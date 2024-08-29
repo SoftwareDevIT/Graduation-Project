@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('user_name');
             $table->string('sex');
             $table->string('password');
-            $table->string('mail');
+            $table->string('email');
             $table->string('avatar')->nullable();
             $table->string('phone');
             $table->string('address');
