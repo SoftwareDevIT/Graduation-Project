@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('cinema', function (Blueprint $table) {
             $table->id('cinema_id');
             $table->string('cinema_name');
-            $table->string('phone');
+            $table->string('phone')->nullable();
             $table->unsignedBigInteger('location_id');
-            $table->string('cinema_address');
+            $table->string('cinema_address')->nullable();
             $table->enum('status', ['Show', 'Hidden'])->default('Show');
             $table->timestamps();
             $table->foreign('location_id')->references('location_id')->on('location');

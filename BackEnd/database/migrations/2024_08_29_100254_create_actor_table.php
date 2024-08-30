@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('actor', function (Blueprint $table) {
             $table->id('actor_id');
             $table->string('actor_name');
-            $table->string('descripcion');
-            $table->string('photo');
-            $table->string('country');
-            $table->string('link_wiki');
+            $table->string('descripcion')->nullable();
+            $table->string('photo')->nullable();
+            $table->string('country')->nullable();
+            $table->string('link_wiki')->nullable();
             $table->timestamps();
         });
     }

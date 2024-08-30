@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('combos', function (Blueprint $table) {
             $table->id('combo_id');
             $table->string('combo_name');
-            $table->string('images');
+            $table->string('images')->nullable();;
             $table->double('price');
             $table->enum('status', ['Show', 'Hidden'])->default('Show');
             $table->timestamps();
