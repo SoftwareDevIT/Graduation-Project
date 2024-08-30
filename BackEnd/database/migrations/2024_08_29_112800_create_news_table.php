@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('news', function (Blueprint $table) {
             $table->id('news_id');
-            $table->string('title');
+            $table->string('title')->nullable();
             $table->unsignedBigInteger('news_category_id');
-            $table->string('thumnail');
-            $table->string('content');
-            $table->binary('status');
+            $table->string('thumnail')->nullable();
+            $table->string('content')->nullable();
+            $table->enum('status', ['Show', 'Hidden'])->default('Show');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
             $table->foreign('news_category_id')->references('news_category_id')->on('news_category');

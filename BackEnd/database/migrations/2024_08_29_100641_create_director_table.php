@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('director', function (Blueprint $table) {
             $table->id('director_id');
-            $table->string('name');
-            $table->string('descripcion');
-            $table->string('photo');
-            $table->string('country');
-            $table->string('link_wiki');
+            $table->string('director_name');
+            $table->string('descripcion')->nullable();
+            $table->string('photo')->nullable();
+            $table->string('country')->nullable();
+            $table->string('link_wiki')->nullable();
             $table->timestamps();
         });
     }
