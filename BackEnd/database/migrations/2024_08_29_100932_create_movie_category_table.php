@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('movie_category', function (Blueprint $table) {
             $table->id('movie_category_id');
-            $table->string('name');
+            $table->string('category_name');
             $table->string('descripcion');
+            $table->enum('status', ['Show', 'Hidden'])->default('Show');
             $table->timestamps();
         });
     }

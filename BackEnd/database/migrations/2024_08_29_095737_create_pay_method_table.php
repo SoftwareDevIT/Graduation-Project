@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('pay_method', function (Blueprint $table) {
             $table->id('pay_method_id');
-            $table->string('name_method');
-            $table->binary('status');
+            $table->string('pay_method_name');
+            $table->enum('status', ['Show', 'Hidden'])->default('Show');
             $table->timestamps();
         });
     }

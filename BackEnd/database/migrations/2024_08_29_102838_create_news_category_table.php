@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('news_category', function (Blueprint $table) {
             $table->id('news_category_id');
-            $table->string('name');
+            $table->string('news_category_name');
             $table->string('descriptions');
-            $table->binary('status');
+            $table->enum('status', ['Show', 'Hidden'])->default('Show');
             $table->timestamps();
         });
     }

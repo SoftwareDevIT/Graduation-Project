@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id('user_id'); 
+            $table->id('user_id');
             $table->string('user_name');
             $table->string('sex');
             $table->string('password');
@@ -22,6 +22,8 @@ return new class extends Migration
             $table->string('address');
             $table->string('fullname');
             $table->double('coin');
+            // $table->enum('role_type', ['admin', 'user', 'staff', 'manage'])->default('user');
+            $table->enum('status', ['Normal', 'Ban'])->default('Normal');
             $table->unsignedBigInteger('role_id'); // Unsigned big integer for foreign key
             $table->timestamps(); // Automatically creates 'created_at' and 'updated_at'
 

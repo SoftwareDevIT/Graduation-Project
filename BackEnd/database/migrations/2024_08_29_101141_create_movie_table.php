@@ -16,13 +16,14 @@ return new class extends Migration
             $table->unsignedBigInteger('movie_category_id');
             $table->unsignedBigInteger('actor_id');
             $table->unsignedBigInteger('director_id');
-            $table->string('name');
+            $table->string('movie_name');
             $table->string('poster');
             $table->string('duraion');
             $table->date('release_date');
             $table->integer('age_limit');
             $table->string('descripton');
             $table->string('trailer');
+            $table->enum('status', ['Show', 'Hidden'])->default('Show');
             $table->timestamps();
             $table->foreign('movie_category_id')->references('movie_category_id')->on('movie_category');
             $table->foreign('actor_id')->references('actor_id')->on('actor');

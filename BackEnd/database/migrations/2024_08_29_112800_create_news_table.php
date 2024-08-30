@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('news_category_id');
             $table->string('thumnail');
             $table->string('content');
-            $table->binary('status');
+            $table->enum('status', ['Show', 'Hidden'])->default('Show');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
             $table->foreign('news_category_id')->references('news_category_id')->on('news_category');

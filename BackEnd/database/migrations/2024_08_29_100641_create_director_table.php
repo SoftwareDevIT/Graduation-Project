@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('director', function (Blueprint $table) {
             $table->id('director_id');
-            $table->string('name');
+            $table->string('director_name');
             $table->string('descripcion');
             $table->string('photo');
             $table->string('country');
