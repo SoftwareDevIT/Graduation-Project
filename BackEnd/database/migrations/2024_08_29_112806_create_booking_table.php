@@ -18,8 +18,8 @@ return new class extends Migration
             $table->unsignedBigInteger('seat_id');
             $table->unsignedBigInteger('pay_method_id');
             $table->unsignedBigInteger('combo_id');
-            $table->binary('seat_status');
             $table->double('amount');
+            $table->enum('seat_status', ['hold', 'no'])->default('hold');
             $table->timestamps();
             $table->foreign('user_id')->references('user_id')->on('users');
             $table->foreign('seat_id')->references('seat_id')->on('seats');

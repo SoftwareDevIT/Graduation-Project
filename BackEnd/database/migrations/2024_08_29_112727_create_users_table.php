@@ -12,16 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id('user_id'); 
+            $table->id('user_id');
             $table->string('user_name');
-            $table->string('sex');
+            $table->enum('sex', ['male', 'female', 'undisclosed'])->default('undisclosed');
             $table->string('password');
-            $table->string('mail');
+            $table->string('email')->nullable();
             $table->string('avatar')->nullable();
-            $table->string('phone');
-            $table->string('address');
+            $table->string('phone')->nullable();
+            $table->string('address')->nullable();
             $table->string('fullname');
-            $table->double('coin');
+            $table->double('coin')->nullable();
+            $table->enum('status', ['Normal', 'Ban'])->default('Normal');
             $table->unsignedBigInteger('role_id'); // Unsigned big integer for foreign key
             $table->timestamps(); // Automatically creates 'created_at' and 'updated_at'
 
