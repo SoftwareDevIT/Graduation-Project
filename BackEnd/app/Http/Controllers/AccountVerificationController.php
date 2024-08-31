@@ -30,7 +30,7 @@ class AccountVerificationController extends Controller
      * @param int $userId
      * @return JsonResponse
      */
-    public function verify(Request $request, $userId)
+    public function verify($userId)
     {
         $isVerified = $this->verificationService->verifyAccount($userId);
 

@@ -33,24 +33,6 @@ class AuthController extends Controller
         } catch (\Throwable $th) {
            return $this->error($th->getMessage());
         }
-
-
-        // try {
-        //     // $request->validate([
-        //     //     'user_name' => 'required|string|max:255',  
-        //     //     'email' => 'required|string|email|max:255|unique:users',  
-        //     //     'password' => 'required|string|min:8|confirmed',  
-        //     // ]);
-        //     // $data = $request->validated();
-        //     // $data = $request->all();
-        //     var_dump(123);
-        //     // $user = $this->userRegistrationService->register($request->validated());
-        //     // Mail::to($user->email)->queue(new VerifyAccount($user));
-        //     return $this->success();
-        // } catch (\Throwable $th) {
-        //     Log::error($th->getMessage());
-        //     return $this->error($th->getMessage());
-        // }
     }
 
     public function list()
