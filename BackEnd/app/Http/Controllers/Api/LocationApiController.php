@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Services\LocationService;
 use Illuminate\Http\Request;
-use App\Http\Requests\StoresLocationRequest;
+use App\Http\Requests\StoreLocationRequest;
 use App\Http\Requests\UpdateLocationRequest;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -22,10 +22,11 @@ class LocationApiController extends Controller
     public function index()
     {
         $locations = $this->locationService->index();
+        
         return response()->json($locations);
     }
 
-    public function store(StoresLocationRequest $request)
+    public function store(StoreLocationRequest $request)
     {
         $location = $this->locationService->store($request->validated());
         return response()->json($location, 201);

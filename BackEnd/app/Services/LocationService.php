@@ -11,9 +11,10 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
  */
 class LocationService
 {
-   
+
     public function index(): Collection
     {
+        
         return Location::all();
     }
 
