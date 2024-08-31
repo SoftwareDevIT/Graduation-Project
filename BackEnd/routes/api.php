@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\Api\LocationApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,3 +27,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', [UserController::class, 'index']);
 });
+Route::get('location', [LocationApiController::class, 'index']);
+Route::post('location', [LocationApiController::class, 'store']);
+Route::put('location/{id}', [LocationApiController::class, 'update']);
+Route::delete('location/{id}', [LocationApiController::class, 'destroy']);
