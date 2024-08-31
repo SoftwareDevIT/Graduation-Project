@@ -3,49 +3,39 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    protected $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
     public function login(Request $request)
     {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
         try {
-            $request->validate([
-                'email' => 'email|required',
-                'password' => 'required'
-            ]);
-
-            $credentials = request(['email', 'password']);
-
-            if (!Auth::attempt($credentials)) {
-                return response()->json([
-                    'status_code' => 500,
-                    'message' => 'Unauthorized'
-                ]);
-            }
-
-            $user = User::where('email', $request->email)->first();
-
-            if (!Hash::check($request->password, $user->password, [])) {
-                throw new \Exception('Error in Login');
-            }
-
-            $tokenResult = $user->createToken('authToken')->plainTextToken;
+            $token = $this->userService->login($request->only('email', 'password'));
 
             return response()->json([
                 'status_code' => 200,
-                'access_token' => $tokenResult,
+                'access_token' => $token,
                 'token_type' => 'Bearer',
             ]);
-        } catch (\Exception $error) {
+        } catch (\Exception $e) {
             return response()->json([
-                'status_code' => 500,
-                'message' => 'Error in Login',
-                'error' => $error->getMessage(),
-            ]);
+                'status_code' => 401,
+                'message' => $e->getMessage(),
+            ], 401);
         }
     }
 }
+

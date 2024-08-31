@@ -9,8 +9,11 @@ class UserController extends Controller
 {
     public function index()
     {
+        // Optional: Add pagination or filtering here
+        $users = User::all();
+
         return response()->json([
-            'data' => User::all(),
+            'data' => $users,
         ]);
     }
 }
