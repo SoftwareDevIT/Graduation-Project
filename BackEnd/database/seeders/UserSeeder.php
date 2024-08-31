@@ -15,7 +15,7 @@ class UserSeeder extends Seeder
     {
         DB::table('users')->insert([
             [
-                'user_name' => 'Admin',
+                'user_name' => 'admin',
                 'password' => password_hash('admin', PASSWORD_DEFAULT),
                 'fullname' => 'Admin',
                 'role_id' =>  DB::table('role')->where('role_type', 'Admin')->value('role_id'),
@@ -23,24 +23,24 @@ class UserSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'user_name' => 'Admin',
-                'password' => password_hash('312312312', PASSWORD_DEFAULT),
+                'user_name' => 'Meohh',
+                'password' => password_hash('12312231231231', PASSWORD_DEFAULT),
                 'fullname' => 'Admin',
                 'role_id' =>  DB::table('role')->where('role_type', 'User')->value('role_id'),
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'user_name' => 'ghjkgjgj',
-                'password' => password_hash('frgergerg', PASSWORD_DEFAULT),
+                'user_name' => 'Giku89',
+               'password' => password_hash('123123123', PASSWORD_DEFAULT),
                 'fullname' => 'Admin',
                 'role_id' =>  DB::table('role')->where('role_type', 'User')->value('role_id'),
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'user_name' => 'Admjtyjtyjtyjin',
-                'password' => password_hash('123', PASSWORD_DEFAULT),
+                'user_name' => 'meomeo24',
+               'password' => password_hash('', PASSWORD_DEFAULT),
                 'fullname' => 'Admin',
                 'role_id' =>  DB::table('role')->where('role_type', 'User')->value('role_id'),
                 'created_at' => now(),
