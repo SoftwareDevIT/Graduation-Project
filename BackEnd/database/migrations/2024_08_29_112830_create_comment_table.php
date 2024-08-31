@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('content');
             $table->enum('status', ['Show', 'Hidden'])->default('Show');
             $table->timestamps();
-            $table->foreign('user_id')->references('user_id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('movie_id')->references('movie_id')->on('movie');
         });
     }
