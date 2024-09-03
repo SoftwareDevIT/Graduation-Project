@@ -19,9 +19,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('login',[ AuthController::class, 'login']);
+Route::post('login', [AuthController::class, 'login']);
+Route::get('/user', [AuthController::class, 'list']);
 
-Route::post('register',[ AuthController::class, 'register']);
-Route::post('register',[AuthController::class,'register']);
+Route::post('register', [AuthController::class, 'register']);
+Route::post('register', [AuthController::class, 'register']);
 Route::get('/list', [AuthController::class, 'list']);
 Route::get('/verify-account/{userId}', [AccountVerificationController::class, 'verify'])->name('verify');
