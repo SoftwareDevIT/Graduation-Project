@@ -1,16 +1,24 @@
-import React from 'react'
-import Hearder from '../component/Hearder/Hearder'
+import React from "react";
+import Hearder from "../component/Header/Hearder";
+import Header from "../component/Header/Hearder";
+import MovieBanner from "../component/Banner/MovieBanner";
+import NewsContent from "../component/NewContent/NewsContent";
+import NewsAndReview from "../component/NewsAndReview/NewsAndReview";
+import Footer from "../component/Footer/Footer";
 
-interface Props {
-    
-}
+interface Props {}
 
 const Home = (props: Props) => {
-    return (
-        <div>
-         
-        </div>
-    )
-}
+  return (
+    <>
+    <Header />
+        <MovieBanner />
+        <NewsContent />
+        <NewsAndReview />
+        <Footer />
+    </>
+  )
+ 
+};
 
-export default Home
+export default Home;

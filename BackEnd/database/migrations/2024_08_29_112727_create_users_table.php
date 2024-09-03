@@ -24,6 +24,7 @@ return new class extends Migration
             $table->double('coin')->nullable();
             $table->enum('status', ['Normal', 'Ban'])->default('Normal');
             $table->unsignedBigInteger('role_id'); // Unsigned big integer for foreign key
+            $table->timestamp('email_verified_at')->nullable();
             $table->timestamps(); // Automatically creates 'created_at' and 'updated_at'
 
             // Foreign key constraint
