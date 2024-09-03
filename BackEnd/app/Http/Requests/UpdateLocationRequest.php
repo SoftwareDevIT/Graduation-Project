@@ -6,23 +6,16 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateLocationRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
+    public function authorize()
     {
-        return false;
+        return true; // You can add authorization logic here if needed
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
-    public function rules(): array
+    public function rules()
     {
         return [
-            //
+            'location_name' => 'sometimes|string|max:255',
+
         ];
     }
 }
