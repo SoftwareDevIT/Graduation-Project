@@ -17,4 +17,3 @@ class Role extends Model
         'updated_at',
     ];
 }
-
