@@ -1,0 +1,285 @@
+.container {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    gap: 10px;
+}
+
+.locations, .cinemas, .showtimes {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 20px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.locations {
+    width: 20%;
+    margin: 0;
+    padding: 0;
+}
+
+.cinemas {
+    width: 25%;
+    padding: 0; 
+}
+
+.showtimes {
+    width: 55%;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    padding: 10px 0;
+    cursor: pointer;
+}
+
+li.selected {
+    color: #007bff;
+}
+
+
+ul.cinema-list {
+    list-style-type: none;
+    padding: 0; 
+    margin: 0; 
+    margin-top: -19px;
+    text-align: left;
+}
+
+ul.cinema-list li {
+    border: 1px solid #E3EBF6;
+    padding: 10px;
+    margin-bottom: -1px; 
+    background-color: #fff; 
+    cursor: pointer; 
+    font-family: "Cerebri Sans";
+    transition: background-color 0.3s ease;
+}
+
+
+ul.cinema-list li.selected {
+    background-color: #00aaff;
+    color: #fff;
+}
+
+
+ul.cinema-list li:last-child {
+    margin-bottom: 0;
+}
+
+.date-selection {
+    
+    background-color: #D9D9D9;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+   
+}
+
+.date-selection span {
+    padding: 10px;
+    padding-right: 40px;
+    border-radius: 4px;
+    cursor: pointer;
+    
+}
+
+.date-selection span p {
+    color: #95AACC;
+    margin: 0; 
+    padding: 0;
+}
+
+.date-selection .selected {
+    background-color: #C7D6EC;
+    color: #fff;
+}
+
+.khuvuc {
+    width: 100%;
+    height: 50px;
+    background-color: #EDF2F9;
+    margin-top: 0;
+    padding-top: 6px;
+    font-size: 17px;
+    font-family: "Cerebri Sans";
+    color: #b2bece;
+}
+
+.no-showtimes {
+  
+    width: 100%;
+    height: 40px;
+    padding: 2px;
+    background-color: #ffeb3b;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+.no-showtimes p{
+   margin-top: 10px;
+}
+.movies {
+    margin-top: 20px;
+    font-family: "Cerebri Sans";
+}
+.title{
+    font-family: "Cerebri Sans, sans-";
+    text-align: center;
+    margin-top: 15px;
+}
+
+.movie {
+    display: flex;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
+
+
+.movie .details {
+    flex: 1;
+   
+    text-align: left;
+}
+
+.movie h4 {
+    margin-top: 0;
+}
+
+.showtimes-list button {
+    margin-right: 10px;
+    padding: 10px;
+    border: 1px solid #007bff;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #fff;
+    color: #007bff;
+}
+
+.showtimes-list button:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.list-tp {
+    list-style-type: none; 
+    padding: 0; 
+    margin: 0; 
+    margin-top: -19px;
+    text-align: left;
+    color: #6E84A3;
+}
+
+.list-tp li {
+    border: 1px solid #E3EBF6; 
+    padding: 10px;
+    margin-bottom: -1px; /* Giảm khoảng cách giữa các viền */
+    background-color: #fff; /* Màu nền cho phần tử */
+    cursor: pointer; /* Con trỏ khi di chuột qua phần tử */
+    font-family: "Cerebri Sans";
+    transition: background-color 0.3s ease;
+}
+
+.list-tp li.city {
+    border: 1px solid #e0e0e0;
+    padding: 10px;
+    margin-bottom: -1px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* CSS cho thành phố được chọn */
+li.city.selected {
+    background-color: #00aaff;
+    color: #fff;
+}
+
+/* Tùy chọn: loại bỏ viền dưới cùng của phần tử cuối cùng */
+.list-tp li:last-child {
+    margin-bottom: 0;
+}
+.showtimes{
+    margin: 0;
+    padding: 0;
+}
+.date-selection{
+   width: 100%;
+   font-family: 'Cerebri Sans';
+   height: 50px;
+   line-height: 13px;
+   
+}
+
+
+
+.movie img {
+  width: 80px;
+  height: 120px;
+  border-radius: 5px;
+  object-fit: cover;
+  margin-right: 30px;
+  margin-left: 15px;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.details h4 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.details p {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.showtimes-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+  
+}
+
+.showtimes-list button {
+  padding: 8px 12px;
+  border: 1px solid #d1d1d1;
+  background-color: #f5f5f5;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  transition: background-color 0.2s ease;
+  
+}
+
+.showtimes-list button:hover {
+  background-color: #d1d1d1;
+}
+
+.showtimes-list button.selected {
+  background-color: #ffffff;
+  border-color: #333;
+  color: #333;
+}
+
+.showtimes-list button.selected:hover {
+  background-color: #f0f0f0;
+}

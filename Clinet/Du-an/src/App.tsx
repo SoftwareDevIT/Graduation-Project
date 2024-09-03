@@ -1,26 +1,19 @@
 
-import Slider from 'react-slick'
-import './App.css'
-import MovieBanner from './component/Banner/MovieBanner'
-import Footer from './component/Footer/Footer'
-import Header from './component/Hearder/Hearder'
-import NewsContent from './component/NewContent/NewsContent'
-import NewsAndReview from './component/NewsAndReview/NewsAndReview'
+import "./App.css";
 
-
+import {  Route, Routes } from "react-router-dom";
+import Home from "./Page/Home";
+import Bookcinematickets from "./Page/Bookcinematickets";
 
 function App() {
-  
-
   return (
     <>
-     <Header/>
-     <MovieBanner/>
-     <NewsContent/>
-     <NewsAndReview/>
-    <Footer/>
+      <Routes>
+      <Route index element={<Home/>}/>
+      <Route path="/muave" element={<Bookcinematickets/>}/>
+      </Routes>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
