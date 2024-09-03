@@ -17,6 +17,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::delete('location/{id}', [LocationApiController::class, 'destroy']);
 });
 
-Route::post('register', [AuthController::class, 'register']);
+Route::post('register',[AuthController::class,'register']);
 Route::get('/list', [AuthController::class, 'list']);
 Route::get('/verify-account/{userId}', [AccountVerificationController::class, 'verify'])->name('verify');
