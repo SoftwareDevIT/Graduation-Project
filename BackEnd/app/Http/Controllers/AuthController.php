@@ -5,6 +5,13 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Services\UserService;
 use Illuminate\Http\Request;
+use App\Http\Requests\RegisterRequest;
+use App\Mail\VerifyAccount;
+use App\Models\User;
+use App\Services\UserRegistrationService;
+use App\Traits\ResponseTrait;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
