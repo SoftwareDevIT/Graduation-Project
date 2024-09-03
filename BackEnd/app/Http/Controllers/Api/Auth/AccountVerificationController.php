@@ -1,16 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\Auth;
 
-use App\Services\AccountVerificationService;
-use App\Traits\ResponseTrait;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Services\AccountVerificationService;
 use Illuminate\Http\JsonResponse;
 
 class AccountVerificationController extends Controller
 {
-    use ResponseTrait;
-    
     protected $verificationService;
 
     /**
@@ -38,6 +36,6 @@ class AccountVerificationController extends Controller
             return $this->success($isVerified, 'Account verified successfully.');
         }
         return $this->error('Invalid verification link.');
-       
+
     }
 }

@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
@@ -15,38 +16,25 @@ class UserSeeder extends Seeder
     {
         DB::table('users')->insert([
             [
-                'user_name' => 'Admin',
-                'password' => password_hash('admin', PASSWORD_DEFAULT),
+                'user_name' => 'admin',
+                'sex'=>'Male',
+                'password' => Hash::make('password'),
+                'email' => 'y5sZb@example.com',
+                'phone' => '0123456789',
+                'role_id' => 1,
+                'address' => 'Ha Noi',
                 'fullname' => 'Admin',
-                'role_id' =>  DB::table('role')->where('role_type', 'Admin')->value('role_id'),
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
-                'user_name' => 'Admin',
-                'password' => password_hash('312312312', PASSWORD_DEFAULT),
+                'user_name' => 'admin11',
+                'sex'=>'Male',
+                'password' => Hash::make('password'),
+                'email' => 'kien189204@gmail.com',
+                'phone' => '0123456789',
+                'role_id' => 1,
+                'address' => 'Ha Noi',
                 'fullname' => 'Admin',
-                'role_id' =>  DB::table('role')->where('role_type', 'User')->value('role_id'),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'user_name' => 'ghjkgjgj',
-                'password' => password_hash('frgergerg', PASSWORD_DEFAULT),
-                'fullname' => 'Admin',
-                'role_id' =>  DB::table('role')->where('role_type', 'User')->value('role_id'),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'user_name' => 'Admjtyjtyjtyjin',
-                'password' => password_hash('123', PASSWORD_DEFAULT),
-                'fullname' => 'Admin',
-                'role_id' =>  DB::table('role')->where('role_type', 'User')->value('role_id'),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-
+            ]
         ]);
     }
 }

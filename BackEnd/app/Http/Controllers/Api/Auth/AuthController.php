@@ -1,22 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\Auth;
 
-use App\Http\Requests\RegisterRequest;
 use App\Mail\VerifyAccount;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
+use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use App\Services\UserRegistrationService;
-use App\Traits\ResponseTrait;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
-
-// use Illuminate\Support\Facades\Request;
 
 class AuthController extends Controller
 {
-    use ResponseTrait;
-
     protected $userRegistrationService;
 
     public function __construct(UserRegistrationService $userRegistrationService)
