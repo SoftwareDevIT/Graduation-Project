@@ -1,11 +1,9 @@
 <?php
 
-use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\Api\LocationApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\Auth\AccountVerificationController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -17,17 +15,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
-Route::post('/login', [AuthController::class, 'login']);
-// route::post('/login',[AuthContr] );
-
-Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('/user', [UserController::class, 'index']);
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
 });
-Route::get('location', [LocationApiController::class, 'index']);
-Route::post('location', [LocationApiController::class, 'store']);
-Route::put('location/{id}', [LocationApiController::class, 'update']);
-Route::delete('location/{id}', [LocationApiController::class, 'destroy']);
+
+Route::post('login',[ AuthController::class, 'login']);
+
+Route::post('register',[ AuthController::class, 'register']);
+Route::post('register',[AuthController::class,'register']);
+Route::get('/list', [AuthController::class, 'list']);
+Route::get('/verify-account/{userId}', [AccountVerificationController::class, 'verify'])->name('verify');

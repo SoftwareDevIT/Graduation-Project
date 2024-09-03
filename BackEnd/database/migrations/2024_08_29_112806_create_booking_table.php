@@ -21,7 +21,7 @@ return new class extends Migration
             $table->double('amount');
             $table->enum('seat_status', ['hold', 'no'])->default('hold');
             $table->timestamps();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('user_id')->on('users');
             $table->foreign('seat_id')->references('seat_id')->on('seats');
             $table->foreign('pay_method_id')->references('pay_method_id')->on('pay_method');
             $table->foreign('combo_id')->references('combo_id')->on('combos');
