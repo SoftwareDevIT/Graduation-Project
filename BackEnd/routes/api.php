@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\LocationApiController;
 use App\Http\Controllers\AccountVerificationController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\LocationApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,3 +20,4 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::post('register',[AuthController::class,'register']);
 Route::get('/list', [AuthController::class, 'list']);
 Route::get('/verify-account/{userId}', [AccountVerificationController::class, 'verify'])->name('verify');
+

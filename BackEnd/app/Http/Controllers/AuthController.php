@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
 use App\Mail\VerifyAccount;
 use App\Models\User;
