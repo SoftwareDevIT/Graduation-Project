@@ -1,13 +1,24 @@
 
+import Slider from 'react-slick'
 import './App.css'
+import MovieBanner from './component/Banner/MovieBanner'
+import Footer from './component/Footer/Footer'
+import Header from './component/Hearder/Hearder'
+import NewsContent from './component/NewContent/NewsContent'
+import NewsAndReview from './component/NewsAndReview/NewsAndReview'
+
+
 
 function App() {
-
+  
 
   return (
     <>
-     <h1>Xin Chào Tất Cả Các bạn</h1>
-
+     <Header/>
+     <MovieBanner/>
+     <NewsContent/>
+     <NewsAndReview/>
+    <Footer/>
     </>
   )
 }
