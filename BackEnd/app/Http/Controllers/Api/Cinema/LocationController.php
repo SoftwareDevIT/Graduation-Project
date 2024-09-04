@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Api\Cinema;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\Cinema\LocationService;
-use App\Http\Requests\StoreLocationRequest;
-use App\Http\Requests\UpdateLocationRequest;
+use App\Http\Requests\Store\Cinema\StoreLocationRequest;
+use App\Http\Requests\update\Cinema\UpdateLocationRequest;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
