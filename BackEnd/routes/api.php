@@ -37,6 +37,7 @@ Route::put('location/{id}', [LocationController::class, 'update']);
 Route::delete('location/{id}', [LocationController::class, 'destroy']);
 
 Route::get('cinema', [CinemaController::class, 'index']);
+Route::get('cinema/{id}', [CinemaController::class, 'show']);
 Route::post('cinema', [CinemaController::class, 'store']);
 Route::put('cinema/{id}', [CinemaController::class, 'update']);
 Route::delete('cinema/{id}', [CinemaController::class, 'destroy']);
