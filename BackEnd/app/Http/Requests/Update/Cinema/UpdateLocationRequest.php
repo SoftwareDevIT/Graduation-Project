@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Update\Cinema;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreLocationRequest extends FormRequest
+class UpdateLocationRequest extends FormRequest
 {
     public function authorize()
     {
@@ -14,7 +14,8 @@ class StoreLocationRequest extends FormRequest
     public function rules()
     {
         return [
-            'location_name' => 'required|string|max:255',
+            'location_name' => 'sometimes|string|max:255',
+
         ];
     }
 }

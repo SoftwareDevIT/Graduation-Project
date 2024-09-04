@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api\Cinema;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreCinemaRequest;
-use App\Http\Requests\UpdateCinemaRequest;
+use App\Http\Requests\Store\Cinema\StoreCinemaRequest;
+use App\Http\Requests\Update\Cinema\UpdateCinemaRequest;
 use Illuminate\Http\Request;
 use App\Services\Cinema\CinemaService;
 use Exception;
