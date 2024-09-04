@@ -24,6 +24,21 @@ class CinemaController extends Controller
         $cinemas = $this->cinemaService->index();
         return response()->json($cinemas);
     }
+    public function show($id)
+    {
+        try {
+            $cinema = $this->cinemaService->get($id);
+    
+            if (!$cinema) {
+                return response()->json(['error' => 'Cinema not found'], 404);
+            }
+    
+            return response()->json($cinema);
+        } catch (Exception $e) {
+            return response()->json(['error' => 'An error occurred'], 500);
+        }
+    }
+    
 
     public function store(StoreCinemaRequest $request)
     {

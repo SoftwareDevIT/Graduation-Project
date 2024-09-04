@@ -27,16 +27,20 @@ class CinemaService
 
     public function update(int $id, array $data): Cinema
     {
-        $location = Cinema::findOrFail($id);
-        $location->update($data);
+        $cinema = Cinema::findOrFail($id);
+        $cinema->update($data);
 
-        return $location;
+        return $cinema;
     }
 
 
     public function delete(int $id): ?bool
     {
-        $location = Cinema::findOrFail($id);
-        return $location->delete();
+        $cinema = Cinema::findOrFail($id);
+        return $cinema->delete();
+    }
+    public function get(int $id): Cinema{
+        $cinema = Cinema::findOrFail($id);
+        return $cinema;
     }
 }
