@@ -11,7 +11,7 @@ class StoreCinemaRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;  // Change this to true
     }
 
     /**
@@ -22,7 +22,8 @@ class StoreCinemaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'cinema_name' => 'sometimes|string|max:255',
+            'location_id' => 'integer',
         ];
     }
 }

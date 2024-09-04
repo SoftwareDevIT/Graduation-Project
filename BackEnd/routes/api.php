@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Auth\AccountVerificationController;
 use App\Http\Controllers\Api\Cinema\LocationController;
+use App\Http\Controllers\Api\Cinema\CinemaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,3 +35,8 @@ Route::get('location', [LocationController::class, 'index']);
 Route::post('location', [LocationController::class, 'store']);
 Route::put('location/{id}', [LocationController::class, 'update']);
 Route::delete('location/{id}', [LocationController::class, 'destroy']);
+
+Route::get('cinema', [CinemaController::class, 'index']);
+Route::post('cinema', [CinemaController::class, 'store']);
+Route::put('cinema/{id}', [CinemaController::class, 'update']);
+Route::delete('cinema/{id}', [CinemaController::class, 'destroy']);
