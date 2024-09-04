@@ -9,14 +9,12 @@ class Cinema extends Model
 {
     use HasFactory;
     protected $table = 'cinema';
+    protected $primaryKey = 'cinema_id';
     protected $fillable = [
-        'cinema_id',
         'cinema_name',
         'phone',
         'location_id',
         'cinema_address',
         'status',
-        'created_at',
-        'updated_at',
     ];
 }
