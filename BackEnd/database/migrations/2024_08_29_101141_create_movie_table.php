@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('movie', function (Blueprint $table) {
-            $table->id('movie_id');
+            $table->id('id');
             $table->unsignedBigInteger('movie_category_id');
             $table->unsignedBigInteger('actor_id');
             $table->unsignedBigInteger('director_id');
@@ -25,9 +25,9 @@ return new class extends Migration
             $table->string('trailer')->nullable();
             $table->enum('status', ['Show', 'Hidden'])->default('Show');
             $table->timestamps();
-            $table->foreign('movie_category_id')->references('movie_category_id')->on('movie_category');
-            $table->foreign('actor_id')->references('actor_id')->on('actor');
-            $table->foreign('director_id')->references('director_id')->on('director');
+            $table->foreign('movie_category_id')->references('id')->on('movie_category');
+            $table->foreign('actor_id')->references('id')->on('actor');
+            $table->foreign('director_id')->references('id')->on('director');
         });
     }
 
