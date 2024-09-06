@@ -9,6 +9,7 @@ class NewsCategory extends Model
 {
     use HasFactory;
     protected $table = 'news_category';
+    protected $primaryKey = 'news_category_id';
     protected $fillable = [
         'news_category_id',
         'news_category_name',
@@ -17,4 +18,9 @@ class NewsCategory extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function news()
+    {
+        return $this->hasMany(News::class, 'news_category_id', 'news_category_id');
+    }
 }

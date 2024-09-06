@@ -9,6 +9,7 @@ class News extends Model
 {
     use HasFactory;
     protected $table = 'news';
+    protected $primaryKey = 'news_id';
     protected $fillable = [
         'news_id',
         'title',
@@ -20,4 +21,9 @@ class News extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function newsCategory()
+    {
+        return $this->belongsTo(NewsCategory::class, 'news_category_id', 'news_category_id');
+    }
 }

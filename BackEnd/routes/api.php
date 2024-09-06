@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Auth\AccountVerificationController;
 use App\Http\Controllers\Api\Cinema\LocationController;
 use App\Http\Controllers\Api\Cinema\CinemaController;
+use App\Http\Controllers\Api\New\NewCategoryController;
+use App\Http\Controllers\Api\New\NewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,7 +28,6 @@ Route::post('login', [AuthController::class, 'login']);
 Route::get('/user', [AuthController::class, 'list']);
 
 Route::post('register', [AuthController::class, 'register']);
-Route::post('register', [AuthController::class, 'register']);
 Route::get('/list', [AuthController::class, 'list']);
 Route::get('/verify-account/{userId}', [AccountVerificationController::class, 'verify'])->name('verify');
 
@@ -40,3 +41,6 @@ Route::get('cinema', [CinemaController::class, 'index']);
 Route::post('cinema', [CinemaController::class, 'store']);
 Route::put('cinema/{id}', [CinemaController::class, 'update']);
 Route::delete('cinema/{id}', [CinemaController::class, 'destroy']);
+
+Route::resource('news_category', NewCategoryController::class);
+Route::resource('news', NewController::class);
