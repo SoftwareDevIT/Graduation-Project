@@ -10,12 +10,9 @@ class Seats extends Model
     use HasFactory;
     protected $table = 'seats';
     protected $fillable = [
-        'seat_id',
         'seat_type',
         'room_id',
         'row',
         'number',
-        'created_at',
-        'updated_at',
     ];
 }

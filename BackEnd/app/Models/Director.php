@@ -16,7 +16,5 @@ class Director extends Model
         'photo',
         'country',
         'link_wiki',
-        'created_at',
-        'updated_at',
     ];
 }
