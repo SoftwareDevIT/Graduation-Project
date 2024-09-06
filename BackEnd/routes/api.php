@@ -6,8 +6,6 @@ use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Auth\AccountVerificationController;
 use App\Http\Controllers\Api\Cinema\LocationController;
 use App\Http\Controllers\Api\Cinema\CinemaController;
-use App\Http\Controllers\Api\Combo\ComboController;
-use App\Http\Controllers\Api\PayMethod\PayMethodController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,15 +41,3 @@ Route::get('cinema/{id}', [CinemaController::class, 'show']);
 Route::post('cinema', [CinemaController::class, 'store']);
 Route::put('cinema/{id}', [CinemaController::class, 'update']);
 Route::delete('cinema/{id}', [CinemaController::class, 'destroy']);
-
-Route::get('method', [PayMethodController::class, 'index']);
-Route::get('method/{id}', [PayMethodController::class, 'show']);
-Route::post('method', [PayMethodController::class, 'store']);
-Route::put('method/{id}', [PayMethodController::class, 'update']);
-Route::delete('method/{id}', [PayMethodController::class, 'destroy']);
-
-Route::get('combo', [ComboController::class, 'index']);
-Route::get('combo/{id}', [ComboController::class, 'show']);
-Route::post('combo', [ComboController::class, 'store']);
-Route::put('combo/{id}', [ComboController::class, 'update']);
-Route::delete('combo/{id}', [ComboController::class, 'destroy']);
