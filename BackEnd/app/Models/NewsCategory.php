@@ -11,12 +11,9 @@ class NewsCategory extends Model
     protected $table = 'news_category';
     protected $primaryKey = 'news_category_id';
     protected $fillable = [
-        'news_category_id',
         'news_category_name',
         'descriptions',
         'status',
-        'created_at',
-        'updated_at',
     ];
 
     public function news()

@@ -6,9 +6,11 @@ use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Auth\AccountVerificationController;
 use App\Http\Controllers\Api\Cinema\LocationController;
 use App\Http\Controllers\Api\Cinema\CinemaController;
+use App\Http\Controllers\Api\Movie\ActorController;
+use App\Http\Controllers\Api\Movie\DirectorController;
+use App\Http\Controllers\Api\Movie\MovieCategoryController;
 use App\Http\Controllers\Api\New\NewCategoryController;
 use App\Http\Controllers\Api\New\NewController;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -38,6 +40,7 @@ Route::put('location/{id}', [LocationController::class, 'update']);
 Route::delete('location/{id}', [LocationController::class, 'destroy']);
 
 Route::get('cinema', [CinemaController::class, 'index']);
+Route::get('cinema/{id}', [CinemaController::class, 'show']);
 Route::post('cinema', [CinemaController::class, 'store']);
 Route::put('cinema/{id}', [CinemaController::class, 'update']);
 Route::delete('cinema/{id}', [CinemaController::class, 'destroy']);

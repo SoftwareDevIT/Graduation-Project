@@ -28,7 +28,7 @@ return new class extends Migration
             $table->timestamps(); // Automatically creates 'created_at' and 'updated_at'
 
             // Foreign key constraint
-            $table->foreign('role_id')->references('role_id')->on('role');
+            $table->foreign('role_id')->references('id')->on('role');
         });
     }
 
