@@ -49,17 +49,9 @@ class AuthController extends Controller
 
         try {
             $token = $this->loginService->login($request->only('email', 'password'));
-
-            return response()->json([
-                'status_code' => 200,
-                'access_token' => $token,
-                'token_type' => 'Bearer',
-            ]);
+            return $this->success($token);
         } catch (\Exception $e) {
-            return response()->json([
-                'status_code' => 401,
-                'message' => $e->getMessage(),
-            ], 401);
+            return $e->getMessage();
         }
     }
 }

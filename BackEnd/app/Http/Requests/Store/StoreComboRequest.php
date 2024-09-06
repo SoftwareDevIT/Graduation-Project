@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Requests\Store\Cinema;
+namespace App\Http\Requests\Store;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreCinemaRequest extends FormRequest
+class StoreComboRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;  // Change this to true
+        return true;
     }
 
     /**
@@ -22,8 +22,9 @@ class StoreCinemaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'cinema_name' => 'sometimes|string|max:255',
-            'location_id' => 'integer',
+            "combo_name" => "string",
+            "price" => "",
+            "images" => "file",
         ];
     }
 }

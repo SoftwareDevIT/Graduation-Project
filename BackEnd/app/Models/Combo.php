@@ -9,6 +9,7 @@ class Combo extends Model
 {
     use HasFactory;
     protected $table = 'combos';
+    protected $primaryKey = 'id';
     protected $fillable = [
         'combo_name',
         'images',
