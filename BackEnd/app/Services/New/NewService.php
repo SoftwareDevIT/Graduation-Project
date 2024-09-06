@@ -25,6 +25,8 @@ class NewService
         }
         $news = News::create($data);
         $news->thumnail_url = asset('storage/' . $news->thumnail);
+        $news->save();
+
     
         return $news;
     }
@@ -44,6 +46,7 @@ class NewService
     $news->update($data);
 
     $news->thumnail_url = asset('storage/' . $news->thumnail);
+    $news->save();
 
     return $news;
     }
