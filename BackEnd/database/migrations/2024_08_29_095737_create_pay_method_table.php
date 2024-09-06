@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pay_method', function (Blueprint $table) {
-            $table->id('pay_method_id');
+            $table->id('id');
             $table->string('pay_method_name');
             $table->enum('status', ['Show', 'Hidden'])->default('Show');
             $table->timestamps();

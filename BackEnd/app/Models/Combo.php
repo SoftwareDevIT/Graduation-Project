@@ -10,12 +10,9 @@ class Combo extends Model
     use HasFactory;
     protected $table = 'combos';
     protected $fillable = [
-        'combo_id',
         'combo_name',
         'images',
         'price',
         'status',
-        'created_at',
-        'updated_at',
     ];
 }
