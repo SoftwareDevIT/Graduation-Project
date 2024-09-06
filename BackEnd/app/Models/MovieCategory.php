@@ -10,6 +10,7 @@ class MovieCategory extends Model
     use HasFactory;
     protected $table = 'movie_category';
     protected $fillable = [
+        'id',
         'category_name',
         'descripcion',
         'status',
