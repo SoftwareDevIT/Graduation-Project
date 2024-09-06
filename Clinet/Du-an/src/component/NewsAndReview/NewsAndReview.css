@@ -1,107 +1,107 @@
 /* General container styles */
-.container {
-    display: flex;
-    justify-content: space-between;
-    padding: 20px;
+.new-container {
+  display: flex;
     gap: 20px;
-    background-color: #f5f5f5;
-  }
-  
-  /* News section styles */
-  .news-section {
-    flex: 3;
-    background-color:white ;
-    border-radius: 10px;
     padding: 20px;
-  }
-  
-  .news-section h2 {
-    font-size: 24px;
-    margin-bottom: 15px;
-  }
-  
-  .news-item {
-    display: flex;
-    margin-bottom: 15px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .news-image-placeholder {
-    width: 120px; /* Điều chỉnh kích thước hình ảnh */
-    height: 80px;
-    background-color: #e0e0e0;
-    margin-right: 15px;
-  }
-  
-  .news-content h3 {
-    font-size: 18px;
-    margin-bottom: 10px;
-  }
-  
-  .news-content p {
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 5px;
-  }
-  
-  .news-content .category {
-    font-weight: bold;
-  }
-  
-  .news-content .time {
-    color: #999;
-  }
-  
-  /* Review section styles */
-  .review-section {
-    flex: 1;
-   
-    background-color: white;
-    border-radius: 10px;
-    padding: 20px;
-  }
-  
-  .review-section h2 {
-    font-size: 24px;
-    margin-bottom: 15px;
-  }
-  
-  .review-item {
-    margin-bottom: 15px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .review-item h3 {
-    font-size: 16px;
-    margin-bottom: 5px;
-  }
-  
-  .review-item .time {
-    color: #999;
-  }
-  
-  .review-item .reviewer {
-    color: #555;
-    font-weight: bold;
-  }
-  .load-more-btn {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    margin: 20px 0 0;
-    background-color: #f2f4f7;
-    color: #333;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 16px;
-    text-align: center;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .load-more-btn:hover {
-    background-color: #e0e0e0;
-  }
-  
+    background-color:#f5f5f5;
+}
+
+/* News section styles */
+.news-section {
+  margin: 0;
+  background-color:white ;
+  border-radius: 10px;
+  padding: 20px;
+  width: 60%;
+  margin-left: 120px;
+}
+
+.news-section h2 {
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+.news-item {
+  display: flex;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+.news-image-placeholder {
+  width: 150px; /* Điều chỉnh kích thước hình ảnh */
+  height: 100px;
+  background-color: #e0e0e0;
+  margin-right: 15px;
+  border-radius: 10px;
+}
+
+.news-content h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.news-content p {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.news-content .category {
+  font-weight: bold;
+}
+
+.news-content .time {
+  color: #999;
+}
+
+/* Review section styles */
+.review-section {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  width: 22.5%;
+}
+
+.review-section h2 {
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+.review-item {
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+.review-item h3 {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.review-item .time {
+  color: #999;
+}
+
+.review-item .reviewer {
+  color: #555;
+  font-weight: bold;
+}
+.load-more-btn {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin: 20px 0 0;
+  background-color: #f2f4f7;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.load-more-btn:hover {
+  background-color: #e0e0e0;
+}
