@@ -9,7 +9,8 @@ use App\Http\Controllers\Api\Cinema\CinemaController;
 use App\Http\Controllers\Api\Movie\ActorController;
 use App\Http\Controllers\Api\Movie\DirectorController;
 use App\Http\Controllers\Api\Movie\MovieCategoryController;
-
+use App\Http\Controllers\Api\Combo\ComboController;
+use App\Http\Controllers\Api\PayMethod\PayMethodController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -49,3 +50,14 @@ Route::apiResource('actor', ActorController::class);
 Route::apiResource('director', DirectorController::class);
 Route::apiResource('movie-category', MovieCategoryController::class);
 
+Route::get('method', [PayMethodController::class, 'index']);
+Route::get('method/{id}', [PayMethodController::class, 'show']);
+Route::post('method', [PayMethodController::class, 'store']);
+Route::put('method/{id}', [PayMethodController::class, 'update']);
+Route::delete('method/{id}', [PayMethodController::class, 'destroy']);
+
+Route::get('combo', [ComboController::class, 'index']);
+Route::get('combo/{id}', [ComboController::class, 'show']);
+Route::post('combo', [ComboController::class, 'store']);
+Route::put('combo/{id}', [ComboController::class, 'update']);
+Route::delete('combo/{id}', [ComboController::class, 'destroy']);
