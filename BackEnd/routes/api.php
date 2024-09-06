@@ -21,15 +21,15 @@ use App\Http\Controllers\Api\Cinema\CinemaController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/user', [AuthController::class, 'list']);
+});
 
 Route::post('login', [AuthController::class, 'login']);
-Route::get('/user', [AuthController::class, 'list']);
 
-Route::post('register', [AuthController::class, 'register']);
-Route::post('register', [AuthController::class, 'register']);
+Route::post('/register', [AuthController::class, 'register']);
 Route::get('/list', [AuthController::class, 'list']);
 Route::get('/verify-account/{userId}', [AccountVerificationController::class, 'verify'])->name('verify');
-
 
 Route::get('location', [LocationController::class, 'index']);
 Route::post('location', [LocationController::class, 'store']);
