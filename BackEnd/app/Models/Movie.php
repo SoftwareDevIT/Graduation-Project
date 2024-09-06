@@ -10,7 +10,6 @@ class Movie extends Model
     use HasFactory;
     protected $table = 'movie';
     protected $fillable = [
-        'movie_id',
         'movie_category_id',
         'actor_id',
         'director_id',
@@ -22,7 +21,5 @@ class Movie extends Model
         'descripton',
         'trailer',
         'status',
-        'created_at',
-        'updated_at',
     ];
 }
