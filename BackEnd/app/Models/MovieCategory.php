@@ -14,7 +14,5 @@ class MovieCategory extends Model
         'category_name',
         'descripcion',
         'status',
-        'created_at',
-        'updated_at',
     ];
 }

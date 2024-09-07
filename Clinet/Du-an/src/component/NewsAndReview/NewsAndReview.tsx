@@ -3,12 +3,12 @@ import './NewsAndReview.css';
 
 const NewsAndReview = () => {
   return (
-    <div className="container">
+    <div className='new-container'>
       {/* News Section */}
       <div className="news-section">
         <h2>Mới cập nhật</h2>
         <div className="news-item">
-          <div className="news-image-placeholder"></div>
+          <img className="news-image-placeholder" src='https://cdn.moveek.com/storage/media/cache/small/66cea385df92a101936911.jpg'/>
           <div className="news-content">
             <h3>Hoài Linh cùng 'con trai' Tuấn Trần tại họp báo ra mắt Làm Giàu Với Ma</h3>
             <p>Sau thời gian dài chờ đợi, Làm Giàu Với Ma đã chính thức có buổi công chiếu ra mắt khán giả...</p>
@@ -17,7 +17,7 @@ const NewsAndReview = () => {
         </div>
         
         <div className="news-item">
-          <div className="news-image-placeholder"></div>
+        <img className="news-image-placeholder" src='https://cdn.moveek.com/storage/media/cache/small/66cea385df92a101936911.jpg'/>
           <div className="news-content">
             <h3>CÁC TÁC PHẨM GIẢI TRÍ TỪ ĐỀ TÀI VÕ HIỆP LIỆU CÒN THU HÚT GIỚI TRẺ?</h3>
             <p>Cùng với sự thay đổi của công nghệ và điều kiện sống, sở thích và xu hướng giải trí...</p>
@@ -26,7 +26,7 @@ const NewsAndReview = () => {
         </div>
         
         <div className="news-item">
-          <div className="news-image-placeholder"></div>
+        <img className="news-image-placeholder" src='https://cdn.moveek.com/storage/media/cache/small/66cea385df92a101936911.jpg'/>
           <div className="news-content">
             <h3>Thám Tử Kiên - Victor Vũ trở lại với thể loại kinh dị trinh thám</h3>
             <p>Đạo diễn Victor Vũ trở lại cùng thể loại hình thám tử Kiên và các nhân vật chính họp báo...</p>
@@ -34,7 +34,7 @@ const NewsAndReview = () => {
           </div>
         </div>
         <div className="news-item">
-          <div className="news-image-placeholder"></div>
+        <img className="news-image-placeholder" src='https://cdn.moveek.com/storage/media/cache/small/66cea385df92a101936911.jpg'/>
           <div className="news-content">
             <h3>Thám Tử Kiên - Victor Vũ trở lại với thể loại kinh dị trinh thám</h3>
             <p>Đạo diễn Victor Vũ trở lại cùng thể loại hình thám tử Kiên và các nhân vật chính họp báo...</p>
@@ -42,7 +42,7 @@ const NewsAndReview = () => {
           </div>
         </div>
         <div className="news-item">
-          <div className="news-image-placeholder"></div>
+        <img className="news-image-placeholder" src='https://cdn.moveek.com/storage/media/cache/small/66cea385df92a101936911.jpg'/>
           <div className="news-content">
             <h3>Thám Tử Kiên - Victor Vũ trở lại với thể loại kinh dị trinh thám</h3>
             <p>Đạo diễn Victor Vũ trở lại cùng thể loại hình thám tử Kiên và các nhân vật chính họp báo...</p>
@@ -50,7 +50,7 @@ const NewsAndReview = () => {
           </div>
         </div>
         <div className="news-item">
-          <div className="news-image-placeholder"></div>
+        <img className="news-image-placeholder" src='https://cdn.moveek.com/storage/media/cache/small/66cea385df92a101936911.jpg'/>
           <div className="news-content">
             <h3>Thám Tử Kiên - Victor Vũ trở lại với thể loại kinh dị trinh thám</h3>
             <p>Đạo diễn Victor Vũ trở lại cùng thể loại hình thám tử Kiên và các nhân vật chính họp báo...</p>
@@ -94,7 +94,7 @@ const NewsAndReview = () => {
           <span className="time">10 ngày trước</span> - <span className="reviewer">Ivy_Trat</span>
         </div>
       </div>
-    </div>
+      </div>
   );
 };
 

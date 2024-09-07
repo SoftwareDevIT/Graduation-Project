@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('news', function (Blueprint $table) {
-            $table->id('news_id');
+            $table->id('id');
             $table->string('title')->nullable();
             $table->unsignedBigInteger('news_category_id');
             $table->string('thumnail')->nullable();
@@ -20,7 +20,7 @@ return new class extends Migration
             $table->enum('status', ['Show', 'Hidden'])->default('Show');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
-            $table->foreign('news_category_id')->references('news_category_id')->on('news_category');
+            $table->foreign('news_category_id')->references('id')->on('news_category');
             $table->foreign('user_id')->references('id')->on('users');
         });
     }

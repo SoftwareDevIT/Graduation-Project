@@ -8,7 +8,10 @@ const MovieBanner = () => {
         infinite: true,
         speed: 500,
         slidesToScroll: 4,
-        slidesToShow: 8
+        slidesToShow: 8,
+        draggable: true,
+        swipe: true, 
+        swipeToSlide: true
       };
   return (
     <div className="movie-banner">
@@ -34,7 +37,7 @@ const MovieBanner = () => {
           <img src="https://cdn.moveek.com/storage/media/cache/short/66b1a047a14ac186965830.jpg" alt="Đẹp Trai Thật Sai Gái" />
           <div className="movie-info">
             <button className="buy-ticket">Mua vé</button>
-            <p>Đẹp Trai Thật Sai Gái</p>
+            <p>Đẹp Trai Thật...</p>
             <span>09/08</span>
             <span className="rating">98%</span>
           </div>
@@ -45,7 +48,7 @@ const MovieBanner = () => {
           <img src="https://cdn.moveek.com/storage/media/cache/short/668fa30fa8b81007665610.jpg" alt="Shin Cậu Bé Bút Chì" />
           <div className="movie-info">
             <button className="buy-ticket">Mua vé</button>
-            <p>Shin Cậu Bé Bút Chì</p>
+            <p>Shin Cậu Bé...</p>
             <span>23/08</span>
             <span className="rating">90%</span>
           </div>
@@ -56,7 +59,7 @@ const MovieBanner = () => {
           <img src="https://cdn.moveek.com/storage/media/cache/short/66ab461db9c63013081933.jpg" alt="Quái Vật Không Gian" />
           <div className="movie-info">
             <button className="buy-ticket">Mua vé</button>
-            <p>Quái Vật Không Gian</p>
+            <p>Quái Vật Không..</p>
             <span>16/08</span>
             <span className="rating">92%</span>
           </div>
@@ -100,7 +103,7 @@ const MovieBanner = () => {
           <img src="https://cdn.moveek.com/storage/media/cache/short/66c41ad3ba058964206197.jpg" alt="Harold Và Cả Đám Bạn" />
           <div className="movie-info">
             <button className="buy-ticket">Mua vé</button>
-            <p>Harold Và Cả Đám Bạn</p>
+            <p>Harold Và Cả...</p>
             <span>23/08</span>
             <span className="rating">90%</span>
           </div>

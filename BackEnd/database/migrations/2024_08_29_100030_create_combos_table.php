@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('combos', function (Blueprint $table) {
-            $table->id('combo_id');
+            $table->id('id');
             $table->string('combo_name');
             $table->string('images')->nullable();;
             $table->double('price');

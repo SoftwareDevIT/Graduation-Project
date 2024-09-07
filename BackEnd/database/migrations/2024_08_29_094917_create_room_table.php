@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('room', function (Blueprint $table) {
-            $table->id('room_id');
+            $table->id('id');
             $table->string('room_name');
             $table->unsignedBigInteger('cinema_id');
             $table->enum('status', ['On', 'Off'])->default('On');
             $table->timestamps();
-            $table->foreign('cinema_id')->references('cinema_id')->on('cinema');
+            $table->foreign('cinema_id')->references('id')->on('cinema');
         });
     }
 

@@ -11,14 +11,11 @@ class Showtime extends Model
 
     protected $table = 'showtimes';
     protected $fillable = [
-        'showtime_id',
         'movie_id',
         'room_id',
         'showtime_date',
         'showtime_start',
         'showtime_end',
         'status',
-        'created_at',
-        'updated_at',
     ];
 }
