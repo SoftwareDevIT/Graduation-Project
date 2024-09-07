@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Api\Movie;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Movie\Store\StoreActorRequest;
 use App\Http\Requests\Movie\Update\UpdateActorRequest;
+use App\Models\Actor;
 use App\Services\Movie\ActorService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use GuzzleHttp\Client;
 
 class ActorController extends Controller
 {
@@ -33,8 +35,20 @@ class ActorController extends Controller
      */
     public function store(StoreActorRequest $request)
     {
-        $actor = $this->actorService->store($request->validated());
-        return $this->success($actor, 'Thêm thành công');
+        try {
+            $file = $request->file('photo');
+            $filePath = $file->getPathName();
+            $imageLink = $this->actorService->uploadImage($filePath);
+
+            $actor = $request->validated();
+            $actor['photo'] = $imageLink;
+
+            $actor = $this->actorService->store($actor);
+
+            return $this->success($actor, 'Thêm thành công');
+        } catch (Exception $e) {
+            return $this->error('Có lỗi xảy ra: ' . $e->getMessage(), 500);
+        }
     }
 
     /**
@@ -61,8 +75,24 @@ class ActorController extends Controller
     public function update(UpdateActorRequest $request, string $id)
     {
         try {
-            $actor = $this->actorService->update($id, $request->validated());
-            return $this->success($actor, 'Update thành công');
+            $file = $request->file('photo');
+            if ($file) {
+                $filePath = $file->getPathName();
+                $imageLink = $this->actorService->uploadImage($filePath);
+            } else {
+                $imageLink = null; // Hoặc xử lý khác nếu không có file
+            }
+
+            // Lấy dữ liệu đã được xác thực từ request
+            $actor = $request->validated();
+
+            if ($imageLink) {
+                $actor['photo'] = $imageLink;
+            }
+
+            // Cập nhật dữ liệu của actor
+            $actor = $this->actorService->update($id, $actor);
+            return $this->success($actor, 'Cập nhập thành công');
         } catch (\Throwable $th) {
             if ($th instanceof ModelNotFoundException) {
                 return $this->notFound('Actor not found id = ' . $id, 404);
@@ -79,7 +109,7 @@ class ActorController extends Controller
     {
         try {
             $this->actorService->delete($id);
-            return $this->success(null,'Xóa thành công');
+            return $this->success(null, 'Xóa thành công');
         } catch (\Throwable $th) {
             if ($th instanceof ModelNotFoundException) {
                 return $this->notFound('Actor not found id = ' . $id, 404);

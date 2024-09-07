@@ -32,8 +32,23 @@ class DirectorController extends Controller
      */
     public function store(StoreDirectorRequest $request)
     {
-        $director = $this->directorService->store($request->validated());
-        return $this->success($director, 'Thêm thành công', 201);
+        // $director = $this->directorService->store($request->validated());
+        // return $this->success($director, 'Thêm thành công', 201);
+
+        try {
+            $file = $request->file('photo');
+            $filePath = $file->getPathName();
+            $imageLink = $this->directorService->uploadImage($filePath);
+
+            $director = $request->validated();
+            $director['photo'] = $imageLink;
+
+            $director = $this->directorService->store($director);
+
+            return $this->success($director, 'Thêm thành công');
+        } catch (Exception $e) {
+            return $this->error('Có lỗi xảy ra: ' . $e->getMessage(), 500);
+        }
     }
 
     /**
@@ -59,15 +74,42 @@ class DirectorController extends Controller
      */
     public function update(UpdateDirectorRequest $request, string $id)
     {
+        // try {
+        //     $director = $this->directorService->update($id, $request->validated());
+        //     return $this->success($director, 'Update thành công');
+        // } catch (\Throwable $th) {
+        //     if ($th instanceof ModelNotFoundException) {
+        //         return $this->notFound('Director not found id = ' . $id, 404);
+        //     }
+
+        //     return $this->error('Director not found id = ' . $id, 500);
+        // }
+
         try {
-            $director = $this->directorService->update($id, $request->validated());
-            return $this->success($director, 'Update thành công');
-        } catch (\Throwable $th) {
-            if ($th instanceof ModelNotFoundException) {
-                return $this->notFound('Director not found id = ' . $id, 404);
+            $file = $request->file('photo');
+            if ($file) {
+                $filePath = $file->getPathName();
+                $imageLink = $this->directorService->uploadImage($filePath);
+            } else {
+                $imageLink = null; // Hoặc xử lý khác nếu không có file
             }
 
-            return $this->error('Director not found id = ' . $id, 500);
+            // Lấy dữ liệu đã được xác thực từ request
+            $director = $request->validated();
+
+            if ($imageLink) {
+                $director['photo'] = $imageLink;
+            }
+
+            // Cập nhật dữ liệu của director
+            $director = $this->directorService->update($id, $director);
+            return $this->success($director, 'Cập nhập thành công');
+        } catch (\Throwable $th) {
+            if ($th instanceof ModelNotFoundException) {
+                return $this->notFound('director not found id = ' . $id, 404);
+            }
+
+            return $this->error('director not found id = ' . $id, 500);
         }
     }
 
