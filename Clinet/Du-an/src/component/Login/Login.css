@@ -3,7 +3,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between; /* Chỉnh giữa hai phần form và hình ảnh */
-    background-color: #f5f5f5;
+    /* background-color: #f5f5f5; */
     padding: 30px;
     max-width: 1200px;
     width: 100%;

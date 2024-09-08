@@ -96,7 +96,7 @@ function CinemaSelector() {
           movie: "Thiên Thần Hộ Mệnh",
           director: "Victor Vũ",
           duration: "115 phút",
-          genre: "Tâm lý",
+genre: "Tâm lý",
           times: ["11:30", "14:30", "17:30", "20:30"],
         },
       ],
@@ -136,16 +136,17 @@ function CinemaSelector() {
         <div className="locations">
           <h3 className="khuvuc">Khu vực</h3>
           <ul className="list-tp">
-            {Object.keys(cinemasByCity).map((city) => (
-              <li
-                key={city}
-                className={`city ${selectedCity === city ? "selected" : ""}`}
-                onClick={() => handleCityClick(city)}
-              >
-                {city}
-              </li>
-            ))}
-          </ul>
+  {Object.keys(cinemasByCity).map((city) => (
+    <li
+      key={city}
+      className={`city ${selectedCity === city ? "selected" : ""}`}
+      onClick={() => handleCityClick(city)}
+    >
+      {city}
+      <span className="cinema-count">{cinemasByCity[city].length}</span> {/* Hiển thị số lượng rạp */}
+    </li>
+  ))}
+</ul>
         </div>
 
         <div className="cinemas">
@@ -168,7 +169,7 @@ function CinemaSelector() {
   {[ "2/9","3/9","4/9","5/9","6/9","7/9","8/9"].map((date) => {
     const fullDate = new Date(`2024/${date.split("/")[1]}/${date.split("/")[0]}`);
     const dayOfWeek = fullDate.getDay(); // Lấy ngày trong tuần (0: Chủ Nhật, 1: Thứ Hai, ..., 6: Thứ Bảy)
-    const days = ["CN", "T2", "T3", "T4", "T5", "T6", "T7"]; // Mảng các thứ trong tuần
+    const days = ["CN", "T2", "T3", "T4", "T5", "T6", "T7"]; 
 
     return (
       <span
@@ -186,7 +187,7 @@ function CinemaSelector() {
             <div className="movies">
                <div className="no-showtimes">
               <p>Nhấn vào suất chiếu để tiến hành mua vé.</p>
-            </div>
+              </div>
               {currentShowtimes.map((showtime, index) => (
                 <div key={index} className="movie">
                   <img src="https://cdn.moveek.com/storage/media/cache/mini/6684d276139ad087720074.jpg" alt="Movie Poster" />

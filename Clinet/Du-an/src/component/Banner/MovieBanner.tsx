@@ -105,6 +105,7 @@ const MovieBanner = () => {
           <div className="movie-info">
             <button className="buy-ticket">Mua vé</button>
             <p>Harold Và Cả...</p>
+
             <span>23/08</span>
             <span className="rating">90%</span>
           </div>
