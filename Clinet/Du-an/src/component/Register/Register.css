@@ -1,0 +1,98 @@
+/* Container to center the form */
+.custom-register-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f5f5f5;
+    padding: 30px;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    gap: 20px;
+  }
+  
+  /* Form styling */
+  .custom-register-form {
+    width: 50%;
+    padding-bottom: 50px;
+    margin: 0;
+  }
+  
+  .custom-register-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 40px;
+  }
+  
+  /* Form group styling */
+  .custom-form-group {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+  }
+  
+  /* Form field styling */
+  .custom-form-field {
+    width: 48%;
+  }
+  
+  .custom-form-field label {
+    display: block;
+    margin-bottom: 15px;
+    font-size: 14px;
+  }
+  
+  .custom-form-field input {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  
+  /* Submit button styling */
+  .custom-submit-btn {
+    margin-top: 20px;
+    width: 100%;
+    padding: 12px;
+    background-color: #0D1E36;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .custom-submit-btn:hover {
+    background-color: black;
+  }
+  
+  /* Login link */
+  .custom-login-link {
+    text-align: center;
+    margin-top: 15px;
+    color: #555;
+  }
+  
+  .custom-login-link a {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .custom-login-link a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Image container */
+  .custom-image-container {
+    width: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .custom-image-container img {
+    max-width: 100%;
+    height: auto;
+  }
+  

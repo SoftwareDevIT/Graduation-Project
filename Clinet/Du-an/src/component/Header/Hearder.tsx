@@ -1,15 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Hearder.css";
 import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
     <header className="header">
+      
       <div className="header-left">
         <Link to={"/muave"} style={{ color: "red", fontWeight: "bold" }}>
           Đặt vé phim chiếu rạp
         </Link>
-
         <a href="#">Lịch chiếu</a>
         <div className="dropdown">
           <a href="#" className="dropbtn">
