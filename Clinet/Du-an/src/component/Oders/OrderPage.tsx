@@ -33,7 +33,7 @@ const OrderPage = () => {
           <div className="combo-header">
                 <div className='item'>COMBO</div>
                 <div className='item'>GIÁ TIỀN</div>
-                <div className='item'>SỐ LƯỢNG</div>
+                <div className='item fix-item'>SỐ LƯỢNG</div>
             </div>
             {combos.map((combo, index) => (
                 <div key={index} className="combo-item">
@@ -43,9 +43,9 @@ const OrderPage = () => {
                     </div>
                     <div className="combo-price">{combo.price.toLocaleString('vi-VN')} đ</div>
                     <div className="combo-quantity">
-                        <button onClick={() => handleQuantityChange(index, -1)}>-</button>
+                        <button className='iconcong' onClick={() => handleQuantityChange(index, -1)}>-</button>
                         <span>{combo.quantity}</span>
-                        <button onClick={() => handleQuantityChange(index, 1)}>+</button>
+                        <button className='iconcong' onClick={() => handleQuantityChange(index, 1)}>+</button>
                     </div>
                 </div>
             ))}
@@ -64,8 +64,8 @@ const OrderPage = () => {
   </div>
 
   <div className="actions">
-    <button className="back-btn">←</button>
-    <Link to={'/orders'}><button className="continue-btn">Tiếp Tục</button></Link>
+    <button className="back-btn2">←</button>
+    <Link to={'/pay'}><button className="continue-btn2" >Tiếp Tục</button></Link>
   </div>
 </div>
 

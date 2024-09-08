@@ -1,19 +1,20 @@
-.container-map{
-  margin-top: 0;
-  margin-left: 180px;
+.container-map {
+  margin: 0;
+  padding: 0;
+  margin-left: 130px;
+  max-width: 1600px; /* Increased width */
 }
+
 /* Hộp chính: sắp xếp ngang */
 .seat-info-box {
   display: flex;
-  flex-direction: row; /* Xếp ngang ghế và thông tin */
-  width: 90%;
-  max-width: 1200px;
-  background-color: #ffffff;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  flex-direction: row;
+  width: 100%; /* Takes up full container width */
+  max-width: 1600px; /* Increase max width */
+
   padding: 20px;
   align-items: flex-start;
-  justify-content: space-between; /* Cân đối khoảng cách */
+  justify-content: space-between;
 }
 
 /* Bản đồ ghế */
@@ -21,14 +22,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;   
- 
   border-radius: 15px;
-
+  width: 700px; /* Increased width for seat map box */
 }
+
 .thongtinphim{
-  margin-right: 20%;
-  margin-top: 20px;
+  margin-right: 18%;
+  margin-top: 0px;
 }
 .screen {
   font-size: 1.2em;
@@ -85,9 +85,9 @@
 }
 
 .seat.couple-seat {
-  background-color: #4ed3ca70;
+  background: linear-gradient(45deg, gray 50%, rgb(56, 53, 53) 50%);
   width: 58px;
-  border: 2px solid #4a464770;
+ 
 }
 
 .seat.reserved {
@@ -115,27 +115,40 @@
 
 /* Chi tiết phim và giá */
 .details-box {
-border: 1px solid #EDF2F9;
+border: 1px solid #899099;
 width: 400px;
 color: #000000;
   padding: 20px;
  background-color: #ffffff;
   margin-bottom: 20px;
   text-align: left;
+  border-radius: 5px;
+  margin-left: 30px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), /* Bóng đổ mềm chính */
+              0 6px 6px rgba(0, 0, 0, 0.1), /* Bóng đổ nhỏ hơn */
+              0 20px 40px rgba(0, 0, 0, 0.05); /* Bóng đổ mờ và lan rộng hơn */
+  
 }
 .details-box p{
   color: #000000;
   font-family: "Cerebri Sans, sans-serif;";
+
 }
 .details-box span{
   font-weight: bold;
 }
 /* Phần tổng đơn hàng */
 .price-box {
-  border: 1px solid #EDF2F9;
+  border: 1px solid #899099;
   background-color: #ffffff;
   padding: 10px;
   margin-bottom: 20px;
+  border-radius: 5px;
+  margin-left: 30px;
+  padding-left: 20px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), /* Bóng đổ mềm chính */
+  0 6px 6px rgba(0, 0, 0, 0.1), /* Bóng đổ nhỏ hơn */
+  0 20px 40px rgba(0, 0, 0, 0.05); /* Bóng đổ mờ và lan rộng hơn */
 }
 
 .price-box .price {
@@ -155,7 +168,8 @@ color: #000000;
   margin-top: 30px;
 }
 .back-btn{
-  margin-left: 5px;
+  margin-left: 30px;
+  height: 37px;
 }
 .back-btn, .continue-btn {
  width: 80px;
@@ -167,15 +181,16 @@ color: #000000;
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s;
+  
 }
 
 
 .continue-btn {
   border: none;
-  width: 200px;
+width: 250px;
   background: #6E849B;
   color: white;
-
+  
 }
 
 
@@ -204,5 +219,3 @@ color: #000000;
 .legend div {
   margin-right: 20px;
 }
-
-

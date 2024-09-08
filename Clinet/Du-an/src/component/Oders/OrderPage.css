@@ -2,17 +2,17 @@
 
   display: flex;
     width: 100%;
-    max-width: 1140px;
+    max-width: 1200px;
     margin: 0 auto;
-
+margin-left: 130px;
     border-radius: 8px;
- 
+
     padding: 20px;
 }
 .thongtincombo{
-    margin-top: 20px;
+    margin-top: 0px;
     border-radius: 10px;
-    width: 600px;
+    width: 700px;
     border: 1px solid #ddd;
     
 }
@@ -21,22 +21,23 @@
     height: 50px;
     border-radius: 10px 10px 0 0;
     display: grid;
-    grid-template-columns: 2.5fr 1fr 1fr;
+    grid-template-columns: 2.7fr 1fr 1fr;
     font-weight: bold;
     padding: 10px 0;
     border: 1px solid #ddd ;
     text-transform: uppercase;
-    color: rgb(149, 170, 201);
+    color: #95aac9;
     background-color:#edf2f9;
 }
 .combo-header .item{
+    line-height: 27px;
     margin-left: 20px;
 }
 
 .combo-item {
     font-family: "Cerebri Sans, sans-serif";
     margin-left: 15px;
-    width: 500px;
+    width: 650px;
     display: grid;
     grid-template-columns: 3fr 1fr 1fr;
     align-items: center;
@@ -51,26 +52,34 @@
 
 .combo-name {
  font-weight: 550;
-    color: #333;
+    color: #12263f;
+ padding-bottom: 5px;
 }
 
 .combo-description {
-    font-size: 12px;
-    color: #777;
+    font-size: 15px;
+    color: #95aac9;
 }
 
 .combo-price {
     font-weight: bold;
     color: #333;
     text-align: center;
+   
+   
 }
 
 .combo-quantity {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding-left: 30px;
 }
-
+.combo-quantity .iconcong{
+    border: 1px solid #e3ebf6;
+    width: 25px;
+    height: 25px;
+}
 .combo-quantity button {
     width: 30px;
     height: 30px;
@@ -93,9 +102,43 @@
 }
 .box-thongtinphim{
 
-width: 300px;
+width: 100px;
 margin-left: 50px;
 }
 .price-box{
     width: 400px;
 }
+.actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    width: 430px;
+  }
+  .back-btn2{
+    margin-left: 30px;
+    height: 37px;
+    width: 100px ;
+    
+  }
+  .back-btn2, .continue-btn2 {
+ 
+    padding: 10px 10px;
+    font-size: 1em;
+    background-color: #ffffff;
+    color: black;
+    border: 1px solid black;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s;
+    
+  }
+  
+  
+  .continue-btn2 {
+    
+    border: none;
+    width: 200px;
+    background: #6E849B;
+    color: white;
+    
+  }

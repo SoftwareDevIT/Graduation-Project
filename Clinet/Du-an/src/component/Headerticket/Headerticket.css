@@ -17,7 +17,9 @@
 
     margin: 0 5px; /* Giảm khoảng cách giữa các icon */
     font-size: 50px; /* Giảm kích thước dấu ">" */
-    color: #ccc; 
+    color: #ccc;
+    font-weight: lighter; /* hoặc font-weight: 100; */
+    font-size: 2.5em; /* Giảm kích thước để mũi tên nhỏ hơn */ 
 }
 
 .buoc {
