@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Update;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreComboRequest extends FormRequest
+class UpdatePayMethodRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,7 @@ class StoreComboRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            "pay_method_name" => "string",
         ];
     }
 }

@@ -9,7 +9,8 @@ use App\Http\Controllers\Api\Cinema\CinemaController;
 use App\Http\Controllers\Api\Movie\ActorController;
 use App\Http\Controllers\Api\Movie\DirectorController;
 use App\Http\Controllers\Api\Movie\MovieCategoryController;
-
+use App\Http\Controllers\Api\Combo\ComboController;
+use App\Http\Controllers\Api\PayMethod\PayMethodController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -26,6 +27,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('login', [AuthController::class, 'login']);
+Route::post('logout', [AuthController::class, 'logout']);
 Route::get('/user', [AuthController::class, 'list']);
 
 Route::post('register', [AuthController::class, 'register']);
@@ -34,18 +36,14 @@ Route::get('/list', [AuthController::class, 'list']);
 Route::get('/verify-account/{userId}', [AccountVerificationController::class, 'verify'])->name('verify');
 
 
-Route::get('location', [LocationController::class, 'index']);
-Route::post('location', [LocationController::class, 'store']);
-Route::put('location/{id}', [LocationController::class, 'update']);
-Route::delete('location/{id}', [LocationController::class, 'destroy']);
+Route::apiResource('location', LocationController::class);
 
-Route::get('cinema', [CinemaController::class, 'index']);
-Route::get('cinema/{id}', [CinemaController::class, 'show']);
-Route::post('cinema', [CinemaController::class, 'store']);
-Route::put('cinema/{id}', [CinemaController::class, 'update']);
-Route::delete('cinema/{id}', [CinemaController::class, 'destroy']);
+Route::apiResource('cinema', CinemaController::class);
 
 Route::apiResource('actor', ActorController::class);
 Route::apiResource('director', DirectorController::class);
 Route::apiResource('movie-category', MovieCategoryController::class);
 
+Route::apiResource('method', PayMethodController::class);
+
+Route::apiResource('combo', ComboController::class);
