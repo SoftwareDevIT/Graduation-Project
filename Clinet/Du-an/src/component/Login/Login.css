@@ -10,7 +10,10 @@
     margin: 0 auto;
     gap: 20px; /* Tăng khoảng cách giữa form và hình ảnh */
   }
-  
+  .error-message{
+    color: red;
+    margin-top: 10px;
+  }
   .login-form {
     width: 50%;
     padding-bottom: 50px;
