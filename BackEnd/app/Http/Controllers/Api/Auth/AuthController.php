@@ -54,4 +54,21 @@ class AuthController extends Controller
             return $e->getMessage();
         }
     }
+    public function logout(Request $request)
+    {
+        try {
+            $user = $request->user();
+            if ($user) {
+                $user->tokens()->delete(); 
+                return $this->success([], 'Logged out successfully.');
+            } else {
+                return $this->error('User is not authenticated or token is missing.');
+            }
+        } catch (\Exception $e) {
+            return $this->error($e->getMessage());
+        }
+    }
+
+
+
 }
