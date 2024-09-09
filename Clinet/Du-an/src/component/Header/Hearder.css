@@ -129,6 +129,7 @@
 
 .dropdown:hover .dropdown-content {
     display: block;
+
 }
 @media (max-width: 768px) {
     .header {
@@ -174,3 +175,6 @@
       margin: 5px 0;
     }
   }
+
+}
+
