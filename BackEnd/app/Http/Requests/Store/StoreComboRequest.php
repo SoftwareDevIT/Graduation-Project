@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Store;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreNewsCategoryRequest extends FormRequest
+class StoreComboRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,9 @@ class StoreNewsCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            "combo_name" => "string",
+            "price" => "",
+            "images" => "file",
         ];
     }
 }
