@@ -11,12 +11,13 @@ const MovieBanner = () => {
         slidesToShow: 8,
         draggable: true,
         swipe: true, 
-        swipeToSlide: true
+        swipeToSlide: true,
+        
       };
   return (
     <div className="movie-banner">
       <div className="banner-header">
-        <h2>Đang chiếu</h2>|<h2>Sắp chiếu</h2>
+        <h2>Đang chiếu</h2>|<h2 style={{color: "#95aac9"}}>Sắp chiếu</h2>
       </div>
       <div className="movie-slider">
       <div className="slider-container">
@@ -104,6 +105,7 @@ const MovieBanner = () => {
           <div className="movie-info">
             <button className="buy-ticket">Mua vé</button>
             <p>Harold Và Cả...</p>
+
             <span>23/08</span>
             <span className="rating">90%</span>
           </div>
