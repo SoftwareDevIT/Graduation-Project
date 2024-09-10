@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Api\New;
+namespace App\Http\Controllers\Api\News;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\NewCategory\StoreNewsCategoryRequest;
 use App\Http\Requests\NewCategory\UpdateNewsCategoryRequest;
-use App\Services\New\NewCategoryService;
+use App\Services\News\NewCategoryService;
 use Illuminate\Http\Request;
 
 class NewCategoryController extends Controller

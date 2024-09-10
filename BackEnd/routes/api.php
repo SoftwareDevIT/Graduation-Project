@@ -9,8 +9,8 @@ use App\Http\Controllers\Api\Cinema\CinemaController;
 use App\Http\Controllers\Api\Movie\ActorController;
 use App\Http\Controllers\Api\Movie\DirectorController;
 use App\Http\Controllers\Api\Movie\MovieCategoryController;
-use App\Http\Controllers\Api\New\NewCategoryController;
-use App\Http\Controllers\Api\New\NewController;
+use App\Http\Controllers\Api\News\NewCategoryController;
+use App\Http\Controllers\Api\News\NewController;
 use App\Http\Controllers\Api\Combo\ComboController;
 use App\Http\Controllers\Api\PayMethod\PayMethodController;
 /*
