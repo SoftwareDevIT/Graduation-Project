@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('booking', function (Blueprint $table) {
-            $table->id('booking_id');
+            $table->id('id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('showtime_id');
             $table->unsignedBigInteger('seat_id');
@@ -22,10 +22,10 @@ return new class extends Migration
             $table->enum('seat_status', ['hold', 'no'])->default('hold');
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('seat_id')->references('seat_id')->on('seats');
-            $table->foreign('pay_method_id')->references('pay_method_id')->on('pay_method');
-            $table->foreign('combo_id')->references('combo_id')->on('combos');
-            $table->foreign('showtime_id')->references('showtime_id')->on('showtimes');
+            $table->foreign('seat_id')->references('id')->on('seats');
+            $table->foreign('pay_method_id')->references('id')->on('pay_method');
+            $table->foreign('combo_id')->references('id')->on('combos');
+            $table->foreign('showtime_id')->references('id')->on('showtimes');
         });
     }
 

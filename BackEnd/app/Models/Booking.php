@@ -10,7 +10,6 @@ class Booking extends Model
     use HasFactory;
     protected $table = 'booking';
     protected $fillable = [
-        'booking_id',
         'user_id',
         'showtime_id',
         'seat_id',
@@ -18,7 +17,5 @@ class Booking extends Model
         'combo_id',
         'amount',
         'seat_status',
-        'created_at',
-        'updated_at',
     ];
 }

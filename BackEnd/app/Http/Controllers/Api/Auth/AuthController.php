@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
-use App\Services\LoginService;
+use App\Services\Auth\LoginService;
 use App\Services\UserRegistrationService;
 
 class AuthController extends Controller

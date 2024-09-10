@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('showtimes', function (Blueprint $table) {
-            $table->id('showtime_id');
+            $table->id('id');
             $table->unsignedBigInteger('movie_id');
             $table->unsignedBigInteger('room_id');
             $table->date('showtime_date');
@@ -20,8 +20,8 @@ return new class extends Migration
             $table->date('showtime_end');
             $table->enum('status', ['Show', 'Hidden'])->default('Show');
             $table->timestamps();
-            $table->foreign('movie_id')->references('movie_id')->on('movie');
-            $table->foreign('room_id')->references('room_id')->on('room');
+            $table->foreign('movie_id')->references('id')->on('movie');
+            $table->foreign('room_id')->references('id')->on('room');
         });
     }
 

@@ -34,8 +34,6 @@ class User extends Authenticatable
         'coin',
         'role_id',
         'status',
-        'created_at',
-        'updated_at',
     ];
 
     /**
