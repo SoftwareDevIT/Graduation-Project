@@ -12,7 +12,7 @@ use Illuminate\Queue\SerializesModels;
 
 class VerifyAccount extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable, SerializesModels ;
 
     public $user;
     public $verificationUrl;

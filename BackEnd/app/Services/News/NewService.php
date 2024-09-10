@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\New;
+namespace App\Services\News;
 
 use App\Models\News;
 use Illuminate\Support\Facades\Storage;
@@ -27,7 +27,7 @@ class NewService
         $news->thumnail_url = asset('storage/' . $news->thumnail);
         $news->save();
 
-    
+
         return $news;
     }
 
@@ -60,6 +60,6 @@ class NewService
             Storage::disk('public')->delete($news->thumnail);
         }
 
-        return$news->delete(); 
+        return$news->delete();
     }
 }
