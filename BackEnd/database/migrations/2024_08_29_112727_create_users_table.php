@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('avatar')->nullable();
             $table->string('phone')->nullable();
             $table->string('address')->nullable();
-            $table->string('fullname');
+            $table->string('fullname')->nullable();
             $table->double('coin')->nullable();
             $table->enum('status', ['Normal', 'Ban'])->default('Normal');
             $table->unsignedBigInteger('role_id'); // Unsigned big integer for foreign key
