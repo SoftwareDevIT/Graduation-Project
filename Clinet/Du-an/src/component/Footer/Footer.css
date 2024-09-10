@@ -52,3 +52,53 @@
     height: 40px;
     object-fit: contain;
 }
+@media (max-width: 1024px) {
+    .footer {
+        padding: 20px 30px;
+        flex-direction: column; /* Stack the footer on smaller screens */
+        align-items: center;
+    }
+
+    .footer-left {
+        text-align: center; /* Center text for smaller screens */
+    }
+
+    .footer-right {
+        justify-content: center;
+    }
+}
+
+/* For mobile phones */
+@media (max-width: 768px) {
+    .footer {
+        padding: 20px 20px;
+    }
+
+    .partners img {
+        height: 30px; /* Reduce the size of partner logos on mobile */
+    }
+
+    .company-info {
+        font-size: 12px; /* Smaller text for mobile */
+    }
+}
+
+/* For smaller mobile screens */
+@media (max-width: 480px) {
+    .footer {
+        padding: 10px;
+    }
+
+    .partners img {
+        height: 25px; /* Further reduce the logo size */
+    }
+
+    .company-info {
+        font-size: 11px;
+    }
+
+    .company-logo {
+        width: 40px;
+        height: 40px;
+    }
+}

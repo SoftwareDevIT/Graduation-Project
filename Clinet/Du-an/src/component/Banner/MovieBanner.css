@@ -97,3 +97,56 @@
   text-align: right;
   margin-left: 50px;
 }
+@media (max-width: 1024px) {
+  .slider-container {
+    width: 90%; /* Expand slider container width */
+  }
+
+  .movie-item {
+    height: 280px; /* Adjust height */
+  }
+
+  .movie-info p {
+    font-size: 0.9em;
+  }
+
+  .buy-ticket {
+    font-size: 0.85em;
+  }
+}
+
+/* Responsive styles for mobile phones */
+@media (max-width: 768px) {
+  .slider-container {
+    width: 95%; /* Full-width for mobile */
+  }
+
+  .movie-item {
+    height: 240px;
+  }
+
+  .movie-info p {
+    font-size: 0.8em;
+  }
+
+  .buy-ticket {
+    font-size: 0.75em;
+    padding: 8px;
+  }
+}
+
+/* Responsive styles for smaller mobile screens */
+@media (max-width: 480px) {
+  .movie-item {
+    height: 200px;
+  }
+
+  .movie-info p {
+    font-size: 0.7em;
+  }
+
+  .buy-ticket {
+    font-size: 0.7em;
+    padding: 6px;
+  }
+}
