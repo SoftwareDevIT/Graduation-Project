@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Store;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateNewsRequest extends FormRequest
+class StoreCinemaRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;  // Change this to true
     }
 
     /**
@@ -22,7 +22,8 @@ class UpdateNewsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'cinema_name' => 'sometimes|string|max:255',
+            'location_id' => 'integer',
         ];
     }
 }

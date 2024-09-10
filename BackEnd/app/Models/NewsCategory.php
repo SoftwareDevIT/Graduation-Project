@@ -14,4 +14,9 @@ class NewsCategory extends Model
         'descriptions',
         'status',
     ];
+
+    public function news()
+    {
+        return $this->hasMany(News::class, 'news_category_id', 'id');
+    }
 }
