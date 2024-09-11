@@ -11,9 +11,9 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
  */
 class MovieService
 {
-    public function index(): Collection
+    public function index()
     {
-        return Movie::all();
+        return Movie::with('showtimes')->get();
     }
 
     public function store(array $data)
