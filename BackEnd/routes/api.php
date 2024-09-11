@@ -9,8 +9,8 @@ use App\Http\Controllers\Api\Cinema\CinemaController;
 use App\Http\Controllers\Api\Movie\ActorController;
 use App\Http\Controllers\Api\Movie\DirectorController;
 use App\Http\Controllers\Api\Movie\MovieCategoryController;
-use App\Http\Controllers\Api\New\NewCategoryController;
-use App\Http\Controllers\Api\New\NewController;
+use App\Http\Controllers\Api\News\NewCategoryController;
+use App\Http\Controllers\Api\News\NewController;
 use App\Http\Controllers\Api\Combo\ComboController;
 use App\Http\Controllers\Api\Movie\MovieController;
 use App\Http\Controllers\Api\PayMethod\PayMethodController;
@@ -28,8 +28,12 @@ use App\Http\Controllers\Api\PayMethod\PayMethodController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/user', [AuthController::class, 'list']);
+});
 
 Route::post('login', [AuthController::class, 'login']);
+
 Route::post('logout', [AuthController::class, 'logout']);
 Route::get('/user', [AuthController::class, 'list']);
 
@@ -43,8 +47,10 @@ Route::apiResource('location', LocationController::class);
 Route::apiResource('cinema', CinemaController::class);
 
 
+
 Route::resource('news_category', NewCategoryController::class);// crud của danh mục tin tức
 Route::resource('news', NewController::class);// crud của tin tức
+
 
 Route::apiResource('actor', ActorController::class);// crud của tác giả
 Route::apiResource('director', DirectorController::class);// crud của diễn viên

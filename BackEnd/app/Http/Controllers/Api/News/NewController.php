@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Api\New;
+namespace App\Http\Controllers\Api\News;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\News\StoreNewsRequest;
 use App\Http\Requests\News\UpdateNewsRequest;
 use App\Models\News;
-use App\Services\New\NewService;
+use App\Services\News\NewService;
 use Illuminate\Http\Request;
 
 class NewController extends Controller
