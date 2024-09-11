@@ -22,4 +22,19 @@ class Movie extends Model
         'trailer',
         'status',
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(MovieCategory::class, 'movie_category_id');
+    }
+
+    public function actor()
+    {
+        return $this->belongsTo(Actor::class, 'actor_id');
+    }
+
+    public function director()
+    {
+        return $this->belongsTo(Director::class, 'director_id');
+    }
 }
