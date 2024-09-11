@@ -9,8 +9,8 @@ use App\Http\Controllers\Api\Cinema\CinemaController;
 use App\Http\Controllers\Api\Movie\ActorController;
 use App\Http\Controllers\Api\Movie\DirectorController;
 use App\Http\Controllers\Api\Movie\MovieCategoryController;
-use App\Http\Controllers\Api\New\NewCategoryController;
-use App\Http\Controllers\Api\New\NewController;
+use App\Http\Controllers\Api\News\NewCategoryController;
+use App\Http\Controllers\Api\News\NewController;
 use App\Http\Controllers\Api\Combo\ComboController;
 use App\Http\Controllers\Api\PayMethod\PayMethodController;
 /*
@@ -27,8 +27,16 @@ use App\Http\Controllers\Api\PayMethod\PayMethodController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/user', [AuthController::class, 'list']);
+});
 
 Route::post('login', [AuthController::class, 'login']);
+
+Route::post('/register', [AuthController::class, 'register']);
+Route::get('/list', [AuthController::class, 'list']);
+Route::get('/verify-account/{userId}', [AccountVerificationController::class, 'verify'])->name('verify');
+
 Route::post('logout', [AuthController::class, 'logout']);
 Route::get('/user', [AuthController::class, 'list']);
 
@@ -43,7 +51,9 @@ Route::apiResource('cinema', CinemaController::class);
 
 
 Route::resource('news_category', NewCategoryController::class);
+
 Route::resource('news', NewController::class);
+
 
 Route::apiResource('actor', ActorController::class);
 Route::apiResource('director', DirectorController::class);
