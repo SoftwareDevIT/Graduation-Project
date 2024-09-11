@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\Movie\MovieCategoryController;
 use App\Http\Controllers\Api\News\NewCategoryController;
 use App\Http\Controllers\Api\News\NewController;
 use App\Http\Controllers\Api\Combo\ComboController;
+use App\Http\Controllers\Api\Movie\MovieController;
 use App\Http\Controllers\Api\PayMethod\PayMethodController;
 /*
 |--------------------------------------------------------------------------
@@ -33,16 +34,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 Route::post('login', [AuthController::class, 'login']);
 
-Route::post('/register', [AuthController::class, 'register']);
-Route::get('/list', [AuthController::class, 'list']);
-Route::get('/verify-account/{userId}', [AccountVerificationController::class, 'verify'])->name('verify');
-
 Route::post('logout', [AuthController::class, 'logout']);
 Route::get('/user', [AuthController::class, 'list']);
 
-Route::post('register', [AuthController::class, 'register']);
-Route::get('/list', [AuthController::class, 'list']);
-Route::get('/verify-account/{userId}', [AccountVerificationController::class, 'verify'])->name('verify');
+Route::post('register', [AuthController::class, 'register']);// chức năng post của đăng ký
+Route::get('/list', [AuthController::class, 'list']);// danh sách tài khoản user
+Route::get('/verify-account/{userId}', [AccountVerificationController::class, 'verify'])->name('verify');// route để người dùng xác thực từ gmail
 
 
 Route::apiResource('location', LocationController::class);
@@ -50,15 +47,15 @@ Route::apiResource('location', LocationController::class);
 Route::apiResource('cinema', CinemaController::class);
 
 
-Route::resource('news_category', NewCategoryController::class);
 
-Route::resource('news', NewController::class);
+Route::resource('news_category', NewCategoryController::class);// crud của danh mục tin tức
+Route::resource('news', NewController::class);// crud của tin tức
 
 
-Route::apiResource('actor', ActorController::class);
-Route::apiResource('director', DirectorController::class);
-Route::apiResource('movie-category', MovieCategoryController::class);
-
+Route::apiResource('actor', ActorController::class);// crud của tác giả
+Route::apiResource('director', DirectorController::class);// crud của diễn viên
+Route::apiResource('movie-category', MovieCategoryController::class);// crud của danh mục phim
+Route::apiResource('movies', MovieController::class);// crud của phim
 Route::apiResource('method', PayMethodController::class);
 
 Route::apiResource('combo', ComboController::class);
