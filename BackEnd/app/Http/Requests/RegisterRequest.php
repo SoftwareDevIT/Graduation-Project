@@ -25,6 +25,7 @@ class RegisterRequest extends FormRequest
             'user_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
+            'g-recaptcha-response' => 'required',
         ];
     }
 
@@ -41,6 +42,7 @@ class RegisterRequest extends FormRequest
             'password.string' => 'The password must be a string.',
             'password.min' => 'The password must be at least 8 characters.',
             'password.confirmed' => 'The password confirmation does not match.',
+            'g-recaptcha-response.required' => 'The captcha field is required.',
         ];
     }
 }

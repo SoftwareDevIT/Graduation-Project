@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Api\Auth\AuthController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,3 +17,15 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+
+Route::get('/test', function () {
+    return view('test');
+});
+use App\Http\Controllers\RegisterController;
+
+Route::get('register', function () {
+    return view('test');
+})->name('register.form');
+
+Route::post('register', [RegisterController::class, 'register'])->name('register.submit');
+
