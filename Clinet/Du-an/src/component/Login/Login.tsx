@@ -1,34 +1,84 @@
-import React from "react";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import instance from "../../server";
+import { loginSchema, LoginSchema } from "../../utils/validationSchema";
 import "./Login.css";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-function Login() {
+const Login = () => {
+  const [serverError, setServerError] = useState<string | null>(null);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginSchema>({
+    resolver: zodResolver(loginSchema),
+  });
+
+  const navigate = useNavigate();
+
+  const onSubmit = async (data: LoginSchema) => {
+    try {
+      const response = await instance.post("/login", data);
+      if (response.status === 200) {
+        navigate("/");
+      }
+    } catch (error: any) {
+      if (error.response) {
+        // Xử lý lỗi từ server và lưu vào trạng thái lỗi chung
+        if (error.response.status === 403) {
+          setServerError("Tài khoản chưa được xác thực. Vui lòng kiểm tra email của bạn để xác thực tài khoản.");
+        } else if (error.response.status === 401) {
+          setServerError("Thông tin đăng nhập không chính xác.");
+        } else if (error.response.status === 404) {
+          setServerError("Email chưa tồn tại.");
+        } else {
+          setServerError("Đã xảy ra lỗi. Vui lòng thử lại sau.");
+        }
+      } else {
+        setServerError("Đã xảy ra lỗi. Vui lòng thử lại sau.");
+      }
+    }
+  };
+
   return (
     <div className="login-container">
       <div className="login-form">
         <h2>Đăng nhập</h2>
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
+         
           <div className="form-group">
-            <label>Tài khoản</label>
-            <input type="text" />
+            <label>Email</label>
+            <input
+              type="email"
+              {...register("email")}
+            />
+            {errors.email && <p className="error-message">{errors.email.message}</p>}
           </div>
           <div className="form-group">
             <label>Mật khẩu</label>
-            <input type="password" />
-          </div>
-          <div className="form-group">
-            <a href="/" className="forgot-password">
-              Quên mật khẩu?
-            </a>
+            <input
+              type="password"
+              {...register("password")}
+            />
+            {errors.password && <p className="error-message">{errors.password.message}</p>}
           </div>
           <button type="submit" className="login-button">
             Đăng nhập
           </button>
-          <div className="register-link">
-            <p>
-              Chưa có tài khoản? <a href="/">Đăng ký ngay!</a>
-            </p>
-          </div>
         </form>
+        {serverError && <p className="error-message">{serverError}</p>}
+  
+        <div className="form-footer">
+          <a href="/" className="forgot-password">
+            Quên mật khẩu?
+          </a>
+          <p className="register-link">
+            Chưa có tài khoản? <a href="/register">Đăng ký ngay!</a>
+          </p>
+        </div>
       </div>
       <div className="login-image">
         <img
@@ -38,6 +88,6 @@ function Login() {
       </div>
     </div>
   );
-}
+};
 
 export default Login;

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './MovieBanner.css';
 import Slider from 'react-slick';
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
 
 const MovieBanner = () => {
     var settings = {
@@ -12,7 +14,22 @@ const MovieBanner = () => {
         draggable: true,
         swipe: true, 
         swipeToSlide: true,
-        
+        responsive: [
+          {
+              breakpoint: 768, // For tablets
+              settings: {
+                  slidesToShow: 3,
+                  
+              }
+          },
+          {
+              breakpoint: 480, // For smaller mobile screens
+              settings: {
+                  slidesToShow: 3,
+                  
+              }
+          }
+      ]
       };
   return (
     <div className="movie-banner">

@@ -68,3 +68,28 @@
 .buoc:last-child::after {
     display: none; /* Ẩn đường kẻ cho bước cuối cùng */
 }
+@media (max-width: 768px) {
+    .thanh-tien-trinh {
+        flex-wrap: nowrap; /* Ensure steps are horizontal */
+        overflow-x: auto; /* Allow horizontal scrolling */
+    }
+
+    .buoc {
+        margin: 0 10px; /* Adjust space for smaller screens */
+    }
+
+    .separator {
+        font-size: 1.5em; /* Smaller arrow on mobile */
+    }
+}
+
+@media (max-width: 480px) {
+    .buoc {
+        font-size: 10px; /* Smaller font size for very small screens */
+        margin: 0 5px; /* Further reduce spacing */
+    }
+
+    .separator {
+        font-size: 1.2em; /* Further reduce arrow size */
+    }
+}
