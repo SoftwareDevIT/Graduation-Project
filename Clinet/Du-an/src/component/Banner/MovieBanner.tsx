@@ -16,9 +16,9 @@ const MovieBanner = () => {
         swipeToSlide: true,
         responsive: [
           {
-              breakpoint: 1024, // For tablets
+              breakpoint: 768, // For tablets
               settings: {
-                  slidesToShow: 4,
+                  slidesToShow: 3,
                   
               }
           },

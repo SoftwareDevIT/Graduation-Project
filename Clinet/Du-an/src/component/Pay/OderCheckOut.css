@@ -278,4 +278,88 @@
 /* Add specific colors for other icons as desired */
 
 
-  
+@media (max-width: 768px) {
+  .order-checkout-container {
+    flex-direction: column;
+    margin: 0;
+  }
+
+  .left-panel {
+    width: 100%;
+    margin-left: 0;
+    padding: 10px;
+  }
+
+  .order-summary {
+    width: 100%;
+    margin-left: 0;
+    /* Add any additional styles here if needed */
+  }
+
+  .payment-methods {
+    margin-left: 0;
+    /* Center icons */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .form-container {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .right-panel {
+    width: 100%;
+    margin-right: 0;
+    margin-top: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .order-checkout-container {
+    flex-direction: column;
+  }
+
+  .left-panel, .right-panel {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .order-summary, .payment-methods, .form-container, .right-panel {
+    padding: 10px;
+    box-shadow: none;
+  }
+
+  .order-item, .payment-methods li {
+    display: flex;
+    text-align: center;
+  }
+
+  .item-header, .order-item {
+    display: flex;
+  }
+
+  .order-item .item-quantity, .order-item .item-price {
+    display: block;
+    margin: 5px 0;
+  }
+
+  .payment-methods li {
+    margin-bottom: 15px;
+    /* Ensure icons are centered */
+    display: flex;
+    justify-content: center;
+  }
+
+  .checkout-details .description {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .checkout-details .checkout-button {
+    padding: 10px;
+    font-size: 16px;
+  }
+} 

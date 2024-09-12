@@ -129,3 +129,15 @@
 .dropdown:hover .dropdown-content {
   display: block;
 }
+/* Hearder.css */
+
+.header-right .icon-link svg {
+  fill: currentColor; /* Giữ màu hiện tại của text */
+  color: inherit;     /* Kế thừa màu từ thẻ cha */
+}
+
+/* Xóa mặc định màu của link */
+.header-right .icon-link {
+  color: inherit; /* Đảm bảo màu icon không thay đổi khi dùng Link */
+  text-decoration: none; /* Loại bỏ gạch chân nếu có */
+}
