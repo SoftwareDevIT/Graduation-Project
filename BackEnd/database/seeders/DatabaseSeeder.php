@@ -24,7 +24,9 @@ class DatabaseSeeder extends Seeder
             ComboSeeder::class,
             DirectorSeeder::class,
             MovieSeeder::class,
-            News::class
+            News::class,
+            RoomSeeder::class,
+            ShowtimeSeeder::class,
         ]);
     }
 }

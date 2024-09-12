@@ -18,4 +18,9 @@ class Showtime extends Model
         'showtime_end',
         'status',
     ];
+
+    public function movie()
+    {
+        return $this->belongsTo(Movie::class);
+    }
 }

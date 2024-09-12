@@ -37,4 +37,9 @@ class Movie extends Model
     {
         return $this->belongsTo(Director::class, 'director_id');
     }
+
+    public function showtimes()
+    {
+        return $this->hasMany(Showtime::class);
+    }
 }
