@@ -46,7 +46,6 @@ class AuthController extends Controller
             'email' => 'required|email',
             'password' => 'required',
         ]);
-
         try {
             $token = $this->loginService->login($request->only('email', 'password'));
             return $this->success($token);
@@ -59,7 +58,7 @@ class AuthController extends Controller
         try {
             $user = $request->user();
             if ($user) {
-                $user->tokens()->delete(); 
+                $user->tokens()->delete();
                 return $this->success([], 'Logged out successfully.');
             } else {
                 return $this->error('User is not authenticated or token is missing.');
