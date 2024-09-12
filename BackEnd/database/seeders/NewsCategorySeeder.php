@@ -15,17 +15,17 @@ class NewsCategorySeeder extends Seeder
     {
         DB::table('news_category')->insert([
             [
-                'news_category_name' => 'Tin điện ảnh',
+                'news_category_name' => 'Hành Động',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'news_category_name' => 'Đánh giá phim',
+                'news_category_name' => 'Kinh dị',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'news_category_name' => 'TV Series',
+                'news_category_name' => 'Tình Cảm',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]
