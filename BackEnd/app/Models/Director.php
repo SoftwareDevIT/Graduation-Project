@@ -17,4 +17,9 @@ class Director extends Model
         'country',
         'link_wiki',
     ];
+
+    public function movies()
+    {
+        return $this->hasMany(Movie::class);
+    }
 }
