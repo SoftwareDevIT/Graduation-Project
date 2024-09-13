@@ -17,7 +17,7 @@ class News extends Seeder
             [
                 'title' => 'Đố Anh Còng Được Tôi - Mãn nhãn với những pha hành động cực gắt của Hwang Jung Min và Jung Hae In',
                 'news_category_id' => '3',
-                'user_id' => '3',
+                'user_id' => '1',
                 'content' => 'Bậc thầy phim hành động Hwang Jung Min trở lại, bắt tay với “Con Trai Bạn Mẹ” Jung Hae In truy bắt tội phạm trong phim mới.
                 Đố Anh Còng Được Tôi (I, The Executioner) được biết đến là phần 2 của huyền thoại Veteran với 13 triệu vé bán ra vào năm 2015. Tiếp bước phần 1 sau 9 năm, phim được kỳ vọng sẽ làm nên chuyện với sự trở lại của bậc thầy phim hành động Hwang Jung Min và sự góp mặt của mỹ nam ăn khách nhất nhì Hàn Quốc - Jung Hae In. Tuy nhiên, phần 2 sẽ là câu chuyện tách rời hoàn toàn so với phần 1, chỉ giữ lại những nhân vật chủ chốt để cùng tạo nên một phần phim mới mẻ.',
                 'thumnail' => 'https://cdn.moveek.com/storage/media/cache/small/66e29ae31292b081798064.jpg',

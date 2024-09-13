@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Auth\AccountVerificationController;
 use App\Http\Controllers\Api\Cinema\LocationController;
 use App\Http\Controllers\Api\Cinema\CinemaController;
+use App\Http\Controllers\Api\Cinema\RoomController;
+use App\Http\Controllers\Api\Cinema\ShowtimeController;
 use App\Http\Controllers\Api\Movie\ActorController;
 use App\Http\Controllers\Api\Movie\DirectorController;
 use App\Http\Controllers\Api\Movie\MovieCategoryController;
@@ -59,4 +61,8 @@ Route::apiResource('movies', MovieController::class);// crud của phim
 Route::apiResource('method', PayMethodController::class);
 
 Route::apiResource('combo', ComboController::class);
+Route::apiResource('showtimes', ShowtimeController::class);
+Route::get('showtimes/movie/{movie_name}', [ShowtimeController::class, 'showtimeByMovieName']);
+Route::apiResource('room', RoomController::class);
+
 

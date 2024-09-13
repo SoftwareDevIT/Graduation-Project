@@ -22,7 +22,11 @@ class StoreShowtimeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            "movie_id" => "integer",
+            "room_id" => "integer",
+            "showtime_date" => "",
+            "showtime_start" => "",
+            "showtime_end" => "",
         ];
     }
 }

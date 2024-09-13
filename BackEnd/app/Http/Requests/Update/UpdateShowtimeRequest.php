@@ -22,7 +22,11 @@ class UpdateShowtimeRequest extends FormRequest
     public function rules(): array
     {
         return [
-
+            "movie_id" => "",
+            "room_id" => "",
+            "showtime_date" => "",
+            "showtime_start" => "",
+            "showtime_end" => "",
         ];
     }
 }

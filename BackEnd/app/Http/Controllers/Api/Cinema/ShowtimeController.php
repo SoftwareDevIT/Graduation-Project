@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Api\Cinema;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Store\StoreShowtimeRequest;
 use App\Http\Requests\Update\UpdateShowtimeRequest;
+use App\Models\Movie;
 use App\Services\Cinema\ShowtimeService;
 use Illuminate\Http\Request;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ShowtimeController extends Controller
 {
@@ -23,16 +25,18 @@ class ShowtimeController extends Controller
         $showtimes = $this->showtimeService->index();
         return $this->success($showtimes);
     }
-    public function show($id)
+
+    public function showtimeByMovieName($movie_name)
     {
         try {
-            $showtime = $this->showtimeService->get($id);
+            $showtimes = $this->showtimeService->getShowtimesByMovieName($movie_name);
 
-            if (!$showtime) {
-                return response()->json(['error' => 'showtime not found'], 404);
+            if ($showtimes->isEmpty()) {
+                return $this->notFound();
             }
-
-            return $this->success($showtime);
+            return $this->success($showtimes);
+        } catch (ModelNotFoundException $e) {
+            return $e->getMessage();
         } catch (Exception $e) {
             return $e->getMessage();
         }
@@ -59,6 +63,21 @@ class ShowtimeController extends Controller
     {
         try {
             return $this->success($this->showtimeService->delete($id));
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function show($id)
+    {
+        try {
+            $showtime = $this->showtimeService->get($id);
+
+            if (!$showtime) {
+                return $this->notFound();
+            }
+
+            return $this->success($showtime);
         } catch (Exception $e) {
             return $e->getMessage();
         }
