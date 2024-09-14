@@ -29,7 +29,9 @@ const Login = () => {
       if (error.response) {
         // Xử lý lỗi từ server và lưu vào trạng thái lỗi chung
         if (error.response.status === 403) {
-          setServerError("Tài khoản chưa được xác thực. Vui lòng kiểm tra email của bạn để xác thực tài khoản.");
+          setServerError(
+            "Tài khoản chưa được xác thực. Vui lòng kiểm tra email của bạn để xác thực tài khoản."
+          );
         } else if (error.response.status === 401) {
           setServerError("Thông tin đăng nhập không chính xác.");
         } else if (error.response.status === 404) {
@@ -48,29 +50,26 @@ const Login = () => {
       <div className="login-form">
         <h2>Đăng nhập</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
-         
           <div className="form-group">
             <label>Email</label>
-            <input
-              type="email"
-              {...register("email")}
-            />
-            {errors.email && <p className="error-message">{errors.email.message}</p>}
+            <input type="email" {...register("email")} />
+            {errors.email && (
+              <p className="error-message">{errors.email.message}</p>
+            )}
           </div>
           <div className="form-group">
             <label>Mật khẩu</label>
-            <input
-              type="password"
-              {...register("password")}
-            />
-            {errors.password && <p className="error-message">{errors.password.message}</p>}
+            <input type="password" {...register("password")} />
+            {errors.password && (
+              <p className="error-message">{errors.password.message}</p>
+            )}
           </div>
           <button type="submit" className="login-button">
             Đăng nhập
           </button>
         </form>
         {serverError && <p className="error-message">{serverError}</p>}
-  
+
         <div className="form-footer">
           <a href="/" className="forgot-password">
             Quên mật khẩu?
