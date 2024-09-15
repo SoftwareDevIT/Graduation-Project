@@ -10,6 +10,7 @@ class Showtime extends Model
     use HasFactory;
 
     protected $table = 'showtimes';
+    // protected $primaryKey = 'id';
     protected $fillable = [
         'movie_id',
         'room_id',
@@ -18,4 +19,9 @@ class Showtime extends Model
         'showtime_end',
         'status',
     ];
+
+    public function movie()
+    {
+        return $this->belongsTo(Movie::class);
+    }
 }

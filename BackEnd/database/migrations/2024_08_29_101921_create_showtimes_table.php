@@ -16,8 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('movie_id');
             $table->unsignedBigInteger('room_id');
             $table->date('showtime_date');
-            $table->date('showtime_start');
-            $table->date('showtime_end');
+            $table->time('showtime_start');
+            $table->time('showtime_end');
             $table->enum('status', ['Show', 'Hidden'])->default('Show');
             $table->timestamps();
             $table->foreign('movie_id')->references('id')->on('movie');
