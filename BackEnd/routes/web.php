@@ -25,7 +25,6 @@ use App\Http\Controllers\RegisterController;
 
 Route::get('register', function () {
     return view('test');
-})->name('register.form');
+})->name('register.form'); anhdung
 
 Route::post('register', [RegisterController::class, 'register'])->name('register.submit');
-
