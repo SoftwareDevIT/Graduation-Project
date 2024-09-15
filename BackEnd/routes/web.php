@@ -27,5 +27,4 @@ Route::get('register', function () {
     return view('test');
 })->name('register.form');
 
-
 Route::post('register', [RegisterController::class, 'register'])->name('register.submit');

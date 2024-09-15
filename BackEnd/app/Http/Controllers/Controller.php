@@ -10,5 +10,5 @@ use App\Traits\UploadImageTrait;
 
 class Controller extends BaseController
 {
-    use AuthorizesRequests, ValidatesRequests, ResponseTrait,UploadImageTrait;
+    use AuthorizesRequests, ValidatesRequests, ResponseTrait, UploadImageTrait;
 }
