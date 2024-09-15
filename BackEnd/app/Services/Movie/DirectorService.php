@@ -13,19 +13,6 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
  */
 class DirectorService
 {
-    protected $client;
-
-    public function __construct()
-    {
-        $this->client = new Client([
-            'base_uri' => 'https://api.imgur.com/3/',
-            'timeout' => 0,
-            'allow_redirects' => false,
-            'headers' => [
-                'Authorization' => 'Client-ID ' . env('IMGUR_CLIENT_ID'),
-            ],
-        ]);
-    }
     public function index(): Collection
     {
         return Director::all();
@@ -33,12 +20,7 @@ class DirectorService
 
     public function store(array $data): Director
     {
-        try {
-            return Director::create($data);
-        } catch (\Exception $e) {
-            // Xử lý ngoại lệ, ví dụ: ghi log hoặc trả về thông báo lỗi
-            throw new \Exception('An error occurred while creating the director.');
-        }
+        return Director::create($data);
     }
 
     public function update(int $id, array $data): Director
@@ -58,29 +40,5 @@ class DirectorService
     public function get(int $id): Director
     {
         return Director::query()->findOrFail($id);
-    }
-
-    public function uploadImage($filePath)
-    {
-        try {
-            $response = $this->client->request('POST', 'image', [
-                'multipart' => [
-                    [
-                        'name'     => 'image',
-                        'contents' => fopen($filePath, 'r'),
-                    ],
-                ],
-            ]);
-
-            $data = json_decode($response->getBody()->getContents(), true);
-
-            if (isset($data['success']) && $data['success']) {
-                return $data['data']['link'];
-            } else {
-                throw new Exception('Upload ảnh thất bại');
-            }
-        } catch (Exception $e) {
-            throw new Exception('Có lỗi xảy ra: ' . $e->getMessage());
-        }
     }
 }

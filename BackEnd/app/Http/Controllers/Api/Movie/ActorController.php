@@ -37,8 +37,7 @@ class ActorController extends Controller
     {
         try {
             $file = $request->file('photo');
-            $filePath = $file->getPathName();
-            $imageLink = $this->actorService->uploadImage($filePath);
+            $imageLink = $this->uploadImage($file);
 
             $actor = $request->validated();
             $actor['photo'] = $imageLink;
@@ -77,8 +76,7 @@ class ActorController extends Controller
         try {
             $file = $request->file('photo');
             if ($file) {
-                $filePath = $file->getPathName();
-                $imageLink = $this->actorService->uploadImage($filePath);
+                $imageLink = $this->uploadImage($file);
             } else {
                 $imageLink = null; // Hoặc xử lý khác nếu không có file
             }
