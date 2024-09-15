@@ -9,7 +9,6 @@ use App\Http\Controllers\Api\Cinema\CinemaController;
 use App\Http\Controllers\Api\Movie\ActorController;
 use App\Http\Controllers\Api\Movie\DirectorController;
 use App\Http\Controllers\Api\Movie\MovieCategoryController;
-use App\Http\Controllers\Api\Movie\MovieController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,7 +45,6 @@ Route::post('cinema', [CinemaController::class, 'store']);
 Route::put('cinema/{id}', [CinemaController::class, 'update']);
 Route::delete('cinema/{id}', [CinemaController::class, 'destroy']);
 
-Route::apiResource('movie', MovieController::class);
 Route::apiResource('actor', ActorController::class);
 Route::apiResource('director', DirectorController::class);
 Route::apiResource('movie-category', MovieCategoryController::class);
