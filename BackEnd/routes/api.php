@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Traits;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Auth\AccountVerificationController;
@@ -16,6 +18,7 @@ use App\Http\Controllers\Api\News\NewController;
 use App\Http\Controllers\Api\Combo\ComboController;
 use App\Http\Controllers\Api\Movie\MovieController;
 use App\Http\Controllers\Api\PayMethod\PayMethodController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -27,42 +30,35 @@ use App\Http\Controllers\Api\PayMethod\PayMethodController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('user', function (Request $request) {
+//     return $request->user();
+// });
+
+// Auth routes
+Route::post('login', [AuthController::class, 'login'])->name('login');
+Route::post('register', [AuthController::class, 'register']);
+Route::get('/verify-account/{userId}', [AccountVerificationController::class, 'verify'])->name('verify');
+
+
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('/user', [AuthController::class, 'list']);
+    Route::post('logout', [AuthController::class, 'logout']);
+    Route::get('list', [AuthController::class, 'list']);
+    // Route::get('/user', [AuthController::class, 'list']);
+    Route::apiResource('location', LocationController::class);
+    Route::apiResource('user', AuthController::class);
+    Route::apiResource('cinema', CinemaController::class);
+    Route::apiResource('room', RoomController::class);
+    Route::apiResource('showtimes', ShowtimeController::class);
+    Route::get('showtimes/movie/{movie_name}', [ShowtimeController::class, 'showtimeByMovieName']);
+
+    Route::resource('news_category', NewCategoryController::class);
+    Route::resource('news', NewController::class);
+
+    Route::apiResource('actor', ActorController::class);
+    Route::apiResource('director', DirectorController::class);
+    Route::apiResource('movie-category', MovieCategoryController::class);
+    Route::apiResource('movies', MovieController::class);
+    Route::apiResource('method', PayMethodController::class);
+    Route::apiResource('combo', ComboController::class);
 });
-
-Route::post('login', [AuthController::class, 'login']);
-
-Route::post('logout', [AuthController::class, 'logout']);
-Route::get('/user', [AuthController::class, 'list']);
-
-Route::post('register', [AuthController::class, 'register']);// chức năng post của đăng ký
-Route::get('/list', [AuthController::class, 'list']);// danh sách tài khoản user
-Route::get('/verify-account/{userId}', [AccountVerificationController::class, 'verify'])->name('verify');// route để người dùng xác thực từ gmail
-
-
-Route::apiResource('location', LocationController::class);
-
-Route::apiResource('cinema', CinemaController::class);
-
-
-
-Route::resource('news_category', NewCategoryController::class);// crud của danh mục tin tức
-Route::resource('news', NewController::class);// crud của tin tức
-
-
-Route::apiResource('actor', ActorController::class);// crud của tác giả
-Route::apiResource('director', DirectorController::class);// crud của diễn viên
-Route::apiResource('movie-category', MovieCategoryController::class);// crud của danh mục phim
-Route::apiResource('movies', MovieController::class);// crud của phim
-Route::apiResource('method', PayMethodController::class);
-
-Route::apiResource('combo', ComboController::class);
-Route::apiResource('showtimes', ShowtimeController::class);
-Route::get('showtimes/movie/{movie_name}', [ShowtimeController::class, 'showtimeByMovieName']);
-Route::apiResource('room', RoomController::class);
-
 
