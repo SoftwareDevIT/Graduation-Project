@@ -31,9 +31,6 @@ use App\Http\Controllers\Api\PayMethod\PayMethodController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('user', function (Request $request) {
-    return $request->user();
-});
 
 // Auth routes
 Route::post('login', [AuthController::class, 'login'])->name('login');
