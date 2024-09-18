@@ -18,4 +18,9 @@ class Actor extends Model
         'link_wiki',
 
     ];
+    
+    public function movies()
+    {
+        return $this->hasMany(Movie::class);
+    }
 }

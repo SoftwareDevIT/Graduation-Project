@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Slider from 'react-slick';
 import instance from '../../server';
 
-import './NewsContent.css'; // Make sure you have the corresponding styles
+import './NewsContent.css'; 
 import { NewsItem } from '../../interface/NewsItem';
 
 const NewsContent = () => {
@@ -82,3 +82,4 @@ const NewsContent = () => {
 };
 
 export default NewsContent;
+

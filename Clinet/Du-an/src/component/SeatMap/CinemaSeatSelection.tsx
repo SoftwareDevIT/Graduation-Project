@@ -1,9 +1,11 @@
-import React, { useState } from "react";
-import "./CinemaSeatSelection.css";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Header from "../Header/Hearder";
 import Footer from "../Footer/Footer";
 import Headerticket from "../Headerticket/Headerticket";
+import "./CinemaSeatSelection.css";
+import instance from "../../server";
+import { Room } from "../../interface/Room";
 
 interface SeatRowProps {
   row: string | { row: string; seats: (string | null)[] };
@@ -21,23 +23,55 @@ interface SeatProps {
 
 const CinemaSeatSelection: React.FC = () => {
   const [selectedSeats, setSelectedSeats] = useState<Map<string, number | null>>(new Map());
+  const [roomData, setRoomData] = useState<Room | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const seatRows: Array<string | { row: string; seats: (string | null)[] }> = [
-    { row: "A", seats: Array(12).fill(null) },
-    { row: "B", seats: Array(12).fill(null) },
-    { row: "C", seats: Array(12).fill(null) },
-    { row: "D", seats: [null, null, null, "reserved", "reserved", null, null, null, null, null, null, null] }, // D4, D5
-    { row: "E", seats: [null, null, null, null, null, null, null, "reserved", "reserved", null, null, null] }, // E8, E9
-    { row: "F", seats: Array(12).fill(null) },
-    { row: "G", seats: Array(12).fill(null) },
-    { row: "H", seats: [null, null, null, null, "reserved", "reserved", "reserved", "reserved", null, null, null, null] }, // H5, H6, H7, H8
-    { row: "I", seats: Array(12).fill(null) },
-    { row: "J", seats: Array(12).fill(null) },
-    { row: "K", seats: Array(12).fill(null) },
-    { row: "L", seats: ["couple", "couple", "couple", "couple", "couple", "couple"] },
-  ];  
+  useEffect(() => {
+    instance.get('/room')
+      .then(response => {
+        const data = response.data;
+
+        console.log('Room data:', data);
+
+        if (data && data.status && Array.isArray(data.data) && data.data.length > 0) {
+          const room = data.data[0];
+          if (room && typeof room.volume === 'number' && room.volume > 0) {
+            setRoomData(room);
+          } else {
+            setError('Invalid room data: volume is not a valid number');
+          }
+        } else {
+          setError('Invalid room data: no rooms available');
+        }
+      })
+      .catch(error => {
+        setError('Error fetching room data');
+        console.error('Error fetching room data:', error);
+      });
+  }, []);
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
+  if (!roomData) {
+    return <div>Loading...</div>;
+  }
+
+  const totalSeats = roomData.volume;
+  const seatsPerRow = 10; // Adjust based on actual layout
+  const totalRows = Math.ceil(totalSeats / seatsPerRow);
+  const rowLabels = Array.from({ length: totalRows }, (_, index) => String.fromCharCode(65 + index));
+
+  const seatRows: Array<string | { row: string; seats: (string | null)[] }> = rowLabels.map((rowLabel, rowIndex) => {
+    const startSeatNumber = rowIndex * seatsPerRow;
+    const endSeatNumber = Math.min(startSeatNumber + seatsPerRow, totalSeats);
+    const seats = Array.from({ length: endSeatNumber - startSeatNumber }, (_, index) => `${rowLabel}${startSeatNumber + index + 1}`);
+    return { row: rowLabel, seats };
+  });
 
   const handleSeatClick = (row: string, seatIndex: number) => {
+    const seat = `${row}${seatIndex + 1}`;
     setSelectedSeats(prev => {
       const newSelection = new Map(prev);
       if (newSelection.get(row) === seatIndex) {
@@ -51,50 +85,47 @@ const CinemaSeatSelection: React.FC = () => {
 
   return (
     <>
-    <Header/>
-    <Headerticket/>
-    <div className="container container-map">
-      <div className="seat-info-box"> {/* Combined seat-map and info-box */}
-        <div className="seat-map-box">
-          <div className="screen">MÀN HÌNH</div>
-          <div className="seat-map">
-            {seatRows.map((row, index) => (
-              <SeatRow
-                key={index}
-                row={row}
-                onSeatClick={handleSeatClick}
-                selectedSeats={selectedSeats}
-              />
-            ))}
+      <Header />
+      <Headerticket />
+      <div className="container container-map">
+        <div className="seat-info-box">
+          <div className="seat-map-box">
+            <div className="screen">MÀN HÌNH</div>
+            <div className="seat-map">
+              {seatRows.map((row, index) => (
+                <SeatRow
+                  key={index}
+                  row={row}
+                  onSeatClick={handleSeatClick}
+                  selectedSeats={selectedSeats}
+                />
+              ))}
+            </div>
+            <div className="legend">
+              <div><span className="seat selected"></span> Ghế bạn chọn</div>
+              <div><span className="seat couple-seat"></span> Ghế đôi</div>
+              <div><span className="seat reserved"></span> Đã bán</div>
+            </div>
           </div>
-          <div className="legend">
-            <div><span className="seat selected"></span> Ghế bạn chọn</div>
-            <div><span className="seat couple-seat"></span> Ghế đôi</div>
-            <div><span className="seat reserved"></span> Đã bán</div>
+          <div className="thongtinphim">
+            <div className="details-box">
+              <p>Làm Giàu Với Ma</p>
+              <p>Rạp:<span> Cinestar Quốc Thanh</span></p>
+              <p>Suất: <span> 23:59 28/08/2024</span></p>
+              <p>Phòng chiếu 01</p>
+              <p>Ghế {Array.from(selectedSeats.entries()).map(([row, index]) => `${row}${index !== null ? index + 1 : 'N/A'}`).join(', ')}</p>
+            </div>
+            <div className="price-box">
+              <div className="price">Tổng đơn hàng<br /> <span>0 đ</span></div>
+            </div>
+            <div className="actions">
+              <button className="back-btn">←</button>
+              <Link to={'/orders'}><button className="continue-btn">Tiếp Tục</button></Link>
+            </div>
           </div>
         </div>
-        <div className="thongtinphim">
-  <div className="details-box">
-    <p>Làm Giàu Với Ma</p>
-    <p>Rạp:<span> Cinestar Quốc Thanh</span></p>
-    <p>Suất: <span> 23:59 28/08/2024</span></p>
-    <p>Phòng chiếu 01</p>
-    <p>Ghế {Array.from(selectedSeats.entries()).map(([row, index]) => `${row}${index !== null ? index + 1 : 'N/A'}`).join(', ')}</p>
-  </div>
-
-  <div className="price-box">
-    <div className="price">Tổng đơn hàng<br /> <span>0 đ</span></div>
-  </div>
-
-  <div className="actions">
-    <button className="back-btn">←</button>
-    <Link to={'/orders'}><button className="continue-btn">Tiếp Tục</button></Link>
-  </div>
-</div>
-
       </div>
-    </div>
-    <Footer/>
+      <Footer />
     </>
   );
 };
@@ -104,8 +135,9 @@ const SeatRow: React.FC<SeatRowProps> = ({ row, onSeatClick, selectedSeats }) =>
   const seats = typeof row === "string" ? Array(12).fill(null) : row.seats;
 
   return (
-    <div className="seat-row">
-      <div className="seat-label">{rowLabel}</div>
+    <div className="seat-row-container">
+    <div className="seat-row-label">{rowLabel}</div>
+    <div className="seat-row-seats">
       {seats.map((seat, index) => (
         <Seat
           key={index}
@@ -117,6 +149,7 @@ const SeatRow: React.FC<SeatRowProps> = ({ row, onSeatClick, selectedSeats }) =>
         />
       ))}
     </div>
+  </div>
   );
 };
 
@@ -135,6 +168,5 @@ const Seat: React.FC<SeatProps> = ({ type, index, row, onSeatClick, isSelected }
     </div>
   );
 };
-
 
 export default CinemaSeatSelection;

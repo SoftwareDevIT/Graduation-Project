@@ -105,3 +105,50 @@
 .load-more-btn:hover {
   background-color: #e0e0e0;
 }
+/* Responsive styles for mobile devices */
+@media (max-width: 768px) {
+  .new-container {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .news-section,
+  .review-section {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .news-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .news-image-placeholder {
+    width: 100%;
+    height: auto;
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .news-content h3 {
+    font-size: 16px;
+  }
+
+  .news-content p {
+    font-size: 12px;
+  }
+
+  .review-item h3 {
+    font-size: 14px;
+  }
+
+  .review-item .time,
+  .review-item .reviewer {
+    font-size: 12px;
+  }
+  
+  .load-more-btn {
+    padding: 12px;
+    font-size: 14px;
+  }
+}

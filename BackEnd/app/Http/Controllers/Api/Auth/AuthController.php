@@ -27,7 +27,7 @@ class AuthController extends Controller
         try {
             $user = $this->userRegistrationService->register($request->validated());
             Mail::to($user->email)->queue(new VerifyAccount($user));
-            return $this->success($user, 'success');
+            return $this->success('Tạo tài khoảng thành công!', 'success',200);
         } catch (\Throwable $th) {
             return $this->error($th->getMessage());
         }
@@ -49,17 +49,26 @@ class AuthController extends Controller
 
         try {
             $token = $this->loginService->login($request->only('email', 'password'));
-
-            return response()->json([
-                'status_code' => 200,
-                'access_token' => $token,
-                'token_type' => 'Bearer',
-            ]);
+            return $this->success($token);
         } catch (\Exception $e) {
-            return response()->json([
-                'status_code' => 401,
-                'message' => $e->getMessage(),
-            ], 401);
+            return $e->getMessage();
         }
     }
+    public function logout(Request $request)
+    {
+        try {
+            $user = $request->user();
+            if ($user) {
+                $user->tokens()->delete(); 
+                return $this->success([], 'Logged out successfully.');
+            } else {
+                return $this->error('User is not authenticated or token is missing.');
+            }
+        } catch (\Exception $e) {
+            return $this->error($e->getMessage());
+        }
+    }
+
+
+
 }

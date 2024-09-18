@@ -27,7 +27,6 @@ const Login = () => {
       }
     } catch (error: any) {
       if (error.response) {
-        // Xử lý lỗi từ server và lưu vào trạng thái lỗi chung
         if (error.response.status === 403) {
           setServerError(
             "Tài khoản chưa được xác thực. Vui lòng kiểm tra email của bạn để xác thực tài khoản."

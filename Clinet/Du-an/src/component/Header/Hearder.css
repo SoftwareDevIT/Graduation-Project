@@ -1,19 +1,19 @@
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 150px;
-  background-color: #fff;
-  border-bottom: 1px solid #ddd;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 140px;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 .header-left {
-  display: flex;
-  align-items: center;
-  gap: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
 .header-left a {
@@ -35,6 +35,10 @@
   font-weight: bold;
   text-transform: lowercase;
   letter-spacing: 2px;
+}
+.header-logo a{
+  color: #e50914;
+  text-decoration: none;
 }
 
 .header-right {
@@ -129,47 +133,15 @@
 .dropdown:hover .dropdown-content {
   display: block;
 }
-@media (max-width: 768px) {
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+/* Hearder.css */
 
-  .header-left, .header-right {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .header-logo {
-    width: 100%;
-    text-align: center;
-    margin-bottom: 10px;
-  }
-
-  .header a, .header input[type="text"] {
-    margin: 5px 0;
-  }
-
-  .header input[type="text"] {
-    width: calc(100% - 20px);
-  }
-
-  .header-right {
-    flex-direction: column;
-    align-items: flex-end;
-  }
+.header-right .icon-link svg {
+  fill: currentColor; /* Giữ màu hiện tại của text */
+  color: inherit;     /* Kế thừa màu từ thẻ cha */
 }
 
-@media (max-width: 480px) {
-  .header-left, .header-right {
-flex-direction: column;
-  }
-
-  .dropdown-content {
-    min-width: 100%;
-  }
-
-  .header-right svg {
-    margin: 5px 0;
-  }
+/* Xóa mặc định màu của link */
+.header-right .icon-link {
+  color: inherit; /* Đảm bảo màu icon không thay đổi khi dùng Link */
+  text-decoration: none; /* Loại bỏ gạch chân nếu có */
 }

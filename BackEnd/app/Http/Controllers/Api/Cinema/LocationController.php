@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api\Cinema;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Store\StoreLocationRequest;
 use Illuminate\Http\Request;
 use App\Services\Cinema\LocationService;
-use App\Http\Requests\Store\Cinema\StoreLocationRequest;
-use App\Http\Requests\update\Cinema\UpdateLocationRequest;
+use App\Http\Requests\update\UpdateLocationRequest;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -23,14 +23,13 @@ class LocationController extends Controller
     public function index()
     {
         $locations = $this->locationService->index();
-
-        return response()->json($locations);
+        return $this->success($locations);
     }
 
     public function store(StoreLocationRequest $request)
     {
         $location = $this->locationService->store($request->validated());
-        return response()->json($location, 201);
+        return $this->success($location);
 
     }
 
@@ -38,19 +37,18 @@ class LocationController extends Controller
     {
         try {
             $location = $this->locationService->update($id, $request->validated());
-            return response()->json($location);
+            return $this->success($location);
         } catch (Exception $e) {
-            return response()->json(['error' => 'Location not found'], 404);
+            return $e->getMessage();
         }
     }
 
     public function destroy($id)
     {
         try {
-            $this->locationService->delete($id);
-            return response()->json(null, 204);
+            return $this->success($this->locationService->delete($id));
         } catch (Exception $e) {
-            return response()->json(['error' => 'Location not found'], 404);
+            return $e->getMessage();
         }
     }
 }
