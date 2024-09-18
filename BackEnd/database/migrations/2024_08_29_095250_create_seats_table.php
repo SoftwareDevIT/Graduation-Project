@@ -14,11 +14,11 @@ return new class extends Migration {
             $table->id('id');
             // $table->string('seat_type');
             $table->enum('seat_type', ['single', 'double'])->default('single');
-            $table->unsignedBigInteger('room_id');
-            $table->string('row');
-            $table->integer('number');
+            // $table->unsignedBigInteger('room_id');
+            // $table->string('row');
+            $table->integer('number_seat');
             $table->timestamps();
-            $table->foreign('room_id')->references('id')->on('room');
+            // $table->foreign('room_id')->references('id')->on('room');
         });
     }
 
