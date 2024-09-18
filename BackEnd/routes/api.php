@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\Movie\MovieCategoryController;
 use App\Http\Controllers\Api\News\NewCategoryController;
 use App\Http\Controllers\Api\News\NewController;
 use App\Http\Controllers\Api\Combo\ComboController;
+use App\Http\Controllers\Api\Movie\FavoriteController;
 use App\Http\Controllers\Api\Movie\MovieController;
 use App\Http\Controllers\Api\PayMethod\PayMethodController;
 /*
@@ -32,12 +33,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', [AuthController::class, 'list']);
+    Route::post('favorites', [FavoriteController::class, 'store']);             // Chức năng yêu thích phim
+    Route::delete('favorites/{movie_id}', [FavoriteController::class, 'destroy']);    // Chức năng xóa yêu thích phim
 });
 
 Route::post('login', [AuthController::class, 'login']);
 
 Route::post('logout', [AuthController::class, 'logout']);
-Route::get('/user', [AuthController::class, 'list']);
+// Route::get('/user', [AuthController::class, 'list']);
 
 Route::post('register', [AuthController::class, 'register']);// chức năng post của đăng ký
 Route::get('/list', [AuthController::class, 'list']);// danh sách tài khoản user
@@ -54,11 +57,12 @@ Route::resource('news_category', NewCategoryController::class);// crud của dan
 Route::resource('news', NewController::class);// crud của tin tức
 
 
-Route::apiResource('actor', ActorController::class);// crud của tác giả
-Route::apiResource('director', DirectorController::class);// crud của diễn viên
-Route::apiResource('movie-category', MovieCategoryController::class);// crud của danh mục phim
-Route::apiResource('movies', MovieController::class);// crud của phim
+Route::apiResource('actor', ActorController::class);                        // crud của tác giả
+Route::apiResource('director', DirectorController::class);                  // crud của diễn viên
+Route::apiResource('movie-category', MovieCategoryController::class);       // crud của danh mục phim
+Route::apiResource('movies', MovieController::class);                       // crud của phim
 Route::apiResource('method', PayMethodController::class);
+Route::get('/movie/search/{movie_name}', [MovieController::class, 'search']);    // Chức năng tìm kiếm theo tên phim
 
 Route::apiResource('combo', ComboController::class);
 Route::apiResource('showtimes', ShowtimeController::class);
