@@ -54,6 +54,7 @@
   display: flex;
   align-items: center;
   margin-bottom: 8px;
+  position: relative;
 }
 
 .seat-label {
@@ -112,6 +113,24 @@
 .seat.selected .seat-number {
   opacity: 1;
 }
+.seat-row:last-child {
+  display: flex;
+  justify-content: flex-start; /* Canh các ghế về phía trái */
+  margin-bottom: 8px;
+}
+/* CSS cho hàng ghế cuối cùng "L" */
+.seat-row:last-child .seat-label {
+  position: relative; /* Đổi từ absolute sang relative */
+  left: 0;
+  width: 40px; /* Cố định cùng độ rộng với các hàng ghế khác */
+  text-align: center;
+  display: block; /* Đảm bảo phần tử này hiển thị */
+  z-index: 1; /* Đảm bảo phần tử này nằm trên các ghế nếu bị che */
+  color: #555;
+  margin-right: 5px; /* Thêm khoảng cách giữa nhãn ghế và ghế đầu tiên */
+}
+
+
 
 /* Chi tiết phim và giá */
 .details-box {

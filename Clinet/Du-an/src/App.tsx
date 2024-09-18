@@ -1,7 +1,7 @@
 
 import "./App.css";
 
-import {  Route, Routes } from "react-router-dom";
+import {  Route, Router, Routes } from "react-router-dom";
 import Home from "./Page/Home";
 import Bookcinematickets from "./Page/Bookcinematickets";
 import OrderPage from "./component/Oders/OrderPage";
@@ -11,6 +11,12 @@ import Headerticket from "./component/Headerticket/Headerticket";
 
 import RegisterCinema from "./Page/RegisterCinema";
 import LoginCinema from "./Page/LoginCinema";
+
+
+
+
+
+
 
 
 
@@ -36,8 +42,13 @@ function App() {
 
       <Route path="/register" element={<RegisterCinema/>}/>
       <Route path="/login" element={<LoginCinema/>}/>
+      
+    
+
+     
 
       </Routes>
+
     </>
   );
 }
