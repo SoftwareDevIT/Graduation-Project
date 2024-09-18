@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -18,6 +17,8 @@ return new class extends Migration
             $table->unsignedBigInteger('seat_id');
             $table->unsignedBigInteger('pay_method_id');
             $table->unsignedBigInteger('combo_id')->nullable();
+            $table->double('price_ticket')->nullable();
+            $table->double('price_combo')->nullable();
             $table->double('amount');
             $table->enum('seat_status', ['hold', 'no'])->default('hold');
             $table->timestamps();

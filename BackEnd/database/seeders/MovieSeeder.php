@@ -17,6 +17,7 @@ class MovieSeeder extends Seeder
             [
                 'movie_name' => 'Trấn thành',
                 'movie_category_id' => '1',
+                'cinema_id' => '1',
                 'director_id' => '1',
                 'actor_id' => '1',
                 'poster' => 'https://cdn.moveek.com/storage/media/cache/short/6672a665bf15f621375171.jpg',
@@ -31,6 +32,7 @@ class MovieSeeder extends Seeder
             [
                 'movie_name' => 'Làm Giàu Với Ma',
                 'movie_category_id' => '3',
+                'cinema_id' => '1',
                 'director_id' => '2',
                 'actor_id' => '1',
                 'poster' => 'https://cdn.moveek.com/storage/media/cache/short/66b1a047a14ac186965830.jpg',
@@ -45,6 +47,7 @@ class MovieSeeder extends Seeder
             [
                 'movie_name' => 'Hai Muối',
                 'movie_category_id' => '5',
+                'cinema_id' => '1',
                 'director_id' => '3',
                 'actor_id' => '2',
                 'poster' => 'https://cdn.moveek.com/storage/media/cache/short/66c2c56176eb2629893638.jpg',
