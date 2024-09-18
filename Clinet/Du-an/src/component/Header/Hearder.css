@@ -127,9 +127,62 @@
 }
 
 .dropdown:hover .dropdown-content {
+
+    display: block;
+
+}
+@media (max-width: 768px) {
+    .header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .header-left, .header-right {
+      width: 100%;
+      justify-content: space-between;
+    }
+  
+    .header-logo {
+      width: 100%;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+  
+    .header a, .header input[type="text"] {
+      margin: 5px 0;
+    }
+  
+    .header input[type="text"] {
+      width: calc(100% - 20px);
+    }
+  
+    .header-right {
+      flex-direction: column;
+      align-items: flex-end;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .header-left, .header-right {
+      flex-direction: column;
+    }
+  
+    .dropdown-content {
+      min-width: 100%;
+    }
+  
+    .header-right svg {
+      margin: 5px 0;
+    }
+
+  }
+
+ 
+
   display: block;
 }
 /* Hearder.css */
+
 
 .header-right .icon-link svg {
   fill: currentColor; /* Giữ màu hiện tại của text */
