@@ -22,7 +22,11 @@ class UpdateActorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "actor_name" => "required|string"
+            'actor_name' => 'string|max:255',
+            'descripcion' => 'max:255',
+            'photo' => 'mimes:jpeg,png,jpg,gif|max:2048',
+            'country' => 'max:255',
+            'link_wiki' => 'max:255',
         ];
     }
 }
