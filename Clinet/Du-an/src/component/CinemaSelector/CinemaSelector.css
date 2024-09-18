@@ -332,3 +332,136 @@ li.city.selected {
   font-size: 12px;
   font-weight: bold;
 }
+/* CSS hiện tại của bạn */
+
+/* Media queries cho các thiết bị nhỏ hơn */
+@media (max-width: 1024px) {
+  .container {
+    flex-direction: column; /* Chuyển đổi thành cột */
+  }
+
+  .locations, .cinemas, .showtimes {
+    width: 100%; /* Chiếm toàn bộ chiều rộng */
+    padding: 10px; /* Giảm padding */
+    margin: 0; /* Xóa margin */
+  }
+
+  .locations {
+    width: 100%; /* Chiếm toàn bộ chiều rộng */
+  }
+
+  .cinemas {
+    width: 100%; /* Chiếm toàn bộ chiều rộng */
+    margin-top: 10px; /* Thêm khoảng cách giữa các phần */
+  }
+
+  .showtimes {
+    width: 100%; /* Chiếm toàn bộ chiều rộng */
+    margin-top: 10px; /* Thêm khoảng cách giữa các phần */
+  }
+
+  .movie {
+    flex-direction: column; /* Xếp theo cột */
+    align-items: flex-start; /* Căn lề trái */
+    margin-bottom: 15px; /* Giảm khoảng cách giữa các phần tử */
+  }
+
+  .movie img {
+    width: 100%; /* Đảm bảo hình ảnh không vượt quá chiều rộng */
+    height: auto; /* Tự động điều chỉnh chiều cao */
+    margin-right: 0; /* Xóa margin bên phải */
+    margin-left: 0; /* Xóa margin bên trái */
+  }
+
+  .details {
+    text-align: left; /* Căn lề trái */
+    padding: 10px 0; /* Thêm padding */
+  }
+
+  .date-selection {
+    flex-direction: column; /* Chuyển đổi thành cột */
+    margin-bottom: 10px; /* Thêm khoảng cách giữa các phần */
+  }
+
+  .date-selection span {
+    padding: 5px;
+    font-size: 12px; /* Giảm kích thước chữ */
+  }
+
+  .showtimes-list button {
+    padding: 8px 10px; /* Giảm kích thước padding */
+    font-size: 12px; /* Giảm kích thước chữ */
+  }
+
+  .no-showtimes {
+    height: auto; /* Cho phép chiều cao tự điều chỉnh */
+  }
+
+  .cinema-count {
+    font-size: 10px; /* Giảm kích thước chữ */
+    width: 15px; /* Giảm kích thước vòng tròn */
+    height: 15px; /* Giảm kích thước vòng tròn */
+  }
+}
+
+/* Media queries cho các thiết bị nhỏ hơn nữa */
+@media (max-width: 768px) {
+  .container {
+    padding: 10px; /* Giảm padding */
+  }
+
+  .locations, .cinemas, .showtimes {
+    padding: 5px; /* Giảm padding thêm nữa */
+  }
+
+  .movie {
+    margin-bottom: 10px; /* Giảm khoảng cách giữa các phần tử */
+  }
+
+  .movie img {
+    width: 100%; /* Đảm bảo hình ảnh không vượt quá chiều rộng */
+  }
+
+  .details {
+    padding: 5px 0; /* Giảm padding */
+  }
+
+  .date-selection {
+    display: flex;
+    flex-direction: row; /* Change to horizontal layout */
+    flex-wrap: wrap; /* Allow wrapping if needed */
+    align-items: center; /* Align items vertically centered */
+    gap: 10px; /* Add some space between items */
+    margin-bottom: 10px; /* Add space below the date selection */
+  }
+  
+  .date-selection span {
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    background-color: #D9D9D9; /* Background color */
+  }
+  
+  .date-selection span p {
+    color: #95AACC;
+    margin: 0;
+    padding-left: 10px;
+  }
+  
+  .date-selection .selected {
+    background-color: #C7D6EC; /* Selected background color */
+    color: #fff; /* Selected text color */
+  }
+  
+  .showtimes-list button {
+    padding: 6px 8px; /* Giảm kích thước padding */
+    font-size: 10px; /* Giảm kích thước chữ */
+  }
+
+  .cinema-count {
+    font-size: 8px; /* Giảm kích thước chữ */
+    width: 12px; /* Giảm kích thước vòng tròn */
+    height: 12px; /* Giảm kích thước vòng tròn */
+  }
+}

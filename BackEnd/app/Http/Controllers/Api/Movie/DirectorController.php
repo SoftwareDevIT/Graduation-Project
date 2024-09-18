@@ -32,8 +32,19 @@ class DirectorController extends Controller
      */
     public function store(StoreDirectorRequest $request)
     {
-        $director = $this->directorService->store($request->validated());
-        return $this->success($director, 'Thêm thành công', 201);
+        try {
+            $file = $request->file('photo');
+            $imageLink = $this->uploadImage($file);
+
+            $direct = $request->validated();
+            $direct['photo'] = $imageLink;
+
+            $direct = $this->directorService->store($direct);
+
+            return $this->success($direct, 'Thêm thành công');
+        } catch (Exception $e) {
+            return $this->error('Có lỗi xảy ra: ' . $e->getMessage(), 500);
+        }
     }
 
     /**
@@ -59,15 +70,31 @@ class DirectorController extends Controller
      */
     public function update(UpdateDirectorRequest $request, string $id)
     {
+
         try {
-            $director = $this->directorService->update($id, $request->validated());
-            return $this->success($director, 'Update thành công');
-        } catch (\Throwable $th) {
-            if ($th instanceof ModelNotFoundException) {
-                return $this->notFound('Director not found id = ' . $id, 404);
+            $file = $request->file('photo');
+            if ($file) {
+                $imageLink = $this->uploadImage($file);
+            } else {
+                $imageLink = null; // Hoặc xử lý khác nếu không có file
             }
 
-            return $this->error('Director not found id = ' . $id, 500);
+            // Lấy dữ liệu đã được xác thực từ request
+            $direct = $request->validated();
+
+            if ($imageLink) {
+                $direct['photo'] = $imageLink;
+            }
+
+            // Cập nhật dữ liệu của direct
+            $direct = $this->directorService->update($id, $direct);
+            return $this->success($direct, 'Cập nhập thành công');
+        } catch (\Throwable $th) {
+            if ($th instanceof ModelNotFoundException) {
+                return $this->notFound('Direct not found id = ' . $id, 404);
+            }
+
+            return $this->error('Direct not found id = ' . $id, 500);
         }
     }
 

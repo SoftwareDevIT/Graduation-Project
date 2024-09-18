@@ -25,7 +25,19 @@ use App\Http\Controllers\RegisterController;
 
 Route::get('register', function () {
     return view('test');
+
 })->name('register.form');
 
 Route::post('register', [RegisterController::class, 'register'])->name('register.submit');
+
+
+
+// Check if user is logged in?
+Route::get('/', function () {
+    // return view('');
+    // If the user is successfully logged in, return here ...
+})->middleware('checkLogin');
+
+
+
 

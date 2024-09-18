@@ -1,3 +1,4 @@
+/* Existing styles */
 .news-container {
   display: flex;
   gap: 20px;
@@ -6,11 +7,9 @@
 }
 
 .main-news {
- 
   background-color: white;
   border-radius: 10px;
   padding: 20px;
-  /* box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); */
   width: 60%;
   margin-left: 120px;
 }
@@ -40,11 +39,10 @@
 }
 
 .related-news {
- width: 22.5%;
+  width: 22.5%;
   background-color: white;
   border-radius: 10px;
   padding: 20px;
-  /* box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); */
 }
 
 .related-news ul {
@@ -73,12 +71,14 @@
   font-size: 14px;
   margin-top: 5px;
 }
+
 .author {
   display: block;
   margin-top: 10px;
   color: #555;
   font-size: 14px;
 }
+
 .related-news-item {
   padding: 10px;
   border-radius: 8px;
@@ -92,6 +92,41 @@
   color: black;
   font-size: 18px;
 }
-.related-news-item span{
+
+.related-news-item span {
   color: red;
+}
+
+/* Responsive styles for mobile devices */
+@media (max-width: 768px) {
+  .news-container {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .main-news {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .related-news {
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  .related-news ul li {
+    margin-bottom: 10px;
+  }
+
+  .main-news-content h2 {
+    font-size: 20px;
+  }
+
+  .main-news-content .category {
+    font-size: 12px;
+  }
+
+  .main-news-content .description {
+    font-size: 14px;
+  }
 }
