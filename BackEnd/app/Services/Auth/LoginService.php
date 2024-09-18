@@ -9,6 +9,24 @@ use Illuminate\Validation\ValidationException;
 
 class LoginService
 {
+
+    public function index()
+    {
+        $user = Auth::user();
+        return $user;
+    }
+    public function get(int $id): User
+    {
+        $user = User::findOrFail($id);
+        return $user;
+    }
+
+    public function update(int $id, array $data): User
+    {
+        $user = User::findOrFail($id);
+        $user->update($data);
+        return $user;
+    }
     public function login(array $credentials)
     {
         if (!Auth::attempt($credentials)) {
@@ -30,11 +48,6 @@ class LoginService
 
 
 
-    public function update(int $id, array $data): User
-    {
-        $user = User::findOrFail($id);
-        $user->update($data);
-        return $user;
-    }
+
 
 }
