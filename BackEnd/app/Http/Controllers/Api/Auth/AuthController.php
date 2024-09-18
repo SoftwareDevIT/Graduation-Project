@@ -7,9 +7,14 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\Store\StoreUserRequest;
+use App\Http\Requests\Update\UpdateUserRequest;
 use App\Models\User;
 use App\Services\Auth\LoginService;
 use App\Services\UserRegistrationService;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -21,6 +26,12 @@ class AuthController extends Controller
         $this->userRegistrationService = $userRegistrationService;
         $this->loginService = $loginService;
     }
+
+    // public function index()
+    // {
+    //     $user = $this->loginService->index();
+    //     return response()->json($user);
+    // }
 
     public function register(RegisterRequest $request)
     {
@@ -50,7 +61,7 @@ class AuthController extends Controller
         try {
             $token = $this->loginService->login($request->only('email', 'password'));
             return $this->success($token);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $e->getMessage();
         }
     }
@@ -64,9 +75,39 @@ class AuthController extends Controller
             } else {
                 return $this->error('Người dùng không được xác thực hoặc thiếu mã thông báo.');
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->error($e->getMessage());
         }
     }
+
+
+
+    public function update(UpdateUserRequest $request, $id)
+    {
+        try {
+            $filesToUpload = ['avatar', 'cover'];
+            $userData = $request->validated();
+
+            foreach ($filesToUpload as $fileKey) {
+                if ($request->hasFile($fileKey)) {
+                    $userData[$fileKey] = $this->uploadImage($request->file($fileKey));
+                }
+            }
+
+            // Update the user using the login service
+            $user = $this->loginService->update($id, $userData);
+
+            // Success response
+            return $this->success($user);
+        } catch (ModelNotFoundException $e) {
+            // Log::warning("User not found with id = {$id}");
+            // return $this->notFound('User not found with id = ' . $id, 404);
+            return $this->error($e->getMessage());
+        } catch (Exception $e) {
+            return $this->error($e->getMessage());
+        }
+    }
+
+
 
 }
