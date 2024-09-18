@@ -100,8 +100,6 @@ class AuthController extends Controller
             // Success response
             return $this->success($user);
         } catch (ModelNotFoundException $e) {
-            // Log::warning("User not found with id = {$id}");
-            // return $this->notFound('User not found with id = ' . $id, 404);
             return $this->error($e->getMessage());
         } catch (Exception $e) {
             return $this->error($e->getMessage());
