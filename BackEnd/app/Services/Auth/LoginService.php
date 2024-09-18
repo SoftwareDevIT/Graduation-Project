@@ -2,6 +2,8 @@
 
 namespace App\Services\Auth;
 
+use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
@@ -19,10 +21,20 @@ class LoginService
             throw new \Exception('User not authenticated', 401);
         }
 
-        if (!($user instanceof \App\Models\User)) {
+        if (!($user instanceof User)) {
             throw new \Exception('Authenticated user is not an instance of User', 500);
         }
 
         return $user->createToken('authToken')->plainTextToken;
     }
+
+
+
+    public function update(int $id, array $data): User
+    {
+        $user = User::findOrFail($id);
+        $user->update($data);
+        return $user;
+    }
+
 }
