@@ -38,7 +38,12 @@ class NewController extends Controller
      */
     public function store(StoreNewsRequest $request)
     {
-        $new = $this->newservice->store($request->validated());
+        $file = $request->file('thumnail');
+        $imageLink = $this->uploadImage($file);
+
+        $new = $request->validated();
+        $new['thumnail'] = $imageLink; 
+        $new = $this->newservice->store($new);
         return $this->success($new, 'success');
     }
 
@@ -64,7 +69,20 @@ class NewController extends Controller
     public function update(string $id,UpdateNewsRequest $request)
     {
         try {
-            $new = $this->newservice->update($id,$request->validated());
+            $file = $request->file('thumnail');
+            if ($file) {
+                $imageLink = $this->uploadImage($file);
+            } else {
+                $imageLink = null; // Hoặc xử lý khác nếu không có file
+            }
+
+            // Lấy dữ liệu đã được xác thực từ request
+            $new = $request->validated();
+
+            if ($imageLink) {
+                $new['thumnail'] = $imageLink;
+            }
+            $new = $this->newservice->update($id,$new);
             return $this->success($new, 'success');
         } catch (\Throwable $th) {
             return $this->error($th->getMessage());

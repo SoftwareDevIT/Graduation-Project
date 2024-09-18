@@ -40,8 +40,7 @@ Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout']);
 Route::get('/user', [AuthController::class, 'list']);
 
-Route::post('register', [AuthController::class, 'register']);// chức năng post của đăng ký
-Route::get('/list', [AuthController::class, 'list']);// danh sách tài khoản user
+Route::post('register', [AuthController::class, 'register']);// chức năng post của đăng ký  
 Route::get('/verify-account/{userId}', [AccountVerificationController::class, 'verify'])->name('verify');// route để người dùng xác thực từ gmail
 Route::post('password/send-otp', [ForgotPasswordController::class, 'sendOtp']);// nhập email để gửi email mã otp
 Route::post('password/verify-otp', [ForgotPasswordController::class, 'verifyOtp']);// nhập mã otp để xác thực 
