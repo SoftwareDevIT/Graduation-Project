@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('room', function (Blueprint $table) {
             $table->id('id');
             $table->string('room_name');
-            $table->integer('volume');
+            $table->integer('volume')->nullable();
             $table->unsignedBigInteger('cinema_id');
             $table->enum('status', ['On', 'Off'])->default('On');
             $table->timestamps();
