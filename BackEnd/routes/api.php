@@ -31,16 +31,14 @@ use App\Http\Controllers\Api\PayMethod\PayMethodController;
 |
 */
 
+
 // Route::middleware('auth:sanctum')->get('user', function (Request $request) {
 //     return $request->user();
 // });
 
-// Auth routes
-Route::post('login', [AuthController::class, 'login'])->name('login');
-Route::post('register', [AuthController::class, 'register']);
-Route::get('/verify-account/{userId}', [AccountVerificationController::class, 'verify'])->name('verify');
-
-
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', [AuthController::class, 'list']);
 });
@@ -53,27 +51,37 @@ Route::get('/user', [AuthController::class, 'list']);
 Route::post('register', [AuthController::class, 'register']);// chức năng post của đăng ký
 Route::get('/list', [AuthController::class, 'list']);// danh sách tài khoản user
 Route::get('/verify-account/{userId}', [AccountVerificationController::class, 'verify'])->name('verify');// route để người dùng xác thực từ gmail
-
-
-Route::apiResource('location', LocationController::class);
-
-Route::apiResource('cinema', CinemaController::class);
+Route::post('password/send-otp', [ForgotPasswordController::class, 'sendOtp']);// nhập email để gửi email mã otp
+Route::post('password/verify-otp', [ForgotPasswordController::class, 'verifyOtp']);// nhập mã otp để xác thực 
+Route::post('password/reset', [ForgotPasswordController::class, 'resetPassword']);// thay đổi mật khẩu
 
 
 
-Route::resource('news_category', NewCategoryController::class);// crud của danh mục tin tức
-Route::resource('news', NewController::class);// crud của tin tức
+// Auth routes
+Route::post('login', [AuthController::class, 'login'])->name('login');
+Route::post('register', [AuthController::class, 'register']);
+Route::get('/verify-account/{userId}', [AccountVerificationController::class, 'verify'])->name('verify');
 
 
-Route::apiResource('actor', ActorController::class);// crud của tác giả
-Route::apiResource('director', DirectorController::class);// crud của diễn viên
-Route::apiResource('movie-category', MovieCategoryController::class);// crud của danh mục phim
-Route::apiResource('movies', MovieController::class);// crud của phim
-Route::apiResource('method', PayMethodController::class);
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::post('logout', [AuthController::class, 'logout']);
+    Route::get('list', [AuthController::class, 'list']);
+    // Route::get('/user', [AuthController::class, 'list']);
+    Route::apiResource('location', LocationController::class);
+    Route::apiResource('user', AuthController::class);
+    Route::apiResource('cinema', CinemaController::class);
+    Route::apiResource('room', RoomController::class);
+    Route::apiResource('showtimes', ShowtimeController::class);
+    Route::get('showtimes/movie/{movie_name}', [ShowtimeController::class, 'showtimeByMovieName']);
 
-Route::apiResource('combo', ComboController::class);
-Route::apiResource('showtimes', ShowtimeController::class);
-Route::get('showtimes/movie/{movie_name}', [ShowtimeController::class, 'showtimeByMovieName']);
-Route::apiResource('room', RoomController::class);
+    Route::resource('news_category', NewCategoryController::class);
+    Route::resource('news', NewController::class);
 
+    Route::apiResource('actor', ActorController::class);
+    Route::apiResource('director', DirectorController::class);
+    Route::apiResource('movie-category', MovieCategoryController::class);
+    Route::apiResource('movies', MovieController::class);
+    Route::apiResource('method', PayMethodController::class);
+    Route::apiResource('combo', ComboController::class);
+});
 
