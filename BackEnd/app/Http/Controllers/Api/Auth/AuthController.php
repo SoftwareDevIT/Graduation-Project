@@ -27,7 +27,7 @@ class AuthController extends Controller
         try {
             $user = $this->userRegistrationService->register($request->validated());
             Mail::to($user->email)->queue(new VerifyAccount($user));
-            return $this->success('Tạo tài khoảng thành công!', 'success',200);
+            return $this->success('Tạo tài khoảng thành công!', 'success', 200);
         } catch (\Throwable $th) {
             return $this->error($th->getMessage());
         }
@@ -59,16 +59,14 @@ class AuthController extends Controller
         try {
             $user = $request->user();
             if ($user) {
-                $user->tokens()->delete(); 
+                $user->tokens()->delete();
                 return $this->success([], 'Logged out successfully.');
             } else {
-                return $this->error('User is not authenticated or token is missing.');
+                return $this->error('Người dùng không được xác thực hoặc thiếu mã thông báo.');
             }
         } catch (\Exception $e) {
             return $this->error($e->getMessage());
         }
     }
-
-
 
 }
