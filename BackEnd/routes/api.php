@@ -36,37 +36,22 @@ use App\Http\Controllers\Api\PayMethod\PayMethodController;
 //     return $request->user();
 // });
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware('auth:sanctum')->get('user', function (Request $request) {
     return $request->user();
 });
-Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('/user', [AuthController::class, 'list']);
-});
-
-Route::post('login', [AuthController::class, 'login']);
-
-Route::post('logout', [AuthController::class, 'logout']);
-Route::get('/user', [AuthController::class, 'list']);
-
-Route::post('register', [AuthController::class, 'register']);// chức năng post của đăng ký
-Route::get('/list', [AuthController::class, 'list']);// danh sách tài khoản user
-Route::get('/verify-account/{userId}', [AccountVerificationController::class, 'verify'])->name('verify');// route để người dùng xác thực từ gmail
-Route::post('password/send-otp', [ForgotPasswordController::class, 'sendOtp']);// nhập email để gửi email mã otp
-Route::post('password/verify-otp', [ForgotPasswordController::class, 'verifyOtp']);// nhập mã otp để xác thực 
-Route::post('password/reset', [ForgotPasswordController::class, 'resetPassword']);// thay đổi mật khẩu
-
-
 
 // Auth routes
 Route::post('login', [AuthController::class, 'login'])->name('login');
-Route::post('register', [AuthController::class, 'register']);
-Route::get('/verify-account/{userId}', [AccountVerificationController::class, 'verify'])->name('verify');
+Route::post('register', [AuthController::class, 'register']);// chức năng post của đăng ký
+Route::get('/verify-account/{userId}', [AccountVerificationController::class, 'verify'])->name('verify');// route để người dùng xác thực từ gmail
+Route::post('password/send-otp', [ForgotPasswordController::class, 'sendOtp']);// nhập email để gửi email mã otp
+Route::post('password/verify-otp', [ForgotPasswordController::class, 'verifyOtp']);// nhập mã otp để xác thực
+Route::post('password/reset', [ForgotPasswordController::class, 'resetPassword']);// thay đổi mật khẩu
 
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
-    Route::get('list', [AuthController::class, 'list']);
-    // Route::get('/user', [AuthController::class, 'list']);
+    Route::get('list', [AuthController::class, 'list']);// danh sách tài khoản user
     Route::apiResource('location', LocationController::class);
     Route::apiResource('user', AuthController::class);
     Route::apiResource('cinema', CinemaController::class);
