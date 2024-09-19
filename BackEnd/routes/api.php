@@ -60,3 +60,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('combo', ComboController::class);
 });
 
+Route::get('cenima/{id}',[CinemaController::class,'filterMovie']);
+// Lọc phim theo rạp phim

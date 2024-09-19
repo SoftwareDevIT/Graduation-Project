@@ -1,0 +1,123 @@
+/* Sidebar container styling */
+.sidebar {
+    width: 250px;
+    background: linear-gradient(135deg, #1a1a1a, #333333); /* Dark gradient background */
+    padding: 20px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid rgba(255, 255, 255, 0.2); /* Subtle border for separation */
+}
+
+/* Logo styling */
+.sidebar .logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.sidebar .logo img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 3px solid #f39c12; /* Neon border for the logo */
+}
+
+/* General section title styling */
+.sidebar .section-title {
+    color: #b0bec5; /* Light grey for the section title */
+    font-size: 0.85rem;
+    letter-spacing: 0.05rem;
+    margin: 20px 0 10px 15px;
+    text-transform: uppercase;
+}
+
+/* List styling */
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+/* Individual list item styling */
+.sidebar ul li {
+    margin: 5px 0;
+}
+
+/* Link styling */
+.sidebar ul li a {
+    color: #e0e0e0; /* Light grey text for links */
+    text-decoration: none;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    border-radius: 12px;
+    background-color: transparent;
+    transition: all 0.3s ease;
+}
+
+/* Icon styling */
+.sidebar ul li a svg {
+    margin-right: 15px;
+    font-size: 1.5rem; /* Larger icon size */
+    color: #f39c12; /* Bright neon color for icons */
+    transition: color 0.3s ease;
+}
+
+/* Hover effect */
+    .sidebar ul li a:hover {
+        background-color: rgba(255, 255, 255, 0.1); /* Light, semi-transparent background */
+        color: #f39c12; /* Neon highlight color on hover */
+        transform: translateX(10px); /* Slight hover shift for dynamic effect */
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* More pronounced shadow */
+        transition: all 0.3s ease-in-out;
+    }
+
+    /* Active or focused state */
+    .sidebar ul li a.active,
+    .sidebar ul li a:focus {
+        background-color: rgba(255, 255, 255, 0.2); /* Darker background for active item */
+        color: #f39c12; /* Neon highlight color */
+        transform: translateX(10px);
+        box-shadow: inset 4px 0 0 #f39c12; /* Neon bar to highlight the active item */
+    }
+
+/* Submenu styling */
+.sidebar ul li ul {
+    margin-left: 20px;
+    display: none; /* Hide submenu by default */
+}
+
+/* When submenu is active */
+.sidebar ul li.active ul {
+    display: block;
+}
+
+/* Submenu item */
+.sidebar ul li ul li {
+    margin: 5px 0;
+}
+
+.sidebar ul li ul li a {
+    font-size: 0.9rem;
+    padding: 8px 20px; /* Slightly larger padding for submenu items */
+}
+
+/* Media query for responsiveness */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 200px;
+    }
+
+    .sidebar ul li a {
+        font-size: 0.9rem;
+        padding: 10px 15px;
+    }
+
+    .sidebar ul li ul li a {
+        padding: 8px 15px;
+    }
+}

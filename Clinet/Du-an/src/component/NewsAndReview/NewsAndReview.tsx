@@ -94,6 +94,7 @@ const NewsAndReview = () => {
           <span className="time">10 ngày trước</span> - <span className="reviewer">Ivy_Trat</span>
         </div>
       </div>
+      
       </div>
   );
 };
