@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -18,16 +17,16 @@ return new class extends Migration
             $table->string('password');
             $table->string('email')->nullable();
             $table->string('avatar')->nullable();
+            $table->string('cover')->nullable();
+            $table->string('description')->nullable();
             $table->string('phone')->nullable();
             $table->string('address')->nullable();
             $table->string('fullname')->nullable();
             $table->double('coin')->nullable();
             $table->enum('status', ['Normal', 'Ban'])->default('Normal');
-            $table->unsignedBigInteger('role_id'); // Unsigned big integer for foreign key
+            $table->unsignedBigInteger('role_id'); 
             $table->timestamp('email_verified_at')->nullable();
-            $table->timestamps(); // Automatically creates 'created_at' and 'updated_at'
-
-            // Foreign key constraint
+            $table->timestamps();
             $table->foreign('role_id')->references('id')->on('role');
         });
     }
