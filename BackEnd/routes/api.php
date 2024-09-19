@@ -60,3 +60,5 @@ Route::apiResource('method', PayMethodController::class);
 
 Route::apiResource('combo', ComboController::class);
 
+Route::get('cenima/{id}',[CinemaController::class,'filterMovie']);
+// Lọc phim theo rạp phim
