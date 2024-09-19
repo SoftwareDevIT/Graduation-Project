@@ -36,6 +36,12 @@ interface Showtime {
   showtime_start: string;
   showtime_end: string;
   status: string;
+  cinema_id?: number;
+}
+
+interface Room {
+  id: number;
+  cinema_id: number;
 }
 
 const CinemaSelector: React.FC = () => {
@@ -43,62 +49,56 @@ const CinemaSelector: React.FC = () => {
   const [cinemas, setCinemas] = useState<Cinema[]>([]);
   const [movies, setMovies] = useState<Movie[]>([]);
   const [showtimes, setShowtimes] = useState<Showtime[]>([]);
+  const [rooms, setRooms] = useState<Room[]>([]);
   const [selectedCity, setSelectedCity] = useState<number | null>(null);
   const [selectedCinema, setSelectedCinema] = useState<number | null>(null);
-  const [selectedDate, setSelectedDate] = useState<string>('');
+  const [selectedDate, setSelectedDate] = useState<string>("");
   const [filteredCinemas, setFilteredCinemas] = useState<Cinema[]>([]);
   const [filteredShowtimes, setFilteredShowtimes] = useState<Showtime[]>([]);
 
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-        const response = await instance.get('/location');
-        if (Array.isArray(response.data.data)) {
-          setLocations(response.data.data);
-        } else {
-          console.error('Unexpected API response format for /location:', response.data);
-        }
+        const response = await instance.get("/location");
+        setLocations(response.data.data || []);
       } catch (error) {
-        console.error('Failed to fetch locations:', error);
+        console.error("Failed to fetch locations:", error);
       }
     };
 
     const fetchCinemas = async () => {
       try {
-        const response = await instance.get('/cinema');
-        if (Array.isArray(response.data.data)) {
-          setCinemas(response.data.data);
-        } else {
-          console.error('Unexpected API response format for /cinema:', response.data);
-        }
+        const response = await instance.get("/cinema");
+        setCinemas(response.data.data || []);
       } catch (error) {
-        console.error('Failed to fetch cinemas:', error);
+        console.error("Failed to fetch cinemas:", error);
       }
     };
 
     const fetchMovies = async () => {
       try {
-        const response = await instance.get('/movies');
-        if (Array.isArray(response.data.data)) {
-          setMovies(response.data.data);
-        } else {
-          console.error('Unexpected API response format for /movies:', response.data);
-        }
+        const response = await instance.get("/movies");
+        setMovies(response.data.data || []);
       } catch (error) {
-        console.error('Failed to fetch movies:', error);
+        console.error("Failed to fetch movies:", error);
       }
     };
 
     const fetchShowtimes = async () => {
       try {
-        const response = await instance.get('/showtimes');
-        if (Array.isArray(response.data.data)) {
-          setShowtimes(response.data.data);
-        } else {
-          console.error('Unexpected API response format for /showtimes:', response.data);
-        }
+        const response = await instance.get("/showtimes");
+        setShowtimes(response.data.data || []);
       } catch (error) {
-        console.error('Failed to fetch showtimes:', error);
+        console.error("Failed to fetch showtimes:", error);
+      }
+    };
+
+    const fetchRooms = async () => {
+      try {
+        const response = await instance.get("/room");
+        setRooms(response.data.data || []);
+      } catch (error) {
+        console.error("Failed to fetch rooms:", error);
       }
     };
 
@@ -106,26 +106,37 @@ const CinemaSelector: React.FC = () => {
     fetchCinemas();
     fetchMovies();
     fetchShowtimes();
+    fetchRooms();
   }, []);
 
   useEffect(() => {
     if (selectedCity) {
-      setFilteredCinemas(cinemas.filter(cinema => cinema.location_id === selectedCity));
+      setFilteredCinemas(cinemas.filter((cinema) => cinema.location_id === selectedCity));
     } else {
       setFilteredCinemas(cinemas);
     }
   }, [selectedCity, cinemas]);
 
   useEffect(() => {
-    if (selectedCinema && selectedDate) {
-      setFilteredShowtimes(showtimes.filter(showtime => showtime.movie_id === selectedCinema && showtime.showtime_date === selectedDate));
+    console.log("Selected cinema:", selectedCinema);
+    console.log("Selected date:", selectedDate);
+
+    if (selectedCinema) {
+      // Lọc showtimes theo rạp
+      const filteredShowtimesByCinema = showtimes.filter(
+        (showtime) =>
+          showtime.cinema_id === selectedCinema && (selectedDate ? showtime.showtime_date === selectedDate : true)
+      );
+
+      setFilteredShowtimes(filteredShowtimesByCinema);
     } else {
+      console.log("No cinema selected, clearing showtimes");
       setFilteredShowtimes([]);
     }
   }, [selectedCinema, selectedDate, showtimes]);
 
   const formatDate = (date: string) => {
-    const [day, month] = date.split('/');
+    const [day, month] = date.split("/");
     const fullDate = new Date(`2024/${month}/${day}`);
     const days = ["CN", "T2", "T3", "T4", "T5", "T6", "T7"];
     return `${day}/${month} ${days[fullDate.getDay()]}`;
@@ -138,8 +149,8 @@ const CinemaSelector: React.FC = () => {
         <div className="locations">
           <h3 className="khuvuc">Khu vực</h3>
           <ul className="list-tp">
-            {locations.map(location => {
-              const count = cinemas.filter(cinema => cinema.location_id === location.id).length;
+            {locations.map((location) => {
+              const count = cinemas.filter((cinema) => cinema.location_id === location.id).length;
               return (
                 <li
                   key={location.id}
@@ -147,7 +158,7 @@ const CinemaSelector: React.FC = () => {
                   onClick={() => setSelectedCity(location.id)}
                 >
                   {location.location_name}
-                  <span className="cinema-count">{count}</span> {/* Display the number of cinemas */}
+                  <span className="cinema-count">{count}</span>
                 </li>
               );
             })}
@@ -157,11 +168,14 @@ const CinemaSelector: React.FC = () => {
         <div className="cinemas">
           <h3 className="khuvuc">Rạp</h3>
           <ul className="list-tp">
-            {filteredCinemas.map(cinema => (
+            {filteredCinemas.map((cinema) => (
               <li
                 key={cinema.id}
                 className={`cinema ${selectedCinema === cinema.id ? "selected" : ""}`}
-                onClick={() => setSelectedCinema(cinema.id)}
+                onClick={() => {
+                  setSelectedCinema(cinema.id);
+                  setSelectedDate(""); // Clear date selection when changing cinema
+                }}
               >
                 {cinema.cinema_name}
               </li>
@@ -171,11 +185,14 @@ const CinemaSelector: React.FC = () => {
 
         <div className="showtimes">
           <div className="date-selection">
-            {[ "2/9","3/9","4/9","5/9","6/9","7/9","8/9"].map(date => (
+            {["2/9", "3/9", "4/9", "5/9", "6/9", "7/9", "8/9"].map((date) => (
               <span
                 key={date}
                 className={`date ${selectedDate === date ? "selected" : ""}`}
-                onClick={() => setSelectedDate(date)}
+                onClick={() => {
+                  setSelectedDate(date);
+                  console.log("Date selected:", date); // Log selected date
+                }}
               >
                 <p>{formatDate(date)}</p>
               </span>
@@ -186,8 +203,8 @@ const CinemaSelector: React.FC = () => {
               <div className="no-showtimes">
                 <p>Nhấn vào suất chiếu để tiến hành mua vé.</p>
               </div>
-              {filteredShowtimes.map(showtime => {
-                const movie = movies.find(m => m.id === showtime.movie_id);
+              {filteredShowtimes.map((showtime) => {
+                const movie = movies.find((m) => m.id === showtime.movie_id);
                 return movie ? (
                   <div key={showtime.id} className="movie">
                     <img src={movie.poster} alt={movie.movie_name} />
