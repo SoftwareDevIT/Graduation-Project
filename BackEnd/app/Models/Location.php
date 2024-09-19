@@ -13,4 +13,7 @@ class Location extends Model
     protected $fillable = [
         'location_name',
     ];
+    public function cinema(){
+        return $this->hasMany(Cinema::class);
+    }
 }
