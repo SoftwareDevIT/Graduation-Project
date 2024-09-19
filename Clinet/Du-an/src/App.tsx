@@ -1,7 +1,13 @@
 
 import "./App.css";
 
+
 import {  Route, Routes } from "react-router-dom";
+
+
+import {  Route, Router, Routes } from "react-router-dom";
+import Home from "./Page/Home";
+import Bookcinematickets from "./Page/Bookcinematickets";
 
 import OrderPage from "./component/Oders/OrderPage";
 import OrderCheckout from "./component/Pay/OderCheckOut";
@@ -39,6 +45,12 @@ import RevenueByMoviesManager from "./Page/Admin/RevenueByMoviesManager/RevenueB
 
 
 
+
+
+
+
+
+
 function App() {
   return (
     <>
@@ -53,6 +65,7 @@ function App() {
 
       <Route path="/register" element={<RegisterCinema/>}/>
       <Route path="/login" element={<LoginCinema/>}/>
+
       <Route path="/admin" element={<Dashboard/>}/>
       <Route path="admin/user" element={<User/>}/>
       <Route path="admin/showtimes" element={<ShowtimesManager/>}/>
@@ -67,7 +80,9 @@ function App() {
       <Route path="admin/schedules" element={<SchedulesManager  />} />
       <Route path="admin/revenuebycinema" element={<RevenueByCinemaManager/>} />
       <Route path="admin/revenuebymovie" element={<RevenueByMoviesManager/>} />
+
       </Routes>
+
     </>
   );
 }

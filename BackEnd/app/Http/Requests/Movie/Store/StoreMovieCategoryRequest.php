@@ -23,6 +23,7 @@ class StoreMovieCategoryRequest extends FormRequest
     {
         return [
             'category_name' => 'required|string|max:255',
+            'descripcion' => 'max:255',
         ];
     }
 }

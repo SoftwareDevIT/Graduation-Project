@@ -3,6 +3,8 @@
 namespace App\Services\Movie;
 
 use App\Models\Director;
+use Exception;
+use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -18,12 +20,7 @@ class DirectorService
 
     public function store(array $data): Director
     {
-        try {
-            return Director::create($data);
-        } catch (\Exception $e) {
-            // Xử lý ngoại lệ, ví dụ: ghi log hoặc trả về thông báo lỗi
-            throw new \Exception('An error occurred while creating the director.');
-        }
+        return Director::create($data);
     }
 
     public function update(int $id, array $data): Director
