@@ -50,7 +50,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('room', RoomController::class);
     Route::apiResource('showtimes', ShowtimeController::class);
     Route::get('showtimes/movie/{movie_name}', [ShowtimeController::class, 'showtimeByMovieName']);
-    Route::get('cinema/location/{id}', [CinemaController::class, 'getCinemaByLocation']);
     Route::resource('news_category', NewCategoryController::class);
     Route::resource('news', NewController::class);
     Route::apiResource('actor', ActorController::class);

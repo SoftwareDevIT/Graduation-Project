@@ -45,13 +45,5 @@ class CinemaService
         return $cinema;
     }
 
-    public function getCinemaByLocation(int $id)
-    {
-        $location = Location::where('id', $id)->first();
 
-        if (!$location) {
-            throw new ModelNotFoundException('location not found');
-        }
-        return $location->cinema;
-    }
 }
