@@ -9,7 +9,10 @@
     top: 0;
     z-index: 1000;
 }
-
+.thongbao{
+  font-size: 25px;
+  margin-bottom: 7px;
+}
 .header-left {
     display: flex;
     align-items: center;
@@ -191,6 +194,7 @@
 
 /* Xóa mặc định màu của link */
 .header-right .icon-link {
+  font-size: 25px;
   color: inherit; /* Đảm bảo màu icon không thay đổi khi dùng Link */
   text-decoration: none; /* Loại bỏ gạch chân nếu có */
 }
