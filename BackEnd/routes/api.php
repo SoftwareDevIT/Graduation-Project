@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Auth\AccountVerificationController;
+use App\Http\Controllers\Api\Auth\ForgotPasswordController;
 use App\Http\Controllers\Api\Cinema\LocationController;
 use App\Http\Controllers\Api\Cinema\CinemaController;
 use App\Http\Controllers\Api\Cinema\RoomController;
@@ -45,6 +46,9 @@ Route::post('logout', [AuthController::class, 'logout']);
 Route::post('register', [AuthController::class, 'register']);// chức năng post của đăng ký
 Route::get('/list', [AuthController::class, 'list']);// danh sách tài khoản user
 Route::get('/verify-account/{userId}', [AccountVerificationController::class, 'verify'])->name('verify');// route để người dùng xác thực từ gmail
+Route::post('password/send-otp', [ForgotPasswordController::class, 'sendOtp']);// nhập email để gửi email mã otp
+Route::post('password/verify-otp', [ForgotPasswordController::class, 'verifyOtp']);// nhập mã otp để xác thực 
+Route::post('password/reset', [ForgotPasswordController::class, 'resetPassword']);// thay đổi mật khẩu
 
 
 Route::apiResource('location', LocationController::class);
