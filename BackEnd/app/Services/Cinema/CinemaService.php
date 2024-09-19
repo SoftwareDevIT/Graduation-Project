@@ -39,8 +39,19 @@ class CinemaService
         $cinema = Cinema::findOrFail($id);
         return $cinema->delete();
     }
-    public function get(int $id): Cinema{
+    public function get(int $id): Cinema
+    {
         $cinema = Cinema::findOrFail($id);
         return $cinema;
+    }
+
+    public function getCinemaByLocation(int $id)
+    {
+        $location = Location::where('id', $id)->first();
+
+        if (!$location) {
+            throw new ModelNotFoundException('location not found');
+        }
+        return $location->cinema;
     }
 }

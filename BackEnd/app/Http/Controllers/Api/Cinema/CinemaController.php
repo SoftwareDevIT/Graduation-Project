@@ -64,4 +64,19 @@ class CinemaController extends Controller
             return $e->getMessage();
         }
     }
+    public function getCinemaByLocation($location)
+    {
+        try {
+            $cinema = $this->cinemaService->getCinemaByLocation($location);
+
+            if ($cinema->isEmpty()) {
+                return $this->notFound();
+            }
+            return $this->success($cinema);
+        } catch (ModelNotFoundException $e) {
+            return $e->getMessage();
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
 }
