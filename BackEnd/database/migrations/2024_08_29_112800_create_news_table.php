@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('thumnail')->nullable();
             $table->string('thumnail_url')->nullable();
             $table->text('content')->nullable();
+            $table->longText('content')->nullable();
             $table->enum('status', ['Show', 'Hidden'])->default('Show');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();

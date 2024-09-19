@@ -3,6 +3,8 @@
 namespace App\Services\Movie;
 
 use App\Models\Actor;
+use Exception;
+use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
