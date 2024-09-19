@@ -33,14 +33,12 @@ class FavoriteController extends Controller
     public function store(StoreFavoriteRequest $request)
     {
         try {
-            $farotive = $this->favoriteService->store($request->validated());
-
-            return $this->success($farotive, 'Thêm thành công');
+            $favorite = $this->favoriteService->store($request->validated());
+    
+            return $this->success($favorite, 'Thêm thành công');
         } catch (Exception $e) {
             return $this->error('Có lỗi xảy ra: ' . $e->getMessage(), 500);
         }
-    
-
     }
 
     /**
@@ -69,10 +67,10 @@ class FavoriteController extends Controller
             return $this->success(null,'Xóa thành công');
         } catch (\Throwable $th) {
             if ($th instanceof ModelNotFoundException) {
-                return $this->notFound('Fatorite not found id = ' . $id, 404);
+                return $this->notFound('Movie not found id = ' . $id, 404);
             }
 
-            return $this->error('Fatorite not found id = ' . $id, 500);
+            return $this->error('Movie not found id = ' . $id, 500);
         }
     }
 }
