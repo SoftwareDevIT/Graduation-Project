@@ -25,31 +25,45 @@ const CinemaSeatSelection: React.FC = () => {
   const [selectedSeats, setSelectedSeats] = useState<Map<string, number | null>>(new Map());
   const [roomData, setRoomData] = useState<Room | null>(null);
   const [error, setError] = useState<string | null>(null);
-
   useEffect(() => {
-    instance.get('/room')
-      .then(response => {
+    const fetchRandomRoom = async () => {
+      try {
+        const response = await instance.get(`/room`);
         const data = response.data;
-
-        console.log('Room data:', data);
-
-        if (data && data.status && Array.isArray(data.data) && data.data.length > 0) {
-          const room = data.data[0];
-          if (room && typeof room.volume === 'number' && room.volume > 0) {
-            setRoomData(room);
+  
+        if (data && Array.isArray(data.data) && data.data.length > 0) {
+          // Chọn ngẫu nhiên một phòng từ danh sách phòng
+          const randomRoom = data.data[Math.floor(Math.random() * data.data.length)];
+  
+          // Kiểm tra dữ liệu phòng ngẫu nhiên
+          console.log('Random room data:', randomRoom); // Kiểm tra dữ liệu
+  
+          // Nếu phòng có dữ liệu volume, bạn có thể xử lý tiếp
+          if (randomRoom && randomRoom.volume > 0) {
+            const totalSeats = randomRoom.volume;
+            const randomSeatNumber = Math.floor(Math.random() * totalSeats) + 1; // Random từ 1 đến số ghế
+            const seatRow = String.fromCharCode(65 + Math.floor((randomSeatNumber - 1) / 10)); // Tính row (A, B, C,...)
+            const seatIndex = (randomSeatNumber - 1) % 10 + 1; // Tính vị trí ghế trong hàng
+  
+            // Kiểm tra và sử dụng thuộc tính đúng
+            console.log(`Phòng ngẫu nhiên: ${randomRoom.name || randomRoom.room_name || randomRoom.id}, Ghế ngẫu nhiên: ${seatRow}${seatIndex}`);
+            setRoomData(randomRoom); // Lưu thông tin phòng đã chọn
           } else {
-            setError('Invalid room data: volume is not a valid number');
+            setError("Room data is invalid");
           }
         } else {
-          setError('Invalid room data: no rooms available');
+          setError("No rooms available");
         }
-      })
-      .catch(error => {
-        setError('Error fetching room data');
-        console.error('Error fetching room data:', error);
-      });
+      } catch (error) {
+        setError("Error fetching room data");
+        console.error(error);
+      }
+    };
+  
+    fetchRandomRoom();
   }, []);
-
+  
+  
   if (error) {
     return <div>{error}</div>;
   }
@@ -136,20 +150,20 @@ const SeatRow: React.FC<SeatRowProps> = ({ row, onSeatClick, selectedSeats }) =>
 
   return (
     <div className="seat-row-container">
-    <div className="seat-row-label">{rowLabel}</div>
-    <div className="seat-row-seats">
-      {seats.map((seat, index) => (
-        <Seat
-          key={index}
-          type={seat}
-          index={index}
-          row={rowLabel}
-          onSeatClick={onSeatClick}
-          isSelected={selectedSeats.get(rowLabel) === index}
-        />
-      ))}
+      <div className="seat-row-label">{rowLabel}</div>
+      <div className="seat-row-seats">
+        {seats.map((seat, index) => (
+          <Seat
+            key={index}
+            type={seat}
+            index={index}
+            row={rowLabel}
+            onSeatClick={onSeatClick}
+            isSelected={selectedSeats.get(rowLabel) === index}
+          />
+        ))}
+      </div>
     </div>
-  </div>
   );
 };
 

@@ -5,8 +5,10 @@ import { Link } from "react-router-dom";
 const Header = () => {
   return (
     <header className="header">
-      <div className="header-left">
-        <Link to={"/muave"} style={{ color: "red", fontWeight: "bold" }}>
+      <div className="container">
+        <div className="row">
+          <div className="header-left col-lg-6 ">
+          <Link to={"/muave"} style={{ color: "red", fontWeight: "bold" }}>
           Đặt vé phim chiếu rạp
         </Link>
 
@@ -67,12 +69,12 @@ const Header = () => {
           </div>
         </div>
         <a href="#">Cộng đồng</a>
-      </div>
-      <div className="header-logo">
-        <Link to={"/"}> moveek</Link>
-      </div>
-      <div className="header-right">
-      <input type="text" placeholder="Từ khóa tìm kiếm..." />
+          </div>
+          <div className="header-logo col-lg-1 ">
+          <Link to={"/"}>moveek</Link>
+          </div>
+          <div className= "header-right col-lg-5 ">
+          <input type="text" placeholder="Từ khóa tìm kiếm..." />
       <Link to="/map" className="icon-link">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -115,7 +117,11 @@ const Header = () => {
           </svg>
         </Link>
         <span className="thongbao">&#128276;</span>
+          </div>
+        </div>
       </div>
+ 
+  
     </header>
   );
 };
