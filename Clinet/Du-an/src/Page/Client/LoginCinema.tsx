@@ -1,10 +1,9 @@
 import React from "react";
+import Header from "../../component/Header/Hearder";
+import Login from "../../component/Login/Login";
+import Footer from "../../component/Footer/Footer";
 
-import Header from "../component/Header/Hearder";
 
-import Footer from "../component/Footer/Footer";
-
-import Login from "../component/Login/Login";
 
 
 

@@ -35,6 +35,11 @@ class AuthController extends Controller
     public function show($id)
     {
         try {
+            $user = $this->userRegistrationService->register($request->validated());
+            Mail::to($user->email)->queue(new VerifyAccount($user));
+            return $this->success($user, 'success');
+        } catch (\Throwable $th) {
+            return $this->error($th->getMessage());
             $user = $this->loginService->get($id);
 
             if (!$user) {
@@ -95,7 +100,6 @@ class AuthController extends Controller
             'email' => 'required|email',
             'password' => 'required',
         ]);
-
         try {
             $token = $this->loginService->login($request->only('email', 'password'));
             return $this->success($token);
