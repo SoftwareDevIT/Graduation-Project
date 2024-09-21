@@ -1,7 +1,7 @@
 import React from 'react'
-import Header from '../component/Header/Hearder'
-import CinemaSelector from '../component/CinemaSelector/CinemaSelector'
-import Footer from '../component/Footer/Footer'
+import Header from '../../component/Header/Hearder'
+import CinemaSelector from '../../component/CinemaSelector/CinemaSelector'
+import Footer from '../../component/Footer/Footer'
 
 interface Props {
     

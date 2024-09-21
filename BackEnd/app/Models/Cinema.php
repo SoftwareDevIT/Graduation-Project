@@ -17,4 +17,7 @@ class Cinema extends Model
         'cinema_address',
         'status',
     ];
+    public function location(){
+        return $this->belongsTo(Location::class);
+    }
 }

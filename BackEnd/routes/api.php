@@ -50,10 +50,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('room', RoomController::class);
     Route::apiResource('showtimes', ShowtimeController::class);
     Route::get('showtimes/movie/{movie_name}', [ShowtimeController::class, 'showtimeByMovieName']);
-
     Route::resource('news_category', NewCategoryController::class);
     Route::resource('news', NewController::class);
-
     Route::apiResource('actor', ActorController::class);
     Route::apiResource('director', DirectorController::class);
     Route::apiResource('movie-category', MovieCategoryController::class);
@@ -62,3 +60,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('combo', ComboController::class);
 });
 
+Route::get('cenima/{id}',[CinemaController::class,'filterMovie']);
+// Lọc phim theo rạp phim

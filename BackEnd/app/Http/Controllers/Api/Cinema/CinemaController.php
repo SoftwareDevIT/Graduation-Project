@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Cinema;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Store\StoreCinemaRequest;
 use App\Http\Requests\Update\UpdateCinemaRequest;
+use App\Models\Movie;
 use Illuminate\Http\Request;
 use App\Services\Cinema\CinemaService;
 use Exception;
@@ -63,5 +64,23 @@ class CinemaController extends Controller
         } catch (Exception $e) {
             return $e->getMessage();
         }
+    }
+
+
+    public function filterMovie($id){
+        try {
+            $movies = Movie::where('cinema_id', $id)->with('showtimes')->get();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Danh sách phim theo rạp phim',
+                'data' => $movies
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'fail',
+                'data' => $th->getMessage()
+            ]);
+        }
+
     }
 }
