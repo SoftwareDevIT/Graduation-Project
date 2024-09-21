@@ -24,6 +24,10 @@ class StoreActorRequest extends FormRequest
     {
         return [
             'actor_name' => 'required|string|max:255',
+            'descripcion' => 'max:255',
+            'photo' => 'required|mimes:jpeg,png,jpg,gif|max:2048',
+            'country' => 'max:255',
+            'link_wiki' => 'max:255',
         ];
     }
 }

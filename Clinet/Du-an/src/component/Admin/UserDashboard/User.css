@@ -152,3 +152,94 @@
         padding: 8px 12px;
     }
 }
+/* Container chính của form */
+.form-container {
+    background-color: #f7f7f7; /* Nền xám nhạt cho form */
+    padding: 30px;
+    max-width: 500px;
+    margin: 50px auto;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Đổ bóng mềm */
+    font-family: 'Arial', sans-serif;
+}
+
+.form-container h2 {
+    text-align: center;
+    color: #333; /* Màu chữ đậm */
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Thiết kế chung cho form */
+.product-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-weight: bold;
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 5px;
+    display: block;
+}
+
+/* Style cho các input và textarea */
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #333;
+    transition: border-color 0.3s ease;
+    background-color: #fff;
+}
+
+/* Thiết kế đẹp cho các trường input khi người dùng click vào */
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #4299e1; /* Màu xanh dương nhẹ khi input được focus */
+    outline: none;
+    box-shadow: 0 0 5px rgba(66, 153, 225, 0.5); /* Đổ bóng xanh nhạt khi focus */
+}
+
+/* Nút Submit */
+.submit-btn {
+    background-color: #4299e1; /* Màu xanh dương nhạt */
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.submit-btn:hover {
+    background-color: #2b6cb0; /* Màu đậm hơn khi hover */
+    box-shadow: 0 8px 16px rgba(66, 153, 225, 0.4); /* Đổ bóng khi hover */
+}
+
+/* Responsive cho màn hình nhỏ */
+@media (max-width: 600px) {
+    .form-container {
+        padding: 20px;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        font-size: 12px;
+    }
+
+    .submit-btn {
+        font-size: 14px;
+        padding: 10px 15px;
+    }
+}

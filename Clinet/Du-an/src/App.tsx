@@ -1,7 +1,9 @@
 
 import "./App.css";
 
-import {  Route, Routes } from "react-router-dom";
+
+
+
 
 import OrderPage from "./component/Oders/OrderPage";
 import OrderCheckout from "./component/Pay/OderCheckOut";
@@ -25,18 +27,9 @@ import MoviesManager from "./Page/Admin/Movies/MoviesManager";
 import SchedulesManager from "./Page/Admin/Schedules/SchedulesManager";
 import RevenueByCinemaManager from "./Page/Admin/RevenueByCinema/RevenueByCinemaManager";
 import RevenueByMoviesManager from "./Page/Admin/RevenueByMoviesManager/RevenueByMoviesManager";
-
-
-
-
-
-
-
-
-
-
-
-
+import { Route, Routes } from "react-router-dom";
+import EmailConfirm from "./component/EmailConfirm/EmailConfirm";
+import UserForm1 from "./Page/Admin/User/UserForm";
 
 
 function App() {
@@ -49,12 +42,15 @@ function App() {
       <Route path="/pay" element={<OrderCheckout/>}/>
       <Route path="/seat" element={<CinemaSeatSelection/>}/>
       <Route path="/headerticket" element={<Headerticket/>}/>
+      <Route path="/confirm" element={<EmailConfirm/>}/>
 
 
       <Route path="/register" element={<RegisterCinema/>}/>
       <Route path="/login" element={<LoginCinema/>}/>
+
       <Route path="/admin" element={<Dashboard/>}/>
       <Route path="admin/user" element={<User/>}/>
+      <Route path="admin/user/add" element={<UserForm1/>}/>
       <Route path="admin/showtimes" element={<ShowtimesManager/>}/>
       <Route path="admin/orders" element={<OrdersManager/>}/>
       <Route path="admin/tickets" element={<TicketsManager/>}/>
@@ -67,7 +63,9 @@ function App() {
       <Route path="admin/schedules" element={<SchedulesManager  />} />
       <Route path="admin/revenuebycinema" element={<RevenueByCinemaManager/>} />
       <Route path="admin/revenuebymovie" element={<RevenueByMoviesManager/>} />
+
       </Routes>
+
     </>
   );
 }
