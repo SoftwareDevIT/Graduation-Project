@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title')->nullable();
             $table->unsignedBigInteger('news_category_id');
             $table->string('thumnail')->nullable();// ảnh nhỏ bên dưới
-            $table->string('banner')->nullable();// ảnh để banner
+            $table->string('banner')->nullable();// ảnh để banner;
             $table->longText('content')->nullable();
             $table->enum('status', ['Show', 'Hidden'])->default('Show');
             $table->unsignedBigInteger('user_id');
