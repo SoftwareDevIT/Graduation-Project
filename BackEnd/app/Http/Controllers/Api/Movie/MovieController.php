@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Api\Movie;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Movie\Store\StoreMovieRequest;
 use App\Http\Requests\Movie\Update\UpdateMovieRequest;
+use App\Models\Movie;
 use App\Services\Movie\MovieService;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 class MovieController extends Controller
@@ -74,5 +77,21 @@ class MovieController extends Controller
     {
         $movie = $this->movieService->delete($id);
         return $this->success('Xoá Thành Công', 'success');
+    }
+
+    public function search($movie_name)
+    {
+        try {
+            $movie = $this->movieService->getMovieByMovieName($movie_name);
+
+            if ($movie->isEmpty()) {
+                return $this->notFound();
+            }
+            return $this->success($movie);
+        } catch (ModelNotFoundException $e) {
+            return $e->getMessage();
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
 }

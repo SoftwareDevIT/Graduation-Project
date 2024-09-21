@@ -1,36 +1,12 @@
-import React, { useState, useEffect } from 'react';
-
+import React from 'react';
 import './User.css';
-import instance from '../../../server';
 
 const UserDashboard = () => {
-    const [users, setUsers] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-
-    // Fetch users from the API when the component mounts
-    useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const response = await instance.get('/user');
-                setUsers(response.data);  // Assuming API response has data in `data` field
-                setLoading(false);
-            } catch (err) {
-                setError('Failed to fetch users');
-                setLoading(false);
-            }
-        };
-
-        fetchUsers();
-    }, []);
-
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-
-    if (error) {
-        return <div>{error}</div>;
-    }
+    const users = [
+        { id: 'USR001', name: 'John Doe', email: 'john.doe@example.com', role: 'Admin', reviews: 55, rating: 4.5 },
+        { id: 'USR002', name: 'Jane Smith', email: 'jane.smith@example.com', role: 'User', reviews: 143, rating: 4.1 },
+        { id: 'USR003', name: 'Sam Wilson', email: 'sam.wilson@example.com', role: 'User', reviews: 174, rating: 4.4 },
+    ];
 
     return (
         <div className="user-management">
