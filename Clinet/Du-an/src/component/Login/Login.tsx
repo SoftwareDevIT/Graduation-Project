@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 const Login = () => {
   const [serverError, setServerError] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
 
   const {
     register,
@@ -27,9 +28,10 @@ const Login = () => {
       }
     } catch (error: any) {
       if (error.response) {
-        if (error.response.status === 403) {
+        if (error.response.status === 403 && error.response.data.userId) {
+          setUserId(error.response.data.userId);
           setServerError(
-            "Tài khoản chưa được xác thực. Vui lòng kiểm tra email của bạn để xác thực tài khoản."
+            "Tài khoản chưa được xác thực. Vui lòng xác thực tài khoản."
           );
         } else if (error.response.status === 401) {
           setServerError("Thông tin đăng nhập không chính xác.");
@@ -67,7 +69,16 @@ const Login = () => {
             Đăng nhập
           </button>
         </form>
-        {serverError && <p className="error-message">{serverError}</p>}
+        {serverError && (
+          <p className="error-message">
+            {serverError}
+            {userId && (
+              <a href={`/verify-account/${userId}`} className="verify-link">
+                Xác thực ngay
+              </a>
+            )}
+          </p>
+        )}
 
         <div className="form-footer">
           <a href="/" className="forgot-password">

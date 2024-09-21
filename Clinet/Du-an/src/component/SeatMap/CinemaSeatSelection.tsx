@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom"; // Nhập useLocation
 import Header from "../Header/Hearder";
 import Footer from "../Footer/Footer";
 import Headerticket from "../Headerticket/Headerticket";
@@ -22,31 +22,24 @@ interface SeatProps {
 }
 
 const CinemaSeatSelection: React.FC = () => {
+  const location = useLocation(); // Khai báo useLocation
+  const { movieName, cinemaName, showtime } = location.state || {}; // Lấy dữ liệu từ state
+
   const [selectedSeats, setSelectedSeats] = useState<Map<string, number | null>>(new Map());
   const [roomData, setRoomData] = useState<Room | null>(null);
   const [error, setError] = useState<string | null>(null);
+
   useEffect(() => {
     const fetchRandomRoom = async () => {
       try {
         const response = await instance.get(`/room`);
         const data = response.data;
-  
+
         if (data && Array.isArray(data.data) && data.data.length > 0) {
           // Chọn ngẫu nhiên một phòng từ danh sách phòng
           const randomRoom = data.data[Math.floor(Math.random() * data.data.length)];
-  
-          // Kiểm tra dữ liệu phòng ngẫu nhiên
-          console.log('Random room data:', randomRoom); // Kiểm tra dữ liệu
-  
-          // Nếu phòng có dữ liệu volume, bạn có thể xử lý tiếp
+
           if (randomRoom && randomRoom.volume > 0) {
-            const totalSeats = randomRoom.volume;
-            const randomSeatNumber = Math.floor(Math.random() * totalSeats) + 1; // Random từ 1 đến số ghế
-            const seatRow = String.fromCharCode(65 + Math.floor((randomSeatNumber - 1) / 10)); // Tính row (A, B, C,...)
-            const seatIndex = (randomSeatNumber - 1) % 10 + 1; // Tính vị trí ghế trong hàng
-  
-            // Kiểm tra và sử dụng thuộc tính đúng
-            console.log(`Phòng ngẫu nhiên: ${randomRoom.name || randomRoom.room_name || randomRoom.id}, Ghế ngẫu nhiên: ${seatRow}${seatIndex}`);
             setRoomData(randomRoom); // Lưu thông tin phòng đã chọn
           } else {
             setError("Room data is invalid");
@@ -59,11 +52,10 @@ const CinemaSeatSelection: React.FC = () => {
         console.error(error);
       }
     };
-  
+
     fetchRandomRoom();
   }, []);
-  
-  
+
   if (error) {
     return <div>{error}</div>;
   }
@@ -73,7 +65,7 @@ const CinemaSeatSelection: React.FC = () => {
   }
 
   const totalSeats = roomData.volume;
-  const seatsPerRow = 10; // Adjust based on actual layout
+  const seatsPerRow = 10; // Số ghế trong một hàng
   const totalRows = Math.ceil(totalSeats / seatsPerRow);
   const rowLabels = Array.from({ length: totalRows }, (_, index) => String.fromCharCode(65 + index));
 
@@ -123,10 +115,10 @@ const CinemaSeatSelection: React.FC = () => {
           </div>
           <div className="thongtinphim">
             <div className="details-box">
-              <p>Làm Giàu Với Ma</p>
-              <p>Rạp:<span> Cinestar Quốc Thanh</span></p>
-              <p>Suất: <span> 23:59 28/08/2024</span></p>
-              <p>Phòng chiếu 01</p>
+              <p>{movieName}</p> {/* Hiển thị tên phim */}
+              <p>Rạp:<span> {cinemaName}</span></p> {/* Hiển thị tên rạp */}
+              <p>Suất: <span> {showtime}</span></p> {/* Hiển thị thời gian chiếu */}
+              <p>Phòng chiếu: <span>{roomData.room_name|| roomData.room_name || roomData.id}</span></p>
               <p>Ghế {Array.from(selectedSeats.entries()).map(([row, index]) => `${row}${index !== null ? index + 1 : 'N/A'}`).join(', ')}</p>
             </div>
             <div className="price-box">
@@ -134,7 +126,9 @@ const CinemaSeatSelection: React.FC = () => {
             </div>
             <div className="actions">
               <button className="back-btn">←</button>
-              <Link to={'/orders'}><button className="continue-btn">Tiếp Tục</button></Link>
+              <Link to={'/orders'}>
+                <button className="continue-btn">Tiếp Tục</button>
+              </Link>
             </div>
           </div>
         </div>
@@ -176,7 +170,7 @@ const Seat: React.FC<SeatProps> = ({ type, index, row, onSeatClick, isSelected }
       className={`${seatClass} ${isSelected ? 'selected' : ''}`}
       onClick={handleClick}
       role="button"
-      aria-label={`Seat ${index + 1}`}
+      aria-label={`Ghế ${index + 1}`}
     >
       <span className="seat-number">{row}{index + 1}</span>
     </div>

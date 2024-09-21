@@ -2,7 +2,7 @@
 .container-map {
   margin: 0;
   padding: 0;
-  margin-left: 130px;
+  margin-left: 190px;
   max-width: 1600px; /* Increased width */
 }
 
@@ -17,15 +17,16 @@
 }
 
 .seat-map-box {
+  margin-left: 128px;
   display: flex;
   flex-direction: column;
   align-items: center;
   border-radius: 15px;
-  width: 700px; /* Increased width for seat map box */
+  width: 600px; /* Increased width for seat map box */
 }
 
 .thongtinphim {
-  margin-right: 18%;
+  margin-right: 4%;
   margin-top: 0px;
 }
 

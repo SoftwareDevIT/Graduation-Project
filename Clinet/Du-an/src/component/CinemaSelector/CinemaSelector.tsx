@@ -5,6 +5,7 @@ import { Cinema } from "../../interface/Cinema";
 import { Actor } from "../../interface/Actor";
 import { Movie } from "../../interface/Movie";
 import { Location } from "../../interface/Location";
+import { useNavigate } from "react-router-dom";
 
 
 const CinemaSelector: React.FC = () => {
@@ -16,7 +17,7 @@ const CinemaSelector: React.FC = () => {
   const [selectedCinema, setSelectedCinema] = useState<number | null>(null);
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [filteredCinemas, setFilteredCinemas] = useState<Cinema[]>([]);
-
+  const navigate = useNavigate();
   // Lấy danh sách vị trí, rạp
   useEffect(() => {
     const fetchLocations = async () => {
@@ -53,8 +54,18 @@ const CinemaSelector: React.FC = () => {
     fetchLocations();
     fetchCinemas();
   }, []);
+  useEffect(() => {
+    if (locations.length > 0) {
+      const haNoi = locations.find(location => location.location_name === "Hà Nội");
+      if (haNoi) {
+        setSelectedCity(haNoi.id); // Mặc định chọn Hà Nội
+      }
+    }
+  
+    setSelectedDate("19/9"); // Chọn ngày đầu tiên
+  }, [locations]); // Chạy khi danh sách locations thay đổi
+  
 
-  // Lọc rạp theo thành phố được chọn
   useEffect(() => {
     if (selectedCity) {
       const filtered = cinemas.filter(
@@ -103,11 +114,12 @@ const CinemaSelector: React.FC = () => {
     const days = ["CN", "T2", "T3", "T4", "T5", "T6", "T7"];
     return `${day}/${month} ${days[fullDate.getDay()]}`;
   };
+  const selectedCinemaDetails = cinemas.find(cinema => cinema.id === selectedCinema);
 
   return (
     <>
       <h2 className="title">Mua vé theo rạp</h2>
-      <div className="container">
+      <div className="container ">
         <div className="locations">
           <h3 className="khuvuc">Khu vực</h3>
           <ul className="list-tp">
@@ -188,12 +200,24 @@ const CinemaSelector: React.FC = () => {
                       <p>Thời gian: {movie.duraion}</p>
                       <p>Giới hạn tuổi: {movie.age_limit}+</p>
                       <div className="showtimes-list">
-                        {movie.showtimes.map((showtime) => (
-                          <button key={showtime.id}>
-                            {showtime.showtime_start.slice(0, 5)}
-                          </button>
-                        ))}
-                      </div>
+          {movie.showtimes.map((showtime) => (
+            <button
+              key={showtime.id}
+              onClick={() => {
+                // Chuyển hướng và truyền thông tin qua state
+                navigate('/seat', {
+                  state: {
+                    movieName: movie.movie_name,
+                    cinemaName: selectedCinemaDetails?.cinema_name, // Thay đổi ở đây
+                    showtime: showtime.showtime_start,
+                  },
+                });
+              }}
+            >
+              {showtime.showtime_start.slice(0, 5)}
+            </button>
+          ))}
+        </div>
                     </div>
                   </div>
                 );

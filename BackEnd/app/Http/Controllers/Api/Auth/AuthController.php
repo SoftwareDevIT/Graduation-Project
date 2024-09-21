@@ -32,25 +32,25 @@ class AuthController extends Controller
         $user = $this->loginService->index();
         return response()->json($user);
     }
-    public function show($id)
-    {
-        try {
-            $user = $this->userRegistrationService->register($request->validated());
-            Mail::to($user->email)->queue(new VerifyAccount($user));
-            return $this->success($user, 'success');
-        } catch (\Throwable $th) {
-            return $this->error($th->getMessage());
-            $user = $this->loginService->get($id);
+    // public function show($id)
+    // {
+    //     try {
+    //         $user = $this->userRegistrationService->register($request->validated());
+    //         Mail::to($user->email)->queue(new VerifyAccount($user));
+    //         return $this->success($user, 'success');
+    //     } catch (\Throwable $th) {
+    //         return $this->error($th->getMessage());
+    //         $user = $this->loginService->get($id);
 
-            if (!$user) {
-                return response()->json(['error' => 'user not found'], 404);
-            }
+    //         if (!$user) {
+    //             return response()->json(['error' => 'user not found'], 404);
+    //         }
 
-            return $this->success($user);
-        } catch (Exception $e) {
-            return $e->getMessage();
-        }
-    }
+    //         return $this->success($user);
+    //     } catch (Exception $e) {
+    //         return $e->getMessage();
+    //     }
+    // }
 
     public function list()
     {

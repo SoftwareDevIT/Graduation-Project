@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import ReactPaginate from 'react-paginate';
 import './User.css';
 
 const UserDashboard = () => {
@@ -6,7 +7,22 @@ const UserDashboard = () => {
         { id: 'USR001', name: 'John Doe', email: 'john.doe@example.com', role: 'Admin', reviews: 55, rating: 4.5 },
         { id: 'USR002', name: 'Jane Smith', email: 'jane.smith@example.com', role: 'User', reviews: 143, rating: 4.1 },
         { id: 'USR003', name: 'Sam Wilson', email: 'sam.wilson@example.com', role: 'User', reviews: 174, rating: 4.4 },
+        { id: 'USR004', name: 'Peter Parker', email: 'peter.parker@example.com', role: 'User', reviews: 50, rating: 4.8 },
+        { id: 'USR005', name: 'Tony Stark', email: 'tony.stark@example.com', role: 'Admin', reviews: 120, rating: 4.9 },
+        // Thêm nhiều người dùng hơn nếu cần
     ];
+
+    const itemsPerPage = 2; // Số lượng người dùng mỗi trang
+    const [currentPage, setCurrentPage] = useState(0);
+    
+    // Tính toán số trang
+    const pageCount = Math.ceil(users.length / itemsPerPage);
+
+    const handlePageClick = (data: { selected: number }) => {
+        setCurrentPage(data.selected);
+    };
+
+    const currentUsers = users.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
 
     return (
         <div className="user-management">
@@ -27,7 +43,7 @@ const UserDashboard = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {users.map(user => (
+                        {currentUsers.map(user => (
                             <tr key={user.id}>
                                 <td>{user.id}</td>
                                 <td>{user.name}</td>
@@ -48,6 +64,17 @@ const UserDashboard = () => {
                         ))}
                     </tbody>
                 </table>
+                <ReactPaginate
+                    breakLabel={"..."}
+                    pageCount={pageCount}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={4} // Số ô trang hiển thị
+                    onPageChange={handlePageClick}
+                    containerClassName={"pagination"}
+                    pageClassName={"page-item"}
+                    pageLinkClassName={"page-link"}
+                    activeClassName={"active"}
+                />
             </div>
         </div>
     );

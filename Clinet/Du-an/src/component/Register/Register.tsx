@@ -2,6 +2,7 @@ import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import { notification } from "antd"; // Import Ant Design notification
 import instance from "../../server";
 import ReCAPTCHA from "react-google-recaptcha";
 import "./Register.css";
@@ -10,16 +11,22 @@ import { RegisterFormData } from "../../interface/RegisterFormData";
 const Register = () => {
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors } } = useForm<RegisterFormData>();
-  const [serverError, setServerError] = React.useState<string | null>(null);
   const [captchaValue, setCaptchaValue] = React.useState<string | null>(null);
+
+  const openNotificationWithIcon = (type: "success" | "error", message: string, description: string) => {
+    notification[type]({
+      message,
+      description,
+    });
+  };
 
   const onSubmit: SubmitHandler<RegisterFormData> = async (data) => {
     if (data.password !== data.confirmPassword) {
-      setServerError("Mật khẩu không khớp");
+      openNotificationWithIcon("error", "Lỗi xác thực", "Mật khẩu và xác nhận mật khẩu không khớp.");
       return;
     }
     if (!captchaValue) {
-      setServerError("Vui lòng xác minh CAPTCHA");
+      openNotificationWithIcon("error", "Lỗi xác thực", "Vui lòng xác minh CAPTCHA.");
       return;
     }
 
@@ -33,8 +40,7 @@ const Register = () => {
       });
 
       if (response.status === 200) {
-        alert("Đăng ký tài khoản thành công!"); // Sử dụng alert để thông báo thành công
-        setServerError(null);
+        openNotificationWithIcon("success", "Đăng ký thành công", "Tài khoản của bạn đã được tạo thành công!");
         navigate("/login");
       }
     } catch (err: unknown) {
@@ -45,14 +51,17 @@ const Register = () => {
         };
 
         if (err.response?.status === 422) {
-          setServerError("Tài khoản đã tồn tại! Vui lòng nhập tài khoản khác");
+          openNotificationWithIcon("error", "Đăng ký thất bại", "Tài khoản đã tồn tại! Vui lòng nhập tài khoản khác.");
         } else if (err.response?.status === 500) {
-          setServerError("Có lỗi từ phía server. Xin thử lại sau.");
+          openNotificationWithIcon("error", "Lỗi server", "Có lỗi xảy ra từ phía server. Xin thử lại sau.");
+        } else if (errorResponse?.errors) {
+          const errorMessages = Object.values(errorResponse.errors).flat().join(", ");
+          openNotificationWithIcon("error", "Đăng ký thất bại", errorMessages);
         } else {
-          setServerError(errorResponse?.message || "Đã xảy ra lỗi");
+          openNotificationWithIcon("error", "Đăng ký thất bại", errorResponse?.message || "Đã xảy ra lỗi.");
         }
       } else {
-        setServerError("Đã xảy ra lỗi không xác định");
+        openNotificationWithIcon("error", "Lỗi không xác định", "Đã xảy ra lỗi không xác định. Xin thử lại sau.");
       }
     }
   };
@@ -65,7 +74,6 @@ const Register = () => {
     <div className="custom-register-container">
       <div className="custom-register-form">
         <h2>Đăng ký</h2>
-        {serverError && <p className="error-message">{serverError}</p>}
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="custom-form-group">
             <div className="custom-form-field">
@@ -75,7 +83,9 @@ const Register = () => {
                 id="email"
                 {...register("email", { required: "Email là bắt buộc" })}
               />
-              {errors.email && <p className="error-message">{errors.email.message}</p>}
+              {errors.email && (
+                <p className="error-message">{errors.email.message}</p>
+              )}
             </div>
             <div className="custom-form-field">
               <label htmlFor="user_name">Tên đăng nhập:</label>
@@ -84,7 +94,9 @@ const Register = () => {
                 id="user_name"
                 {...register("user_name", { required: "Tên đăng nhập là bắt buộc" })}
               />
-              {errors.user_name && <p className="error-message">{errors.user_name.message}</p>}
+              {errors.user_name && (
+                <p className="error-message">{errors.user_name.message}</p>
+              )}
             </div>
           </div>
           <div className="custom-form-group">
@@ -95,7 +107,9 @@ const Register = () => {
                 id="password"
                 {...register("password", { required: "Mật khẩu là bắt buộc" })}
               />
-              {errors.password && <p className="error-message">{errors.password.message}</p>}
+              {errors.password && (
+                <p className="error-message">{errors.password.message}</p>
+              )}
             </div>
             <div className="custom-form-field">
               <label htmlFor="confirmPassword">Xác minh mật khẩu:</label>
@@ -104,7 +118,9 @@ const Register = () => {
                 id="confirmPassword"
                 {...register("confirmPassword", { required: "Xác minh mật khẩu là bắt buộc" })}
               />
-              {errors.confirmPassword && <p className="error-message">{errors.confirmPassword.message}</p>}
+              {errors.confirmPassword && (
+                <p className="error-message">{errors.confirmPassword.message}</p>
+              )}
             </div>
           </div>
           <div className="custom-form-group">
