@@ -97,6 +97,14 @@ class AuthController extends Controller
         ]);
 
         try {
+            $user = User::where('email', $request->email)->first();
+            if (!$user) {
+                return $this->error('Tài khoản không tồn tại.');
+            }
+            if ($user->email_verified_at === null) {
+                return $this->error('Tài khoản chưa được kích hoạt, vui lòng kiểm tra email để kích hoạt.');
+            }
+
             $token = $this->loginService->login($request->only('email', 'password'));
             return $this->success($token);
         } catch (Exception $e) {
