@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\Movie\MovieCategoryController;
 use App\Http\Controllers\Api\News\NewCategoryController;
 use App\Http\Controllers\Api\News\NewController;
 use App\Http\Controllers\Api\Combo\ComboController;
+use App\Http\Controllers\Api\Filter\FilterByDate;
 use App\Http\Controllers\Api\Movie\FavoriteController;
 use App\Http\Controllers\Api\Movie\MovieController;
 use App\Http\Controllers\Api\PayMethod\PayMethodController;
@@ -44,7 +45,7 @@ Route::post('logout', [AuthController::class, 'logout']);
 // Route::get('/user', [AuthController::class, 'list']);
 
 Route::post('register', [AuthController::class, 'register']);// chức năng post của đăng ký
-Route::get('/list', [AuthController::class, 'list']);// danh sách tài khoản user
+Route::get('/lists', [AuthController::class, 'list']);// danh sách tài khoản user
 Route::get('/verify-account/{userId}', [AccountVerificationController::class, 'verify'])->name('verify');// route để người dùng xác thực từ gmail
 Route::post('password/send-otp', [ForgotPasswordController::class, 'sendOtp']);// nhập email để gửi email mã otp
 Route::post('password/verify-otp', [ForgotPasswordController::class, 'verifyOtp']);// nhập mã otp để xác thực 
@@ -95,3 +96,4 @@ Route::apiResource('room', RoomController::class);
 
 Route::get('cenima/{id}',[CinemaController::class,'filterMovie']);
 // Lọc phim theo rạp phim
+Route::get('/filterByDate', [FilterByDate::class, 'filterByDate']);

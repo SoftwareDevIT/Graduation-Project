@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import instance from "../../server";
-import "./CinemaSelector.css"; // Import file CSS
+import "./CinemaSelector.css";
 import { Cinema } from "../../interface/Cinema";
 import { Actor } from "../../interface/Actor";
 import { Movie } from "../../interface/Movie";
 import { Location } from "../../interface/Location";
 import { useNavigate } from "react-router-dom";
-
+import dayjs from "dayjs";
 
 const CinemaSelector: React.FC = () => {
   const [locations, setLocations] = useState<Location[]>([]);
@@ -18,7 +18,25 @@ const CinemaSelector: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [filteredCinemas, setFilteredCinemas] = useState<Cinema[]>([]);
   const navigate = useNavigate();
-  // Lấy danh sách vị trí, rạp
+
+  // Lấy ngày hiện tại theo định dạng YYYY-MM-DD
+  const getCurrentDate = (): string => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`; // Định dạng YYYY-MM-DD
+  };
+
+  // Tạo danh sách ngày cho 7 ngày tiếp theo
+  const generateDateList = (): string[] => {
+    return Array.from({ length: 7 }, (_, i) =>
+      dayjs().add(i, "day").format("YYYY-MM-DD")
+    );
+  };
+
+  // Lấy danh sách vị trí, rạp, diễn viên
   useEffect(() => {
     const fetchLocations = async () => {
       try {
@@ -37,89 +55,106 @@ const CinemaSelector: React.FC = () => {
         console.error("Lỗi khi lấy danh sách rạp:", error);
       }
     };
-    // Lấy danh sách diễn viên
 
     const fetchActors = async () => {
       try {
         const response = await instance.get("/actor");
         setActors(response.data || []);
-        console.log(response.data);
       } catch (error) {
         console.error("Lỗi khi lấy danh sách diễn viên:", error);
       }
     };
 
     fetchActors();
-
     fetchLocations();
     fetchCinemas();
+
+    // Đặt ngày hiện tại làm ngày mặc định
+    setSelectedDate(getCurrentDate());
   }, []);
+
+  // Mặc định chọn Hà Nội
   useEffect(() => {
     if (locations.length > 0) {
-      const haNoi = locations.find(location => location.location_name === "Hà Nội");
+      const haNoi = locations.find(
+        (location) => location.location_name === "Hà Nội"
+      );
       if (haNoi) {
         setSelectedCity(haNoi.id); // Mặc định chọn Hà Nội
       }
     }
-  
-    setSelectedDate("19/9"); // Chọn ngày đầu tiên
-  }, [locations]); // Chạy khi danh sách locations thay đổi
-  
+  }, [locations]);
 
+  // Lọc rạp theo khu vực
   useEffect(() => {
     if (selectedCity) {
       const filtered = cinemas.filter(
         (cinema) => cinema.location_id === selectedCity
       );
       setFilteredCinemas(filtered);
-      if (filtered.length === 0) {
-        setMovies([]); // Xóa danh sách phim nếu không có rạp nào
-      }
     } else {
       setFilteredCinemas(cinemas);
-      setMovies([]); // Xóa danh sách phim khi không chọn khu vực
     }
   }, [selectedCity, cinemas]);
-
-  // Lấy phim của rạp được chọn
   useEffect(() => {
-    if (selectedCinema) {
-      setMovies([]); // Xóa danh sách phim ngay lập tức khi rạp mới được chọn
-
-      const fetchMoviesForCinema = async () => {
+    const fetchMoviesForSelectedCinemaAndDate = async () => {
+      if (selectedCinema && selectedDate) {
         try {
-          const response = await instance.get(`/cenima/${selectedCinema}`); // Sửa URL cho đúng
-          if (response.data && response.data.data) {
-            setMovies(response.data.data); // Lưu danh sách phim và showtimes
+          // Gọi API lọc phim theo rạp
+          const cinemaResponse = await instance.get(`/cenima/${selectedCinema}`);
+          console.log("Dữ liệu từ lọc phim theo rạp:", cinemaResponse.data.data);
+  
+          const cinemaMovies: Movie[] = cinemaResponse.data?.data || []; // Dữ liệu phim từ API rạp
+  
+          // Nếu không có phim cho rạp này
+          if (cinemaMovies.length === 0) {
+            console.log("Không có phim nào cho rạp này.");
+            setMovies([]);
+            return;
+          }
+  
+          // Gọi API lọc theo ngày
+          const dateResponse = await instance.get(`/filterByDate`, {
+            params: {
+              cinema_id: selectedCinema,
+              showtime_date: selectedDate,
+            },
+          });
+          console.log("Dữ liệu từ dateResponse:", dateResponse.data);
+  
+          const dateMovies: Movie[] = Array.isArray(dateResponse.data) ? dateResponse.data : [];
+  
+          // Lọc những phim có trong cả hai API (lọc rạp và lọc ngày)
+          const filteredMovies = cinemaMovies.filter((cinemaMovie: Movie) =>
+            dateMovies.some((dateMovie: Movie) => dateMovie.id === cinemaMovie.id)
+          );
+  
+          // Cập nhật danh sách phim
+          if (filteredMovies.length > 0) {
+            setMovies(filteredMovies);
           } else {
-            console.log("Không có phim nào trong rạp này.");
-            setMovies([]); // Xóa danh sách phim nếu không có phim
+            console.log("Không có phim nào cho rạp và ngày này.");
+            setMovies([]);
           }
         } catch (error) {
-          console.error("Không thể lấy phim của rạp:", error);
+          console.error("Lỗi khi lấy phim cho rạp và ngày:", error);
           setMovies([]); // Xóa danh sách phim khi gặp lỗi
         }
-      };
+      }
+    };
+  
+    fetchMoviesForSelectedCinemaAndDate();
+  }, [selectedCinema, selectedDate]); // useEffect chạy khi cả rạp và ngày thay đổi
+  
 
-      fetchMoviesForCinema();
-    } else {
-      setMovies([]); // Xóa danh sách phim khi không chọn rạp
-    }
-  }, [selectedCinema]);
-
-  // Định dạng ngày
-  const formatDate = (date: string) => {
-    const [day, month] = date.split("/");
-    const fullDate = new Date(`2024/${month}/${day}`);
-    const days = ["CN", "T2", "T3", "T4", "T5", "T6", "T7"];
-    return `${day}/${month} ${days[fullDate.getDay()]}`;
-  };
-  const selectedCinemaDetails = cinemas.find(cinema => cinema.id === selectedCinema);
+  const selectedCinemaDetails = cinemas.find(
+    (cinema) => cinema.id === selectedCinema
+  );
 
   return (
     <>
       <h2 className="title">Mua vé theo rạp</h2>
-      <div className="container ">
+      <div className="container">
         <div className="locations">
           <h3 className="khuvuc">Khu vực</h3>
           <ul className="list-tp">
@@ -154,7 +189,6 @@ const CinemaSelector: React.FC = () => {
                 }`}
                 onClick={() => {
                   setSelectedCinema(cinema.id);
-                  setSelectedDate(""); // Xóa lựa chọn ngày khi thay đổi rạp
                 }}
               >
                 {cinema.cinema_name}
@@ -165,20 +199,18 @@ const CinemaSelector: React.FC = () => {
 
         <div className="showtimes">
           <div className="date-selection">
-            {["19/9", "20/9", "21/9", "22/9", "23/9", "24/9", "25/9"].map(
-              (date) => (
-                <span
-                  key={date}
-                  className={`date ${selectedDate === date ? "selected" : ""}`}
-                  onClick={() => {
-                    setSelectedDate(date);
-                    console.log("Ngày được chọn:", date);
-                  }}
-                >
-                  <p>{formatDate(date)}</p>
-                </span>
-              )
-            )}
+            {generateDateList().map((date) => (
+              <span
+                key={date}
+                className={`date ${selectedDate === date ? "selected" : ""}`}
+                onClick={() => {
+                  setSelectedDate(date);
+                  console.log("Ngày được chọn:", date);
+                }}
+              >
+                <p>{dayjs(date).format("DD/MM")}</p>
+              </span>
+            ))}
           </div>
 
           {/* Hiển thị danh sách phim */}
@@ -195,29 +227,28 @@ const CinemaSelector: React.FC = () => {
                       <p>
                         Đạo Diễn:{" "}
                         {actor ? actor.actor_name : "Không có thông tin"}
-                      </p>{" "}
-                      {/* Hiển thị tên diễn viên */}
+                      </p>
                       <p>Thời gian: {movie.duraion}</p>
                       <p>Giới hạn tuổi: {movie.age_limit}+</p>
                       <div className="showtimes-list">
-          {movie.showtimes.map((showtime) => (
-            <button
-              key={showtime.id}
-              onClick={() => {
-                // Chuyển hướng và truyền thông tin qua state
-                navigate('/seat', {
-                  state: {
-                    movieName: movie.movie_name,
-                    cinemaName: selectedCinemaDetails?.cinema_name, // Thay đổi ở đây
-                    showtime: showtime.showtime_start,
-                  },
-                });
-              }}
-            >
-              {showtime.showtime_start.slice(0, 5)}
-            </button>
-          ))}
-        </div>
+                        {movie.showtimes.map((showtime) => (
+                          <button
+                            key={showtime.id}
+                            onClick={() => {
+                              navigate("/seat", {
+                                state: {
+                                  movieName: movie.movie_name,
+                                  cinemaName:
+                                    selectedCinemaDetails?.cinema_name,
+                                  showtime: showtime.showtime_start,
+                                },
+                              });
+                            }}
+                          >
+                            {showtime.showtime_start.slice(0, 5)}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 );

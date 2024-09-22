@@ -9,10 +9,14 @@ const UserDashboard = () => {
         { id: 'USR003', name: 'Sam Wilson', email: 'sam.wilson@example.com', role: 'User', reviews: 174, rating: 4.4 },
         { id: 'USR004', name: 'Peter Parker', email: 'peter.parker@example.com', role: 'User', reviews: 50, rating: 4.8 },
         { id: 'USR005', name: 'Tony Stark', email: 'tony.stark@example.com', role: 'Admin', reviews: 120, rating: 4.9 },
+        { id: 'USR005', name: 'Tony Stark', email: 'tony.stark@example.com', role: 'Admin', reviews: 120, rating: 4.9 },
+        { id: 'USR005', name: 'Tony Stark', email: 'tony.stark@example.com', role: 'Admin', reviews: 120, rating: 4.9 },
+        { id: 'USR005', name: 'Tony Stark', email: 'tony.stark@example.com', role: 'Admin', reviews: 120, rating: 4.9 },
+        { id: 'USR005', name: 'Tony Stark', email: 'tony.stark@example.com', role: 'Admin', reviews: 120, rating: 4.9 },
         // Thêm nhiều người dùng hơn nếu cần
     ];
 
-    const itemsPerPage = 2; // Số lượng người dùng mỗi trang
+    const itemsPerPage = 1; // Số lượng người dùng mỗi trang
     const [currentPage, setCurrentPage] = useState(0);
     
     // Tính toán số trang

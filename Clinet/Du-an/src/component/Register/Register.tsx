@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
@@ -15,7 +15,7 @@ const Register = () => {
 
   const openNotificationWithIcon = (type: "success" | "error", message: string, description: string) => {
     notification[type]({
-      message,
+      message: message ?? "Thông báo", // Cung cấp giá trị mặc định
       description,
     });
   };
@@ -58,7 +58,8 @@ const Register = () => {
           const errorMessages = Object.values(errorResponse.errors).flat().join(", ");
           openNotificationWithIcon("error", "Đăng ký thất bại", errorMessages);
         } else {
-          openNotificationWithIcon("error", "Đăng ký thất bại", errorResponse?.message || "Đã xảy ra lỗi.");
+          const errorMessage = errorResponse?.message ?? "Đã xảy ra lỗi."; // Cung cấp giá trị mặc định
+          openNotificationWithIcon("error", "Đăng ký thất bại", errorMessage);
         }
       } else {
         openNotificationWithIcon("error", "Lỗi không xác định", "Đã xảy ra lỗi không xác định. Xin thử lại sau.");
@@ -70,6 +71,21 @@ const Register = () => {
     setCaptchaValue(value);
   };
 
+  useEffect(() => {
+    if (errors.email) {
+      openNotificationWithIcon("error", "Lỗi xác thực", errors.email.message ?? "Có lỗi xảy ra.");
+    }
+    if (errors.user_name) {
+      openNotificationWithIcon("error", "Lỗi xác thực", errors.user_name.message ?? "Có lỗi xảy ra.");
+    }
+    if (errors.password) {
+      openNotificationWithIcon("error", "Lỗi xác thực", errors.password.message ?? "Có lỗi xảy ra.");
+    }
+    if (errors.confirmPassword) {
+      openNotificationWithIcon("error", "Lỗi xác thực", errors.confirmPassword.message ?? "Có lỗi xảy ra.");
+    }
+  }, [errors]);
+
   return (
     <div className="custom-register-container">
       <div className="custom-register-form">
@@ -79,13 +95,16 @@ const Register = () => {
             <div className="custom-form-field">
               <label htmlFor="email">Email:</label>
               <input
-                type="email"
+                type="text"
                 id="email"
-                {...register("email", { required: "Email là bắt buộc" })}
+                {...register("email", { 
+                  required: "Email là bắt buộc", 
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: "Email không đúng định dạng"
+                  }
+                })}
               />
-              {errors.email && (
-                <p className="error-message">{errors.email.message}</p>
-              )}
             </div>
             <div className="custom-form-field">
               <label htmlFor="user_name">Tên đăng nhập:</label>
@@ -94,9 +113,6 @@ const Register = () => {
                 id="user_name"
                 {...register("user_name", { required: "Tên đăng nhập là bắt buộc" })}
               />
-              {errors.user_name && (
-                <p className="error-message">{errors.user_name.message}</p>
-              )}
             </div>
           </div>
           <div className="custom-form-group">
@@ -105,22 +121,24 @@ const Register = () => {
               <input
                 type="password"
                 id="password"
-                {...register("password", { required: "Mật khẩu là bắt buộc" })}
+                {...register("password", { 
+                  required: "Mật khẩu là bắt buộc", 
+                  minLength: {
+                    value: 8,
+                    message: "Mật khẩu phải có ít nhất 8 ký tự"
+                  }
+                })}
               />
-              {errors.password && (
-                <p className="error-message">{errors.password.message}</p>
-              )}
             </div>
             <div className="custom-form-field">
               <label htmlFor="confirmPassword">Xác minh mật khẩu:</label>
               <input
                 type="password"
                 id="confirmPassword"
-                {...register("confirmPassword", { required: "Xác minh mật khẩu là bắt buộc" })}
+                {...register("confirmPassword", { 
+                  required: "Xác minh mật khẩu là bắt buộc" 
+                })}
               />
-              {errors.confirmPassword && (
-                <p className="error-message">{errors.confirmPassword.message}</p>
-              )}
             </div>
           </div>
           <div className="custom-form-group">
