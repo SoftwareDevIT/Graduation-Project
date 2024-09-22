@@ -22,7 +22,7 @@ class RegisterController extends Controller
         try {
             // dd($request);
             $user = $this->userRegistrationService->register($request->validated());
-            // Mail::to($user->email)->queue(new VerifyAccount($user));
+            Mail::to($user->email)->queue(new VerifyAccount($user));
 
             return redirect()->route('register.form')->with('success', 'Tạo tài khoản thành công!');
         } catch (\Throwable $th) {
