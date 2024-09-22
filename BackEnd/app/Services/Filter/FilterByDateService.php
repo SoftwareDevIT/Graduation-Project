@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\Filter;
 
 use App\Models\Movie;
@@ -7,17 +8,20 @@ use Carbon\Carbon;
 
 class FilterByDateService
 {
-    public function filterByDate(string $data)
-    {
-        
-        $filteredShowtimes = function($query) use ($data) {
-            $query->where('showtime_date', $data)
-                  ->where('status', 'Show');
-        };
-        return Movie::whereHas('showtimes', $filteredShowtimes)
-                       ->with(['showtimes' => $filteredShowtimes])
-                       ->get();
+    public function filterByDate(string $date, $cinemaId = null)
+{
+    $filteredShowtimes = function($query) use ($date) {
+        $query->where('showtime_date', $date)
+              ->where('status', 'Show');
+    };
+    
+    $query = Movie::whereHas('showtimes', $filteredShowtimes)
+                  ->with(['showtimes' => $filteredShowtimes]);
 
-        
+    if ($cinemaId) {
+        $query->where('cinema_id', $cinemaId);
     }
+
+    return $query->get();
+}
 }
