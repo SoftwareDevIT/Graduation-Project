@@ -10,9 +10,20 @@ class Seats extends Model
     use HasFactory;
     protected $table = 'seats';
     protected $fillable = [
-        'seat_type',
-        'room_id',
-        'row',
-        'number',
+        'number_seat',
+        'price',
+        'taken',
+        'showtime_id',
+        'category_seat_id',
     ];
+
+    public function categorySeat()
+    {
+        return $this->belongsTo(CategorySeat::class, 'category_seat_id');
+    }
+
+    public function room()
+    {
+        return $this->belongsTo(Room::class);
+    }
 }

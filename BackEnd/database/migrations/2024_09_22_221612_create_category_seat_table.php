@@ -10,15 +10,11 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('seats', function (Blueprint $table) {
-            $table->id('id');
-            $table->string('number_seat');
-            $table->double('price');
-            $table->unsignedBigInteger('room_id');
-            $table->boolean('taken')->default(false);
+        Schema::create('category_seat', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->boolean('couple')->default(false);
             $table->timestamps();
-            $table->foreign('room_id')->references('id')->on('room');
-
         });
     }
 
@@ -27,6 +23,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('seats');
+        Schema::dropIfExists('category_seat');
     }
 };
