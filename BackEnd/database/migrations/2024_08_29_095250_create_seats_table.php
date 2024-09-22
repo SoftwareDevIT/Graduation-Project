@@ -14,10 +14,10 @@ return new class extends Migration {
             $table->id('id');
             $table->string('number_seat');
             $table->double('price');
-            $table->unsignedBigInteger('room_id');
+            // $table->unsignedBigInteger('room_id');
             $table->boolean('taken')->default(false);
             $table->timestamps();
-            $table->foreign('room_id')->references('id')->on('room');
+            // $table->foreign('room_id')->references('id')->on('room');
 
         });
     }
