@@ -29,7 +29,8 @@ import RevenueByCinemaManager from "./Page/Admin/RevenueByCinema/RevenueByCinema
 import RevenueByMoviesManager from "./Page/Admin/RevenueByMoviesManager/RevenueByMoviesManager";
 import { Route, Routes } from "react-router-dom";
 import EmailConfirm from "./component/EmailConfirm/EmailConfirm";
-import UserForm1 from "./Page/Admin/User/UserForm";
+import UserAddManager from "./Page/Admin/User/UserAdd";
+
 
 
 function App() {
@@ -50,7 +51,7 @@ function App() {
 
       <Route path="/admin" element={<Dashboard/>}/>
       <Route path="admin/user" element={<User/>}/>
-      <Route path="admin/user/add" element={<UserForm1/>}/>
+      <Route path="admin/user/add" element={<UserAddManager/>}/>
       <Route path="admin/showtimes" element={<ShowtimesManager/>}/>
       <Route path="admin/orders" element={<OrdersManager/>}/>
       <Route path="admin/tickets" element={<TicketsManager/>}/>

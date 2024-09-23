@@ -6,7 +6,7 @@ const EmailConfirm = () => {
     <div className="email-confirm-container">
       <header className="email-confirm-header">
         <h1 className="email-confirm-event-title">eventbrite</h1>
-        <p className="email-confirm-confirmation-msg">Smiles Davis, you're good to go</p>
+        <p className="email-confirm-confirmation-msg">Trần Quang Huy, you're good to go</p>
         <div className="email-confirm-ticket-icon">
           <img src="https://img.icons8.com/?size=100&id=pwpz1tqVnCQy&format=png&color=000000" alt="ticket icon" />
           <p>Keep your tickets handy</p>
@@ -14,7 +14,7 @@ const EmailConfirm = () => {
         </div>
       </header>
       <main className="email-confirm-event-details">
-  <h2 className="email-confirm-event-title">WarholKids Presents: Jason M Peterson Gallery Launch</h2>
+  <h2 className="email-confirm-event-title">Tên phim</h2>
   
   <img src="https://venngage-wordpress.s3.amazonaws.com/uploads/2021/10/Email-Banner-Travel-Offer.png" alt="event image" className="email-confirm-event-image" />
       <div className="email-confirm-ticket-info">
@@ -44,10 +44,7 @@ const EmailConfirm = () => {
     <a href="#">View event details</a>
   </div>
 
-  <div className="organizer-section">
-    <p>WarholKids</p>
-    <button className="follow-button">Follow</button>
-  </div>
+
 
   <div className="contact-section">
     <p>Questions about this event?</p>

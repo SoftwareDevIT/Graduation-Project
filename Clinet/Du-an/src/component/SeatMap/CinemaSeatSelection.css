@@ -46,6 +46,7 @@
   flex-direction: column;
   align-items: center;
   margin-top: 10px;
+  width: 300px;
 }
 
 .seat-row {
@@ -297,4 +298,45 @@
   .seat-number {
     font-size: 0.7em; /* Smaller seat number */
   }
+}
+.seat-row-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px; /* Khoảng cách giữa các hàng ghế */
+}
+
+.seat-row-label {
+  width: 40px; /* Chiều rộng cố định của nhãn */
+  text-align: center;
+  color: white;
+  background-color: #727575;
+  border: 1px solid black;
+  padding: 5px 0;
+  margin-right: 190px; /* Khoảng cách giữa nhãn và hàng ghế */
+}
+
+.seat-row-seats {
+  display: flex;
+  flex-wrap: nowrap; /* Giữ các ghế trên cùng một dòng */
+}
+.seat-row-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px; /* Khoảng cách giữa các hàng ghế */
+}
+
+.seat-row-label {
+  width: 40px; /* Chiều rộng cố định của nhãn */
+  text-align: center;
+  color: white;
+  background-color: #727575;
+  border: 1px solid black;
+  padding: 5px 0;
+  margin-right: 140px; /* Khoảng cách giữa nhãn và hàng ghế */
+}
+
+.seat-row-seats {
+  display: flex;
+  flex-wrap: nowrap; /* Giữ các ghế trên cùng một dòng */
+  margin-right: 140px;
 }

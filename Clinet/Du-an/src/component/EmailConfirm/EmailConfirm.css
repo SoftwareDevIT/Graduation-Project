@@ -99,10 +99,20 @@
 }
 
 .email-confirm-ticket-info i {
-    color: #e96526; /* Icon color matches theme */
+    font-size: 18px; /* Adjust icon size */
+    vertical-align: middle; /* Ensure icon is vertically centered */
+    color: #e96526; /* Icon color */
     margin-right: 8px;
-    font-size: 20px;
 }
+
+.email-confirm-ticket-info p {
+    font-size: 18px; /* Match text size to the icon */
+    line-height: 1; /* Prevent extra spacing around text */
+    margin: 0; /* Remove any default margin */
+    vertical-align: middle; /* Align text vertically with the icon */
+    display: inline-block; /* Ensure both text and icon are treated similarly */
+}
+
 
 .order-total {
     font-size: 15px;

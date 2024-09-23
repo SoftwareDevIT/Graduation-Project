@@ -44,7 +44,7 @@ Route::post('logout', [AuthController::class, 'logout']);
 // Route::get('/user', [AuthController::class, 'list']);
 
 Route::post('register', [AuthController::class, 'register']);// chức năng post của đăng ký
-Route::get('/list', [AuthController::class, 'list']);// danh sách tài khoản user
+Route::get('/lists', [AuthController::class, 'list']);// danh sách tài khoản user
 Route::get('/verify-account/{userId}', [AccountVerificationController::class, 'verify'])->name('verify');// route để người dùng xác thực từ gmail
 Route::post('password/send-otp', [ForgotPasswordController::class, 'sendOtp']);// nhập email để gửi email mã otp
 Route::post('password/verify-otp', [ForgotPasswordController::class, 'verifyOtp']);// nhập mã otp để xác thực 
@@ -62,10 +62,10 @@ Route::resource('news_category', NewCategoryController::class);// crud của dan
 Route::resource('news', NewController::class);// crud của tin tức
 
 
-Route::apiResource('actor', ActorController::class);                        // crud của tác giả
-Route::apiResource('director', DirectorController::class);                  // crud của diễn viên
-Route::apiResource('movie-category', MovieCategoryController::class);       // crud của danh mục phim
-Route::apiResource('movies', MovieController::class);                       // crud của phim
+Route::apiResource('actor', ActorController::class);// crud của tác giả
+Route::apiResource('director', DirectorController::class);// crud của diễn viên
+Route::apiResource('movie-category', MovieCategoryController::class);// crud của danh mục phim
+Route::apiResource('movies', MovieController::class);
 Route::apiResource('method', PayMethodController::class);
 Route::get('/movie/search/{movie_name}', [MovieController::class, 'search']);    // Chức năng tìm kiếm theo tên phim
 
@@ -74,7 +74,7 @@ Route::apiResource('showtimes', ShowtimeController::class);
 Route::get('showtimes/movie/{movie_name}', [ShowtimeController::class, 'showtimeByMovieName']);
 Route::apiResource('room', RoomController::class);
 
-Route::middleware(['auth:sanctum'])->group(function () {
+// Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::get('list', [AuthController::class, 'list']);// danh sách tài khoản user
     Route::apiResource('location', LocationController::class);
@@ -91,7 +91,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('movies', MovieController::class);
     Route::apiResource('method', PayMethodController::class);
     Route::apiResource('combo', ComboController::class);
-});
+// });
 
 Route::get('cenima/{id}',[CinemaController::class,'filterMovie']);
 // Lọc phim theo rạp phim

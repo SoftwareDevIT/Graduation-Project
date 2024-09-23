@@ -1,13 +1,41 @@
-import React from 'react';
-import './CinemasDashboard.css';
+import React, { useState, useEffect } from 'react';
 
-const CinemasDashboard = () => {
-    const cinemas = [
-        { id: 'CIN001', name: 'Cinema 1', location: 'Downtown', capacity: 150 },
-        { id: 'CIN002', name: 'Cinema 2', location: 'Uptown', capacity: 200 },
-        { id: 'CIN003', name: 'Cinema 3', location: 'Suburbs', capacity: 100 },
-    ];
-    
+import './CinemasDashboard.css';
+import { Cinema } from '../../../interface/Cinema';
+import instance from '../../../server';
+
+const CinemasDashboard: React.FC = () => {
+    const [cinemas, setCinemas] = useState<Cinema[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchCinemas = async () => {
+            try {
+                const response = await instance.get('/cinema');
+                console.log('API Response:', response.data); // Log the entire response
+                setCinemas(response.data.data);
+                // Assuming response.data is an array of cinemas
+                
+                setLoading(false);
+            } catch (err) {
+                console.error('Fetch error:', err); // Log the error
+                setError('Failed to fetch cinemas');
+                setLoading(false);
+            }
+        };
+
+        fetchCinemas();
+    }, []);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>{error}</div>;
+    }
+
     return (
         <div className="cinemas-dashboard">
             <h2>All Cinemas</h2>
@@ -20,8 +48,9 @@ const CinemasDashboard = () => {
                         <tr>
                             <th>Cinema ID</th>
                             <th>Cinema Name</th>
-                            <th>Location</th>
-                            <th>Capacity</th>
+                            <th>Phone</th>
+                            <th>Address</th>
+                            <th>Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -29,9 +58,10 @@ const CinemasDashboard = () => {
                         {cinemas.map((cinema) => (
                             <tr key={cinema.id}>
                                 <td>{cinema.id}</td>
-                                <td>{cinema.name}</td>
-                                <td>{cinema.location}</td>
-                                <td>{cinema.capacity}</td>
+                                <td>{cinema.cinema_name}</td>
+                                <td>{cinema.phone}</td>
+                                <td>{cinema.cinema_address}</td>
+                                <td>{cinema.status}</td>
                                 <td className="action-buttons">
                                     <button className="view-btn">👁</button>
                                     <button className="edit-btn">✏️</button>
