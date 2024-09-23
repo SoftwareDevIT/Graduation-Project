@@ -27,6 +27,8 @@ class DatabaseSeeder extends Seeder
             News::class,
             RoomSeeder::class,
             ShowtimeSeeder::class,
+            CategorySeatSeeder::class,
+            // SeatSeeder::class,
         ]);
     }
 }
