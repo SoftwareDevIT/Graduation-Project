@@ -10,20 +10,46 @@ class Seats extends Model
     use HasFactory;
     protected $table = 'seats';
     protected $fillable = [
-        'number_seat',
-        'price',
-        'taken',
+        'seat_name',
+        'room_id',
         'showtime_id',
-        'category_seat_id',
+        'seat_row',
+        'seat_column',
+        'number',
+        'seat_type',
+        'status'
     ];
 
-    public function categorySeat()
+    public function isAvailable()
     {
-        return $this->belongsTo(CategorySeat::class, 'category_seat_id');
+        return is_null($this->reserved_until || now()->greaterThan($this->reserved_until));
+    }
+
+    public function reserveForUser()
+    {
+        // Đặt ghế và giữ trong thời gian (5 phút mặc định)
+        $this->reserved_until = now()->addMinutes(1);
+        $this->status = 'Reserved Until';
+        $this->save();
     }
 
     public function room()
     {
-        return $this->belongsTo(Room::class);
+        return $this->belongsTo(Room::class, 'room_id', 'id');
+    }
+
+    public function showtime()
+    {
+        return $this->belongsTo(Showtime::class, 'showtime_id', 'id');
+    }
+    public function bookings()
+    {
+        return $this->belongsToMany(Booking::class, 'booking_seats');
+    }
+
+    public static function updateSeatsStatus(array $seatIds, string $status)
+    {
+        // Cập nhật cột 'status' với giá trị mới cho tất cả các ghế có ID nằm trong danh sách $seatIds
+        self::whereIn('id', $seatIds)->update(['status' => $status, 'reserved_until' => null]);
     }
 }

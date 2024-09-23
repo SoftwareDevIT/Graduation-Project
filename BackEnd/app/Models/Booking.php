@@ -9,7 +9,8 @@ class Booking extends Model
 {
     use HasFactory;
     protected $table = 'booking';
-    protected $fillable = [
+   protected $fillable = [
+        'booking_id',
         'user_id',
         'showtime_id',
         'seat_id',
@@ -17,5 +18,33 @@ class Booking extends Model
         'combo_id',
         'amount',
         'seat_status',
+        'created_at',
+        'updated_at',
     ];
+
+    public function seats()
+    {
+        return $this->belongsToMany(Seats::class, 'booking_seats', 'booking_id', 'seat_id');
+    }
+
+
+    public function combos()
+    {
+        return $this->belongsToMany(Combo::class, 'booking_combos');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function showtime()
+    {
+        return $this->belongsTo(Showtime::class,);
+    }
+
+    public function payMethod()
+    {
+        return $this->belongsTo(PayMethod::class, 'pay_method_id', 'pay_method_id');
+    }
 }

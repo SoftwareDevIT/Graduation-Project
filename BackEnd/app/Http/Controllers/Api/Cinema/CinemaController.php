@@ -70,11 +70,10 @@ class CinemaController extends Controller
     public function filterMovie($id){
         try {
             $movies = Movie::where('cinema_id', $id)->with('showtimes')->get();
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Danh sách phim theo rạp phim',
-                'data' => $movies
-            ]);
+            if($movies->isEmpty()){
+                return $this->error('Không có phim trong rạp này .');
+            }
+            return $this->success($movies,'Lấy phim thành công');
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => 'fail',
