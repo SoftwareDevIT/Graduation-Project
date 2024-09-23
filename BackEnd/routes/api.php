@@ -80,7 +80,7 @@ Route::apiResource('showtimes', ShowtimeController::class);
 Route::get('showtimes/movie/{movie_name}', [ShowtimeController::class, 'showtimeByMovieName']);
 Route::apiResource('room', RoomController::class);
 
-Route::middleware(['auth:sanctum'])->group(function () {
+// Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::get('list', [AuthController::class, 'list']); // danh sách tài khoản user
     Route::apiResource('location', LocationController::class);
@@ -97,7 +97,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('movies', MovieController::class);
     Route::apiResource('method', PayMethodController::class);
     Route::apiResource('combo', ComboController::class);
-});
+// });
 
 // Route::middleware(['auth:sanctum'])->group(function () {
 //     Route::post('logout', [AuthController::class, 'logout']);

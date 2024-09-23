@@ -31,15 +31,8 @@
     font-weight:500;
 }
 
-
-.company-logo {
-    width: 50px;
-    height: 50px;
-    margin-bottom: 10px;    
-
 .company-info p {
     margin: 0;
-
 }
 
 .footer-links {
@@ -139,8 +132,7 @@
     }
 }
 
-    object-fit: contain;
-}
+
 @media (max-width: 1024px) {
     .footer {
         padding: 20px 30px;
@@ -191,4 +183,3 @@
         height: 40px;
     }
 }
-

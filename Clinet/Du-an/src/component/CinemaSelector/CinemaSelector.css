@@ -6,7 +6,9 @@
   padding: 20px;
   gap: 10px;
 }
-
+.seat{
+  margin-left: 10px;
+}
 .locations, .cinemas, .showtimes {
   background-color: #fff;
   border: 1px solid #e0e0e0;
@@ -323,7 +325,7 @@ li.city.selected {
 
 .cinema-count {
   background-color: #007bff;
-  padding-top: 4px;
+  padding-top: 2px;
   text-align: center;
   color: #fff;
   width: 20px;
@@ -331,6 +333,7 @@ li.city.selected {
   border-radius: 50%;
   font-size: 12px;
   font-weight: bold;
+  
 }
 /* CSS hiện tại của bạn */
 
