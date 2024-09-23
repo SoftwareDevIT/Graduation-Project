@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
-import { notification } from "antd"; // Import Ant Design notification
+import { notification } from "antd";
 import instance from "../../server";
 import ReCAPTCHA from "react-google-recaptcha";
 import "./Register.css";
@@ -11,11 +11,12 @@ import { RegisterFormData } from "../../interface/RegisterFormData";
 const Register = () => {
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors } } = useForm<RegisterFormData>();
-  const [captchaValue, setCaptchaValue] = React.useState<string | null>(null);
-
+  const [captchaValue, setCaptchaValue] = useState<string | null>(null);
+  const captchaRef = useRef<ReCAPTCHA | null>(null); // Dùng ref để giữ CAPTCHA
+//  thư viên Ant Degsin
   const openNotificationWithIcon = (type: "success" | "error", message: string, description: string) => {
     notification[type]({
-      message: message ?? "Thông báo", // Cung cấp giá trị mặc định
+      message: message ?? "Thông báo", 
       description,
     });
   };
@@ -47,7 +48,7 @@ const Register = () => {
       if (axios.isAxiosError(err)) {
         const errorResponse = err.response?.data as {
           message?: string;
-          errors?: Record<string, string[]>; 
+          errors?: Record<string, string[]>;
         };
 
         if (err.response?.status === 422) {
@@ -58,7 +59,7 @@ const Register = () => {
           const errorMessages = Object.values(errorResponse.errors).flat().join(", ");
           openNotificationWithIcon("error", "Đăng ký thất bại", errorMessages);
         } else {
-          const errorMessage = errorResponse?.message ?? "Đã xảy ra lỗi."; // Cung cấp giá trị mặc định
+          const errorMessage = errorResponse?.message ?? "Đã xảy ra lỗi.";
           openNotificationWithIcon("error", "Đăng ký thất bại", errorMessage);
         }
       } else {
@@ -72,17 +73,23 @@ const Register = () => {
   };
 
   useEffect(() => {
-    if (errors.email) {
-      openNotificationWithIcon("error", "Lỗi xác thực", errors.email.message ?? "Có lỗi xảy ra.");
+    if (captchaRef.current) {
+      captchaRef.current.reset();
     }
-    if (errors.user_name) {
-      openNotificationWithIcon("error", "Lỗi xác thực", errors.user_name.message ?? "Có lỗi xảy ra.");
-    }
+  }, []);
+
+  useEffect(() => {
     if (errors.password) {
       openNotificationWithIcon("error", "Lỗi xác thực", errors.password.message ?? "Có lỗi xảy ra.");
     }
     if (errors.confirmPassword) {
       openNotificationWithIcon("error", "Lỗi xác thực", errors.confirmPassword.message ?? "Có lỗi xảy ra.");
+    }
+    if (errors.email) {
+      openNotificationWithIcon("error", "Lỗi xác thực", errors.email.message ?? "Có lỗi xảy ra.");
+    }
+    if (errors.user_name) {
+      openNotificationWithIcon("error", "Lỗi xác thực", errors.user_name.message ?? "Có lỗi xảy ra.");
     }
   }, [errors]);
 
@@ -145,6 +152,7 @@ const Register = () => {
             <ReCAPTCHA
               sitekey="6LdahEAqAAAAAKeWH4oPIbVjTx0zFMO2_nb8B7MM" // Thay thế bằng site key của bạn
               onChange={onCaptchaChange}
+              ref={captchaRef}
             />
           </div>
           <button type="submit" className="custom-submit-btn">

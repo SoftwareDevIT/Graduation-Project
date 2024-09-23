@@ -224,7 +224,7 @@ const CinemaSelector: React.FC = () => {
                     <img src={movie.poster} alt={movie.movie_name} />
                     <div className="details">
                       <h4>{movie.movie_name}</h4>
-                      <p>
+                      <p> 
                         Đạo Diễn:{" "}
                         {actor ? actor.actor_name : "Không có thông tin"}
                       </p>

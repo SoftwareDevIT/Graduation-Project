@@ -2,11 +2,12 @@
 import { z } from "zod";
 
 export const loginSchema = z.object({
-  email: z.string().nonempty("Vui lòng nhập email.").email("Email không hợp lệ."),
-  password: z.string().nonempty("Vui lòng nhập mật khẩu.").min(6, "Mật khẩu phải có ít nhất 6 ký tự."),
+  email: z.string().email("Email không hợp lệ").nonempty("Email là bắt buộc"),
+  password: z.string().nonempty("Mật khẩu là bắt buộc"),
 });
 
 export type LoginSchema = z.infer<typeof loginSchema>;
+
 export const registerSchema = z.object({
   email: z.string().nonempty("Vui lòng nhập email.").email("Email không hợp lệ."),
   user_name: z.string().nonempty("Tên đăng nhập là bắt buộc."),
