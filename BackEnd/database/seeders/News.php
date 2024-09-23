@@ -33,7 +33,6 @@ class News extends Seeder
                 'banner' => 'https://cdn.moveek.com/storage/media/cache/large/66ea6a5c65e5f666484610.png',
                 'content' => 'Kể từ khi phim điện ảnh Cám công bố poster và trailer chính thức, chi tiết gây chú ý nhất là mối quan hệ “trên tình bạn" của Bờm và Cám được hé mở.
                 Bộ phim kinh dị Cám đã tạo ra nhiều sự chú ý kể từ khi công bố poster và trailer chính thức. Điều đáng nói là sự xuất hiện của nhân vật Chàng Bờm, và mối quan hệ mập mờ với Cám (do Lâm Thanh Mỹ thủ vai). Đây là một sự kết hợp độc đáo và mới lạ giữa hai nhân vật nổi tiếng trong văn hóa dân gian Việt Nam, nhưng lần này, họ được đặt trong một bối cảnh đầy ma mị và đen tối.',
-
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
