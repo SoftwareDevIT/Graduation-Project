@@ -2,19 +2,12 @@
 import "./App.css";
 
 
-import {  Route, Routes } from "react-router-dom";
-
-
-import {  Route, Router, Routes } from "react-router-dom";
-import Home from "./Page/Home";
-import Bookcinematickets from "./Page/Bookcinematickets";
 
 import OrderPage from "./component/Oders/OrderPage";
 import OrderCheckout from "./component/Pay/OderCheckOut";
 import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
 import Headerticket from "./component/Headerticket/Headerticket";
-import Home from "./Page/Client/Home";
-import Bookcinematickets from "./Page/Client/Bookcinematickets";
+
 import RegisterCinema from "./Page/Client/RegisterCinema";
 import LoginCinema from "./Page/Client/LoginCinema";
 import Dashboard from "./Page/Admin/Dashboard/Dashboard";
@@ -31,6 +24,9 @@ import MoviesManager from "./Page/Admin/Movies/MoviesManager";
 import SchedulesManager from "./Page/Admin/Schedules/SchedulesManager";
 import RevenueByCinemaManager from "./Page/Admin/RevenueByCinema/RevenueByCinemaManager";
 import RevenueByMoviesManager from "./Page/Admin/RevenueByMoviesManager/RevenueByMoviesManager";
+import { Route, Routes } from "react-router-dom";
+import Home from "./Page/Client/Home";
+import Bookcinematickets from "./Page/Client/Bookcinematickets";
 
 
 

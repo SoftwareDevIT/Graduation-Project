@@ -1,7 +1,7 @@
 /* General page styling */
 .revenue-by-movie {
     padding: 30px;
-    background-color: #1f1b1b; /* Dark background */
+    background: rgb(229, 240, 242); /* Nền xanh nhạt */
     min-height: 170vh;
     display: flex;
     flex-direction: column;

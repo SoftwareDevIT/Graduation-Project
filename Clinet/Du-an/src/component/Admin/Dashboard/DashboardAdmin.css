@@ -1,69 +1,112 @@
-/* General layout for the dashboard */
 .dashboard {
     padding: 30px;
-    background: #1f1b1b; /* Dark background */
+    background: rgb(229, 240, 242); /* Nền xanh nhạt */
     min-height: 170vh;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-/* Dashboard title */
+/* Tiêu đề Dashboard */
 .dashboard-title {
-    font-size: 3rem;
+    font-size: 2.5rem;
     margin-bottom: 40px;
-    color: #ffffff; /* White text */
+    color: #006064; /* Xanh đậm */
     text-align: center;
     font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 1.5px;
 }
 
-/* Dashboard content */
+/* Nội dung Dashboard */
 .dashboard-content {
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
 }
 
-/* Summary cards */
+/* Thẻ tóm tắt */
 .summary {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
     margin-bottom: 30px;
+    
 }
 
 .summary-card {
-    background: #2d2d2d;
-    padding: 30px;
+    background-color: #fff !important; /* Màu nền sáng xanh rất nhạt */
+    padding: 20px;
     border-radius: 12px;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 6px 16px rgba(10, 37, 129, 0.1);
     text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
-    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
 }
-
+.summary-card h3{
+    color: black !important;
+}
 .summary-card:hover {
     transform: translateY(-10px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
-    background-color: #3b3b3b;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
 }
 
-.summary-card h3 {
-    font-size: 1.5rem;
-    color: #ffffff;
+.summary-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin-bottom: 10px;
-    font-weight: 600;
+}
+
+.summary-icon {
+    font-size: 2rem;
+    margin-right: 20px;
+    color: #00796b; /* Xanh đậm */
 }
 
 .summary-number {
     font-size: 2.5rem;
-    color: #f56565;
+    color: #0097a7; /* Xanh biển */
     font-weight: bold;
 }
 
-/* Charts section */
+.summary-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    font-size: 0.9rem;
+    color: #00796b; /* Xanh đậm */
+}
+
+.summary-change {
+    display: flex;
+    align-items: center;
+}
+
+.positive {
+    color: #4caf50; /* Xanh lá */
+}
+
+.negative {
+    color: #f44336; /* Đỏ */
+}
+
+.summary-change i {
+    font-size: 1.2rem;
+    margin-right: 5px;
+}
+
+.view-more {
+    color: #0097a7; /* Xanh biển nhạt */
+    text-decoration: none;
+}
+
+.view-more:hover {
+    text-decoration: underline;
+}
+
+/* Phần biểu đồ */
 .charts-container {
     display: flex;
     justify-content: space-between;
@@ -72,17 +115,17 @@
 }
 
 .revenue-summary, .quarterly-revenue {
-    background: #2d2d2d;
+    background: #ffffff; /* Nền trắng */
     padding: 30px;
     border-radius: 12px;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
     text-align: center;
     flex: 1;
 }
 
 .revenue-summary h3, .quarterly-revenue h3 {
     font-size: 1.8rem;
-    color: #ffffff;
+    color: #006064; /* Xanh đậm */
     margin-bottom: 20px;
     font-weight: 600;
 }
@@ -95,11 +138,73 @@
 
 .revenue-amount {
     font-size: 2rem;
-    color: #f56565;
+    color: #00796b; /* Xanh đậm */
     font-weight: bold;
 }
 
+/* Bảng đơn hàng gần đây */
+.recent-orders {
+    margin-top: 30px;
+    background-color: #ffffff; /* Nền trắng */
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.recent-orders h3 {
+    margin-bottom: 20px;
+    font-size: 18px;
+    color: #006064; /* Xanh đậm */
+    font-weight: bold;
+}
+
+.recent-orders table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    color: #006064; /* Xanh đậm */
+}
+
+.recent-orders table th,
+.recent-orders table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #b2ebf2; /* Viền xanh nhạt */
+}
+
+.recent-orders table th {
+    background-color: #e0f7fa; /* Nền xanh nhạt cho tiêu đề */
+    color: #00796b; /* Chữ xanh đậm */
+    font-weight: 600;
+}
+
+.recent-orders table td {
+    color: #00796b; /* Chữ xanh đậm */
+}
+
+.recent-orders table tr:nth-child(even) {
+    background-color: #f1f8e9; /* Màu nền xanh rất nhạt cho hàng chẵn */
+}
+
+.recent-orders table tr:hover {
+    background-color: #b2ebf2; /* Màu xanh nhạt khi hover */
+}
+
+.recent-orders p {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #00796b; /* Chữ xanh đậm */
+}
+
 /* Responsive design for mobile devices */
+@media (max-width: 768px) {
+    .recent-orders table th,
+    .recent-orders table td {
+        font-size: 12px;
+        padding: 8px;
+    }
+}
+
 @media (max-width: 768px) {
     .charts-container {
         flex-direction: column;

@@ -1,7 +1,7 @@
 /* Main container */
 .combo-dashboard {
     padding: 20px;
-    background-color: #1f1b1b;
+    background-color: #a09d9d;
     min-height: 170vh; /* Match the height of CinemasDashboard */
     color: #ffffff;
     font-family: 'Roboto', sans-serif;
