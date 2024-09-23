@@ -15,8 +15,7 @@ class ShowtimeService
 
     public function index(): Collection
     {
-
-        return Showtime::all();
+        return Showtime::with('movie.cinema')->get();
     }
 
 
