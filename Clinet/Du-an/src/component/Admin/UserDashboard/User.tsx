@@ -1,18 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import './User.css';
-import { User } from '../../../interface/User';
-import instance from '../../../server';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
 import ReactPaginate from 'react-paginate';
+import './User.css';
+import { Link } from 'react-router-dom';
 
-const UserDashboard: React.FC = () => {
-    const [users, setUsers] = useState<User[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    const itemsPerPage = 1; // Number of users per page
+const UserDashboard = () => {
+    const users = [
+        { id: 'USR001', name: 'John Doe', email: 'john.doe@example.com', role: 'Admin', reviews: 55, rating: 4.5 },
+        { id: 'USR002', name: 'Jane Smith', email: 'jane.smith@example.com', role: 'User', reviews: 143, rating: 4.1 },
+        { id: 'USR003', name: 'Sam Wilson', email: 'sam.wilson@example.com', role: 'User', reviews: 174, rating: 4.4 },
+        { id: 'USR004', name: 'Peter Parker', email: 'peter.parker@example.com', role: 'User', reviews: 50, rating: 4.8 },
+        { id: 'USR005', name: 'Tony Stark', email: 'tony.stark@example.com', role: 'Admin', reviews: 120, rating: 4.9 },
+        { id: 'USR005', name: 'Tony Stark', email: 'tony.stark@example.com', role: 'Admin', reviews: 120, rating: 4.9 },
+        { id: 'USR005', name: 'Tony Stark', email: 'tony.stark@example.com', role: 'Admin', reviews: 120, rating: 4.9 },
+        { id: 'USR005', name: 'Tony Stark', email: 'tony.stark@example.com', role: 'Admin', reviews: 120, rating: 4.9 },
+        { id: 'USR005', name: 'Tony Stark', email: 'tony.stark@example.com', role: 'Admin', reviews: 120, rating: 4.9 },
+        // Thêm nhiều người dùng hơn nếu cần
+    ];
+
+    const itemsPerPage = 1; // Số lượng người dùng mỗi trang
     const [currentPage, setCurrentPage] = useState(0);
-
-    // Calculate total pages
+    
+    // Tính toán số trang
     const pageCount = Math.ceil(users.length / itemsPerPage);
 
     const handlePageClick = (data: { selected: number }) => {
@@ -20,33 +28,6 @@ const UserDashboard: React.FC = () => {
     };
 
     const currentUsers = users.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
-
-    // Fetch users from the API when the component mounts
-    useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const response = await instance.get('/lists');
-                console.log('API Response:', response);  // Log the full response object
-                console.log('Data:', response.data.data);      // Log the data part specifically
-                setUsers(response.data.data);
-                setLoading(false);
-            } catch (err) {
-                console.error('Fetch error:', err); // Log the error
-                setError('Failed to fetch users');
-                setLoading(false);
-            }
-        };
-
-        fetchUsers();
-    }, []);
-
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-
-    if (error) {
-        return <div>{error}</div>;
-    }
 
     return (
         <div className="user-management">
@@ -67,34 +48,32 @@ const UserDashboard: React.FC = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {Array.isArray(currentUsers) && currentUsers.length > 0 ? (
-                            currentUsers.map(user => (
-                                <tr key={user.id}>
-                                    <td>{user.id}</td>
-                                    <td>{user.fullname}</td>
-                                    <td>{user.email || 'N/A'}</td>
-                                    <td>{user.role_id}</td>
-                                    <td>{user.phone}</td>
-                                  
-                                    <td className="action-buttons">
-                                        <button className="view-btn">👁</button>
-                                        <button className="edit-btn">✏️</button>
-                                        <button className="delete-btn">🗑</button>
-                                    </td>
-                                </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td colSpan={6}>No users available</td>
+                        {currentUsers.map(user => (
+                            <tr key={user.id}>
+                                <td>{user.id}</td>
+                                <td>{user.name}</td>
+                                <td>{user.email}</td>
+                                <td>{user.role}</td>
+                                <td>
+                                    <div className="rating">
+                                        <span className="star">⭐</span> {user.rating}
+                                        <span className="reviews"> ({user.reviews} Reviews)</span>
+                                    </div>
+                                </td>
+                                <td className="action-buttons">
+                                    <button className="view-btn">👁</button>
+                                    <button className="edit-btn">✏️</button>
+                                    <button className="delete-btn">🗑</button>
+                                </td>
                             </tr>
-                        )}
+                        ))}
                     </tbody>
                 </table>
                 <ReactPaginate
                     breakLabel={"..."}
                     pageCount={pageCount}
                     marginPagesDisplayed={2}
-                    pageRangeDisplayed={4} // Number of page buttons to display
+                    pageRangeDisplayed={4} // Số ô trang hiển thị
                     onPageChange={handlePageClick}
                     containerClassName={"pagination"}
                     pageClassName={"page-item"}

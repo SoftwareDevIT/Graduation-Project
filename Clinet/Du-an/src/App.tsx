@@ -1,16 +1,11 @@
 
 import "./App.css";
 
-
-
-
-
 import OrderPage from "./component/Oders/OrderPage";
 import OrderCheckout from "./component/Pay/OderCheckOut";
 import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
 import Headerticket from "./component/Headerticket/Headerticket";
-import Home from "./Page/Client/Home";
-import Bookcinematickets from "./Page/Client/Bookcinematickets";
+
 import RegisterCinema from "./Page/Client/RegisterCinema";
 import LoginCinema from "./Page/Client/LoginCinema";
 import Dashboard from "./Page/Admin/Dashboard/Dashboard";
@@ -28,10 +23,10 @@ import SchedulesManager from "./Page/Admin/Schedules/SchedulesManager";
 import RevenueByCinemaManager from "./Page/Admin/RevenueByCinema/RevenueByCinemaManager";
 import RevenueByMoviesManager from "./Page/Admin/RevenueByMoviesManager/RevenueByMoviesManager";
 import { Route, Routes } from "react-router-dom";
-import EmailConfirm from "./component/EmailConfirm/EmailConfirm";
+import Home from "./Page/Home";
+import Bookcinematickets from "./Page/Client/Bookcinematickets";
 import UserAddManager from "./Page/Admin/User/UserAdd";
-
-
+import EmailConfirm from "./component/EmailConfirm/EmailConfirm";
 
 function App() {
   return (
@@ -48,7 +43,6 @@ function App() {
 
       <Route path="/register" element={<RegisterCinema/>}/>
       <Route path="/login" element={<LoginCinema/>}/>
-
       <Route path="/admin" element={<Dashboard/>}/>
       <Route path="admin/user" element={<User/>}/>
       <Route path="admin/user/add" element={<UserAddManager/>}/>

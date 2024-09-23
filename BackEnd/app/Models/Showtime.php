@@ -24,4 +24,9 @@ class Showtime extends Model
     {
         return $this->belongsTo(Movie::class);
     }
+
+    public function room()
+    {
+        return $this->belongsTo(Room::class);
+    }
 }
