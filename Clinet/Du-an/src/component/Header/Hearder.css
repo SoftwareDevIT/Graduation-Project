@@ -41,6 +41,10 @@
   text-transform: lowercase;
   letter-spacing: 2px;
 }
+.header-logo a{
+  color: #e50914;
+  text-decoration: none;
+}
 
 .header-right {
   display: flex;

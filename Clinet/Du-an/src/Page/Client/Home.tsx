@@ -11,6 +11,7 @@ import Footer from "../../component/Footer/Footer";
 
 
 
+
 interface Props {}
 
 const Home = (props: Props) => {

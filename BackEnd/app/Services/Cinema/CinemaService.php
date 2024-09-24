@@ -39,8 +39,11 @@ class CinemaService
         $cinema = Cinema::findOrFail($id);
         return $cinema->delete();
     }
-    public function get(int $id): Cinema{
+    public function get(int $id): Cinema
+    {
         $cinema = Cinema::findOrFail($id);
         return $cinema;
     }
+
+
 }

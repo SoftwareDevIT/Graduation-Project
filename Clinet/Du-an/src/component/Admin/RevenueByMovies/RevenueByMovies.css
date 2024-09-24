@@ -1,7 +1,7 @@
 /* General page styling */
 .revenue-by-movie {
     padding: 30px;
-    background: rgb(229, 240, 242); /* Nền xanh nhạt */
+    background: rgb(229, 240, 242); /* Nền xanh nhạt giống DashboardAdmin */
     min-height: 170vh;
     display: flex;
     flex-direction: column;
@@ -12,7 +12,7 @@
 .revenue-by-movie h2 {
     font-size: 3rem;
     margin-bottom: 40px;
-    color: #ffffff; /* White text */
+    color: #006064; /* Xanh đậm giống DashboardAdmin */
     text-align: center;
     font-weight: bold;
     text-transform: uppercase;
@@ -21,9 +21,9 @@
 
 /* Summary card styling */
 .summary-card {
-    background-color: #2d2d2d; /* Dark card background */
+    background-color: #ffffff; /* Nền trắng */
     border-radius: 12px;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1); /* Giống DashboardAdmin */
     padding: 30px;
     margin-bottom: 30px;
     text-align: center;
@@ -33,14 +33,14 @@
 
 .summary-card h3 {
     font-size: 1.8rem;
-    color: #ffffff; /* White text */
+    color: #006064; /* Xanh đậm */
     margin-bottom: 20px;
     font-weight: 600;
 }
 
 .total-revenue {
     font-size: 2.5rem;
-    color: #f56565; /* Red color for total revenue */
+    color: #f56565; /* Màu đỏ giống trong biểu đồ */
     font-weight: bold;
 }
 
@@ -49,7 +49,7 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
-    max-width: 1200px; /* Increased max-width */
+    max-width: 1200px;
     margin-bottom: 30px;
     gap: 20px;
 }
@@ -57,9 +57,9 @@
 /* Chart section styling */
 .chart-section {
     flex: 1;
-    background-color: #2d2d2d; /* Dark section background */
+    background-color: #ffffff; /* Nền trắng */
     border-radius: 12px;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1); /* Giống DashboardAdmin */
     padding: 30px;
 }
 
@@ -72,7 +72,7 @@
 /* Button styles */
 .export-btn {
     padding: 12px 24px;
-    background-color: #007bff; /* Blue color for button */
+    background-color: #0097a7; /* Màu xanh biển nhạt */
     color: white;
     border: none;
     border-radius: 5px;
@@ -83,7 +83,7 @@
 }
 
 .export-btn:hover {
-    background-color: #0056b3; /* Darker blue for hover effect */
+    background-color: #00796b; /* Xanh đậm cho hover */
     transform: scale(1.05);
 }
 

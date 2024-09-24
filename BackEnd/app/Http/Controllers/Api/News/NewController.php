@@ -38,34 +38,59 @@ class NewController extends Controller
      */
     public function store(StoreNewsRequest $request)
     {
-        $new = $this->newservice->store($request->validated());
-        return $this->success($new, 'success');
+        $thumbnailFile = $request->file('thumbnail');
+        $bannerFile = $request->file('banner');
+
+        $thumbnailLink = $this->uploadImage($thumbnailFile);
+        $bannerLink = $this->uploadImage($bannerFile);
+
+        $new = $request->validated();
+
+        $new['thumbnail'] = $thumbnailLink;
+        $new['banner'] = $bannerLink;
+        $new = $this->newservice->store($new);
+        return $this->success($new, 'Thêm thành công');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-
-    }
+    public function show(string $id) {}
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
-    {
-
-    }
+    public function edit(string $id) {}
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(string $id,UpdateNewsRequest $request)
+    public function update(string $id, UpdateNewsRequest $request)
     {
         try {
-            $new = $this->newservice->update($id,$request->validated());
-            return $this->success($new, 'success');
+            $thumbnailFile = $request->file('thumbnail');
+            if ($thumbnailFile) {
+                $thumbnailLink = $this->uploadImage($thumbnailFile);
+            } else {
+                $thumbnailLink = null;
+            }
+
+            $bannerFile = $request->file('banner');
+            if ($bannerFile) {
+                $bannerLink = $this->uploadImage($bannerFile);
+            } else {
+                $bannerLink = null;
+            }
+
+            $new = $request->validated();
+            if ($thumbnailLink) {
+                $new['thumbnail'] = $thumbnailLink;
+            }
+            if ($bannerLink) {
+                $new['banner'] = $bannerLink;
+            }
+            $new = $this->newservice->update($id, $new);
+            return $this->success($new, 'Sửa Thành công');
         } catch (\Throwable $th) {
             return $this->error($th->getMessage());
         }
@@ -78,7 +103,7 @@ class NewController extends Controller
     {
         try {
             $new = $this->newservice->delete($id);
-            return $this->success($new, 'success');
+            return $this->success($new, 'xoá thành công');
         } catch (\Throwable $th) {
             return $this->error($th->getMessage());
         }

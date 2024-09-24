@@ -117,6 +117,37 @@
 .delete-btn:hover {
     color: #e74c3c;
 }
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 10px 0;
+    font-size: 14px;
+}
+
+.page-item {
+    margin: 0 5px;
+}
+
+.page-link {
+    color: #007bff;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none !important;
+    transition: color 0.3s, transform 0.3s;
+}
+
+.page-link:hover {
+    color: #0056b3;
+    transform: scale(1.05);
+}
+
+.active .page-link {
+    color: #0056b3;
+    cursor: default;
+}
+
 
 /* Responsive design for mobile */
 @media (max-width: 768px) {
@@ -137,4 +168,7 @@
     .action-buttons button {
         margin: 5px 0;
     }
+}
+.previous a ,.next a{
+    text-decoration: none;
 }

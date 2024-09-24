@@ -3,18 +3,24 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import instance from "../../server";
+
 import "./Register.css";
 import { RegisterFormData } from "../../interface/RegisterFormData";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const Register = () => {
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors } } = useForm<RegisterFormData>();
   const [serverError, setServerError] = React.useState<string | null>(null);
-  const [success, setSuccess] = React.useState<boolean>(false);
+  const [captchaValue, setCaptchaValue] = React.useState<string | null>(null);
 
   const onSubmit: SubmitHandler<RegisterFormData> = async (data) => {
     if (data.password !== data.confirmPassword) {
       setServerError("Mật khẩu không khớp");
+      return;
+    }
+    if (!captchaValue) {
+      setServerError("Vui lòng xác minh CAPTCHA");
       return;
     }
 
@@ -24,10 +30,11 @@ const Register = () => {
         user_name: data.user_name,
         password: data.password,
         password_confirmation: data.confirmPassword,
+        'g-recaptcha-response': captchaValue,
       });
 
       if (response.status === 200) {
-        setSuccess(true);
+        alert("Đăng ký tài khoản thành công!"); // Sử dụng alert để thông báo thành công
         setServerError(null);
         navigate("/login");
       }
@@ -35,11 +42,11 @@ const Register = () => {
       if (axios.isAxiosError(err)) {
         const errorResponse = err.response?.data as {
           message?: string;
-          errors?: Record<string, string[]>;
+          errors?: Record<string, string[]>; 
         };
 
         if (err.response?.status === 422) {
-          setServerError("Dữ liệu không hợp lệ, xin kiểm tra lại.");
+          setServerError("Tài khoản đã tồn tại! Vui lòng nhập tài khoản khác");
         } else if (err.response?.status === 500) {
           setServerError("Có lỗi từ phía server. Xin thử lại sau.");
         } else {
@@ -51,12 +58,15 @@ const Register = () => {
     }
   };
 
+  const onCaptchaChange = (value: string | null) => {
+    setCaptchaValue(value);
+  };
+
   return (
     <div className="custom-register-container">
       <div className="custom-register-form">
         <h2>Đăng ký</h2>
         {serverError && <p className="error-message">{serverError}</p>}
-        {success && <p className="success-message">Đăng ký thành công! Bạn có thể <Link to="/login">đăng nhập</Link> ngay.</p>}
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="custom-form-group">
             <div className="custom-form-field">
@@ -97,6 +107,12 @@ const Register = () => {
               />
               {errors.confirmPassword && <p className="error-message">{errors.confirmPassword.message}</p>}
             </div>
+          </div>
+          <div className="custom-form-group">
+            <ReCAPTCHA
+              sitekey="6LdahEAqAAAAAKeWH4oPIbVjTx0zFMO2_nb8B7MM" // Thay thế bằng site key của bạn
+              onChange={onCaptchaChange}
+            />
           </div>
           <button type="submit" className="custom-submit-btn">
             Tạo tài khoản

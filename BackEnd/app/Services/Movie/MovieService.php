@@ -39,4 +39,15 @@ class MovieService
     {
         return Movie::query()->findOrFail($id);
     }
+
+    public function getMovieByMovieName(string $movie_name)
+    {
+        // Tìm kiếm phim dựa trên tên phim
+        $movie = Movie::where('movie_name', 'like', '%' . $movie_name . '%')->get();
+
+        if (!$movie) {
+            throw new ModelNotFoundException('Movie not found');
+        }
+        return $movie;
+    }
 }

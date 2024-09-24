@@ -24,6 +24,7 @@ class UpdateNewsRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'news_category_id' => 'required',
+            'thumnail' => 'mimes:jpeg,png,jpg,gif|max:2048',
             'content' => 'required|string',
             'user_id' => 'required',
         ];
@@ -35,7 +36,8 @@ class UpdateNewsRequest extends FormRequest
             'title.string' => 'the title must be a string.',
             'title.max' => 'the title may not be greater than 255 characters.',
             'news_category_id.required' => 'the news category field is required.',
-
+            'thumnail.mimes' => 'the thumnail must be a file of type: jpeg, png, jpg, gif.',
+            'thumnail.max' => 'the thumnail may not be greater than 2048 kb.',
             'content.required' => 'the content field is required.',
             'content.string' => 'the content must be a string.',
             'user_id.required' => 'the user id field is required.',
