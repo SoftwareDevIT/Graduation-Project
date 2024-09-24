@@ -1,18 +1,17 @@
 <?php
 
-namespace App\Http\Requests\Movie\Store;
-
+namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreActorRequest extends FormRequest
+class UpdateRatingRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -23,11 +22,7 @@ class StoreActorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'actor_name' => 'required|string|max:255|unique:actor',
-            'descripcion' => 'max:255',
-            'photo' => 'mimes:jpeg,png,jpg,gif|max:2048',
-            'country' => 'max:255',
-            'link_wiki' => 'max:255',
+            //
         ];
     }
 }

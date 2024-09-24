@@ -50,7 +50,7 @@ class AuthController extends Controller
 
     public function list()
     {
-        $data = User::all();
+        $data = User::with('favoriteMovies')->get();
         return $this->success($data);
     }
 
