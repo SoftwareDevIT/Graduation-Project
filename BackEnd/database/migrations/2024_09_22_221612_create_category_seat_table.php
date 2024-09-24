@@ -10,9 +10,11 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::table('seats', function (Blueprint $table) {
-            $table->unsignedBigInteger('showtime_id');
-            $table->foreign('showtime_id')->references('id')->on('showtimes');
+        Schema::create('category_seat', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->boolean('couple')->default(false);
+            $table->timestamps();
         });
     }
 
@@ -21,8 +23,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::table('seats', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('category_seat');
     }
 };

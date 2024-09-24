@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -12,13 +13,19 @@ return new class extends Migration {
     {
         Schema::create('seats', function (Blueprint $table) {
             $table->id('id');
-            // $table->string('seat_type');
+           $table->string('seat_name');
+            $table->enum('status', ['Reserved Until', 'Booked'])->default('Reserved Until');
+            $table->unsignedBigInteger('showtime_id');
+            $table->unsignedBigInteger('room_id');
+            $table->integer('seat_column');
+            $table->timestamp('reserved_until')->nullable();
             $table->enum('seat_type', ['single', 'double'])->default('single');
-            // $table->unsignedBigInteger('room_id');
-            // $table->string('row');
-            $table->integer('number_seat');
+            $table->integer('seat_row');
+            $table->foreign('showtime_id')->references('id')->on('showtimes');
+            $table->foreign('room_id')->references('id')->on('room');
             $table->timestamps();
             // $table->foreign('room_id')->references('id')->on('room');
+
         });
     }
 

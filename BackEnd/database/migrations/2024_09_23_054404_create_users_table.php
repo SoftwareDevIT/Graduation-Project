@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -24,13 +25,12 @@ return new class extends Migration {
             $table->string('fullname')->nullable();
             $table->double('coin')->nullable();
             $table->enum('status', ['Normal', 'Ban'])->default('Normal');
-            $table->unsignedBigInteger('role_id'); 
+            $table->unsignedBigInteger('role_id');
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamps();
             $table->foreign('role_id')->references('id')->on('role');
         });
     }
-
 
     /**
      * Reverse the migrations.

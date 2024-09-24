@@ -15,4 +15,14 @@ class Room extends Model
         'cinema_id',
         'status',
     ];
+
+    public function seats()
+    {
+        return $this->hasMany(Seats::class);
+    }
+
+    public function showtimes()
+    {
+        return $this->hasMany(Showtime::class);
+    }
 }

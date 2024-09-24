@@ -49,6 +49,7 @@ class Movie extends Model
         return $this->belongsTo(Cinema::class);
     }
 
+
     public function favorites()
     {
         return $this->hasMany(Favorite::class);
@@ -58,4 +59,5 @@ class Movie extends Model
     {
         return $this->hasMany(Rating::class);
     }
+
 }

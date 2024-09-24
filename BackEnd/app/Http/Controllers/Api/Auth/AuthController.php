@@ -32,14 +32,10 @@ class AuthController extends Controller
         $user = $this->loginService->index();
         return response()->json($user);
     }
+  
     public function show($id)
     {
         try {
-            $user = $this->userRegistrationService->register($request->validated());
-            Mail::to($user->email)->queue(new VerifyAccount($user));
-            return $this->success($user, 'success');
-        } catch (\Throwable $th) {
-            return $this->error($th->getMessage());
             $user = $this->loginService->get($id);
 
             if (!$user) {
@@ -94,19 +90,42 @@ class AuthController extends Controller
     }
 
 
-    public function login(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
-        try {
-            $token = $this->loginService->login($request->only('email', 'password'));
-            return $this->success($token);
-        } catch (Exception $e) {
-            return $e->getMessage();
+  public function login(Request $request)
+{
+    // Validate the request input
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+    ]);
+
+    try {
+        // Retrieve the user by email
+        $user = User::where('email', $request->email)->first();
+
+        // Check if the user exists
+        if (!$user) {
+            return response()->json(['message' => 'Tài khoản không tồn tại.'], 404);
         }
+
+        // Check if the email is verified
+        if ($user->email_verified_at === null) {
+            return response()->json(['message' => 'Tài khoản chưa được kích hoạt, vui lòng kiểm tra email để kích hoạt.'], 403);
+        }
+
+        // Attempt to log in the user
+        if (!password_verify($request->password, $user->password)) {
+            return response()->json(['message' => 'Mật khẩu không chính xác.'], 401);
+        }
+
+        // Generate the token if login is successful
+        $token = $this->loginService->login($request->only('email', 'password'));
+        return response()->json(['token' => $token], 200);
+
+    } catch (Exception $e) {
+        return response()->json(['message' => 'Đã xảy ra lỗi: ' . $e->getMessage()], 500);
     }
+}
+
     public function logout(Request $request)
     {
         try {
