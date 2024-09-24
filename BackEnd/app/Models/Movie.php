@@ -30,11 +30,6 @@ class Movie extends Model
         return $this->belongsTo(MovieCategory::class, 'movie_category_id');
     }
 
-    public function cinema()
-    {
-        return $this->belongsTo(Cinema::class, 'cinema_id');
-    }
-
     public function actor()
     {
         return $this->belongsTo(Actor::class, 'actor_id');
@@ -48,6 +43,10 @@ class Movie extends Model
     public function showtimes()
     {
         return $this->hasMany(Showtime::class);
+    }
+    public function cinema()
+    {
+        return $this->belongsTo(Cinema::class);
     }
 
     public function favorites()
