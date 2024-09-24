@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\News\NewController;
 use App\Http\Controllers\Api\Combo\ComboController;
 use App\Http\Controllers\Api\Movie\FavoriteController;
 use App\Http\Controllers\Api\Movie\MovieController;
+use App\Http\Controllers\Api\Movie\RatingController;
 use App\Http\Controllers\Api\PayMethod\PayMethodController;
 /*
 |--------------------------------------------------------------------------
@@ -28,14 +29,16 @@ use App\Http\Controllers\Api\PayMethod\PayMethodController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+    $user = $request->user()->load('favoriteMovies');
+    return response()->json($user);
 });
+
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('/user', [AuthController::class, 'list']);
+    // Route::get('/user', [AuthController::class, 'list']);
     Route::post('favorites', [FavoriteController::class, 'store']);             // Chức năng yêu thích phim
     Route::delete('favorites/{movie_id}', [FavoriteController::class, 'destroy']);    // Chức năng xóa yêu thích phim
+    Route::post('ratings', [RatingController::class, 'store']);
 });
 
 Route::post('login', [AuthController::class, 'login']);
@@ -73,4 +76,4 @@ Route::apiResource('showtimes', ShowtimeController::class);
 Route::get('showtimes/movie/{movie_name}', [ShowtimeController::class, 'showtimeByMovieName']);
 Route::apiResource('room', RoomController::class);
 
-
+Route::get('category/{category_id}', [MovieController::class, 'movieByCategory']);

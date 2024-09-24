@@ -13,7 +13,7 @@ class MovieService
 {
     public function index()
     {
-        return Movie::with('showtimes')->get();
+        return Movie::with('showtimes')->get();        
     }
 
     public function store(array $data)
@@ -36,6 +36,11 @@ class MovieService
     }
 
     public function show(int $id)
+    {
+        return Movie::query()->with(['showtimes', 'ratings'])->findOrFail($id);
+    }
+
+    public function get(int $id): Movie
     {
         return Movie::query()->findOrFail($id);
     }

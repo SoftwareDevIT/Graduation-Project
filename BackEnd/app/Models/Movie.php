@@ -11,21 +11,28 @@ class Movie extends Model
     protected $table = 'movie';
     protected $fillable = [
         'movie_category_id',
+        'cinema_id',
         'actor_id',
         'director_id',
         'movie_name',
         'poster',
-        'duraion',
+        'duration',
         'release_date',
         'age_limit',
         'descripton',
         'trailer',
         'status',
+        'rating'
     ];
 
     public function category()
     {
         return $this->belongsTo(MovieCategory::class, 'movie_category_id');
+    }
+
+    public function cinema()
+    {
+        return $this->belongsTo(Cinema::class, 'cinema_id');
     }
 
     public function actor()
@@ -41,5 +48,15 @@ class Movie extends Model
     public function showtimes()
     {
         return $this->hasMany(Showtime::class);
+    }
+
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
     }
 }
