@@ -129,10 +129,11 @@
 }
 
 .details-box {
-  border: 1px solid #899099;
+  font-family: 'Cerebri Sans';
+  border: 1px solid #EDF2F9;
   width: 400px;
-  color: #000000;
-  padding: 20px;
+  color: rgba(0, 0, 0, 0);
+  padding: 10px;
   background-color: #ffffff;
   margin-bottom: 20px;
   text-align: left;
@@ -141,19 +142,26 @@
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1),
               0 6px 6px rgba(0, 0, 0, 0.1),
               0 20px 40px rgba(0, 0, 0, 0.05);
+  height: 150px;
+ 
 }
 
 .details-box p {
   color: #000000;
   font-family: "Cerebri Sans, sans-serif;";
+  margin-bottom: 0rem
 }
 
 .details-box span {
-  font-weight: bold;
+  font-weight: 600;
+  font-family: "Cerebri Sans";
 }
-
+.title-phim{
+ font-weight: 400;
+ 
+}
 .price-box {
-  border: 1px solid #899099;
+  border: 1px solid #EDF2F9;
   background-color: #ffffff;
   padding: 10px;
   margin-bottom: 20px;
@@ -179,11 +187,13 @@
   display: flex;
   justify-content: space-between;
   margin-top: 30px;
+
 }
 
 .back-btn {
   margin-left: 30px;
   height: 37px;
+
 }
 
 .back-btn, .continue-btn {

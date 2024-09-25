@@ -34,14 +34,14 @@ use App\Http\Controllers\Api\Auth\AccountVerificationController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::middleware(['auth:sanctum'])->group(function () {
+// Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', [AuthController::class, 'list']);
     Route::post('favorites', [FavoriteController::class, 'store']);             // Chức năng yêu thích phim
     Route::delete('favorites/{movie_id}', [FavoriteController::class, 'destroy']);
     Route::post('/vnpay-return', [BookingController::class, 'vnPayReturn']);
     Route::post('/book-ticket', [BookingController::class, 'bookTicket']);
     // Chức năng xóa yêu thích phim
-});
+// });
 
 
 Route::post('login', [AuthController::class, 'login']);
