@@ -36,6 +36,7 @@ class User extends Authenticatable
         'coin',
         'role_id',
         'status',
+        'rating'
     ];
 
     /**
@@ -70,5 +71,15 @@ class User extends Authenticatable
     public function setRoleIdAttribute($value)
     {
         $this->attributes['role_id'] = (int) $value;
+    }
+
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+    public function favoriteMovies()
+    {
+        return $this->hasManyThrough(Movie::class, Favorite::class, 'user_id', 'id', 'id', 'movie_id');
     }
 }

@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->string('fullname')->nullable();
             $table->double('coin')->nullable();
-            $table->enum('status', ['Normal', 'Ban'])->default('Normal');
+            $table->boolean('status')->default(true);
             $table->unsignedBigInteger('role_id');
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamps();

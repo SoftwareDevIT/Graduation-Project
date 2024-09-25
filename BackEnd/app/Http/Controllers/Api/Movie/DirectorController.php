@@ -34,14 +34,13 @@ class DirectorController extends Controller
     {
         try {
             $file = $request->file('photo');
-            $imageLink = $this->uploadImage($file);
+            $imageLink = $file ?  $this->uploadImage($file) : null;
 
             $direct = $request->validated();
             $direct['photo'] = $imageLink;
 
             $direct = $this->directorService->store($direct);
-
-            return $this->success($direct, 'Thêm thành công');
+            return $this->success($direct, 'Thêm thành công đạo diễn');
         } catch (Exception $e) {
             return $this->error('Có lỗi xảy ra: ' . $e->getMessage(), 500);
         }
@@ -55,7 +54,7 @@ class DirectorController extends Controller
         try {
             $director = $this->directorService->get($id);
 
-            return $this->success($director, 'Chi tiết diễn viên với id = ' . $id);
+            return $this->success($director, 'Chi tiết đạo diễn với id = ' . $id);
         } catch (\Throwable $th) {
             if ($th instanceof ModelNotFoundException) {
                 return $this->notFound('Director not found id = ' . $id, 404);
@@ -73,20 +72,11 @@ class DirectorController extends Controller
 
         try {
             $file = $request->file('photo');
-            if ($file) {
-                $imageLink = $this->uploadImage($file);
-            } else {
-                $imageLink = null; // Hoặc xử lý khác nếu không có file
-            }
+            $oldImagedirector = $this->directorService->get($id);
 
-            // Lấy dữ liệu đã được xác thực từ request
             $direct = $request->validated();
+            $direct['photo'] = $file ? $this->uploadImage($file) : $oldImagedirector->photo;
 
-            if ($imageLink) {
-                $direct['photo'] = $imageLink;
-            }
-
-            // Cập nhật dữ liệu của direct
             $direct = $this->directorService->update($id, $direct);
             return $this->success($direct, 'Cập nhập thành công');
         } catch (\Throwable $th) {
@@ -105,7 +95,7 @@ class DirectorController extends Controller
     {
         try {
             $this->directorService->delete($id);
-            return $this->success(null,'Xóa thành công');
+            return $this->success(null, 'Xóa thành công đạo diễn');
         } catch (\Throwable $th) {
             if ($th instanceof ModelNotFoundException) {
                 return $this->notFound('Director not found id = ' . $id, 404);
