@@ -20,6 +20,8 @@ use App\Http\Controllers\Api\Auth\ForgotPasswordController;
 use App\Http\Controllers\Api\Movie\MovieCategoryController;
 use App\Http\Controllers\Api\PayMethod\PayMethodController;
 use App\Http\Controllers\Api\Auth\AccountVerificationController;
+use App\Http\Controllers\Api\Movie\RatingController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -30,17 +32,23 @@ use App\Http\Controllers\Api\Auth\AccountVerificationController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+    $user = $request->user()->load('favoriteMovies');
+    return response()->json($user);
 });
+
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('/user', [AuthController::class, 'list']);
+    // Route::get('/user', [AuthController::class, 'list']);
     Route::post('favorites', [FavoriteController::class, 'store']);             // Chức năng yêu thích phim
+
+    Route::delete('favorites/{movie_id}', [FavoriteController::class, 'destroy']);    // Chức năng xóa yêu thích phim
+    Route::post('ratings', [RatingController::class, 'store']);
+
     Route::delete('favorites/{movie_id}', [FavoriteController::class, 'destroy']);
     Route::post('/vnpay-return', [BookingController::class, 'vnPayReturn']);
     Route::post('/book-ticket', [BookingController::class, 'bookTicket']);
     // Chức năng xóa yêu thích phim
+
 });
 
 
@@ -80,6 +88,24 @@ Route::apiResource('showtimes', ShowtimeController::class);
 Route::get('showtimes/movie/{movie_name}', [ShowtimeController::class, 'showtimeByMovieName']);
 Route::apiResource('room', RoomController::class);
 
+// Route::middleware(['auth:sanctum'])->group(function () {
+    Route::post('logout', [AuthController::class, 'logout']);
+    Route::get('list', [AuthController::class, 'list']); // danh sách tài khoản user
+    Route::apiResource('location', LocationController::class);
+    Route::apiResource('user', AuthController::class);
+    Route::apiResource('cinema', CinemaController::class);
+    Route::apiResource('room', RoomController::class);
+    Route::apiResource('showtimes', ShowtimeController::class);
+    Route::get('showtimes/movie/{movie_name}', [ShowtimeController::class, 'showtimeByMovieName']);
+    Route::resource('news_category', NewCategoryController::class);
+    Route::resource('news', NewController::class);
+    Route::apiResource('actor', ActorController::class);
+    Route::apiResource('director', DirectorController::class);
+    Route::apiResource('movie-category', MovieCategoryController::class);
+    Route::apiResource('movies', MovieController::class);
+    Route::apiResource('method', PayMethodController::class);
+    Route::apiResource('combo', ComboController::class);
+// });
 
 // Route::middleware(['auth:sanctum'])->group(function () {
 //     Route::post('logout', [AuthController::class, 'logout']);

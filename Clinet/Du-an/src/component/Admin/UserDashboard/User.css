@@ -152,3 +152,32 @@
         padding: 8px 12px;
     }
 }
+.pagination {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+.page-item {
+    margin: 0 5px;
+}
+
+.page-link {
+    background-color: #007bff; /* Màu nền */
+    color: white; /* Màu chữ */
+    border: none; /* Không viền */
+    padding: 10px 15px; /* Khoảng cách trong ô */
+    border-radius: 5px; /* Bo góc */
+    cursor: pointer; /* Con trỏ tay khi hover */
+    text-decoration: none; /* Bỏ gạch chân */
+    transition: background-color 0.3s; /* Hiệu ứng chuyển đổi */
+}
+
+.page-link:hover {
+    background-color: #0056b3; /* Màu khi hover */
+}
+
+.active .page-link {
+    background-color: #0056b3; /* Màu cho nút đang hoạt động */
+    color: white; /* Màu chữ cho nút đang hoạt động */
+}

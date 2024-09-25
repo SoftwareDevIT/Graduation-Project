@@ -22,15 +22,18 @@ class StoreMovieRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'movie_category_id' => 'required|integer',
-            'actor_id' => 'required|integer',
-            'director_id' => 'required|integer',
-            'movie_name' => 'required|string|max:255|unique:movies',
-            'poster' => 'required',
-            'release_date' => 'required|date',
-            'age_limit' => 'required|integer',
-            'descriptions' => 'string|max:255',
-            'trailer' => 'string|max:255',
+            'movie_category_id'     => 'required|integer',
+            'cinema_id'             => 'required|integer',
+            'actor_id'              => 'required|integer',
+            'director_id'           => 'required|integer',
+            'movie_name'            => 'required|string|max:255|unique:movie',
+            'poster'                => 'mimes:jpeg,png,jpg,gif|max:2048',
+            'duration'              => 'string|max:225',
+            'release_date'          => 'date',
+            'age_limit'             => 'required|integer',
+            'descripton'            => 'string|max:255',
+            'trailer'               => 'string|max:255',
+            'rating'                => 'numeric'
         ];
     }
 
@@ -39,6 +42,8 @@ class StoreMovieRequest extends FormRequest
         return [
             'movie_category_id.required' => 'The movie category field is required.',
             'movie_category_id.integer' => 'The movie category must be an integer.',
+            'cinema_id.required' => 'The cinema field is required.',
+            'cinema_id.integer' => 'The cinema must be an integer.',
             'actor_id.required' => 'The actor field is required.',
             'actor_id.integer' => 'The actor must be an integer.',
             'director_id.required' => 'The director field is required.',
@@ -47,15 +52,18 @@ class StoreMovieRequest extends FormRequest
             'movie_name.string' => 'The movie name must be a string.',
             'movie_name.max' => 'The movie name may not be greater than 255 characters.',
             'movie_name.unique' => 'The movie name has already been taken.',
-            'poster.required' => 'The poster field is required.',
-            'release_date.required' => 'The release date field is required.',
-            'release_date.date' => 'The release date must be a date.',
+            'poster.string' => 'The poster must be a string.',
+            'poster.max' => 'The poster may not be greater than 225 characters.',
+            'duration.string' => 'The duration must be a string.',
+            'duration.max' => 'The duration may not be greater than 225 characters.',
+            'release_date.date' => 'The release date must be a valid date.',
             'age_limit.required' => 'The age limit field is required.',
             'age_limit.integer' => 'The age limit must be an integer.',
             'descriptions.string' => 'The descriptions must be a string.',
             'descriptions.max' => 'The descriptions may not be greater than 255 characters.',
             'trailer.string' => 'The trailer must be a string.',
             'trailer.max' => 'The trailer may not be greater than 255 characters.',
+            'rating.numeric' => 'The rating must be a number.'
         ];
     }
 }

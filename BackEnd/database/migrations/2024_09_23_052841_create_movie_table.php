@@ -19,11 +19,12 @@ return new class extends Migration
             $table->unsignedBigInteger('director_id');
             $table->string('movie_name');
             $table->string('poster')->nullable();
-            $table->string('duraion')->nullable();
+            $table->string('duration')->nullable();
             $table->date('release_date')->nullable();
             $table->integer('age_limit')->nullable();
             $table->string('descripton')->nullable();
             $table->string('trailer')->nullable();
+            $table->float('rating')->nullable();
             $table->enum('status', ['Show', 'Hidden'])->default('Show');
             $table->timestamps();
             $table->foreign('movie_category_id')->references('id')->on('movie_category');

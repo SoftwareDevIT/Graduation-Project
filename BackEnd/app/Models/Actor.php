@@ -16,7 +16,6 @@ class Actor extends Model
         'photo',
         'country',
         'link_wiki',
-
     ];
     
     public function movies()

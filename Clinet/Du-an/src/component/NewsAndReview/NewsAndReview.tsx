@@ -1,63 +1,61 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import instance from '../../server';
 import './NewsAndReview.css';
+import { NewsItem } from '../../interface/NewsItem';
 
 const NewsAndReview = () => {
+  const [newsData, setNewsData] = useState<NewsItem[]>([]);
+  const [visibleItems, setVisibleItems] = useState(5); 
+  const [loading, setLoading] = useState(true);
+  const [showAll, setShowAll] = useState(false); // State to toggle between showing all items or initial set
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await instance.get('/news');
+        setNewsData(response.data.data || []);
+      } catch (error) {
+        console.error('Error fetching news data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleToggleItems = () => {
+    if (showAll) {
+      setVisibleItems(5); // Show only the initial 5 items
+    } else {
+      setVisibleItems(newsData.length); // Show all items
+    }
+    setShowAll(!showAll); // Toggle the state
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className='new-container'>
       {/* News Section */}
       <div className="news-section">
         <h2>Mới cập nhật</h2>
-        <div className="news-item">
-          <img className="news-image-placeholder" src='https://cdn.moveek.com/storage/media/cache/small/66cea385df92a101936911.jpg'/>
-          <div className="news-content">
-            <h3>Hoài Linh cùng 'con trai' Tuấn Trần tại họp báo ra mắt Làm Giàu Với Ma</h3>
-            <p>Sau thời gian dài chờ đợi, Làm Giàu Với Ma đã chính thức có buổi công chiếu ra mắt khán giả...</p>
-            <span className="category">Tin điện ảnh</span> - <span className="time">10 giờ trước</span>
+        {newsData.slice(0, visibleItems).map((news, index) => (
+          <div className="news-item" key={index}>
+            <img className="news-image-placeholder" src={news.thumnail || 'https://via.placeholder.com/150'} alt={news.title} />
+            <div className="news-content">
+              <h3>{news.title}</h3>
+              <p>{news.content.substring(0, 100)}...</p>
+            </div>
           </div>
-        </div>
-        
-        <div className="news-item">
-        <img className="news-image-placeholder" src='https://cdn.moveek.com/storage/media/cache/small/66cea385df92a101936911.jpg'/>
-          <div className="news-content">
-            <h3>CÁC TÁC PHẨM GIẢI TRÍ TỪ ĐỀ TÀI VÕ HIỆP LIỆU CÒN THU HÚT GIỚI TRẺ?</h3>
-            <p>Cùng với sự thay đổi của công nghệ và điều kiện sống, sở thích và xu hướng giải trí...</p>
-            <span className="category">Moveek</span> - <span className="time">4 ngày trước</span>
-          </div>
-        </div>
-        
-        <div className="news-item">
-        <img className="news-image-placeholder" src='https://cdn.moveek.com/storage/media/cache/small/66cea385df92a101936911.jpg'/>
-          <div className="news-content">
-            <h3>Thám Tử Kiên - Victor Vũ trở lại với thể loại kinh dị trinh thám</h3>
-            <p>Đạo diễn Victor Vũ trở lại cùng thể loại hình thám tử Kiên và các nhân vật chính họp báo...</p>
-            <span className="category">Tin điện ảnh</span> - <span className="time">6 ngày trước</span>
-          </div>
-        </div>
-        <div className="news-item">
-        <img className="news-image-placeholder" src='https://cdn.moveek.com/storage/media/cache/small/66cea385df92a101936911.jpg'/>
-          <div className="news-content">
-            <h3>Thám Tử Kiên - Victor Vũ trở lại với thể loại kinh dị trinh thám</h3>
-            <p>Đạo diễn Victor Vũ trở lại cùng thể loại hình thám tử Kiên và các nhân vật chính họp báo...</p>
-            <span className="category">Tin điện ảnh</span> - <span className="time">6 ngày trước</span>
-          </div>
-        </div>
-        <div className="news-item">
-        <img className="news-image-placeholder" src='https://cdn.moveek.com/storage/media/cache/small/66cea385df92a101936911.jpg'/>
-          <div className="news-content">
-            <h3>Thám Tử Kiên - Victor Vũ trở lại với thể loại kinh dị trinh thám</h3>
-            <p>Đạo diễn Victor Vũ trở lại cùng thể loại hình thám tử Kiên và các nhân vật chính họp báo...</p>
-            <span className="category">Tin điện ảnh</span> - <span className="time">6 ngày trước</span>
-          </div>
-        </div>
-        <div className="news-item">
-        <img className="news-image-placeholder" src='https://cdn.moveek.com/storage/media/cache/small/66cea385df92a101936911.jpg'/>
-          <div className="news-content">
-            <h3>Thám Tử Kiên - Victor Vũ trở lại với thể loại kinh dị trinh thám</h3>
-            <p>Đạo diễn Victor Vũ trở lại cùng thể loại hình thám tử Kiên và các nhân vật chính họp báo...</p>
-            <span className="category">Tin điện ảnh</span> - <span className="time">6 ngày trước</span>
-          </div>
-        </div>
-        <button className='load-more-btn'>Xem Thêm</button>
+        ))}
+        {newsData.length > 5 && (
+          <button className='load-more-btn' onClick={handleToggleItems}>
+            {showAll ? 'Ẩn bớt' : 'Xem Thêm'}
+          </button>
+        )}
       </div>
       
       {/* Review Section */}
@@ -94,8 +92,7 @@ const NewsAndReview = () => {
           <span className="time">10 ngày trước</span> - <span className="reviewer">Ivy_Trat</span>
         </div>
       </div>
-      
-      </div>
+    </div>
   );
 };
 
