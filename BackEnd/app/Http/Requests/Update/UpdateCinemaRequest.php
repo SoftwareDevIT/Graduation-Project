@@ -26,6 +26,7 @@ class UpdateCinemaRequest extends FormRequest
             'location_id' => 'integer',
             'phone' => 'string',
             'cinema_address' => 'string',
+            'status' => 'integer',
         ];
     }
 }
