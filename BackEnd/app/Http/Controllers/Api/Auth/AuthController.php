@@ -83,9 +83,9 @@ class AuthController extends Controller
         try {
             $user = $this->userRegistrationService->register($request->validated());
             Mail::to($user->email)->queue(new VerifyAccount($user));
-            return $this->success('Tạo tài khoảng thành công!', 'success', 200);
+            return $this->success(__('messages.success_register'), 'success', 200);
         } catch (\Throwable $th) {
-            return $this->error($th->getMessage());
+            return $this->error($th->getMessage(), 'error', 400);
         }
     }
 

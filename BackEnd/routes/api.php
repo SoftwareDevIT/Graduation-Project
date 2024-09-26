@@ -57,7 +57,7 @@ Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout']);
 // Route::get('/user', [AuthController::class, 'list']);
 
-Route::post('register', [AuthController::class, 'register']); // chức năng post của đăng ký
+Route::post('register', [AuthController::class, 'register'])->middleware('localization'); // chức năng post của đăng ký
 Route::get('/lists', [AuthController::class, 'list']); // danh sách tài khoản user
 Route::get('/verify-account/{userId}', [AccountVerificationController::class, 'verify'])->name('verify'); // route để người dùng xác thực từ gmail
 Route::post('password/send-otp', [ForgotPasswordController::class, 'sendOtp']); // nhập email để gửi email mã otp
@@ -88,24 +88,7 @@ Route::apiResource('showtimes', ShowtimeController::class);
 Route::get('showtimes/movie/{movie_name}', [ShowtimeController::class, 'showtimeByMovieName']);
 Route::apiResource('room', RoomController::class);
 
-// Route::middleware(['auth:sanctum'])->group(function () {
-    Route::post('logout', [AuthController::class, 'logout']);
-    Route::get('list', [AuthController::class, 'list']); // danh sách tài khoản user
-    Route::apiResource('location', LocationController::class);
-    Route::apiResource('user', AuthController::class);
-    Route::apiResource('cinema', CinemaController::class);
-    Route::apiResource('room', RoomController::class);
-    Route::apiResource('showtimes', ShowtimeController::class);
-    Route::get('showtimes/movie/{movie_name}', [ShowtimeController::class, 'showtimeByMovieName']);
-    Route::resource('news_category', NewCategoryController::class);
-    Route::resource('news', NewController::class);
-    Route::apiResource('actor', ActorController::class);
-    Route::apiResource('director', DirectorController::class);
-    Route::apiResource('movie-category', MovieCategoryController::class);
-    Route::apiResource('movies', MovieController::class);
-    Route::apiResource('method', PayMethodController::class);
-    Route::apiResource('combo', ComboController::class);
-// });
+
 
 // Route::middleware(['auth:sanctum'])->group(function () {
 //     Route::post('logout', [AuthController::class, 'logout']);
