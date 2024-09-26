@@ -13,7 +13,7 @@ class MovieSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('movie')->insert([
+        DB::table('movies')->insert([
             [
                 'movie_name' => 'Trấn thành',
                 'movie_category_id' => '1',
