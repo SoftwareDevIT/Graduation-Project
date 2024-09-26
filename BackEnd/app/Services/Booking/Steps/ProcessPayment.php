@@ -95,3 +95,4 @@ class ProcessPayment extends AbstractBookingStep
         return null;
     }
 }
+
