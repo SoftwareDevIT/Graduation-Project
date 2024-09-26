@@ -15,18 +15,18 @@ return new class extends Migration
             $table->id('id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('showtime_id');
-            $table->unsignedBigInteger('seat_id');
+            // $table->unsignedBigInteger('seat_id');
             $table->unsignedBigInteger('pay_method_id');
-            $table->unsignedBigInteger('combo_id')->nullable();
+            // $table->unsignedBigInteger('combo_id')->nullable();
             $table->double('price_ticket')->nullable();
             $table->double('price_combo')->nullable();
             $table->double('amount');
             $table->enum('seat_status', ['hold', 'no'])->default('hold');
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('seat_id')->references('id')->on('seats');
+            // $table->foreign('seat_id')->references('id')->on('seats');
             $table->foreign('pay_method_id')->references('id')->on('pay_method');
-            $table->foreign('combo_id')->references('id')->on('combos');
+            // $table->foreign('combo_id')->references('id')->on('combos');
             $table->foreign('showtime_id')->references('id')->on('showtimes');
         });
     }
