@@ -37,14 +37,11 @@ class ActorController extends Controller
     {
         try {
             $file = $request->file('photo');
-            $imageLink = $this->uploadImage($file);
-
             $actor = $request->validated();
-            $actor['photo'] = $imageLink;
+            $actor['photo'] = $file ? $this->uploadImage($file) : null;
 
             $actor = $this->actorService->store($actor);
-
-            return $this->success($actor, 'Thêm thành công');
+            return $this->success($actor, 'Thêm thành công Diễn Viên');
         } catch (Exception $e) {
             return $this->error('Có lỗi xảy ra: ' . $e->getMessage(), 500);
         }
@@ -58,7 +55,7 @@ class ActorController extends Controller
         try {
             $actor = $this->actorService->get($id);
 
-            return $this->success($actor, 'Chi tiết đạo diễn với id = ' . $id);
+            return $this->success($actor, 'Chi tiết diễn viên với id = ' . $id);
         } catch (\Throwable $th) {
             if ($th instanceof ModelNotFoundException) {
                 return $this->notFound('Actor not found id = ' . $id, 404);
@@ -75,27 +72,18 @@ class ActorController extends Controller
     {
         try {
             $file = $request->file('photo');
-            if ($file) {
-                $imageLink = $this->uploadImage($file);
-            } else {
-                $imageLink = null; // Hoặc xử lý khác nếu không có file
-            }
+            $oldImgageActor  = $this->actorService->get($id);
+
+            $imageLink =  $file ? $this->uploadImage($file) :  $oldImgageActor->photo;
 
             // Lấy dữ liệu đã được xác thực từ request
             $actor = $request->validated();
-
-            if ($imageLink) {
-                $actor['photo'] = $imageLink;
-            }
-
-            // Cập nhật dữ liệu của actor
+            $actor['photo'] = $imageLink;
+          
             $actor = $this->actorService->update($id, $actor);
+
             return $this->success($actor, 'Cập nhập thành công');
         } catch (\Throwable $th) {
-            if ($th instanceof ModelNotFoundException) {
-                return $this->notFound('Actor not found id = ' . $id, 404);
-            }
-
             return $this->error('Actor not found id = ' . $id, 500);
         }
     }
@@ -107,7 +95,7 @@ class ActorController extends Controller
     {
         try {
             $this->actorService->delete($id);
-            return $this->success(null, 'Xóa thành công');
+            return $this->success(null, 'Xóa thành công diễn viên');
         } catch (\Throwable $th) {
             if ($th instanceof ModelNotFoundException) {
                 return $this->notFound('Actor not found id = ' . $id, 404);

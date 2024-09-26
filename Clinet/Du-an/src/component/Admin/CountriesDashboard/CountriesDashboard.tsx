@@ -1,12 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+
 import './CountriesDashboard.css';
+import instance from '../../../server';
+import { Location } from '../../../interface/Location';
 
 const CountriesDashboard = () => {
-    const countries = [
-        { id: 'COU001', name: 'United States' },
-        { id: 'COU002', name: 'Canada' },
-        { id: 'COU003', name: 'France' },
-    ];
+    const [countries, setCountries] = useState<Location[]>([]);
+
+    const fetchCountries = async () => {
+        try {
+            const response = await instance.get('/location');
+            setCountries(response.data.data); // Đảm bảo response.data.data tồn tại
+        } catch (error) {
+            console.error('Error fetching countries:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchCountries();
+    }, []);
 
     return (
         <div className="countries-dashboard">
@@ -27,7 +39,7 @@ const CountriesDashboard = () => {
                         {countries.map((country) => (
                             <tr key={country.id}>
                                 <td>{country.id}</td>
-                                <td>{country.name}</td>
+                                <td>{country.location_name}</td>
                                 <td className="action-buttons">
                                     <button className="view-btn">👁</button>
                                     <button className="edit-btn">✏️</button>

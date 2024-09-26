@@ -12,8 +12,9 @@ class Combo extends Model
     protected $primaryKey = 'id';
     protected $fillable = [
         'combo_name',
-        'images',
         'price',
+        'descripton',
+        'volume',
         'status',
     ];
 }

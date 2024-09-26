@@ -2,20 +2,19 @@ import React from 'react';
 import './CinemasManager.css'
 import Sidebar from '../../../component/Admin/SidebarDashboard/Sidebar';
 import Header from '../../../component/Admin/HeaderDashboard/Header1';
+import CinemaForm from '../../../component/Admin/CinemasDashboard/CinemasForm';
 
-import CinemasAdd from '../../../component/Admin/CinemasDashboard/CinemasAdd';
 
-
-function CinemasAddManager() {
+function CinemasFormManager() {
     return (
         <div className="cinemasmanager">
             <Sidebar />
             <div className="cinemasadmin">
                 <Header />
-                <CinemasAdd/>
+                <CinemaForm/>
             </div>
         </div>
     );
 }
 
-export default CinemasAddManager;
+export default CinemasFormManager;

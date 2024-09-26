@@ -1,20 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import './ComboDashboard.css';
-import { Combo } from '../../../interface/Combo';
-import instance from '../../../server';
 
+import { Link } from 'react-router-dom';
+import instance from '../../../server';
+import { useComboContext } from '../../../Context/ComboContext';
 
 const ComboDashboard: React.FC = () => {
-    const [combos, setCombos] = useState<Combo[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
+    const { state, deleteCombo } = useComboContext(); // Sử dụng useComboContext để lấy state và deleteCombo
+    const { combos } = state; // Lấy combos từ state
+    const [loading, setLoading] = React.useState<boolean>(true); // Biến loading để xử lý trạng thái tải
+    const [error, setError] = React.useState<string | null>(null); // Biến error để xử lý lỗi
 
-    // Fetch combos using the Axios instance
+    // Fetch combos when the component mounts
     useEffect(() => {
         const fetchCombos = async () => {
             try {
-                const response = await instance.get('/combo'); // Sử dụng instance để gọi API
-                setCombos(response.data.data); // Giả sử response.data chứa mảng combo
+                await instance.get('/combo'); // Lấy combos từ API
                 setLoading(false);
             } catch (err) {
                 setError('Failed to load combos');
@@ -25,7 +26,19 @@ const ComboDashboard: React.FC = () => {
         fetchCombos();
     }, []);
 
-    // Hiển thị trạng thái loading và error nếu có
+    // Function to handle deleting a combo
+    const handleDelete = async (id: number) => {
+        if (window.confirm('Are you sure you want to delete this combo?')) {
+            try {
+                await deleteCombo(id); // Sử dụng hàm deleteCombo từ context
+                alert('Combo deleted successfully!');
+            } catch (err) {
+                setError('Failed to delete combo');
+            }
+        }
+    };
+
+    // Display loading and error states if applicable
     if (loading) {
         return <p>Loading...</p>;
     }
@@ -38,7 +51,7 @@ const ComboDashboard: React.FC = () => {
         <div className="combo-dashboard">
             <h2>All Combos</h2>
             <div className="actions">
-                <button className="add-combo-btn">Add Combo</button>
+                <Link to={'/admin/combo/add'} className="add-combo-btn">Add Combo</Link>
             </div>
             <div className="table-container">
                 <table className="combo-table">
@@ -49,7 +62,6 @@ const ComboDashboard: React.FC = () => {
                             <th>Description</th>
                             <th>Price</th>
                             <th>Volume</th>
-                            <th>Status</th>
                             <th>Created At</th>
                             <th>Actions</th>
                         </tr>
@@ -62,12 +74,17 @@ const ComboDashboard: React.FC = () => {
                                 <td>{combo.descripton}</td>
                                 <td>{combo.price}</td>
                                 <td>{combo.volume}</td>
-                                <td>{combo.status}</td>
+                            
                                 <td>{new Date(combo.created_at).toLocaleDateString()}</td>
                                 <td className="action-buttons">
                                     <button className="view-btn">👁</button>
-                                    <button className="edit-btn">✏️</button>
-                                    <button className="delete-btn">🗑</button>
+                                    <Link to={`/admin/combo/edit/${combo.id}`} className="edit-btn">✏️</Link>
+                                    <button 
+                                        className="delete-btn" 
+                                        onClick={() => handleDelete(combo.id)} // Attach delete handler
+                                    >
+                                        🗑
+                                    </button>
                                 </td>
                             </tr>
                         ))}

@@ -54,7 +54,7 @@ const UserDashboard: React.FC = () => {
                 <div className="table-header">
                     <h3>All Users List</h3>
                     <div className="add-user-container">
-                     <Link to={'/admin/user/add'}>   <button className="add-user-btn">Add User</button></Link>
+                     <Link to={'/admin/user/add'}><button className="add-user-btn">Add User</button></Link>
                     </div>
                 </div>
 
