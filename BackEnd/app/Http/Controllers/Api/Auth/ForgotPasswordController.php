@@ -3,20 +3,20 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Services\OtpService;
-use App\Services\PasswordResetService;
+use App\Services\Auth\ForgotPasswordService;
+use App\Services\Auth\OtpService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
 class ForgotPasswordController extends Controller
 {
     protected $otpService;
-    protected $passwordResetService;
+    protected $forgotpasswordService;
 
-    public function __construct(OtpService $otpService, PasswordResetService $passwordResetService)
+    public function __construct(OtpService $otpService, ForgotPasswordService $forgotpasswordService)
     {
         $this->otpService = $otpService;
-        $this->passwordResetService = $passwordResetService;
+        $this->forgotpasswordService = $forgotpasswordService;
     }
 
     public function sendOtp(Request $request)
@@ -50,7 +50,7 @@ class ForgotPasswordController extends Controller
         }
     }
 
-    public function resetPassword(Request $request)
+    public function forgotPassword(Request $request)
     {
         $request->validate([
             'password' => 'required|min:8|confirmed',
@@ -67,7 +67,7 @@ class ForgotPasswordController extends Controller
             $password = $request->input('password');
 
             // Gọi service để đặt lại mật khẩu
-            $this->passwordResetService->resetPassword($email, $password);
+            $this->forgotpasswordService->ForgotPassword($email, $password);
 
             // Xóa trạng thái xác thực OTP và email
             $this->otpService->clearOtpVerification();

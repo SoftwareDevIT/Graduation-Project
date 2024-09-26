@@ -63,7 +63,7 @@ Route::get('/verify-account/{userId}', [AccountVerificationController::class, 'v
 // Password reset routes
 Route::post('password/send-otp', [ForgotPasswordController::class, 'sendOtp']); // Send OTP to email
 Route::post('password/verify-otp', [ForgotPasswordController::class, 'verifyOtp']); // Verify OTP
-Route::post('password/reset', [ForgotPasswordController::class, 'resetPassword']); // Reset password
+Route::post('password/reset', [ForgotPasswordController::class, 'forgotPassword']); // Reset password
 
 // CRUD API resources
 Route::middleware(['auth:sanctum'])->group(function () {
