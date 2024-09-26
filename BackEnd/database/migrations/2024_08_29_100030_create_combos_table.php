@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -14,10 +13,11 @@ return new class extends Migration
         Schema::create('combos', function (Blueprint $table) {
             $table->id('id');
             $table->string('combo_name');
-            $table->string('descripton')->nullable();;
+            $table->string('descripton')->nullable();
+            ;
             $table->double('price');
             $table->integer('volume');
-            $table->enum('status', ['Show', 'Hidden'])->default('Show');
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }

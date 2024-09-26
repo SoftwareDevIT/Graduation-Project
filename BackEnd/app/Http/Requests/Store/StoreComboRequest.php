@@ -23,8 +23,10 @@ class StoreComboRequest extends FormRequest
     {
         return [
             "combo_name" => "string",
-            "price" => "",
-            "images" => "file",
+            "price" => "required|integer",
+            "descripton" => "nullable",
+            "volume" => "required|integer",
+            "status" => "integer",
         ];
     }
 }
