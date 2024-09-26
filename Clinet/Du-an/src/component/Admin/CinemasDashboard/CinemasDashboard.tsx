@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-
 import './CinemasDashboard.css';
 import { Cinema } from '../../../interface/Cinema';
 import instance from '../../../server';
+import { Link } from 'react-router-dom';
 
 const CinemasDashboard: React.FC = () => {
     const [cinemas, setCinemas] = useState<Cinema[]>([]);
@@ -15,8 +15,6 @@ const CinemasDashboard: React.FC = () => {
                 const response = await instance.get('/cinema');
                 console.log('API Response:', response.data); // Log the entire response
                 setCinemas(response.data.data);
-                // Assuming response.data is an array of cinemas
-                
                 setLoading(false);
             } catch (err) {
                 console.error('Fetch error:', err); // Log the error
@@ -27,6 +25,20 @@ const CinemasDashboard: React.FC = () => {
 
         fetchCinemas();
     }, []);
+
+    const handleDeleteCinema = async (id: number) => {
+        if (window.confirm("Are you sure you want to delete this cinema?")) {
+            try {
+                await instance.delete(`/cinema/${id}`); // Adjust your API endpoint if necessary
+                // Filter out the deleted cinema from the state
+                setCinemas(cinemas.filter(cinema => cinema.id !== id));
+                alert("Cinema deleted successfully!");
+            } catch (err) {
+                console.error("Failed to delete cinema:", err);
+                alert("Failed to delete cinema");
+            }
+        }
+    };
 
     if (loading) {
         return <div>Loading...</div>;
@@ -40,7 +52,7 @@ const CinemasDashboard: React.FC = () => {
         <div className="cinemas-dashboard">
             <h2>All Cinemas</h2>
             <div className="actions">
-                <button className="add-cinema-btn">Add Cinema</button>
+                <Link to={'/admin/cinemas/add'} className="add-cinema-btn">Add Cinema</Link>
             </div>
             <div className="table-container">
                 <table className="cinema-table">
@@ -64,8 +76,13 @@ const CinemasDashboard: React.FC = () => {
                                 <td>{cinema.status}</td>
                                 <td className="action-buttons">
                                     <button className="view-btn">👁</button>
-                                    <button className="edit-btn">✏️</button>
-                                    <button className="delete-btn">🗑</button>
+                                    <Link to={`/admin/cinemas/edit/${cinema.id}`} className="edit-btn">✏️</Link>
+                                    <button 
+                                        className="delete-btn" 
+                                        onClick={() => handleDeleteCinema(cinema.id!)} // Ensure id is defined
+                                    >
+                                        🗑
+                                    </button>
                                 </td>
                             </tr>
                         ))}

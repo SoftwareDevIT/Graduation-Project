@@ -68,17 +68,12 @@ Route::resource('news_category', NewCategoryController::class); // crud của da
 Route::resource('news', NewController::class); // crud của tin tức
 
 
-<<<<<<<<< Temporary merge branch 1
-Route::apiResource('actor', ActorController::class);// crud của tác giả
-Route::apiResource('director', DirectorController::class);// crud của diễn viên
-Route::apiResource('movie-category', MovieCategoryController::class);// crud của danh mục phim
-Route::apiResource('movies', MovieController::class);
-=========
+
 Route::apiResource('actor', ActorController::class);                        // crud của tác giả
 Route::apiResource('director', DirectorController::class);                  // crud của diễn viên
 Route::apiResource('movie-category', MovieCategoryController::class);       // crud của danh mục phim
 Route::apiResource('movies', MovieController::class);                       // crud của phim
->>>>>>>>> Temporary merge branch 2
+
 Route::apiResource('method', PayMethodController::class);
 Route::get('/movie/search/{movie_name}', [MovieController::class, 'search']);    // Chức năng tìm kiếm theo tên phim
 

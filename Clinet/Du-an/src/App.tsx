@@ -28,6 +28,10 @@ import Bookcinematickets from "./Page/Client/Bookcinematickets";
 import UserAddManager from "./Page/Admin/User/UserAdd";
 import EmailConfirm from "./component/EmailConfirm/EmailConfirm";
 
+import CinemasFormManager from "./Page/Admin/Cinemas/CinemasForm";
+import CinemasAddManager from "./Page/Admin/Cinemas/CinemasForm";
+import CinemasEditManager from "./Page/Admin/Cinemas/CinemasEdit";
+
 function App() {
   return (
     <>
@@ -54,6 +58,8 @@ function App() {
       <Route path="admin/countries" element={<CountriesManager/>} />
       <Route path="admin/combo" element={<ComboManager/>} />
       <Route path="admin/cinemas" element={<CinemasManager/>} />
+      <Route path="admin/cinemas/add" element={<CinemasAddManager/>} />
+      <Route path="admin/cinemas/edit/:id" element={<CinemasEditManager/>} />
       <Route path="admin/movies" element={<MoviesManager/>} />
       <Route path="admin/schedules" element={<SchedulesManager  />} />
       <Route path="admin/revenuebycinema" element={<RevenueByCinemaManager/>} />
