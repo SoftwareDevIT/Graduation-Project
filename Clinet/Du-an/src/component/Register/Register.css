@@ -139,3 +139,6 @@
     font-size: 14px; /* Smaller font size for button text */
   }
 }
+.error-message{
+  color: red;
+}

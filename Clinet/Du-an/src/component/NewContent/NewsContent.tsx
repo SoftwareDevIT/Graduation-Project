@@ -1,8 +1,14 @@
-import React from "react";
-import Slider from "react-slick";
-import "./NewsContent.css";
+import React, { useEffect, useState } from 'react';
+import Slider from 'react-slick';
+import instance from '../../server';
+
+import './NewsContent.css'; 
+import { NewsItem } from '../../interface/NewsItem';
 
 const NewsContent = () => {
+  const [newsData, setNewsData] = useState<NewsItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
   const settings = {
     infinite: true,
     speed: 500,
@@ -13,60 +19,67 @@ const NewsContent = () => {
     arrows: true,
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await instance.get('/news');
+        if (Array.isArray(response.data.data)) {
+          setNewsData(response.data.data);
+        } else {
+          console.error("Expected an array in 'data', but received:", typeof response.data.data);
+        }
+      } catch (error) {
+        console.error('Error fetching news data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!newsData || newsData.length === 0) {
+    return <div>No news available</div>;
+  }
+
+  // Display main news (first news item)
+  const mainNews = newsData[0];
+
   return (
     <div className="news-container">
       <div className="main-news">
         <div className="main-news-image">
           <Slider {...settings}>
-            <div>
-              <img src="https://cdn.moveek.com/storage/media/cache/large/66ceaadf0b3b1511942043.jpg" alt="News 1" />
-            </div>
-            <div>
-              <img src="https://cdn.moveek.com/storage/media/cache/large/66d3ed0067821313087651.png" alt="News 2" />
-            </div>
-            <div>
-              <img src="https://i.imgur.com/zU8Nq0r.jpg" alt="News 3" />
-            </div>
+            {newsData.slice(0, 3).map((news, index) => (
+              <div key={index}>
+                <img src={news.banner || 'https://via.placeholder.com/800x400'} alt={news.title} />
+              </div>
+            ))}
           </Slider>
         </div>
         <div className="main-news-content">
-          <h2>9 phim Netflix đáng xem nhất tháng 9 năm 2024</h2>
-          <p className="category">TV Series • linhhuynh0257 • 3 giờ trước</p>
-          <p className="description">
-            Như thường lệ cứ mỗi tháng Netflix lại gỡ một số phim cũ và lên
-            nhiều phim mới, hấp dẫn. Danh sách phim Netflix dưới đây sẽ mang
-            đến cho bạn những tựa phim đáng chú ý nhất.
+          <h2>{mainNews.title}</h2>
+          <p className="category">
+            TV Series • {mainNews.user_id} • {new Date(mainNews.created_at).toLocaleString()}
           </p>
+          <p className="description">{mainNews.content}</p>
         </div>
       </div>
 
       <div className="related-news">
-          <div className="related-news-item">
-            <a href="#">Hai Muối và Làm Giàu Với Ma – 2 bộ phim Việt trình làng dịp lễ Quốc khánh 2/9</a>
-            <span className="author">miduynph • 11 giờ trước</span>
+        {newsData.slice(1, 6).map((news, index) => (
+          <div className="related-news-item" key={index}>
+            <a href="#">{news.title}</a>
+            <span className="author">{news.user_id} • {new Date(news.created_at).toLocaleString()}</span>
           </div>
-          <div className="related-news-item">
-            <a href="#">List phim anime 18+ 'cực đỉnh' trên Netflix</a>
-            <span className="author">vntduyen • 1 ngày trước</span>
-          </div>
-          <div className="related-news-item">
-            <a href="#">Thấy gì về thành công của Ma Da và Quý Cậu?</a>
-            <span className="author">Ivy_Trat • 2 ngày trước</span>
-          </div>
-          <div className="related-news-item">
-            <a href="#">Đã Nữ Báo Thù (Revolver) – Đừng dại mà thất hứa với phụ nữ!</a>
-            <span className="author">linhhuynh0257 • 4 ngày trước</span>
-          </div>
-          <div className="related-news-item">
-            <a href="#">Giải mã sức hút của Shin Cậu Bé Bút Chì: Nhật Ký Khủng Long Của Chúng Mình</a>
-            <span className="author">miduynph • 4 ngày trước</span>
-          </div>
-          <div className="related-news-item">
-            <a href="#">Jeon Do Yeon – Ji Chang Wook – Lim Ji Yeon bộ ba sao hạng A hội ngộ trong Đã Nữ Báo Thù</a>
-            <span className="author">miduynph • 6 ngày trước</span>
-          </div>
+        ))}
       </div>
     </div>
   );
 };
+
 export default NewsContent;
+

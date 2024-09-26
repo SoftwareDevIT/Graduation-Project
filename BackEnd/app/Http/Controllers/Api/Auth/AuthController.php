@@ -15,6 +15,7 @@ use App\Services\UserRegistrationService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
 
 class AuthController extends Controller
 {
@@ -30,8 +31,9 @@ class AuthController extends Controller
     public function index()
     {
         $user = $this->loginService->index();
-        return response()->json($user);
+        return $this->success($user);
     }
+
     public function show($id)
     {
         try {
@@ -49,7 +51,7 @@ class AuthController extends Controller
 
     public function list()
     {
-        $data = User::all();
+        $data = User::with('favoriteMovies')->get();
         return $this->success($data);
     }
 
@@ -89,28 +91,33 @@ class AuthController extends Controller
     }
 
 
-    public function login(Request $request)
+    public function login(UpdateUserRequest $request)
     {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
-
         try {
             $user = User::where('email', $request->email)->first();
+
             if (!$user) {
-                return $this->error('Tài khoản không tồn tại.');
+                return $this->error('Tài khoản không tồn tại.', 404);
             }
             if ($user->email_verified_at === null) {
-                return $this->error('Tài khoản chưa được kích hoạt, vui lòng kiểm tra email để kích hoạt.');
+                return $this->error('Tài khoản chưa được kích hoạt, vui lòng kiểm tra email để kích hoạt.', 403);
             }
+            if ($user->status === 0) {
+                return $this->error('Tài khoản đã bị khóa vui lòng liên hệ admin để được hỗ trợ', 403);
+            }
+            if (!password_verify($request->password, $user->password)) {
+                return $this->error('Mật khẩu không chính xác.', 401);
+            }
+            $token = $this->loginService->login($request->validated());
+            // return response()->json(['token' => $token], 200);
+            // return $this->success($token, 200);
+            return $this->success(['token' => $token], 200);
 
-            $token = $this->loginService->login($request->only('email', 'password'));
-            return $this->success($token);
         } catch (Exception $e) {
             return $e->getMessage();
         }
     }
+
     public function logout(Request $request)
     {
         try {

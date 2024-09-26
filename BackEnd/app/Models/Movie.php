@@ -11,16 +11,18 @@ class Movie extends Model
     protected $table = 'movies';
     protected $fillable = [
         'movie_category_id',
+        'cinema_id',
         'actor_id',
         'director_id',
         'movie_name',
         'poster',
-        'duraion',
+        'duration',
         'release_date',
         'age_limit',
         'descripton',
         'trailer',
         'status',
+        'rating'
     ];
 
     public function category()
@@ -46,4 +48,16 @@ class Movie extends Model
     {
         return $this->belongsTo(Cinema::class);
     }
+
+
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
+
 }
