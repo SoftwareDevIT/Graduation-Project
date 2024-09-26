@@ -16,6 +16,15 @@ class PasswordResetService
      */
     public function resetPassword($data)
     {
-        $user = User::where('password', Hash::make($data['password']));
+        $user = auth()->user(); // Lấy người dùng hiện tại
+
+        if (!Hash::check($data['current_password'], $user->password)) {
+            throw new \Exception(__('messages.error_password_old'));
+        }
+
+        $user->password = $data['new_password'];
+        $user->save();
+
+        return $user;
     }
 }

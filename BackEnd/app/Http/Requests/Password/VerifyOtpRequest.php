@@ -22,7 +22,15 @@ class VerifyOtpRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'otp' => 'required|size:6',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'otp.required' => 'The OTP field is required.',
+            'otp.size' => 'The OTP must be 6 characters.',
         ];
     }
 }

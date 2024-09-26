@@ -22,7 +22,15 @@ class SendOtpRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'email' => 'required|email',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'email.required' => 'The email field is required.',
+            'email.email' => 'The email must be a valid email address.',
         ];
     }
 }

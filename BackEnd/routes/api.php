@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\News\NewController;
 use App\Http\Controllers\Api\Auth\AuthController;
-use App\Http\Controllers\Api\Filter\FilterByDate;
+use App\Http\Controllers\Api\Filter\FilterByDateController;
 use App\Http\Controllers\Api\Cinema\RoomController;
 use App\Http\Controllers\Api\Combo\ComboController;
 use App\Http\Controllers\Api\Movie\ActorController;
@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\Auth\ForgotPasswordController;
 use App\Http\Controllers\Api\Movie\MovieCategoryController;
 use App\Http\Controllers\Api\PayMethod\PayMethodController;
 use App\Http\Controllers\Api\Auth\AccountVerificationController;
+use App\Http\Controllers\Api\Auth\ResetPasswordController;
 use App\Http\Controllers\Api\Movie\RatingController;
 
 /*
@@ -118,6 +119,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('method', PayMethodController::class);
     Route::apiResource('combo', ComboController::class);
     Route::get('showtimes/movie/{movie_name}', [ShowtimeController::class, 'showtimeByMovieName']);
+    Route::post('/resetPassword', [ResetPasswordController::class, 'resetPassword']);
 });
 
 
@@ -127,4 +129,4 @@ Route::get('showtimes/movie/{movie_name}', [ShowtimeController::class, 'showtime
 
 // Additional cinema routes
 Route::get('cenima/{id}', [CinemaController::class, 'filterMovie']); // Filter movies by cinema
-Route::get('/filterByDate', [FilterByDate::class, 'filterByDate']); // Filter movies by date
+Route::get('/filterByDate', [FilterByDateController::class, 'filterByDate']); // Filter movies by date

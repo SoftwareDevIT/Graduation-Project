@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Password\ForgotPasswordRequest;
+use App\Http\Requests\Password\SendOtpRequest;
+use App\Http\Requests\Password\VerifyOtpRequest;
 use App\Services\Auth\ForgotPasswordService;
 use App\Services\Auth\OtpService;
 use Illuminate\Http\Request;
@@ -19,12 +22,9 @@ class ForgotPasswordController extends Controller
         $this->forgotpasswordService = $forgotpasswordService;
     }
 
-    public function sendOtp(Request $request)
+    public function sendOtp(SendOtpRequest $request)
     {
-        $request->validate([
-            'email' => 'required|email',
-        ]);
-
+        $request->validated();
         try {
             $email = $request->input('email');
             Session::put('reset_password_email', $email); // Lưu email vào session
@@ -35,12 +35,9 @@ class ForgotPasswordController extends Controller
         }
     }
 
-    public function verifyOtp(Request $request)
+    public function verifyOtp(VerifyOtpRequest $request)
     {
-        $request->validate([
-            'otp' => 'required|size:6',
-        ]);
-
+        $request->validated();
         try {
             $otp = $request->input('otp');
             $message = $this->otpService->verifyOtp($otp);
@@ -50,12 +47,9 @@ class ForgotPasswordController extends Controller
         }
     }
 
-    public function forgotPassword(Request $request)
+    public function forgotPassword(ForgotPasswordRequest $request)
     {
-        $request->validate([
-            'password' => 'required|min:8|confirmed',
-        ]);
-
+        $request->validated();
         try {
             // Kiểm tra xem OTP đã được xác thực chưa
             if (!$this->otpService->canResetPassword()) {

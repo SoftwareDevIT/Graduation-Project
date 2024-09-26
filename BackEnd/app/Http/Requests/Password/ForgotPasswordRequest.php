@@ -22,7 +22,16 @@ class ForgotPasswordRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'password' => 'required|min:8|confirmed',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'password.required' => 'The new password field is required.',
+            'password.min' => 'The new password must be at least 8 characters.',
+            'password.confirmed' => 'The new password confirmation does not match.',
         ];
     }
 }
