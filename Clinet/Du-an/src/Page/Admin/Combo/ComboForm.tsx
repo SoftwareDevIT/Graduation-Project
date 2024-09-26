@@ -1,21 +1,22 @@
 import React from 'react';
-import './UserManager.css'
+import './ComboManager.css'
 import Sidebar from '../../../component/Admin/SidebarDashboard/Sidebar';
 import Header from '../../../component/Admin/HeaderDashboard/Header1';
-import UserDashboard from '../../../component/Admin/UserDashboard/User';
+
+import ComboForm from '../../../component/Admin/ComboDashboard/ComboForm';
 
 
 
-function User() {
+function ComboFormManager() {
     return (
-        <div className="usermanager">
+        <div className="combomanager">
             <Sidebar />
-            <div className="mainadmin">
+            <div className="comboadmin">
                 <Header />
-                <UserDashboard/>
+                <ComboForm/>
             </div>
         </div>
     );
 }
 
-export default User;
+export default ComboFormManager;

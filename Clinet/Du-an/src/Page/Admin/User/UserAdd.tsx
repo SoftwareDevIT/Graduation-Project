@@ -2,20 +2,22 @@ import React from 'react';
 import './UserManager.css'
 import Sidebar from '../../../component/Admin/SidebarDashboard/Sidebar';
 import Header from '../../../component/Admin/HeaderDashboard/Header1';
-import UserDashboard from '../../../component/Admin/UserDashboard/User';
+import UserAdd from '../../../component/Admin/UserDashboard/UserAdd';
 
 
 
-function User() {
+
+
+function UserAddManager() {
     return (
         <div className="usermanager">
             <Sidebar />
             <div className="mainadmin">
                 <Header />
-                <UserDashboard/>
+                <UserAdd/>
             </div>
         </div>
     );
 }
 
-export default User;
+export default UserAddManager;
