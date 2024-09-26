@@ -22,8 +22,9 @@ class StoreMovieCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'category_name' => 'required|string|max:255',
-            'descripcion' => 'max:255',
+            'category_name'   => 'required|string|max:255|unique:movie_category',
+            'descripcion'     => 'max:255',
+            
         ];
     }
 }

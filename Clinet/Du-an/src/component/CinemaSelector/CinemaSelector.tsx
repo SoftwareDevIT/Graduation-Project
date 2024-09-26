@@ -1,219 +1,268 @@
-  import React, { useState } from "react";
-  import "./CinemaSelector.css";
+import React, { useState, useEffect } from "react";
+import instance from "../../server";
+import "./CinemaSelector.css";
+import { Cinema } from "../../interface/Cinema";
+import { Actor } from "../../interface/Actor";
+import { Movie } from "../../interface/Movie";
+import { Location } from "../../interface/Location";
+import { useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
 
-  function CinemaSelector() {
-    // Đặt mặc định selectedCity là "TP. Hồ Chí Minh"
-    const [selectedCity, setSelectedCity] = useState<string>("TP. Hồ Chí Minh");
-    const [selectedCinema, setSelectedCinema] = useState<string | null>(null);
-    const [selectedDate, setSelectedDate] = useState<string>("30/8");
+const CinemaSelector: React.FC = () => {
+  const [locations, setLocations] = useState<Location[]>([]);
+  const [cinemas, setCinemas] = useState<Cinema[]>([]);
+  const [actors, setActors] = useState<Actor[]>([]);
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [selectedCity, setSelectedCity] = useState<number | null>(null);
+  const [selectedCinema, setSelectedCinema] = useState<number | null>(null);
+  const [selectedDate, setSelectedDate] = useState<string>("");
+  const [filteredCinemas, setFilteredCinemas] = useState<Cinema[]>([]);
+  const navigate = useNavigate();
 
-    // Đối tượng chứa thông tin các rạp theo thành phố
-    const cinemasByCity: { [key: string]: string[] } = {
-      "TP. Hồ Chí Minh": [
-        "BHD Star Cineplex 3/2",
-        "CGV Crescent Mall",
-        "Galaxy Nguyễn Du",
-        "Lotte Cinema Cộng Hòa",
-        "Cinestar Quốc Thanh",
-        "Mega GS Cao Thắng",
-        "BHD Star Phạm Hùng",
-        "Lotte Cinema Nam Sài Gòn",
-        "CGV Pandora City",
-        "Galaxy Kinh Dương Vương",
-      ],
-      "Hà Nội": [
-        "BETA Thanh Xuân",
-        "BETA Mỹ Đình",
-        "CGV Tràng Tiền Plaza",
-        "CGV Vincom Bà Triệu",
-        "Lotte Cinema Hà Đông",
-        "Galaxy Mipec Long Biên",
-        "Lotte Cinema Keangnam",
-        "Platinum Royal City",
-        "Platinum Times City",
-        "Lotte Cinema Long Biên",
-      ],
-      "Bình Dương": [
-        "CGV Aeon Canary",
-        "BHD Star Bình Dương",
-        "Galaxy Bình Dương",
-        "Cinestar Bình Dương",
-        "Lotte Cinema Bình Dương",
-        "Mega GS Bình Dương",
-        "CGV Becamex Bình Dương",
-        "Beta Bình Dương",
-        "CGV Dĩ An",
-        "Galaxy Bến Cát",
-      ],
+  // Lấy ngày hiện tại theo định dạng YYYY-MM-DD
+  const getCurrentDate = (): string => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`; // Định dạng YYYY-MM-DD
+  };
+
+  // Tạo danh sách ngày cho 7 ngày tiếp theo
+  const generateDateList = (): string[] => {
+    return Array.from({ length: 7 }, (_, i) =>
+      dayjs().add(i, "day").format("YYYY-MM-DD")
+    );
+  };
+
+  // Lấy danh sách vị trí, rạp, diễn viên
+  useEffect(() => {
+    const fetchLocations = async () => {
+      try {
+        const response = await instance.get("/location");
+        setLocations(response.data.data || []);
+      } catch (error) {
+        console.error("Lỗi khi lấy danh sách vị trí:", error);
+      }
     };
 
-    // Thông tin các phim và suất chiếu theo rạp và ngày
-    const showtimesByCinemaAndDate: {
-      [key: string]: {
-        [key: string]: { movie: string; director: string; duration: string; genre: string; times: string[] }[];
-      };
-    } = {
-      "BHD Star Cineplex 3/2": {
-        "2/9": [
-          {
-            movie: "Ma Da",
-            director: "Đinh Tuấn Vũ",
-            duration: "120 phút",
-            genre: "Kinh dị",
-            times: ["12:45", "15:30", "18:45", "21:00"],
-          },
-          {
-            movie: "Lật Mặt 6",
-            director: "Lý Hải",
-            duration: "130 phút",
-            genre: "Hành động",
-            times: ["11:00", "14:00", "17:00", "20:00"],
-          },
-          {
-            movie: "Thiên Thần Hộ Mệnh",
-            director: "Victor Vũ",
-            duration: "115 phút",
-            genre: "Tâm lý",
-            times: ["10:30", "13:30", "16:30", "19:30"],
-          },
-        ],
-        "3/9": [
-          {
-            movie: "Ma Da",
-            director: "Đinh Tuấn Vũ",
-            duration: "120 phút",
-            genre: "Kinh dị",
-            times: ["13:00", "16:00", "19:00", "22:00"],
-          },
-          {
-            movie: "Lật Mặt 6",
-            director: "Lý Hải",
-            duration: "130 phút",
-            genre: "Hành động",
-            times: ["12:00", "15:00", "18:00", "21:00"],
-          },
-          {
-            movie: "Thiên Thần Hộ Mệnh",
-            director: "Victor Vũ",
-            duration: "115 phút",
-  genre: "Tâm lý",
-            times: ["11:30", "14:30", "17:30", "20:30"],
-          },
-        ],
-      },
-      // Thêm thông tin cho các rạp khác và ngày khác tương tự
+    const fetchCinemas = async () => {
+      try {
+        const response = await instance.get("/cinema");
+        setCinemas(response.data.data || []);
+      } catch (error) {
+        console.error("Lỗi khi lấy danh sách rạp:", error);
+      }
     };
 
-    // Hàm để xử lý sự kiện khi bấm vào một thành phố
-    const handleCityClick = (city: string) => {
-      setSelectedCity(city);
-      setSelectedCinema(null); // Reset rạp đã chọn khi thay đổi thành phố
+    const fetchActors = async () => {
+      try {
+        const response = await instance.get("/actor");
+        setActors(response.data || []);
+      } catch (error) {
+        console.error("Lỗi khi lấy danh sách diễn viên:", error);
+      }
     };
 
-    // Hàm xử lý khi chọn rạp
-    const handleCinemaClick = (cinema: string) => {
-      setSelectedCinema(cinema);
-    };
+    fetchActors();
+    fetchLocations();
+    fetchCinemas();
 
-    // Hàm xử lý khi chọn ngày
-    const handleDateClick = (date: string) => {
-      setSelectedDate(date);
-    };
+    // Đặt ngày hiện tại làm ngày mặc định
+    setSelectedDate(getCurrentDate());
+  }, []);
 
-    // Danh sách rạp hiện tại dựa trên thành phố được chọn
-    const currentCinemas = selectedCity ? cinemasByCity[selectedCity] : [];
-
-    // Danh sách suất chiếu hiện tại dựa trên rạp và ngày được chọn
-    const currentShowtimes =
-      selectedCinema && showtimesByCinemaAndDate[selectedCinema]
-        ? showtimesByCinemaAndDate[selectedCinema][selectedDate] || []
-        : [];
-
-    return (
-      <>
-        <h2 className="title">Mua vé theo rạp</h2>
-        <div className="container">
-          <div className="locations">
-            <h3 className="khuvuc">Khu vực</h3>
-            <ul className="list-tp">
-    {Object.keys(cinemasByCity).map((city) => (
-      <li
-        key={city}
-        className={`city ${selectedCity === city ? "selected" : ""}`}
-        onClick={() => handleCityClick(city)}
-      >
-        {city}
-        <span className="cinema-count">{cinemasByCity[city].length}</span> {/* Hiển thị số lượng rạp */}
-      </li>
-    ))}
-  </ul>
-          </div>
-
-          <div className="cinemas">
-            <h3 className="khuvuc">Rạp</h3>
-            <ul className="list-tp">
-              {currentCinemas.map((cinema) => (
-                <li
-                  key={cinema}
-                  className={`cinema ${selectedCinema === cinema ? "selected" : ""}`}
-                  onClick={() => handleCinemaClick(cinema)}
-                >
-                  {cinema}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="showtimes">
-          <div className="date-selection">
-    {[ "2/9","3/9","4/9","5/9","6/9","7/9","8/9"].map((date) => {
-      const fullDate = new Date(`2024/${date.split("/")[1]}/${date.split("/")[0]}`);
-      const dayOfWeek = fullDate.getDay(); // Lấy ngày trong tuần (0: Chủ Nhật, 1: Thứ Hai, ..., 6: Thứ Bảy)
-      const days = ["CN", "T2", "T3", "T4", "T5", "T6", "T7"]; 
-
-      return (
-        <span
-          key={date}
-          className={`date ${selectedDate === date ? "selected" : ""}`}
-          onClick={() => handleDateClick(date)}
-        >
-          <p>{date}</p>
-          <p>{days[dayOfWeek]}</p> {/* Hiển thị thứ */}
-        </span>
+  // Mặc định chọn Hà Nội
+  useEffect(() => {
+    if (locations.length > 0) {
+      const haNoi = locations.find(
+        (location) => location.location_name === "Hà Nội"
       );
-    })}
-  </div>
-            {currentShowtimes.length > 0 ? (
-              <div className="movies">
-                <div className="no-showtimes">
-                <p>Nhấn vào suất chiếu để tiến hành mua vé.</p>
-                </div>
-                {currentShowtimes.map((showtime, index) => (
-                  <div key={index} className="movie">
-                    <img src="https://cdn.moveek.com/storage/media/cache/mini/6684d276139ad087720074.jpg" alt="Movie Poster" />
+      if (haNoi) {
+        setSelectedCity(haNoi.id); // Mặc định chọn Hà Nội
+      }
+    }
+  }, [locations]);
+
+  // Lọc rạp theo khu vực
+  useEffect(() => {
+    if (selectedCity) {
+      const filtered = cinemas.filter(
+        (cinema) => cinema.location_id === selectedCity
+      );
+      setFilteredCinemas(filtered);
+    } else {
+      setFilteredCinemas(cinemas);
+    }
+  }, [selectedCity, cinemas]);
+  useEffect(() => {
+    const fetchMoviesForSelectedCinemaAndDate = async () => {
+      if (selectedCinema && selectedDate) {
+        try {
+          // Gọi API lọc phim theo rạp
+          const cinemaResponse = await instance.get(`/cenima/${selectedCinema}`);
+          console.log("Dữ liệu từ lọc phim theo rạp:", cinemaResponse.data.data);
+  
+          const cinemaMovies: Movie[] = cinemaResponse.data?.data || []; // Dữ liệu phim từ API rạp
+  
+          // Nếu không có phim cho rạp này
+          if (cinemaMovies.length === 0) {
+            console.log("Không có phim nào cho rạp này.");
+            setMovies([]);
+            return;
+          }
+  
+          // Gọi API lọc theo ngày
+          const dateResponse = await instance.get(`/filterByDate`, {
+            params: {
+              cinema_id: selectedCinema,
+              showtime_date: selectedDate,
+            },
+          });
+          console.log("Dữ liệu từ dateResponse:", dateResponse.data);
+  
+          const dateMovies: Movie[] = Array.isArray(dateResponse.data) ? dateResponse.data : [];
+  
+          // Lọc những phim có trong cả hai API (lọc rạp và lọc ngày)
+          const filteredMovies = cinemaMovies.filter((cinemaMovie: Movie) =>
+            dateMovies.some((dateMovie: Movie) => dateMovie.id === cinemaMovie.id)
+          );
+  
+          // Cập nhật danh sách phim
+          if (filteredMovies.length > 0) {
+            setMovies(filteredMovies);
+          } else {
+            console.log("Không có phim nào cho rạp và ngày này.");
+            setMovies([]);
+          }
+        } catch (error) {
+          console.error("Lỗi khi lấy phim cho rạp và ngày:", error);
+          setMovies([]); // Xóa danh sách phim khi gặp lỗi
+        }
+      }
+    };
+  
+    fetchMoviesForSelectedCinemaAndDate();
+  }, [selectedCinema, selectedDate]); // useEffect chạy khi cả rạp và ngày thay đổi
+  
+
+  const selectedCinemaDetails = cinemas.find(
+    (cinema) => cinema.id === selectedCinema
+  );
+
+  return (
+    <>
+      <h2 className="title">Mua vé theo rạp</h2>
+      <div className="container">
+        <div className="locations">
+          <h3 className="khuvuc">Khu vực</h3>
+          <ul className="list-tp">
+            {locations.map((location) => {
+              const count = cinemas.filter(
+                (cinema) => cinema.location_id === location.id
+              ).length;
+              return (
+                <li
+                  key={location.id}
+                  className={`city ${
+                    selectedCity === location.id ? "selected" : ""
+                  }`}
+                  onClick={() => setSelectedCity(location.id)}
+                >
+                  {location.location_name}
+                  <span className="cinema-count">{count}</span>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+
+        <div className="cinemas">
+          <h3 className="khuvuc">Rạp</h3>
+          <ul className="list-tp">
+            {filteredCinemas.map((cinema) => (
+              <li
+                key={cinema.id}
+                className={`cinema ${
+                  selectedCinema === cinema.id ? "selected" : ""
+                }`}
+                onClick={() => {
+                  setSelectedCinema(cinema.id);
+                }}
+              >
+                {cinema.cinema_name}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="showtimes">
+          <div className="date-selection">
+            {generateDateList().map((date) => (
+              <span
+                key={date}
+                className={`date ${selectedDate === date ? "selected" : ""}`}
+                onClick={() => {
+                  setSelectedDate(date);
+                  console.log("Ngày được chọn:", date);
+                }}
+              >
+                <p>{dayjs(date).format("DD/MM")}</p>
+              </span>
+            ))}
+          </div>
+
+          {/* Hiển thị danh sách phim */}
+          {movies.length > 0 ? (
+            <div className="movies">
+              {movies.map((movie) => {
+                const actor = actors.find((a) => a.id === movie.actor_id);
+
+                return (
+                  <div key={movie.id} className="movie">
+                    <img src={movie.poster} alt={movie.movie_name} />
                     <div className="details">
-                      <h4>{showtime.movie}</h4>
-                      <p>Đạo diễn: {showtime.director}</p>
-                      <p>Thời gian: {showtime.duration}</p>
-                      <p>Thể loại: {showtime.genre}</p>
+                      <h4>{movie.movie_name}</h4>
+                      <p> 
+                        Đạo Diễn:{" "}
+                        {actor ? actor.actor_name : "Không có thông tin"}
+                      </p>
+                      <p>Thời gian: {movie.duraion}</p>
+                      <p>Giới hạn tuổi: {movie.age_limit}+</p>
                       <div className="showtimes-list">
-                        {showtime.times.map((time) => (
-                          <button key={time}>{time}</button>
+                        {movie.showtimes.map((showtime) => (
+                          <button
+                            key={showtime.id}
+                            onClick={() => {
+                              navigate("/seat", {
+                                state: {
+                                  movieName: movie.movie_name,
+                                  cinemaName:
+                                    selectedCinemaDetails?.cinema_name,
+                                  showtime: showtime.showtime_start,
+                                },
+                              });
+                            }}
+                          >
+                            {showtime.showtime_start.slice(0, 5)}
+                          </button>
                         ))}
                       </div>
                     </div>
                   </div>
-                ))}
-              </div>
-            ) : (
-              <div className="no-showtimes">
-                <p>Không có suất chiếu cho ngày này.</p>
-              </div>
-            )}
-          </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="no-showtimes">
+              <p>Không có phim cho rạp này.</p>
+            </div>
+          )}
         </div>
-      </>
-    );
-  }
+      </div>
+    </>
+  );
+};
 
-  export default CinemaSelector;
+export default CinemaSelector;
