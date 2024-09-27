@@ -1,12 +1,25 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import instance from '../../../server';
+
 import './PostDashboard.css';
+import { NewsItem } from '../../../interface/NewsItem';
 
 const PostsDashboard = () => {
-    const posts = [
-        { id: 'POST001', title: 'React Basics', category: 'Programming', author: 'John Doe', date: '2024-09-10', status: 'Published' },
-        { id: 'POST002', title: 'Getting started with Laravel', category: 'Web Development', author: 'Jane Doe', date: '2024-09-12', status: 'Draft' },
-        { id: 'POST003', title: 'CSS Tricks for UI Design', category: 'Design', author: 'Alice Smith', date: '2024-09-13', status: 'Published' },
-    ];
+    const [posts, setPosts] = useState<NewsItem[]>([]);
+
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                const response = await instance.get('/news');
+                setPosts(response.data.data); // Giả định dữ liệu có cấu trúc như bạn đã mô tả
+            } catch (error) {
+                console.error("Failed to fetch posts:", error);
+            }
+        };
+
+        fetchPosts();
+    }, []);
+
     return (
         <div className="posts-management">
             <h2>Post Management</h2>
@@ -19,6 +32,7 @@ const PostsDashboard = () => {
                         <tr>
                             <th>Post ID</th>
                             <th>Title</th>
+                            <th>Thumbnail</th> {/* Thêm cột Thumbnail */}
                             <th>Category</th>
                             <th>Author</th>
                             <th>Date Published</th>
@@ -29,11 +43,15 @@ const PostsDashboard = () => {
                     <tbody>
                         {posts.map((post) => (
                             <tr key={post.id}>
+                               
                                 <td>{post.id}</td>
                                 <td>{post.title}</td>
-                                <td>{post.category}</td>
-                                <td>{post.author}</td>
-                                <td>{post.date}</td>
+                                <td>
+                                    <img src={post.thumnail} alt={post.title} style={{ width: '40px', height: '40px' }} /> {/* Hiển thị thumbnail */}
+                                </td>
+                                <td>{post.news_category_id}</td> {/* Cập nhật để lấy category */}
+                                <td>{post.user_id}</td> {/* Cập nhật để lấy author */}
+                                <td>{new Date(post.created_at).toLocaleDateString()}</td>
                                 <td>{post.status}</td>
                                 <td className="action-buttons">
                                     <button className="view-btn">👁</button>

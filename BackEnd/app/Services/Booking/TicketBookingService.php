@@ -112,7 +112,7 @@ class TicketBookingService
             $booking = DB::transaction(function () use ($temporaryBooking, $reservedShowtime, $reservedSeats, $combos, $totalAmount) {
                 // Tạo booking
                 $booking = Booking::create([
-                    'user_id' => $temporaryBooking->user_id,
+                    'user_id' => auth()->user()->id,
                     'showtime_id' => $reservedShowtime[0]['showtimes'][0]['id'] ?? null,
                     'pay_method_id' => 1, // Sử dụng phương thức thanh toán mặc định
                     'amount' => $totalAmount,

@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\News\NewController;
 use App\Http\Controllers\Api\Auth\AuthController;
-use App\Http\Controllers\Api\Filter\FilterByDate;
+use App\Http\Controllers\Api\Filter\FilterByDateController;
 use App\Http\Controllers\Api\Cinema\RoomController;
 use App\Http\Controllers\Api\Combo\ComboController;
 use App\Http\Controllers\Api\Movie\ActorController;
@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\Auth\ForgotPasswordController;
 use App\Http\Controllers\Api\Movie\MovieCategoryController;
 use App\Http\Controllers\Api\PayMethod\PayMethodController;
 use App\Http\Controllers\Api\Auth\AccountVerificationController;
+use App\Http\Controllers\Api\Auth\ResetPasswordController;
 use App\Http\Controllers\Api\Movie\RatingController;
 
 /*
@@ -33,6 +34,9 @@ use App\Http\Controllers\Api\Movie\RatingController;
 |
 */
 
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 // Authenticated routes
 // Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', function (Request $request) {
@@ -50,6 +54,41 @@ use App\Http\Controllers\Api\Movie\RatingController;
 
 // Public authentication routes
 Route::post('login', [AuthController::class, 'login']);
+
+Route::post('logout', [AuthController::class, 'logout']);
+// Route::get('/user', [AuthController::class, 'list']);
+
+Route::post('register', [AuthController::class, 'register']); // chức năng post của đăng ký
+Route::get('/lists', [AuthController::class, 'list']); // danh sách tài khoản user
+Route::get('/verify-account/{userId}', [AccountVerificationController::class, 'verify'])->name('verify'); // route để người dùng xác thực từ gmail
+Route::post('password/send-otp', [ForgotPasswordController::class, 'sendOtp']); // nhập email để gửi email mã otp
+Route::post('password/verify-otp', [ForgotPasswordController::class, 'verifyOtp']); // nhập mã otp để xác thực
+Route::post('password/reset', [ForgotPasswordController::class, 'forgotPassword']); // thay đổi mật khẩu
+
+
+
+Route::apiResource('location', LocationController::class);
+
+Route::apiResource('cinema', CinemaController::class);
+
+
+
+Route::apiResource('news_category', NewCategoryController::class); // crud của danh mục tin tức
+Route::apiResource('news', NewController::class); // crud của tin tức
+
+
+Route::apiResource('actor', ActorController::class);                        // crud của tác giả
+Route::apiResource('director', DirectorController::class);                  // crud của diễn viên
+Route::apiResource('movie-category', MovieCategoryController::class);       // crud của danh mục phim
+Route::apiResource('movies', MovieController::class);                       // crud của phim
+Route::apiResource('method', PayMethodController::class);
+Route::get('/movie/search/{movie_name}', [MovieController::class, 'search']);    // Chức năng tìm kiếm theo tên phim
+
+Route::apiResource('combo', ComboController::class);
+Route::apiResource('showtimes', ShowtimeController::class);
+Route::get('showtimes/movie/{movie_name}', [ShowtimeController::class, 'showtimeByMovieName']);
+Route::apiResource('room', RoomController::class);
+
 Route::post('register', [AuthController::class, 'register']); // Register user
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
@@ -63,7 +102,7 @@ Route::get('/verify-account/{userId}', [AccountVerificationController::class, 'v
 // Password reset routes
 Route::post('password/send-otp', [ForgotPasswordController::class, 'sendOtp']); // Send OTP to email
 Route::post('password/verify-otp', [ForgotPasswordController::class, 'verifyOtp']); // Verify OTP
-Route::post('password/reset', [ForgotPasswordController::class, 'resetPassword']); // Reset password
+Route::post('password/reset', [ForgotPasswordController::class, 'forgotPassword']); // Reset password
 
 // CRUD API resources
 // Route::middleware(['auth:sanctum'])->group(function () {
@@ -79,7 +118,12 @@ Route::post('password/reset', [ForgotPasswordController::class, 'resetPassword']
     Route::apiResource('movies', MovieController::class);
     Route::apiResource('method', PayMethodController::class);
     Route::apiResource('combo', ComboController::class);
+
 // });
+=======
+    Route::get('showtimes/movie/{movie_name}', [ShowtimeController::class, 'showtimeByMovieName']);
+    Route::post('/resetPassword', [ResetPasswordController::class, 'resetPassword']);
+});
 
 
 // Movie-specific routes
@@ -88,4 +132,4 @@ Route::get('showtimes/movie/{movie_name}', [ShowtimeController::class, 'showtime
 
 // Additional cinema routes
 Route::get('cenima/{id}', [CinemaController::class, 'filterMovie']); // Filter movies by cinema
-Route::get('/filterByDate', [FilterByDate::class, 'filterByDate']); // Filter movies by date
+Route::get('/filterByDate', [FilterByDateController::class, 'filterByDate']); // Filter movies by date
