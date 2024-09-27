@@ -9,6 +9,7 @@ use App\Models\Seats;
 use App\Models\TemporaryBooking;
 use App\Services\Booking\TicketBookingService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class BookingController extends Controller
 {
@@ -36,23 +37,21 @@ class BookingController extends Controller
 
     public function vnPayReturn(Request $request)
     {
+        Log::info($request->all());
         $data = $request->only(['vnp_TxnRef', 'vnp_ResponseCode']);
         $temporaryBooking = TemporaryBooking::latest()->first();
         $reservedSeats = $temporaryBooking->reserved_seats;
-        $combos = $temporaryBooking->combos;
-
+        // dd($reservedSeats);
+        if (is_string($reservedSeats)) {
+            $reservedSeats = json_decode($reservedSeats, true);
+        }
         // Kiểm tra mã phản hồi từ VNPAY
         if ($data['vnp_ResponseCode'] == "00") {
-            $booking = Booking::create([
-                'user_id' => 1,
-                'showtime_id' => $temporaryBooking->reserved_showtime['showtime_id'],
-                'pay_method_id' => 1,
-                'amount' => $temporaryBooking->total_amount,
-            ]);
-
+            $booking = Booking::where('id', $data['vnp_TxnRef'])->first();
+            Log::info('Booking ID: ' . $booking);
             // $booking->combos()->sync($combos->pluck('id'));
-            // $booking->seats()->sync($reservedSeats->pluck('id'));
-            Seats::updateSeatsStatus($reservedSeats->pluck('id'), 'booked');
+            $booking->seats()->sync(collect($reservedSeats)->pluck('id'));
+            Seats::updateSeatsStatus(collect($reservedSeats)->pluck('id')->toArray(), 'booked');
 
             // Thanh toán thành công, thực hiện sự kiện và listener
             event(new InvoiceCreated($booking));

@@ -48,7 +48,7 @@ use App\Http\Controllers\Api\Movie\RatingController;
     Route::delete('favorites/{movie_id}', [FavoriteController::class, 'destroy']); // Remove favorite movie
     Route::post('ratings', [RatingController::class, 'store']); // Rate movie
 
-    Route::post('/vnpay-return', [BookingController::class, 'vnPayReturn']);
+    Route::get('/vnpay-return', [BookingController::class, 'vnPayReturn']);
     Route::post('/book-ticket', [BookingController::class, 'bookTicket']); // Book ticket
 // });
 
@@ -92,7 +92,7 @@ Route::apiResource('room', RoomController::class);
 Route::post('register', [AuthController::class, 'register']); // Register user
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
-   
+
 });
 Route::get('/lists', [AuthController::class, 'list']); // List user accounts
 
@@ -120,10 +120,8 @@ Route::post('password/reset', [ForgotPasswordController::class, 'forgotPassword'
     Route::apiResource('combo', ComboController::class);
 
 // });
-=======
     Route::get('showtimes/movie/{movie_name}', [ShowtimeController::class, 'showtimeByMovieName']);
     Route::post('/resetPassword', [ResetPasswordController::class, 'resetPassword']);
-});
 
 
 // Movie-specific routes
