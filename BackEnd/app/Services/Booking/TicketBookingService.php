@@ -53,10 +53,10 @@ class TicketBookingService
             ];
         }
         // Khi đã có booking, gọi hàm thanh toán
-        $paymentRequest = new Request(array_merge($request->all(), ['boking_id' => $booking->id, 'amount' => $data['totalAmount']]));
+        $paymentRequest = new Request(array_merge($request->all(), ['boking_id' => $booking->id]));
 
         // Gọi hàm thanh toán VNPAY
-        $paymentResult = $this->processPaymentStep->handle($paymentRequest);
+        $paymentResult = $this->processPaymentStep->process($paymentRequest);
 
         return [
             'status' => true,
@@ -69,7 +69,7 @@ class TicketBookingService
     {
         // Tạo temporary booking
         $temporaryBooking = TemporaryBooking::create([
-            'user_id' => 1,
+            'user_id' => 3,
             'reserved_showtime' => $result['movies'],
             'reserved_seats' => $result['seats_data'],
             'combos' => is_array($result['combos']) ? json_encode($result['combos']) : $result['combos']->toArray(),
@@ -112,7 +112,7 @@ class TicketBookingService
             $booking = DB::transaction(function () use ($temporaryBooking, $reservedShowtime, $reservedSeats, $combos, $totalAmount) {
                 // Tạo booking
                 $booking = Booking::create([
-                    'user_id' => auth()->user()->id,
+                    'user_id' => 3,
                     'showtime_id' => $reservedShowtime[0]['showtimes'][0]['id'] ?? null,
                     'pay_method_id' => 1, // Sử dụng phương thức thanh toán mặc định
                     'amount' => $totalAmount,
@@ -125,7 +125,7 @@ class TicketBookingService
                 return $booking;
             });
 
-            
+
             return $booking; // Trả về booking đã tạo
         } catch (\Exception $e) {
             Log::error('Error during booking creation: ' . $e->getMessage());
