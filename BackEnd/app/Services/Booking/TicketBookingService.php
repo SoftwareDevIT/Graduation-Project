@@ -69,7 +69,7 @@ class TicketBookingService
     {
         // Tạo temporary booking
         $temporaryBooking = TemporaryBooking::create([
-            'user_id' => auth()->user()->id,
+            'user_id' => 1,
             'reserved_showtime' => $result['movies'],
             'reserved_seats' => $result['seats_data'],
             'combos' => is_array($result['combos']) ? json_encode($result['combos']) : $result['combos']->toArray(),
@@ -125,7 +125,7 @@ class TicketBookingService
                 return $booking;
             });
 
-
+            
             return $booking; // Trả về booking đã tạo
         } catch (\Exception $e) {
             Log::error('Error during booking creation: ' . $e->getMessage());

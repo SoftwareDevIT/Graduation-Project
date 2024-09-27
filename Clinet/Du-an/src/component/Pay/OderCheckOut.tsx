@@ -1,13 +1,11 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import axios from 'axios';
 import instance from '../../server';
 import Header from '../Header/Hearder';
 import Headerticket from '../Headerticket/Headerticket';
 import Footer from '../Footer/Footer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWallet, faMobileAlt, faQrcode, faUniversity, faCreditCard } from '@fortawesome/free-solid-svg-icons';
-import { Combo } from '../../interface/Combo';
 import './OderCheckOut.css';
 
 const OrderCheckout = () => {
@@ -18,57 +16,61 @@ const OrderCheckout = () => {
     showtime,
     selectedSeats,
     totalPrice,
-    comboQuantities,
-    combos,
-    selectedCombos, // Thêm selectedCombos
+    selectedCombos,
   } = location.state || {};
-console.log(selectedCombos);
 
-const handleCheckout = async () => {
-  const cinemaId = location.state?.cinemaId;
-  const showtimeId = location.state?.showtimeId;
-  const roomId = location.state?.roomId; // Nhận roomId từ location.state
-
-  if (!cinemaId || !showtimeId ) { // Kiểm tra roomId
-      console.error('cinemaId, showtimeId hoặc roomId không được tìm thấy');
+  const handleCheckout = async () => {
+    const cinemaId = location.state?.cinemaId;
+    const showtimeId = location.state?.showtimeId;
+    const roomId = location.state?.roomId;
+  
+    if (!cinemaId || !showtimeId || !selectedSeats) {
+      console.error('cinemaId, showtimeId hoặc ghế ngồi không được tìm thấy');
       return;
-  }
-
-  // Chuyển đổi selectedSeats thành mảng ghế
-  const seats = selectedSeats.split(",").map((seatName: string) => {
+    }
+  
+    const seats = selectedSeats.split(",").map((seatName: string) => {
       const trimmedSeat = seatName.trim();
-      const row = trimmedSeat.charAt(0); // Giả sử hàng ghế là ký tự đầu tiên (ví dụ: 'D')
-      const column = parseInt(trimmedSeat.slice(1)) - 1; // Chỉ số ghế bắt đầu từ 0
-
+      const row = trimmedSeat.charAt(0);
+      const column = parseInt(trimmedSeat.slice(1)) - 1;
+  
       return {
-          seat_name: trimmedSeat,
-          room_id: roomId, // Thêm roomId vào đối tượng ghế
-          showtime_id: showtimeId, // Đảm bảo rằng showtimeId được thêm vào
-          seat_row: row,
-          seat_column: column, // Sửa lỗi chính tả từ "seat_colum" thành "seat_column"
+        seat_name: trimmedSeat,
+        room_id: roomId,
+        showtime_id: showtimeId,
+        seat_row: row,
+        seat_column: column,
       };
-  });
-
-  // Tạo dữ liệu đặt vé chỉ với cinemaId, showtimeId và seats
-  const bookingData = {
+    });
+  
+    const bookingData = {
       cinemaId: cinemaId,
       showtimeId: showtimeId,
-      seats: seats, // Chỉ cần gửi seats
-  };
-
-  console.log('Booking Data:', bookingData);
-
-  try {
+      seats: seats,
+      totalPrice: totalPrice,
+      selectedCombos: selectedCombos,
+    };
+  
+    try {
+      // Gửi yêu cầu đặt vé
       const response = await instance.post('/book-ticket', bookingData);
       console.log('Đặt vé thành công:', response.data);
-      alert('Đặt vé thành công!'); // Thêm thông báo thành công
-  } catch (error) {
+  
+      // Kiểm tra URL trả về
+      if (response.data && typeof response.data.data === 'string') {
+        const vnpayUrl = response.data.data;
+        console.log('Chuyển hướng đến VNPAY:', vnpayUrl);
+  
+        // Chuyển hướng người dùng đến VNPAY
+        window.location.href = vnpayUrl;
+      } else {
+        console.error('Không tìm thấy URL VNPAY hoặc dữ liệu không hợp lệ');
+      }
+    } catch (error) {
       console.error('Đặt vé thất bại:', error);
-      alert('Đặt vé thất bại. Vui lòng thử lại.'); // Thêm thông báo lỗi
-  }
-};
-
-
+      alert('Đặt vé thất bại. Vui lòng thử lại.');
+    }
+  };
   
   return (
     <>
@@ -99,33 +101,22 @@ const handleCheckout = async () => {
             <div className="order-item">
               <span className="item-title">Ghế đã chọn: {selectedSeats}</span>
             </div>
-
             {selectedCombos && selectedCombos.length > 0 && (
-  <>
-    {console.log('Selected Combos:', selectedCombos)} {/* Log dữ liệu ra console */}
-    <div className="combo-summary">
-      <h4>Combo đã chọn:</h4>
-      {selectedCombos.map((combo: any, index: number) => (
-        <div key={index} className="order-item">
-          <span className="item-title">Combo: {combo.name}</span>
-          <span className="item-quantity">Số lượng: {combo.quantity}</span>
-        </div>
-      ))}
-    </div>
-  </>
-)}
-
-
-
-
-
-
+              <div className="combo-summary">
+                <h4>Combo đã chọn:</h4>
+                {selectedCombos.map((combo: any, index: number) => (
+                  <div key={index} className="order-item">
+                    <span className="item-title">Combo: {combo.name}</span>
+                    <span className="item-quantity">Số lượng: {combo.quantity}</span>
+                  </div>
+                ))}
+              </div>
+            )}
             <div className="order-total">
               <span className="total-title">Tổng</span>
               <span className="total-price">{totalPrice?.toLocaleString('vi-VN')} đ</span>
             </div>
           </div>
-
           <div className="payment-methods">
             <h3>Hình thức thanh toán</h3>
             <ul>
@@ -152,7 +143,6 @@ const handleCheckout = async () => {
               </li>
             </ul>
           </div>
-
           <div className="form-container">
             <h3>Thông tin cá nhân</h3>
             <form>
@@ -175,7 +165,6 @@ const handleCheckout = async () => {
             </form>
           </div>
         </div>
-
         <div className="right-panel">
           <div className="checkout-details">
             <div className="order-info">
