@@ -48,7 +48,7 @@ use App\Http\Controllers\Api\Movie\RatingController;
     Route::delete('favorites/{movie_id}', [FavoriteController::class, 'destroy']); // Remove favorite movie
     Route::post('ratings', [RatingController::class, 'store']); // Rate movie
 
-    Route::post('/vnpay-return', [BookingController::class, 'vnPayReturn']);
+    Route::get('/vnpay-return', [BookingController::class, 'vnPayReturn']);
     Route::post('/book-ticket', [BookingController::class, 'bookTicket']); // Book ticket
 // });
 
