@@ -2,6 +2,7 @@
 namespace App\Services\Auth;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class PasswordResetService
 {
@@ -13,14 +14,17 @@ class PasswordResetService
      * @return void
      * @throws \Exception
      */
-    public function resetPassword($email, $password)
+    public function resetPassword($data)
     {
-        $user = User::where('email', $email)->first();
+        $user = auth()->user(); // Lấy người dùng hiện tại
 
-        if (!$user) {
-            throw new \Exception('Không tìm thấy người dùng với email này.');
+        if (!Hash::check($data['current_password'], $user->password)) {
+            throw new \Exception(__('messages.error_password_old'));
         }
-        $user->password = bcrypt($password);
+
+        $user->password = $data['new_password'];
         $user->save();
+
+        return $user;
     }
 }

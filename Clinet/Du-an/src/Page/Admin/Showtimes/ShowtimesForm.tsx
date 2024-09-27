@@ -1,21 +1,20 @@
 import React from 'react';
-import './UserManager.css'
+import './Showtimes.css'
 import Sidebar from '../../../component/Admin/SidebarDashboard/Sidebar';
 import Header from '../../../component/Admin/HeaderDashboard/Header1';
-import UserDashboard from '../../../component/Admin/UserDashboard/User';
 
 
 
-function User() {
+function ShowtimesFormManager() {
     return (
-        <div className="usermanager">
+        <div className="showtimesmanager">
             <Sidebar />
-            <div className="mainadmin">
+            <div className="showtimesadmin">
                 <Header />
-                <UserDashboard/>
+               
             </div>
         </div>
-    );
+    );  
 }
 
-export default User;
+export default ShowtimesFormManager;

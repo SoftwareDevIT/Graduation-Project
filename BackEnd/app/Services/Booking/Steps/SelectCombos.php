@@ -11,11 +11,18 @@ class SelectCombos extends AbstractBookingStep
 {
 
     protected function process(Request $request): ?array
-    {
-        $comboData = $request->input('comboId'); // Lấy toàn bộ dữ liệu comboId từ request
+{
+    $comboData = $request->input('comboId'); // Lấy toàn bộ dữ liệu comboId từ request
 
-        $combos = [];
-        foreach ($comboData as $combo) {
+    // Kiểm tra nếu comboData là một mảng
+    if (!is_array($comboData)) {
+        return ['combos' => []]; // Trả về mảng rỗng nếu không có comboId
+    }
+
+    $combos = [];
+    foreach ($comboData as $combo) {
+        // Kiểm tra xem combo có phải là một mảng và có key 'id'
+        if (isset($combo['id'])) {
             // Lấy combo theo id
             $comboModel = Combo::find($combo['id']);
             if ($comboModel) {
@@ -24,12 +31,14 @@ class SelectCombos extends AbstractBookingStep
                 $combos[] = $comboModel;
             }
         }
-
-        if (!empty($combos)) {
-            // Lưu thông tin combos và số lượng vào session
-            Session::put('combos', $combos);
-        }
-
-        return ['combos' => $combos];
     }
+
+    if (!empty($combos)) {
+        // Lưu thông tin combos và số lượng vào session
+        Session::put('combos', $combos);
+    }
+
+    return ['combos' => $combos];
+}
+
 }

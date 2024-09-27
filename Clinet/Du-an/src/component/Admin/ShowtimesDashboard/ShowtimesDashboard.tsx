@@ -1,36 +1,69 @@
-import React from 'react';
-import './ShowtimesDashboard.css';
+import React, { useState, useEffect } from 'react';
 
-const ShowtimesDashboard = () => {
-    const showtimes = [
-        { id: 1, movie: 'Movie A', cinema: 'Cinema 1', date: '2024-09-20', time: '14:00' },
-        { id: 2, movie: 'Movie B', cinema: 'Cinema 2', date: '2024-09-21', time: '16:00' },
-        { id: 3, movie: 'Movie C', cinema: 'Cinema 3', date: '2024-09-22', time: '18:00' },
-    ];
+import './ShowtimesDashboard.css';
+import { Showtime } from '../../../interface/Showtimes';
+import instance from '../../../server';
+
+const ShowtimesDashboard: React.FC = () => {
+    const [showtimes, setShowtimes] = useState<Showtime[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchShowtimes = async () => {
+            try {
+                const response = await instance.get<{ data: Showtime[] }>('/showtimes');
+                console.log('API Response:', response.data);
+                
+                if (Array.isArray(response.data.data)) {
+                    setShowtimes(response.data.data);
+                } else {
+                    console.error('Định dạng phản hồi không mong đợi', response.data);
+                    setError('Không thể lấy showtime: Định dạng phản hồi không mong đợi');
+                }
+                setLoading(false);
+            } catch (err) {
+                console.error('Lỗi lấy dữ liệu:', err);
+                setError('Không thể lấy showtime');
+                setLoading(false);
+            }
+        };
+
+        fetchShowtimes();
+    }, []);
+
+    if (loading) {
+        return <div>Đang tải...</div>;
+    }
+
+    if (error) {
+        return <div>{error}</div>;
+    }
+
     return (
         <div className="showtimes-management">
-            <h2>Showtime Management</h2>
+            <h2>Quản lý Showtime</h2>
             <div className="actions">
-                <button className="add-showtime-btn">Add New Showtime</button>
+                <button className="add-showtime-btn">Thêm Showtime Mới</button>
             </div>
             <div className="table-container">
                 <table className="showtime-table">
                     <thead>
                         <tr>
-                            <th>Movie</th>
-                            <th>Cinema</th>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Actions</th>
+                            <th>Phim</th>
+                            <th>Rạp</th>
+                            <th>Ngày</th>
+                            <th>Giờ</th>
+                            <th>Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
                         {showtimes.map((showtime) => (
                             <tr key={showtime.id}>
-                                <td>{showtime.movie}</td>
-                                <td>{showtime.cinema}</td>
-                                <td>{showtime.date}</td>
-                                <td>{showtime.time}</td>
+                                <td>{showtime.movie.movie_name}</td>
+                                <td>{showtime.movie.cinema.cinema_name}</td>  
+                                <td>{showtime.showtime_date}</td>
+                                <td>{showtime.showtime_start}</td>
                                 <td className="action-buttons">
                                     <button className="view-btn">👁</button>
                                     <button className="edit-btn">✏️</button>
