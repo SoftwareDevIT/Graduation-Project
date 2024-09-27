@@ -4,6 +4,7 @@ export interface NewsItem {
     title: string;
     news_category_id: number;
     thumnail: string;
+    banner:string;
     content: string;
     status: 'Show' | 'Hidden';
     user_id: number;

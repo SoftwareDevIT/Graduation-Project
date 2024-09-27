@@ -10,6 +10,7 @@ import OrderCheckout from "./component/Pay/OderCheckOut";
 import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
 import Headerticket from "./component/Headerticket/Headerticket";
 
+
 import RegisterCinema from "./Page/Client/RegisterCinema";
 import LoginCinema from "./Page/Client/LoginCinema";
 import Dashboard from "./Page/Admin/Dashboard/Dashboard";
@@ -32,6 +33,11 @@ import UserAddManager from "./Page/Admin/User/UserAdd";
 import Home from "./Page/Home";
 import Bookcinematickets from "./Page/Client/Bookcinematickets";
 
+import LichChieu from "./component/MovieDetail/LichChieu";
+import DanhGia from "./component/MovieDetail/DanhGia";
+import TinTuc from "./component/MovieDetail/TinTuc";
+import { ContentMovie } from "./component/MovieDetail/ContentMovie";
+
 
 
 function App() {
@@ -43,13 +49,16 @@ function App() {
       <Route path="/orders" element={<OrderPage/>}/>
       <Route path="/pay" element={<OrderCheckout/>}/>
       <Route path="/seat" element={<CinemaSeatSelection/>}/>
+      <Route path="/moviedetail" element={<ContentMovie/>}/>
+      <Route path="/lich-chieu" element={<LichChieu/>}/>
+      <Route path="/danh-gia" element={<DanhGia/>}/>
+      <Route path="/tin-tuc" element={<TinTuc/>}/>
       <Route path="/headerticket" element={<Headerticket/>}/>
       <Route path="/confirm" element={<EmailConfirm/>}/>
 
 
       <Route path="/register" element={<RegisterCinema/>}/>
       <Route path="/login" element={<LoginCinema/>}/>
-
       <Route path="/admin" element={<Dashboard/>}/>
       <Route path="admin/user" element={<User/>}/>
       <Route path="admin/user/add" element={<UserAddManager/>}/>

@@ -38,7 +38,6 @@ class LoginService
         if (!$user) {
             throw new \Exception('User not authenticated', 401);
         }
-
         if (!($user instanceof User)) {
             throw new \Exception('Authenticated user is not an instance of User', 500);
         }

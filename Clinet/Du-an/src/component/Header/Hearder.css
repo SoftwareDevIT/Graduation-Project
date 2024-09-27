@@ -23,8 +23,8 @@
 
 .header-left a {
   text-decoration: none;
-  color: #555;
-  font-size: 16px;
+  color: #6e84a3;
+  font-size: 15px;
   font-weight: 400;
   position: relative;
   transition: color 0.3s ease;
@@ -35,13 +35,15 @@
 }
 
 .header-logo {
+  
   color: #e50914;
   font-size: 26px;
   font-weight: bold;
   text-transform: lowercase;
-  letter-spacing: 2px;
+
 }
 .header-logo a{
+
   color: #e50914;
   text-decoration: none;
 }
@@ -85,7 +87,7 @@
 
 .dropbtn {
   background-color: transparent;
-  color: #555;
+  color: #6e84a3;
   font-size: 16px;
   font-weight: 400;
   border: none;
@@ -124,7 +126,7 @@
 }
 
 .dropdown-content a {
-  color: #333;
+  color: #6e84a3;
   padding: 10px 20px;
   text-decoration: none;
   display: block;
@@ -209,4 +211,7 @@
   font-size: 25px;
   color: inherit; /* Đảm bảo màu icon không thay đổi khi dùng Link */
   text-decoration: none; /* Loại bỏ gạch chân nếu có */
+}
+.header-logo {
+  padding: 0 !important; /* Xóa padding với ưu tiên cao hơn */
 }

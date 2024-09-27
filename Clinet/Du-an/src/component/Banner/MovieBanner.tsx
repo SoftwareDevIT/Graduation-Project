@@ -15,12 +15,8 @@ const MovieBanner = () => {
     useEffect(() => {
       const fetchMovies = async () => {
         try {
-          const response = await instance.get('/movies');
-          if (Array.isArray(response.data.data)) {
+          const response = await instance.get('/movies');  
             setMovies(response.data.data);
-          } else {
-            console.error('Unexpected API response format:', response.data);
-          }
         } catch (error) {
           console.error('Failed to fetch movies:', error);
         }

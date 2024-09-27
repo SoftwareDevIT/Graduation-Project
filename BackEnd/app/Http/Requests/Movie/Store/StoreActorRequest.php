@@ -23,9 +23,9 @@ class StoreActorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'actor_name' => 'required|string|max:255',
+            'actor_name' => 'required|string|max:255|unique:actor',
             'descripcion' => 'max:255',
-            'photo' => 'required|mimes:jpeg,png,jpg,gif|max:2048',
+            'photo' => 'mimes:jpeg,png,jpg,gif|max:2048',
             'country' => 'max:255',
             'link_wiki' => 'max:255',
         ];
