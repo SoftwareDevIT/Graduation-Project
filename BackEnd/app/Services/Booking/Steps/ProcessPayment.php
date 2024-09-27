@@ -81,18 +81,14 @@ class ProcessPayment extends AbstractBookingStep
             $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
         }
 
+        
         $returnData = array(
             'code' => '00',
             'message' => 'success',
             'data' => $vnp_Url
         );
-        if (isset($request['redirect'])) {
-            header('Location: ' . $vnp_Url);
-            die();
-        } else {
-            echo json_encode($returnData);
-        }
-        return null;
+
+        return response()->json($returnData);
     }
 }
 
