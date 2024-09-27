@@ -1,23 +1,86 @@
 import React, { useState, useEffect } from "react";
-import "./OrderPage.css";
-import { Link } from "react-router-dom";
-import Header from "../Header/Hearder";
+import { useLocation, Link, useNavigate } from "react-router-dom";
+
 import Headerticket from "../Headerticket/Headerticket";
 import Footer from "../Footer/Footer";
 import instance from "../../server";
+import "./OrderPage.css";
 import { Combo } from "../../interface/Combo";
+import Header from "../Header/Hearder";
 
-const OrderPage = () => {
+export interface LocationState {
+  movieName: string;
+  cinemaName: string;
+  showtime: string;
+  selectedSeats: string;
+  totalPrice: number;
+  comboQuantities: number[];
+  combos: Combo[];
+  showtimeId: number; // Thêm showtimeId
+  roomId: number; // Thêm roomId
+  cinemaId: number; // Thêm cinemaId
+}
+
+const OrderPage: React.FC = () => {
+  const location = useLocation(); 
+  const {
+    movieName,
+    cinemaName,
+    showtime,
+    selectedSeats,
+    totalPrice: initialTotalPrice,
+    showtimeId, // Lấy từ location.state
+    roomId, // Lấy từ location.state
+    cinemaId, // Lấy từ location.state
+  } = location.state as LocationState || {}; // Sử dụng as để ép kiểu
+
+  // Log ra giá trị showtimeId, roomId và cinemaId để kiểm tra
+  console.log('showtimeId:', showtimeId);
+  console.log('roomId:', roomId);
+  console.log('cinemaId:', cinemaId);
 
   const [combos, setCombos] = useState<Combo[]>([]);
+  const [totalPrice, setTotalPrice] = useState<number>(initialTotalPrice || 0);
+  const [comboQuantities, setComboQuantities] = useState<number[]>([]);
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const navigate = useNavigate();
 
+  const handleContinue = () => {
+    const selectedCombos = comboQuantities
+      .map((quantity, index) => {
+        if (quantity > 0) {
+          return {
+            name: combos[index].combo_name,
+            quantity: quantity,
+          };
+        }
+        return null;
+      })
+      .filter((combo) => combo !== null);
+  
+    navigate("/pay", {
+      state: {
+        movieName,
+        cinemaName,
+        showtime,
+        selectedSeats,
+        totalPrice,
+        showtimeId: showtimeId, // Truyền showtimeId
+        roomId: roomId, // Truyền roomId
+        cinemaId: cinemaId, // Truyền cinemaId
+        selectedCombos, // Truyền thông tin combo đã chọn
+      },
+    });
+};
+
+  
 
   useEffect(() => {
     const fetchCombos = async () => {
       try {
         const response = await instance.get("/combo");
-        console.log(response.data.data); // Log the response to verify its structure
-        setCombos(response.data.data); // Ensure this is an array
+        setCombos(response.data.data);
+        setComboQuantities(new Array(response.data.data.length).fill(0));
       } catch (error) {
         console.error("Error fetching combos:", error);
       }
@@ -26,12 +89,28 @@ const OrderPage = () => {
     fetchCombos();
   }, []);
 
-  // Function to update quantity
   const handleQuantityChange = (index: number, delta: number): void => {
-    const newCombos = [...combos];
-    newCombos[index].volume += delta;
-    if (newCombos[index].volume < 0) newCombos[index].volume = 0;
-    setCombos(newCombos);
+    const newQuantities = [...comboQuantities];
+    const newQuantity = newQuantities[index] + delta;
+
+    // Kiểm tra nếu người dùng chọn số lượng vượt quá số lượng tối đa
+    if (delta > 0 && newQuantity > combos[index].volume) {
+      alert(`Sản phẩm ${combos[index].combo_name} hiện hết hàng`);
+      return;
+    }
+
+    // Đảm bảo số lượng combo không âm
+    if (newQuantity >= 0) {
+      newQuantities[index] = newQuantity;
+      setComboQuantities(newQuantities);
+
+      // Cập nhật tổng tiền
+      const priceDifference = delta * combos[index].price;
+      setTotalPrice((prevTotal) => prevTotal + priceDifference);
+
+      // Xóa thông báo lỗi nếu thay đổi số lượng hợp lệ
+      setErrorMessage("");
+    }
   };
 
   return (
@@ -39,6 +118,8 @@ const OrderPage = () => {
       <Header />
       <Headerticket />
       <div className="combo-list">
+        {errorMessage && <div className="error-message">{errorMessage}</div>} 
+
         <div className="thongtincombo">
           <div className="combo-header">
             <div className="item">COMBO</div>
@@ -50,7 +131,7 @@ const OrderPage = () => {
               <div key={combo.id} className="combo-item">
                 <div className="combo-info">
                   <div className="combo-name">{combo.combo_name}</div>
-                  <div className="combo-description">{combo.descripton}</div>
+               
                 </div>
                 <div className="combo-price">
                   {combo.price.toLocaleString("vi-VN")} đ
@@ -62,7 +143,7 @@ const OrderPage = () => {
                   >
                     -
                   </button>
-                  <span>{combo.volume}</span>
+                  <span>{comboQuantities[index]}</span>
                   <button
                     className="iconcong"
                     onClick={() => handleQuantityChange(index, 1)}
@@ -73,31 +154,33 @@ const OrderPage = () => {
               </div>
             ))}
         </div>
+
         <div className="thongtinphim box-thongtinphim">
           <div className="details-box">
-            <p>Làm Giàu Với Ma</p>
+            <p>{movieName}</p>
             <p>
-              Rạp:<span> Cinestar Quốc Thanh</span>
+              Rạp:<span> {cinemaName}</span>
             </p>
             <p>
-              Suất: <span> 23:59 28/08/2024</span>
+              Suất: <span> {showtime}</span>
             </p>
-            <p>Phòng chiếu 01</p>
-            <p>Ghế </p>
+            <p>
+              Ghế: <span>{selectedSeats}</span>
+            </p>
           </div>
 
           <div className="price-box">
             <div className="price">
               Tổng đơn hàng
-              <br /> <span>0 đ</span>
+              <br /> <span>{totalPrice.toLocaleString()} đ</span>
             </div>
           </div>
 
           <div className="actions">
-            <button className="back-btn2">←</button>
-            <Link to={"/pay"}>
-              <button className="continue-btn2">Tiếp Tục</button>
-            </Link>
+            <Link to="/" className="back-btn2">← Quay lại</Link>
+            <button className="continue-btn2" onClick={handleContinue}>
+              Tiếp Tục
+            </button>
           </div>
         </div>
       </div>
