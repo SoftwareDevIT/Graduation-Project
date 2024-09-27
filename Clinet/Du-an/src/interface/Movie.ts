@@ -1,5 +1,6 @@
 
 import { Cinema } from "./Cinema";
+import { Showtime } from "./Showtime";
 
 export interface Movie {
     rating: string;
@@ -16,5 +17,6 @@ export interface Movie {
     description: string | null;
     trailer: string | null;
     status: 'Show' | 'Hidden';
+    showtimes: Showtime[];
   }
   

@@ -120,10 +120,9 @@ Route::post('password/reset', [ForgotPasswordController::class, 'forgotPassword'
     Route::apiResource('combo', ComboController::class);
 
 // });
-=======
+
     Route::get('showtimes/movie/{movie_name}', [ShowtimeController::class, 'showtimeByMovieName']);
     Route::post('/resetPassword', [ResetPasswordController::class, 'resetPassword']);
-});
 
 
 // Movie-specific routes
