@@ -105,7 +105,7 @@ Route::post('password/verify-otp', [ForgotPasswordController::class, 'verifyOtp'
 Route::post('password/reset', [ForgotPasswordController::class, 'forgotPassword']); // Reset password
 
 // CRUD API resources
-Route::middleware(['auth:sanctum'])->group(function () {
+// Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('location', LocationController::class);
     Route::apiResource('cinema', CinemaController::class);
     Route::apiResource('room', RoomController::class);
@@ -120,7 +120,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('combo', ComboController::class);
     Route::get('showtimes/movie/{movie_name}', [ShowtimeController::class, 'showtimeByMovieName']);
     Route::post('/resetPassword', [ResetPasswordController::class, 'resetPassword']);
-});
+// });
 
 
 // Movie-specific routes

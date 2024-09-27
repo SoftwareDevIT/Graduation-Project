@@ -33,7 +33,7 @@ import CinemasFormManager from "./Page/Admin/Cinemas/CinemasForm";
 
 import ComboFormManager from "./Page/Admin/Combo/ComboForm";
 import ShowtimesFormManager from "./Page/Admin/Showtimes/ShowtimesForm";
-import MoviesFormManager from "./Page/Admin/Movies/MoviesForm";
+import MoviesFormManager from "./Page/Admin/Movies/MoviesAdd";
 import PostsFormManager from "./Page/Admin/Posts/PostForm";
 
 
