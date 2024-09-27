@@ -9,14 +9,15 @@ import { ComboProvider } from './Context/ComboContext.tsx'
 
 
 
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
     <CinemaProvider>
       <ComboProvider>
-        
+
     <App />
-    
+
     </ComboProvider>
     </CinemaProvider>
     </BrowserRouter>

@@ -1,5 +1,6 @@
 import { Movie } from "./Movie";
 
+
 export interface Showtime {
     id: number;
     movie_id: number;

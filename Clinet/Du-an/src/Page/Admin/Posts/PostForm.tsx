@@ -1,20 +1,23 @@
 import React from 'react';
-import './MoviesManager.css'
+import './PostsManager.css'
 import Sidebar from '../../../component/Admin/SidebarDashboard/Sidebar';
 import Header from '../../../component/Admin/HeaderDashboard/Header1';
+import PostsAdd from '../../../component/Admin/PostsDasboard/PostsAdd';
 
 
 
-function MoviesManager() {
+
+
+function PostsFormManager() {
     return (
-        <div className="moviesmanager">
+        <div className="postsmanager">
             <Sidebar />
-            <div className="moviesadmin">
+            <div className="postsadmin">
                 <Header />
-            
+                <PostsAdd/>
             </div>
         </div>
     );
 }
 
-export default MoviesManager;
+export default PostsFormManager;
