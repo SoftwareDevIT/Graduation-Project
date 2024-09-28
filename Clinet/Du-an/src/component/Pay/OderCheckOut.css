@@ -66,6 +66,12 @@
     color: #e74c3c;
     font-weight: bold;
   }
+  .order-total .total-price{
+    color: red;
+  }
+  .order-total .total-title{
+    color: black;
+  }
   
   .payment-methods {
     margin-top: 30px;
@@ -114,7 +120,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 400px;
+    height: 450px;
     margin-top: 20px;
     margin-right: 140px;
   }
@@ -171,7 +177,9 @@
     padding: 15px;
     border-radius: 6px;
     border: none;
-    width: 100%;
+    width: 465px;
+    height: 50px;
+    margin-top: 0;
     font-size: 18px;
     font-weight: bold;
     cursor: pointer;

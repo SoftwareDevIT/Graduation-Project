@@ -3,21 +3,22 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #1f1b1b; /* Dark background */
+    background-color:#fff; /* Nền xanh nhạt */
     padding: 15px 30px;
-    color: #c4b79a; /* Light gold-like color for the text */
+    color: #004d40; /* Màu xanh đậm cho chữ */
 }
 
 /* CSS cho chế độ sáng */
 .light-mode {
-    background-color: #f5f5f5; /* Nền sáng */
-    color: #333; /* Màu chữ tối */
+    background-color: #ffffff; /* Nền trắng cho chế độ sáng */
+    color: #00796b; /* Màu xanh đậm cho chữ khi ở chế độ sáng */
 }
 
 /* Title styling */
 .header1 h1 {
     font-size: 20px;
     margin: 0;
+    color: #00796b; /* Màu xanh đậm cho tiêu đề */
 }
 
 /* Header actions container */
@@ -38,7 +39,7 @@
     position: relative;
     margin: 0 15px;
     font-size: 1.2rem;
-    color: #c4b79a;
+    color: #00796b; /* Màu xanh đậm cho icon */
     cursor: pointer;
     transition: color 0.3s ease;
 }
@@ -46,6 +47,7 @@
 /* Profile picture icon styling */
 .profile-pic {
     font-size: 1.8rem;
+    color: #00796b; /* Màu xanh đậm cho biểu tượng người dùng */
 }
 
 /* Notification badge styling */
@@ -53,7 +55,7 @@
     position: absolute;
     top: -5px;
     right: -10px;
-    background-color: #e74c3c; /* Red badge color */
+    background-color: #e74c3c; /* Màu đỏ cho thông báo */
     color: white;
     padding: 2px 6px;
     border-radius: 50%;
@@ -62,7 +64,7 @@
 
 /* Icon hover effect */
 .icon:hover {
-    color: #f39c12; /* Slight golden hover effect */
+    color: #004d40; /* Màu xanh đậm khi hover */
 }
 
 /* Search container */
@@ -74,24 +76,25 @@
     padding: 6px 12px;
     border-radius: 20px;
     border: none;
-    background-color: #2c2a2a; /* Darker search box background */
-    color: #c4b79a; /* Placeholder and text color */
+    background-color: #fff; /* Nền xanh nhạt cho ô tìm kiếm */
+    color: #004d40; /* Màu chữ xanh đậm */
     outline: none;
     font-size: 0.9rem;
+    border: 1px solid rgb(63, 176, 153);
 }
 
 .search-container input::placeholder {
-    color: #b0a597; /* Placeholder color */
+    color: #00796b; /* Màu placeholder xanh đậm */
 }
 
 /* Search box for light mode */
 .light-mode .search-container input {
-    background-color: #ffffff; /* Light mode search box background */
-    color: #333; /* Dark text color */
+    background-color: #e0f7fa; /* Nền xanh nhạt cho chế độ sáng */
+    color: #00796b; /* Màu chữ xanh đậm */
 }
 
 .light-mode .search-container input::placeholder {
-    color: #999; /* Light mode placeholder color */
+    color: #004d40; /* Màu placeholder khi ở chế độ sáng */
 }
 
 /* Responsive design */

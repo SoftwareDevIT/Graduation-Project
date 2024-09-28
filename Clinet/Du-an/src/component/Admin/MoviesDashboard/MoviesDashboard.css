@@ -1,26 +1,23 @@
-/* General dashboard styling */
 .movies-dashboard {
-    padding: 20px;
-    background-color: #1f1b1b;
-    min-height: 159vh;
-    color: #ffffff;
+    padding: 30px;
+    background-color: rgb(229, 240, 242); /* Nền giống UserDashboard */
+    min-height: 170vh;
+    color: #262626;
     font-family: 'Roboto', sans-serif;
 }
 
-/* Title styling */
 .movies-dashboard h2 {
     margin-bottom: 20px;
     font-size: 1.75rem;
-    color: #ffffff;
+    color: #262626;
     letter-spacing: 1px;
     text-transform: uppercase;
     text-align: center;
 }
 
-/* Actions container */
 .actions {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     margin-bottom: 20px;
 }
 
@@ -41,53 +38,42 @@
     background-color: #2ecc71;
 }
 
-/* Table container styling */
 .table-container {
-    width: 100%;
+    margin-top: 30px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
     max-width: 1300px;
     overflow-x: auto;
-    border-radius: 8px;
-    background-color: #1a1a1a;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-/* Table styling */
 .movie-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-/* Header styling */
 .movie-table th {
-    background-color: #282828;
-    color: #ffffff;
-    text-align: center; /* Ensure left alignment for headers */
+    background-color: #e0f7fa;
+    color: #00796b;
+    text-align: center;
     font-weight: 600;
-    font-size: 1rem;
-    padding: 15px;
-    text-transform: uppercase;
-    border-bottom: 2px solid #3a3a3a; /* Distinct bottom border for headers */
-    vertical-align: middle; /* Center content vertically */
+    padding: 10px;
 }
 
-/* Row styling */
 .movie-table td {
-    padding: 15px;
-    background-color: #1e1e1e;
-    color: #e0e0e0;
-    border-bottom: 1px solid #3a3a3a;
-    font-size: 0.875rem;
-    vertical-align: middle; /* Center content vertically */
-    text-align: center; /* Ensure left alignment for data cells */
+    padding: 10px;
+    background-color: #ffffff;
+    color: #00796b;
+    border-bottom: 1px solid #b2ebf2;
+    text-align: center;
 }
 
-/* Hover effect for rows */
 .movie-table tbody tr:hover {
-    background-color: #333333;
+    background-color: #b2ebf2;
     transition: background-color 0.3s ease;
 }
 
-/* Button styles */
 .action-buttons {
     display: flex;
     justify-content: space-around;
@@ -97,7 +83,7 @@
     background: none;
     border: none;
     cursor: pointer;
-    color: #ffffff;
+    color: #00796b;
     font-size: 1rem;
     transition: color 0.3s ease;
 }
@@ -112,6 +98,37 @@
 
 .delete-btn:hover {
     color: #e74c3c;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 10px 0;
+    font-size: 14px;
+}
+
+.page-item {
+    margin: 0 5px;
+}
+
+.page-link {
+    color: #007bff;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none !important;
+    transition: color 0.3s, transform 0.3s;
+}
+
+.page-link:hover {
+    color: #0056b3;
+    transform: scale(1.05);
+}
+
+.active .page-link {
+    color: #0056b3;
+    cursor: default;
 }
 
 /* Responsive design for mobile */

@@ -1,12 +1,12 @@
 /* Sidebar container styling */
 .sidebar {
     width: 250px;
-    background: linear-gradient(135deg, #1a1a1a, #333333); /* Dark gradient background */
+    background: #fff; /* Nền xanh nhạt */
     padding: 20px;
-    color: white;
+    color: #006064; /* Chữ xanh đậm */
     display: flex;
     flex-direction: column;
-    border-right: 1px solid rgba(255, 255, 255, 0.2); /* Subtle border for separation */
+    border-right: 1px solid rgba(0, 150, 136, 0.2); /* Đường viền xanh nhạt */
 }
 
 /* Logo styling */
@@ -21,12 +21,12 @@
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    border: 3px solid #f39c12; /* Neon border for the logo */
+    border: 3px solid #00796b; /* Viền xanh đậm cho logo */
 }
 
 /* General section title styling */
 .sidebar .section-title {
-    color: #b0bec5; /* Light grey for the section title */
+    color: #004d40; /* Màu xanh đậm cho tiêu đề */
     font-size: 0.85rem;
     letter-spacing: 0.05rem;
     margin: 20px 0 10px 15px;
@@ -48,7 +48,7 @@
 
 /* Link styling */
 .sidebar ul li a {
-    color: #e0e0e0; /* Light grey text for links */
+    color: #004d40; /* Màu xanh đậm cho chữ */
     text-decoration: none;
     font-size: 1rem;
     display: flex;
@@ -62,33 +62,33 @@
 /* Icon styling */
 .sidebar ul li a svg {
     margin-right: 15px;
-    font-size: 1.5rem; /* Larger icon size */
-    color: #f39c12; /* Bright neon color for icons */
+    font-size: 1.5rem; /* Kích thước lớn hơn cho icon */
+    color: #00796b; /* Màu xanh đậm cho icon */
     transition: color 0.3s ease;
 }
 
 /* Hover effect */
-    .sidebar ul li a:hover {
-        background-color: rgba(255, 255, 255, 0.1); /* Light, semi-transparent background */
-        color: #f39c12; /* Neon highlight color on hover */
-        transform: translateX(10px); /* Slight hover shift for dynamic effect */
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* More pronounced shadow */
-        transition: all 0.3s ease-in-out;
-    }
+.sidebar ul li a:hover {
+    background-color: rgba(0, 121, 107, 0.1); /* Nền xanh nhạt khi hover */
+    color: #00796b; /* Màu xanh đậm khi hover */
+    transform: translateX(10px); /* Hiệu ứng di chuyển khi hover */
+    box-shadow: 0 6px 12px rgba(0, 150, 136, 0.3); /* Shadow nhạt hơn */
+    transition: all 0.3s ease-in-out;
+}
 
-    /* Active or focused state */
-    .sidebar ul li a.active,
-    .sidebar ul li a:focus {
-        background-color: rgba(255, 255, 255, 0.2); /* Darker background for active item */
-        color: #f39c12; /* Neon highlight color */
-        transform: translateX(10px);
-        box-shadow: inset 4px 0 0 #f39c12; /* Neon bar to highlight the active item */
-    }
+/* Active or focused state */
+.sidebar ul li a.active,
+.sidebar ul li a:focus {
+    background-color: rgba(0, 121, 107, 0.2); /* Nền xanh nhạt hơn khi active */
+    color: #00796b; /* Màu xanh đậm */
+    transform: translateX(10px);
+    box-shadow: inset 4px 0 0 #00796b; /* Thanh highlight xanh đậm */
+}
 
 /* Submenu styling */
 .sidebar ul li ul {
     margin-left: 20px;
-    display: none; /* Hide submenu by default */
+    display: none; /* Ẩn submenu */
 }
 
 /* When submenu is active */
@@ -103,7 +103,7 @@
 
 .sidebar ul li ul li a {
     font-size: 0.9rem;
-    padding: 8px 20px; /* Slightly larger padding for submenu items */
+    padding: 8px 20px; /* Padding cho submenu */
 }
 
 /* Media query for responsiveness */
