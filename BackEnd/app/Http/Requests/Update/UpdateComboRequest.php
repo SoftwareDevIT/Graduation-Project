@@ -22,7 +22,11 @@ class UpdateComboRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            "combo_name" => "string",
+            "price" => "required|integer",
+            "descripton" => "nullable",
+            "volume" => "required|integer",
+            "status" => "integer",
         ];
     }
 }

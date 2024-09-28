@@ -1,6 +1,10 @@
 .dashboard {
     padding: 30px;
+
     background: rgb(229, 240, 242); /* Nền xanh nhạt */
+
+    background: #0f0d30; /* Dark background to match the screenshot */
+
     min-height: 170vh;
     display: flex;
     flex-direction: column;
@@ -35,8 +39,13 @@
 }
 
 .summary-card {
+
     background-color: #fff !important; /* Màu nền sáng xanh rất nhạt */
     padding: 20px;
+
+    background: #1b1837; /* Dark purple background */
+    padding: 30px;
+
     border-radius: 12px;
     box-shadow: 0 6px 16px rgba(10, 37, 129, 0.1);
     text-align: center;
@@ -48,6 +57,7 @@
 }
 .summary-card:hover {
     transform: translateY(-10px);
+
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
 }
 
@@ -55,6 +65,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
+
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+    background-color: #2d2b58;
+}
+
+.summary-card h3 {
+    font-size: 1.5rem;
+    color: #a3b1ff; /* Light purple/blue text for card titles */
+
     margin-bottom: 10px;
 }
 
@@ -66,7 +85,11 @@
 
 .summary-number {
     font-size: 2.5rem;
+
     color: #0097a7; /* Xanh biển */
+
+    color: #50e3c2; /* Neon cyan for numbers */
+
     font-weight: bold;
 }
 
@@ -115,7 +138,11 @@
 }
 
 .revenue-summary, .quarterly-revenue {
+
     background: #ffffff; /* Nền trắng */
+
+    background: #1b1837; /* Same dark purple background for charts */
+
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
@@ -125,7 +152,11 @@
 
 .revenue-summary h3, .quarterly-revenue h3 {
     font-size: 1.8rem;
+
     color: #006064; /* Xanh đậm */
+
+    color: #a3b1ff; /* Light purple/blue text for chart titles */
+
     margin-bottom: 20px;
     font-weight: 600;
 }
@@ -138,6 +169,7 @@
 
 .revenue-amount {
     font-size: 2rem;
+
     color: #00796b; /* Xanh đậm */
     font-weight: bold;
 }
@@ -155,6 +187,9 @@
     margin-bottom: 20px;
     font-size: 18px;
     color: #006064; /* Xanh đậm */
+
+    color: #50e3c2; /* Neon cyan for total revenue */
+
     font-weight: bold;
 }
 
