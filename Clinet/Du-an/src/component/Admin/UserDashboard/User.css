@@ -1,17 +1,18 @@
 /* Main container */
 .user-management {
-    padding: 20px;
-    background-color: #1f1b1b;
+    padding: 30px;
+    background: rgb(229, 240, 242); /* Nền xanh nhạt */
     min-height: 170vh;
-    color: #ffffff;
-    font-family: 'Roboto', sans-serif;
+    display: flex;
+    flex-direction: column;
+  
 }
 
 /* Title styling */
 .user-management h2 {
     margin-bottom: 20px;
     font-size: 1.75rem;
-    color: #ffffff;
+    color: #262626;
     letter-spacing: 1px;
     text-transform: uppercase;
     text-align: center;
@@ -25,7 +26,7 @@
 }
 
 .add-user-btn, .filter-btn {
-    padding: 10px 20px;
+    padding: 5px 20px;
     background-color: #f39c12;
     border: none;
     border-radius: 5px;
@@ -47,51 +48,100 @@
     background-color: #e67e22;
 }
 
+
 .filter-btn:hover {
     background-color: #1f2933;
 }
 
 /* Table container styling */
+/* Container styling */
 .table-container {
-    width: 100%;
+    margin-top: 30px;
+    background-color: #ffffff; /* Nền trắng giống bảng đơn hàng */
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Bóng nhẹ */
+    padding: 20px;
     max-width: 1300px;
     overflow-x: auto;
-    border-radius: 8px;
-    background-color: #1a1a1a;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    background-color: #fff !important;
 }
 
-/* Table styling */
+/* Tiêu đề bảng */
+.table-container h3 {
+    margin-bottom: 20px;
+    font-size: 18px;
+    color: #006064; /* Màu xanh đậm */
+    font-weight: bold;
+}
+.table-header {
+    display: flex;
+    justify-content: space-between; /* Căn đều giữa tiêu đề và nút */
+    align-items: center; /* Căn giữa theo chiều dọc */
+}
+
+.add-user-container {
+    height: 35px;
+   margin-bottom: 15px;
+    display: flex;
+    justify-content: flex-end; /* Căn phải */
+    flex-grow: 1; /* Để nút "Add User" nằm bên phải */
+}
+.add-user-container button{
+    padding-top: 6px;
+}
+
+
+/* Phần hiển thị số lượng người dùng */
+.table-container p {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #00796b; /* Màu xanh đậm */
+}
+
+/* Bảng người dùng */
 .user-table {
     width: 100%;
     border-collapse: collapse;
+    font-size: 14px;
+    color: #006064; /* Màu xanh đậm */
 }
 
-/* Header styling */
+/* Định dạng tiêu đề bảng */
 .user-table th {
-    background-color: #282828;
-    color: #ffffff;
+    background-color: #e0f7fa; /* Nền xanh nhạt */
+    color: #00796b; /* Chữ xanh đậm */
     text-align: center;
     font-weight: 600;
-    font-size: 1rem;
-    padding: 15px;
-    text-transform: uppercase;
+    padding: 10px;
+    text-transform: none; /* Không viết hoa toàn bộ */
+    border-bottom: 1px solid #b2ebf2; /* Viền xanh nhạt */
 }
 
-/* Row styling */
+/* Định dạng nội dung bảng */
 .user-table td {
-    padding: 15px;
-    background-color: #1e1e1e;
-    color: #e0e0e0;
-    border-bottom: 1px solid #3a3a3a;
-    font-size: 0.875rem;
-    vertical-align: middle;
+    padding: 10px;
+    background-color: #ffffff; /* Nền trắng */
+    color: #00796b; /* Chữ xanh đậm */
+    border-bottom: 1px solid #b2ebf2; /* Viền xanh nhạt */
     text-align: center;
 }
 
-/* Rating section */
+/* Hàng chẵn có nền xanh rất nhạt */
+.user-table tr:nth-child(even) {
+    background-color: #f1f8e9; /* Nền xanh rất nhạt */
+}
+
+/* Hiệu ứng hover cho hàng */
+.user-table tbody tr:hover {
+    background-color: #b2ebf2; /* Nền xanh nhạt khi hover */
+    transition: background-color 0.3s ease;
+}
+
+/* Phần đánh giá (rating) */
 .rating {
-    
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .star {
@@ -104,23 +154,21 @@
     color: #888;
 }
 
-/* Hover effect for rows */
-.user-table tbody tr:hover {
-    background-color: #333333;
-    transition: background-color 0.3s ease;
-}
-
-/* Button styles */
+/* Các nút hành động (xem, sửa, xóa) */
 .action-buttons {
     display: flex;
     justify-content: space-around;
+  
 }
 
+.action-buttons :hover{
+    background: none;
+}
 .action-buttons button {
     background: none;
     border: none;
     cursor: pointer;
-    color: #ffffff;
+    color: #00796b !important; /* Màu xanh đậm */
     font-size: 1rem;
     transition: color 0.3s ease;
 }
@@ -137,50 +185,213 @@
     color: #e74c3c;
 }
 
-/* Responsive design for mobile */
+/* Responsive design cho di động */
 @media (max-width: 768px) {
     .user-table th, .user-table td {
         font-size: 0.875rem;
         padding: 10px;
     }
 
-    .add-user-btn {
-        width: 100%;
-        font-size: 0.875rem;
+    .action-buttons {
+        flex-direction: column;
     }
 
-    .edit-btn, .delete-btn {
-        padding: 8px 12px;
+    .action-buttons button {
+        margin: 5px 0;
     }
 }
+
 .pagination {
     display: flex;
-    justify-content: center;
-    padding: 20px 0;
+    align-items: center; /* Căn giữa theo chiều dọc */
+    justify-content: flex-end; /* Căn phải */
+    padding: 10px 0;
+    font-size: 14px;
 }
+
 
 .page-item {
     margin: 0 5px;
 }
 
 .page-link {
-    background-color: #007bff; /* Màu nền */
-    color: white; /* Màu chữ */
-    border: none; /* Không viền */
-    padding: 10px 15px; /* Khoảng cách trong ô */
-    border-radius: 5px; /* Bo góc */
-    cursor: pointer; /* Con trỏ tay khi hover */
-    text-decoration: none; /* Bỏ gạch chân */
-    transition: background-color 0.3s; /* Hiệu ứng chuyển đổi */
+    color: #007bff; /* Màu chữ */
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none !important; /* Bỏ gạch chân */
+    transition: color 0.3s, transform 0.3s;
 }
 
 .page-link:hover {
-    background-color: #0056b3; /* Màu khi hover */
+    color: #0056b3; /* Màu khi hover */
+    transform: scale(1.05);
 }
 
 .active .page-link {
-    background-color: #0056b3; /* Màu cho nút đang hoạt động */
-    color: white; /* Màu chữ cho nút đang hoạt động */
+    color: #0056b3;
+    cursor: default;
+}
+
+/* Thêm mũi tên */
+.previous, .next {
+    color: #28a745;
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin: 0 5px;
+    transition: color 0.3s, transform 0.3s;
+}
+
+.previous:hover, .next:hover {
+    color: #218838;
+    transform: scale(1.05);
+}
+
+/* Căn giữa chữ "Page x of y" */
+.pagination-text {
+    margin: 0 10px; /* Khoảng cách giữa nút và chữ */
+    color: #007bff; /* Màu chữ */
+    text-decoration: none !important; /* Bỏ gạch chân */
+}
+
+
+/* Css Add */
+/* Tổng thể container */
+.user-add-container {
+    padding: 20px;
+    background: linear-gradient(to right, #4a90e2, #50e3c2);
+    border-radius: 8px;
+    color: #ffffff;
+    min-height: 170vh;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Tiêu đề */
+.user-add-container h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+/* Container cho ảnh sản phẩm */
+.product-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 20px;
+}
+
+/* Phần hiển thị ảnh */
+.product-photo {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.product-photo img {
+    width: 100%;
+    border-radius: 8px;
+    border: 2px solid #ffffff;
+}
+
+/* Phần upload ảnh */
+.upload-section {
+    flex: 2;
+}
+
+.upload-box {
+    border: 2px dashed #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.1);
+    transition: background 0.3s;
+}
+
+.upload-box:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.upload-label {
+    cursor: pointer;
+}
+
+.upload-label a {
+    color: #50e3c2;
+    text-decoration: underline;
+}
+
+/* Container thông tin người dùng */
+.box-container {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    width: 96.7%;
+    margin-left: 20px;
+    
+}
+
+/* Tiêu đề thông tin người dùng */
+.box-container h3 {
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+/* Nhóm form */
+.form-group {
+    margin-bottom: 15px;
+}
+.form-group #sex{
+    color: black;
+    background-color: white;
+}
+
+/* Nhãn */
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+/* Input */
+input, select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ffffff;
+    background: rgba(255, 255, 255, 0.1);
+    color: black;
+    font-size: 1rem;
+    transition: border 0.3s;
+}
+
+input:focus, select:focus {
+    border-color: #50e3c2;
+    outline: none;
+}
+
+/* Nút submit */
+.actions {
+    text-align: center; /* Căn giữa văn bản trong .actions */
+    margin-top: 20px; /* Khoảng cách phía trên nếu cần */
+}
+
+.button1 {
+    width: 1105px;
+    padding: 10px 20px;
+    border: none !important;
+    border-radius: 5px !important;
+    background-color: #50e3c2;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+    display: inline-block; /* Đặt thành khối nội tuyến để căn giữa */
+    /* margin-left: 280px !important; Tự động căn giữa */
+}
+
+button:hover {
+    background-color: #4ec6b6;
 }
 .user-add-container{
     padding: 20px;

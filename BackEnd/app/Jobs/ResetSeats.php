@@ -43,7 +43,7 @@ class ResetSeats implements ShouldQueue
             return;
         }
 
-        if ($seat->status == 'Reserved Until' || $seat->reserved_until < now()) {
+        if ($seat->status == 'Reserved Until' && $seat->reserved_until < now()) {
             Log::info('Seat reserved time expired for seat ID: ' . $seat->id);
 
             // Tìm booking liên quan đến ghế này
@@ -81,14 +81,13 @@ class ResetSeats implements ShouldQueue
             }
             $seat->delete();
 
-
             // Xóa dữ liệu tạm nếu có
-
 
             // Phát sự kiện sau khi ghế đã được xóa
 
-
-        } else {
+        } elseif ($seat->status == 'Booked') {
+            $seat->reserved_until = null;
+            $seat->save();
             Log::info('Seat is still reserved or booked, no action taken for seat ID: ' . $seat->id);
         }
     }

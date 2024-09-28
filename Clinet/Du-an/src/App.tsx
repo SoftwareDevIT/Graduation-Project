@@ -1,10 +1,15 @@
 
 import "./App.css";
 
+
+
+
+
 import OrderPage from "./component/Oders/OrderPage";
 import OrderCheckout from "./component/Pay/OderCheckOut";
 import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
 import Headerticket from "./component/Headerticket/Headerticket";
+
 
 import RegisterCinema from "./Page/Client/RegisterCinema";
 import LoginCinema from "./Page/Client/LoginCinema";
@@ -23,6 +28,8 @@ import SchedulesManager from "./Page/Admin/Schedules/SchedulesManager";
 import RevenueByCinemaManager from "./Page/Admin/RevenueByCinema/RevenueByCinemaManager";
 import RevenueByMoviesManager from "./Page/Admin/RevenueByMoviesManager/RevenueByMoviesManager";
 import { Route, Routes } from "react-router-dom";
+import EmailConfirm from "./component/EmailConfirm/EmailConfirm";
+import UserAddManager from "./Page/Admin/User/UserAdd";
 import Home from "./Page/Home";
 import Bookcinematickets from "./Page/Client/Bookcinematickets";
 import UserAddManager from "./Page/Admin/User/UserAdd";
@@ -38,6 +45,13 @@ import PostsFormManager from "./Page/Admin/Posts/PostForm";
 
 
 
+import LichChieu from "./component/MovieDetail/LichChieu";
+import DanhGia from "./component/MovieDetail/DanhGia";
+import TinTuc from "./component/MovieDetail/TinTuc";
+import { ContentMovie } from "./component/MovieDetail/ContentMovie";
+
+
+
 function App() {
   return (
     <>
@@ -47,6 +61,10 @@ function App() {
       <Route path="/orders" element={<OrderPage/>}/>
       <Route path="/pay" element={<OrderCheckout/>}/>
       <Route path="/seat" element={<CinemaSeatSelection/>}/>
+      <Route path="/moviedetail" element={<ContentMovie/>}/>
+      <Route path="/lich-chieu" element={<LichChieu/>}/>
+      <Route path="/danh-gia" element={<DanhGia/>}/>
+      <Route path="/tin-tuc" element={<TinTuc/>}/>
       <Route path="/headerticket" element={<Headerticket/>}/>
       <Route path="/confirm" element={<EmailConfirm/>}/>
 
@@ -56,9 +74,13 @@ function App() {
       <Route path="/admin" element={<Dashboard/>}/>
       <Route path="admin/user" element={<User/>}/>
       <Route path="admin/user/add" element={<UserAddManager/>}/>
+
+      <Route path="admin/showtimes" element={<ShowtimesManager/>}/>
+
       <Route path="admin/showtimes" element={<ShowtimesManager/>}/>      
       <Route path="admin/showtimes/add" element={<ShowtimesFormManager/>}/>      
       <Route path="admin/showtimes/edit/:id" element={<ShowtimesFormManager/>}/>      
+
 
       <Route path="admin/orders" element={<OrdersManager/>}/>
       <Route path="admin/tickets" element={<TicketsManager/>}/>

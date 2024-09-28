@@ -38,7 +38,7 @@ use App\Http\Controllers\Api\Movie\RatingController;
 //     return $request->user();
 // });
 // Authenticated routes
-Route::middleware(['auth:sanctum'])->group(function () {
+// Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', function (Request $request) {
         $user = $request->user()->load('favoriteMovies');
         return response()->json($user);
@@ -48,9 +48,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::delete('favorites/{movie_id}', [FavoriteController::class, 'destroy']); // Remove favorite movie
     Route::post('ratings', [RatingController::class, 'store']); // Rate movie
 
-    Route::post('/vnpay-return', [BookingController::class, 'vnPayReturn']);
+    Route::get('/vnpay-return', [BookingController::class, 'vnPayReturn']);
     Route::post('/book-ticket', [BookingController::class, 'bookTicket']); // Book ticket
-});
+// });
 
 // Public authentication routes
 Route::post('login', [AuthController::class, 'login']);
@@ -92,9 +92,9 @@ Route::apiResource('room', RoomController::class);
 Route::post('register', [AuthController::class, 'register']); // Register user
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
-    Route::get('/lists', [AuthController::class, 'list']); // List user accounts
-});
 
+});
+Route::get('/lists', [AuthController::class, 'list']); // List user accounts
 
 // Account verification routes
 Route::get('/verify-account/{userId}', [AccountVerificationController::class, 'verify'])->name('verify'); // Verify account from email
@@ -118,9 +118,13 @@ Route::post('password/reset', [ForgotPasswordController::class, 'forgotPassword'
     Route::apiResource('movies', MovieController::class);
     Route::apiResource('method', PayMethodController::class);
     Route::apiResource('combo', ComboController::class);
+
+// });
     Route::get('showtimes/movie/{movie_name}', [ShowtimeController::class, 'showtimeByMovieName']);
     Route::post('/resetPassword', [ResetPasswordController::class, 'resetPassword']);
+
 // });
+
 
 
 // Movie-specific routes
