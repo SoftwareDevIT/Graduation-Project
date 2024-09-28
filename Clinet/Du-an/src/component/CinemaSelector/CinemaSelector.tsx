@@ -84,7 +84,24 @@ const CinemaSelector: React.FC = () => {
       }
     }
   }, [locations]);
+// Mặc định chọn Hà Nội và rạp đầu tiên của Hà Nội
+useEffect(() => {
+  if (selectedCity && filteredCinemas.length > 0) {
+    // Chọn rạp đầu tiên
+    setSelectedCinema(filteredCinemas[0].id ?? null);
 
+    // Chọn ngày đầu tiên là ngày hiện tại
+    const today = getCurrentDate();
+    setSelectedDate(today);
+  }
+}, [selectedCity, filteredCinemas]);
+
+// Khi chọn Hà Nội, chọn rạp đầu tiên của Hà Nội
+useEffect(() => {
+  if (selectedCity && filteredCinemas.length > 0) {
+    setSelectedCinema(filteredCinemas[0].id ?? null); // Chọn rạp đầu tiên hoặc null nếu không có id
+  }
+}, [selectedCity, filteredCinemas]);
   // Lọc rạp theo khu vực
   useEffect(() => {
     if (selectedCity) {

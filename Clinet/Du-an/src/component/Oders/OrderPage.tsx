@@ -131,6 +131,7 @@ const OrderPage: React.FC = () => {
               <div key={combo.id} className="combo-item">
                 <div className="combo-info">
                   <div className="combo-name">{combo.combo_name}</div>
+                  <div className="descripton">{combo.descripton}</div>
                
                 </div>
                 <div className="combo-price">
@@ -176,8 +177,8 @@ const OrderPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="actions">
-            <Link to="/" className="back-btn2">← Quay lại</Link>
+          <div className="actionsts">
+            <Link to="/" className="back-btn2"><span>← </span>Quay lại</Link>
             <button className="continue-btn2" onClick={handleContinue}>
               Tiếp Tục
             </button>

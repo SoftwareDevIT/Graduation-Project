@@ -8,33 +8,37 @@
     position: sticky;
     top: 0;
     z-index: 1000;
+    
 }
 .thongbao{
   font-size: 25px;
-  margin-bottom: 7px;
+ 
 }
 .header-left {
 
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 9px;
 }
 
 .header-left a {
+position: relative;
+bottom: 12px;
   text-decoration: none;
   color: #6e84a3;
   font-size: 15px;
   font-weight: 400;
-  position: relative;
+
   transition: color 0.3s ease;
 }
+
 
 .header-left a:hover {
   color: #e50914; /* Red color on hover */
 }
 
 .header-logo {
-  
+ 
   color: #e50914;
   font-size: 26px;
   font-weight: bold;
@@ -42,7 +46,9 @@
 
 }
 .header-logo a{
-
+ position: relative;
+ top:5px;
+ right: 20px;
   color: #e50914;
   text-decoration: none;
 }
@@ -159,3 +165,70 @@
 .header-logo {
   padding: 0 !important; /* Xóa padding với ưu tiên cao hơn */
 }
+@media (max-width: 992px) {
+  .menu button {
+   
+    background: rgb(237, 234, 234);
+  }
+  .navbar-dark .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='black' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+  }
+  
+  .header-left .dropdown-content {
+    display: none;
+  }
+  .header-left {
+    position: absolute; 
+    top: 60px; 
+    left: 0;
+    width: 100%;
+    display: none; 
+    flex-direction: column; /* Chuyển đổi sang menu dọc */
+    align-items: flex-start; 
+    z-index: 999;
+    background-color: white; 
+    border: 1px solid #ddd; 
+    padding: 10px 0; 
+  }
+  .thanhmenu{
+    margin-top: 8px;
+  }
+  .header-left a{
+    top:5px;
+    padding-left: 85px;
+  }
+  .header-right input {
+    display: none; /* Ẩn input khi trong chế độ di động */
+  }
+
+  .header-left.hidden {
+    display: none; /* Giữ ẩn khi không cần hiển thị */
+  }
+
+  .header-left.visible {
+    display: flex; /* Hiển thị menu khi class 'visible' được thêm vào */
+  }
+}
+@media (max-width:576px) {
+  .thanhmenu{
+    position: relative;
+   right: 120px;
+  }
+  .header-logo a{
+    position: relative;
+    right: 120px;
+     color: #e50914;
+     text-decoration: none;
+   }
+   .header-right{
+    position: relative;
+    right: 100px;
+   }
+   .header-left a{
+    top:5px;
+   padding-left: 0;
+  }
+   
+}
+
+
