@@ -2,11 +2,6 @@ import React, { createContext, useReducer, useContext, useEffect } from 'react';
 import { Movie } from '../interface/Movie';
 import instance from '../server';
 
-// Define the shape of the context state
-interface MoviesState {
-  movies: Movie[];
-}
-
 // Define action types
 type Action =
   | { type: 'SET_MOVIES'; payload: Movie[] }
@@ -14,16 +9,22 @@ type Action =
   | { type: 'UPDATE_MOVIE'; payload: Movie }
   | { type: 'DELETE_MOVIE'; payload: number };
 
-const MoviesContext = createContext<{
-  state: MoviesState;
-  fetchMovies: () => Promise<void>;
+// Define the initial state type
+interface MovieState {
+  movies: Movie[];
+}
+
+// Create context
+const MovieContext = createContext<{
+  state: MovieState;
+  dispatch: React.Dispatch<Action>;
   addMovie: (movie: Movie) => Promise<void>;
   updateMovie: (id: number, movie: Movie) => Promise<void>;
   deleteMovie: (id: number) => Promise<void>;
 } | undefined>(undefined);
 
-// Define a reducer to manage state
-const moviesReducer = (state: MoviesState, action: Action): MoviesState => {
+// Reducer function
+const movieReducer = (state: MovieState, action: Action): MovieState => {
   switch (action.type) {
     case 'SET_MOVIES':
       return { ...state, movies: action.payload };
@@ -47,8 +48,8 @@ const moviesReducer = (state: MoviesState, action: Action): MoviesState => {
 };
 
 // Create a provider component
-export const MoviesProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [state, dispatch] = useReducer(moviesReducer, { movies: [] });
+export const MovieProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [state, dispatch] = useReducer(movieReducer, { movies: [] });
 
   const fetchMovies = async () => {
     try {
@@ -59,19 +60,27 @@ export const MoviesProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
   };
 
+  useEffect(() => {
+    fetchMovies(); // Fetch movies when the provider mounts
+  }, []);
+
+  // Function to add a new movie
   const addMovie = async (movie: Movie) => {
     try {
       const response = await instance.post('/movies', movie);
-      dispatch({ type: 'ADD_MOVIE', payload: response.data });
+      dispatch({ type: 'ADD_MOVIE', payload: response.data }); // Dispatch add action
+      fetchMovies(); // Re-fetch movies after adding
     } catch (error) {
       console.error('Failed to add movie:', error);
     }
   };
 
+  // Function to update an existing movie
   const updateMovie = async (id: number, movie: Movie) => {
     try {
       const response = await instance.patch(`/movies/${id}`, movie);
-      dispatch({ type: 'UPDATE_MOVIE', payload: response.data.data });
+      dispatch({ type: 'UPDATE_MOVIE', payload: response.data }); // Dispatch update action
+      fetchMovies(); // Re-fetch movies after updating
     } catch (error) {
       console.error('Failed to update movie:', error);
     }
@@ -88,22 +97,18 @@ export const MoviesProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
   };
 
-  useEffect(() => {
-    fetchMovies();
-  }, []);
-
   return (
-    <MoviesContext.Provider value={{ state, fetchMovies, addMovie, updateMovie, deleteMovie }}>
+    <MovieContext.Provider value={{ state, dispatch, addMovie, updateMovie, deleteMovie }}>
       {children}
-    </MoviesContext.Provider>
+    </MovieContext.Provider>
   );
 };
 
-// Custom hook for using the MoviesContext
-export const useMoviesContext = () => {
-  const context = useContext(MoviesContext);
+// Custom hook to use the MovieContext
+export const useMovieContext = () => {
+  const context = useContext(MovieContext);
   if (!context) {
-    throw new Error('useMoviesContext must be used within a MoviesProvider');
+    throw new Error('useMovieContext must be used within a MovieProvider');
   }
   return context;
 };

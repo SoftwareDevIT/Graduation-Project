@@ -23,17 +23,17 @@ const OrderCheckout = () => {
     const cinemaId = location.state?.cinemaId;
     const showtimeId = location.state?.showtimeId;
     const roomId = location.state?.roomId;
-  
+
     if (!cinemaId || !showtimeId || !selectedSeats) {
       console.error('cinemaId, showtimeId hoặc ghế ngồi không được tìm thấy');
       return;
     }
-  
+
     const seats = selectedSeats.split(",").map((seatName: string) => {
       const trimmedSeat = seatName.trim();
       const row = trimmedSeat.charAt(0);
       const column = parseInt(trimmedSeat.slice(1)) - 1;
-  
+
       return {
         seat_name: trimmedSeat,
         room_id: roomId,
@@ -42,25 +42,26 @@ const OrderCheckout = () => {
         seat_column: column,
       };
     });
-  
+
     const bookingData = {
       cinemaId: cinemaId,
       showtimeId: showtimeId,
       seats: seats,
-      totalPrice: totalPrice,
+      amount: totalPrice,
       selectedCombos: selectedCombos,
     };
-  
+
     try {
       // Gửi yêu cầu đặt vé
+      console.log(bookingData);
+      
       const response = await instance.post('/book-ticket', bookingData);
-      console.log('Đặt vé thành công:', response.data);
-  
-      // Kiểm tra URL trả về
-      if (response.data && typeof response.data.data === 'string') {
-        const vnpayUrl = response.data.data;
+      console.log('Đặt vé thành công:', response.data.data.data);
+
+      if (response.data.data) {
+        const vnpayUrl = response.data.data.data;
         console.log('Chuyển hướng đến VNPAY:', vnpayUrl);
-  
+
         // Chuyển hướng người dùng đến VNPAY
         window.location.href = vnpayUrl;
       } else {
@@ -70,8 +71,9 @@ const OrderCheckout = () => {
       console.error('Đặt vé thất bại:', error);
       alert('Đặt vé thất bại. Vui lòng thử lại.');
     }
+
   };
-  
+
   return (
     <>
       <Header />
