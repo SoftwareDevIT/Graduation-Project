@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 
 use function Laravel\Prompts\error;
 
-class FilterByDate extends Controller
+class FilterByDateController extends Controller
 {
     protected $filterByDateService;
     public function __construct(FilterByDateService $filterByDateService)
