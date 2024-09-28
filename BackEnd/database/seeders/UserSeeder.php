@@ -34,6 +34,16 @@ class UserSeeder extends Seeder
                 'role_id' => 1,
                 'address' => 'Ha Noi',
                 'fullname' => 'Admin',
+            ],
+            [
+                'user_name' => 'admin2',
+                'sex'=>'Male',
+                'password' => Hash::make('12345678'),
+                'email' => 'anhdung@gmail.com',
+                'phone' => '0123456789',
+                'role_id' => 1,
+                'address' => 'Ha Noi',
+                'fullname' => 'Admin',
             ]
         ]);
     }
