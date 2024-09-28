@@ -54,7 +54,8 @@ class UserSeeder extends Seeder
                 // 'role_id' => 1,
                 'address' => 'Ha Noi',
                 'fullname' => 'User',
-            ],
+            ]
+   
         ]);
     }
 }

@@ -1,23 +1,24 @@
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  padding-left: 120px;
-    background-color: #fff;
-    border-bottom: 1px solid #ddd;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 140px;
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
-.thongbao{
+
+.thongbao {
   font-size: 25px;
   margin-bottom: 7px;
 }
-.header-left {
 
-    display: flex;
-    align-items: center;
-    gap: 15px;
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
 
 .header-left a {
@@ -50,16 +51,15 @@
 .header-right {
   display: flex;
   align-items: center;
-  gap: 20px;
- 
+  gap: 15px; /* Giảm khoảng cách giữa các icon */
 }
 
 .header-right input[type="text"] {
   padding: 10px 15px;
-  font-size: 15px;
+  font-size: 14px; /* Giảm font-size để phù hợp với không gian hẹp */
   border: 1px solid #ddd;
   border-radius: 20px;
-  width: 300px;
+  width: 250px; /* Điều chỉnh lại chiều rộng của thanh tìm kiếm */
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -138,19 +138,75 @@
 }
 
 .dropdown:hover .dropdown-content {
-
-    display: block;
-
+  display: block;
 }
 
+/* Media Queries for Responsive Design */
+@media (max-width: 768px) {
+  .header {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 10px 20px;
+  }
 
+  .header-left,
+  .header-right {
+      width: 100%;
+      justify-content: space-between;
+  }
 
+  .header-logo {
+      width: 100%;
+      text-align: center;
+      margin-bottom: 10px;
+  }
+
+  .header-right {
+      justify-content: space-between; /* Tách các icon và thanh tìm kiếm */
+      gap: 10px;
+  }
+
+  .header-right input[type="text"] {
+      width: 60%; /* Thanh tìm kiếm chiếm 60% chiều rộng */
+  }
+
+  .header-right .icon-link {
+      font-size: 20px; /* Giảm kích thước icon */
+  }
+}
+
+@media (max-width: 480px) {
+  .header-left,
+  .header-right {
+      flex-direction: column;
+      align-items: flex-start;
+      width: 100%;
+  }
+
+  .header-right {
+      flex-direction: column; /* Xếp icon và thanh tìm kiếm theo chiều dọc */
+      align-items: flex-start;
+      gap: 10px;
+  }
+
+  .header-right input[type="text"] {
+      width: 100%; /* Thanh tìm kiếm chiếm toàn bộ chiều rộng */
+  }
+
+  .header-right .icon-link {
+      font-size: 18px; /* Giảm thêm kích thước icon */
+  }
+
+  .header-right svg {
+      margin: 5px 0;
+  }
+}
+  
 .header-right .icon-link svg {
   fill: currentColor; /* Giữ màu hiện tại của text */
   color: inherit;     /* Kế thừa màu từ thẻ cha */
 }
 
-/* Xóa mặc định màu của link */
 .header-right .icon-link {
   font-size: 25px;
   color: inherit; /* Đảm bảo màu icon không thay đổi khi dùng Link */

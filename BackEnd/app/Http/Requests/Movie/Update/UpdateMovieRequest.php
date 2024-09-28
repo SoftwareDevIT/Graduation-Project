@@ -26,7 +26,7 @@ class UpdateMovieRequest extends FormRequest
             'cinema_id'             => 'required|integer',
             'actor_id'              => 'required|integer',
             'director_id'           => 'required|integer',
-            'movie_name'            => 'required|string|max:255|unique:movie',
+            'movie_name'            => 'required|string|max:255|unique:movies',
             'poster'                => 'mimes:jpeg,png,jpg,gif|max:2048',
             'duration'              => 'string|max:225',
             'release_date'          => 'date',
