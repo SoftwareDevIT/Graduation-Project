@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from 'react';
-
+// MoviesDashboard.tsx
+import React from 'react';
 import './MoviesDashboard.css';
+
+import { Link } from 'react-router-dom';
+
 import { Movie } from '../../../interface/Movie';
 import instance from '../../../server';
 import ReactPaginate from 'react-paginate';
@@ -51,43 +54,74 @@ import './MoviesDashboard.css';
 import { Movie } from '../../../interface/Movie';
 import instance from '../../../server';
 
+
 const MoviesDashboard: React.FC = () => {
-    const [movies, setMovies] = useState<Movie[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+  const { state, deleteMovie } = useMoviesContext();
+  const { movies } = state;
 
-    // Fetch movies from the API when the component mounts
-    useEffect(() => {
-        const fetchMovies = async () => {
-            try {
-                const response = await instance.get('/movies');
-                console.log('API Response:', response.data); // Log the entire response
-    
-                // Access the movies array from the response.data
-                if (Array.isArray(response.data.data)) {
-                    setMovies(response.data.data); // Set movies if it's an array
-                } else {
-                    console.error('Unexpected response format', response.data);
-                    setError('Failed to fetch movies: Unexpected response format');
-                }
-                setLoading(false);
-            } catch (err) {
-                console.error('Fetch error:', err); // Log the error
-                setError('Failed to fetch movies');
-                setLoading(false);
-            }
-        };
-    
-        fetchMovies();
-    }, []);
-    
-    if (loading) {
-        return <div>Loading...</div>;
+  const handleDelete = async (id: number) => {
+    if (window.confirm('Are you sure you want to delete this movie?')) {
+      await deleteMovie(id);
     }
+  };
 
-    if (error) {
-        return <div>{error}</div>;
-    }
+  return (
+    <div className="movies-dashboard">
+      <h2>Movie Management</h2>
+      <div className="actions">
+        <Link to="/admin/movies/add" className="add-movie-btn">Add New Movie</Link>
+      </div>
+      <div className="table-container">
+        <table className="movie-table">
+          <thead>
+            <tr>
+              <th>Movie ID</th>
+              <th>Title</th>
+              <th>Poster</th>
+              <th>Category ID</th>
+              <th>Actor ID</th>
+              <th>Director ID</th>
+              <th>Duration</th>
+              <th>Release Date</th>
+              <th>Description</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {movies.length > 0 ? (
+              movies.map((movie) => (
+                <tr key={movie.id}>
+                  <td>{movie.id}</td>
+                  <td>{movie.movie_name}</td>
+                  <td>
+                    {movie.poster ? (
+                      <img src={movie.poster} alt={movie.movie_name} className="movie-poster" />
+                    ) : (
+                      <span>No Poster Available</span>
+                    )}
+                  </td>
+                  <td>{movie.movie_category_id}</td>
+                  <td>{movie.actor_id}</td>
+                  <td>{movie.director_id}</td>
+                  <td>{movie.duraion}</td>
+                  <td>{movie.release_date}</td>
+                  <td>{movie.description}</td>
+                  <td>
+                    <Link to={`/admin/movies/edit/${movie.id}`} className="edit-btn">Edit</Link>
+                    <button onClick={() => handleDelete(movie.id)} className="delete-btn">Delete</button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={10}>No movies found.</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
 
 
     return (
@@ -156,6 +190,7 @@ const MoviesDashboard: React.FC = () => {
             </div>
         </div>
     );
+
 };
 
 export default MoviesDashboard;

@@ -80,8 +80,21 @@ Route::middleware(['auth:sanctum', 'role:admin|manager'])->group(function () {
     Route::apiResource('combo', ComboController::class);
 });
 
+
+// });
+    Route::get('showtimes/movie/{movie_name}', [ShowtimeController::class, 'showtimeByMovieName']);
+    Route::post('/resetPassword', [ResetPasswordController::class, 'resetPassword']);
+
+// });
+
+
+
+// Movie-specific routes
+Route::get('/movie/search/{movie_name}', [MovieController::class, 'search']); // Search for movies by name
+
 // Các tuyến đường dành riêng cho phim
 Route::get('/movie/search/{movie_name}', [MovieController::class, 'search']); // Tìm kiếm phim theo tên
+
 Route::get('showtimes/movie/{movie_name}', [ShowtimeController::class, 'showtimeByMovieName']); // Showtimes by movie name
 Route::get('/filterByDate', [FilterByDateController::class, 'filterByDate']);// Phim lọc theo ngày
 Route::get('cinema/{id}', [CinemaController::class, 'filterMovie']);// Phim lọc của điện ảnh
