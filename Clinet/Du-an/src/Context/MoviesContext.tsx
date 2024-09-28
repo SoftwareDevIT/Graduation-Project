@@ -1,8 +1,6 @@
-// MoviesContext.tsx
 import React, { createContext, useReducer, useContext, useEffect } from 'react';
 import { Movie } from '../interface/Movie';
 import instance from '../server';
-
 
 // Define the shape of the context state
 interface MoviesState {
@@ -16,7 +14,6 @@ type Action =
   | { type: 'UPDATE_MOVIE'; payload: Movie }
   | { type: 'DELETE_MOVIE'; payload: number };
 
-// Create a context
 const MoviesContext = createContext<{
   state: MoviesState;
   fetchMovies: () => Promise<void>;
@@ -53,7 +50,6 @@ const moviesReducer = (state: MoviesState, action: Action): MoviesState => {
 export const MoviesProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(moviesReducer, { movies: [] });
 
-  // Fetch movies from the API
   const fetchMovies = async () => {
     try {
       const response = await instance.get('/movies');
@@ -63,7 +59,6 @@ export const MoviesProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
   };
 
-  // Add a new movie
   const addMovie = async (movie: Movie) => {
     try {
       const response = await instance.post('/movies', movie);
@@ -73,7 +68,6 @@ export const MoviesProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
   };
 
-  // Update an existing movie
   const updateMovie = async (id: number, movie: Movie) => {
     try {
       const response = await instance.patch(`/movies/${id}`, movie);
@@ -83,25 +77,17 @@ export const MoviesProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
   };
 
+  // Function to delete a movie
   const deleteMovie = async (id: number) => {
     try {
-      // Check for related showtimes first
-      const showtimesResponse = await instance.get(`/showtimes?movie_id=${id}`);
-      if (showtimesResponse.data.length > 0) {
-        console.error('Cannot delete movie; related showtimes exist.');
-        return; // or handle the error gracefully
-      }
-  
-      // Proceed to delete the movie
       await instance.delete(`/movies/${id}`);
-      dispatch({ type: 'DELETE_MOVIE', payload: id });
+      dispatch({ type: 'DELETE_MOVIE', payload: id }); // Dispatch delete action
+      fetchMovies(); // Re-fetch movies after deleting
     } catch (error) {
       console.error('Failed to delete movie:', error);
     }
   };
-  
 
-  // Fetch movies on component mount
   useEffect(() => {
     fetchMovies();
   }, []);

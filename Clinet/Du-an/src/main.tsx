@@ -7,6 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { CinemaProvider } from './Context/CinemasContext.tsx'
 import { ComboProvider } from './Context/ComboContext.tsx'
 import { MoviesProvider } from './Context/MoviesContext.tsx'
+import { PostsProvider } from './Context/PostContext.tsx'
 
 
 
@@ -18,7 +19,9 @@ createRoot(document.getElementById('root')!).render(
     <CinemaProvider>
       <ComboProvider>
       <MoviesProvider>
+        <PostsProvider>
     <App />
+    </PostsProvider>
     </MoviesProvider>
     </ComboProvider>
     </CinemaProvider>
