@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('review')->nullable();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('movie_id')->references('id')->on('movie');
+            $table->foreign('movie_id')->references('id')->on('movies');
         });
     }
 

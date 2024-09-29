@@ -231,24 +231,25 @@ const CinemaSelector: React.FC = () => {
                       <p>Thời gian: {movie.duraion}</p>
                       <p>Giới hạn tuổi: {movie.age_limit}+</p>
                       <div className="showtimes-list">
-                        {movie.showtimes.map((showtime) => (
-                          <button
-                            key={showtime.id}
-                            onClick={() => {
-                              navigate("/seat", {
-                                state: {
-                                  movieName: movie.movie_name,
-                                  cinemaName:
-                                    selectedCinemaDetails?.cinema_name,
-                                  showtime: showtime.showtime_start,
-                                },
-                              });
-                            }}
-                          >
-                            {showtime.showtime_start.slice(0, 5)}
-                          </button>
-                        ))}
-                      </div>
+  {movie.showtimes.map((showtime) => (
+    <button
+      key={showtime.id}
+      onClick={() => {
+        navigate("/seat", {
+          state: {
+            movieName: movie.movie_name,
+            cinemaName: selectedCinemaDetails?.cinema_name,
+            showtime: showtime.showtime_start,
+            showtimeId: showtime.id, // Truyền showtimeId
+            cinemaId: selectedCinemaDetails?.id, // Truyền cinemaId
+          },
+        });
+      }}
+    >
+      {showtime.showtime_start.slice(0, 5)}
+    </button>
+  ))}
+</div>
                     </div>
                   </div>
                 );

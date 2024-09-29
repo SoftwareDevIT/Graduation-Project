@@ -24,11 +24,11 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->string('fullname')->nullable();
             $table->double('coin')->nullable();
-            $table->enum('status', ['Normal', 'Ban'])->default('Normal');
-            $table->unsignedBigInteger('role_id');
+            $table->boolean('status')->default(true);
+            // $table->unsignedBigInteger('role_id');
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamps();
-            $table->foreign('role_id')->references('id')->on('role');
+            // $table->foreign('role_id')->references('id')->on('role');
         });
     }
 

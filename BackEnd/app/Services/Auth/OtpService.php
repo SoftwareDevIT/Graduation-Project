@@ -1,5 +1,5 @@
 <?php
-namespace App\Services;
+namespace App\Services\Auth;
 
 use App\Mail\ResetPasswordOtpMail;
 use Illuminate\Support\Facades\Cache;
@@ -29,7 +29,7 @@ class OtpService
 
     public function verifyOtp($otp)
     {
-        // Lấy email từ session
+
         $email = Session::get('reset_password_email');
 
         if (!$email) {

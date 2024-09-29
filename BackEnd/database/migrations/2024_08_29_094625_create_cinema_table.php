@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->unsignedBigInteger('location_id');
             $table->string('cinema_address')->nullable();
-            $table->enum('status', ['Show', 'Hidden'])->default('Show');
+            $table->boolean('status')->default(true);
             $table->timestamps();
             $table->foreign('location_id')->references('id')->on('location');
         });

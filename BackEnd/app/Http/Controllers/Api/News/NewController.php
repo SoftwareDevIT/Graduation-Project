@@ -108,4 +108,20 @@ class NewController extends Controller
             return $this->error($th->getMessage());
         }
     }
+
+    public function newByCategory($id){
+        try{
+            $news = News::where('news_category_id', $id)->get();
+
+            if($news->isEmpty()){
+                return $this->notFound('Không tìm thấy news theo new_category', 404);
+            }
+
+            return $this->success($news, 'Danh sách News', 200);
+
+        }catch(\Throwable $th){
+            return $this->error($th->getMessage());
+
+        }
+    }
 }

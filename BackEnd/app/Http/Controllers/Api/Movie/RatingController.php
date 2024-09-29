@@ -7,6 +7,7 @@ use App\Http\Requests\Movie\Store\StoreRatingRequest;
 use App\Models\Rating;
 use App\Services\Movie\RatingService;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 class RatingController extends Controller
@@ -34,7 +35,7 @@ class RatingController extends Controller
         try {
             $rating = $this->ratingService->store($request->validated());
     
-            return $this->success($rating, 'Thêm thành công');
+            return $this->success($rating, 'Đánh giá thành công');
         } catch (Exception $e) {
             return $this->error('Có lỗi xảy ra: ' . $e->getMessage(), 500);
         }
@@ -61,6 +62,15 @@ class RatingController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $this->ratingService->delete($id);
+            return $this->success(null,'Xóa thành công');
+        } catch (\Throwable $th) {
+            if ($th instanceof ModelNotFoundException) {
+                return $this->notFound('Movie not found id = ' . $id, 404);
+            }
+
+            return $this->error('Movie not found id = ' . $id, 500);
+        }
     }
 }
