@@ -95,6 +95,6 @@ Route::get('/movie/search/{movie_name}', [MovieController::class, 'search']);   
 
 Route::get('showtimes/movie/{movie_name}', [ShowtimeController::class, 'showtimeByMovieName']);     // Showtimes by movie name
 Route::get('/filterByDate', [FilterByDateController::class, 'filterByDate']);                       // Phim lọc theo ngày
-Route::get('cinema/{id}', [CinemaController::class, 'filterMovie']);                                // Phim lọc của điện ảnh
+Route::get('filterMovie/{id}', [CinemaController::class, 'filterMovie']);                                // Phim lọc của điện ảnh
 Route::get('/movie/{category}', [MovieController::class, 'movieByCategory']);                       // Lọc Phim theo thể loại
 Route::get('/new/{category}', [NewController::class, 'newByCategory']);                             // Lọc chuyên đề theo thể loại
