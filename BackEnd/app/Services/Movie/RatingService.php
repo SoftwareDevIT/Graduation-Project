@@ -17,22 +17,39 @@ class RatingService
 
     public function store(array $data)
     {
+
+        if (!Auth::check()) {
+            return response()->json(['message' => 'User not authenticated'], 401);
+        }
+
+        $user_id = Auth::id();
         $movie_id = $data['movie_id']; // Lấy giá trị movie_id từ mảng $data
 
-        $existingFavorite = Rating::where('user_id', operator: Auth::id())
+        $existingRating = Rating::where('user_id',  $user_id)
             ->where('movie_id',  $movie_id)
             ->first();
 
-        if ($existingFavorite) {
-            return response()->json(['message' => 'Movie already in rating'], 409);
-        }
+        // if ($existingFavorite) {
+        //     return response()->json(['message' => 'Movie already in rating'], 409);
+        // }
 
-        $rating =  Rating::create([
-            'user_id' => Auth::id(),
-            'movie_id' => $movie_id,
-            'rating' => $data['rating'],
-            'review' => $data['review'],
-        ]);
+        if ($existingRating) {
+            // Nếu đánh giá đã tồn tại, ta sẽ chỉ cập nhật mà không tạo mới
+            $existingRating->rating = $data['rating'];
+            $existingRating->review = $data['review'];
+            $existingRating->save();
+    
+            $message = 'Rating updated successfully';
+        } else {
+            // Nếu đánh giá chưa tồn tại, ta sẽ tạo mới
+            $existingRating = Rating::create([
+                'user_id'    => $user_id,
+                'movie_id'   => $movie_id,
+                'rating'     => $data['rating'],
+                'review'     => $data['review'],
+            ]);
+            $message = 'Rating created successfully';
+        }    
 
         // Tính toán lại đánh giá trung bình
         $averageRating = Rating::where('movie_id', $movie_id)->avg('rating');
@@ -42,7 +59,10 @@ class RatingService
         $movie->rating = $averageRating;
         $movie->save();
 
-        return $rating;
+        return response()->json([
+            'message' => $message,
+            'rating'  => $existingRating
+        ]);
     }
 
     public function update(int $id, array $data) {}

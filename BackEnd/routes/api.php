@@ -38,7 +38,7 @@ use App\Http\Controllers\Api\Movie\RatingController;
 //     return $request->user();
 // });
 // Authenticated routes
-// Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', function (Request $request) {
         $user = $request->user()->load('favoriteMovies');
         return response()->json($user);
@@ -50,7 +50,7 @@ use App\Http\Controllers\Api\Movie\RatingController;
 
     Route::get('/vnpay-return', [BookingController::class, 'vnPayReturn']);
     Route::post('/book-ticket', [BookingController::class, 'bookTicket']); // Book ticket
-// });
+});
 
 // Public authentication routes
 Route::post('login', [AuthController::class, 'login']);
@@ -129,5 +129,7 @@ Route::get('/movie/search/{movie_name}', [MovieController::class, 'search']); //
 Route::get('showtimes/movie/{movie_name}', [ShowtimeController::class, 'showtimeByMovieName']); // Showtimes by movie name
 
 // Additional cinema routes
-Route::get('cenima/{id}', [CinemaController::class, 'filterMovie']); // Filter movies by cinema
-Route::get('/filterByDate', [FilterByDateController::class, 'filterByDate']); // Filter movies by date
+Route::get('cenima/{id}', [CinemaController::class, 'filterMovie']);                // Filter movies by cinema
+Route::get('/filterByDate', [FilterByDateController::class, 'filterByDate']);       // Filter movies by date
+Route::get('/movie/{category}', [MovieController::class, 'movieByCategory']);       // Lọc Phim theo thể loại
+Route::get('/new/{category}', [NewController::class, 'newByCategory']);             // Lọc chuyên đề theo thể loại
