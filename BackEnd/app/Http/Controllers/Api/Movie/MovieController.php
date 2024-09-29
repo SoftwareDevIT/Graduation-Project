@@ -79,7 +79,7 @@ class MovieController extends Controller
             $movie = $this->movieService->update($id, $movie);
 
             return $this->success($movie, 'Cập nhập thành công');
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             return $this->error('Movie not found id = ' . $id, 500);
         }
     }
@@ -123,7 +123,7 @@ class MovieController extends Controller
             }
 
             return $this->success($movies, 'Danh sách phim tho Category ', 200);
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             return $this->error('Fail', 500);
         }
     }
