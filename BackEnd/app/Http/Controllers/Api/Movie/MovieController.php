@@ -122,7 +122,7 @@ class MovieController extends Controller
                 return $this->error('Không có phim nào thuộc Category này', 404);
             }
 
-            return $this->success($movies, 'Danh sách phim Category ', 200);
+            return $this->success($movies, 'Danh sách phim tho Category ', 200);
         } catch (\Throwable $th) {
             return $this->error('Fail', 500);
         }
