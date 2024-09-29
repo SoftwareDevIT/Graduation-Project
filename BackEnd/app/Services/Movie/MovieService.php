@@ -32,6 +32,9 @@ class MovieService
     public function delete(int $id)
     {
         $movieCategory = Movie::query()->findOrFail($id);
+
+        // $movieCategory->showtimes($id)->delete();    // Xóa suất chiếu phim
+
         return $movieCategory->delete();
     }
 

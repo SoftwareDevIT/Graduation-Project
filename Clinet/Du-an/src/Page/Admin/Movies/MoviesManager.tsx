@@ -13,7 +13,7 @@ function MoviesManager() {
             <Sidebar />
             <div className="moviesadmin">
                 <Header />
-                <MoviesDashboard/>
+                    <MoviesDashboard/>
             </div>
         </div>
     );

@@ -86,7 +86,7 @@ class AuthController extends Controller
             Mail::to($user->email)->queue(new VerifyAccount($user));
             return $this->success(__('messages.success_register'), 'success', 200);
         } catch (\Throwable $th) {
-            return $this->error($th->getMessage(), 'error', 400);
+            return $this->error($th->getMessage(), 400);
         }
     }
 
