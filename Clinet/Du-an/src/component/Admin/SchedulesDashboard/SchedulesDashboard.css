@@ -1,7 +1,7 @@
 /* Main container */
 .schedules-management {
     padding: 20px;
-    background-color: #1f1b1b;
+    background: rgb(229, 240, 242); /* Nền xanh nhạt */
     min-height: 170vh;
     color: #ffffff;
     font-family: 'Roboto', sans-serif;

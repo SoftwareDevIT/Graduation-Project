@@ -53,7 +53,7 @@ class TicketBookingService
             ];
         }
         // Khi đã có booking, gọi hàm thanh toán
-        $paymentRequest = new Request(array_merge($request->all(), ['boking_id' => $booking->id]));
+        $paymentRequest = new Request(array_merge($request->all(), ['boking_id' => $booking->id],['amount' => $booking->amount]));
 
         // Gọi hàm thanh toán VNPAY
         $paymentResult = $this->processPaymentStep->process($paymentRequest);

@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate, Link } from "react-router-dom";
-import { notification } from "antd";
+
 import instance from "../../server";
 import { loginSchema, LoginSchema } from "../../utils/validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import "./Login.css";
+import { notification } from "antd";
 
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginSchema>({

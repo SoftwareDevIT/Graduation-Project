@@ -1,139 +1,92 @@
-/* Main container */
+/* Container chính */
 .cinemas-dashboard {
-    padding: 20px;
-    background-color: #1f1b1b;
+    padding: 30px;
+    background: rgb(229, 240, 242); /* Nền xanh nhạt */
     min-height: 170vh;
-    color: #ffffff;
-    font-family: 'Roboto', sans-serif;
+    display: flex;
+    flex-direction: column;
 }
 
-/* Title styling */
+/* Định dạng tiêu đề */
 .cinemas-dashboard h2 {
     margin-bottom: 20px;
     font-size: 1.75rem;
-    color: #ffffff;
+    color: #262626; /* Màu chữ tối */
     letter-spacing: 1px;
     text-transform: uppercase;
     text-align: center;
 }
 
-/* Actions container */
-.actions {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-}
-
-.add-cinema-btn, .filter-btn {
-    padding: 10px 20px;
-    background-color: #f39c12;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    text-transform: uppercase;
-    font-weight: bold;
-}
-
-.filter-btn {
-    background-color: #2d3748;
-    color: #ffffff;
-}
-
-.add-cinema-btn:hover {
-    background-color: #e67e22;
-}
-
-.filter-btn:hover {
-    background-color: #1f2933;
-}
-
-/* Table container styling */
+/* Định dạng container bảng */
 .table-container {
-    width: 100%;
+    margin-top: 30px;
+    background-color: #ffffff; /* Nền trắng cho bảng */
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
     max-width: 1300px;
     overflow-x: auto;
-    border-radius: 8px;
-    background-color: #1a1a1a;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-/* Table styling */
+/* Định dạng bảng */
 .cinema-table {
     width: 100%;
     border-collapse: collapse;
+    font-size: 14px;
+    color: #006064; /* Màu xanh đậm */
 }
 
-/* Header styling */
+/* Định dạng tiêu đề bảng */
 .cinema-table th {
-    background-color: #282828;
-    color: #ffffff;
+    background-color: #e0f7fa; /* Nền xanh nhạt */
+    color: #00796b; /* Màu chữ xanh đậm */
     text-align: center;
     font-weight: 600;
-    font-size: 1rem;
-    padding: 15px;
-    text-transform: uppercase;
+    padding: 10px;
 }
 
-/* Row styling */
+/* Định dạng nội dung bảng */
 .cinema-table td {
-    padding: 15px;
-    background-color: #1e1e1e;
-    color: #e0e0e0;
-    border-bottom: 1px solid #3a3a3a;
-    font-size: 0.875rem;
-    vertical-align: middle;
+    padding: 10px;
+    background-color: #ffffff; /* Nền trắng */
+    color: #00796b; /* Màu chữ xanh đậm */
+    border-bottom: 1px solid #b2ebf2; /* Viền xanh nhạt */
     text-align: center;
 }
 
-/* Hover effect for rows */
+/* Hiệu ứng hover cho hàng */
 .cinema-table tbody tr:hover {
-    background-color: #333333;
+    background-color: #b2ebf2; /* Nền xanh nhạt khi hover */
     transition: background-color 0.3s ease;
 }
 
-/* Button styles */
-.action-buttons {
+/* Phân trang */
+.pagination {
     display: flex;
-    justify-content: space-around;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 10px 0;
 }
 
-.action-buttons button {
-    background: none;
-    border: none;
+.page-item {
+    margin: 0 5px;
+}
+
+.page-link {
+    color: #007bff;
+    padding: 10px 15px;
+    border-radius: 5px;
     cursor: pointer;
-    color: #ffffff;
-    font-size: 1rem;
-    transition: color 0.3s ease;
+    text-decoration: none;
+    transition: color 0.3s, transform 0.3s;
 }
 
-.view-btn:hover {
-    color: #1abc9c;
+.page-link:hover {
+    color: #0056b3;
+    transform: scale(1.05);
 }
 
-.edit-btn:hover {
-    color: #f1c40f;
-}
-
-.delete-btn:hover {
-    color: #e74c3c;
-}
-
-/* Responsive design for mobile */
-@media (max-width: 768px) {
-    .cinema-table th, .cinema-table td {
-        font-size: 0.875rem;
-        padding: 10px;
-    }
-
-    .add-cinema-btn {
-        width: 100%;
-        font-size: 0.875rem;
-    }
-
-    .edit-btn, .delete-btn {
-        padding: 8px 12px;
-    }
+.active .page-link {
+    color: #0056b3;
+    cursor: default;
 }
