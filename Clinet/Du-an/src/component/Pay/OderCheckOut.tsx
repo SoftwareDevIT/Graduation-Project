@@ -58,15 +58,15 @@ const OrderCheckout = () => {
       const response = await instance.post('/book-ticket', bookingData);
       console.log('Đặt vé thành công:', response.data.data.data);
 
-      if (response.data.data) {
-        const vnpayUrl = response.data.data.data;
-        console.log('Chuyển hướng đến VNPAY:', vnpayUrl);
+      // if (response.data.data) {
+      //   const vnpayUrl = response.data.data.data;
+      //   console.log('Chuyển hướng đến VNPAY:', vnpayUrl);
 
-        // Chuyển hướng người dùng đến VNPAY
-        window.location.href = vnpayUrl;
-      } else {
-        console.error('Không tìm thấy URL VNPAY hoặc dữ liệu không hợp lệ');
-      }
+      //   // Chuyển hướng người dùng đến VNPAY
+      //   window.location.href = vnpayUrl;
+      // } else {
+      //   console.error('Không tìm thấy URL VNPAY hoặc dữ liệu không hợp lệ');
+      // }
     } catch (error) {
       console.error('Đặt vé thất bại:', error);
       alert('Đặt vé thất bại. Vui lòng thử lại.');
