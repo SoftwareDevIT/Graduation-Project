@@ -45,6 +45,7 @@ const TicketsDashboard = () => {
                         ))}
                     </tbody>
                 </table>
+                
             </div>
         </div>
     );

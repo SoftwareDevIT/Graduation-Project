@@ -63,7 +63,7 @@ const MovieDetail: React.FC = () => {
                 </div>
                 {/* Tabs */}
                 <div className="tabs">
-                    <Link  to={"/thong-tin-phim"} className="tab active">Thông tin phim</Link>
+                    <Link  to={"/moviedetail"} className="tab active">Thông tin phim</Link>
                     <Link  to={"/lich-chieu"} className="tab ">Lịch chiếu</Link>
                     <Link  to={"/danh-gia"} className="tab ">Đánh giá</Link>
                     <Link  to={"/tin-tuc"} className="tab ">Tin tức</Link>

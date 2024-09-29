@@ -121,7 +121,7 @@ border: 1px solid white;
 
 }
 .additional-info p{
-    color: red;
+    color: rgb(225, 21, 21);
 }
 /* Tabs */
 .tabs {
@@ -163,7 +163,7 @@ border: 1px solid white;
    float: none;
    padding-right: 150px;
 }
-.container{
+.content-1{
     display: block;
   
  

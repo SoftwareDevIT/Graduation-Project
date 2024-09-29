@@ -3,16 +3,18 @@
     padding: 20px;
     background: rgb(229, 240, 242); /* Nền xanh nhạt */
     min-height: 170vh;
-    color: #ffffff;
+    color: #333; /* Màu chữ chính */
     font-family: 'Roboto', sans-serif;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Title styling */
 .posts-management h2 {
     margin-bottom: 20px;
-    font-size: 1.75rem;
-    color: #ffffff;
-    letter-spacing: 1px;
+    font-size: 1.5rem;
+    color: #006064; /* Màu chữ tiêu đề */
+    letter-spacing: 0.5px;
     text-transform: uppercase;
     text-align: center;
 }
@@ -26,7 +28,7 @@
 
 .add-post-btn {
     padding: 10px 20px;
-    background-color: #f39c12;
+    background-color: #f39c12; /* Màu giống UserDashboard */
     border: none;
     border-radius: 5px;
     color: white;
@@ -38,7 +40,7 @@
 }
 
 .add-post-btn:hover {
-    background-color: #e67e22;
+    background-color: #e67e22; /* Màu nền khi hover */
 }
 
 /* Table container styling */
@@ -47,8 +49,8 @@
     max-width: 1300px;
     overflow-x: auto;
     border-radius: 8px;
-    background-color: #1a1a1a;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    background-color: #f4f6f7; /* Background sáng hơn */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Nhẹ hơn */
 }
 
 /* Table styling */
@@ -59,8 +61,8 @@
 
 /* Header styling */
 .post-table th {
-    background-color: #282828;
-    color: #ffffff;
+    background-color: #e0f7fa; /* Màu xanh nhạt */
+    color: #00796b;
     text-align: center;
     font-weight: 600;
     font-size: 1rem;
@@ -71,17 +73,22 @@
 /* Row styling */
 .post-table td {
     padding: 15px;
-    background-color: #1e1e1e;
-    color: #e0e0e0;
-    border-bottom: 1px solid #3a3a3a;
+    background-color: #ffffff; /* Màu nền hàng */
+    color: #00796b; /* Màu chữ trong bảng */
+    border-bottom: 1px solid #e5e5e5;
     font-size: 0.875rem;
     vertical-align: middle;
     text-align: center;
 }
 
-/* Hover effect for rows */
+/* Hàng chẵn có nền xanh rất nhạt */
+.post-table tr:nth-child(even) {
+    background-color: #f1f8e9; /* Nền xanh rất nhạt */
+}
+
+/* Hiệu ứng hover cho hàng */
 .post-table tbody tr:hover {
-    background-color: #333333;
+    background-color: #b2ebf2; /* Nền xanh nhạt khi hover */
     transition: background-color 0.3s ease;
 }
 
@@ -95,21 +102,33 @@
     background: none;
     border: none;
     cursor: pointer;
-    color: #ffffff;
+    color: #333;
     font-size: 1rem;
     transition: color 0.3s ease;
 }
 
-.view-btn:hover {
-    color: #1abc9c;
+.view-btn {
+    color: #3498db;
 }
 
-.edit-btn:hover {
+.view-btn:hover {
+    color: #2980b9;
+}
+
+.edit-btn {
     color: #f1c40f;
 }
 
-.delete-btn:hover {
+.edit-btn:hover {
+    color: #f39c12;
+}
+
+.delete-btn {
     color: #e74c3c;
+}
+
+.delete-btn:hover {
+    color: #c0392b;
 }
 
 /* Responsive design for mobile */
@@ -124,7 +143,7 @@
         font-size: 0.875rem;
     }
 
-    .edit-btn, .delete-btn {
+    .view-btn, .edit-btn, .delete-btn {
         padding: 8px 12px;
     }
 }

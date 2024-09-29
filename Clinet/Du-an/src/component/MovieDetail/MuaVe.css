@@ -32,19 +32,25 @@
 .city-select-custom,
 .format-select-custom {
     margin-top: 10px;
- 
+    padding: 12px;
     font-size: 16px;
     border: 1px solid #e2e8f0;
     border-radius: 8px;
     background-color: #fff;
     color: #333;
     appearance: none; /* Bỏ mũi tên mặc định của select */
-    width: 335px;
-  padding: 0 !important;
-  padding-left: 15px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Thêm bóng cho select */
 }
 
+.city-select-custom {
+    width: 335px;
+    height: 40px;
+}
 
+.format-select-custom {
+    width: 335px;
+    height: 40px;
+}
 
 .city-select-custom:focus,
 .format-select-custom:focus {
@@ -75,7 +81,6 @@
     transition: background-color 0.3s, color 0.3s;
     cursor: pointer;
     font-size: 16px; /* Tăng kích thước chữ */
-   
     background-color: #f8f9fc; /* Màu nền nhẹ cho ngày */
 }
 
@@ -230,52 +235,3 @@ bottom: 20px;
     color: white; /* Thay đổi màu chữ cho dễ đọc */
 }
 
-select{
-    line-height: 20px !important;
-}
-.sub-cinema-details {
-    font-family: Arial, sans-serif;
-    line-height: 1.2;
-    padding-left: 10px;
-}
-
-.cinema-address {
-    color: #83b9d3;
-    font-size: 12px; /* Giảm kích thước chữ */
-    margin: 2px 0;
-    font-weight: 500;
-}
-
-.cinema-showtimes {
-    display: flex;
-    flex-wrap: wrap;
-    margin-top: 6px;
-}
-
-.cinema-showtimes span {
-    background-color: #f0f0f0;
-    padding: 4px 8px; /* Giảm kích thước padding */
-    border-radius: 3px;
-    margin: 3px;
-    font-size: 10px; /* Giảm kích thước chữ cho suất chiếu */
-    color: #000;
-    cursor: pointer;
-    border: 1px solid #ccc;
-    text-align: center;
-    min-width: 50px; /* Chiều rộng tối thiểu nhỏ hơn */
-}
-
-.cinema-showtimes span:hover {
-    background-color: #ddd;
-}
-
-.cinema-showtimes span.active {
-    background-color: #fff;
-    border: 1px solid #333;
-}
-
-.cinema-showtimes span .price {
-    display: block;
-    font-size: 9px; /* Kích thước chữ nhỏ hơn cho giá */
-    color: #666;
-}

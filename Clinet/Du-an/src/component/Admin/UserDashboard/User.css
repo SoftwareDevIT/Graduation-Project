@@ -215,7 +215,7 @@
 }
 
 .page-link {
-    color: #007bff; /* Màu chữ */
+    
     padding: 10px 15px;
     border-radius: 5px;
     cursor: pointer;
@@ -224,14 +224,17 @@
 }
 
 .page-link:hover {
-    color: #0056b3; /* Màu khi hover */
+  
     transform: scale(1.05);
 }
 
 .active .page-link {
-    color: #0056b3;
+   
     cursor: default;
 }
+.page-link{
+    box-shadow: none !important;
+    }
 
 /* Thêm mũi tên */
 .previous, .next {
@@ -250,7 +253,7 @@
 /* Căn giữa chữ "Page x of y" */
 .pagination-text {
     margin: 0 10px; /* Khoảng cách giữa nút và chữ */
-    color: #007bff; /* Màu chữ */
+   
     text-decoration: none !important; /* Bỏ gạch chân */
 }
 
