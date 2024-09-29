@@ -22,7 +22,7 @@ class StoreFavoriteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'movie_id' => 'required|exists:movie,id',
+            'movie_id' => 'required|exists:movies,id',
         ];
     }
 }

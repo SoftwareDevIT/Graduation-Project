@@ -14,85 +14,226 @@ class DirectorSeeder extends Seeder
      */
     public function run(): void
     {
-        $director = [
+        $directors = [
             [
-                'director_name' => 'Victor Vũ',
-                'descripcion' => 'Known for Tôi thấy hoa vàng trên cỏ xanh, Scandal',
-                'photo' => 'https://upload.wikimedia.org/wikipedia/commons/8/8e/Victor_Vu.jpg',
-                'country' => 'Vietnam',
-                'link_wiki' => 'https://vi.wikipedia.org/wiki/Victor_Vũ',
+                'director_name' => 'F. Gary Gray',
+                'descripcion' => null,
+                'photo' => 'http://rapchieuphim.com/images/avatar.png',
+                'country' => null,
+                'link_wiki' => null
+            ],
+            [
+                'director_name' => 'Lê Thanh Sơn, Charlie Nguyễn',
+                'descripcion' => null,
+                'photo' => 'http://rapchieuphim.com/images/avatar.png',
+                'country' => null,
+                'link_wiki' => null
+            ],
+            [
+                'director_name' => 'Yamamoto Yaseuichiro',
+                'descripcion' => null,
+                'photo' => 'http://rapchieuphim.com/images/avatar.png',
+                'country' => null,
+                'link_wiki' => null
+            ],
+            [
+                'director_name' => 'Nacho Vigalondo',
+                'descripcion' => null,
+                'photo' => 'http://rapchieuphim.com/images/avatar.png',
+                'country' => null,
+                'link_wiki' => null
+            ],
+            [
+                'director_name' => 'Tom McGrath',
+                'descripcion' => null,
+                'photo' => 'https://rapchieuphim.com/photos/director/avatar/1498195853-tom-mcgrath.jpg',
+                'country' => 'Lynnwood, Washington',
+                'link_wiki' => null
+            ],
+            [
+                'director_name' => 'Andrew Goth',
+                'descripcion' => null,
+                'photo' => 'http://rapchieuphim.com/images/avatar.png',
+                'country' => null,
+                'link_wiki' => null
+            ],
+            [
+                'director_name' => 'Obin Olson, Amariah Olson',
+                'descripcion' => null,
+                'photo' => 'http://rapchieuphim.com/images/avatar.png',
+                'country' => null,
+                'link_wiki' => null
+            ],
+            [
+                'director_name' => 'James Gunn',
+                'descripcion' => null,
+                'photo' => 'https://rapchieuphim.com/photos/director/avatar/1498193581-james-gunn.jpg',
+                'country' => 'St. Louis, Missouri',
+                'link_wiki' => null
+            ],
+            [
+                'director_name' => 'Gerard Barrett',
+                'descripcion' => null,
+                'photo' => 'http://rapchieuphim.com/images/avatar.png',
+                'country' => null,
+                'link_wiki' => null
+            ],
+            [
+                'director_name' => 'Kelly Asbury',
+                'descripcion' => null,
+                'photo' => 'http://rapchieuphim.com/images/avatar.png',
+                'country' => null,
+                'link_wiki' => null
+            ],
+            [
+                'director_name' => 'Ayush Banker, Justin LaReau',
+                'descripcion' => null,
+                'photo' => 'http://rapchieuphim.com/images/avatar.png',
+                'country' => null,
+                'link_wiki' => null
+            ],
+            [
+                'director_name' => 'Huỳnh Tuấn Anh',
+                'descripcion' => null,
+                'photo' => 'http://rapchieuphim.com/images/avatar.png',
+                'country' => null,
+                'link_wiki' => null
+            ],
+            [
+                'director_name' => 'Park Kwang-hyun',
+                'descripcion' => null,
+                'photo' => 'https://rapchieuphim.com/photos/director/avatar/1498699036-park-kwang-hyun.jpg',
+                'country' => 'South Korea',
+                'link_wiki' => null
+            ],
+            [
+                'director_name' => 'Jordan Peele',
+                'descripcion' => null,
+                'photo' => 'https://rapchieuphim.com/photos/director/avatar/1498197589-jordan-peele.jpg',
+                'country' => 'U.S.',
+                'link_wiki' => null
+            ],
+            [
+                'director_name' => 'Jordan Vogt-Roberts',
+                'descripcion' => null,
+                'photo' => 'https://rapchieuphim.com/photos/director/avatar/1498197576-jordan-vogt-roberts.jpg',
+                'country' => 'United States',
+                'link_wiki' => null
+            ],
+            [
+                'director_name' => 'Lương Đình Dũng',
+                'descripcion' => null,
+                'photo' => 'http://rapchieuphim.com/images/avatar.png',
+                'country' => null,
+                'link_wiki' => null
+            ],
+            [
+                'director_name' => 'Bill Condon',
+                'descripcion' => null,
+                'photo' => 'http://rapchieuphim.com/images/avatar.png',
+                'country' => null,
+                'link_wiki' => null
             ],
             [
                 'director_name' => 'Nguyễn Quang Dũng',
-                'descripcion' => 'Known for Mỹ Nhân Kế, Tháng năm rực rỡ',
-                'photo' => 'https://upload.wikimedia.org/wikipedia/commons/4/4e/Nguyen_Quang_Dung.jpg',
-                'country' => 'Vietnam',
-                'link_wiki' => 'https://vi.wikipedia.org/wiki/Nguyễn_Quang_Dũng',
+                'descripcion' => null,
+                'photo' => 'http://rapchieuphim.com/images/avatar.png',
+                'country' => '',
+                'link_wiki' => null
             ],
             [
-                'director_name' => 'Charlie Nguyễn',
-                'descripcion' => 'Known for Để Mai Tính, Tèo Em',
-                'photo' => 'https://upload.wikimedia.org/wikipedia/commons/3/3e/Charlie_Nguyen.jpg',
-                'country' => 'Vietnam',
-                'link_wiki' => 'https://vi.wikipedia.org/wiki/Charlie_Nguyễn',
+                'director_name' => 'Cho Ui-seok',
+                'descripcion' => null,
+                'photo' => 'http://rapchieuphim.com/images/avatar.png',
+                'country' => 'South Korea',
+                'link_wiki' => null
             ],
             [
-                'director_name' => 'Trần Anh Hùng',
-                'descripcion' => 'Known for Mùi Đu Đủ Xanh, Xích lô',
-                'photo' => 'https://upload.wikimedia.org/wikipedia/commons/5/5e/Tran_Anh_Hung.jpg',
-                'country' => 'Vietnam',
-                'link_wiki' => 'https://vi.wikipedia.org/wiki/Trần_Anh_Hùng',
+                'director_name' => 'F. Javier Gutiérrez',
+                'descripcion' => null,
+                'photo' => 'http://rapchieuphim.com/images/avatar.png',
+                'country' => '',
+                'link_wiki' => null
             ],
             [
-                'director_name' => 'Lê Văn Kiệt',
-                'descripcion' => 'Known for Hai Phượng, The Princess',
-                'photo' => 'https://upload.wikimedia.org/wikipedia/commons/6/6a/Le_Van_Kiet.jpg',
-                'country' => 'Vietnam',
-                'link_wiki' => 'https://vi.wikipedia.org/wiki/Lê_Văn_Kiệt',
+                'director_name' => 'Zach Braff',
+                'descripcion' => null,
+                'photo' => 'https://rapchieuphim.com/photos/director/avatar/1498197606-zach-braff.jpg',
+                'country' => 'South Orange, New Jersey',
+                'link_wiki' => null
             ],
             [
-                'director_name' => 'Vũ Ngọc Đãng',
-                'descripcion' => 'Known for Bỗng Dưng Muốn Khóc, Hotboy Nổi Loạn',
-                'photo' => 'https://upload.wikimedia.org/wikipedia/commons/7/7e/Vu_Ngoc_Dang.jpg',
-                'country' => 'Vietnam',
-                'link_wiki' => 'https://vi.wikipedia.org/wiki/Vũ_Ngọc_Đãng',
+                'director_name' => 'Damien Chazelle',
+                'descripcion' => null,
+                'photo' => 'http://rapchieuphim.com/images/avatar.png',
+                'country' => null,
+                'link_wiki' => null
             ],
             [
-                'director_name' => 'Ngô Thanh Vân',
-                'descripcion' => 'Known for Tấm Cám: Chuyện chưa kể, Hai Phượng',
-                'photo' => 'https://upload.wikimedia.org/wikipedia/commons/8/8e/Ngô_Thanh_Vân.jpg',
-                'country' => 'Vietnam',
-                'link_wiki' => 'https://vi.wikipedia.org/wiki/Ngô_Thanh_Vân',
+                'director_name' => 'M. Night Shyamalan',
+                'descripcion' => null,
+                'photo' => 'http://rapchieuphim.com/images/avatar.png',
+                'country' => null,
+                'link_wiki' => null
             ],
             [
-                'director_name' => 'Đặng Nhật Minh',
-                'descripcion' => 'Known for Bao giờ cho đến tháng Mười, Mùa ổi',
-                'photo' => 'https://upload.wikimedia.org/wikipedia/commons/9/9e/Đặng_Nhật_Minh.jpg',
-                'country' => 'Vietnam',
-                'link_wiki' => 'https://vi.wikipedia.org/wiki/Đặng_Nhật_Minh',
+                'director_name' => 'Scott Derrickson',
+                'descripcion' => null,
+                'photo' => 'http://rapchieuphim.com/images/avatar.png',
+                'country' => null,
+                'link_wiki' => null
             ],
             [
-                'director_name' => 'Phan Đăng Di',
-                'descripcion' => 'Known for Bi, đừng sợ!, Cha và con và...',
-                'photo' => 'https://upload.wikimedia.org/wikipedia/commons/a/a3/Phan_Đăng_Di.jpg',
-                'country' => 'Vietnam',
-                'link_wiki' => 'https://vi.wikipedia.org/wiki/Phan_Đăng_Di',
+                'director_name' => 'Eric D. Howell',
+                'descripcion' => null,
+                'photo' => 'http://rapchieuphim.com/images/avatar.png',
+                'country' => null,
+                'link_wiki' => null
             ],
             [
-                'director_name' => 'Nguyễn Hoàng Điệp',
-                'descripcion' => 'Known for Đập cánh giữa không trung, Cánh đồng bất tận',
-                'photo' => 'https://upload.wikimedia.org/wikipedia/commons/b/bc/Nguyễn_Hoàng_Điệp.jpg',
-                'country' => 'Vietnam',
-                'link_wiki' => 'https://vi.wikipedia.org/wiki/Nguyễn_Hoàng_Điệp',
+                'director_name' => 'Nicholas Stoller, Doug Sweetland',
+                'descripcion' => null,
+                'photo' => 'http://rapchieuphim.com/images/avatar.png',
+                'country' => 'State College, Pennsylvania',
+                'link_wiki' => null
             ],
+            [
+                'director_name' => 'Eric Summer, Éric Warin',
+                'descripcion' => null,
+                'photo' => 'http://rapchieuphim.com/images/avatar.png',
+                'country' => null,
+                'link_wiki' => null
+            ],
+            [
+                'director_name' => 'Luís Quílez',
+                'descripcion' => null,
+                'photo' => 'http://rapchieuphim.com/images/avatar.png',
+                'country' => null,
+                'link_wiki' => null
+            ],
+            [
+                'director_name' => 'Oleg Malovichko',
+                'descripcion' => null,
+                'photo' => 'http://rapchieuphim.com/images/avatar.png',
+                'country' => null,
+                'link_wiki' => null
+            ],
+            [
+                'director_name' => 'Baran bo Odar',
+                'descripcion' => null,
+                'photo' => 'http://rapchieuphim.com/images/avatar.png',
+                'country' => null,
+                'link_wiki' => null
+            ]
         ];
+        
 
-        foreach ($director as &$direct) {
+        foreach ($directors as &$direct) {
             $direct['created_at'] = Carbon::now();
             $direct['updated_at'] = Carbon::now();
         }
 
-        DB::table('director')->insert($director);
+        DB::table('director')->insert($directors);
 
     }
 }

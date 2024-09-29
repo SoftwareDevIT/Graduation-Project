@@ -7,10 +7,12 @@ use App\Http\Requests\Movie\Store\StoreMovieRequest;
 use App\Http\Requests\Movie\Update\UpdateMovieRequest;
 use App\Models\Movie;
 use App\Models\MovieCategory;
+use App\Models\Showtime;
 use App\Services\Movie\MovieService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use League\Flysystem\WhitespacePathNormalizer;
+use Throwable;
 
 class MovieController extends Controller
 {
@@ -50,8 +52,13 @@ class MovieController extends Controller
      */
     public function show(string $id)
     {
-        $movie = $this->movieService->show($id);
-        return $this->success($movie, 'success');
+        try{
+            $movie = $this->movieService->show($id);
+            return $this->success($movie, 'Chi tiết phim ');
+        }catch(Throwable $th){
+            return $this->error('Movie not found id = ' . $id, 500);
+        }
+      
     }
 
     /**
@@ -73,7 +80,7 @@ class MovieController extends Controller
 
             return $this->success($movie, 'Cập nhập thành công');
         } catch (\Throwable $th) {
-            return $this->error('Actor not found id = ' . $id, 500);
+            return $this->error('Movie not found id = ' . $id, 500);
         }
     }
 
@@ -82,6 +89,12 @@ class MovieController extends Controller
      */
     public function destroy(string $id)
     {
+        $showtimes = Showtime::where('movie_id', $id)->exists();
+
+        if ($showtimes) {
+            return $this->error( 'Phim đang công chiếu, không thể xóa', 400);
+        }
+        
         $this->movieService->delete($id);
         return $this->success('Xoá Thành Công', 'success');
     }
@@ -92,9 +105,9 @@ class MovieController extends Controller
             $movie = $this->movieService->getMovieByMovieName($movie_name);
 
             if ($movie->isEmpty()) {
-                return $this->notFound();
+                return $this->notFound('Không tìm thấy phim', 404);
             }
-            return $this->success($movie);
+            return $this->success($movie, 'Phim theo tên tìm kiếm là:');
         } catch (ModelNotFoundException $e) {
             return $e->getMessage();
         }
@@ -109,7 +122,7 @@ class MovieController extends Controller
                 return $this->error('Không có phim nào thuộc Category này', 404);
             }
 
-            return $this->success($movies, 'Danh sách phim Category ', 200);
+            return $this->success($movies, 'Danh sách phim tho Category ', 200);
         } catch (\Throwable $th) {
             return $this->error('Fail', 500);
         }
