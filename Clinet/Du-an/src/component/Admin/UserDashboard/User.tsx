@@ -24,7 +24,11 @@ const UserDashboard: React.FC = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
+
+                const response = await instance.get('/lists');
+
                 const response = await instance.get('/list');
+
                 console.log('API Response:', response);  // Log the full response object
                 console.log('Data:', response.data.data);      // Log the data part specifically
                 setUsers(response.data.data);
@@ -54,7 +58,11 @@ const UserDashboard: React.FC = () => {
                 <div className="table-header">
                     <h3>All Users List</h3>
                     <div className="add-user-container">
+
+                     <Link to={'/admin/user/add'}>   <button className="add-user-btn">Add User</button></Link>
+
                      <Link to={'/admin/user/add'}><button className="add-user-btn">Add User</button></Link>
+
                     </div>
                 </div>
 

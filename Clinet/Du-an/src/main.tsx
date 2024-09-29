@@ -6,6 +6,9 @@ import { BrowserRouter } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { CinemaProvider } from './Context/CinemasContext.tsx'
 import { ComboProvider } from './Context/ComboContext.tsx'
+import { MoviesProvider } from './Context/MoviesContext.tsx'
+
+
 
 
 
@@ -14,9 +17,9 @@ createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
     <CinemaProvider>
       <ComboProvider>
-        
+      <MoviesProvider>
     <App />
-    
+    </MoviesProvider>
     </ComboProvider>
     </CinemaProvider>
     </BrowserRouter>

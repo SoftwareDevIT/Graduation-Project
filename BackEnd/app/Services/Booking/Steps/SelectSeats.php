@@ -216,7 +216,7 @@ class SelectSeats extends AbstractBookingStep
     }
     private function dispatchResetSeatsJob(Seats $seat): void
     {
-        Queue::later(now()->addMinutes(1), new ResetSeats($seat));
+        Queue::later(now()->addMinutes(5), new ResetSeats($seat));
     }
     private function storeSeatInSession(Seats $seat): void
     {

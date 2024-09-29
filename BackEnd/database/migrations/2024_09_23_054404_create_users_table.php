@@ -25,10 +25,10 @@ return new class extends Migration
             $table->string('fullname')->nullable();
             $table->double('coin')->nullable();
             $table->boolean('status')->default(true);
-            $table->unsignedBigInteger('role_id');
+            // $table->unsignedBigInteger('role_id');
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamps();
-            $table->foreign('role_id')->references('id')->on('role');
+            // $table->foreign('role_id')->references('id')->on('role');
         });
     }
 

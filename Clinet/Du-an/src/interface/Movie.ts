@@ -1,6 +1,10 @@
 
 import { Cinema } from "./Cinema";
 
+
+import { Cinema } from "./Cinema";
+
+
 export interface Movie {
     rating: string;
     id: number;
@@ -17,4 +21,4 @@ export interface Movie {
     trailer: string | null;
     status: 'Show' | 'Hidden';
   }
-  
+

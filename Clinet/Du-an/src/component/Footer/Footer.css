@@ -133,6 +133,7 @@
 }
 
 
+
 @media (max-width: 1024px) {
     .footer {
         padding: 20px 30px;
@@ -171,7 +172,7 @@
     }
 
     .partners img {
-        height: 25px; /* Further reduce the logo size */
+height: 25px; /* Further reduce the logo size */
     }
 
     .company-info {
