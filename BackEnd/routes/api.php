@@ -66,7 +66,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
 // Các route quản trị và quản lý
-// Route::middleware(['auth:sanctum', 'role:admin|manager'])->group(function () {
+Route::middleware(['auth:sanctum', 'role:admin|manager'])->group(function () {
     Route::apiResource('location', LocationController::class)->except(['index', 'show']);
     Route::apiResource('cinema', CinemaController::class)->except(['index', 'show']);
     Route::apiResource('room', RoomController::class);
@@ -79,7 +79,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('movies', MovieController::class)->except(['index', 'show']);
     Route::apiResource('method', PayMethodController::class);
     Route::apiResource('combo', ComboController::class);
-// });
+});
 
 
 // });
