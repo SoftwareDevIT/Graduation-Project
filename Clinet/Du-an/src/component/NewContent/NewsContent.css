@@ -92,8 +92,10 @@
 
 .related-news-item a {
   text-decoration: none;
-  color: black;
-  font-size: 18px;
+  color: #12263f;
+  font-size: 15px;
+  font-family: "Cerebri Sans, sans-serif";
+  font-weight: 400
 }
 
 .related-news-item span {

@@ -22,7 +22,7 @@ export interface LocationState {
 }
 
 const OrderPage: React.FC = () => {
-  const location = useLocation(); 
+  const location = useLocation();
   const {
     movieName,
     cinemaName,
@@ -32,12 +32,12 @@ const OrderPage: React.FC = () => {
     showtimeId, // Lấy từ location.state
     roomId, // Lấy từ location.state
     cinemaId, // Lấy từ location.state
-  } = location.state as LocationState || {}; // Sử dụng as để ép kiểu
+  } = (location.state as LocationState) || {}; // Sử dụng as để ép kiểu
 
   // Log ra giá trị showtimeId, roomId và cinemaId để kiểm tra
-  console.log('showtimeId:', showtimeId);
-  console.log('roomId:', roomId);
-  console.log('cinemaId:', cinemaId);
+  console.log("showtimeId:", showtimeId);
+  console.log("roomId:", roomId);
+  console.log("cinemaId:", cinemaId);
 
   const [combos, setCombos] = useState<Combo[]>([]);
   const [totalPrice, setTotalPrice] = useState<number>(initialTotalPrice || 0);
@@ -50,17 +50,17 @@ const OrderPage: React.FC = () => {
       .map((quantity, index) => {
         if (quantity > 0) {
           return {
-            name: combos[index].combo_name,  // Tên combo
-            quantity: quantity,               // Số lượng combo đã chọn
-            price: combos[index].price,       // Giá của combo
+            id: combos[index].id, 
+            quantity: quantity, // Số lượng combo đã chọn
+            // price: combos[index].price, // Giá của combo
           };
         }
         return null;
       })
       .filter((combo) => combo !== null);
-  
+
     console.log("Selected combos with price:", selectedCombos); // Kiểm tra combo với giá
-  
+
     navigate("/pay", {
       state: {
         movieName,
@@ -68,16 +68,13 @@ const OrderPage: React.FC = () => {
         showtime,
         selectedSeats,
         totalPrice,
-        showtimeId: showtimeId,  // Truyền showtimeId
-        roomId: roomId,          // Truyền roomId
-        cinemaId: cinemaId,      // Truyền cinemaId
-        selectedCombos,          // Truyền thông tin combo đã chọn bao gồm giá
+        showtimeId: showtimeId, // Truyền showtimeId
+        roomId: roomId, // Truyền roomId
+        cinemaId: cinemaId, // Truyền cinemaId
+        selectedCombos, // Truyền thông tin combo đã chọn bao gồm giá
       },
     });
   };
-  
-  
-  
 
   useEffect(() => {
     const fetchCombos = async () => {
@@ -122,7 +119,7 @@ const OrderPage: React.FC = () => {
       <Header />
       <Headerticket />
       <div className="combo-list">
-        {errorMessage && <div className="error-message">{errorMessage}</div>} 
+        {errorMessage && <div className="error-message">{errorMessage}</div>}
 
         <div className="thongtincombo">
           <div className="combo-header">
@@ -136,7 +133,6 @@ const OrderPage: React.FC = () => {
                 <div className="combo-info">
                   <div className="combo-name">{combo.combo_name}</div>
                   <div className="descripton">{combo.descripton}</div>
-               
                 </div>
                 <div className="combo-price">
                   {combo.price.toLocaleString("vi-VN")} đ
@@ -182,7 +178,9 @@ const OrderPage: React.FC = () => {
           </div>
 
           <div className="actionsts">
-            <Link to="/" className="back-btn2"><span>← </span>Quay lại</Link>
+            <Link to="/" className="back-btn2">
+              <span>← </span>Quay lại
+            </Link>
             <button className="continue-btn2" onClick={handleContinue}>
               Tiếp Tục
             </button>

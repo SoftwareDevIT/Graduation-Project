@@ -35,6 +35,7 @@ import ComboFormManager from "./Page/Admin/Combo/ComboForm";
 import ShowtimesFormManager from "./Page/Admin/Showtimes/ShowtimesForm";
 import AddMovie from "./component/Admin/MoviesDashboard/MovieAdd";
 import MoviesManagerForm from "./Page/Admin/Movies/MoviesForm";
+import PaymentCallback from "./component/Pay/PaymentCallback";
 
 
 
@@ -49,7 +50,7 @@ function App() {
       <Route path="/seat" element={<CinemaSeatSelection/>}/>
       <Route path="/headerticket" element={<Headerticket/>}/>
       <Route path="/confirm" element={<EmailConfirm/>}/>
-
+      <Route path="/payment-callback" element={<PaymentCallback />} />
 
       <Route path="/register" element={<RegisterCinema/>}/>
       <Route path="/login" element={<LoginCinema/>}/>
