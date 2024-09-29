@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import './ComboDashboard.css';
 
 import { Link } from 'react-router-dom';
-import instance from '../../../server';
 import { useComboContext } from '../../../Context/ComboContext';
+import instance from '../../../server';
 
 const ComboDashboard: React.FC = () => {
     const { state, deleteCombo } = useComboContext(); // Sử dụng useComboContext để lấy state và deleteCombo
@@ -62,6 +62,7 @@ const ComboDashboard: React.FC = () => {
                             <th>Description</th>
                             <th>Price</th>
                             <th>Volume</th>
+                            <th>Status</th>
                             <th>Created At</th>
                             <th>Actions</th>
                         </tr>
@@ -74,7 +75,7 @@ const ComboDashboard: React.FC = () => {
                                 <td>{combo.descripton}</td>
                                 <td>{combo.price}</td>
                                 <td>{combo.volume}</td>
-                            
+                                <td>{combo.status}</td>
                                 <td>{new Date(combo.created_at).toLocaleDateString()}</td>
                                 <td className="action-buttons">
                                     <button className="view-btn">👁</button>

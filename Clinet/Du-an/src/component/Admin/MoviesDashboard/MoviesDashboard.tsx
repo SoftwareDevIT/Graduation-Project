@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import './MoviesDashboard.css';
 
 import { useMovieContext } from '../../../Context/MoviesContext';
+import { Link } from 'react-router-dom';
 
 const MoviesDashboard: React.FC = () => {
     const { state, deleteMovie } = useMovieContext();
@@ -11,7 +12,7 @@ const MoviesDashboard: React.FC = () => {
         <div className="movies-dashboard">
             <h2>Movie Management</h2>
             <div className="actions">
-                <button className="add-movie-btn">Add New Movie</button>
+                <Link to={`/admin/movies/add`} className="add-movie-btn">Add New Movie</Link>
             </div>
             <div className="table-container">
                 <table className="movie-table">

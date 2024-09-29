@@ -9,6 +9,7 @@ import { ComboProvider } from './Context/ComboContext.tsx'
 
 import { PostsProvider } from './Context/PostContext.tsx'
 import { MovieProvider } from './Context/MoviesContext.tsx'
+import { CountryProvider } from './Context/CountriesContext.tsx'
 
 
 
@@ -21,7 +22,9 @@ createRoot(document.getElementById('root')!).render(
       <ComboProvider>
       <MovieProvider>
         <PostsProvider>
+          <CountryProvider>
     <App />
+    </CountryProvider>
     </PostsProvider>
     </MovieProvider>
     </ComboProvider>

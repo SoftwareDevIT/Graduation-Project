@@ -68,12 +68,13 @@ export const MovieProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const addMovie = async (movie: Movie) => {
     try {
       const response = await instance.post('/movies', movie);
-      dispatch({ type: 'ADD_MOVIE', payload: response.data }); // Dispatch add action
-      fetchMovies(); // Re-fetch movies after adding
+      dispatch({ type: 'ADD_MOVIE', payload: response.data }); // Use response.data if it matches your Movie structure
     } catch (error) {
       console.error('Failed to add movie:', error);
+      // Handle errors appropriately
     }
   };
+  
 
   // Function to update an existing movie
   const updateMovie = async (id: number, movie: Movie) => {

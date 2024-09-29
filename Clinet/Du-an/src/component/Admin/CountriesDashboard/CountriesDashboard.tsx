@@ -1,30 +1,25 @@
-import React, { useEffect, useState } from 'react';
-
+import React from 'react';
 import './CountriesDashboard.css';
-import instance from '../../../server';
+import { useCountryContext } from '../../../Context/CountriesContext';
 import { Location } from '../../../interface/Location';
+import { Link } from 'react-router-dom';
 
-const CountriesDashboard = () => {
-    const [countries, setCountries] = useState<Location[]>([]);
+const CountriesDashboard: React.FC = () => {
+    const { state, deleteCountry } = useCountryContext();
+    const { countries } = state;
 
-    const fetchCountries = async () => {
-        try {
-            const response = await instance.get('/location');
-            setCountries(response.data.data); // Đảm bảo response.data.data tồn tại
-        } catch (error) {
-            console.error('Error fetching countries:', error);
+    const handleDelete = async (id: number) => {
+        const confirmDelete = window.confirm("Are you sure you want to delete this country?");
+        if (confirmDelete) {
+            await deleteCountry(id);
         }
     };
-
-    useEffect(() => {
-        fetchCountries();
-    }, []);
 
     return (
         <div className="countries-dashboard">
             <h2>All Countries</h2>
             <div className="actions">
-                <button className="add-country-btn">Add Country</button>
+                <Link to={'/admin/countries/add'} className="add-country-btn">Add Country</Link>
             </div>
             <div className="table-container">
                 <table className="country-table">
@@ -41,9 +36,8 @@ const CountriesDashboard = () => {
                                 <td>{country.id}</td>
                                 <td>{country.location_name}</td>
                                 <td className="action-buttons">
-                                    <button className="view-btn">👁</button>
-                                    <button className="edit-btn">✏️</button>
-                                    <button className="delete-btn">🗑</button>
+                                    <Link to={`/admin/countries/edit/${country.id}`} className="edit-btn">✏️</Link>
+                                    <button onClick={() => handleDelete(country.id)} className="delete-btn">🗑</button>
                                 </td>
                             </tr>
                         ))}

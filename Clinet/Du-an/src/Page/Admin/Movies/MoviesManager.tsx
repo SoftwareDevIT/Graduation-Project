@@ -6,13 +6,14 @@ import MoviesDashboard from '../../../component/Admin/MoviesDashboard/MoviesDash
 
 
 
+
 function MoviesManager() {
     return (
         <div className="moviesmanager">
             <Sidebar />
             <div className="moviesadmin">
                 <Header />
-                    <MoviesDashboard/>
+                <MoviesDashboard/>
             </div>
         </div>
     );
