@@ -36,7 +36,6 @@ const CountriesDashboard: React.FC = () => {
                                 <td>{country.id}</td>
                                 <td>{country.location_name}</td>
                                 <td className="action-buttons">
-                                    <Link to={`/admin/countries/edit/${country.id}`} className="edit-btn">✏️</Link>
                                     <button onClick={() => handleDelete(country.id)} className="delete-btn">🗑</button>
                                 </td>
                             </tr>

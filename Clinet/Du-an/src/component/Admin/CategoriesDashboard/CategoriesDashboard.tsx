@@ -1,30 +1,18 @@
 import React, { useEffect, useState } from 'react';
-
 import './CategoriesDashboard.css';
-import { Categories } from '../../../interface/Categories';
-import instance from '../../../server';
+
+import { useCategoryContext } from '../../../Context/CategoriesContext';
+import { Link } from 'react-router-dom';
 
 const CategoriesDashboard = () => {
-    const [categories, setCategories] = useState<Categories[]>([]);
-
-    const fetchCategories = async () => {
-        try {
-            const response = await instance.get('/news_category');
-            setCategories(response.data.data); // Đảm bảo response.data.data tồn tại
-        } catch (error) {
-            console.error('Error fetching categories:', error);
-        }
-    };
-
-    useEffect(() => {
-        fetchCategories();
-    }, []);
+    const { state, deleteCategory } = useCategoryContext();
+    const { categories } = state;
 
     return (
         <div className="categories-dashboard">
-            <h2>All Categories</h2>
+            <h2>All Movie Categories</h2>
             <div className="actions">
-                <button className="add-category-btn">Add Category</button>
+                <Link to={'/admin/categories/add'} className="add-category-btn">Add Movie Category</Link>
             </div>
             <div className="table-container">
                 <table className="category-table">
@@ -32,7 +20,6 @@ const CategoriesDashboard = () => {
                         <tr>
                             <th>Category ID</th>
                             <th>Name</th>
-                            <th>Description</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -40,12 +27,11 @@ const CategoriesDashboard = () => {
                         {categories.map((category) => (
                             <tr key={category.id}>
                                 <td>{category.id}</td>
-                                <td>{category.news_category_name}</td>
-                                <td>{category.descriptions}</td>
+                                <td>{category.category_name}</td>
                                 <td className="action-buttons">
                                     <button className="view-btn">👁</button>
-                                    <button className="edit-btn">✏️</button>
-                                    <button className="delete-btn">🗑</button>
+                                    <Link to={`/admin/categories/edit/${category.id}`} className="edit-btn">✏️</Link>
+                                    <button onClick={() => deleteCategory(category.id)} className="delete-btn">🗑</button>
                                 </td>
                             </tr>
                         ))}

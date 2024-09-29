@@ -13,6 +13,7 @@ class News extends Model
         'title',
         'news_category_id',
         'thumnail',
+        'banner',
         'content',
         'status',
         'user_id',

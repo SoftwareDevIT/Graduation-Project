@@ -122,6 +122,7 @@
   .news-item {
     flex-direction: column;
     align-items: flex-start;
+    
   }
 
   .news-image-placeholder {
@@ -133,6 +134,7 @@
 
   .news-content h3 {
     font-size: 16px;
+    text-align: left;
   }
 
   .news-content p {
@@ -152,4 +154,10 @@
     padding: 12px;
     font-size: 14px;
   }
+}
+.news-content h3{
+  text-align: left;
+  font-size: 16px;
+  font-weight: bold;
+  font-family: "Cerebri Sans,sans-serif";
 }

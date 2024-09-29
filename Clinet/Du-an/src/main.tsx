@@ -10,6 +10,7 @@ import { ComboProvider } from './Context/ComboContext.tsx'
 import { PostsProvider } from './Context/PostContext.tsx'
 import { MovieProvider } from './Context/MoviesContext.tsx'
 import { CountryProvider } from './Context/CountriesContext.tsx'
+import { CategoryProvider } from './Context/CategoriesContext.tsx'
 
 
 
@@ -23,7 +24,9 @@ createRoot(document.getElementById('root')!).render(
       <MovieProvider>
         <PostsProvider>
           <CountryProvider>
+            <CategoryProvider>
     <App />
+    </CategoryProvider>
     </CountryProvider>
     </PostsProvider>
     </MovieProvider>

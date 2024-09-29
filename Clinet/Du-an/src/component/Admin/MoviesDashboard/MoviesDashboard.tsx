@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import './MoviesDashboard.css';
 
 import { useMovieContext } from '../../../Context/MoviesContext';
@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 const MoviesDashboard: React.FC = () => {
     const { state, deleteMovie } = useMovieContext();
     const { movies } = state;
-
+ 
     return (
         <div className="movies-dashboard">
             <h2>Movie Management</h2>
@@ -20,7 +20,8 @@ const MoviesDashboard: React.FC = () => {
                         <tr>
                             <th>Movie ID</th>
                             <th>Title</th>
-                            <th>Genre</th>
+                            <th>Thumbnail</th>
+                            <th>Movie Category</th>
                             <th>Duration</th>
                             <th>Actions</th>
                         </tr>
@@ -31,11 +32,16 @@ const MoviesDashboard: React.FC = () => {
                                 <tr key={movie.id}>
                                     <td>{movie.id}</td>
                                     <td>{movie.movie_name}</td>
-                                    <td>{movie.movie_category_id}</td>
+                                    <td>
+                                        <img src={movie.poster ?? undefined} style={{ width: "40px", height: "40px" }} alt={`${movie.movie_name} poster`} />
+                                    </td>
+                                    <td>
+                                        {movie.movie_category_id}
+                                    </td>
                                     <td>{movie.duraion}</td>
                                     <td className="action-buttons">
                                         <button className="view-btn">👁</button>
-                                        <button className="edit-btn">✏️</button>
+                                        <Link to={`/admin/movies/edit/${movie.id}`} className="edit-btn">✏️</Link>
                                         <button
                                             className="delete-btn"
                                             onClick={() => {
@@ -51,7 +57,7 @@ const MoviesDashboard: React.FC = () => {
                             ))
                         ) : (
                             <tr>
-                                <td colSpan={5}>No movies available</td>
+                                <td colSpan={6}>No movies available</td>
                             </tr>
                         )}
                     </tbody>

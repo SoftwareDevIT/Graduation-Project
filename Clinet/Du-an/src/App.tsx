@@ -40,6 +40,7 @@ import CinemasFormManager from "./Page/Admin/Cinemas/CinemasForm";
 import ComboFormManager from "./Page/Admin/Combo/ComboForm";
 import ShowtimesFormManager from "./Page/Admin/Showtimes/ShowtimesForm";
 
+
 import PostsFormManager from "./Page/Admin/Posts/PostForm";
 
 
@@ -49,6 +50,9 @@ import DanhGia from "./component/MovieDetail/DanhGia";
 import TinTuc from "./component/MovieDetail/TinTuc";
 import { ContentMovie } from "./component/MovieDetail/ContentMovie";
 import CountriesFormManager from "./Page/Admin/Countries/CountriesForm";
+import MoviesAddManager from "./Page/Admin/Movies/MoviesForm";
+import MoviesUpdateManager from "./Page/Admin/Movies/MoviesUpdate";
+import CategoriesFormManager from "./Page/Admin/Categories/CategoriesForm";
 
 
 
@@ -88,6 +92,8 @@ function App() {
       <Route path="admin/posts/add" element={<PostsFormManager/>} />
       <Route path="admin/posts/edit/:id" element={<PostsFormManager/>} />
       <Route path="admin/categories" element={<CategoriesManager/>} />
+      <Route path="admin/categories/add" element={<CategoriesFormManager/>} />
+      <Route path="admin/categories/edit/:id" element={<CategoriesFormManager/>} />
       <Route path="admin/countries" element={<CountriesManager/>} />
       <Route path="admin/countries/add" element={<CountriesFormManager/>} />
       <Route path="admin/countries/edit/:id" element={<CountriesFormManager/>} />
@@ -98,6 +104,8 @@ function App() {
       <Route path="admin/cinemas/add" element={<CinemasFormManager/>} />
       <Route path="admin/cinemas/edit/:id" element={<CinemasFormManager/>} />
       <Route path="admin/movies" element={<MoviesManager/>} />
+      <Route path="admin/movies/add" element={<MoviesAddManager/>} />
+      <Route path="admin/movies/edit/:id" element={<MoviesUpdateManager/>} />
       
       <Route path="admin/schedules" element={<SchedulesManager  />} />
       <Route path="admin/revenuebycinema" element={<RevenueByCinemaManager/>} />

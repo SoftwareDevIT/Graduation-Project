@@ -68,7 +68,6 @@ export const PostsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     try {
       const response = await instance.post('/news', post);
       dispatch({ type: 'ADD_POST', payload: response.data }); // Dispatch add action
-      fetchPosts(); // Re-fetch posts after adding
     } catch (error) {
       console.error('Failed to add post:', error);
     }
@@ -77,8 +76,7 @@ export const PostsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const updatePost = async (id: number, post: NewsItem) => {
     try {
       const response = await instance.put(`/news/${id}`, post);
-      dispatch({ type: 'UPDATE_POST', payload: response.data }); // Dispatch update action
-      fetchPosts(); // Re-fetch posts after updating
+      dispatch({ type: 'UPDATE_POST', payload: response.data }); // Make sure response.data has the updated post
     } catch (error) {
       console.error('Failed to update post:', error);
     }
@@ -88,7 +86,6 @@ export const PostsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     try {
       await instance.delete(`/news/${id}`);
       dispatch({ type: 'DELETE_POST', payload: id }); // Dispatch delete action
-      fetchPosts(); // Re-fetch posts after deleting
     } catch (error) {
       console.error('Failed to delete post:', error);
     }

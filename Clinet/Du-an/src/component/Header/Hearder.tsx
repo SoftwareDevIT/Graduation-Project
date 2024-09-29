@@ -1,13 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Hearder.css";
 import { Link } from "react-router-dom";
 
 const Header = () => {
+  const [isHeaderLeftVisible, setHeaderLeftVisible] = useState(false); // Thêm state
+
+  const toggleHeaderLeft = () => {
+    setHeaderLeftVisible(prev => {
+      console.log('isHeaderLeftVisible:', !prev); // Sử dụng prev để kiểm tra trạng thái cũ
+      return !prev;
+    });
+};
+
   return (
     <header className="header">
       <div className="container">
-        <div className="row">
-          <div className="header-left col-lg-6 ">
+        <div className="row menu ">
+          <div className="col-lg-6 col-md-4 col-sm-4 col-4 menu-2">
+          <button className="navbar-toggler navbar-dark thanhmenu" 
+              type="button" 
+              onClick={toggleHeaderLeft} // Gọi hàm toggle khi bấm nút
+              aria-controls="navbarToggleExternalContent" 
+              aria-expanded={isHeaderLeftVisible} 
+              aria-label="Toggle navigation">
+        <span className="navbar-toggler-icon"></span>
+      </button>
+          <div className={`header-left ${isHeaderLeftVisible ? 'visible' : 'hidden'}`} id="menukkk">
           <Link to={"/muave"} style={{ color: "red", fontWeight: "bold" }}>
           Đặt vé phim chiếu rạp
         </Link>
@@ -70,10 +88,14 @@ const Header = () => {
         </div>
         <a href="#">Cộng đồng</a>
           </div>
-          <div className="header-logo col-lg-1 ">
+          
+          </div>
+          
+          <div className="header-logo col-lg-1 col-md-4 col-sm-4 col-4 ">
+         
           <Link to={"/"}>moveek</Link>
           </div>
-          <div className= "header-right col-lg-5 ">
+          <div className= "header-right col-lg-5 col-md-4 col-sm-4 col-4 ">
           <input type="text" placeholder="Từ khóa tìm kiếm..." />
       <Link to="/map" className="icon-link">
           <svg

@@ -65,16 +65,16 @@ export const MovieProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, []);
 
   // Function to add a new movie
-  const addMovie = async (movie: Movie) => {
-    try {
-      const response = await instance.post('/movies', movie);
-      dispatch({ type: 'ADD_MOVIE', payload: response.data }); // Use response.data if it matches your Movie structure
-    } catch (error) {
-      console.error('Failed to add movie:', error);
-      // Handle errors appropriately
-    }
-  };
-  
+const addMovie = async (movie: Movie) => {
+  try {
+    const response = await instance.post('/movies', movie);
+    dispatch({ type: 'ADD_MOVIE', payload: response.data }); // Use response.data if it matches your Movie structure
+  } catch (error) {
+    console.error('Failed to add movie:', error);
+    // Handle errors appropriately
+  }
+};
+
 
   // Function to update an existing movie
   const updateMovie = async (id: number, movie: Movie) => {

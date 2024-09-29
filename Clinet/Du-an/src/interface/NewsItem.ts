@@ -1,3 +1,5 @@
+import { NewsCategory } from "./NewsCategory";
+
 // News.interface.ts
 export interface NewsItem {
     id: number;

@@ -165,8 +165,8 @@ const CinemaSeatSelection: React.FC = () => {
                   )
                   .join(", ")}
               </p>
-              <p>Showtime ID: <span>{showtimeId}</span></p> {/* Hiển thị showtimeId */}
-    <p>Cinema ID: <span>{cinemaId}</span></p> {/* Hiển thị cinemaId */}
+              {/* <p>Showtime ID: <span>{showtimeId}</span></p> Hiển thị showtimeId */}
+    {/* <p>Cinema ID: <span>{cinemaId}</span></p> Hiển thị cinemaId */}
             </div>
             <div className="price-box">
               <div className="price">
@@ -174,7 +174,7 @@ const CinemaSeatSelection: React.FC = () => {
                 <br /> <span>{totalPrice.toLocaleString()} đ</span>
               </div>
             </div>
-            <div className="actions">
+            <div className="actionst">
               <button className="back-btn">←</button>
               <Link
   to="/orders"

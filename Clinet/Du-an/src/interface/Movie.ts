@@ -1,13 +1,14 @@
 
 import { Actor } from "./Actor";
 import { Cinema } from "./Cinema";
-import { Director } from "./Director";
+import { MovieCategory } from "./MovieCategory";
 
-
+import { Showtime } from "./Showtime";
 
 export interface Movie {
     rating: string;
     id: number;
+    movie_category: MovieCategory;
     movie_category_id: number;
     actor_id: number;
     director_id: number;
@@ -20,7 +21,6 @@ export interface Movie {
     description: string | null;
     trailer: string | null;
     status: 'Show' | 'Hidden';
-    actor:Actor;
-    director:Director
+    showtimes: Showtime[];
   }
-
+  

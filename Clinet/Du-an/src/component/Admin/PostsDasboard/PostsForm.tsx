@@ -7,7 +7,6 @@ import instance from '../../../server';
 import { NewsItem } from '../../../interface/NewsItem';
 import { usePostsContext } from '../../../Context/PostContext';
 
-
 // Define the schema for form validation using Zod
 const postSchema = z.object({
   title: z.string().min(1, "Title is required."),
@@ -41,7 +40,7 @@ const PostsForm = () => {
         try {
           const { data } = await instance.get(`/news/${id}`);
           setPost(data.data);
-          reset(data.data);
+          reset(data.data); // Reset the form with the fetched post data
         } catch (error) {
           console.error("Failed to fetch post:", error);
         }
@@ -53,6 +52,7 @@ const PostsForm = () => {
 
   const handleFormSubmit = async (data: NewsItem) => {
     try {
+      console.log("Submitting Data:", data); // Log data
       if (isEditMode) {
         await updatePost(Number(id), data);
         alert("Post updated successfully!");
@@ -67,8 +67,6 @@ const PostsForm = () => {
       alert("Failed to submit form");
     }
   };
-
-  if (isEditMode && !post) return <div>Loading...</div>;
 
   return (
     <div>
