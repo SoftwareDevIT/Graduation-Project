@@ -19,21 +19,19 @@ class FavoriteService
         return Favorite::all();
     }
 
-    public function store(array $data): Favorite
+    public function store($movie): Favorite
     {
-        $movie_id = $data['movie_id']; // Lấy giá trị movie_id từ mảng $data
-
         $existingFavorite = Favorite::where('user_id', Auth::id())
-            ->where('movie_id', $movie_id)
+            ->where('movie_id', $movie)
             ->first();
     
         if ($existingFavorite) {
-            return response()->json(['message' => 'Movie already in favorites'], 409);
+            throw new Exception('Phim đã được yêu thích!', 409);
         }
     
         return Favorite::create([
             'user_id' => Auth::id(),
-            'movie_id' => $movie_id,
+            'movie_id' => $movie,
         ]);
     }
 

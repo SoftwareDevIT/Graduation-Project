@@ -30,14 +30,14 @@ class FavoriteController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreFavoriteRequest $request)
+    public function store($id)
     {
         try {
-            $favorite = $this->favoriteService->store($request->validated());
+           $this->favoriteService->store($id);
     
-            return $this->success($favorite, 'Thêm thành công');
+            return $this->success(null, 'Thêm thành công phim yêu thích');
         } catch (Exception $e) {
-            return $this->error('Có lỗi xảy ra: ' . $e->getMessage(), 500);
+            return $this->error('Lỗi: ' . $e->getMessage(), 500);
         }
     }
 
