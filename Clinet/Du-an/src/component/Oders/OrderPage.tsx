@@ -50,13 +50,16 @@ const OrderPage: React.FC = () => {
       .map((quantity, index) => {
         if (quantity > 0) {
           return {
-            name: combos[index].combo_name,
-            quantity: quantity,
+            name: combos[index].combo_name,  // Tên combo
+            quantity: quantity,               // Số lượng combo đã chọn
+            price: combos[index].price,       // Giá của combo
           };
         }
         return null;
       })
       .filter((combo) => combo !== null);
+  
+    console.log("Selected combos with price:", selectedCombos); // Kiểm tra combo với giá
   
     navigate("/pay", {
       state: {
@@ -65,14 +68,15 @@ const OrderPage: React.FC = () => {
         showtime,
         selectedSeats,
         totalPrice,
-        showtimeId: showtimeId, // Truyền showtimeId
-        roomId: roomId, // Truyền roomId
-        cinemaId: cinemaId, // Truyền cinemaId
-        selectedCombos, // Truyền thông tin combo đã chọn
+        showtimeId: showtimeId,  // Truyền showtimeId
+        roomId: roomId,          // Truyền roomId
+        cinemaId: cinemaId,      // Truyền cinemaId
+        selectedCombos,          // Truyền thông tin combo đã chọn bao gồm giá
       },
     });
-};
-
+  };
+  
+  
   
 
   useEffect(() => {

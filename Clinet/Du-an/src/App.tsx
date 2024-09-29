@@ -33,6 +33,8 @@ import CinemasFormManager from "./Page/Admin/Cinemas/CinemasForm";
 
 import ComboFormManager from "./Page/Admin/Combo/ComboForm";
 import ShowtimesFormManager from "./Page/Admin/Showtimes/ShowtimesForm";
+import AddMovie from "./component/Admin/MoviesDashboard/MovieAdd";
+import MoviesManagerForm from "./Page/Admin/Movies/MoviesForm";
 
 
 
@@ -70,6 +72,7 @@ function App() {
       <Route path="admin/cinemas/add" element={<CinemasFormManager/>} />
       <Route path="admin/cinemas/edit/:id" element={<CinemasFormManager/>} />
       <Route path="admin/movies" element={<MoviesManager/>} />
+      <Route path="admin/movies/add" element={<MoviesManagerForm/>} />
       <Route path="admin/schedules" element={<SchedulesManager  />} />
       <Route path="admin/revenuebycinema" element={<RevenueByCinemaManager/>} />
       <Route path="admin/revenuebymovie" element={<RevenueByMoviesManager/>} />
