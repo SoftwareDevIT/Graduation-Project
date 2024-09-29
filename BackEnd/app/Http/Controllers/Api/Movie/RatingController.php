@@ -35,7 +35,7 @@ class RatingController extends Controller
         try {
             $rating = $this->ratingService->store($request->validated());
     
-            return $this->success($rating, 'Thêm thành công');
+            return $this->success($rating, 'Đánh giá thành công');
         } catch (Exception $e) {
             return $this->error('Có lỗi xảy ra: ' . $e->getMessage(), 500);
         }
