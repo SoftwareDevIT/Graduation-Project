@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Password\ForgotPasswordRequest;
 use App\Http\Requests\Password\SendOtpRequest;
 use App\Http\Requests\Password\VerifyOtpRequest;
+use App\Models\User;
 use App\Services\Auth\ForgotPasswordService;
 use App\Services\Auth\OtpService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 
 class ForgotPasswordController extends Controller
@@ -31,7 +33,7 @@ class ForgotPasswordController extends Controller
             $message = $this->otpService->sendOtp($email);
             return $this->success($message, 'success', 200);
         } catch (\Throwable $th) {
-            return $this->error($th->getMessage(), 'error', 400);
+            return $this->error($th->getMessage(), 400);
         }
     }
 
@@ -43,7 +45,7 @@ class ForgotPasswordController extends Controller
             $message = $this->otpService->verifyOtp($otp);
             return $this->success($message, 'success', 200);
         } catch (\Throwable $th) {
-            return $this->error($th->getMessage(), 'error', 400);
+            return $this->error($th->getMessage(), 400);
         }
     }
 
@@ -53,22 +55,19 @@ class ForgotPasswordController extends Controller
         try {
             // Kiểm tra xem OTP đã được xác thực chưa
             if (!$this->otpService->canResetPassword()) {
-                return $this->error('OTP chưa được xác thực.', 'error', 400);
+                return $this->error('OTP chưa được xác thực.', 400);
             }
 
             // Lấy email từ session
             $email = Session::get('reset_password_email');
-            $password = $request->input('password');
-
             // Gọi service để đặt lại mật khẩu
-            $this->forgotpasswordService->ForgotPassword($email, $password);
-
+            $this->forgotpasswordService->ForgotPassword($email, $request->password);
             // Xóa trạng thái xác thực OTP và email
             $this->otpService->clearOtpVerification();
 
             return $this->success('Mật khẩu đã được đặt lại thành công!', 'success', 200);
         } catch (\Throwable $th) {
-            return $this->error($th->getMessage(), 'error', 400);
+            return $this->error($th->getMessage(), 400);
         }
     }
 }

@@ -1,7 +1,9 @@
 <?php
+
 namespace App\Services\Auth;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class ForgotPasswordService
 {
@@ -20,7 +22,7 @@ class ForgotPasswordService
         if (!$user) {
             throw new \Exception('Không tìm thấy người dùng với email này.');
         }
-        $user->password = bcrypt($password);
+        $user->password = $password;
         $user->save();
     }
 }
