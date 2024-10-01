@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->string('room_name');
             $table->integer('volume')->nullable();
             $table->unsignedBigInteger('cinema_id');
-            $table->enum('status', ['On', 'Off'])->default('On');
+            $table->boolean('status')->default(true);
             $table->timestamps();
             $table->foreign('cinema_id')->references('id')->on('cinema');
         });
