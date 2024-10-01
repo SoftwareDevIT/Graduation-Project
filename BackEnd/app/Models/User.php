@@ -35,7 +35,7 @@ class User extends Authenticatable
         'address',
         'fullname',
         'coin',
-        'role_id',
+        // 'role_id',
         'status',
         'rating'
     ];

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('id');
             $table->string('category_name');
             $table->string('descripcion')->nullable();
-            $table->enum('status', ['Show', 'Hidden'])->default('Show');
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }

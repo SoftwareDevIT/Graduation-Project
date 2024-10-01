@@ -10,6 +10,7 @@ use App\Services\Booking\Steps\SelectSeats;
 use App\Services\Booking\Steps\SelectCombos;
 use App\Services\Booking\Steps\ProcessPayment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -113,7 +114,7 @@ class TicketBookingService
             $booking = DB::transaction(function () use ( $reservedSeats, $combos,$request) {
                 // Tạo booking
                 $booking = Booking::create([
-                    'user_id' => auth()->user()->id,
+                    'user_id' => Auth::user()->id,
                     'showtime_id' => $request->showtimeId,
                     'pay_method_id' => 1, // Sử dụng phương thức thanh toán mặc định
                     'amount' => $request->amount   ,

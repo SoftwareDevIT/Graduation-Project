@@ -86,7 +86,7 @@ class AuthController extends Controller
             Mail::to($user->email)->queue(new VerifyAccount($user));
             return $this->success(__('messages.success_register'), 'success', 200);
         } catch (\Throwable $th) {
-            return $this->error($th->getMessage(), 'error', 400);
+            return $this->error($th->getMessage(), 400);
         }
     }
 
@@ -111,7 +111,8 @@ class AuthController extends Controller
             $token = $this->loginService->login($request->validated());
             // return response()->json(['token' => $token], 200);
             // return $this->success($token, 200);
-            return $this->success(['token' => $token], 200);
+            $user = $this->loginService->index();
+            return $this->success(['token' => $token, 'profile' => $user], 200);
 
         } catch (Exception $e) {
             return $e->getMessage();
