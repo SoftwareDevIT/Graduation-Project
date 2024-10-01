@@ -27,16 +27,20 @@ class StoreMovieRequest extends FormRequest
             'actor_id'              => 'required|integer',
             'director_id'           => 'required|integer',
 <<<<<<< HEAD
+<<<<<<< HEAD
             'movie_name'            => 'required|string|max:255',
             'poster'                => '',
 =======
             'movie_name'            => 'required|string|max:255|unique:movies',
+=======
+            'movie_name'            => 'required|string|max:255',
+>>>>>>> 26d51ec7c5dd1d883bfc77c179e9b69666364aa9
             'poster'                => 'mimes:jpeg,png,jpg,gif|max:2048',
 >>>>>>> 9af2afa115d99d44f41376de447fb4c5df210164
             'duration'              => 'string|max:225',
             'release_date'          => 'date',
             'age_limit'             => 'required|integer',
-            'descripton'            => 'string|max:255',
+            'description'            => 'string|max:255',
             'trailer'               => 'string|max:255',
             'rating'                => 'numeric'
         ];

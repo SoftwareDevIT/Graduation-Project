@@ -10,26 +10,17 @@ import './OderCheckOut.css';
 
 const OrderCheckout = () => {
   const location = useLocation();
-  const {
-    movieName,
-    cinemaName,
-    showtime,
-    selectedSeats,
-    totalPrice,
-    selectedCombos,
-  } = location.state || {};
+  const { movieName, cinemaName, showtime, selectedSeats, totalPrice, selectedCombos } = location.state || {};
 
   const handleCheckout = async () => {
-    const cinemaId = location.state?.cinemaId;
-    const showtimeId = location.state?.showtimeId;
-    const roomId = location.state?.roomId;
+    const { cinemaId, showtimeId, roomId } = location.state || {};
 
     if (!cinemaId || !showtimeId || !selectedSeats) {
       console.error('cinemaId, showtimeId hoặc ghế ngồi không được tìm thấy');
       return;
     }
 
-    const seats = selectedSeats.split(",").map((seatName: string) => {
+    const seats = selectedSeats.split(',').map((seatName: string) => {
       const trimmedSeat = seatName.trim();
       const row = trimmedSeat.charAt(0);
       const column = parseInt(trimmedSeat.slice(1)) - 1;
@@ -44,34 +35,24 @@ const OrderCheckout = () => {
     });
 
     const bookingData = {
-      cinemaId: cinemaId,
-      showtimeId: showtimeId,
-      seats: seats,
+      cinemaId,
+      showtimeId,
+      seats,
       amount: totalPrice,
       comboId: selectedCombos,
     };
 
     try {
-      // Gửi yêu cầu đặt vé
       console.log(bookingData);
-      
       const response = await instance.post('/book-ticket', bookingData);
       console.log('Đặt vé thành công:', response.data.data);
 
-      // if (response.data.data) {
-      //   const vnpayUrl = response.data.data.data;
-      //   console.log('Chuyển hướng đến VNPAY:', vnpayUrl);
-
-      //   // Chuyển hướng người dùng đến VNPAY
-      //   window.location.href = vnpayUrl;
-      // } else {
-      //   console.error('Không tìm thấy URL VNPAY hoặc dữ liệu không hợp lệ');
-      // }
+      // Chuyển hướng người dùng đến trang thanh toán nếu cần
+      // window.location.href = response.data.data?.data || '';
     } catch (error) {
       console.error('Đặt vé thất bại:', error);
       alert('Đặt vé thất bại. Vui lòng thử lại.');
     }
-
   };
 
   return (
@@ -81,9 +62,7 @@ const OrderCheckout = () => {
       <div className="order-checkout-container">
         <div className="left-panel">
           <div className="order-summary">
-            <div className="order-header">
-              <h3>Tóm tắt đơn hàng</h3>
-            </div>
+            <h3>Tóm tắt đơn hàng</h3>
             <div className="item-header">
               <span>Mô Tả</span>
               <span>Số Lượng</span>
@@ -103,7 +82,7 @@ const OrderCheckout = () => {
             <div className="order-item">
               <span className="item-title">Ghế đã chọn: {selectedSeats}</span>
             </div>
-            {selectedCombos && selectedCombos.length > 0 && (
+            {selectedCombos?.length > 0 && (
               <div className="combo-summary">
                 <h4>Combo đã chọn:</h4>
                 {selectedCombos.map((combo: any, index: number) => (
@@ -119,32 +98,18 @@ const OrderCheckout = () => {
               <span className="total-price">{totalPrice?.toLocaleString('vi-VN')} đ</span>
             </div>
           </div>
+
           <div className="payment-methods">
             <h3>Hình thức thanh toán</h3>
             <ul>
-              <li>
-                <FontAwesomeIcon icon={faWallet} className="payment-icon" /> Fundiin
-              </li>
-              <li>
-                <FontAwesomeIcon icon={faMobileAlt} className="payment-icon" /> Ví MoMo
-              </li>
-              <li>
-                <FontAwesomeIcon icon={faQrcode} className="payment-icon" /> Quét mã QR
-              </li>
-              <li>
-                <FontAwesomeIcon icon={faUniversity} className="payment-icon" /> Chuyển khoản / Internet Banking
-              </li>
-              <li>
-                <FontAwesomeIcon icon={faWallet} className="payment-icon" /> Ví ShopeePay
-              </li>
-              <li>
-                <FontAwesomeIcon icon={faCreditCard} className="payment-icon" /> Thẻ ATM (Thẻ nội địa)
-              </li>
-              <li>
-                <FontAwesomeIcon icon={faWallet} className="payment-icon" /> Ví FPT Pay
-              </li>
+              <li><FontAwesomeIcon icon={faWallet} className="payment-icon" /> Fundiin</li>
+              <li><FontAwesomeIcon icon={faMobileAlt} className="payment-icon" /> Ví MoMo</li>
+              <li><FontAwesomeIcon icon={faQrcode} className="payment-icon" /> Quét mã QR</li>
+              <li><FontAwesomeIcon icon={faUniversity} className="payment-icon" /> Chuyển khoản</li>
+              <li><FontAwesomeIcon icon={faCreditCard} className="payment-icon" /> Thẻ ATM</li>
             </ul>
           </div>
+
           <div className="form-container">
             <h3>Thông tin cá nhân</h3>
             <form>
@@ -162,11 +127,12 @@ const OrderCheckout = () => {
               </div>
               <div className="form-group checkbox-group">
                 <input type="checkbox" id="create-account" />
-                <label htmlFor="create-account">Tạo tài khoản với email và số điện thoại này</label>
+                <label htmlFor="create-account">Tạo tài khoản</label>
               </div>
             </form>
           </div>
         </div>
+
         <div className="right-panel">
           <div className="checkout-details">
             <div className="order-info">
@@ -179,9 +145,8 @@ const OrderCheckout = () => {
             </div>
             <div className="description">
               <p>
-                Vé đã mua không thể đổi hoặc hoàn tiền. Mã vé sẽ được gửi 01 lần
-                qua số điện thoại và email đã nhập. Vui lòng kiểm tra lại thông
-                tin trước khi tiếp tục
+                Vé đã mua không thể đổi hoặc hoàn tiền. Mã vé sẽ được gửi qua số điện thoại và email đã nhập. 
+                Vui lòng kiểm tra lại thông tin trước khi tiếp tục.
               </p>
             </div>
             <button onClick={handleCheckout} className="checkout-button">Thanh toán</button>

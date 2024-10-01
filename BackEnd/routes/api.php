@@ -22,6 +22,7 @@ use App\Http\Controllers\Api\PayMethod\PayMethodController;
 use App\Http\Controllers\Api\Auth\AccountVerificationController;
 use App\Http\Controllers\Api\Auth\ResetPasswordController;
 use App\Http\Controllers\Api\Movie\RatingController;
+use App\Http\Controllers\Api\Seat\SeatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,12 +46,15 @@ Route::get('/verify-account/{userId}', [AccountVerificationController::class, 'v
 // Các tuyến công khai để xem tài nguyên
 Route::apiResource('location', LocationController::class)->only(['index', 'show']);
 Route::apiResource('cinema', CinemaController::class)->only(['index', 'show']);
-Route::apiResource('news_category', NewCategoryController::class)->only(['index', 'show']);         // Liệt kê các danh mục tin tức
-Route::apiResource('news', NewController::class)->only(['index', 'show']);                          // List news
-Route::apiResource('actor', ActorController::class)->only(['index', 'show']);                       // Liệt kê các diễn viên
-Route::apiResource('director', DirectorController::class)->only(['index', 'show']);                 // Danh sách giám đốc
-Route::apiResource('movie-category', MovieCategoryController::class)->only(['index', 'show']);      // Liệt kê các thể loại phim
-Route::apiResource('movies', MovieController::class)->only(['index', 'show']);                      // Liệt kê phim
+
+Route::apiResource('news_category', NewCategoryController::class)->only(['index', 'show']);// Liệt kê các danh mục tin tức
+Route::apiResource('news', NewController::class)->only(['index', 'show']); // List news
+Route::apiResource('actor', ActorController::class)->only(['index', 'show']);// Liệt kê các diễn viên
+Route::apiResource('director', DirectorController::class)->only(['index', 'show']);// Danh sách giám đốc
+Route::apiResource('movie-category', MovieCategoryController::class)->only(['index', 'show']); // Liệt kê các thể loại phim
+Route::apiResource('movies', MovieController::class)->only(['index', 'show']); // Liệt kê phim
+Route::apiResource('combo', ComboController::class)->only(['index', 'show']);;
+Route::apiResource('seat', SeatController::class)->only(['index', 'show']);;
 
 // Các tuyến có thể truy cập được cho người dùng được xác thực
 Route::middleware(['auth:sanctum'])->group(function () {

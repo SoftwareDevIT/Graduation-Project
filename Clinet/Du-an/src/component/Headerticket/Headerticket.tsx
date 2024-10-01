@@ -26,21 +26,28 @@ const Headerticket = () => {
                 <span className="label">Chọn ghế</span>
             </div>
 
-            <span className="separator"> &gt; </span>
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 4L16 12L8 20" stroke="#b0c4de" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
 
             <div className={`buoc ${getActiveClass('/orders')}`}>
                 <i data-feather="shopping-bag"></i>
                 <span className="label">Bắp nước</span>
             </div>
 
-            <span className="separator"> &gt; </span>
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 4L16 12L8 20" stroke="#b0c4de" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
 
             <div className={`buoc ${getActiveClass('/pay')}`}>
                 <i data-feather="credit-card"></i>
                 <span className="label">Thanh toán</span>
             </div>
 
-            <span className="separator"> &gt; </span>
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8 4L16 12L8 20" stroke="#b0c4de" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
 
             <div className="buoc">
                 <i data-feather="inbox"></i>
