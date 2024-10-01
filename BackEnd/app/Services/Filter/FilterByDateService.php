@@ -12,9 +12,9 @@ class FilterByDateService
 {
     $filteredShowtimes = function($query) use ($date) {
         $query->where('showtime_date', $date)
-              ->where('status', 'Show');
+              ->where('status', '1');
     };
-    
+
     $query = Movie::whereHas('showtimes', $filteredShowtimes)
                   ->with(['showtimes' => $filteredShowtimes]);
 
