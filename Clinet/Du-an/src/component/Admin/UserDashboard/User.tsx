@@ -25,7 +25,7 @@ const UserDashboard: React.FC = () => {
         const fetchUsers = async () => {
             try {
 
-                const response = await instance.get('/lists');
+               
 
                 const response = await instance.get('/list');
 

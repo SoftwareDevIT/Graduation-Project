@@ -74,3 +74,78 @@
 .tintuccontainer{
     display: block;
 }
+/* Cho màn hình máy tính bảng */
+@media (max-width: 1024px) {
+    .related-posts {
+        width: 100%;
+        margin-left: 0;
+        padding: 15px;
+    }
+
+    .title-2 {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .post {
+        flex-direction: column; /* Chuyển sang hiển thị theo cột */
+        align-items: flex-start; /* Căn trái cho nội dung */
+    }
+
+    .post-image {
+        width: 100%; /* Cho ảnh chiếm toàn bộ chiều ngang */
+        height: auto;
+        margin-bottom: 10px;
+    }
+
+    .post-info {
+        width: 100%;
+    }
+
+    .post-title {
+        font-size: 16px;
+    }
+
+    .post-meta, .post-meta-2 {
+        font-size: 14px;
+    }
+}
+
+/* Cho màn hình điện thoại */
+@media (max-width: 768px) {
+    .related-posts {
+        width: 100%;
+        padding: 10px;
+        margin-left: 0;
+    }
+
+    .title-2 {
+        width: 100%;
+        margin-left: 0;
+        text-align: center; /* Căn giữa tiêu đề */
+    }
+
+    .post {
+        flex-direction: column; /* Hiển thị theo cột cho nội dung */
+        align-items: flex-start;
+    }
+
+    .post-image {
+        width: 100%;
+        height: auto;
+        margin-bottom: 10px;
+    }
+
+    .post-title {
+        font-size: 18px;
+        margin-bottom: 8px;
+    }
+
+    .post-meta, .post-meta-2 {
+        font-size: 14px;
+    }
+
+    .container.tintuccontainer {
+        padding: 0 10px;
+    }
+}

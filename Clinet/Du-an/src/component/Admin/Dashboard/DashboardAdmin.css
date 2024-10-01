@@ -1,10 +1,6 @@
 .dashboard {
     padding: 30px;
-
-    background: rgb(229, 240, 242); /* Nền xanh nhạt */
-
-    background: #0f0d30; /* Dark background to match the screenshot */
-
+    background: #f0f4f8; /* Nền sáng xanh nhạt */
     min-height: 170vh;
     display: flex;
     flex-direction: column;
@@ -15,7 +11,7 @@
 .dashboard-title {
     font-size: 2.5rem;
     margin-bottom: 40px;
-    color: #006064; /* Xanh đậm */
+    color: #004d40; /* Xanh đậm */
     text-align: center;
     font-weight: bold;
     text-transform: uppercase;
@@ -35,29 +31,19 @@
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
     margin-bottom: 30px;
-    
 }
 
 .summary-card {
-
-    background-color: #fff !important; /* Màu nền sáng xanh rất nhạt */
+    background-color: #ffffff; /* Màu nền trắng */
     padding: 20px;
-
-    background: #1b1837; /* Dark purple background */
-    padding: 30px;
-
     border-radius: 12px;
-    box-shadow: 0 6px 16px rgba(10, 37, 129, 0.1);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-  
 }
-.summary-card h3{
-    color: black !important;
-}
+
 .summary-card:hover {
     transform: translateY(-10px);
-
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
 }
 
@@ -65,31 +51,23 @@
     display: flex;
     align-items: center;
     justify-content: center;
-
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
-    background-color: #2d2b58;
 }
 
 .summary-card h3 {
     font-size: 1.5rem;
-    color: #a3b1ff; /* Light purple/blue text for card titles */
-
+    color: #004d40; /* Xanh đậm */
     margin-bottom: 10px;
 }
 
 .summary-icon {
     font-size: 2rem;
     margin-right: 20px;
-    color: #00796b; /* Xanh đậm */
+    color: #00796b; /* Xanh biển */
 }
 
 .summary-number {
     font-size: 2.5rem;
-
-    color: #0097a7; /* Xanh biển */
-
-    color: #50e3c2; /* Neon cyan for numbers */
-
+    color: #00796b; /* Xanh biển đậm */
     font-weight: bold;
 }
 
@@ -99,7 +77,7 @@
     align-items: center;
     margin-top: 15px;
     font-size: 0.9rem;
-    color: #00796b; /* Xanh đậm */
+    color: #004d40; /* Xanh đậm */
 }
 
 .summary-change {
@@ -121,7 +99,7 @@
 }
 
 .view-more {
-    color: #0097a7; /* Xanh biển nhạt */
+    color: #00796b; /* Xanh biển nhạt */
     text-decoration: none;
 }
 
@@ -138,11 +116,7 @@
 }
 
 .revenue-summary, .quarterly-revenue {
-
     background: #ffffff; /* Nền trắng */
-
-    background: #1b1837; /* Same dark purple background for charts */
-
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
@@ -152,11 +126,7 @@
 
 .revenue-summary h3, .quarterly-revenue h3 {
     font-size: 1.8rem;
-
-    color: #006064; /* Xanh đậm */
-
-    color: #a3b1ff; /* Light purple/blue text for chart titles */
-
+    color: #004d40; /* Xanh đậm */
     margin-bottom: 20px;
     font-weight: 600;
 }
@@ -169,7 +139,6 @@
 
 .revenue-amount {
     font-size: 2rem;
-
     color: #00796b; /* Xanh đậm */
     font-weight: bold;
 }
@@ -186,10 +155,7 @@
 .recent-orders h3 {
     margin-bottom: 20px;
     font-size: 18px;
-    color: #006064; /* Xanh đậm */
-
-    color: #50e3c2; /* Neon cyan for total revenue */
-
+    color: #004d40; /* Xanh đậm */
     font-weight: bold;
 }
 
@@ -197,7 +163,7 @@
     width: 100%;
     border-collapse: collapse;
     font-size: 14px;
-    color: #006064; /* Xanh đậm */
+    color: #004d40; /* Xanh đậm */
 }
 
 .recent-orders table th,
@@ -209,12 +175,12 @@
 
 .recent-orders table th {
     background-color: #e0f7fa; /* Nền xanh nhạt cho tiêu đề */
-    color: #00796b; /* Chữ xanh đậm */
+    color: #004d40; /* Chữ xanh đậm */
     font-weight: 600;
 }
 
 .recent-orders table td {
-    color: #00796b; /* Chữ xanh đậm */
+    color: #004d40; /* Chữ xanh đậm */
 }
 
 .recent-orders table tr:nth-child(even) {
@@ -225,12 +191,6 @@
     background-color: #b2ebf2; /* Màu xanh nhạt khi hover */
 }
 
-.recent-orders p {
-    margin-top: 15px;
-    font-size: 14px;
-    color: #00796b; /* Chữ xanh đậm */
-}
-
 /* Responsive design for mobile devices */
 @media (max-width: 768px) {
     .recent-orders table th,
@@ -238,9 +198,7 @@
         font-size: 12px;
         padding: 8px;
     }
-}
 
-@media (max-width: 768px) {
     .charts-container {
         flex-direction: column;
     }

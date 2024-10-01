@@ -32,8 +32,7 @@ import EmailConfirm from "./component/EmailConfirm/EmailConfirm";
 import UserAddManager from "./Page/Admin/User/UserAdd";
 import Home from "./Page/Home";
 import Bookcinematickets from "./Page/Client/Bookcinematickets";
-import UserAddManager from "./Page/Admin/User/UserAdd";
-import EmailConfirm from "./component/EmailConfirm/EmailConfirm";
+
 
 import CinemasFormManager from "./Page/Admin/Cinemas/CinemasForm";
 

@@ -360,4 +360,96 @@ border: 1px solid white;
   .dislike-btn:hover {
     opacity: 0.7;
   }
-  
+  /* Cho màn hình máy tính bảng */
+@media (max-width: 1024px) {
+    .movie-detail-container {
+        padding: 20px;
+    }
+
+    .info-section {
+        flex-direction: column;
+        width: 100%;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .movie-details-wrapper {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .poster {
+        width: 180px;
+    }
+
+    .additional-info {
+        width: 100%;
+        padding-top: 20px;
+    }
+
+    .tabs {
+        flex-direction: column;
+        gap: 10px;
+        padding-left: 0;
+        margin-left: 0;
+    }
+
+    .schedule-section, .related-posts, .title-2, .community-section {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .video-section {
+        width: 100%;
+    }
+}
+
+/* Cho màn hình điện thoại */
+@media (max-width: 768px) {
+    .info-section {
+        flex-direction: column;
+        width: 100%;
+        gap: 15px;
+        padding: 15px;
+    }
+
+    .movie-details-wrapper {
+        flex-direction: column;
+        width: 100%;
+        gap: 15px;
+    }
+
+    .poster {
+        width: 150px;
+    }
+
+    .additional-info {
+        width: 100%;
+        padding-top: 10px;
+    }
+
+    .tabs {
+        flex-direction: column;
+        padding-left: 0;
+        margin-left: 0;
+    }
+
+    .actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .movie-details {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .schedule-section, .related-posts, .title-2, .community-section {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .video-section {
+        width: 100%;
+    }
+}

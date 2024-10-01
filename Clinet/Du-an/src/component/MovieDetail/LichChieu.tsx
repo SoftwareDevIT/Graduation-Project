@@ -92,9 +92,7 @@ const LichChieuUpdated: React.FC = () => {
                                         <p className="cinema-name">{cinema.name}</p>
                                         <p className="cinema-branches">{cinema.branches} rạp</p>
                                     </div>
-                                    <div className="cinema-arrow">
-                                        <span>&gt;</span>
-                                    </div>
+                                  
                                 </div>
                                 {expandedIndex === index && (
                                     <div className="sub-cinema-list">
@@ -115,11 +113,9 @@ const LichChieuUpdated: React.FC = () => {
                                                       <span>15:20</span>
                                                       <span>18:20</span>
                                                       <span>19:00</span>
-                                                      <span>20:10 <span className="price">80K</span></span>
-                                                      <span>21:15 <span className="price">80K</span></span>
-                                                      <span>21:40 <span className="price">80K</span></span>
-                                                      <span>22:40 <span className="price">50K</span></span>
-                                                      <span>23:10 <span className="price">50K</span></span>
+                                                      <span>20:10 </span>
+                                                      <span>21:15 </span>
+                                                     
                                                   </div>
                                               </div>
                                               
