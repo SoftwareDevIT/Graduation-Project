@@ -70,7 +70,7 @@ class TicketBookingService
     {
         // Tạo temporary booking
         $temporaryBooking = TemporaryBooking::create([
-            'user_id' => 3,
+            'user_id' => auth()->user()->id,
             'reserved_showtime' => $result['movies'],
             'reserved_seats' => $result['seats_data'],
             'combos' => is_array($result['combos']) ? json_encode($result['combos']) : $result['combos']->toArray(),
@@ -113,7 +113,7 @@ class TicketBookingService
             $booking = DB::transaction(function () use ( $reservedSeats, $combos,$request) {
                 // Tạo booking
                 $booking = Booking::create([
-                    'user_id' => 3,
+                    'user_id' => auth()->user()->id,
                     'showtime_id' => $request->showtimeId,
                     'pay_method_id' => 1, // Sử dụng phương thức thanh toán mặc định
                     'amount' => $request->amount   ,

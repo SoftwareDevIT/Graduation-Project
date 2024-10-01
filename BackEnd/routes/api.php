@@ -36,18 +36,18 @@ use App\Http\Controllers\Api\Movie\RatingController;
 // Các tuyến xác thực công khai
 Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout']);
-Route::post('register', [AuthController::class, 'register']);// Đăng ký người dùng
-Route::post('password/send-otp', [ForgotPasswordController::class, 'sendOtp']);// Gửi OTP đến email
+Route::post('register', [AuthController::class, 'register']); // Đăng ký người dùng
+Route::post('password/send-otp', [ForgotPasswordController::class, 'sendOtp']); // Gửi OTP đến email
 Route::post('password/verify-otp', [ForgotPasswordController::class, 'verifyOtp']); // Xác minh OTP
 Route::post('password/reset', [ForgotPasswordController::class, 'forgotPassword']); // Đặt lại mật khẩu
 
 // Các tuyến công khai để xem tài nguyên
 Route::apiResource('location', LocationController::class)->only(['index', 'show']);
 Route::apiResource('cinema', CinemaController::class)->only(['index', 'show']);
-Route::apiResource('news_category', NewCategoryController::class)->only(['index', 'show']);// Liệt kê các danh mục tin tức
+Route::apiResource('news_category', NewCategoryController::class)->only(['index', 'show']); // Liệt kê các danh mục tin tức
 Route::apiResource('news', NewController::class)->only(['index', 'show']); // List news
-Route::apiResource('actor', ActorController::class)->only(['index', 'show']);// Liệt kê các diễn viên
-Route::apiResource('director', DirectorController::class)->only(['index', 'show']);// Danh sách giám đốc
+Route::apiResource('actor', ActorController::class)->only(['index', 'show']); // Liệt kê các diễn viên
+Route::apiResource('director', DirectorController::class)->only(['index', 'show']); // Danh sách giám đốc
 Route::apiResource('movie-category', MovieCategoryController::class)->only(['index', 'show']); // Liệt kê các thể loại phim
 Route::apiResource('movies', MovieController::class)->only(['index', 'show']); // Liệt kê phim
 // Các tuyến có thể truy cập được cho người dùng được xác thực
@@ -81,8 +81,8 @@ Route::middleware(['auth:sanctum', 'role:admin|manager'])->group(function () {
 
 
 // });
-    Route::get('showtimes/movie/{movie_name}', [ShowtimeController::class, 'showtimeByMovieName']);
-    Route::post('/resetPassword', [ResetPasswordController::class, 'resetPassword']);
+Route::get('showtimes/movie/{movie_name}', [ShowtimeController::class, 'showtimeByMovieName']);
+Route::post('/resetPassword', [ResetPasswordController::class, 'resetPassword']);
 
 // });
 
