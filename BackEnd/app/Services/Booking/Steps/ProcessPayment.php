@@ -6,7 +6,7 @@ use App\Services\Booking\Handlers\AbstractBookingStep;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
-class ProcessPayment 
+class ProcessPayment
 {
     public function process(Request $request): ?string
     {
@@ -24,7 +24,7 @@ class ProcessPayment
 
         // Lấy dữ liệu từ request
         $bookingId = $request->input('boking_id'); // Booking ID từ bước trước
-        Log::info('Booking ID: ' . $bookingId);
+        Log::info('Booking ID: ' . json_encode($request->all()));
         if (!$bookingId) {
             return null; // Trả về null nếu không có Booking ID
         }

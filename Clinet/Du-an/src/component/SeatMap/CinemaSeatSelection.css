@@ -239,80 +239,6 @@
   margin-right: 20px;
 }
 
-/* Mobile responsiveness */
-@media (max-width: 768px) {
-  .container-map {
-    margin-left: 0; /* Remove left margin on smaller screens */
-  }
-
-  .seat-info-box {
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 20px; /* Space below info box */
-  }
-
-  .seat-map-box {
-    width: 100%; /* Full width on mobile */
-    margin-bottom: 20px; /* Space below seat map box */
-  }
-
-  .thongtinphim {
-    margin-right: 0;
-    margin-top: 20px; /* Add space on top */
-    width: 100%; /* Full width on mobile */
-    text-align: center; /* Center text */
-  }
-
-  .details-box, .price-box {
-    width: 90%; /* Adjust width for mobile */
-    align-items: center;
-    box-shadow: none; /* Remove box shadow for mobile */
-  }
-
-  .actionst {
-    flex-direction: column;
-    align-items: center; 
-    width: 100%; /* Full width for actions */
-  }
-
-  .back-btn, .continue-btn {
-    width: 20%; /* Full width buttons on mobile */
-    margin-left: 20px;
-  }
-
-  .continue-btn {
-    width: 100%;
-  }
-
-  .legend {
-    
-    align-items: flex-start; /* Align items to the start for better spacing */
-  }
-}
-
-@media (max-width: 480px) {
-  .seat-label {
-    font-size: 0.8em; /* Smaller font size for seat labels */
-  }
-
-  .seat {
-    width: 24px; /* Smaller seat size */
-    height: 24px;
-  }
-
-  .price-box .price {
-    font-size: 14px; /* Smaller font size for price */
-  }
-
-  .seat-number {
-    font-size: 0.7em; /* Smaller seat number */
-  }
-}
-.seat-row-container {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px; /* Khoảng cách giữa các hàng ghế */
-}
 
 .seat-row-label {
   width: 40px; /* Chiều rộng cố định của nhãn */
@@ -363,3 +289,285 @@
   height: 45px;
   width: 100px;
 }
+@media (max-width: 480px) {
+  .container-map {
+    margin-left: 0;
+    padding: 0;
+    max-width: 100%;
+  }
+
+  .seat-info-box {
+    flex-direction: column-reverse;
+    padding: 10px;
+  }
+
+  .seat-map-box {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .thongtinphim {
+   position: relative;
+   right: 50px;
+    margin-top: 10px;
+  }
+
+  .screen {
+    font-size: 1em;
+    padding: 6px 0;
+  }
+
+  .seat-map {
+    width: 100%;
+  }
+
+  .seat {
+    width: 24px;
+    height: 24px;
+    margin: 0 3px;
+  }
+
+  .seat.couple-seat {
+    width: 50px;
+  }
+
+  .details-box {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .price-box {
+    margin-left: 0;
+    padding-left: 10px;
+  }
+
+  .actions {
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15px;
+  }
+
+  .back-btn, .continue-btn {
+    width: 60%;
+   margin-left: 40px;
+   margin-bottom: 15px;
+  }
+
+  .legend {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  .legend div {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .seat-row-label {
+    margin-right: 0;
+    width: 30px;
+  }
+
+  .seat-row-seats {
+    margin-right: 0;
+  }
+
+  .actionst {
+    margin-left: 0;
+  }
+
+  .actionst .back-btn {
+    width: 30%;
+    margin: 5px 0;
+  }
+}
+@media (max-width: 992px) {
+  .container-map {
+    margin-left: 0;
+    padding: 0;
+    max-width: 100%;
+  }
+
+  .seat-info-box {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .seat-map-box {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .thongtinphim {
+    margin-left: 135px;
+    margin-top: 10px;
+  }
+
+  .screen {
+    font-size: 1em;
+    padding: 6px 0;
+  }
+
+  .seat-map {
+    width: 100%;
+  }
+
+  .seat {
+    width: 24px;
+    height: 24px;
+    margin: 0 3px;
+  }
+
+  .seat.couple-seat {
+    width: 50px;
+  }
+
+  .details-box {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .price-box {
+    margin-left: 0;
+    padding-left: 10px;
+  }
+
+  .actions {
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15px;
+  }
+
+  .back-btn, .continue-btn {
+    width: 60%;
+    margin-left: 40px;
+    margin-bottom: 15px;
+  }
+
+  .legend {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    flex-wrap: wrap; /* Cho phép dòng chữ legend gọn hơn */
+    justify-content: center; /* Canh giữa nội dung */
+  }
+
+  .legend div {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .seat-row-label {
+    margin-right: 0;
+    width: 30px;
+  }
+
+  .seat-row-seats {
+    margin-right: 0;
+  }
+
+  .actionst {
+    margin-left: 0;
+  }
+
+  .actionst .back-btn {
+    width: 30%;
+    margin: 5px 0;
+  }
+}
+@media (max-width: 768px) {
+  .container-map {
+    margin-left: 0;
+    padding: 0;
+    max-width: 100%;
+  }
+
+  .seat-info-box {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .seat-map-box {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .thongtinphim {
+    margin-left: 45px; /* Giảm khoảng cách bên trái */
+    margin-top: 10px;
+  }
+
+  .screen {
+    font-size: 1em;
+    padding: 6px 0;
+  }
+
+  .seat-map {
+    width: 100%;
+  }
+
+  .seat {
+    width: 24px;
+    height: 24px;
+    margin: 0 3px;
+  }
+
+  .seat.couple-seat {
+    width: 50px;
+  }
+
+  .details-box {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .price-box {
+    margin-left: 0;
+    padding-left: 10px;
+  }
+
+  .actions {
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15px;
+  }
+
+  .back-btn, .continue-btn {
+    width: 60%;
+    margin-left: 40px;
+    margin-bottom: 15px;
+  }
+
+  .legend {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    flex-wrap: wrap; /* Cho phép dòng chữ legend gọn hơn */
+    justify-content: center; /* Canh giữa nội dung */
+  }
+
+  .legend div {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .seat-row-label {
+    margin-right: 0;
+    width: 30px;
+  }
+
+  .seat-row-seats {
+    margin-right: 0;
+  }
+
+  .actionst {
+    margin-left: 0;
+  }
+
+  .actionst .back-btn {
+    width: 30%;
+    margin: 5px 0;
+  }
+}
+

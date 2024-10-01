@@ -128,7 +128,7 @@ const CinemaSeatSelection: React.FC = () => {
       <Headerticket />
       <div className="container container-map">
         <div className="seat-info-box">
-          <div className="seat-map-box">
+          <div className="seat-map-box ">
             <div className="screen">MÀN HÌNH</div>
             <div className="seat-map">
               {seatRows.map((row, index) => (

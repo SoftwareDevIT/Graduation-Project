@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './CinemasDashboard.css'
@@ -59,6 +60,7 @@ const CinemasDashboard: React.FC = () => {
       </div>
     </div>
   );
+
 };
 
 export default CinemasDashboard;

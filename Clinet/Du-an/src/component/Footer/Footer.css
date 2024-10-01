@@ -133,6 +133,7 @@
 }
 
 
+
 @media (max-width: 1024px) {
     .footer {
         padding: 20px 30px;
@@ -162,6 +163,9 @@
     .company-info {
         font-size: 12px; /* Smaller text for mobile */
     }
+    .footer-left img{
+        display: none;
+    }
 }
 
 /* For smaller mobile screens */
@@ -171,7 +175,7 @@
     }
 
     .partners img {
-        height: 25px; /* Further reduce the logo size */
+height: 25px; /* Further reduce the logo size */
     }
 
     .company-info {

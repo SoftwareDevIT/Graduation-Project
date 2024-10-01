@@ -1,52 +1,18 @@
-import React, { useState, useEffect } from 'react';
-
+import React from 'react';
 import './MoviesDashboard.css';
-import { Movie } from '../../../interface/Movie';
-import instance from '../../../server';
+
+
+import { Link } from 'react-router-dom';
 
 const MoviesDashboard: React.FC = () => {
-    const [movies, setMovies] = useState<Movie[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-
-    // Fetch movies from the API when the component mounts
-    useEffect(() => {
-        const fetchMovies = async () => {
-            try {
-                const response = await instance.get('/movies');
-                console.log('API Response:', response.data); // Log the entire response
-    
-                // Access the movies array from the response.data
-                if (Array.isArray(response.data.data)) {
-                    setMovies(response.data.data); // Set movies if it's an array
-                } else {
-                    console.error('Unexpected response format', response.data);
-                    setError('Failed to fetch movies: Unexpected response format');
-                }
-                setLoading(false);
-            } catch (err) {
-                console.error('Fetch error:', err); // Log the error
-                setError('Failed to fetch movies');
-                setLoading(false);
-            }
-        };
-    
-        fetchMovies();
-    }, []);
-    
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-
-    if (error) {
-        return <div>{error}</div>;
-    }
-
+    const { state, deleteMovie } = useMovieContext();
+    const { movies } = state;
+ 
     return (
         <div className="movies-dashboard">
             <h2>Movie Management</h2>
             <div className="actions">
-                <button className="add-movie-btn">Add New Movie</button>
+                <Link to={`/admin/movies/add`} className="add-movie-btn">Add New Movie</Link>
             </div>
             <div className="table-container">
                 <table className="movie-table">
@@ -54,7 +20,8 @@ const MoviesDashboard: React.FC = () => {
                         <tr>
                             <th>Movie ID</th>
                             <th>Title</th>
-                            <th>Genre</th>
+                            <th>Thumbnail</th>
+                            <th>Movie Category</th>
                             <th>Duration</th>
                             <th>Actions</th>
                         </tr>
@@ -64,22 +31,36 @@ const MoviesDashboard: React.FC = () => {
                             movies.map((movie) => (
                                 <tr key={movie.id}>
                                     <td>{movie.id}</td>
-                                    <td>{movie.movie_name}</td> {/* Adjust to match your interface */}
-                                    <td>{movie.movie_category_id}</td> {/* Replace with genre if needed */}
+                                    <td>{movie.movie_name}</td>
+                                    <td>
+                                        <img src={movie.poster ?? undefined} style={{ width: "40px", height: "40px" }} alt={`${movie.movie_name} poster`} />
+                                    </td>
+                                    <td>
+                                        {movie.movie_category_id}
+                                    </td>
                                     <td>{movie.duraion}</td>
                                     <td className="action-buttons">
                                         <button className="view-btn">👁</button>
-                                        <button className="edit-btn">✏️</button>
-                                        <button className="delete-btn">🗑</button>
+                                        <Link to={`/admin/movies/edit/${movie.id}`} className="edit-btn">✏️</Link>
+                                        <button
+                                            className="delete-btn"
+                                            onClick={() => {
+                                                if (window.confirm(`Are you sure you want to delete ${movie.movie_name}?`)) {
+                                                    deleteMovie(movie.id);
+                                                }
+                                            }}
+                                        >
+                                            🗑
+                                        </button>
                                     </td>
                                 </tr>
                             ))
                         ) : (
                             <tr>
-                                <td colSpan={5}>No movies available</td>
+                                <td colSpan={6}>No movies available</td>
                             </tr>
                         )}
-                    </tbody>
+</tbody>
                 </table>
             </div>
         </div>
@@ -87,3 +68,7 @@ const MoviesDashboard: React.FC = () => {
 };
 
 export default MoviesDashboard;
+
+function useMovieContext(): { state: any; deleteMovie: any; } {
+  throw new Error('Function not implemented.');
+}

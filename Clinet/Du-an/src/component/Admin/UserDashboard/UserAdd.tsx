@@ -38,7 +38,11 @@ const UserAdd: React.FC = () => {
               </div>
 
             <div className="upload-section">
+
+             {/* <h3>Add Product Photo</h3> */}
+
              <h3>Add Product Photo</h3>
+
         <div className="upload-box">
             <input type="file" id="file-upload" accept="image/png, image/jpeg, image/gif" hidden/>
             <label htmlFor="file-upload" className="upload-label">
@@ -89,7 +93,11 @@ const UserAdd: React.FC = () => {
             </div>
 
             <div className="form-group actions">
+
+                <button type="submit" className='button1'>Submit</button>
+
                 <button type="submit">Submit</button>
+
             </div>
         </form>
     </div>

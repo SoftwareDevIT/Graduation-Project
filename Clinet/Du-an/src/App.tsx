@@ -1,10 +1,15 @@
 
 import "./App.css";
 
+
+
+
+
 import OrderPage from "./component/Oders/OrderPage";
 import OrderCheckout from "./component/Pay/OderCheckOut";
 import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
 import Headerticket from "./component/Headerticket/Headerticket";
+
 
 import RegisterCinema from "./Page/Client/RegisterCinema";
 import LoginCinema from "./Page/Client/LoginCinema";
@@ -23,10 +28,11 @@ import SchedulesManager from "./Page/Admin/Schedules/SchedulesManager";
 import RevenueByCinemaManager from "./Page/Admin/RevenueByCinema/RevenueByCinemaManager";
 import RevenueByMoviesManager from "./Page/Admin/RevenueByMoviesManager/RevenueByMoviesManager";
 import { Route, Routes } from "react-router-dom";
+import EmailConfirm from "./component/EmailConfirm/EmailConfirm";
+import UserAddManager from "./Page/Admin/User/UserAdd";
 import Home from "./Page/Home";
 import Bookcinematickets from "./Page/Client/Bookcinematickets";
-import UserAddManager from "./Page/Admin/User/UserAdd";
-import EmailConfirm from "./component/EmailConfirm/EmailConfirm";
+
 
 import CinemasFormManager from "./Page/Admin/Cinemas/CinemasForm";
 
@@ -36,6 +42,11 @@ import ShowtimesFormManager from "./Page/Admin/Showtimes/ShowtimesForm";
 import AddMovie from "./component/Admin/MoviesDashboard/MovieAdd";
 import MoviesManagerForm from "./Page/Admin/Movies/MoviesForm";
 import PaymentCallback from "./component/Pay/PaymentCallback";
+import PostsFormManager from "./Page/Admin/Posts/PostForm";
+import { ContentMovie } from "./component/MovieDetail/ContentMovie";
+import LichChieu from "./component/MovieDetail/LichChieu";
+import DanhGia from "./component/MovieDetail/DanhGia";
+import TinTuc from "./component/MovieDetail/TinTuc";
 
 
 
@@ -48,6 +59,10 @@ function App() {
       <Route path="/orders" element={<OrderPage/>}/>
       <Route path="/pay" element={<OrderCheckout/>}/>
       <Route path="/seat" element={<CinemaSeatSelection/>}/>
+      <Route path="/moviedetail" element={<ContentMovie/>}/>
+      <Route path="/lich-chieu" element={<LichChieu/>}/>
+      <Route path="/danh-gia" element={<DanhGia/>}/>
+      <Route path="/tin-tuc" element={<TinTuc/>}/>
       <Route path="/headerticket" element={<Headerticket/>}/>
       <Route path="/confirm" element={<EmailConfirm/>}/>
       <Route path="/payment-callback" element={<PaymentCallback />} />
@@ -57,13 +72,19 @@ function App() {
       <Route path="/admin" element={<Dashboard/>}/>
       <Route path="admin/user" element={<User/>}/>
       <Route path="admin/user/add" element={<UserAddManager/>}/>
+
+      <Route path="admin/showtimes" element={<ShowtimesManager/>}/>
+
       <Route path="admin/showtimes" element={<ShowtimesManager/>}/>      
       <Route path="admin/showtimes/add" element={<ShowtimesFormManager/>}/>      
       <Route path="admin/showtimes/edit/:id" element={<ShowtimesFormManager/>}/>      
 
+
       <Route path="admin/orders" element={<OrdersManager/>}/>
       <Route path="admin/tickets" element={<TicketsManager/>}/>
       <Route path="admin/posts" element={<PostsManager/>} />
+      <Route path="admin/posts/add" element={<PostsFormManager/>} />
+      <Route path="admin/posts/edit/:id" element={<PostsFormManager/>} />
       <Route path="admin/categories" element={<CategoriesManager/>} />
       <Route path="admin/countries" element={<CountriesManager/>} />
       <Route path="admin/combo" element={<ComboManager/>} />

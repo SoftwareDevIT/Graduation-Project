@@ -16,106 +16,217 @@ class ActorSeeder extends Seeder
     {
         $actors = [
             [
-                'actor_name' => 'Ninh Dương Lan Ngọc',
-                'descripcion' => 'Ninh Dương Lan Ngọc là một nữ diễn viên nổi tiếng của Việt Nam.',
-                'photo' => 'https://i.imgur.com/WfTbnQB.jpeg',
-                'country' => 'Việt Nam',
-                'link_wiki' => 'https://vi.wikipedia.org/wiki/Ninh_D%C6%B0%C6%A1ng_Lan_Ng%E1%BB%8Dc',
+                'actor_name' => 'Vin Diesel',
+                'descripcion' => null,
+                'photo' => 'https://rapchieuphim.com/photos/actor/avatar/1498198742-vin-diesel.jpg',
+                'country' => 'Thành phố New York',
+                'link_wiki' => null
             ],
             [
-                'actor_name' => 'Nhã Phương',
-                'descripcion' => 'Nhã Phương là một nữ diễn viên nổi tiếng của Việt Nam.',
-                'photo' => 'https://i.imgur.com/WfTbnQB.jpeg',
-                'country' => 'Việt Nam',
-                'link_wiki' => 'https://vi.wikipedia.org/wiki/Nh%C3%A3_Ph%C6%B0%C6%A1ng',
+                'actor_name' => 'Dwayne Johnson',
+                'descripcion' => null,
+                'photo' => 'https://rapchieuphim.com/photos/actor/avatar/1498198745-dwayne-johnson.jpg',
+                'country' => 'Hayward, California',
+                'link_wiki' => null
             ],
             [
-                'actor_name' => 'Jennifer Lawrence',
-                'descripcion' => 'Jennifer Lawrence là một nữ diễn viên nổi tiếng của Mỹ.',
-                'photo' => 'https://i.imgur.com/WfTbnQB.jpeg',
-                'country' => 'Mỹ',
-                'link_wiki' => 'https://en.wikipedia.org/wiki/Jennifer_Lawrence',
+                'actor_name' => 'Jason Statham',
+                'descripcion' => null,
+                'photo' => 'https://rapchieuphim.com/photos/actor/avatar/1498198741-jason-statham.jpg',
+                'country' => 'Shirebrook, Derbyshire',
+                'link_wiki' => null
             ],
             [
-                'actor_name' => 'Emma Watson',
-                'descripcion' => 'Emma Watson là một nữ diễn viên nổi tiếng của Anh.',
-                'photo' => 'https://i.imgur.com/WfTbnQB.jpeg',
-                'country' => 'Anh',
-                'link_wiki' => 'https://en.wikipedia.org/wiki/Emma_Watson',
+                'actor_name' => 'Kaity Nguyễn',
+                'descripcion' => 'Nổi tiếng với vai trò một beauty blogger triệu view, quay về Việt Nam một thời gian ngắn và lập tức nhận được vai chính trong bộ phim điện ảnh đầu tay, cô gái 18 tuổi Kaity Nguyễn đang có những bước đi khá thuận lợi trong những ngày đầu theo nghiệp diễn.',
+                'photo' => 'https://rapchieuphim.com/photos/actor/avatar/1498198762-kaity-nguyen.jpg',
+                'country' => null,
+                'link_wiki' => null
             ],
             [
-                'actor_name' => 'Nhã Phương',
-                'descripcion' => 'Nhã Phương là một nữ diễn viên nổi tiếng của Việt Nam.',
-                'photo' => 'https://i.imgur.com/WfTbnQB.jpeg',
-                'country' => 'Việt Nam',
-                'link_wiki' => 'https://vi.wikipedia.org/wiki/Nh%C3%A3_Ph%C6%B0%C6%A1ng',
+                'actor_name' => 'Will',
+                'descripcion' => null,
+                'photo' => 'https://rapchieuphim.com/photos/actor/avatar/1498198744-will.jpg',
+                'country' => 'Toronto, Ontario',
+                'link_wiki' => null
             ],
             [
-                'actor_name' => 'Minh Hằng',
-                'descripcion' => 'Minh Hằng là một nữ diễn viên và ca sĩ nổi tiếng của Việt Nam.',
-                'photo' => 'https://i.imgur.com/WfTbnQB.jpeg',
-                'country' => 'Việt Nam',
-                'link_wiki' => 'https://vi.wikipedia.org/wiki/Minh_H%E1%BA%B1ng',
+                'actor_name' => 'Châu Bùi',
+                'descripcion' => '',
+                'photo' => 'https://rapchieuphim.com/images/avatar.png',
+                'country' => null,
+                'link_wiki' => null
             ],
             [
-                'actor_name' => 'Tăng Thanh Hà',
-                'descripcion' => 'Tăng Thanh Hà là một nữ diễn viên nổi tiếng của Việt Nam.',
-                'photo' => 'https://i.imgur.com/WfTbnQB.jpeg',
-                'country' => 'Việt Nam',
-                'link_wiki' => 'https://vi.wikipedia.org/wiki/T%C4%83ng_Thanh_H%C3%A0',
+                'actor_name' => 'Kathy Uyên',
+                'descripcion' => null,
+                'photo' => '',
+                'country' => '',
+                'link_wiki' => null
             ],
             [
-                'actor_name' => 'Kiều Minh Tuấn',
-                'descripcion' => 'Kiều Minh Tuấn là một nam diễn viên nổi tiếng của Việt Nam.',
-                'photo' => 'https://i.imgur.com/WfTbnQB.jpeg',
-                'country' => 'Việt Nam',
-                'link_wiki' => 'https://vi.wikipedia.org/wiki/Ki%E1%BB%81u_Minh_Tu%E1%BA%A5n',
+                'actor_name' => 'Quang Minh',
+                'descripcion' => '',
+                'photo' => 'https://rapchieuphim.com/images/avatar.png',
+                'country' => null,
+                'link_wiki' => null
             ],
             [
-                'actor_name' => 'Cao Minh Đạt',
-                'descripcion' => 'Cao Minh Đạt là một nam diễn viên nổi tiếng của Việt Nam.',
-                'photo' => 'https://i.imgur.com/WfTbnQB.jpeg',
-                'country' => 'Việt Nam',
-                'link_wiki' => 'https://vi.wikipedia.org/wiki/Cao_Minh_%C4%90%E1%BA%A1t',
+                'actor_name' => 'Huy Khánh',
+                'descripcion' => '',
+                'photo' => 'https://rapchieuphim.com/photos/actor/avatar/1498198758-huy-khanh.jpg',
+                'country' => null,
+                'link_wiki' => null
             ],
             [
-                'actor_name' => 'Huỳnh Đông',
-                'descripcion' => 'Huỳnh Đông là một nam diễn viên nổi tiếng của Việt Nam.',
-                'photo' => 'https://i.imgur.com/WfTbnQB.jpeg',
-                'country' => 'Việt Nam',
-                'link_wiki' => 'https://vi.wikipedia.org/wiki/Hu%E1%BB%B3nh_%C4%90%C3%B4ng',
+                'actor_name' => 'Don Nguyễn',
+                'descripcion' => '',
+                'photo' => 'https://rapchieuphim.com/images/avatar.png',
+                'country' => null,
+                'link_wiki' => null
             ],
             [
-                'actor_name' => 'Khả Ngân',
-                'descripcion' => 'Khả Ngân là một nữ diễn viên nổi tiếng của Việt Nam.',
-                'photo' => 'https://i.imgur.com/WfTbnQB.jpeg',
-                'country' => 'Việt Nam',
-                'link_wiki' => 'https://vi.wikipedia.org/wiki/Kh%E1%BA%A3_Ng%C3%A2n',
+                'actor_name' => 'Kudo Shinichi',
+                'descripcion' => '',
+                'photo' => 'https://rapchieuphim.com/images/avatar.png',
+                'country' => null,
+                'link_wiki' => null
             ],
             [
-                'actor_name' => 'Jun Vũ',
-                'descripcion' => 'Jun Vũ là một nữ diễn viên nổi tiếng của Việt Nam.',
-                'photo' => 'https://i.imgur.com/WfTbnQB.jpeg',
-                'country' => 'Việt Nam',
-                'link_wiki' => 'https://vi.wikipedia.org/wiki/Jun_V%C5%A9',
+                'actor_name' => 'Edogawa Conan',
+                'descripcion' => '',
+                'photo' => 'https://rapchieuphim.com/images/avatar.png',
+                'country' => null,
+                'link_wiki' => null
             ],
             [
-                'actor_name' => 'Hồng Đăng',
-                'descripcion' => 'Hồng Đăng là một nam diễn viên nổi tiếng của Việt Nam.',
-                'photo' => 'https://i.imgur.com/WfTbnQB.jpeg',
-                'country' => 'Việt Nam',
-                'link_wiki' => 'https://vi.wikipedia.org/wiki/H%E1%BB%93ng_%C4%90%C4%83ng',
+                'actor_name' => 'Mori Ran',
+                'descripcion' => '',
+                'photo' => 'https://rapchieuphim.com/images/avatar.png',
+                'country' => null,
+                'link_wiki' => null
             ],
             [
-                'actor_name' => 'Ngô Thanh Vân',
-                'descripcion' => 'Ngô Thanh Vân là một nữ diễn viên, ca sĩ và nhà sản xuất phim nổi tiếng của Việt Nam.',
-                'photo' => 'https://i.imgur.com/WfTbnQB.jpeg',
-                'country' => 'Việt Nam',
-                'link_wiki' => 'https://vi.wikipedia.org/wiki/Ng%C3%B4_Thanh_V%C3%A2n',
+                'actor_name' => 'Sherry',
+                'descripcion' => null,
+                'photo' => 'https://rapchieuphim.com/photos/actor/avatar/1498198746-sherry.jpg',
+                'country' => 'Wendell, Idaho',
+                'link_wiki' => null
             ],
-
-
+            [
+                'actor_name' => 'Mori Kogoro',
+                'descripcion' => '',
+                'photo' => 'https://rapchieuphim.com/images/avatar.png',
+                'country' => null,
+                'link_wiki' => null
+            ],
+            [
+                'actor_name' => 'Anne Hathaway',
+                'descripcion' => null,
+                'photo' => 'https://rapchieuphim.com/photos/actor/avatar/1498198742-anne-hathaway.jpg',
+                'country' => '',
+                'link_wiki' => null
+            ],
+            [
+                'actor_name' => 'Jason Sudeikis',
+                'descripcion' => '',
+                'photo' => 'https://rapchieuphim.com/photos/actor/avatar/1498198759-jason-sudeikis.jpg',
+                'country' => null,
+                'link_wiki' => null
+            ],
+            [
+                'actor_name' => 'Austin Stowell',
+                'descripcion' => null,
+                'photo' => 'https://rapchieuphim.com/photos/actor/avatar/1498198740-austin-stowell.jpg',
+                'country' => 'U.S',
+                'link_wiki' => null
+            ],
+            [
+                'actor_name' => 'Alec Baldwin',
+                'descripcion' => null,
+                'photo' => 'https://rapchieuphim.com/photos/actor/avatar/1498198743-alec-baldwin.jpg',
+                'country' => '',
+                'link_wiki' => null
+            ],
+            [
+                'actor_name' => 'Lisa Kudrow',
+                'descripcion' => null,
+                'photo' => 'https://rapchieuphim.com/photos/actor/avatar/1498198739-lisa-kudrow.jpg',
+                'country' => 'Los Angeles',
+                'link_wiki' => null
+            ],
+            [
+                'actor_name' => 'Steve Buscemi',
+                'descripcion' => null,
+                'photo' => 'https://rapchieuphim.com/photos/actor/avatar/1498198743-steve-buscemi.jpg',
+                'country' => 'New York',
+                'link_wiki' => null
+            ],
+            [
+                'actor_name' => 'Sam Neill',
+                'descripcion' => null,
+                'photo' => 'https://rapchieuphim.com/photos/actor/avatar/1498198741-sam-neill.jpg',
+                'country' => 'Omagh',
+                'link_wiki' => null
+            ],
+            [
+                'actor_name' => 'Dominique Tipper',
+                'descripcion' => '',
+                'photo' => 'https://rapchieuphim.com/images/avatar.png',
+                'country' => null,
+                'link_wiki' => null
+            ],
+            [
+                'actor_name' => 'Tom Payne',
+                'descripcion' => null,
+                'photo' => 'https://rapchieuphim.com/photos/actor/avatar/1498198745-tom-payne.jpg',
+                'country' => 'England',
+                'link_wiki' => null
+            ],
+            [
+                'actor_name' => 'Jonathan Rhys Meyers',
+                'descripcion' => null,
+                'photo' => 'https://rapchieuphim.com/photos/actor/avatar/1498198743-jonathan-rhys-meyers.jpg',
+                'country' => 'Ireland',
+                'link_wiki' => null
+            ],
+            [
+                'actor_name' => 'Michael Biehn',
+                'descripcion' => null,
+                'photo' => 'https://rapchieuphim.com/photos/actor/avatar/1498198740-michael-biehn.jpg',
+                'country' => 'Alabama',
+                'link_wiki' => null
+            ],
+            [
+                'actor_name' => 'Cam Gigandet',
+                'descripcion' => null,
+                'photo' => 'https://rapchieuphim.com/photos/actor/avatar/1498198740-cam-gigandet.jpg',
+                'country' => 'Tacoma, Washington',
+                'link_wiki' => null
+            ],
+            [
+                'actor_name' => 'Chris Pratt',
+                'descripcion' => null,
+                'photo' => 'https://rapchieuphim.com/photos/actor/avatar/1498198744-chris-pratt.jpg',
+                'country' => 'Virginia, Minnesota',
+                'link_wiki' => null
+            ],
+            [
+                'actor_name' => 'Zoe Saldana',
+                'descripcion' => null,
+                'photo' => 'https://rapchieuphim.com/photos/actor/avatar/1498198739-zoe-saldana.jpg',
+                'country' => 'Passaic, New Jersey',
+                'link_wiki' => null
+            ],
+            [
+                'actor_name' => 'Bradley Cooper',
+                'descripcion' => null,
+                'photo' => 'https://rapchieuphim.com/photos/actor/avatar/1498198739-bradley-cooper.jpg',
+                'country' => 'U.S.',
+                'link_wiki' => null
+            ]
         ];
+        
 
         foreach ($actors as &$actor) {
             $actor['created_at'] = Carbon::now();

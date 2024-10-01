@@ -72,7 +72,7 @@ const NewsContent = () => {
       <div className="related-news">
         {newsData.slice(1, 6).map((news, index) => (
           <div className="related-news-item" key={index}>
-            <a href="#">{news.title}</a>
+            <a href="#" className='title'>{news.title}</a>
             <span className="author">{news.user_id} • {new Date(news.created_at).toLocaleString()}</span>
           </div>
         ))}

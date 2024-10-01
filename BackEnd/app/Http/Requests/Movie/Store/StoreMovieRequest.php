@@ -26,15 +26,19 @@ class StoreMovieRequest extends FormRequest
             'cinema_id'             => 'required|integer',
             'actor_id'              => 'required|integer',
             'director_id'           => 'required|integer',
+<<<<<<< HEAD
             'movie_name'            => 'required|string|max:255',
             'poster'                => '',
+=======
+            'movie_name'            => 'required|string|max:255|unique:movies',
+            'poster'                => 'mimes:jpeg,png,jpg,gif|max:2048',
+>>>>>>> 9af2afa115d99d44f41376de447fb4c5df210164
             'duration'              => 'string|max:225',
             'release_date'          => 'date',
             'age_limit'             => 'required|integer',
             'descripton'            => 'string|max:255',
             'trailer'               => 'string|max:255',
-            'rating'                => 'numeric',
-            // 'status'                => 'nullable|in:show,hidden',
+            'rating'                => 'numeric'
         ];
     }
 
@@ -64,8 +68,7 @@ class StoreMovieRequest extends FormRequest
             'descriptions.max' => 'The descriptions may not be greater than 255 characters.',
             'trailer.string' => 'The trailer must be a string.',
             'trailer.max' => 'The trailer may not be greater than 255 characters.',
-            'rating.numeric' => 'The rating must be a number.',
-            'status.in' => 'status là show hoặc hidden'
+            'rating.numeric' => 'The rating must be a number.'
         ];
     }
 }

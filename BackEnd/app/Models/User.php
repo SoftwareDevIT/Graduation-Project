@@ -9,10 +9,11 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable,HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -60,9 +61,9 @@ class User extends Authenticatable
     ];
 
 
-    public function roles(){
-        return $this->hasMany(Role::class, 'role_id', 'role_id');
-    }
+    // public function roles(){
+    //     return $this->hasMany(Role::class, 'role_id', 'role_id');
+    // }
 
     public function setPasswordAttribute($value)
     {
@@ -81,5 +82,9 @@ class User extends Authenticatable
     public function favoriteMovies()
     {
         return $this->hasManyThrough(Movie::class, Favorite::class, 'user_id', 'id', 'id', 'movie_id');
+    }
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
     }
 }

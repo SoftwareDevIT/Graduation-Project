@@ -10,6 +10,7 @@ use App\Services\Booking\Steps\SelectSeats;
 use App\Services\Booking\Steps\SelectCombos;
 use App\Services\Booking\Steps\ProcessPayment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -35,6 +36,7 @@ class TicketBookingService
 
     public function bookTicket($request)
     {
+        Log::info('Booking request: ' . json_encode($request->all()));
         $result = $this->selectMovieStep->handle($request);
 
         if (isset($result['errors'])) {
@@ -44,7 +46,7 @@ class TicketBookingService
         $data = $this->prepareBookingData($result);
         Log::info('Data for prepareBookingData:');
         // Gọi phương thức bookings với dữ liệu đã chuẩn bị
-        $booking = $this->bookings(data: $data);
+        $booking = $this->bookings($data, $request);
         Log::info('Data for bookings:');
         if (!$booking) {
             return [
@@ -53,7 +55,7 @@ class TicketBookingService
             ];
         }
         // Khi đã có booking, gọi hàm thanh toán
-        $paymentRequest = new Request(array_merge($request->all(), ['boking_id' => $booking->id]));
+        $paymentRequest = new Request(array_merge($request->all(), ['boking_id' => $booking->id], ['amount' => $request->amount]));
 
         // Gọi hàm thanh toán VNPAY
         $paymentResult = $this->processPaymentStep->process($paymentRequest);
@@ -69,7 +71,7 @@ class TicketBookingService
     {
         // Tạo temporary booking
         $temporaryBooking = TemporaryBooking::create([
-            'user_id' => 3,
+            'user_id' => Auth::user()->id,
             'reserved_showtime' => $result['movies'],
             'reserved_seats' => $result['seats_data'],
             'combos' => is_array($result['combos']) ? json_encode($result['combos']) : $result['combos']->toArray(),
@@ -100,22 +102,22 @@ class TicketBookingService
     }
 
 
-    public function bookings($data)
+    public function bookings($data, Request $request)
     {
-        $temporaryBooking = $data['temporaryBooking'];
-        $reservedShowtime = $data['reservedShowtime'];
+        // $temporaryBooking = $data['temporaryBooking'];
+        // $reservedShowtime = $data['reservedShowtime'];
         $reservedSeats = $data['reservedSeats'];
         $combos = $data['combos'];
-        $totalAmount = $data['totalAmount'];
+        // $totalAmount = $data['totalAmount'];
 
         try {
-            $booking = DB::transaction(function () use ($temporaryBooking, $reservedShowtime, $reservedSeats, $combos, $totalAmount) {
+            $booking = DB::transaction(function () use ( $reservedSeats, $combos,$request) {
                 // Tạo booking
                 $booking = Booking::create([
-                    'user_id' => 3,
-                    'showtime_id' => $reservedShowtime[0]['showtimes'][0]['id'] ?? null,
+                    'user_id' => Auth::user()->id,
+                    'showtime_id' => $request->showtimeId,
                     'pay_method_id' => 1, // Sử dụng phương thức thanh toán mặc định
-                    'amount' => $totalAmount,
+                    'amount' => $request->amount   ,
                 ]);
 
                 foreach ($combos as $combo) {

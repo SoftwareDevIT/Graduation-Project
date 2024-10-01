@@ -119,7 +119,7 @@ useEffect(() => {
         try {
           // Gọi API lọc phim theo rạp
           const cinemaResponse = await instance.get(
-            `/cenima/${selectedCinema}`
+            `/filterMovie/${selectedCinema}`
           );
           console.log(
             "Dữ liệu từ lọc phim theo rạp:",
@@ -178,12 +178,14 @@ useEffect(() => {
 
   return (
     <>
-      <h2 className="title">Mua vé theo rạp</h2>
+     <div className="div-content">
+     <h2 className="title">Mua vé theo rạp</h2>
       <div className="container">
         <div className="locations">
           <h3 className="khuvuc">Khu vực</h3>
           <ul className="list-tp">
-            {locations.map((location) => {
+         <div className="list">
+         {locations.map((location) => {
               const count = cinemas.filter(
                 (cinema) => cinema.location_id === location.id
               ).length;
@@ -200,6 +202,19 @@ useEffect(() => {
                 </li>
               );
             })}
+         </div>
+             <select
+            className="city-select"
+            value={selectedCity ?? ""}
+            onChange={(e) => setSelectedCity(Number(e.target.value))}
+          >
+            <option value="">Chọn khu vực</option>
+            {locations.map((location) => (
+              <option key={location.id} value={location.id}>
+                {location.location_name}
+              </option>
+            ))}
+          </select>
           </ul>
         </div>
 
@@ -288,6 +303,7 @@ useEffect(() => {
           )}
         </div>
       </div>
+     </div>
     </>
   );
 };

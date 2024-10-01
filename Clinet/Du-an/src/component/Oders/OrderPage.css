@@ -155,10 +155,18 @@ font-size: 15px;
     color: white;
     
   }
-  /* Media Queries for Mobile Devices */
-/* Media Queries for Mobile Devices */
-/* Media Queries for devices with max width of 768px */
-@media (max-width: 768px) {
+.back-btn2{
+    padding:7px;
+    padding-left: 15px;
+    text-decoration: none;
+   
+}
+.back-btn2 span{
+    margin-right: 5px;
+
+}
+/* Media Queries for devices with max width of 992px */
+@media (max-width: 992px) {
     .combo-list {
         flex-direction: column;
         margin-left: 0;
@@ -171,45 +179,31 @@ font-size: 15px;
 
     .combo-header {
         grid-template-columns: 2fr 1fr 1fr; /* Giữ cấu trúc 3 cột */
+        text-align: center;
     }
-
+.box-thongtinphim{
+    width: 500px;
+}
     .combo-item {
-        display: grid;
-        grid-template-columns: 2fr 1fr 1fr; /* Giữ bố cục 3 cột khi trên mobile */
+        grid-template-columns: 2fr 1fr 1fr; /* Giữ bố cục 3 cột khi trên 992px */
         width: 100%;
         padding: 10px 0;
         align-items: center;
     }
 
     .combo-quantity {
-        display: flex;
         justify-content: center;
         align-items: center;
         padding-left: 0;
     }
 
     .combo-quantity span {
-        margin: 0 5px; /* Thu hẹp khoảng cách giữa số lượng và nút */
+        margin: 0 5px;
     }
 
-    .box-thongtinphim{
-        margin-top: 20px;
-        padding: 10px;
-    }
-
-    .actions {
-        width: 100%;
-        flex-direction: column;
-        align-items: center;
-        gap: 15px;
-    }
 
     .back-btn2, .continue-btn2 {
-        width: 20%; /* Full width buttons on mobile */
-        margin: 5px 0; /* Add space between buttons */
-    }
-    .continue-btn2{
-        width: 100%;
+        width: 80%;
     }
 }
 
@@ -221,53 +215,42 @@ font-size: 15px;
     }
 
     .combo-header {
-        grid-template-columns: 2fr 2fr 2fr; /* Giữ cấu trúc như ở màn 768px */
+        grid-template-columns: 1fr 1fr 1fr; /* Giữ cấu trúc như ở màn 480px */
         text-align: center;
     }
 
     .combo-item {
-        display: grid;
         grid-template-columns: 1fr 1fr 1fr;
         padding: 10px 0;
         width: 100%;
         align-items: center;
     }
+
     .combo-quantity {
         justify-content: center;
         padding-left: 0;
     }
 
     .combo-quantity span {
-        margin: 0 5px; /* Điều chỉnh khoảng cách cho phù hợp */
+        margin: 0 5px;
     }
 
     .box-thongtinphim {
+        width: 100%;
         margin-top: 10px;
         padding: 10px;
+        margin-left: 20px;
     }
 
-    .actions {
-        width: 100%;
+    .actionsts {
         flex-direction: column;
-        gap: 15px;
+        align-items: center;
+        width: 100%;
+        gap: 10px;
     }
 
     .back-btn2, .continue-btn2 {
-        width: 20%; /* Full width buttons on mobile */
-        margin: 5px 0; /* Add space between buttons */
+        width: 90%; 
     }
-    .continue-btn2{
-        width: 100%;
-    }
-}
     
-.back-btn2{
-    padding:7px;
-    padding-left: 15px;
-    text-decoration: none;
-   
-}
-.back-btn2 span{
-    margin-right: 5px;
-
 }
