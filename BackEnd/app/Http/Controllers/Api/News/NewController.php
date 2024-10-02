@@ -38,7 +38,7 @@ class NewController extends Controller
      */
     public function store(StoreNewsRequest $request)
     {
-        $thumbnailFile = $request->file('thumbnail');
+        $thumbnailFile = $request->file('thumnail');
         $bannerFile = $request->file('banner');
 
         $thumbnailLink = $this->uploadImage($thumbnailFile);
@@ -46,7 +46,7 @@ class NewController extends Controller
 
         $new = $request->validated();
 
-        $new['thumbnail'] = $thumbnailLink;
+        $new['thumnail'] = $thumbnailLink;
         $new['banner'] = $bannerLink;
         $new = $this->newservice->store($new);
         return $this->success($new, 'Thêm thành công');
@@ -68,7 +68,7 @@ class NewController extends Controller
     public function update(string $id, UpdateNewsRequest $request)
     {
         try {
-            $thumbnailFile = $request->file('thumbnail');
+            $thumbnailFile = $request->file('thumnail');
             if ($thumbnailFile) {
                 $thumbnailLink = $this->uploadImage($thumbnailFile);
             } else {
@@ -84,7 +84,7 @@ class NewController extends Controller
 
             $new = $request->validated();
             if ($thumbnailLink) {
-                $new['thumbnail'] = $thumbnailLink;
+                $new['thumnail'] = $thumbnailLink;
             }
             if ($bannerLink) {
                 $new['banner'] = $bannerLink;

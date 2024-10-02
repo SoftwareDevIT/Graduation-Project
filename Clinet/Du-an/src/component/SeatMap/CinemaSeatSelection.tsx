@@ -23,7 +23,8 @@ interface SeatProps {
 
 const CinemaSeatSelection: React.FC = () => {
   const location = useLocation(); // Khai báo useLocation
-  const { movieName, cinemaName, showtime ,showtimeId, cinemaId} = location.state || {};
+  const { movieName, cinemaName, showtime, showtimeId, cinemaId } =
+    location.state || {};
 
   const [selectedSeats, setSelectedSeats] = useState<Map<string, number[]>>(
     new Map()
@@ -110,7 +111,16 @@ const CinemaSeatSelection: React.FC = () => {
     (acc, selectedSeatsInRow) => acc + selectedSeatsInRow.length,
     0
   );
-  const totalPrice = totalSelectedSeats * 50000; // 50,000 VND per seat
+
+  const hours = showtime.split(":")[0]; // Cắt chuỗi lấy phần giờ (22)
+
+  let price_ticket = 0;
+  if (hours < 22) {
+    price_ticket = 50000;
+  } else {
+    price_ticket = 45000;
+  }
+  const totalPrice = totalSelectedSeats * price_ticket; // 50,000 VND per seat
 
   return (
     <>
@@ -118,7 +128,7 @@ const CinemaSeatSelection: React.FC = () => {
       <Headerticket />
       <div className="container container-map">
         <div className="seat-info-box">
-          <div className="seat-map-box">
+          <div className="seat-map-box ">
             <div className="screen">MÀN HÌNH</div>
             <div className="seat-map">
               {seatRows.map((row, index) => (
@@ -165,8 +175,8 @@ const CinemaSeatSelection: React.FC = () => {
                   )
                   .join(", ")}
               </p>
-              <p>Showtime ID: <span>{showtimeId}</span></p> {/* Hiển thị showtimeId */}
-    <p>Cinema ID: <span>{cinemaId}</span></p> {/* Hiển thị cinemaId */}
+              {/* <p>Showtime ID: <span>{showtimeId}</span></p> Hiển thị showtimeId */}
+              {/* <p>Cinema ID: <span>{cinemaId}</span></p> Hiển thị cinemaId */}
             </div>
             <div className="price-box">
               <div className="price">
@@ -174,28 +184,27 @@ const CinemaSeatSelection: React.FC = () => {
                 <br /> <span>{totalPrice.toLocaleString()} đ</span>
               </div>
             </div>
-            <div className="actions">
+            <div className="actionst">
               <button className="back-btn">←</button>
               <Link
-  to="/orders"
-  state={{
-    movieName,
-    cinemaName,
-    showtime,
-    showtimeId, // Truyền showtimeId
-    cinemaId,   // Truyền cinemaId
-    roomId: roomData?.id, // Truyền roomId từ roomData
-    selectedSeats: Array.from(selectedSeats.entries())
-      .map(([row, indices]) =>
-        indices.map((index) => `${row}${index + 1}`).join(", ")
-      )
-      .join(", "),
-    totalPrice,
-  }}
->
-  <button className="continue-btn">Tiếp Tục</button>
-</Link>
-
+                to="/orders"
+                state={{
+                  movieName,
+                  cinemaName,
+                  showtime,
+                  showtimeId, // Truyền showtimeId
+                  cinemaId, // Truyền cinemaId
+                  roomId: roomData?.id, // Truyền roomId từ roomData
+                  selectedSeats: Array.from(selectedSeats.entries())
+                    .map(([row, indices]) =>
+                      indices.map((index) => `${row}${index + 1}`).join(", ")
+                    )
+                    .join(", "),
+                  totalPrice,
+                }}
+              >
+                <button className="continue-btn">Tiếp Tục</button>
+              </Link>
             </div>
           </div>
         </div>

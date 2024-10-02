@@ -163,6 +163,9 @@
     .company-info {
         font-size: 12px; /* Smaller text for mobile */
     }
+    .footer-left img{
+        display: none;
+    }
 }
 
 /* For smaller mobile screens */

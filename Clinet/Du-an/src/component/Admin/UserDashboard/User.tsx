@@ -27,7 +27,7 @@ const UserDashboard: React.FC = () => {
 
                 const response = await instance.get('/lists');
 
-                const response = await instance.get('/list');
+          
 
                 console.log('API Response:', response);  // Log the full response object
                 console.log('Data:', response.data.data);      // Log the data part specifically

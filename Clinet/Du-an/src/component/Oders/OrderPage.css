@@ -8,6 +8,8 @@ margin-left: 130px;
     border-radius: 8px;
 
     padding: 20px;
+
+    margin-bottom: 60px;
 }
 .thongtincombo{
     margin-top: 0px;
@@ -17,6 +19,7 @@ margin-left: 130px;
     
 }
 .combo-header {
+    border-color: inherit;
     font-family: "Cerebri Sans, sans-serif";
     height: 50px;
     border-radius: 10px 10px 0 0;
@@ -24,10 +27,11 @@ margin-left: 130px;
     grid-template-columns: 2.7fr 1fr 1fr;
     font-weight: bold;
     padding: 10px 0;
-    border: 1px solid #ddd ;
+    border-bottom: 1px solid #ddd ;
     text-transform: uppercase;
     color: #95aac9;
-    background-color:#edf2f9;
+    background-color:#fafafa;
+    font-weight: 500;
 }
 .combo-header .item{
     line-height: 27px;
@@ -43,6 +47,9 @@ margin-left: 130px;
     align-items: center;
     padding: 20px 0;
     border-bottom: 1px solid #eee;
+    color: #12263f;
+
+
 }
 
 .combo-info {
@@ -51,7 +58,7 @@ margin-left: 130px;
 }
 
 .combo-name {
- font-weight: 550;
+ font-weight: 400;
     color: #12263f;
  padding-bottom: 5px;
 }
@@ -108,7 +115,7 @@ width: 100px;
 .price-box{
     width: 400px;
 }
-.actions {
+.actionsts{
     display: flex;
     justify-content: space-between;
     margin-top: 30px;
@@ -118,10 +125,13 @@ width: 100px;
     margin-left: 30px;
     height: 37px;
     width: 100px ;
+    padding-bottom: 15px;
     
   }
   .back-btn2, .continue-btn2 {
- 
+    
+ width: 120px;
+ height: 40px;
     padding: 10px 10px;
     font-size: 1em;
     background-color: #ffffff;
@@ -132,9 +142,12 @@ width: 100px;
     transition: background-color 0.3s ease, transform 0.2s;
     
   }
+  .descripton {
+color: #6E849B;
+font-size: 15px;
+  }
   
-  
-  .continue-btn2 {
+  .continue-btn2{
     
     border: none;
     width: 200px;
@@ -142,10 +155,18 @@ width: 100px;
     color: white;
     
   }
-  /* Media Queries for Mobile Devices */
-/* Media Queries for Mobile Devices */
-/* Media Queries for devices with max width of 768px */
-@media (max-width: 768px) {
+.back-btn2{
+    padding:7px;
+    padding-left: 15px;
+    text-decoration: none;
+   
+}
+.back-btn2 span{
+    margin-right: 5px;
+
+}
+/* Media Queries for devices with max width of 992px */
+@media (max-width: 992px) {
     .combo-list {
         flex-direction: column;
         margin-left: 0;
@@ -158,45 +179,31 @@ width: 100px;
 
     .combo-header {
         grid-template-columns: 2fr 1fr 1fr; /* Giữ cấu trúc 3 cột */
+        text-align: center;
     }
-
+.box-thongtinphim{
+    width: 500px;
+}
     .combo-item {
-        display: grid;
-        grid-template-columns: 2fr 1fr 1fr; /* Giữ bố cục 3 cột khi trên mobile */
+        grid-template-columns: 2fr 1fr 1fr; /* Giữ bố cục 3 cột khi trên 992px */
         width: 100%;
         padding: 10px 0;
         align-items: center;
     }
 
     .combo-quantity {
-        display: flex;
         justify-content: center;
         align-items: center;
         padding-left: 0;
     }
 
     .combo-quantity span {
-        margin: 0 5px; /* Thu hẹp khoảng cách giữa số lượng và nút */
+        margin: 0 5px;
     }
 
-    .box-thongtinphim{
-        margin-top: 20px;
-        padding: 10px;
-    }
-
-    .actions {
-        width: 100%;
-        flex-direction: column;
-        align-items: center;
-        gap: 15px;
-    }
 
     .back-btn2, .continue-btn2 {
-        width: 20%; /* Full width buttons on mobile */
-        margin: 5px 0; /* Add space between buttons */
-    }
-    .continue-btn2{
-        width: 100%;
+        width: 80%;
     }
 }
 
@@ -208,43 +215,42 @@ width: 100px;
     }
 
     .combo-header {
-        grid-template-columns: 2fr 2fr 2fr; /* Giữ cấu trúc như ở màn 768px */
+        grid-template-columns: 1fr 1fr 1fr; /* Giữ cấu trúc như ở màn 480px */
         text-align: center;
     }
 
     .combo-item {
-        display: grid;
         grid-template-columns: 1fr 1fr 1fr;
         padding: 10px 0;
         width: 100%;
         align-items: center;
     }
+
     .combo-quantity {
         justify-content: center;
         padding-left: 0;
     }
 
     .combo-quantity span {
-        margin: 0 5px; /* Điều chỉnh khoảng cách cho phù hợp */
+        margin: 0 5px;
     }
 
     .box-thongtinphim {
+        width: 100%;
         margin-top: 10px;
         padding: 10px;
+        margin-left: 20px;
     }
 
-    .actions {
-        width: 100%;
+    .actionsts {
         flex-direction: column;
-        gap: 15px;
+        align-items: center;
+        width: 100%;
+        gap: 10px;
     }
 
     .back-btn2, .continue-btn2 {
-        width: 20%; /* Full width buttons on mobile */
-        margin: 5px 0; /* Add space between buttons */
+        width: 90%; 
     }
-    .continue-btn2{
-        width: 100%;
-    }
-}
     
+}

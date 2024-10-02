@@ -41,12 +41,13 @@ const NewsAndReview = () => {
     <div className='new-container'>
       {/* News Section */}
       <div className="news-section">
-        <h2>Mới cập nhật</h2>
+        <div className="Capnhat"><h2>Mới cập nhật</h2></div>
         {newsData.slice(0, visibleItems).map((news, index) => (
           <div className="news-item" key={index}>
             <img className="news-image-placeholder" src={news.thumnail || 'https://via.placeholder.com/150'} alt={news.title} />
             <div className="news-content">
               <h3>{news.title}</h3>
+              
               <p>{news.content.substring(0, 100)}...</p>
             </div>
           </div>
