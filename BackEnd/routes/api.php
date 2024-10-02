@@ -22,6 +22,7 @@ use App\Http\Controllers\Api\PayMethod\PayMethodController;
 use App\Http\Controllers\Api\Auth\AccountVerificationController;
 use App\Http\Controllers\Api\Auth\ResetPasswordController;
 use App\Http\Controllers\Api\Movie\RatingController;
+use App\Http\Controllers\Api\Seat\SeatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -80,6 +81,7 @@ Route::get('/vnpay-return', [BookingController::class, 'vnPayReturn']);
     Route::apiResource('movies', MovieController::class)->except(['index', 'show']);
     Route::apiResource('method', PayMethodController::class);
     Route::apiResource('combo', ComboController::class);
+    Route::apiResource('seat', SeatController::class);
 // });
 
 
