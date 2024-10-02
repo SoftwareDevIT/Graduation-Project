@@ -8,10 +8,12 @@ const Header = () => {
 
   useEffect(() => {
     // Kiểm tra nếu có userId trong localStorage
-    const userId = localStorage.getItem("userId");
-    if (userId) {
+    const token = localStorage.getItem("token");
+    const user_id = localStorage.getItem("user_id");
+    if (user_id && token) {
       setIsLoggedIn(true); // Cập nhật trạng thái đăng nhập
     }
+   
   }, []);
 
   const toggleHeaderLeft = () => {
@@ -19,6 +21,7 @@ const Header = () => {
   };
 
   const handleLogout = () => {
+    localStorage.removeItem("token");
     localStorage.removeItem("userId"); // Xóa userId khỏi localStorage
     setIsLoggedIn(false); // Cập nhật trạng thái đăng nhập
   };
