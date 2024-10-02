@@ -55,15 +55,15 @@ Route::apiResource('movies', MovieController::class)->only(['index', 'show']);  
 
 // Các tuyến có thể truy cập được cho người dùng được xác thực
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('/user', function (Request $request) {
-        // $user = $request->user()->load('favoriteMovies');
-        $user = $request->user()->load('favoriteMovies');
-        return response()->json($user);
-    });
     Route::post('favorites/{movie_id}', [FavoriteController::class, 'store']);                 // Thêm phim yêu thích
     Route::delete('favorites/{movie_id}', [FavoriteController::class, 'destroy']);             // Xóa phim yêu thích
     Route::post('ratings', [RatingController::class, 'store']);                                // Phim đánh giá
-    Route::post('/book-ticket', [BookingController::class, 'bookTicket']);                      // vé vé
+    Route::post('/book-ticket', [BookingController::class, 'bookTicket']);
+    Route::apiResource('user', AuthController::class);
+    Route::get('/user', function (Request $request) {
+        $user = $request->user()->load('favoriteMovies');
+        return response()->json($user);
+    });
 });
 Route::get('/vnpay-return', [BookingController::class, 'vnPayReturn']);
 
@@ -82,6 +82,7 @@ Route::get('/vnpay-return', [BookingController::class, 'vnPayReturn']);
     Route::apiResource('method', PayMethodController::class);
     Route::apiResource('combo', ComboController::class);
     Route::apiResource('seat', SeatController::class);
+
 // });
 
 
