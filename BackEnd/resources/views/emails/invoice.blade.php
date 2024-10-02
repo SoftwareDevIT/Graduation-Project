@@ -120,7 +120,7 @@
         <div class="email-body">
             <h2>Kính gửi <span class="highlight">{{ $booking->user['user_name'] }}</span>,</h2>
             <p>Chúc mừng bạn đã đặt vé thành công tại
-                <strong>{{ $booking->showtime->movie->cemina->first()->cinema_name }}</strong>! Dưới đây là thông tin
+                <strong>{{ $booking->showtime->movie->cinema->cinema_name }}</strong>! Dưới đây là thông tin
                 chi tiết về đặt vé của bạn:</p>
             <div class="ticket-info">
                 <h3>Thông tin vé:</h3>
@@ -128,9 +128,9 @@
                 <p><strong>Suất chiếu:</strong>
                     {{ \Carbon\Carbon::parse($booking->showtime['showtime_start'])->format('H:i A') }} to
                     {{ \Carbon\Carbon::parse($booking->showtime['showtime_end'])->format('H:i A') }}</p>
-                <p><strong>Rạp chiếu:</strong> {{ $booking->showtime->movie->cemina->first()->cinema_name }}</p>
+                <p><strong>Rạp chiếu:</strong> {{ $booking->showtime->movie->cinema->cinema_name }}</p>
                 <p><strong>Địa chỉ
-                        rạp:</strong>{{ $booking->showtime->movie->cemina->first()->location['location_name'] }}</p>
+                        rạp:</strong>{{ $booking->showtime->movie->cinema->location['location_name'] }}</p>
                 <p><strong>Phòng chiếu:</strong> {{ $booking->showtime->room['room_name'] }}</p>
                 <p><strong>Ghế ngồi:</strong>
                     @foreach ($booking->seats as $item)
@@ -157,14 +157,14 @@
                     1088</strong>.</p>
 
             <p>Xin cảm ơn và hẹn gặp lại tại
-                <strong>{{ $booking->showtime->movie->cemina->first()->cinema_name }}</strong>!</p>
+                <strong>{{ $booking->showtime->movie->cinema->cinema_name }}</strong>!</p>
 
             <a href="[Link đặt vé]" class="btn">Xem chi tiết đặt vé</a>
         </div>
 
         <!-- Footer -->
         <div class="email-footer">
-            <p><strong>{{ $booking->showtime->movie->cemina->first()->cinema_name }}</strong> | <a
+            <p><strong>{{ $booking->showtime->movie->cinema->cinema_name }}</strong> | <a
                     href="[Website rạp chiếu]">[Website rạp chiếu]</a> | Hotline: [Số điện thoại hỗ trợ]</p>
         </div>
     </div>

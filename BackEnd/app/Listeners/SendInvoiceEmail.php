@@ -6,6 +6,7 @@ use App\Events\InvoiceCreated;
 use App\Mail\InvoiceMail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
@@ -29,6 +30,6 @@ class SendInvoiceEmail
             'invoiceData' => $event->booking
         ]);
         // Gửi email
-        Mail::to('kien18092004@gmail.com')->queue(new InvoiceMail($event->booking));
+        Mail::to(Auth::user()->email)->queue(new InvoiceMail($event->booking));
     }
 }

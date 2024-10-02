@@ -10,7 +10,7 @@ class UserRegistrationService
 {
     public function register(array $request)
     {
-        $request['role_id'] = $request['role_id'] ?? 4;
+        // $request['role_id'] = $request['role_id'] ?? 4;
         return User::create($request);
     }
 }
