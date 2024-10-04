@@ -1,7 +1,6 @@
 import React from 'react';
 import './MoviesDashboard.css';
 
-
 import { Link } from 'react-router-dom';
 
 const MoviesDashboard: React.FC = () => {

@@ -1,41 +1,46 @@
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 140px;
-  background-color: #fff;
-  border-bottom: 1px solid #ddd;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  padding-left: 120px;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    
 }
 
 .thongbao {
   font-size: 25px;
-  margin-bottom: 7px;
+ 
 }
 
 .header-left {
-  display: flex;
-  align-items: center;
-  gap: 15px;
+  position: relative;
+bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .header-left a {
+position: relative;
   text-decoration: none;
   color: #6e84a3;
   font-size: 15px;
   font-weight: 400;
-  position: relative;
+bottom: 10px;
   transition: color 0.3s ease;
 }
+
 
 .header-left a:hover {
   color: #e50914; /* Red color on hover */
 }
 
 .header-logo {
-  
+ 
   color: #e50914;
   font-size: 26px;
   font-weight: bold;
@@ -43,15 +48,19 @@
 
 }
 .header-logo a{
-
+ position: relative;
+ top:12px;
+right: 45px;
   color: #e50914;
   text-decoration: none;
 }
 
 .header-right {
+  position: relative;
+  right: 27px;
   display: flex;
   align-items: center;
-  gap: 15px; /* Giảm khoảng cách giữa các icon */
+  gap: 19px; /* Giảm khoảng cách giữa các icon */
 }
 
 .header-right input[type="text"] {
@@ -81,11 +90,12 @@
 }
 
 /* Dropdown Styles */
-.dropdown {
+.dropdown1 {
   position: relative;
+ 
 }
 
-.dropbtn {
+.dropbtn1 {
   background-color: transparent;
   color: #6e84a3;
   font-size: 16px;
@@ -98,16 +108,16 @@
   transition: color 0.3s ease;
 }
 
-.dropbtn .arrow {
+.dropbtn1 .arrow {
   margin-left: 5px;
   transition: transform 0.3s ease;
 }
 
-.dropdown:hover .dropbtn {
+.dropdown1:hover .dropbtn1 {
   color: #e50914;
 }
 
-.dropdown:hover .dropbtn .arrow {
+.dropdown1:hover .dropbtn1 .arrow {
   transform: rotate(180deg);
 }
 
@@ -143,22 +153,17 @@
 
 /* Media Queries for Responsive Design */
 @media (max-width: 768px) {
-  .header {
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 10px 20px;
-  }
 
-  .header-left,
-  .header-right {
-      width: 100%;
-      justify-content: space-between;
+  .menu button {
+   position: relative;
+   top:10px;
+    background: rgb(237, 234, 234);
   }
 
   .header-logo {
       width: 100%;
       text-align: center;
-      margin-bottom: 10px;
+      margin-bottom: 40px;
   }
 
   .header-right {
@@ -175,32 +180,7 @@
   }
 }
 
-@media (max-width: 480px) {
-  .header-left,
-  .header-right {
-      flex-direction: column;
-      align-items: flex-start;
-      width: 100%;
-  }
 
-  .header-right {
-      flex-direction: column; /* Xếp icon và thanh tìm kiếm theo chiều dọc */
-      align-items: flex-start;
-      gap: 10px;
-  }
-
-  .header-right input[type="text"] {
-      width: 100%; /* Thanh tìm kiếm chiếm toàn bộ chiều rộng */
-  }
-
-  .header-right .icon-link {
-      font-size: 18px; /* Giảm thêm kích thước icon */
-  }
-
-  .header-right svg {
-      margin: 5px 0;
-  }
-}
   
 .header-right .icon-link svg {
   fill: currentColor; /* Giữ màu hiện tại của text */
@@ -214,4 +194,78 @@
 }
 .header-logo {
   padding: 0 !important; /* Xóa padding với ưu tiên cao hơn */
+}
+@media (max-width: 992px) {
+  .menu button {
+   
+    background: rgb(237, 234, 234);
+  }
+  .navbar-dark .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='black' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+  }
+  
+  .header-left .dropdown-content {
+    display: none;
+  }
+  .header-left {
+    position: absolute; 
+    top: 60px; 
+    left: 0;
+    width: 100%;
+    display: none; 
+    flex-direction: column; /* Chuyển đổi sang menu dọc */
+    align-items: flex-start; 
+    z-index: 999;
+    background-color: white; 
+    border: 1px solid #ddd; 
+    padding: 10px 0; 
+  }
+  .thanhmenu{
+    margin-top: 8px;
+  }
+  .header-left a{
+    top:5px;
+    padding-left: 85px;
+  }
+  .header-right input {
+    display: none; /* Ẩn input khi trong chế độ di động */
+  }
+
+  .header-left.hidden {
+    display: none; /* Giữ ẩn khi không cần hiển thị */
+  }
+
+  .header-left.visible {
+    display: flex; /* Hiển thị menu khi class 'visible' được thêm vào */
+  }
+}
+@media (max-width:576px) {
+  .thanhmenu{
+    position: relative;
+   right: 120px;
+  }
+  .header-logo a{
+   position: relative;
+   left: -104px;
+  
+     color: #e50914;
+     text-decoration: none;
+   }
+   .header-right{
+    position: relative;
+   left: -60px;
+   }
+   .header-left a{
+    top:5px;
+   padding-left: 0;
+  }
+ 
+}
+
+.dropdown{
+position: relative;
+top:10px;
+color: #6e84a3;
+    font-size: 15px;
+    font-weight: 400;
 }

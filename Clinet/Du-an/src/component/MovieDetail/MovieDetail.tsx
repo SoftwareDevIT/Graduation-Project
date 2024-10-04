@@ -26,10 +26,18 @@ const MovieDetail: React.FC = () => {
                                 <p className="genre">Action, Adventure, Animation, Family, Science Fiction</p>
 
                                 <div className="actions">
-                                    <button className="button like">Thích</button>
-                                    <button className="button rate">Đánh giá</button>
-                                    <button className="button trailer">Trailer</button>
-                                    <button className="button buy-ticket-button">Mua vé</button>
+                                    <div className="button like">
+                                        <span role="img" aria-label="like">❤️</span> <span className="like-1">Thích</span>
+                                    </div>
+                                    <div className="button rate like">
+                                        <span role="img" aria-label="rate">⭐</span> <span className="like-1 like2"> Đánh giá</span>
+                                    </div>
+                                    <div className="button trailer">
+                                        Trailer
+                                    </div>
+                                    <div className="button buy">
+                                        Mua vé
+                                    </div>
                                 </div>
 
                                 <p className="description">
@@ -63,18 +71,18 @@ const MovieDetail: React.FC = () => {
                 </div>
                 {/* Tabs */}
                 <div className="tabs">
-                    <Link  to={"/moviedetail"} className="tab active">Thông tin phim</Link>
-                    <Link  to={"/lich-chieu"} className="tab ">Lịch chiếu</Link>
-                    <Link  to={"/danh-gia"} className="tab ">Đánh giá</Link>
-                    <Link  to={"/tin-tuc"} className="tab ">Tin tức</Link>
-                    <Link  to={"/mua-ve"} className="tab ">Mua vé</Link>
-                    
+                    <Link to={"/moviedetail"} className="tab active">Thông tin phim</Link>
+                    <Link to={"/lich-chieu"} className="tab ">Lịch chiếu</Link>
+                    <Link to={"/danh-gia"} className="tab ">Đánh giá</Link>
+                    <Link to={"/tin-tuc"} className="tab ">Tin tức</Link>
+                    <Link to={"/mua-ve"} className="tab ">Mua vé</Link>
+
                 </div>
 
                 {/* Phần chọn lịch chiếu */}
-           
+
             </div>
-          
+
         </>
     );
 };

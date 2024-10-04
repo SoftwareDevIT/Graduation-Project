@@ -56,6 +56,7 @@ Route::apiResource('movies', MovieController::class)->only(['index', 'show']);  
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', function (Request $request) {
         $user = $request->user()->load('favoriteMovies');
+        // $user = $request->user();
         return response()->json($user);
     });
     Route::post('favorites/{movie_id}', [FavoriteController::class, 'store']);                 // Thêm phim yêu thích
@@ -66,7 +67,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
 // Các route quản trị và quản lý
-Route::middleware(['auth:sanctum', 'role:admin|manager'])->group(function () {
+// Route::middleware(['auth:sanctum', 'role:admin|manager'])->group(function () {
     Route::apiResource('location', LocationController::class)->except(['index', 'show']);
     Route::apiResource('cinema', CinemaController::class)->except(['index', 'show']);
     Route::apiResource('room', RoomController::class);
@@ -79,7 +80,7 @@ Route::middleware(['auth:sanctum', 'role:admin|manager'])->group(function () {
     Route::apiResource('movies', MovieController::class)->except(['index', 'show']);
     Route::apiResource('method', PayMethodController::class);
     Route::apiResource('combo', ComboController::class);
-});
+// });
 
 
 // });
@@ -96,6 +97,6 @@ Route::get('/movie/search/{movie_name}', [MovieController::class, 'search']);   
 
 Route::get('showtimes/movie/{movie_name}', [ShowtimeController::class, 'showtimeByMovieName']);     // Showtimes by movie name
 Route::get('/filterByDate', [FilterByDateController::class, 'filterByDate']);                       // Phim lọc theo ngày
-Route::get('cinema/{id}', [CinemaController::class, 'filterMovie']);                                // Phim lọc của điện ảnh
+Route::get('filterMovie/{id}', [CinemaController::class, 'filterMovie']);                                // Phim lọc của điện ảnh
 Route::get('/movie/{category}', [MovieController::class, 'movieByCategory']);                       // Lọc Phim theo thể loại
 Route::get('/new/{category}', [NewController::class, 'newByCategory']);                             // Lọc chuyên đề theo thể loại

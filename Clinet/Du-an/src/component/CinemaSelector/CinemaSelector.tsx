@@ -84,7 +84,24 @@ const CinemaSelector: React.FC = () => {
       }
     }
   }, [locations]);
+// Mặc định chọn Hà Nội và rạp đầu tiên của Hà Nội
+useEffect(() => {
+  if (selectedCity && filteredCinemas.length > 0) {
+    // Chọn rạp đầu tiên
+    setSelectedCinema(filteredCinemas[0].id ?? null);
 
+    // Chọn ngày đầu tiên là ngày hiện tại
+    const today = getCurrentDate();
+    setSelectedDate(today);
+  }
+}, [selectedCity, filteredCinemas]);
+
+// Khi chọn Hà Nội, chọn rạp đầu tiên của Hà Nội
+useEffect(() => {
+  if (selectedCity && filteredCinemas.length > 0) {
+    setSelectedCinema(filteredCinemas[0].id ?? null); // Chọn rạp đầu tiên hoặc null nếu không có id
+  }
+}, [selectedCity, filteredCinemas]);
   // Lọc rạp theo khu vực
   useEffect(() => {
     if (selectedCity) {
@@ -101,18 +118,23 @@ const CinemaSelector: React.FC = () => {
       if (selectedCinema && selectedDate) {
         try {
           // Gọi API lọc phim theo rạp
-          const cinemaResponse = await instance.get(`/cenima/${selectedCinema}`);
-          console.log("Dữ liệu từ lọc phim theo rạp:", cinemaResponse.data.data);
-  
+          const cinemaResponse = await instance.get(
+            `/filterMovie/${selectedCinema}`
+          );
+          console.log(
+            "Dữ liệu từ lọc phim theo rạp:",
+            cinemaResponse.data.data
+          );
+
           const cinemaMovies: Movie[] = cinemaResponse.data?.data || []; // Dữ liệu phim từ API rạp
-  
+
           // Nếu không có phim cho rạp này
           if (cinemaMovies.length === 0) {
             console.log("Không có phim nào cho rạp này.");
             setMovies([]);
             return;
           }
-  
+
           // Gọi API lọc theo ngày
           const dateResponse = await instance.get(`/filterByDate`, {
             params: {
@@ -121,14 +143,18 @@ const CinemaSelector: React.FC = () => {
             },
           });
           console.log("Dữ liệu từ dateResponse:", dateResponse.data);
-  
-          const dateMovies: Movie[] = Array.isArray(dateResponse.data) ? dateResponse.data : [];
-  
+
+          const dateMovies: Movie[] = Array.isArray(dateResponse.data)
+            ? dateResponse.data
+            : [];
+
           // Lọc những phim có trong cả hai API (lọc rạp và lọc ngày)
           const filteredMovies = cinemaMovies.filter((cinemaMovie: Movie) =>
-            dateMovies.some((dateMovie: Movie) => dateMovie.id === cinemaMovie.id)
+            dateMovies.some(
+              (dateMovie: Movie) => dateMovie.id === cinemaMovie.id
+            )
           );
-  
+
           // Cập nhật danh sách phim
           if (filteredMovies.length > 0) {
             setMovies(filteredMovies);
@@ -142,10 +168,9 @@ const CinemaSelector: React.FC = () => {
         }
       }
     };
-  
+
     fetchMoviesForSelectedCinemaAndDate();
   }, [selectedCinema, selectedDate]); // useEffect chạy khi cả rạp và ngày thay đổi
-  
 
   const selectedCinemaDetails = cinemas.find(
     (cinema) => cinema.id === selectedCinema
@@ -153,12 +178,14 @@ const CinemaSelector: React.FC = () => {
 
   return (
     <>
-      <h2 className="title">Mua vé theo rạp</h2>
+     <div className="div-content">
+     <h2 className="title">Mua vé theo rạp</h2>
       <div className="container">
         <div className="locations">
           <h3 className="khuvuc">Khu vực</h3>
           <ul className="list-tp">
-            {locations.map((location) => {
+         <div className="list">
+         {locations.map((location) => {
               const count = cinemas.filter(
                 (cinema) => cinema.location_id === location.id
               ).length;
@@ -175,6 +202,19 @@ const CinemaSelector: React.FC = () => {
                 </li>
               );
             })}
+         </div>
+             <select
+            className="city-select"
+            value={selectedCity ?? ""}
+            onChange={(e) => setSelectedCity(Number(e.target.value))}
+          >
+            <option value="">Chọn khu vực</option>
+            {locations.map((location) => (
+              <option key={location.id} value={location.id}>
+                {location.location_name}
+              </option>
+            ))}
+          </select>
           </ul>
         </div>
 
@@ -188,7 +228,7 @@ const CinemaSelector: React.FC = () => {
                   selectedCinema === cinema.id ? "selected" : ""
                 }`}
                 onClick={() => {
-                  setSelectedCinema(cinema.id);
+                  setSelectedCinema(cinema.id ?? null);
                 }}
               >
                 {cinema.cinema_name}
@@ -221,35 +261,36 @@ const CinemaSelector: React.FC = () => {
 
                 return (
                   <div key={movie.id} className="movie">
-                    <img src={movie.poster} alt={movie.movie_name} />
+                    <img src={movie.poster ?? undefined} alt={movie.movie_name} />
                     <div className="details">
                       <h4>{movie.movie_name}</h4>
-                      <p> 
+                      <p>
                         Đạo Diễn:{" "}
                         {actor ? actor.actor_name : "Không có thông tin"}
                       </p>
                       <p>Thời gian: {movie.duraion}</p>
                       <p>Giới hạn tuổi: {movie.age_limit}+</p>
                       <div className="showtimes-list">
-  {movie.showtimes.map((showtime) => (
-    <button
-      key={showtime.id}
-      onClick={() => {
-        navigate("/seat", {
-          state: {
-            movieName: movie.movie_name,
-            cinemaName: selectedCinemaDetails?.cinema_name,
-            showtime: showtime.showtime_start,
-            showtimeId: showtime.id, // Truyền showtimeId
-            cinemaId: selectedCinemaDetails?.id, // Truyền cinemaId
-          },
-        });
-      }}
-    >
-      {showtime.showtime_start.slice(0, 5)}
-    </button>
-  ))}
-</div>
+                        {movie.showtimes.map((showtime) => (
+                          <button
+                            key={showtime.id}
+                            onClick={() => {
+                              navigate("/seat", {
+                                state: {
+                                  movieName: movie.movie_name,
+                                  cinemaName:
+                                    selectedCinemaDetails?.cinema_name,
+                                  showtime: showtime.showtime_start,
+                                  showtimeId: showtime.id, // Truyền showtimeId
+                                  cinemaId: selectedCinemaDetails?.id, // Truyền cinemaId
+                                },
+                              });
+                            }}
+                          >
+                            {showtime.showtime_start.slice(0, 5)}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 );
@@ -262,6 +303,7 @@ const CinemaSelector: React.FC = () => {
           )}
         </div>
       </div>
+     </div>
     </>
   );
 };

@@ -61,18 +61,18 @@ const NewsContent = () => {
           </Slider>
         </div>
         <div className="main-news-content">
-          <h2>{mainNews.title}</h2>
-          <p className="category">
+          <h2 className='PhimHot'>Phim Hot Trong Tuần</h2>
+          {/* <p className="category">
             TV Series • {mainNews.user_id} • {new Date(mainNews.created_at).toLocaleString()}
           </p>
-          <p className="description">{mainNews.content}</p>
+          <p className="description">{mainNews.content}</p> */}
         </div>
       </div>
 
       <div className="related-news">
         {newsData.slice(1, 6).map((news, index) => (
           <div className="related-news-item" key={index}>
-            <a href="#">{news.title}</a>
+            <a href="#" className='title'>{news.title}</a>
             <span className="author">{news.user_id} • {new Date(news.created_at).toLocaleString()}</span>
           </div>
         ))}

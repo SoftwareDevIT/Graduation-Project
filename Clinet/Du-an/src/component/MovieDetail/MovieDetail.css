@@ -7,9 +7,38 @@
 
 /* Bố cục phần thông tin và hình ảnh */
 .boxbig {
-    background-color: #12243b;
+    position: relative; /* Đặt relative để lớp phủ có thể căn chỉnh chính xác */
+    background-image: url('https://cdn.moveek.com/storage/media/cache/full/66e7de0b6da94585504187.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     width: 100%;
 }
+
+.boxbig::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Lớp phủ màu đen với độ mờ 50% */
+    z-index: 1; /* Đảm bảo lớp phủ nằm trên background */
+}
+
+.info-section {
+    position: relative;
+    z-index: 2; /* Đảm bảo nội dung nằm trên lớp phủ */
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    padding: 30px;
+    border-radius: 10px;
+    width: calc(100% - 340px);
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
 
 .info-section {
     display: flex;
@@ -52,43 +81,82 @@
     margin-bottom: 15px;
     color: #d3d3d3;
 }
-
-.actions {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
+.actions{
+    margin-right: 95px;
 }
-
-.button {
-    padding: 6px 15px;
-    border-radius: 5px;
-    font-size: 14px;
-    border: none;
+.actions .button {
+    display: inline-block;
+  padding-left: 5px;
+  padding-top: 5px;
+    border-radius: 8px;
+    font-weight: 500;
+    margin-right: 10px;
+    text-align: center;
     cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
-.like {
-    background-color: #e7eaed;
-    color: rgb(41, 38, 38);
+.actions .button.like {
+
+    display: flex;
+    width: 90px;
+    height: 40px;
+    background-color: #f0f2f5; /* Màu nền xám nhạt */
+    color: #111; /* Màu chữ đen */
+    border: 1px solid #d9d9d9; /* Đường viền xám */
 }
 
-.rate {
-    background-color: #e7eaed;
-    color: rgb(41, 38, 38);
+.actions .rate{
+  width: 120px !important;
+ 
+}
+.actions .button .like-1{
+position: relative;
+left: 10px;
+}
+.actions .button .like2{
+    right: 10;
+}
+.actions .button.like:hover {
+    background-color: #e4e6eb;
 }
 
-.trailer {
-    background-color:#12243b;
+.actions .button.rate {
+    background-color: #f0f2f5;
+    color: #111;
+    border: 1px solid #d9d9d9;
+}
+
+.actions .button.rate:hover {
+    background-color: #e4e6eb;
+}
+
+.actions .button.trailer {
+    background-color: #1c1c1e; /* Màu đen */
     color: white;
-   
+    border: none;
+    width: 90px;
+    height: 40px;
+    padding: 8px;
 }
-.actions .trailer{
-border: 1px solid white;
+
+.actions .button.trailer:hover {
+    background-color: #444;
 }
-.actions .trailer:hover{
-    background: white;
-    color: #333;
+
+.actions .button.buy {
+    background-color: #ff4d4f; /* Màu đỏ */
+    color: white;
+    border: none;
+    width: 90px;
+    height: 40px;
+    padding: 8px;
 }
+
+.actions .button.buy:hover {
+    background-color: #ff7875;
+}
+
 
 .buy-ticket-button {
     padding: 8px 20px;
@@ -162,6 +230,11 @@ border: 1px solid white;
     background: #edf2f9;
    float: none;
    padding-right: 150px;
+   margin-top: 0px;
+   margin-bottom:-30px;
+   padding-bottom: 30px;
+   padding-top: 20px;
+ 
 }
 .content-1{
     display: block;
@@ -298,6 +371,7 @@ border: 1px solid white;
     border-radius: 10px;
     margin-top: 20px;
     margin-left: 170px;
+    margin-bottom: 30px;
     width: 735px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
@@ -308,7 +382,7 @@ border: 1px solid white;
     font-weight:600;
     color: #2c3e50;
     padding: 10px; /* Thêm padding để tạo không gian */
-    background-color: #e1f5fe; /* Màu nền cho tiêu đề */
+    background-color: #77e1f1; /* Màu nền cho tiêu đề */
     border: 1px solid #b0bec5; /* Đường viền xung quanh */
     border-radius: 5px; /* Bo góc cho đường viền */
     text-align: center;
@@ -452,4 +526,11 @@ border: 1px solid white;
     .video-section {
         width: 100%;
     }
+}
+.city-select{
+    display: block;
+}
+.movie-info span{
+margin-right: 0;
+
 }

@@ -17,6 +17,8 @@ class Booking extends Model
         'pay_method_id',
         'combo_id',
         'amount',
+        'price_ticket',
+        'price_combo',
         'seat_status',
         'created_at',
         'updated_at',

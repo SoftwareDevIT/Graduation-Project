@@ -20,15 +20,45 @@ const Login = () => {
       description,
     });
   };
-
   const onSubmit: SubmitHandler<LoginSchema> = async (data) => {
     try {
       const response = await instance.post("/login", data);
-      if (response.status === 200) {
-        openNotificationWithIcon("success", "Đăng nhập thành công", "Bạn đã đăng nhập thành công.");
-        navigate("/"); // Chuyển hướng sau khi đăng nhập thành công
+      
+      // Ghi lại phản hồi để kiểm tra
+      console.log("Login response:", response);
+  
+      // Kiểm tra và lấy token từ response
+      if (response.status === 200 && response.data.data.token) {
+        const token = response.data.data.token; // Đường dẫn chính xác để lấy token
+  
+        // Lưu token vào localStorage
+        localStorage.setItem("token", token);
+  
+        // Thiết lập token cho các request tiếp theo
+        instance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  
+        // Gọi API để lấy thông tin user_id từ token
+        const userResponse = await instance.get("/user");
+  
+        console.log("User response:", userResponse); // Ghi lại phản hồi từ API /user
+  
+        if (userResponse.status === 200 && userResponse.data) {
+          const userId = userResponse.data.id;
+  
+          // Lưu userId vào localStorage
+          localStorage.setItem("userId", userId);
+  
+          openNotificationWithIcon("success", "Đăng nhập thành công", "Bạn đã đăng nhập thành công.");
+          navigate("/");
+        } else {
+          openNotificationWithIcon("error", "Lỗi", "Không lấy được thông tin người dùng.");
+        }
+      } else {
+        openNotificationWithIcon("error", "Lỗi", "Đăng nhập không thành công.");
       }
     } catch (error: any) {
+      console.log("Login error:", error); // Ghi lại lỗi để kiểm tra chi tiết
+  
       if (error.response) {
         if (error.response.status === 401) {
           openNotificationWithIcon("error", "Lỗi đăng nhập", "Mật khẩu không chính xác.");
@@ -44,6 +74,12 @@ const Login = () => {
       }
     }
   };
+  
+  
+  
+  
+  
+  
 
   useEffect(() => {
     if (errors.email) {

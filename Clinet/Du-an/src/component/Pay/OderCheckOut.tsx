@@ -48,7 +48,7 @@ const OrderCheckout = () => {
       showtimeId: showtimeId,
       seats: seats,
       amount: totalPrice,
-      selectedCombos: selectedCombos,
+      comboId: selectedCombos,
     };
 
     try {
@@ -56,7 +56,7 @@ const OrderCheckout = () => {
       console.log(bookingData);
       
       const response = await instance.post('/book-ticket', bookingData);
-      console.log('Đặt vé thành công:', response.data.data.data);
+      console.log('Đặt vé thành công:', response.data.data);
 
       // if (response.data.data) {
       //   const vnpayUrl = response.data.data.data;
