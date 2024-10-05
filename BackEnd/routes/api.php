@@ -38,8 +38,8 @@ use App\Http\Controllers\Api\Seat\SeatController;
 // Các tuyến xác thực công khai
 Route::post('login', [AuthController::class, 'login']);
 // Google Sign In
-Route::post('/get-google-sign-in-url', [GoogleController::class, 'getGoogleSignInUrl']);
-Route::get('/callback', [GoogleController::class, 'loginCallback']);
+Route::post('/get-google-sign-in-url', [GoogleController::class, 'getGoogleSignInUrl']); // lấy url login google
+Route::get('/callback', [GoogleController::class, 'loginCallback']);  // login google
 Route::post('logout', [AuthController::class, 'logout']);
 Route::post('register', [AuthController::class, 'register']);                                       // Đăng ký người dùng
 Route::post('password/send-otp', [ForgotPasswordController::class, 'sendOtp']);                     // Gửi OTP đến email
