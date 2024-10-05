@@ -38,6 +38,7 @@ class User extends Authenticatable
         'status',
         'rating',
         'google_id',
+        'email_verified_at',
     ];
 
     /**
