@@ -1,31 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import instance from '../../server';
-import Header from '../Header/Hearder';
+import { message } from 'antd'; // Import message từ Ant Design
 import Headerticket from '../Headerticket/Headerticket';
 import Footer from '../Footer/Footer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWallet, faMobileAlt, faQrcode, faUniversity, faCreditCard } from '@fortawesome/free-solid-svg-icons';
 import './OderCheckOut.css';
+import Header from '../Header/Hearder';
 
 const OrderCheckout = () => {
   const location = useLocation();
-  const {
-    movieName,
-    cinemaName,
-    showtime,
-    selectedSeats,
-    totalPrice,
-    selectedCombos,
-  } = location.state || {};
+  const { movieName, cinemaName, showtime, selectedSeats, totalPrice, selectedCombos } = location.state || {};
 
   const handleCheckout = async () => {
     const cinemaId = location.state?.cinemaId;
     const showtimeId = location.state?.showtimeId;
     const roomId = location.state?.roomId;
+    const userId = localStorage.getItem('user_id'); // Lấy userId từ localStorage
+    const token = localStorage.getItem('token'); // Lấy token từ localStorage
 
-    if (!cinemaId || !showtimeId || !selectedSeats) {
-      console.error('cinemaId, showtimeId hoặc ghế ngồi không được tìm thấy');
+    // Kiểm tra xem người dùng đã đăng nhập chưa
+    if (!token) {
+      message.warning('Vui lòng đăng nhập trước khi đặt vé.'); // Hiển thị thông báo
+      return;
+    }
+
+    if (!cinemaId || !showtimeId || !selectedSeats || !userId) {
+      alert('Vui lòng kiểm tra lại thông tin, không tìm thấy cinemaId, showtimeId, ghế ngồi hoặc userId.');
       return;
     }
 
@@ -49,29 +51,31 @@ const OrderCheckout = () => {
       seats: seats,
       amount: totalPrice,
       comboId: selectedCombos,
+      userId: userId,
     };
 
     try {
-      // Gửi yêu cầu đặt vé
-      console.log(bookingData);
-      
-      const response = await instance.post('/book-ticket', bookingData);
+      console.log('Đang gửi yêu cầu đặt vé:', bookingData);
+      const response = await instance.post('/book-ticket', bookingData, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Sử dụng token từ localStorage
+        },
+      });
       console.log('Đặt vé thành công:', response.data.data);
 
-      // if (response.data.data) {
-      //   const vnpayUrl = response.data.data.data;
-      //   console.log('Chuyển hướng đến VNPAY:', vnpayUrl);
+      if (response.data.data) {
+        const vnpayUrl = response.data.data.data;
+        console.log('Chuyển hướng đến VNPAY:', vnpayUrl);
 
-      //   // Chuyển hướng người dùng đến VNPAY
-      //   window.location.href = vnpayUrl;
-      // } else {
-      //   console.error('Không tìm thấy URL VNPAY hoặc dữ liệu không hợp lệ');
-      // }
+        // Chuyển hướng người dùng đến VNPay
+        window.location.href = vnpayUrl;
+      } else {
+        console.error('Không tìm thấy URL VNPAY hoặc dữ liệu không hợp lệ');
+      }
     } catch (error) {
       console.error('Đặt vé thất bại:', error);
       alert('Đặt vé thất bại. Vui lòng thử lại.');
     }
-
   };
 
   return (
@@ -81,6 +85,7 @@ const OrderCheckout = () => {
       <div className="order-checkout-container">
         <div className="left-panel">
           <div className="order-summary">
+            {/* Hiển thị tóm tắt đơn hàng */}
             <div className="order-header">
               <h3>Tóm tắt đơn hàng</h3>
             </div>
@@ -103,6 +108,7 @@ const OrderCheckout = () => {
             <div className="order-item">
               <span className="item-title">Ghế đã chọn: {selectedSeats}</span>
             </div>
+            {/* Hiển thị combo nếu có */}
             {selectedCombos && selectedCombos.length > 0 && (
               <div className="combo-summary">
                 <h4>Combo đã chọn:</h4>
@@ -119,46 +125,56 @@ const OrderCheckout = () => {
               <span className="total-price">{totalPrice?.toLocaleString('vi-VN')} đ</span>
             </div>
           </div>
+
+          {/* Hình thức thanh toán */}
           <div className="payment-methods">
             <h3>Hình thức thanh toán</h3>
+            {/* Các phương thức thanh toán */}
             <ul>
-              <li>
-                <FontAwesomeIcon icon={faWallet} className="payment-icon" /> Fundiin
-              </li>
-              <li>
-                <FontAwesomeIcon icon={faMobileAlt} className="payment-icon" /> Ví MoMo
-              </li>
-              <li>
-                <FontAwesomeIcon icon={faQrcode} className="payment-icon" /> Quét mã QR
-              </li>
-              <li>
-                <FontAwesomeIcon icon={faUniversity} className="payment-icon" /> Chuyển khoản / Internet Banking
-              </li>
-              <li>
-                <FontAwesomeIcon icon={faWallet} className="payment-icon" /> Ví ShopeePay
-              </li>
-              <li>
-                <FontAwesomeIcon icon={faCreditCard} className="payment-icon" /> Thẻ ATM (Thẻ nội địa)
-              </li>
-              <li>
-                <FontAwesomeIcon icon={faWallet} className="payment-icon" /> Ví FPT Pay
-              </li>
+              <li><FontAwesomeIcon icon={faWallet} className="payment-icon" /> Fundiin</li>
+              <li><FontAwesomeIcon icon={faMobileAlt} className="payment-icon" /> Ví MoMo</li>
+              <li><FontAwesomeIcon icon={faQrcode} className="payment-icon" /> Quét mã QR</li>
+              <li><FontAwesomeIcon icon={faUniversity} className="payment-icon" /> Chuyển khoản / Internet Banking</li>
+              <li><FontAwesomeIcon icon={faWallet} className="payment-icon" /> Ví ShopeePay</li>
+              <li><FontAwesomeIcon icon={faCreditCard} className="payment-icon" /> Thẻ ATM (Thẻ nội địa)</li>
+              <li><FontAwesomeIcon icon={faWallet} className="payment-icon" /> Ví FPT Pay</li>
             </ul>
           </div>
+
+          {/* Thông tin cá nhân */}
           <div className="form-container">
             <h3>Thông tin cá nhân</h3>
             <form>
               <div className="form-group">
                 <label htmlFor="fullname">Họ và tên</label>
-                <input type="text" id="fullname" placeholder="Nhập họ và tên" required />
+                <input
+                  type="text"
+                  id="fullname"
+                  placeholder="Nhập họ và tên"
+              
+                 
+                  required
+                />
               </div>
               <div className="form-group">
                 <label htmlFor="email">Email</label>
-                <input type="email" id="email" placeholder="Nhập email" required />
+                <input
+                  type="email"
+                  id="email"
+                  placeholder="Nhập email"
+                 
+                  required
+                />
               </div>
               <div className="form-group">
                 <label htmlFor="phone">Số điện thoại</label>
-                <input type="tel" id="phone" placeholder="Nhập số điện thoại" required />
+                <input
+                  type="tel"
+                  id="phone"
+                  placeholder="Nhập số điện thoại"
+                 
+                  required
+                />
               </div>
               <div className="form-group checkbox-group">
                 <input type="checkbox" id="create-account" />
@@ -167,6 +183,8 @@ const OrderCheckout = () => {
             </form>
           </div>
         </div>
+
+        {/* Thông tin thanh toán bên phải */}
         <div className="right-panel">
           <div className="checkout-details">
             <div className="order-info">
@@ -179,9 +197,7 @@ const OrderCheckout = () => {
             </div>
             <div className="description">
               <p>
-                Vé đã mua không thể đổi hoặc hoàn tiền. Mã vé sẽ được gửi 01 lần
-                qua số điện thoại và email đã nhập. Vui lòng kiểm tra lại thông
-                tin trước khi tiếp tục
+                Vé đã mua không thể đổi hoặc hoàn tiền. Mã vé sẽ được gửi 01 lần qua số điện thoại và email đã nhập. Vui lòng kiểm tra lại thông tin trước khi tiếp tục.
               </p>
             </div>
             <button onClick={handleCheckout} className="checkout-button">Thanh toán</button>

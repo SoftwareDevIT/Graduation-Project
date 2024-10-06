@@ -18,7 +18,7 @@ return new class extends Migration
             $table->date('showtime_date');
             $table->time('showtime_start');
             $table->time('showtime_end');
-            $table->enum('status', ['Show', 'Hidden'])->default('Show');
+            $table->boolean('status')->default(true);
             $table->timestamps();
             $table->foreign('movie_id')->references('id')->on('movies');
             $table->foreign('room_id')->references('id')->on('room');

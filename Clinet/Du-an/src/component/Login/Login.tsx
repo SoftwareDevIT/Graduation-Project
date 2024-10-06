@@ -43,10 +43,10 @@ const Login = () => {
         console.log("User response:", userResponse); // Ghi lại phản hồi từ API /user
   
         if (userResponse.status === 200 && userResponse.data) {
-          const userId = userResponse.data.id;
+          const user_id = userResponse.data.id;
   
-          // Lưu userId vào localStorage
-          localStorage.setItem("userId", userId);
+          
+          localStorage.setItem("user_id", user_id);
   
           openNotificationWithIcon("success", "Đăng nhập thành công", "Bạn đã đăng nhập thành công.");
           navigate("/");

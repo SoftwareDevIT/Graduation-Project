@@ -21,7 +21,9 @@ use App\Http\Controllers\Api\Movie\MovieCategoryController;
 use App\Http\Controllers\Api\PayMethod\PayMethodController;
 use App\Http\Controllers\Api\Auth\AccountVerificationController;
 use App\Http\Controllers\Api\Auth\ResetPasswordController;
+use App\Http\Controllers\Api\Google\GoogleController;
 use App\Http\Controllers\Api\Movie\RatingController;
+use App\Http\Controllers\Api\Seat\SeatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +37,9 @@ use App\Http\Controllers\Api\Movie\RatingController;
 */
 // Các tuyến xác thực công khai
 Route::post('login', [AuthController::class, 'login']);
+// Google Sign In
+Route::post('/get-google-sign-in-url', [GoogleController::class, 'getGoogleSignInUrl']); // lấy url login google
+Route::get('/callback', [GoogleController::class, 'loginCallback']);  // login google
 Route::post('logout', [AuthController::class, 'logout']);
 Route::post('register', [AuthController::class, 'register']);                                       // Đăng ký người dùng
 Route::post('password/send-otp', [ForgotPasswordController::class, 'sendOtp']);                     // Gửi OTP đến email
@@ -54,17 +59,17 @@ Route::apiResource('movies', MovieController::class)->only(['index', 'show']);  
 
 // Các tuyến có thể truy cập được cho người dùng được xác thực
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('/user', function (Request $request) {
-        $user = $request->user()->load('favoriteMovies');
-        // $user = $request->user();
-        return response()->json($user);
-    });
     Route::post('favorites/{movie_id}', [FavoriteController::class, 'store']);                 // Thêm phim yêu thích
     Route::delete('favorites/{movie_id}', [FavoriteController::class, 'destroy']);             // Xóa phim yêu thích
     Route::post('ratings', [RatingController::class, 'store']);                                // Phim đánh giá
-    Route::get('/vnpay-return', [BookingController::class, 'vnPayReturn']);
-    Route::post('/book-ticket', [BookingController::class, 'bookTicket']);                      // vé vé
+    Route::post('/book-ticket', [BookingController::class, 'bookTicket']);
+    Route::apiResource('user', AuthController::class);
+    Route::get('/user', function (Request $request) {
+        $user = $request->user()->load('favoriteMovies');
+        return response()->json($user);
+    });
 });
+Route::get('/vnpay-return', [BookingController::class, 'vnPayReturn']);
 
 // Các route quản trị và quản lý
 // Route::middleware(['auth:sanctum', 'role:admin|manager'])->group(function () {
@@ -80,6 +85,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('movies', MovieController::class)->except(['index', 'show']);
     Route::apiResource('method', PayMethodController::class);
     Route::apiResource('combo', ComboController::class);
+    Route::apiResource('seat', SeatController::class);
+
 // });
 
 

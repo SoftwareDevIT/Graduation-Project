@@ -8,7 +8,7 @@ use App\Services\Auth\PasswordResetService;
 use Illuminate\Http\Request;
 
 class ResetPasswordController extends Controller
-{   
+{
     protected $resetPasswordService;
 
     public function __construct(PasswordResetService $resetPasswordService){
