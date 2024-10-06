@@ -570,4 +570,6 @@
     margin: 5px 0;
   }
 }
-
+.seat.selected {
+  background-color: #76c7c0; /* Màu xanh để chỉ ghế đã chọn */
+}

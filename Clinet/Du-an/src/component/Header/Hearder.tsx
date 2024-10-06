@@ -154,7 +154,7 @@ const Header = () => {
     {/* Menu cho người dùng đã đăng nhập */}
     <div className="dropdown-menu">
       <Link to="/profile" className="dropdown-item">Xem trang cá nhân</Link>
-      <div className="dropdown-item" onClick={handleLogout}>Đăng xuất</div>
+      <div className="" onClick={handleLogout}>Đăng xuất</div>
     </div>
   </div>
 ) : (

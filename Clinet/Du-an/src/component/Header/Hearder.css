@@ -254,6 +254,7 @@ right: 45px;
    .header-right{
     position: relative;
    left: -60px;
+   bottom: 10px;
    }
    .header-left a{
     top:5px;
