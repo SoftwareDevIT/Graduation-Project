@@ -432,7 +432,9 @@ li.city.selected {
   }
 
   .movie img {
-    width: 100%; /* Đảm bảo hình ảnh không vượt quá chiều rộng */
+    width:80px;
+    height: 90px;
+    
   }
 
   .details {
