@@ -32,14 +32,9 @@ import EmailConfirm from "./component/EmailConfirm/EmailConfirm";
 import UserAddManager from "./Page/Admin/User/UserAdd";
 import Home from "./Page/Home";
 import Bookcinematickets from "./Page/Client/Bookcinematickets";
-
-
 import CinemasFormManager from "./Page/Admin/Cinemas/CinemasForm";
-
-
 import ComboFormManager from "./Page/Admin/Combo/ComboForm";
 import ShowtimesFormManager from "./Page/Admin/Showtimes/ShowtimesForm";
-import AddMovie from "./component/Admin/MoviesDashboard/MovieAdd";
 import MoviesManagerForm from "./Page/Admin/Movies/MoviesForm";
 import PaymentCallback from "./component/Pay/PaymentCallback";
 import PostsFormManager from "./Page/Admin/Posts/PostForm";

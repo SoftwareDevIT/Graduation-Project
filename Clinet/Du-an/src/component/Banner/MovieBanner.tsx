@@ -71,7 +71,7 @@ const MovieBanner = () => {
                     <button className="buy-ticket">Mua vé</button>
                     <p className='name_movie'>{movie.movie_name}</p>
                     <span>{movie.release_date ? new Date(movie.release_date).toLocaleDateString('vi-VN') : 'N/A'}</span>
-                    <span className="rating">{movie.age_limit ? `${movie.age_limit}` : 'N/A'}</span>
+                    {/* <span className="rating">{movie.age_limit ? `${movie.age_limit}` : 'N/A'}</span> */}
                   </div>
                 </div>
               </div>
