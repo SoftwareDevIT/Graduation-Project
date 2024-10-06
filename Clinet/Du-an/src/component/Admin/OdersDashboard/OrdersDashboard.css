@@ -1,17 +1,17 @@
 /* Main container */
 .orders-management {
-    padding: 20px;
+    padding: 30px;
     background: rgb(229, 240, 242); /* Nền xanh nhạt */
     min-height: 170vh;
-    color: #ffffff;
-    font-family: 'Roboto', sans-serif;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Title styling */
 .orders-management h2 {
     margin-bottom: 20px;
     font-size: 1.75rem;
-    color: #ffffff;
+    color: #006064;
     letter-spacing: 1px;
     text-transform: uppercase;
     text-align: center;
@@ -25,7 +25,7 @@
 }
 
 .add-order-btn {
-    padding: 10px 20px;
+    padding: 5px 20px;
     background-color: #f39c12;
     border: none;
     border-radius: 5px;
@@ -43,45 +43,47 @@
 
 /* Table container styling */
 .table-container {
-    width: 100%;
+    margin-top: 30px;
+    background-color: #ffffff; /* Nền trắng giống bảng đơn hàng */
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Bóng nhẹ */
+    padding: 20px;
     max-width: 1300px;
     overflow-x: auto;
-    border-radius: 8px;
-    background-color: #1a1a1a;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 /* Table styling */
 .order-table {
     width: 100%;
     border-collapse: collapse;
+    font-size: 14px;
+    color: #006064; /* Màu xanh đậm */
 }
 
-/* Header styling */
 .order-table th {
-    background-color: #282828;
-    color: #ffffff;
+    background-color: #e0f7fa; /* Nền xanh nhạt */
+    color: #00796b; /* Chữ xanh đậm */
     text-align: center;
     font-weight: 600;
-    font-size: 1rem;
-    padding: 15px;
-    text-transform: uppercase;
+    padding: 10px;
+    text-transform: none;
+    border-bottom: 1px solid #b2ebf2;
 }
 
-/* Row styling */
 .order-table td {
-    padding: 15px;
-    background-color: #1e1e1e;
-    color: #e0e0e0;
-    border-bottom: 1px solid #3a3a3a;
-    font-size: 0.875rem;
-    vertical-align: middle;
+    padding: 10px;
+    background-color: #ffffff; /* Nền trắng */
+    color: #00796b; /* Chữ xanh đậm */
+    border-bottom: 1px solid #b2ebf2;
     text-align: center;
 }
 
-/* Hover effect for rows */
+.order-table tr:nth-child(even) {
+    background-color: #f1f8e9; /* Nền xanh rất nhạt */
+}
+
 .order-table tbody tr:hover {
-    background-color: #333333;
+    background-color: #b2ebf2;
     transition: background-color 0.3s ease;
 }
 
@@ -95,7 +97,7 @@
     background: none;
     border: none;
     cursor: pointer;
-    color: #ffffff;
+    color: #00796b !important;
     font-size: 1rem;
     transition: color 0.3s ease;
 }
@@ -112,19 +114,18 @@
     color: #e74c3c;
 }
 
-/* Responsive design for mobile */
+/* Responsive design */
 @media (max-width: 768px) {
     .order-table th, .order-table td {
         font-size: 0.875rem;
         padding: 10px;
     }
 
-    .add-order-btn {
-        width: 100%;
-        font-size: 0.875rem;
+    .action-buttons {
+        flex-direction: column;
     }
 
-    .edit-btn, .delete-btn {
-        padding: 8px 12px;
+    .action-buttons button {
+        margin: 5px 0;
     }
 }

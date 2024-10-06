@@ -1,7 +1,6 @@
 import React from 'react';
 import './MoviesDashboard.css';
 
-
 import { Link } from 'react-router-dom';
 
 const MoviesDashboard: React.FC = () => {
@@ -60,7 +59,7 @@ const MoviesDashboard: React.FC = () => {
                                 <td colSpan={6}>No movies available</td>
                             </tr>
                         )}
-</tbody>
+                        </tbody>
                 </table>
             </div>
         </div>
