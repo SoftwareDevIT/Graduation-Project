@@ -32,19 +32,25 @@
 .city-select-custom,
 .format-select-custom {
     margin-top: 10px;
- 
+    padding: 12px;
     font-size: 16px;
     border: 1px solid #e2e8f0;
     border-radius: 8px;
     background-color: #fff;
     color: #333;
     appearance: none; /* Bỏ mũi tên mặc định của select */
-    width: 335px;
-  padding: 0 !important;
-  padding-left: 15px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Thêm bóng cho select */
 }
 
+.city-select-custom {
+    width: 710px;
+    height: 40px;
+}
 
+.format-select-custom {
+    width: 335px;
+    height: 40px;
+}
 
 .city-select-custom:focus,
 .format-select-custom:focus {
@@ -56,16 +62,12 @@
 .calendar-custom {
     display: flex;
     padding: 10px 0;
-    background-color: #e4f1fa;
-    border-radius: 7px; /* Bo góc 7px */
-
-    width: 735px;
-    height: 60px;
+    background-color: #e4f1fa; /* Thay đổi màu nền của calendar */
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Thêm bóng cho calendar */
+    width: 730px;
     margin-left: 190px;
-   
-   
-    gap: 0;
-    overflow: hidden; /* Đảm bảo phần tử con không tràn ra ngoài */
+    gap: 0; /* Không có khoảng cách giữa các phần tử date-custom */
 }
 
 .date-custom {
@@ -76,27 +78,26 @@
     flex-grow: 1; /* Chia đều không gian */
     padding: 15px; /* Tăng padding để cải thiện giao diện */
     color: #555;
-    
+    transition: background-color 0.3s, color 0.3s;
     cursor: pointer;
-    font-size: 12px ; /* Tăng kích thước chữ */
+    font-size: 16px; /* Tăng kích thước chữ */
     background-color: #f8f9fc; /* Màu nền nhẹ cho ngày */
 }
 
 .date-custom.active {
-    background-color: #d4e3f4; /* Màu nền cho ngày đang chọn */
+    background-color: #cce5ff; /* Màu nền cho ngày đang chọn */
     color: #0056b3; /* Màu chữ cho ngày đang chọn */
 }
 
 .date-custom:hover {
     background-color: #b0d4ff; /* Màu nền khi hover */
-    color: #54585d; /* Màu chữ khi hover */
+    color: #0056b3; /* Màu chữ khi hover */
 }
 
 .date-custom span {
     font-weight: bold;
-    font-size: 15px !important; /* Tăng kích thước chữ cho ngày */
+    font-size: 18px; /* Tăng kích thước chữ cho ngày */
     margin-bottom: 5px;
-    color: #95aac9;
 }
 
 .date-custom small {
@@ -133,7 +134,7 @@ select {
     flex-direction: column;
     width: 735px;
     margin-left: 190px;
-  box-shadow: none !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
     border-radius: 12px; /* Bo góc */
     overflow: hidden; /* Ẩn các phần tử thừa */
 }
@@ -146,7 +147,7 @@ select {
     background-color: #e9f5ff; /* Màu nền của item rạp */
     border-bottom: 1px solid #e2e8f0; /* Đường viền dưới */
     height: 70px;
-  
+    transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s; /* Hiệu ứng chuyển màu và phóng to */
 }
 
 
@@ -192,7 +193,7 @@ bottom: 20px;
 
 
 .sub-cinema-list {
-    
+    background-color: #f0f4f8; /* Màu nền cho danh sách rạp con */
     color: #12263f !important;
     font-weight: 400 !important;
  
@@ -204,7 +205,7 @@ bottom: 20px;
 .sub-cinema-item {
     padding: 10px; /* Padding cho rạp con */
     background-color: #ffffff; /* Màu nền của item rạp con */
-   border: none;
+    border-bottom: 1px solid #e2e8f0; /* Đường viền dưới */
     cursor: pointer; /* Con trỏ khi hover */
     transition: background-color 0.3s, transform 0.2s; /* Hiệu ứng chuyển màu và phóng to */
 }
@@ -221,7 +222,12 @@ bottom: 20px;
     transition: transform 0.3s; /* Hiệu ứng chuyển động khi hover */
 }
 .cinema-item {
+
+
     background-color: #ecedf3; /* Màu nền của item rạp */
+   
+    
+
 }
 
 .cinema-item.selected {
@@ -229,69 +235,3 @@ bottom: 20px;
     color: white; /* Thay đổi màu chữ cho dễ đọc */
 }
 
-select{
-    line-height: 20px !important;
-}
-.sub-cinema-details {
-    font-family: Arial, sans-serif;
-    line-height: 1.2;
-    padding-left: 10px;
-    background: white;
-    margin-top:-7px;
-  
-}
-
-.cinema-address {
-    color: #95aac9;
-    font-size: .8125rem;
-    margin: 2px 0;
-    font-weight: 400;
-}
-
-.cinema-showtimes {
-    display: flex;
-    flex-wrap: wrap;
-    margin-top: 6px;
-   
-}
-.cinema-showtimes span {
-   
-    padding: 4px 1px;
-    border-radius: 5px;
-    margin: 5px;
-    margin-left: 12px;
-    font-size: 13px;
-    color: #12263f;
-    font-weight: 500;
-  padding-top: 10px;
-    cursor: pointer;
-    border: 1px solid #ccc;
-    text-align: center;
-    width: 70px;
-    height: 40px;
-    border: 1px solid #333; /* Border đậm hơn */
-}
-
-.cinema-showtimes span :hover {
-    background-color: #ddd;
-}
-
-/* Định dạng cho các thẻ span có class price */
-
-
-.cinema-showtimes span.price:hover {
-    background-color: #ffcccb; /* Màu nền khác khi hover cho thẻ có class price */
-}
-
-/* Định dạng hover cho những thẻ span còn lại */
-.cinema-showtimes span:not(.price):hover {
-    background-color: #e1d6d6; /* Màu nền khác khi hover cho thẻ không có class price */
-}
-
-
-.cinema-showtimes span .price {
-    display: block;
-    font-size: 9px; /* Kích thước chữ nhỏ hơn cho giá */
-    color: #666;
-   
-}

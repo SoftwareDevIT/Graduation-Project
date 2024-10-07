@@ -47,6 +47,8 @@ import { ContentMovie } from "./component/MovieDetail/ContentMovie";
 import LichChieu from "./component/MovieDetail/LichChieu";
 import DanhGia from "./component/MovieDetail/DanhGia";
 import TinTuc from "./component/MovieDetail/TinTuc";
+import MuaVe from "./component/MovieDetail/MuaVe";
+import Profile from "./component/PersonalPage/Profile";
 
 
 
@@ -63,9 +65,14 @@ function App() {
       <Route path="/lich-chieu" element={<LichChieu/>}/>
       <Route path="/danh-gia" element={<DanhGia/>}/>
       <Route path="/tin-tuc" element={<TinTuc/>}/>
+      <Route path="/mua-ve" element={<MuaVe/>}/>
       <Route path="/headerticket" element={<Headerticket/>}/>
       <Route path="/confirm" element={<EmailConfirm/>}/>
       <Route path="/payment-callback" element={<PaymentCallback />} />
+
+      <Route path="/profile" element={<Profile/>} />
+
+      
 
       <Route path="/register" element={<RegisterCinema/>}/>
       <Route path="/login" element={<LoginCinema/>}/>

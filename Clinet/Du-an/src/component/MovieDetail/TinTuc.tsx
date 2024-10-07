@@ -1,5 +1,5 @@
 import React from "react";
-import "./MovieDetail.css";
+import "./TinTuc.css";
 import Header from "../Header/Hearder";
 import Footer from "../Footer/Footer";
 import MovieDetail from "./MovieDetail";
@@ -10,7 +10,7 @@ const TinTuc: React.FC = () => {
         <div>
           <MovieDetail/>
                 <div className="content">
-                    <div className="container">
+                    <div className="container tintuccontainer">
                         <div className="title-2">
                             <h3>Bài viết liên quan</h3>
                         </div>
