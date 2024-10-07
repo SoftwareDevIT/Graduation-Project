@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom"; // Nhập useLocation
+import { Link, useLocation } from "react-router-dom";
 import Header from "../Header/Hearder";
 import Footer from "../Footer/Footer";
 import Headerticket from "../Headerticket/Headerticket";
@@ -11,6 +11,7 @@ interface SeatRowProps {
   row: string | { row: string; seats: (string | null)[] };
   onSeatClick: (row: string, seatIndex: number) => void;
   selectedSeats: Map<string, number[]>;
+  reservedSeats: Set<string>; // Thêm reservedSeats
 }
 
 interface SeatProps {
@@ -19,45 +20,74 @@ interface SeatProps {
   row: string;
   onSeatClick: (row: string, seatIndex: number) => void;
   isSelected: boolean;
+  isReserved: boolean; // Thêm isReserved
 }
 
 const CinemaSeatSelection: React.FC = () => {
-  const location = useLocation(); // Khai báo useLocation
-  const { movieName, cinemaName, showtime ,showtimeId, cinemaId} = location.state || {};
+  const location = useLocation();
+  const { movieName, cinemaName, showtime, showtimeId, cinemaId } =
+    location.state || {};
 
   const [selectedSeats, setSelectedSeats] = useState<Map<string, number[]>>(
     new Map()
   );
+  const [reservedSeats, setReservedSeats] = useState<Set<string>>(new Set()); // Thêm reservedSeats
   const [roomData, setRoomData] = useState<Room | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchRandomRoom = async () => {
+    const fetchRoomAndSeats = async () => {
       try {
-        const response = await instance.get(`/room`);
-        const data = response.data;
-
-        if (data && Array.isArray(data.data) && data.data.length > 0) {
-          // Chọn ngẫu nhiên một phòng từ danh sách phòng
-          const randomRoom =
-            data.data[Math.floor(Math.random() * data.data.length)];
-
+        // Lấy dữ liệu phòng
+        const roomResponse = await instance.get(`/room`);
+        const roomData = roomResponse.data;
+    
+        if (roomData && Array.isArray(roomData.data) && roomData.data.length > 0) {
+          const randomRoom = roomData.data[Math.floor(Math.random() * roomData.data.length)];
+    
           if (randomRoom && randomRoom.volume > 0) {
-            setRoomData(randomRoom); // Lưu thông tin phòng đã chọn
+            setRoomData(randomRoom);
           } else {
             setError("Room data is invalid");
+            return; // Dừng lại nếu dữ liệu phòng không hợp lệ
           }
         } else {
           setError("No rooms available");
+          return; // Dừng lại nếu không có phòng nào
         }
+    
+        // Nếu có phòng hợp lệ, tiếp tục lấy dữ liệu ghế đã đặt
+        const seatResponse = await instance.get(`/seat/${showtimeId}`);
+        const seatData = seatResponse.data;
+    
+        const reservedSeatSet = new Set<string>();
+    
+        // Kiểm tra và xử lý ghế nếu có dữ liệu ghế
+        if (seatData && Array.isArray(seatData.data) && seatData.data.length > 0) {
+          seatData.data.forEach((seat: { seat_name: string; status: string }) => {
+            if (seat.status === "Reserved Until" || seat.status === "Booked") {
+              reservedSeatSet.add(seat.seat_name);
+            }
+          });
+          setReservedSeats(reservedSeatSet); // Cập nhật ghế đã đặt
+        } else {
+          // Nếu không có ghế nào đã đặt, vẫn hiển thị ghế trống
+          setReservedSeats(new Set()); // Đặt Set trống nếu không có ghế nào được đặt
+        }
+    
       } catch (error) {
-        setError("Error fetching room data");
-        console.error(error);
+        // Không báo lỗi, chỉ hiển thị giao diện
+        console.error("Error fetching room or seat data", error);
+        setReservedSeats(new Set()); // Đặt Set trống để có thể hiển thị tất cả các ghế
       }
     };
-
-    fetchRandomRoom();
-  }, []);
+    
+    
+    
+    
+    
+    fetchRoomAndSeats();
+  }, [showtimeId]);
 
   if (error) {
     return <div>{error}</div>;
@@ -68,7 +98,7 @@ const CinemaSeatSelection: React.FC = () => {
   }
 
   const totalSeats = roomData.volume;
-  const seatsPerRow = 10; // Số ghế trong một hàng
+  const seatsPerRow = 10;
   const totalRows = Math.ceil(totalSeats / seatsPerRow);
   const rowLabels = Array.from({ length: totalRows }, (_, index) =>
     String.fromCharCode(65 + index)
@@ -85,32 +115,43 @@ const CinemaSeatSelection: React.FC = () => {
       return { row: rowLabel, seats };
     });
 
-  const handleSeatClick = (row: string, seatIndex: number) => {
-    setSelectedSeats((prev) => {
-      const newSelection = new Map(prev);
-      const selectedInRow = newSelection.get(row) || []; // Get the selected seats in the row or an empty array
+    const handleSeatClick = (row: string, seatIndex: number) => {
+      const seatId = `${row}${seatIndex + 1}`;
+      if (reservedSeats.has(seatId)) return; // Ngăn chọn ghế đã đặt
+    
+      // Xử lý chọn/bỏ chọn ghế
+      setSelectedSeats((prev) => {
+        const newSelection = new Map(prev);
+        const selectedInRow = newSelection.get(row) || [];
+    
+        if (selectedInRow.includes(seatIndex)) {
+          newSelection.set(
+            row,
+            selectedInRow.filter((seat) => seat !== seatIndex)
+          );
+        } else {
+          newSelection.set(row, [...selectedInRow, seatIndex]);
+        }
+    
+        return newSelection;
+      });
+    };
+    
 
-      if (selectedInRow.includes(seatIndex)) {
-        // Deselect the seat if it's already selected
-        newSelection.set(
-          row,
-          selectedInRow.filter((seat) => seat !== seatIndex)
-        );
-      } else {
-        // Add the new seat to the selection
-        newSelection.set(row, [...selectedInRow, seatIndex]);
-      }
-
-      return newSelection;
-    });
-  };
-
-  // Calculate the total price based on selected seats
   const totalSelectedSeats = Array.from(selectedSeats.values()).reduce(
     (acc, selectedSeatsInRow) => acc + selectedSeatsInRow.length,
     0
   );
-  const totalPrice = totalSelectedSeats * 50000; // 50,000 VND per seat
+
+  const hours = showtime.split(":")[0];
+
+  let price_ticket = 0;
+  if (hours < 22) {
+    price_ticket = 50000;
+  } else {
+    price_ticket = 45000;
+  }
+  const totalPrice = totalSelectedSeats * price_ticket;
 
   return (
     <>
@@ -118,7 +159,7 @@ const CinemaSeatSelection: React.FC = () => {
       <Headerticket />
       <div className="container container-map">
         <div className="seat-info-box">
-          <div className="seat-map-box">
+          <div className="seat-map-box ">
             <div className="screen">MÀN HÌNH</div>
             <div className="seat-map">
               {seatRows.map((row, index) => (
@@ -127,6 +168,7 @@ const CinemaSeatSelection: React.FC = () => {
                   row={row}
                   onSeatClick={handleSeatClick}
                   selectedSeats={selectedSeats}
+                  reservedSeats={reservedSeats} // Truyền reservedSeats vào
                 />
               ))}
             </div>
@@ -144,16 +186,13 @@ const CinemaSeatSelection: React.FC = () => {
           </div>
           <div className="thongtinphim">
             <div className="details-box">
-              <p className="title-phim">{movieName}</p>{" "}
-              {/* Hiển thị tên phim */}
+              <p className="title-phim">{movieName}</p>
               <p>
                 Rạp:<span> {cinemaName}</span>
-              </p>{" "}
-              {/* Hiển thị tên rạp */}
+              </p>
               <p>
                 Suất: <span> {showtime}</span>
-              </p>{" "}
-              {/* Hiển thị thời gian chiếu */}
+              </p>
               <p>
                 Phòng chiếu: <span>{roomData.room_name || roomData.id}</span>
               </p>
@@ -165,8 +204,6 @@ const CinemaSeatSelection: React.FC = () => {
                   )
                   .join(", ")}
               </p>
-              {/* <p>Showtime ID: <span>{showtimeId}</span></p> Hiển thị showtimeId */}
-    {/* <p>Cinema ID: <span>{cinemaId}</span></p> Hiển thị cinemaId */}
             </div>
             <div className="price-box">
               <div className="price">
@@ -177,25 +214,24 @@ const CinemaSeatSelection: React.FC = () => {
             <div className="actionst">
               <button className="back-btn">←</button>
               <Link
-  to="/orders"
-  state={{
-    movieName,
-    cinemaName,
-    showtime,
-    showtimeId, // Truyền showtimeId
-    cinemaId,   // Truyền cinemaId
-    roomId: roomData?.id, // Truyền roomId từ roomData
-    selectedSeats: Array.from(selectedSeats.entries())
-      .map(([row, indices]) =>
-        indices.map((index) => `${row}${index + 1}`).join(", ")
-      )
-      .join(", "),
-    totalPrice,
-  }}
->
-  <button className="continue-btn">Tiếp Tục</button>
-</Link>
-
+                to="/orders"
+                state={{
+                  movieName,
+                  cinemaName,
+                  showtime,
+                  showtimeId,
+                  cinemaId,
+                  roomId: roomData?.id,
+                  selectedSeats: Array.from(selectedSeats.entries())
+                    .map(([row, indices]) =>
+                      indices.map((index) => `${row}${index + 1}`).join(", ")
+                    )
+                    .join(", "),
+                  totalPrice,
+                }}
+              >
+                <button className="continue-btn">Tiếp Tục</button>
+              </Link>
             </div>
           </div>
         </div>
@@ -209,6 +245,7 @@ const SeatRow: React.FC<SeatRowProps> = ({
   row,
   onSeatClick,
   selectedSeats,
+  reservedSeats,
 }) => {
   const rowLabel = typeof row === "string" ? row : row.row;
   const seats = typeof row === "string" ? Array(12).fill(null) : row.seats;
@@ -217,16 +254,22 @@ const SeatRow: React.FC<SeatRowProps> = ({
     <div className="seat-row-container">
       <div className="seat-row-label">{rowLabel}</div>
       <div className="seat-row-seats">
-        {seats.map((seat, index) => (
-          <Seat
-            key={index}
-            type={seat}
-            index={index}
-            row={rowLabel}
-            onSeatClick={onSeatClick}
-            isSelected={selectedSeats.get(rowLabel)?.includes(index) || false}
-          />
-        ))}
+        {seats.map((seat, index) => {
+          const seatId = `${rowLabel}${index + 1}`;
+          const isReserved = reservedSeats.has(seatId);
+          const isSelected = selectedSeats.get(rowLabel)?.includes(index) ?? false;
+          return (
+            <Seat
+              key={index}
+              type={seat}
+              index={index}
+              row={rowLabel}
+              onSeatClick={onSeatClick}
+              isSelected={isSelected}
+              isReserved={isReserved} // Truyền isReserved
+            />
+          );
+        })}
       </div>
     </div>
   );
@@ -238,28 +281,23 @@ const Seat: React.FC<SeatProps> = ({
   row,
   onSeatClick,
   isSelected,
+  isReserved,
 }) => {
-  const seatClass =
-    type === "reserved"
-      ? "seat reserved"
-      : type === "couple"
-      ? "seat couple-seat"
-      : "seat";
-  const handleClick = () => onSeatClick(row, index);
+  const handleClick = () => {
+    if (!isReserved) {
+      onSeatClick(row, index);
+    }
+  };
 
-  return (
-    <div
-      className={`${seatClass} ${isSelected ? "selected" : ""}`}
-      onClick={handleClick}
-      role="button"
-      aria-label={`Ghế ${index + 1}`}
-    >
-      <span className="seat-number">
-        {row}
-        {index + 1}
-      </span>
-    </div>
-  );
+  const seatClassName = isReserved
+  ? "seat reserved"  // Nếu ghế đã đặt, gán class "reserved"
+  : isSelected
+  ? "seat selected"  // Nếu ghế được chọn, gán class "selected"
+  : type === "couple"
+  ? "seat couple-seat"  // Nếu là ghế đôi, gán class "couple-seat"
+  : "seat";  // Ghế bình thường
+
+  return <span className={seatClassName} onClick={handleClick}></span>;
 };
 
 export default CinemaSeatSelection;

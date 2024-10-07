@@ -33,7 +33,7 @@ const PostsDashboard: React.FC = () => {
               <th>Title</th>
               <th>Thumbnail</th>
               <th>Category</th>
-              <th>Author</th>
+             
               <th>Date Published</th>
               <th>Status</th>
               <th>Actions</th>
@@ -53,7 +53,7 @@ const PostsDashboard: React.FC = () => {
                     />
                   </td>
                   <td>{post.news_category_id}</td>
-                  <td>{post.user_id}</td>
+                
                   <td>{new Date(post.created_at).toLocaleDateString()}</td>
                   <td>{post.status}</td>
                   <td className="action-buttons">

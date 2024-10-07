@@ -76,6 +76,9 @@ const ComboDashboard: React.FC = () => {
                                 <td>{combo.price}</td>
                                 <td>{combo.volume}</td>
                                 <td>{combo.status}</td>
+
+                            
+
                                 <td>{new Date(combo.created_at).toLocaleDateString()}</td>
                                 <td className="action-buttons">
                                     <button className="view-btn">👁</button>

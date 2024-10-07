@@ -21,6 +21,7 @@ class OtpService
         $otp = rand(100000, 999999); // Tạo OTP ngẫu nhiên 6 số
 
         Cache::put('otp_' . $email, $otp, $this->otpExpiration); // Lưu OTP vào cache
+        \Log::info('Mã OTP đã lưu trong cache cho email ' . $email . ': ' . $otp);
 
         Mail::to($user->email)->queue(new ResetPasswordOtpMail($otp));
 
@@ -31,18 +32,19 @@ class OtpService
     {
 
         $email = Session::get('reset_password_email');
-
+      
         if (!$email) {
             throw new \Exception('Không tìm thấy email trong phiên làm việc.');
         }
 
         $cachedOtp = Cache::get('otp_' . $email);
+      
 
         if (!$cachedOtp) {
             throw new \Exception('OTP đã hết hạn hoặc không hợp lệ.');
         }
 
-        if ($cachedOtp !== $otp) {
+        if ($cachedOtp != $otp) {
             throw new \Exception('Mã OTP không đúng.');
         }
 

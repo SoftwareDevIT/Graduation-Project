@@ -113,64 +113,60 @@ useEffect(() => {
       setFilteredCinemas(cinemas);
     }
   }, [selectedCity, cinemas]);
-  useEffect(() => {
-    const fetchMoviesForSelectedCinemaAndDate = async () => {
-      if (selectedCinema && selectedDate) {
-        try {
-          // Gọi API lọc phim theo rạp
-          const cinemaResponse = await instance.get(
-            `/cenima/${selectedCinema}`
-          );
-          console.log(
-            "Dữ liệu từ lọc phim theo rạp:",
-            cinemaResponse.data.data
-          );
-
-          const cinemaMovies: Movie[] = cinemaResponse.data?.data || []; // Dữ liệu phim từ API rạp
-
-          // Nếu không có phim cho rạp này
-          if (cinemaMovies.length === 0) {
-            console.log("Không có phim nào cho rạp này.");
-            setMovies([]);
-            return;
-          }
-
-          // Gọi API lọc theo ngày
-          const dateResponse = await instance.get(`/filterByDate`, {
-            params: {
-              cinema_id: selectedCinema,
-              showtime_date: selectedDate,
-            },
-          });
-          console.log("Dữ liệu từ dateResponse:", dateResponse.data);
-
-          const dateMovies: Movie[] = Array.isArray(dateResponse.data)
-            ? dateResponse.data
-            : [];
-
-          // Lọc những phim có trong cả hai API (lọc rạp và lọc ngày)
-          const filteredMovies = cinemaMovies.filter((cinemaMovie: Movie) =>
-            dateMovies.some(
-              (dateMovie: Movie) => dateMovie.id === cinemaMovie.id
-            )
-          );
-
-          // Cập nhật danh sách phim
-          if (filteredMovies.length > 0) {
-            setMovies(filteredMovies);
-          } else {
-            console.log("Không có phim nào cho rạp và ngày này.");
-            setMovies([]);
-          }
-        } catch (error) {
-          console.error("Lỗi khi lấy phim cho rạp và ngày:", error);
-          setMovies([]); // Xóa danh sách phim khi gặp lỗi
+// Lọc phim theo rạp và ngày
+useEffect(() => {
+  const fetchMoviesForSelectedCinemaAndDate = async () => {
+    if (selectedCinema && selectedDate) {
+      try {
+        // Gọi API lọc phim theo rạp
+        const cinemaResponse = await instance.get(`/filterMovie/${selectedCinema}`);
+        const cinemaMovies: Movie[] = cinemaResponse.data?.data || [];
+  
+        // Nếu không có phim cho rạp này
+        if (cinemaMovies.length === 0) {
+          setMovies([]);
+          return;
         }
+  
+        // Gọi API lọc theo ngày
+        const dateResponse = await instance.get(`/filterByDate`, {
+          params: {
+            cinema_id: selectedCinema,
+            showtime_date: selectedDate,
+          },
+        });
+        const dateMovies: Movie[] = Array.isArray(dateResponse.data) ? dateResponse.data : [];
+  
+        // Lọc những phim có trong cả hai API (lọc rạp và lọc ngày)
+        const filteredMovies = cinemaMovies.filter((cinemaMovie: Movie) =>
+          dateMovies.some((dateMovie: Movie) => dateMovie.id === cinemaMovie.id)
+        );
+  
+        // Lọc showtime theo ngày cho mỗi phim
+        const moviesWithFilteredShowtimes = filteredMovies.map((movie: Movie) => {
+          const correspondingDateMovie = dateMovies.find((dateMovie) => dateMovie.id === movie.id);
+          if (correspondingDateMovie) {
+            // Lọc showtimes dựa trên selectedDate
+            const filteredShowtimes = correspondingDateMovie.showtimes.filter(
+              (showtime) => showtime.showtime_date === selectedDate
+            );
+            return { ...movie, showtimes: filteredShowtimes };
+          }
+          return movie;
+        });
+  
+        // Cập nhật danh sách phim với showtime đã được lọc
+        setMovies(moviesWithFilteredShowtimes.length > 0 ? moviesWithFilteredShowtimes : []);
+      } catch (error) {
+        console.error("Lỗi khi lấy phim cho rạp và ngày:", error);
+        setMovies([]); // Xóa danh sách phim khi gặp lỗi
       }
-    };
+    }
+  };
+  
+  fetchMoviesForSelectedCinemaAndDate();
+}, [selectedCinema, selectedDate]);
 
-    fetchMoviesForSelectedCinemaAndDate();
-  }, [selectedCinema, selectedDate]); // useEffect chạy khi cả rạp và ngày thay đổi
 
   const selectedCinemaDetails = cinemas.find(
     (cinema) => cinema.id === selectedCinema
@@ -178,12 +174,14 @@ useEffect(() => {
 
   return (
     <>
-      <h2 className="title">Mua vé theo rạp</h2>
+     <div className="div-content">
+     <h2 className="title">Mua vé theo rạp</h2>
       <div className="container">
         <div className="locations">
           <h3 className="khuvuc">Khu vực</h3>
           <ul className="list-tp">
-            {locations.map((location) => {
+         <div className="list">
+         {locations.map((location) => {
               const count = cinemas.filter(
                 (cinema) => cinema.location_id === location.id
               ).length;
@@ -200,6 +198,19 @@ useEffect(() => {
                 </li>
               );
             })}
+         </div>
+             <select
+            className="city-select"
+            value={selectedCity ?? ""}
+            onChange={(e) => setSelectedCity(Number(e.target.value))}
+          >
+            <option value="">Chọn khu vực</option>
+            {locations.map((location) => (
+              <option key={location.id} value={location.id}>
+                {location.location_name}
+              </option>
+            ))}
+          </select>
           </ul>
         </div>
 
@@ -288,6 +299,7 @@ useEffect(() => {
           )}
         </div>
       </div>
+     </div>
     </>
   );
 };

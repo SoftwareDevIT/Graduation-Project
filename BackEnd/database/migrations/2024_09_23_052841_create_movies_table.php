@@ -22,10 +22,10 @@ return new class extends Migration
             $table->string('duration')->nullable();
             $table->date('release_date')->nullable();
             $table->integer('age_limit')->nullable();
-            $table->string('descripton')->nullable();
+            $table->string('description')->nullable();
             $table->string('trailer')->nullable();
             $table->float('rating')->nullable();
-            $table->enum('status', ['Show', 'Hidden'])->default('Show');
+            $table->boolean('status')->default(true);
             $table->timestamps();
             $table->foreign('movie_category_id')->references('id')->on('movie_category');
             $table->foreign('actor_id')->references('id')->on('actor');

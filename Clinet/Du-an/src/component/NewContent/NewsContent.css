@@ -46,6 +46,7 @@
   background-color: white;
   border-radius: 10px;
   padding: 20px;
+
 }
 
 .related-news ul {
@@ -60,10 +61,12 @@
 
 .related-news ul li a {
   text-decoration: none;
-  font-size: 16px;
+
   color: #007bff;
 }
-
+.related-news-item .title{
+  font-size: 17px;
+}
 .related-news ul li a:hover {
   text-decoration: underline;
 }
@@ -92,12 +95,14 @@
 
 .related-news-item a {
   text-decoration: none;
-  color: black;
-  font-size: 18px;
+  color: #12263f;
+  font-size: 15px;
+  font-family: "Cerebri Sans, sans-serif";
+  font-weight: 400
 }
 
 .related-news-item span {
-  color: red;
+  color: #888;
 }
 
 /* Responsive styles for mobile devices */

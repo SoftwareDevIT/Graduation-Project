@@ -22,14 +22,14 @@ const PostsForm: React.FC = () => {
 
         if (id) {
           const postResponse = await instance.get(`/news/${id}`);
-          const postData = postResponse.data;
-
+          const postData = postResponse.data.data;
+            console.log(postData);
+            
           reset({
             title: postData.title,
             news_category_id: postData.news_category_id, // This will set the category ID
             content: postData.content,
             status: postData.status,
-            user_id: postData.user_id,
           });
         }
       } catch (error) {

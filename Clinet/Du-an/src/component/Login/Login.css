@@ -36,7 +36,7 @@
   display: block;
   margin-bottom: 0.5rem;
   font-size: 14px;
-  color: #555;
+  color:#0f0f0f !important;
 }
 
 .form-group input {
@@ -148,4 +148,7 @@
   .login-button {
     font-size: 14px; /* Smaller font size for button text */
   }
+}
+.form-group input{
+  background-color: #fff !important;
 }

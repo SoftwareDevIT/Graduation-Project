@@ -53,7 +53,6 @@ export const PostProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     formData.append('news_category_id', data.news_category_id);
     formData.append('content', data.content);
     formData.append('status', data.status);
-    formData.append('user_id', data.user_id);
 
     if (id) {
       formData.append('_method', 'put');

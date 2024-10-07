@@ -74,7 +74,7 @@ const ShowtimesDashboard: React.FC = () => {
                     </tbody>
                 </table>
             </div>
-        </div>
+</div>
     );
 };
 

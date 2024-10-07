@@ -116,7 +116,8 @@ public function allUser(){
             $token = $this->loginService->login($request->validated());
             // return response()->json(['token' => $token], 200);
             // return $this->success($token, 200);
-            return $this->success(['token' => $token], 200);
+            $user = $this->loginService->index();
+            return $this->success(['token' => $token, 'profile' => $user], 200);
 
         } catch (Exception $e) {
             return $e->getMessage();

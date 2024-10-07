@@ -19,31 +19,31 @@ class RoomSeeder extends Seeder
                 'room_name' => 'P1',
                 'volume' => 100,
                 'cinema_id' => 1,
-                'status' => 'On',
+                'status' => '1',
             ],
             [
                 'room_name' => 'P2',
                 'volume' => 100,
                 'cinema_id' => 1,
-                'status' => 'On',
+                'status' => '1',
             ],
             [
                 'room_name' => 'P3',
                 'volume' => 100,
                 'cinema_id' => 1,
-                'status' => 'On',
+                'status' => '1',
             ],
             [
                 'room_name' => 'P4',
                 'volume' => 100,
                 'cinema_id' => 1,
-                'status' => 'On',
+                'status' => '1',
             ],
             [
                 'room_name' => 'P5',
                 'volume' => 100,
                 'cinema_id' => 1,
-                'status' => 'On',
+                'status' => '1',
             ]
         ]);
     }

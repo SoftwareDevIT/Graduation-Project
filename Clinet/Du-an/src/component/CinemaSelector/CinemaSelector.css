@@ -1,5 +1,9 @@
-.container {
-  display: flex;
+.div-content{
+  background: #f3f6fb;
+  margin-top: -13px;
+}
+.div-content .container {
+  display: flex !important;
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
@@ -115,8 +119,9 @@ ul.cinema-list li:last-child {
   margin-top: 0;
   padding-top: 6px;
   font-size: 17px;
-  font-family: "Cerebri Sans";
-  color: #b2bece;
+  font-family: "Cerebri Sans, sans-serif";
+  color: #adc6e6;
+  font-weight: 500;
 }
 
 .no-showtimes {
@@ -136,9 +141,11 @@ ul.cinema-list li:last-child {
   font-family: "Cerebri Sans";
 }
 .title{
-  font-family: "Cerebri Sans, sans-";
+  font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   text-align: center;
-  margin-top: 15px;
+  padding-top: 15px;
+  font-size: 12px;
+  font-weight :500;
 }
 
 .movie {
@@ -408,6 +415,9 @@ li.city.selected {
 }
 
 /* Media queries cho các thiết bị nhỏ hơn nữa */
+.city-select{
+  display: none;
+}
 @media (max-width: 768px) {
   .container {
     padding: 10px; /* Giảm padding */
@@ -422,7 +432,9 @@ li.city.selected {
   }
 
   .movie img {
-    width: 100%; /* Đảm bảo hình ảnh không vượt quá chiều rộng */
+    width:80px;
+    height: 90px;
+    
   }
 
   .details {
@@ -467,4 +479,32 @@ li.city.selected {
     width: 12px; /* Giảm kích thước vòng tròn */
     height: 12px; /* Giảm kích thước vòng tròn */
   }
+}
+@media(max-width:576px){
+  .list-tp .list{
+    display: none;
+  }
+  .city-select{
+    display: block;
+    border: none !important;
+    margin-top: 20px;
+  }
+  .khuvuc{
+    height: 40px;
+  }
+.date-selection{
+gap: 0px;
+}
+.date{
+margin-right: 10px;
+position: relative;
+right: 15px;
+}
+.date-selection {
+  justify-content: center; /* Căn giữa các ngày trên màn hình nhỏ */
+}
+.date {
+  padding: 0px; /* Giảm khoảng cách bên trong */
+  margin: 0px; /* Giảm khoảng cách giữa các ngày để chúng sát nhau hơn */
+}
 }
