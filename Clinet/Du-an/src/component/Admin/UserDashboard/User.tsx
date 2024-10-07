@@ -25,7 +25,11 @@ const UserDashboard: React.FC = () => {
         const fetchUsers = async () => {
             try {
 
+
                 const response = await instance.get('/all-user');
+
+                const response = await instance.get('/lists');
+
 
                 console.log('API Response:', response);  // Log the full response object
                 console.log('Data:', response.data.data);      // Log the data part specifically

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import './MoviesDashboard.css';
 
+
 import { useMovieContext } from '../../../Context/MoviesContext';
+
 import { Link } from 'react-router-dom';
 import instance from '../../../server';
 import { Categories } from '../../../interface/Categories';
@@ -94,7 +96,11 @@ const MoviesDashboard: React.FC = () => {
                                 <td colSpan={7}>No movies available</td>
                             </tr>
                         )}
+
                     </tbody>
+
+                        </tbody>
+
                 </table>
             </div>
         </div>

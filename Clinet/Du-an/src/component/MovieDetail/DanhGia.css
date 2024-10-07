@@ -356,4 +356,10 @@
   .dislike-btn:hover {
     opacity: 0.7;
   }
-  
+  .avatar-icon {
+    font-size: 30px; /* Kích thước của icon */
+    color: #3498db; /* Màu sắc của icon */
+    margin-right: 10px; /* Khoảng cách giữa icon và tên người dùng */
+    vertical-align: middle; /* Canh giữa icon với tên người dùng */
+}
+
