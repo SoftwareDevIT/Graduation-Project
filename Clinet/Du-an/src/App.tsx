@@ -49,6 +49,7 @@ import DanhGia from "./component/MovieDetail/DanhGia";
 import TinTuc from "./component/MovieDetail/TinTuc";
 import MuaVe from "./component/MovieDetail/MuaVe";
 import Profile from "./component/PersonalPage/Profile";
+import ChangePassword from "./component/PersonalPage/ChangePassword";
 
 
 
@@ -71,6 +72,7 @@ function App() {
       <Route path="/payment-callback" element={<PaymentCallback />} />
 
       <Route path="/profile" element={<Profile/>} />
+      <Route path="/changepassword" element={<ChangePassword/>} />
 
       
 
