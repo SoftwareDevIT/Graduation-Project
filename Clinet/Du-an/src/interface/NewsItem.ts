@@ -4,6 +4,7 @@ import { NewsCategory } from "./NewsCategory";
 export interface NewsItem {
     id: number;
     title: string;
+    news_category: NewsCategory
     news_category_id: number;
     thumnail: string;
     banner:string;

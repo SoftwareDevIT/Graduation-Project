@@ -14,7 +14,8 @@ export interface Movie {
     director_id: number;
     movie_name: string;
     poster: string | null;
-    duraion: string | null;
+    cinema_id:string;
+    duration: string | null;
     cinema: Cinema;
     release_date: string | null;
     age_limit: number | null;
@@ -22,5 +23,6 @@ export interface Movie {
     trailer: string | null;
     status: 'Show' | 'Hidden';
     showtimes: Showtime[];
+    [key: string]: any;
   }
   

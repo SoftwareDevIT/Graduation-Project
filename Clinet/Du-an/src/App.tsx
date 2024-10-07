@@ -51,7 +51,7 @@ import TinTuc from "./component/MovieDetail/TinTuc";
 import { ContentMovie } from "./component/MovieDetail/ContentMovie";
 import CountriesFormManager from "./Page/Admin/Countries/CountriesForm";
 import MoviesAddManager from "./Page/Admin/Movies/MoviesForm";
-import MoviesUpdateManager from "./Page/Admin/Movies/MoviesUpdate";
+
 import CategoriesFormManager from "./Page/Admin/Categories/CategoriesForm";
 
 
@@ -105,7 +105,7 @@ function App() {
       <Route path="admin/cinemas/edit/:id" element={<CinemasFormManager/>} />
       <Route path="admin/movies" element={<MoviesManager/>} />
       <Route path="admin/movies/add" element={<MoviesAddManager/>} />
-      <Route path="admin/movies/edit/:id" element={<MoviesUpdateManager/>} />
+      <Route path="admin/movies/edit/:id" element={<MoviesAddManager/>} />
       
       <Route path="admin/schedules" element={<SchedulesManager  />} />
       <Route path="admin/revenuebycinema" element={<RevenueByCinemaManager/>} />

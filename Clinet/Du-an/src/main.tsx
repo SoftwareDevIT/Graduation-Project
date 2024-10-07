@@ -7,10 +7,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { CinemaProvider } from './Context/CinemasContext.tsx'
 import { ComboProvider } from './Context/ComboContext.tsx'
 
-import { PostsProvider } from './Context/PostContext.tsx'
-import { MovieProvider } from './Context/MoviesContext.tsx'
+
+
 import { CountryProvider } from './Context/CountriesContext.tsx'
 import { CategoryProvider } from './Context/CategoriesContext.tsx'
+
+import { MovieProvider } from './Context/MoviesContext.tsx'
+import { PostProvider } from './Context/PostContext.tsx'
+
 
 
 
@@ -22,13 +26,13 @@ createRoot(document.getElementById('root')!).render(
     <CinemaProvider>
       <ComboProvider>
       <MovieProvider>
-        <PostsProvider>
+     <PostProvider>
           <CountryProvider>
             <CategoryProvider>
     <App />
     </CategoryProvider>
     </CountryProvider>
-    </PostsProvider>
+    </PostProvider>
     </MovieProvider>
     </ComboProvider>
     </CinemaProvider>
