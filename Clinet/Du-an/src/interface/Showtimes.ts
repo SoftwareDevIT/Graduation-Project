@@ -14,6 +14,6 @@ export interface Showtime {
     movie: Movie;  
     // Include the Movie interface
 
-    movie: Movie;  // Include the Movie interface
+
 
 }

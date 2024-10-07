@@ -20,6 +20,9 @@ class LoginService
         $user = User::findOrFail($id);
         return $user;
     }
+    public function allUser()  {
+        return User::all();
+    }
 
     public function update(int $id, array $data): User
     {
