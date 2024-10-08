@@ -10,7 +10,6 @@ export interface Showtime {
     showtime_start: string;
     showtime_end: string;
     status: string;
-
     movie: Movie;  
     // Include the Movie interface
 

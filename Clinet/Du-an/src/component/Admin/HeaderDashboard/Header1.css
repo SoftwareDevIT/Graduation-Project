@@ -3,116 +3,123 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color:#fff; /* Nền xanh nhạt */
-    padding: 15px 30px;
-    color: #004d40; /* Màu xanh đậm cho chữ */
+    background-color: #ffffff; /* Nền trắng tinh tế */
+    padding: 10px 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Bóng đổ nhẹ */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid #e0e0e0; /* Đường viền nhẹ ở dưới */
 }
 
-/* CSS cho chế độ sáng */
-.light-mode {
-    background-color: #ffffff; /* Nền trắng cho chế độ sáng */
-    color: #00796b; /* Màu xanh đậm cho chữ khi ở chế độ sáng */
-}
-
-/* Title styling */
-.header1 h1 {
-    font-size: 20px;
-    margin: 0;
-    color: #00796b; /* Màu xanh đậm cho tiêu đề */
-}
-
-/* Header actions container */
-.header-actions {
+/* Left section styling */
+.left-section {
     display: flex;
     align-items: center;
 }
 
-/* Icons container styling */
-.icons-container {
-    display: flex;
-    align-items: center;
+.menu-icon {
+    font-size: 1.5rem;
     margin-right: 20px;
+    cursor: pointer;
+    color: #555; /* Màu xám tinh tế */
+    transition: color 0.3s ease;
 }
 
-/* Icon styling */
+.menu-icon:hover {
+    color: #00796b; /* Màu xanh khi hover */
+}
+
+/* Middle search section */
+.search-container {
+    flex: 1;
+    max-width: 400px;
+    position: relative;
+}
+
+.search-container input {
+    width: 100%;
+    padding: 10px 15px;
+    border-radius: 30px;
+    border: 1px solid #ccc;
+    background-color: #f5f5f5;
+    font-size: 0.9rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    outline: none;
+}
+
+.search-container input:focus {
+    border-color: #00796b; /* Màu xanh khi focus */
+    box-shadow: 0 2px 4px rgba(0, 150, 136, 0.2);
+}
+
+.search-container input::placeholder {
+    color: #aaa;
+}
+
+/* Right section (icons and profile) */
+.right-section {
+    display: flex;
+    align-items: center;
+}
+
 .icon {
     position: relative;
-    margin: 0 15px;
-    font-size: 1.2rem;
-    color: #00796b; /* Màu xanh đậm cho icon */
+    margin: 0 10px;
+    font-size: 1.3rem;
+    color: #555;
     cursor: pointer;
     transition: color 0.3s ease;
 }
 
-/* Profile picture icon styling */
-.profile-pic {
-    font-size: 1.8rem;
-    color: #00796b; /* Màu xanh đậm cho biểu tượng người dùng */
+.icon:hover {
+    color: #00796b;
 }
 
 /* Notification badge styling */
 .notification-badge {
     position: absolute;
     top: -5px;
-    right: -10px;
-    background-color: #e74c3c; /* Màu đỏ cho thông báo */
+    right: -5px;
+    background-color: #e74c3c; /* Màu đỏ nổi bật cho thông báo */
     color: white;
     padding: 2px 6px;
     border-radius: 50%;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
 }
 
-/* Icon hover effect */
-.icon:hover {
-    color: #004d40; /* Màu xanh đậm khi hover */
+/* Profile picture styling */
+.profile-pic {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
 }
 
-/* Search container */
-.search-container {
-    margin-left: 20px;
+.profile-pic img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-.search-container input {
-    padding: 6px 12px;
-    border-radius: 20px;
-    border: none;
-    background-color: #fff; /* Nền xanh nhạt cho ô tìm kiếm */
-    color: #004d40; /* Màu chữ xanh đậm */
-    outline: none;
-    font-size: 0.9rem;
-    border: 1px solid rgb(63, 176, 153);
-}
-
-.search-container input::placeholder {
-    color: #00796b; /* Màu placeholder xanh đậm */
-}
-
-/* Search box for light mode */
-.light-mode .search-container input {
-    background-color: #e0f7fa; /* Nền xanh nhạt cho chế độ sáng */
-    color: #00796b; /* Màu chữ xanh đậm */
-}
-
-.light-mode .search-container input::placeholder {
-    color: #004d40; /* Màu placeholder khi ở chế độ sáng */
-}
-
-/* Responsive design */
+/* Responsive adjustments */
 @media (max-width: 768px) {
-    .header1 h1 {
-        font-size: 18px;
+    .search-container {
+        max-width: 300px;
+    }
+
+    .menu-icon {
+        margin-right: 15px;
     }
 
     .icon {
-        margin: 0 10px;
-        font-size: 1rem;
+        margin: 0 8px;
+        font-size: 1.1rem;
     }
 
     .profile-pic {
-        font-size: 1.4rem;
-    }
-
-    .search-container input {
-        padding: 5px 10px;
+        width: 30px;
+        height: 30px;
     }
 }
