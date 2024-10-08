@@ -1,12 +1,47 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './MoviesDashboard.css';
 
+
+import { useMovieContext } from '../../../Context/MoviesContext';
+
 import { Link } from 'react-router-dom';
+import instance from '../../../server';
+import { Categories } from '../../../interface/Categories';
+import { Movie } from '../../../interface/Movie';
 
 const MoviesDashboard: React.FC = () => {
-    const { state, deleteMovie } = useMovieContext();
+    const [categories, setCategories] = useState<Categories[]>([]);
+    const { state, dispatch } = useMovieContext();
     const { movies } = state;
- 
+    
+    useEffect(() => {
+        const fetchCategories = async () => {
+          const categoryResponse = await instance.get('/movie-category');
+          setCategories(categoryResponse.data);
+        };
+      
+        fetchCategories();
+    }, []);
+
+    useEffect(() => {
+        const fetchMovies = async () => {
+            try {
+                const movieResponse = await instance.get('/movies');
+                dispatch({ type: 'SET_MOVIES', payload: movieResponse.data.data });
+            } catch (error) {
+                console.error('Error fetching movies:', error);
+            }
+        };
+    
+        fetchMovies();
+    }, [dispatch]);
+    
+
+    const deleteMovie = async (id: number) => {
+        await instance.delete(`/movies/${id}`);
+        dispatch({ type: 'DELETE_MOVIE', payload: id });
+    };
+
     return (
         <div className="movies-dashboard">
             <h2>Movie Management</h2>
@@ -22,12 +57,13 @@ const MoviesDashboard: React.FC = () => {
                             <th>Thumbnail</th>
                             <th>Movie Category</th>
                             <th>Duration</th>
+                            <th>Description</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {Array.isArray(movies) && movies.length > 0 ? (
-                            movies.map((movie) => (
+                            movies.map((movie: Movie) => (
                                 <tr key={movie.id}>
                                     <td>{movie.id}</td>
                                     <td>{movie.movie_name}</td>
@@ -35,9 +71,10 @@ const MoviesDashboard: React.FC = () => {
                                         <img src={movie.poster ?? undefined} style={{ width: "40px", height: "40px" }} alt={`${movie.movie_name} poster`} />
                                     </td>
                                     <td>
-                                        {movie.movie_category_id}
+                                        {categories.find(category => category.id === movie.movie_category_id)?.category_name || 'No Category'}
                                     </td>
-                                    <td>{movie.duraion}</td>
+                                    <td>{movie.duration}</td>
+                                    <td>{movie.description}</td>
                                     <td className="action-buttons">
                                         <button className="view-btn">👁</button>
                                         <Link to={`/admin/movies/edit/${movie.id}`} className="edit-btn">✏️</Link>
@@ -56,10 +93,14 @@ const MoviesDashboard: React.FC = () => {
                             ))
                         ) : (
                             <tr>
-                                <td colSpan={6}>No movies available</td>
+                                <td colSpan={7}>No movies available</td>
                             </tr>
                         )}
+
+                    </tbody>
+
                         </tbody>
+
                 </table>
             </div>
         </div>
@@ -67,7 +108,3 @@ const MoviesDashboard: React.FC = () => {
 };
 
 export default MoviesDashboard;
-
-function useMovieContext(): { state: any; deleteMovie: any; } {
-  throw new Error('Function not implemented.');
-}

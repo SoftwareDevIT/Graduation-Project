@@ -55,6 +55,11 @@ class AuthController extends Controller
         return $this->success($data);
     }
 
+public function allUser(){
+    $user=$this->loginService->allUser();
+    return $user;
+}
+
     public function update(UpdateUserRequest $request, $id)
     {
         try {

@@ -4,6 +4,7 @@ namespace App\Services\Auth;
 use App\Mail\ResetPasswordOtpMail;
 use Illuminate\Support\Facades\Cache;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 
@@ -21,7 +22,7 @@ class OtpService
         $otp = rand(100000, 999999); // Tạo OTP ngẫu nhiên 6 số
 
         Cache::put('otp_' . $email, $otp, $this->otpExpiration); // Lưu OTP vào cache
-        \Log::info('Mã OTP đã lưu trong cache cho email ' . $email . ': ' . $otp);
+        Log::info('Mã OTP đã lưu trong cache cho email ' . $email . ': ' . $otp);
 
         Mail::to($user->email)->queue(new ResetPasswordOtpMail($otp));
 

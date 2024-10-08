@@ -35,4 +35,10 @@ class NewCategoryService
         $new_category = NewsCategory::findOrFail($id);
         return $new_category->delete();
     }
+
+    public function show(int $id)
+    {
+        $new_category = NewsCategory::findOrFail($id);
+        return $new_category;
+    }
 }

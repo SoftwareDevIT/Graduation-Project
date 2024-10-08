@@ -24,6 +24,7 @@ class UpdateShowtimeRequest extends FormRequest
         return [
             "movie_id" => "",
             "room_id" => "",
+            "cinema_id" => "",
             "showtime_date" => "",
             "showtime_start" => "",
             "showtime_end" => "",

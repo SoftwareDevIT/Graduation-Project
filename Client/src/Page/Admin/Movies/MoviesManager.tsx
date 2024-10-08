@@ -6,6 +6,7 @@ import Header from '../../../component/Admin/HeaderDashboard/Header1';
 
 
 
+
 function MoviesManager() {
     return (
         <div className="moviesmanager">
