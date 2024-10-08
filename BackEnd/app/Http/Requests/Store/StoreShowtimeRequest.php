@@ -23,7 +23,7 @@ class StoreShowtimeRequest extends FormRequest
     {
         return [
             '*.movie_id' => 'required|integer',
-            '*.room_id' => 'required|integer',
+            // '*.room_id' => 'required|integer',
             '*.cinema_id' => 'required|integer',
             '*.showtime_date' => 'required|date',
             '*.showtime_start' => 'required|date_format:H:i:s',
