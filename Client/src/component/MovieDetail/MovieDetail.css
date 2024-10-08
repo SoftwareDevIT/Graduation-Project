@@ -8,7 +8,7 @@
 /* Bố cục phần thông tin và hình ảnh */
 .boxbig {
     position: relative; /* Đặt relative để lớp phủ có thể căn chỉnh chính xác */
-    background-image: url('https://cdn.moveek.com/storage/media/cache/full/66e7de0b6da94585504187.png');
+
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -70,7 +70,8 @@
 }
 
 .title {
-    
+    text-align: left;
+    padding-bottom: 15px;
     font-size: 28px;
     font-weight: bold;
     margin-bottom: 10px;
