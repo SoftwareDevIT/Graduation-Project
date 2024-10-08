@@ -108,7 +108,7 @@ const Header = () => {
           
           <div className="header-logo col-lg-1 col-md-4 col-sm-4 col-4 ">
          
-          <Link to={"/"}>moveek</Link>
+          <Link to={"/"}> <span className="logo-first-letter">F</span>lickHive</Link>
           </div>
           <div className= "header-right col-lg-5 col-md-4 col-sm-4 col-4 ">
           <input type="text" placeholder="Từ khóa tìm kiếm..." />
