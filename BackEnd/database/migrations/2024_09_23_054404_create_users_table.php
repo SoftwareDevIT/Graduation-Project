@@ -4,6 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+use function GuzzleHttp\default_ca_bundle;
+
 return new class extends Migration
 {
     /**
@@ -13,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id('id');
-            $table->string('user_name');
+            $table->string('user_name')->nullable();
             $table->enum('sex', ['male', 'female', 'undisclosed'])->default('undisclosed');
             $table->string('password');
             $table->string('email')->nullable();
@@ -23,6 +25,7 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->string('address')->nullable();
             $table->string('fullname')->nullable();
+            $table->string('google_id')->nullable();
             $table->double('coin')->nullable();
             $table->boolean('status')->default(true);
             // $table->unsignedBigInteger('role_id');

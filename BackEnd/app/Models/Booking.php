@@ -17,6 +17,8 @@ class Booking extends Model
         'pay_method_id',
         'combo_id',
         'amount',
+        'price_ticket',
+        'price_combo',
         'seat_status',
         'created_at',
         'updated_at',
@@ -45,6 +47,6 @@ class Booking extends Model
 
     public function payMethod()
     {
-        return $this->belongsTo(PayMethod::class, 'pay_method_id', 'pay_method_id');
+        return $this->belongsTo(PayMethod::class, 'pay_method_id', 'id');
     }
 }

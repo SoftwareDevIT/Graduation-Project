@@ -5,11 +5,16 @@ namespace App\Http\Controllers\Api\Cinema;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Store\StoreShowtimeRequest;
 use App\Http\Requests\Update\UpdateShowtimeRequest;
+use App\Models\Cinema;
 use App\Models\Movie;
+use App\Models\Room;
 use App\Services\Cinema\ShowtimeService;
+// use Dotenv\Validator;
 use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Validator;
+
 
 class ShowtimeController extends Controller
 {
@@ -41,13 +46,47 @@ class ShowtimeController extends Controller
             return $e->getMessage();
         }
     }
+    public function create()
+    {
+        $movies = Movie::all();  // Fetch all movies
+        $rooms = Room::all();    // Fetch all rooms
+        $cinemas = Cinema::all();
+
+        return view('showtimes.create', compact('movies', 'rooms', 'cinemas'));
+    }
+
 
 
     public function store(StoreShowtimeRequest $request)
     {
-        $showtime = $this->showtimeService->store($request->validated());
-        return $this->success($showtime);
+        // Retrieve the validated data from the request
+        $showtimeData = $request->validated();
+
+        // Check if the incoming data is an array of arrays (multiple showtimes)
+        if ($this->isMultiDimensionalArray($showtimeData)) {
+            $createdShowtimes = [];
+
+            foreach ($showtimeData as $singleShowtimeData) {
+                // Store each showtime in the database and add to the result array
+                $createdShowtimes[] = $this->showtimeService->store($singleShowtimeData);
+            }
+
+            return $this->success($createdShowtimes, 'Multiple showtimes created successfully.');
+        } else {
+            // Handle a single showtime
+            $createdShowtime = $this->showtimeService->store($showtimeData);
+            return $this->success($createdShowtime, 'Single showtime created successfully.');
+        }
     }
+
+    /**
+     * Helper function to determine if an array is multi-dimensional (i.e., multiple showtimes).
+     */
+    private function isMultiDimensionalArray($array)
+    {
+        return isset($array[0]) && is_array($array[0]);
+    }
+
 
     public function update(UpdateShowtimeRequest $request, $id)
     {
