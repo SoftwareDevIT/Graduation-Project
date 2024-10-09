@@ -1,0 +1,179 @@
+/* Nền tổng thể trang */
+body {
+    background: radial-gradient(circle, #f0f4f8, #d9e3f0); /* Tông màu sáng và dịu */
+    font-family: 'Poppins', sans-serif; /* Font hiện đại */
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.movies-dashboard {
+    padding: 40px;
+    min-height: 100vh;
+}
+
+.movies-dashboard h2 {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 40px;
+    letter-spacing: 1.2px;
+    color: #007aff; /* Màu xanh pastel */
+    text-transform: uppercase;
+    background: -webkit-linear-gradient(#00c6ff, #007aff); /* Gradient xanh sáng */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.add-movie-btn {
+    padding: 15px 30px;
+    background: linear-gradient(145deg, #00c6ff, #a5f3ff); /* Gradient sáng */
+    border: none;
+    text-decoration: none;
+    border-radius: 30px;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    box-shadow: 0 10px 30px rgba(0, 198, 255, 0.3);
+    text-transform: uppercase;
+}
+
+.add-movie-btn:hover {
+    background: linear-gradient(145deg, #a5f3ff, #00d2ff);
+    box-shadow: 0 10px 30px rgba(0, 198, 255, 0.6);
+    transform: translateY(-5px); /* Hiệu ứng hover nâng */
+}
+
+.table-container {
+    margin-top: 30px;
+    padding: 30px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.6); /* Glassmorphism background */
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+}
+
+.movie-table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #333;
+}
+
+.movie-table th {
+    background: rgba(0, 198, 255, 0.2); /* Nền trong suốt với màu xanh pastel */
+    color: #333;
+    padding: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    font-size: 1rem;
+}
+
+.movie-table td {
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.8); /* Nền màu sáng dịu */
+    color: #333;
+    text-align: center;
+    border-bottom: 1px solid rgba(220, 220, 220, 0.6);
+}
+
+.movie-table tbody tr {
+    transition: all 0.3s ease;
+}
+
+.movie-table tbody tr:hover {
+    background-color: rgba(0, 198, 255, 0.1); /* Hiệu ứng hover màu pastel xanh */
+    transform: scale(1.02); /* Phóng to nhẹ */
+}
+
+.movie-table img {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.movie-table img:hover {
+    transform: scale(1.3);
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.action-buttons button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #007aff;
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.action-buttons .view-btn:hover {
+    color: #007aff;
+    transform: scale(1.3);
+}
+
+.action-buttons .edit-btn:hover {
+    color: #f39c12;
+    transform: scale(1.3);
+}
+
+.action-buttons .delete-btn:hover {
+    color: #e74c3c;
+    transform: scale(1.3);
+}
+
+.pagination {
+    display: flex;
+    justify-content: flex-end;
+    padding: 20px 0;
+}
+
+.page-item {
+    margin: 0 8px;
+}
+
+.page-link {
+    color: #007aff;
+    padding: 10px 20px;
+    border-radius: 50px;
+    background: rgba(0, 198, 255, 0.3); /* Màu xanh sáng pastel */
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.page-link:hover {
+    background-color: #00c6ff;
+    color: white;
+    transform: scale(1.1);
+}
+
+.active .page-link {
+    background-color: #007aff;
+    color: white;
+}
+
+/* Responsive design cho mobile */
+@media (max-width: 768px) {
+    .movie-table th, .movie-table td {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+
+    .add-movie-btn {
+        width: 100%;
+        font-size: 1rem;
+    }
+}

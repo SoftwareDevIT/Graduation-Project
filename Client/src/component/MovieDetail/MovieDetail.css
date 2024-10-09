@@ -1,0 +1,537 @@
+.movie-detail-container {
+    width: 100%;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+    background-color: #fff;
+}
+
+/* Bố cục phần thông tin và hình ảnh */
+.boxbig {
+    position: relative; /* Đặt relative để lớp phủ có thể căn chỉnh chính xác */
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+}
+
+.boxbig::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Lớp phủ màu đen với độ mờ 50% */
+    z-index: 1; /* Đảm bảo lớp phủ nằm trên background */
+}
+
+.info-section {
+    position: relative;
+    z-index: 2; /* Đảm bảo nội dung nằm trên lớp phủ */
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    padding: 30px;
+    border-radius: 10px;
+    width: calc(100% - 340px);
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+
+.info-section {
+    display: flex;
+    align-items: center; /* Sửa từ flex-start thành center */
+    gap: 30px;
+    padding: 30px;
+    border-radius: 10px;
+    width: calc(100% - 340px);
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+.poster {
+    width: 230px;
+    height: auto;
+    border-radius: 5px;
+}
+
+.movie-details-wrapper {
+    display: flex;
+    justify-content: space-between; /* Đảm bảo phần diễn viên, đạo diễn ở bên phải */
+    gap: 20px;
+    color: #fff;
+    width: 100%;
+}
+
+.movie-info {
+    flex: 1;
+}
+
+.title {
+    text-align: left;
+    padding-bottom: 15px;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.genre {
+    font-size: 14px;
+    margin-bottom: 15px;
+    color: #d3d3d3;
+}
+.actions{
+    margin-right: 95px;
+}
+.actions .button {
+    display: inline-block;
+  padding-left: 5px;
+  padding-top: 5px;
+    border-radius: 8px;
+    font-weight: 500;
+    margin-right: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.actions .button.like {
+
+    display: flex;
+    width: 90px;
+    height: 40px;
+    background-color: #f0f2f5; /* Màu nền xám nhạt */
+    color: #111; /* Màu chữ đen */
+    border: 1px solid #d9d9d9; /* Đường viền xám */
+}
+
+.actions .rate{
+  width: 120px !important;
+ 
+}
+.actions .button .like-1{
+position: relative;
+left: 10px;
+}
+.actions .button .like2{
+    right: 10;
+}
+.actions .button.like:hover {
+    background-color: #e4e6eb;
+}
+
+.actions .button.rate {
+    background-color: #f0f2f5;
+    color: #111;
+    border: 1px solid #d9d9d9;
+}
+
+.actions .button.rate:hover {
+    background-color: #e4e6eb;
+}
+
+.actions .button.trailer {
+    background-color: #1c1c1e; /* Màu đen */
+    color: white;
+    border: none;
+    width: 90px;
+    height: 40px;
+    padding: 8px;
+}
+
+.actions .button.trailer:hover {
+    background-color: #444;
+}
+
+.actions .button.buy {
+    background-color: #ff4d4f; /* Màu đỏ */
+    color: white;
+    border: none;
+    width: 90px;
+    height: 40px;
+    padding: 8px;
+}
+
+.actions .button.buy:hover {
+    background-color: #ff7875;
+}
+
+
+.buy-ticket-button {
+    padding: 8px 20px;
+    background-color: red;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.description {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+.movie-details {
+    display: flex;
+    gap: 40px;
+    margin-top: 15px;
+    font-size: 14px;
+    color: #ccc;
+}
+
+/* Thông tin diễn viên, đạo diễn, nhà sản xuất */
+.additional-info {
+    width: 230px; /* Đặt width cho phần này */
+    font-size: 14px;
+    line-height: 1.5;
+    padding-top: 70px;
+
+}
+.additional-info p{
+    color: rgb(225, 21, 21);
+}
+/* Tabs */
+.tabs {
+    margin-top: 30px;
+    display: flex;
+    gap: 30px;
+    border-bottom: 2px solid #ddd;
+    padding-left: 190px;
+    margin: 30px auto 0;
+}
+
+.tab {
+    padding: 10px;
+    cursor: pointer;
+    font-size: 15px;
+    color: #666;
+    text-decoration: none; /* Bỏ gạch chân cho thẻ a */
+}
+
+.tab.active {
+    border-bottom: 2px solid #007bff;
+    color: #007bff;
+}
+
+.tab:hover {
+    color: #3498db;
+}
+
+
+/* Phần chọn video */
+.video-section {
+    margin-top: 20px;
+    width: calc(100% - 340px); /* Giảm chiều rộng */
+    margin: 20px auto; /* Căn giữa */
+   
+}
+.content{
+    background: #edf2f9;
+   float: none;
+   padding-right: 150px;
+   margin-top: 0px;
+   margin-bottom:-30px;
+   padding-bottom: 30px;
+   padding-top: 20px;
+ 
+}
+.content-1{
+    display: block;
+  
+ 
+}
+
+
+/* Phần chọn lịch chiếu */
+.schedule-section {
+    border-radius: 5px;
+    background-color: white;
+    margin-top: 20px;
+    padding: 20px; /* Thêm padding để cách lề */
+    gap: 10px;
+    width: 735px; /* Giảm chiều rộng */
+    margin-left: 170px; /* Căn giữa */
+}
+
+/* Điều chỉnh thẻ select */
+.city-select {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    width: 600px; /* Đặt chiều rộng của select là 460px */
+}
+.schedule-section h3{
+    font-weight:500;
+    font-size: 21px;
+}
+.schedule-section p{
+    color:#b7ccef ;
+}
+
+.schedule-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.xem-lich-chieu {
+    padding: 8px 20px;
+    border-radius: 5px;
+    background-color: #0d1f33;
+    color: white;
+    border: none;
+    cursor: pointer;
+    width: 250px; /* Đặt chiều rộng của button là 210px */
+}
+.xem-lich-chieu:hover{
+    background-color: black;
+}
+
+/* Phần bài viết liên quan */
+.related-posts {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 0 0 10px 10px;
+ margin-top: -7px;
+    margin-left: 170px;
+    width: 735px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+   
+}
+
+.title-2 {
+  margin-top: 15px;
+  background-color: #dfe8f3;
+  width: 735px;
+  height: 65px;
+  border-radius:10px;
+  margin-left: 170px;
+  margin-bottom: 0;
+}
+.title-2 h3{
+    padding-left: 30px;
+    font-size: 15px;
+    padding-top: 18px;
+}
+
+.post {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 15px;
+}
+
+.post:last-child {
+    border-bottom: none; /* Bỏ kẻ dưới cho bài viết cuối */
+}
+
+.post-image {
+    width: 250px; /* Thay đổi chiều rộng của ảnh */
+    height: 140px; /* Thay đổi chiều cao của ảnh */
+    object-fit: cover;
+    border-radius: 5px;
+    margin-right: 20px; /* Tăng khoảng cách giữa ảnh và nội dung */
+}
+
+.post-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.post-title {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #3498db;
+    text-decoration: none;
+}
+
+
+
+.post-meta {
+    font-size: 13px;
+    color: #888;
+}
+.post-meta-2{
+    font-size: 13px;
+    font-weight:500;
+    color:#94abd3  ;
+}
+
+  
+  /* Phần cộng đồng */
+  .congdong{
+    text-align: center;
+  }
+  .community-section {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+    margin-left: 170px;
+    margin-bottom: 30px;
+    width: 735px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .community-section h3 {
+    font-size: 15px;
+    margin-bottom: 20px;
+    font-weight:600;
+    color: #2c3e50;
+    padding: 10px; /* Thêm padding để tạo không gian */
+    background-color: #77e1f1; /* Màu nền cho tiêu đề */
+    border: 1px solid #b0bec5; /* Đường viền xung quanh */
+    border-radius: 5px; /* Bo góc cho đường viền */
+    text-align: center;
+  }
+  
+  .comment {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Tạo bóng cho comment */
+    margin-bottom: 15px;
+  }
+  
+  .comment-user {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .comment-rating {
+    font-size: 14px;
+    color: #f5c518; /* Màu vàng cho rating */
+  }
+  
+  .comment-text {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 10px;
+  }
+  
+  .comment-actions {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .comment-actions button {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 0;
+  }
+  
+  .comment-actions button:hover {
+    color: #3498db;
+  }
+  
+  .like-btn:hover,
+  .dislike-btn:hover {
+    opacity: 0.7;
+  }
+  /* Cho màn hình máy tính bảng */
+@media (max-width: 1024px) {
+    .movie-detail-container {
+        padding: 20px;
+    }
+
+    .info-section {
+        flex-direction: column;
+        width: 100%;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .movie-details-wrapper {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .poster {
+        width: 180px;
+    }
+
+    .additional-info {
+        width: 100%;
+        padding-top: 20px;
+    }
+
+    .tabs {
+        flex-direction: column;
+        gap: 10px;
+        padding-left: 0;
+        margin-left: 0;
+    }
+
+    .schedule-section, .related-posts, .title-2, .community-section {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .video-section {
+        width: 100%;
+    }
+}
+
+/* Cho màn hình điện thoại */
+@media (max-width: 768px) {
+    .info-section {
+        flex-direction: column;
+        width: 100%;
+        gap: 15px;
+        padding: 15px;
+    }
+
+    .movie-details-wrapper {
+        flex-direction: column;
+        width: 100%;
+        gap: 15px;
+    }
+
+    .poster {
+        width: 150px;
+    }
+
+    .additional-info {
+        width: 100%;
+        padding-top: 10px;
+    }
+
+    .tabs {
+        flex-direction: column;
+        padding-left: 0;
+        margin-left: 0;
+    }
+
+    .actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .movie-details {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .schedule-section, .related-posts, .title-2, .community-section {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .video-section {
+        width: 100%;
+    }
+}
+.city-select{
+    display: block;
+}
+.movie-info span{
+margin-right: 0;
+
+}
