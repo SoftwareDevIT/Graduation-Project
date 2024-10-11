@@ -56,7 +56,6 @@ Route::get('/verify-account/{userId}', [AccountVerificationController::class, 'v
 // Các tuyến công khai để xem tài nguyên
 Route::apiResource('location', LocationController::class)->only(['index', 'show']);
 Route::apiResource('cinema', CinemaController::class)->only(['index', 'show']);
-<<<<<<< HEAD
 Route::apiResource('news_category', NewCategoryController::class)->only(['index', 'show']); // Liệt kê các danh mục tin tức
 
 // Route::apiResource('news_category', NewCategoryController::class)->only(['index', 'show']);// Liệt kê các danh mục tin tức
@@ -67,21 +66,20 @@ Route::apiResource('movie-category', MovieCategoryController::class)->only(['ind
 Route::apiResource('movies', MovieController::class)->only(['index', 'show']); // Liệt kê phim
 Route::apiResource('combo', ComboController::class)->only(['index', 'show']);;
 Route::apiResource('seat', SeatController::class)->only(['index', 'show']);;
-=======
-Route::apiResource('news_category', NewCategoryController::class)->only(['index', 'show']);         // Liệt kê các danh mục tin tức
-Route::apiResource('news', NewController::class)->only(['index', 'show']);                          // List news
-Route::apiResource('actor', ActorController::class)->only(['index', 'show']);                       // Liệt kê các diễn viên
-Route::apiResource('director', DirectorController::class)->only(['index', 'show']);                 // Danh sách giám đốc
-Route::apiResource('movie-category', MovieCategoryController::class)->only(['index', 'show']);      // Liệt kê các thể loại phim
-Route::apiResource('movies', MovieController::class)->only(['index', 'show']);                      // Liệt kê phim
->>>>>>> main
+//Route::apiResource('news_category', NewCategoryController::class)->only(['index', 'show']);         // Liệt kê các danh mục tin tức
+//Route::apiResource('news', NewController::class)->only(['index', 'show']);                          // List news
+//Route::apiResource('actor', ActorController::class)->only(['index', 'show']);                       // Liệt kê các diễn viên
+//Route::apiResource('director', DirectorController::class)->only(['index', 'show']);                 // Danh sách giám đốc
+//Route::apiResource('movie-category', MovieCategoryController::class)->only(['index', 'show']);      // Liệt kê các thể loại phim
+//Route::apiResource('movies', MovieController::class)->only(['index', 'show']);                      // Liệt kê phim
 
 // Các tuyến có thể truy cập được cho người dùng được xác thực
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('favorites/{movie_id}', [FavoriteController::class, 'store']);                 // Thêm phim yêu thích
     Route::delete('favorites/{movie_id}', [FavoriteController::class, 'destroy']);             // Xóa phim yêu thích
     Route::post('ratings', [RatingController::class, 'store']);                                // Phim đánh giá
-    Route::post('/book-ticket', [BookingController::class, 'bookTicket']);
+    // Route::post('/book-ticket', [BookingController::class, 'bookTicket']);
+    Route::post('save-seat', [BookingController::class, 'saveSeat']);
     Route::apiResource('user', AuthController::class);
     Route::get('/user', function (Request $request) {
         $user = $request->user()->load('favoriteMovies');
@@ -92,19 +90,19 @@ Route::get('/vnpay-return', [BookingController::class, 'vnPayReturn']);
 
 // Các route quản trị và quản lý
 // Route::middleware(['auth:sanctum', 'role:admin|manager'])->group(function () {
-    Route::apiResource('location', LocationController::class)->except(['index', 'show']);
-    Route::apiResource('cinema', CinemaController::class)->except(['index', 'show']);
-    Route::apiResource('room', RoomController::class);
-    Route::apiResource('showtimes', ShowtimeController::class);
-    Route::apiResource('news_category', NewCategoryController::class)->except(['index', 'show']);
-    Route::apiResource('news', NewController::class)->except(['index', 'show']);
-    Route::apiResource('actor', ActorController::class)->except(['index', 'show']);
-    Route::apiResource('director', DirectorController::class)->except(['index', 'show']);
-    Route::apiResource('movie-category', MovieCategoryController::class)->except(['index', 'show']);
-    Route::apiResource('movies', MovieController::class)->except(['index', 'show']);
-    Route::apiResource('method', PayMethodController::class);
-    Route::apiResource('combo', ComboController::class);
-    Route::apiResource('seat', SeatController::class);
+Route::apiResource('location', LocationController::class)->except(['index', 'show']);
+Route::apiResource('cinema', CinemaController::class)->except(['index', 'show']);
+Route::apiResource('room', RoomController::class);
+Route::apiResource('showtimes', ShowtimeController::class);
+Route::apiResource('news_category', NewCategoryController::class)->except(['index', 'show']);
+Route::apiResource('news', NewController::class)->except(['index', 'show']);
+Route::apiResource('actor', ActorController::class)->except(['index', 'show']);
+Route::apiResource('director', DirectorController::class)->except(['index', 'show']);
+Route::apiResource('movie-category', MovieCategoryController::class)->except(['index', 'show']);
+Route::apiResource('movies', MovieController::class)->except(['index', 'show']);
+Route::apiResource('method', PayMethodController::class);
+Route::apiResource('combo', ComboController::class);
+Route::apiResource('seat', SeatController::class);
 
 // });
 
@@ -129,3 +127,28 @@ Route::get('/new/{category}', [NewController::class, 'newByCategory']);         
 
 
 Route::apiResource('order', OrderController::class);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Route::group(['middleware' => ['auth:sanctum','api']], function ()
+{
+    Route::post('/slectMovieAndSeats',[BookingController::class,'slectMovieAndSeats']);
+    Route::post('/selectCombo',[BookingController::class,'selectCombos']);
+    Route::post('/book-ticket', [BookingController::class, 'bookTicket']);
+});
+
+
+Route::get('session',[BookingController::class,'getSession']);

@@ -2,13 +2,14 @@
 
 namespace App\Services\Booking;
 
+use App\Http\Requests\Booking\TicketBookingRequest;
 use App\Models\Booking;
 use App\Models\Seats;
-use App\Models\TemporaryBooking;
 use App\Services\Booking\Steps\SelectMovie;
 use App\Services\Booking\Steps\SelectSeats;
 use App\Services\Booking\Steps\SelectCombos;
 use App\Services\Booking\Steps\ProcessPayment;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -27,111 +28,80 @@ class TicketBookingService
         $this->selectSeatsStep = new SelectSeats();
         $this->selectCombosStep = new SelectCombos();
         $this->processPaymentStep = new ProcessPayment();
-
-        // Kết nối các bước
-        $this->selectMovieStep->setNext($this->selectSeatsStep)
-            ->setNext($this->selectCombosStep)
-        ;
     }
-
-    public function bookTicket($request)
+    public function selectMovieSeats(Request $request)
     {
-        Log::info('Booking request: ' . json_encode($request->all()));
         $result = $this->selectMovieStep->handle($request);
-
-        if (isset($result['errors'])) {
+        if ($result instanceof JsonResponse) {
             return $result;
         }
-
-        $data = $this->prepareBookingData($result);
-        Log::info('Data for prepareBookingData:');
-        // Gọi phương thức bookings với dữ liệu đã chuẩn bị
-        $booking = $this->bookings($data, $request);
-        Log::info('Data for bookings:');
-        if (!$booking) {
-            return [
-                'status' => false,
-                'message' => 'Booking failed!',
-            ];
+        //Xử lý đặt ghế
+        $result = $this->selectSeatsStep->handle($request);
+        session()->put('seatss', $result);
+        Log::info('Seats result: ' . json_encode($result));
+        if ($result instanceof JsonResponse) {
+            return $result;
         }
-        // Khi đã có booking, gọi hàm thanh toán
-        $paymentRequest = new Request(array_merge($request->all(), ['boking_id' => $booking->id], ['amount' => $request->amount]));
-
-        // Gọi hàm thanh toán VNPAY
-        $paymentResult = $this->processPaymentStep->process($paymentRequest);
-
-        return [
-            'status' => true,
-            'message' => 'Booking completed successfully!',
-            'data' => $paymentResult,
-        ];
-    }
-
-    private function prepareBookingData(array $result)
-    {
-        // Tạo temporary booking
-        $temporaryBooking = TemporaryBooking::create([
-            'user_id' => auth()->user()->id,
-            'reserved_showtime' => $result['movies'],
-            'reserved_seats' => $result['seats_data'],
-            'combos' => is_array($result['combos']) ? json_encode($result['combos']) : $result['combos']->toArray(),
-        ]);
-
-        return [
-            'temporaryBooking' => $temporaryBooking,
-            'reservedShowtime' => $result['movies'],
-            'reservedSeats' => $result['seats_data'],
-            'combos' => is_array($result['combos']) ? $result['combos'] : $result['combos']->toArray(),
-            'totalAmount' => $this->calculateTotalAmount($result['seats_data'], is_array($result['combos']) ? $result['combos'] : $result['combos']->toArray()),
-        ];
+        return null;
     }
 
 
-    public function calculateTotalAmount(array $reservedSeats, array $combos): float
+    public function selectCombos(Request $request)
     {
-        // Tính tổng giá cho các ghế đã chọn
-        $totalSeatPrice = collect($reservedSeats)->sum('price');
+        $result = $this->selectCombosStep->handle($request);
+        if ($result instanceof JsonResponse) {
+            return $result;
+        }
+        return null;
+    }
 
-        // Tính tổng giá cho các combo đã chọn dựa trên số lượng
-        $totalComboPrice = collect($combos)->sum(function ($combo) {
-            return $combo['price'] * ($combo['quantity'] ?? 1); // Giá combo nhân với số lượng
-        });
-
-        // Trả về tổng của giá ghế và giá combo
-        return $totalSeatPrice + $totalComboPrice;
+    public function bookTicket(TicketBookingRequest $request)
+    {
+        Log::info('Booking request: ' . json_encode($request->all()));
+        $bookTicket = $this->bookings($request);
+        if ($bookTicket) {
+            $this->bookTicketSaveSession($request, $bookTicket,);
+        }
+        return response()->json(['message' => 'Đặt vé thành công', 'booking' => $bookTicket]);
     }
 
 
-    public function bookings($data, Request $request)
+    public function bookTicketSaveSession(Request $request, $booking)
     {
-        // $temporaryBooking = $data['temporaryBooking'];
-        // $reservedShowtime = $data['reservedShowtime'];
-        $reservedSeats = $data['reservedSeats'];
-        $combos = $data['combos'];
-        // $totalAmount = $data['totalAmount'];
+        session(['booking' => $booking->id]);
+        Log::info('Booking: ' . session('booking'));
+        if (session()->has('combos')) {
+            Log::info('Combos: ' . json_encode(session('combos')));
+            foreach (session('combos') as $combo) {
+                $booking->combos()->attach($combo->id, ['quantity' => $combo->quantity ?? 1]);
+            }
+        }
+        if (session()->has('seats')) {
+            Log::info('Seats: ' . json_encode(session('seats')));
+            $booking->seats()->sync(collect(session('seats'))->pluck('id'));
+            $seatIds = collect(session('seats'))->pluck('id')->toArray(); // Lấy danh sách các ID từ session
+            Seats::updateSeatsStatus($seatIds, 'booked');
+        }
+    }
 
+    public function bookings(TicketBookingRequest $request)
+    {
         try {
-            $booking = DB::transaction(function () use ( $reservedSeats, $combos,$request) {
-                // Tạo booking
-                $booking = Booking::create([
-                    'user_id' => Auth::user()->id,
-                    'showtime_id' => $request->showtimeId,
-                    'pay_method_id' => 1, // Sử dụng phương thức thanh toán mặc định
-                    'amount' => $request->amount   ,
-                ]);
+            $booking = Booking::create($request->validated() + ['user_id' => Auth::user()->id]);
+            return $booking;
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+        }
+    }
 
-                foreach ($combos as $combo) {
-                    $booking->combos()->attach($combo->id, ['quantity' => $combo->quantity ?? 1]);
-                }
-                $booking->seats()->sync(collect($reservedSeats)->pluck('id'));
-                return $booking;
-            });
-
-
-            return $booking; // Trả về booking đã tạo
-        } catch (\Exception $e) {
-            Log::error('Error during booking creation: ' . $e->getMessage());
-            return null;
+    public function processPayment(Request $request)
+    {
+        if ($request->pay_method_id == 1) {
+            $urlPayment =   $this->processPaymentStep->process($request);
+            return $urlPayment;
+        } else {
+            Booking::where('id', session('booking'))->delete();
+            return response()->json(['message' => 'Phương thức thanh toán chưa hoàn thiện . Vui lòng chọn lại !']);
         }
     }
 }
