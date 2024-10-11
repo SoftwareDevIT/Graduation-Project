@@ -23,6 +23,7 @@ use App\Http\Controllers\Api\Auth\AccountVerificationController;
 use App\Http\Controllers\Api\Auth\ResetPasswordController;
 use App\Http\Controllers\Api\Google\GoogleController;
 use App\Http\Controllers\Api\Movie\RatingController;
+use App\Http\Controllers\Api\Order\OrderController;
 use App\Http\Controllers\Api\Seat\SeatController;
 
 /*
@@ -107,3 +108,6 @@ Route::get('/filterByDate', [FilterByDateController::class, 'filterByDate']);   
 Route::get('filterMovie/{id}', [CinemaController::class, 'filterMovie']);                                // Phim lọc của điện ảnh
 Route::get('/movie/{category}', [MovieController::class, 'movieByCategory']);                       // Lọc Phim theo thể loại
 Route::get('/new/{category}', [NewController::class, 'newByCategory']);                             // Lọc chuyên đề theo thể loại
+
+
+Route::apiResource('order', OrderController::class);
