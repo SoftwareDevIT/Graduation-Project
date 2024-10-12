@@ -125,7 +125,7 @@ ul.cinema-list li:last-child {
 }
 
 .no-showtimes {
-
+margin-top: 15px;
   width: 100%;
   height: 40px;
   padding: 2px;
@@ -422,7 +422,14 @@ li.city.selected {
   .container {
     padding: 10px; /* Giảm padding */
   }
-
+  .list-tp .list{
+    display: none;
+  }
+  .city-select{
+    display: block;
+    border: none !important;
+    margin-top: 20px;
+  }
   .locations, .cinemas, .showtimes {
     padding: 5px; /* Giảm padding thêm nữa */
   }
@@ -510,4 +517,60 @@ right: 15px;
 }
 .title{
   text-align: center !important;
+}
+.calendar-custom-1 {
+  display: flex;
+  background-color: #edf2f9;
+ color: #edf2f9;
+  width: 635px;
+  height: 60px;
+  gap: 0;
+  overflow: hidden; /* Đảm bảo phần tử con không tràn ra ngoài */
+}
+
+.date-custom-1 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1; /* Chia đều không gian */
+  padding: 15px; /* Tăng padding để cải thiện giao diện */
+  color: #555;
+  
+  cursor: pointer;
+  font-size: 12px ; /* Tăng kích thước chữ */
+  background-color: #f8f9fc; /* Màu nền nhẹ cho ngày */
+}
+
+.date-custom-1.active {
+  background-color: #d4e3f4; /* Màu nền cho ngày đang chọn */
+  color: #0056b3; /* Màu chữ cho ngày đang chọn */
+}
+
+.date-custom-1:hover {
+  background-color: #b0d4ff; /* Màu nền khi hover */
+  color: #54585d; /* Màu chữ khi hover */
+}
+
+.date-custom-1 span {
+  font-weight: bold;
+  font-size: 15px !important; /* Tăng kích thước chữ cho ngày */
+  margin-bottom: 5px;
+  color: #95aac9;
+}
+
+.date-custom-1 small {
+  font-size: 12px;
+  color: #777;
+}
+
+/* Điều chỉnh khoảng cách giữa các ô ngày */
+.calendar-custom .date-custom:not(:last-child) {
+  margin-right: 0; /* Không có khoảng cách giữa các ngày */
+}
+
+/* Điều chỉnh padding và khoảng cách tổng thể */
+.calendar-custom {
+  padding: 0;
+  gap: 0; /* Không có khoảng cách giữa các date-custom */
 }
