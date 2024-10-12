@@ -508,3 +508,6 @@ right: 15px;
   margin: 0px; /* Giảm khoảng cách giữa các ngày để chúng sát nhau hơn */
 }
 }
+.title{
+  text-align: center !important;
+}

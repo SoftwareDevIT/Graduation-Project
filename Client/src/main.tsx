@@ -16,7 +16,7 @@ import { CategoryProvider } from './Context/CategoriesContext.tsx'
 
 import { MovieProvider } from './Context/MoviesContext.tsx'
 import { PostProvider } from './Context/PostContext.tsx'
-import { ShowtimeProvider } from './Context/ShowtimesContext.tsx'
+
 
 
 
@@ -34,9 +34,9 @@ createRoot(document.getElementById('root')!).render(
      <PostProvider>
           <CountryProvider>
             <CategoryProvider>
-              <ShowtimeProvider>
+           
     <App />
-    </ShowtimeProvider>
+  
     </CategoryProvider>
     </CountryProvider>
     </PostProvider>

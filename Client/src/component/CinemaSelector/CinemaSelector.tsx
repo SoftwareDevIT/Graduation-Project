@@ -84,6 +84,14 @@ const CinemaSelector: React.FC = () => {
       }
     }
   }, [locations]);
+
+  const sortedLocations = locations
+  .map((location) => ({
+    ...location,
+    cinemaCount: cinemas.filter((cinema) => cinema.location_id === location.id)
+      .length,
+  }))
+  .sort((a, b) => b.cinemaCount - a.cinemaCount); // Sắp xếp giảm dần
 // Mặc định chọn Hà Nội và rạp đầu tiên của Hà Nội
 useEffect(() => {
   if (selectedCity && filteredCinemas.length > 0) {
@@ -180,25 +188,22 @@ useEffect(() => {
         <div className="locations">
           <h3 className="khuvuc">Khu vực</h3>
           <ul className="list-tp">
-         <div className="list">
-         {locations.map((location) => {
-              const count = cinemas.filter(
-                (cinema) => cinema.location_id === location.id
-              ).length;
-              return (
-                <li
-                  key={location.id}
-                  className={`city ${
-                    selectedCity === location.id ? "selected" : ""
-                  }`}
-                  onClick={() => setSelectedCity(location.id)}
-                >
-                  {location.location_name}
-                  <span className="cinema-count">{count}</span>
-                </li>
-              );
-            })}
-         </div>
+          <div className="list">
+                {sortedLocations.map((location) => {
+                  return (
+                    <li
+                      key={location.id}
+                      className={`city ${
+                        selectedCity === location.id ? "selected" : ""
+                      }`}
+                      onClick={() => setSelectedCity(location.id)}
+                    >
+                      {location.location_name}
+                      <span className="cinema-count">{location.cinemaCount}</span>
+                    </li>
+                  );
+                })}
+              </div>
              <select
             className="city-select"
             value={selectedCity ?? ""}

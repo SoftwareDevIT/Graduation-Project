@@ -8,6 +8,7 @@
     position: sticky;
     top: 0;
     z-index: 1000;
+    height: 80px;
     
 }
 
@@ -48,12 +49,30 @@ bottom: 10px;
 
 }
 .header-logo a{
- position: relative;
- top:12px;
-right: 45px;
-  color: #e50914;
-  text-decoration: none;
-}
+  
+    font-size: 24px; /* Kích thước chữ tổng thể */
+    font-weight: bold; /* Làm đậm chữ */
+    color: #e50914; /* Màu sắc nổi bật */
+    text-transform: uppercase; /* Chuyển thành in hoa */
+    letter-spacing: 2px; /* Giãn cách giữa các chữ */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Đổ bóng */
+    font-family: 'Poppins', sans-serif; /* Chọn font chữ */
+    
+    display: inline-block;
+    transition: all 0.3s ease; /* Hiệu ứng hover */
+    position: relative;
+    bottom: 5px;
+   right: 79px;
+    
+     text-decoration: none;
+  }
+  
+  .logo-first-letter {
+    font-size: 36px; /* Kích thước lớn hơn cho chữ "F" */
+    color: #e50914; /* Có thể sử dụng màu khác cho chữ "F" */
+ 
+  }
+
 
 .header-right {
   position: relative;
@@ -212,12 +231,13 @@ right: 45px;
     position: absolute; 
     top: 60px; 
     left: 0;
+    height: 220px;
     width: 100%;
     display: none; 
     flex-direction: column; /* Chuyển đổi sang menu dọc */
     align-items: flex-start; 
     z-index: 999;
-    background-color: white; 
+    background-color:#fff; 
     border: 1px solid #ddd; 
     padding: 10px 0; 
   }
@@ -248,7 +268,7 @@ right: 45px;
   .header-logo a{
    position: relative;
    left: -104px;
-  
+  top:10px;
      color: #e50914;
      text-decoration: none;
    }
@@ -266,7 +286,7 @@ right: 45px;
 
 .dropdown{
 position: relative;
-top:10px;
+
 color: #6e84a3;
     font-size: 15px;
     font-weight: 400;
