@@ -11,7 +11,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class InvoiceCreated
+class InvoiceSendMail
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
     /**
