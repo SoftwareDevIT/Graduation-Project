@@ -1,10 +1,12 @@
 /* Main container */
 .showtimes-management {
-    padding: 30px;
+    padding: 20px;
     background: rgb(229, 240, 242); /* Nền xanh nhạt */
     min-height: 170vh;
-    display: flex;
-    flex-direction: column;
+    color: #333;
+    font-family: 'Roboto', sans-serif;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Title styling */
@@ -36,6 +38,7 @@
     transition: background-color 0.3s ease;
     text-transform: uppercase;
     font-weight: bold;
+    text-decoration: none;
 }
 
 .add-showtime-btn:hover {
@@ -43,14 +46,13 @@
 }
 
 /* Table container styling */
-.table-container {
-    margin-top: 30px;
-    background-color: #ffffff; /* Nền trắng */
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Bóng nhẹ */
-    padding: 20px;
+.table-container1 {
+    width: 100%;
     max-width: 1300px;
     overflow-x: auto;
+    border-radius: 8px;
+    background-color: #f4f6f7; /* Background sáng hơn */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Nhẹ hơn */
 }
 
 /* Table styling */
@@ -172,4 +174,51 @@
 }
 .previous a ,.next a{
     text-decoration: none;
+}
+/* Container bao quanh bảng và phân trang */
+.table-pagination-container {
+    position: relative;
+    padding-bottom: 50px; /* Khoảng trống để đặt phân trang */
+}
+
+/* Phân trang */
+.pagination-container {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 10px 0;
+    font-size: 14px;
+}
+
+.page-btn, .prev-btn, .next-btn {
+    padding: 8px 12px;
+    background-color: #00796b;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 0 5px;
+}
+
+.page-btn.active {
+    background-color: #004d40;
+}
+
+.page-btn:hover:not(.active), 
+.prev-btn:hover, 
+.next-btn:hover {
+    background-color: #004d40;
+}
+
+.prev-btn:disabled,
+.next-btn:disabled {
+    background-color: #b2dfdb;
+    cursor: not-allowed;
 }

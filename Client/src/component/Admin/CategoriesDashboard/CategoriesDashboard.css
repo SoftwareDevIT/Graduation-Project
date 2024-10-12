@@ -37,6 +37,7 @@
     transition: background-color 0.3s ease;
     text-transform: uppercase;
     font-weight: bold;
+    text-decoration: none;
 }
 
 .add-category-btn:hover {
@@ -44,7 +45,7 @@
 }
 
 /* Table container styling */
-.table-container {
+.table-container-category {
     width: 100%;
     max-width: 1300px;
     overflow-x: auto;
@@ -134,4 +135,39 @@
     .edit-btn, .delete-btn {
         padding: 8px 12px;
     }
+}
+/* Pagination styles */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.page-btn, .prev-btn, .next-btn {
+    padding: 10px 15px;
+    margin: 0 5px;
+    background-color: #00796b; /* Color */
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+}
+
+.page-btn.active {
+    background-color: #004d40; /* Active color */
+}
+
+.page-btn:hover:not(.active), 
+.prev-btn:hover, 
+.next-btn:hover {
+    background-color: #004d40; /* Hover color */
+}
+
+.prev-btn:disabled,
+.next-btn:disabled {
+    background-color: #b2dfdb; /* Disabled color */
+    cursor: not-allowed; /* Cursor for disabled */
 }

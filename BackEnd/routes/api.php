@@ -74,7 +74,7 @@ Route::apiResource('seat', SeatController::class)->only(['index', 'show']);;
 //Route::apiResource('movies', MovieController::class)->only(['index', 'show']);                      // Liệt kê phim
 
 // Các tuyến có thể truy cập được cho người dùng được xác thực
-Route::middleware(['auth:sanctum'])->group(function () {
+// Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('favorites/{movie_id}', [FavoriteController::class, 'store']);                 // Thêm phim yêu thích
     Route::delete('favorites/{movie_id}', [FavoriteController::class, 'destroy']);             // Xóa phim yêu thích
     Route::post('ratings', [RatingController::class, 'store']);                                // Phim đánh giá
@@ -85,8 +85,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
         $user = $request->user()->load('favoriteMovies');
         return response()->json($user);
     });
-});
+// });
 Route::get('/vnpay-return', [BookingController::class, 'vnPayReturn']);
+Route::get('/all-user', [AuthController::class, 'allUser']);
 
 // Các route quản trị và quản lý
 // Route::middleware(['auth:sanctum', 'role:admin|manager'])->group(function () {

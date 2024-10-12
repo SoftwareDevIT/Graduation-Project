@@ -1,57 +1,89 @@
-/* Container chính */
 .cinemas-dashboard {
-    padding: 30px;
+    padding: 20px;
     background: rgb(229, 240, 242); /* Nền xanh nhạt */
     min-height: 170vh;
-    display: flex;
-    flex-direction: column;
+    color: #333; /* Màu chữ chính */
+    font-family: 'Roboto', sans-serif;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Định dạng tiêu đề */
+/* Title styling */
 .cinemas-dashboard h2 {
     margin-bottom: 20px;
     font-size: 1.75rem;
-    color: #262626; /* Màu chữ tối */
+    color: #006064; /* Màu chữ tiêu đề */
     letter-spacing: 1px;
     text-transform: uppercase;
     text-align: center;
 }
 
-/* Định dạng container bảng */
-.table-container {
-    margin-top: 30px;
-    background-color: #ffffff; /* Nền trắng cho bảng */
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    max-width: 1300px;
-    overflow-x: auto;
+/* Actions container */
+.actions {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
 }
 
-/* Định dạng bảng */
+.add-cinema-btn {
+    padding: 10px 20px;
+    background-color: #f39c12; /* Màu giống CountriesDashboard */
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-transform: uppercase;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.add-cinema-btn:hover {
+    background-color: #e67e22; /* Màu nền khi hover */
+}
+
+/* Table container styling */
+.table-container-cinemas {
+    width: 100%;
+    max-width: 1300px;
+    overflow-x: auto;
+    border-radius: 8px;
+    background-color: #f4f6f7; /* Nền sáng hơn */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Nhẹ hơn */
+}
+
+/* Table styling */
 .cinema-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 14px;
-    color: #006064; /* Màu xanh đậm */
 }
 
-/* Định dạng tiêu đề bảng */
+/* Header styling */
 .cinema-table th {
-    background-color: #e0f7fa; /* Nền xanh nhạt */
-    color: #00796b; /* Màu chữ xanh đậm */
+    background-color: #e0f7fa; /* Màu xanh nhạt */
+    color: #00796b; /* Màu chữ tiêu đề */
     text-align: center;
     font-weight: 600;
-    padding: 10px;
+    font-size: 1rem;
+    padding: 15px;
+    text-transform: uppercase;
 }
 
-/* Định dạng nội dung bảng */
+/* Row styling */
 .cinema-table td {
-    padding: 10px;
-    background-color: #ffffff; /* Nền trắng */
-    color: #00796b; /* Màu chữ xanh đậm */
-    border-bottom: 1px solid #b2ebf2; /* Viền xanh nhạt */
+    padding: 15px;
+    background-color: #ffffff; /* Màu nền hàng */
+    color: #00796b; /* Màu chữ trong bảng */
+    border-bottom: 1px solid #e5e5e5;
+    font-size: 0.875rem;
+    vertical-align: middle;
     text-align: center;
+}
+
+/* Hàng chẵn có nền xanh rất nhạt */
+.cinema-table tr:nth-child(even) {
+    background-color: #f1f8e9; /* Nền xanh rất nhạt */
 }
 
 /* Hiệu ứng hover cho hàng */
@@ -60,33 +92,84 @@
     transition: background-color 0.3s ease;
 }
 
-/* Phân trang */
+/* Button styles */
+.action-buttons {
+    display: flex;
+    justify-content: space-around;
+}
+
+.action-buttons button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #00796b; /* Màu nút */
+    font-size: 1rem;
+    transition: color 0.3s ease;
+    padding: 8px 12px;
+}
+
+/* Delete button */
+.delete-btn {
+    color: #e74c3c;
+}
+
+.delete-btn:hover {
+    color: #c0392b;
+}
+
+/* Align the "Actions" header */
+.cinema-table th:last-child {
+    text-align: center;
+}
+
+/* Pagination styles */
 .pagination {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    padding: 10px 0;
+    margin-top: 20px;
 }
 
-.page-item {
-    margin: 0 5px;
-}
-
-.page-link {
-    color: #007bff;
+.prev-btn, .next-btn, .page-btn {
     padding: 10px 15px;
+    margin: 0 5px;
+    background-color: #00796b; /* Button color */
+    border: none;
     border-radius: 5px;
+    color: white;
     cursor: pointer;
-    text-decoration: none;
-    transition: color 0.3s, transform 0.3s;
+    transition: background-color 0.3s ease;
 }
 
-.page-link:hover {
-    color: #0056b3;
-    transform: scale(1.05);
+.page-btn.active {
+    background-color: #004d40; /* Active button color */
 }
 
-.active .page-link {
-    color: #0056b3;
-    cursor: default;
+.prev-btn:disabled,
+.next-btn:disabled {
+    background-color: #b2dfdb; /* Disabled button color */
+    cursor: not-allowed; /* Cursor for disabled */
+}
+
+.prev-btn:hover:not(:disabled),
+.next-btn:hover:not(:disabled),
+.page-btn:hover:not(.active) {
+    background-color: #004d40; /* Hover color */
+}
+
+/* Responsive design for mobile */
+@media (max-width: 768px) {
+    .cinema-table th, .cinema-table td {
+        font-size: 0.875rem;
+        padding: 10px;
+    }
+
+    .add-cinema-btn {
+        width: 100%;
+        font-size: 0.875rem;
+    }
+
+    .action-buttons button {
+        padding: 8px 12px;
+    }
 }
