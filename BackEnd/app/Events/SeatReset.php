@@ -12,51 +12,28 @@ use Illuminate\Support\Facades\Log;
 
 class SeatReset implements ShouldBroadcast
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
-    public $seatId; // ID cuối cách
-    public function __construct(array $seatId)
+    public $validSeatIds;
+
+    public function __construct(array $validSeatIds)
     {
-        $this->seatId = $seatId;
+        // Truyền mảng seat IDs
+        $this->validSeatIds = $validSeatIds;
     }
 
-    public function broadcastOn():Channel
+    public function broadcastOn()
     {
+        // Kênh broadcast
         return new Channel('seats');
     }
 
-    public function broadcastWith():array
+    public function broadcastWith(): array
     {
+        // Trả về mảng seatIds và thông báo, chỉ một lần
         return [
-            'seat' => $this->seatId,
-            'message' => 'Seat has been reset'
+            'seats' => $this->validSeatIds,  // Trả về mảng các seat ID
+            'message' => 'Seats have been reset'
         ];
     }
-    //     public $seatId; // ID của ghế
-
-    //     public function __construct(Seats $seat)
-    //     {
-    //         // Lưu ID của ghế
-    //         $this->seatId = $seat->id;
-
-    //         // Ghi log khi sự kiện được tạo
-    //         Log::info('SeatReset event triggered for seat with ID: ' . $this->seatId);
-    //     }
-
-    //     public function broadcastOn(): Channel
-    //     {
-    //         // Ghi log về việc phát sự kiện
-    //         Log::info('Broadcasting seat reset event for seat with ID: ' . $this->seatId);
-
-    //         // Phát trên kênh 'seats'
-    //         return new Channel('seats');
-    //     }
-
-    //     public function broadcastWith(): array
-    //     {
-    //         // Trả về thông tin của ghế được phát qua event
-    //         return [
-    //             'seat' => $this->seatId,
-    //             'message' => 'Seat has been reset'
-    //         ];
-    //     }
 }
+
+
