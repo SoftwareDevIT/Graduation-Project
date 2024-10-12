@@ -124,6 +124,7 @@ Route::get('/filterByDate', [FilterByDateController::class, 'filterByDate']);   
 Route::get('filterMovie/{id}', [CinemaController::class, 'filterMovie']);                                // Phim lọc của điện ảnh
 Route::get('/movie/{category}', [MovieController::class, 'movieByCategory']);                       // Lọc Phim theo thể loại
 Route::get('/new/{category}', [NewController::class, 'newByCategory']);                             // Lọc chuyên đề theo thể loại
+Route::get('cinema-by-location/{id}', [CinemaController::class, 'showCinemaByLocation']);
 
 
 Route::apiResource('order', OrderController::class);
@@ -152,3 +153,4 @@ Route::group(['middleware' => ['auth:sanctum','api']], function ()
 
 
 Route::get('session',[BookingController::class,'getSession']);
+
