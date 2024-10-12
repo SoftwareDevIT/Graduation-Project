@@ -55,7 +55,11 @@ class NewController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id) {}
+    public function show(string $id) {
+
+        $new = $this->newservice->show($id);
+        return $this->success($new, 'success');
+    }
 
     /**
      * Show the form for editing the specified resource.

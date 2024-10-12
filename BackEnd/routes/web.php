@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\Cinema\ShowtimeController;
 use App\Http\Controllers\Client\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Client\RoleController;
@@ -63,6 +64,9 @@ Route::middleware(['auth', 'role:admin|manager'])->group(function () {
     Route::post('/users/{user}/roles', [UserController::class, 'syncRoles'])->name('users.roles.sync');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 });
+Route::get('/showtimes/create', [ShowtimeController::class, 'create'])->name('showtimes.create');
+Route::post('/showtimes', [ShowtimeController::class, 'store'])->name('showtimes.store');
+
 
 
 

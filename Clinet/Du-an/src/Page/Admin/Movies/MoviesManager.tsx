@@ -7,6 +7,7 @@ import MoviesDashboard from '../../../component/Admin/MoviesDashboard/MoviesDash
 
 
 
+
 function MoviesManager() {
     return (
         <div className="moviesmanager">

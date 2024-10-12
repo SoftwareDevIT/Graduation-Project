@@ -45,7 +45,8 @@ class NewCategoryController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $newcategory = $this->newcategoryservice->show($id);
+        return $this->success($newcategory, 'success');
     }
 
     /**

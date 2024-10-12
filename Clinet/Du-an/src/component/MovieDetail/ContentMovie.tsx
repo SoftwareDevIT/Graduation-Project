@@ -11,7 +11,7 @@ export const ContentMovie = (props: Props) => {
         <div>
             <MovieDetail/>
              <div className="content">
-                    <div className="container">
+                    <div className="container content-1">
                         <div className="video-section">
                             <iframe
                                 width="735px"

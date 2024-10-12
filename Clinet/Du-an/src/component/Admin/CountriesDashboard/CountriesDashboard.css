@@ -3,15 +3,17 @@
     padding: 20px;
     background: rgb(229, 240, 242); /* Nền xanh nhạt */
     min-height: 170vh;
-    color: #ffffff;
+    color: #333; /* Màu chữ chính */
     font-family: 'Roboto', sans-serif;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Title styling */
 .countries-dashboard h2 {
     margin-bottom: 20px;
     font-size: 1.75rem;
-    color: #ffffff;
+    color: #006064; /* Màu chữ tiêu đề */
     letter-spacing: 1px;
     text-transform: uppercase;
     text-align: center;
@@ -26,7 +28,7 @@
 
 .add-country-btn {
     padding: 10px 20px;
-    background-color: #f39c12;
+    background-color: #f39c12; /* Màu giống UserDashboard */
     border: none;
     border-radius: 5px;
     color: white;
@@ -35,20 +37,21 @@
     transition: background-color 0.3s ease;
     text-transform: uppercase;
     font-weight: bold;
+    text-decoration: none;
 }
 
 .add-country-btn:hover {
-    background-color: #e67e22;
+    background-color: #e67e22; /* Màu nền khi hover */
 }
 
 /* Table container styling */
-.table-container {
+.table-container-country {
     width: 100%;
     max-width: 1300px;
     overflow-x: auto;
     border-radius: 8px;
-    background-color: #1a1a1a;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    background-color: #f4f6f7; /* Nền sáng hơn */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Nhẹ hơn */
 }
 
 /* Table styling */
@@ -59,8 +62,8 @@
 
 /* Header styling */
 .country-table th {
-    background-color: #282828;
-    color: #ffffff;
+    background-color: #e0f7fa; /* Màu xanh nhạt */
+    color: #00796b; /* Màu chữ tiêu đề */
     text-align: center;
     font-weight: 600;
     font-size: 1rem;
@@ -71,17 +74,22 @@
 /* Row styling */
 .country-table td {
     padding: 15px;
-    background-color: #1e1e1e;
-    color: #e0e0e0;
-    border-bottom: 1px solid #3a3a3a;
+    background-color: #ffffff; /* Màu nền hàng */
+    color: #00796b; /* Màu chữ trong bảng */
+    border-bottom: 1px solid #e5e5e5;
     font-size: 0.875rem;
     vertical-align: middle;
     text-align: center;
 }
 
-/* Hover effect for rows */
+/* Hàng chẵn có nền xanh rất nhạt */
+.country-table tr:nth-child(even) {
+    background-color: #f1f8e9; /* Nền xanh rất nhạt */
+}
+
+/* Hiệu ứng hover cho hàng */
 .country-table tbody tr:hover {
-    background-color: #333333;
+    background-color: #b2ebf2; /* Nền xanh nhạt khi hover */
     transition: background-color 0.3s ease;
 }
 
@@ -95,7 +103,7 @@
     background: none;
     border: none;
     cursor: pointer;
-    color: #ffffff;
+    color: #00796b; /* Màu nút */
     font-size: 1rem;
     transition: color 0.3s ease;
     padding: 8px 12px;
@@ -148,4 +156,38 @@
     .view-btn, .edit-btn, .delete-btn {
         padding: 8px 12px;
     }
+}
+/* Pagination styles */
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.prev-btn, .next-btn, .page-btn {
+    padding: 10px 15px;
+    margin: 0 5px;
+    background-color: #00796b; /* Button color */
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.page-btn.active {
+    background-color: #004d40; /* Active button color */
+}
+
+.prev-btn:disabled,
+.next-btn:disabled {
+    background-color: #b2dfdb; /* Disabled button color */
+    cursor: not-allowed; /* Cursor for disabled */
+}
+
+.prev-btn:hover:not(:disabled),
+.next-btn:hover:not(:disabled),
+.page-btn:hover:not(.active) {
+    background-color: #004d40; /* Hover color */
 }

@@ -14,7 +14,7 @@ const TicketsDashboard = () => {
             <div className="actions">
                 <button className="add-ticket-btn">Add New Ticket</button>
             </div>
-            <div className="table-container">
+            <div className="table-container-ticket">
                 <table className="ticket-table">
                     <thead>
                         <tr>
@@ -45,6 +45,7 @@ const TicketsDashboard = () => {
                         ))}
                     </tbody>
                 </table>
+                
             </div>
         </div>
     );
