@@ -1,53 +1,80 @@
-import React from 'react';
-import './OrdersDashboard.css';
+import instance from "../../../server";
+import "./OrdersDashboard.css";
+import { Booking } from "../../../interface/Booking";
+import { useEffect, useState } from "react";
 
-const OrdersDashboard = () => {
-    const orders = [
-        { id: 'ORD001', customer: 'John Doe', product: 'Laptop', quantity: 1, total: 1500, status: 'Pending' },
-        { id: 'ORD002', customer: 'Jane Smith', product: 'Smartphone', quantity: 2, total: 800, status: 'Completed' },
-        { id: 'ORD003', customer: 'Alice Brown', product: 'Headphones', quantity: 3, total: 300, status: 'Shipped' },
-    ];
+const OrdersDashboard: React.FC = () => {
+  const [bookings, setBookings] = useState<Booking[]>([]);
 
-    return (
-        <div className="orders-management">
-            <h2>Order Management</h2>
-            <div className="actions">
-                <button className="add-order-btn">Add Order</button>
-            </div>
-            <div className="table-container">
-                <table className="order-table">
-                    <thead>
-                        <tr>
-                            <th>Order ID</th>
-                            <th>Customer Name</th>
-                            <th>Product</th>
-                            <th>Quantity</th>
-                            <th>Total Price</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {orders.map(order => (
-                            <tr key={order.id}>
-                                <td>{order.id}</td>
-                                <td>{order.customer}</td>
-                                <td>{order.product}</td>
-                                <td>{order.quantity}</td>
-                                <td>${order.total}</td>
-                                <td>{order.status}</td>
-                                <td className="action-buttons">
-                                    <button className="view-btn">👁</button>
-                                    <button className="edit-btn">✏️</button>
-                                    <button className="delete-btn">🗑</button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    );
+  useEffect(() => {
+    const fetchBookings = async () => {
+      try {
+        const response = await instance.get<Booking[]>("/order");
+        console.log(response.data); // Kiểm tra dữ liệu trả về
+     
+        setBookings(response.data.data);
+      } catch (error) {
+        console.error("Error fetching bookings:", error);
+      }
+    };
+
+    fetchBookings();
+  }, []);
+
+  return (
+    <div className="orders-management">
+      <h2>Order Management</h2>
+      <div className="actions">
+        <button className="add-order-btn">Add Order</button>
+      </div>
+      <div className="table-container">
+        <table className="order-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>User</th>
+              <th>Showtime</th>
+              <th>Movie</th>
+              <th>Pay Method</th>
+              <th>Price Ticket</th>
+              <th>Price Combo</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {bookings.length > 0 ? (
+              bookings.map((booking: Booking) => (
+                <tr key={booking.id}>
+                  <td>{booking.id}</td>
+                  <td>{booking.user.user_name}</td> {/* Hiển thị tên người dùng */}
+                  <td>{booking.showtime.showtime_date}</td> {/* Hiển thị thời gian chiếu */}
+                  <td>{booking.showtime.movie.movie_name}</td> {/* Hiển thị tên phim */}
+                  <td>{booking.pay_method.pay_method_name}</td> {/* Hiển thị phương thức thanh toán */}
+                  <td>${booking.price_ticket}</td>
+                  <td>${booking.price_combo}</td>
+                  <td>{booking.amount}</td>
+                  <td>{booking.seat_status}</td> {/* Hiển thị trạng thái */}
+                  <td className="action-buttons">
+                    <button className="view-btn">👁</button>
+                    <button className="edit-btn">✏️</button>
+                    <button className="delete-btn">🗑</button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={9} style={{ textAlign: "center" }}>
+                  No booking available.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
 };
 
 export default OrdersDashboard;
