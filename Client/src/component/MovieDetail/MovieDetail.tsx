@@ -2,10 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Header from "../Header/Hearder";
 import Footer from "../Footer/Footer";
-import axios from "axios";
-import "./MovieDetail.css";
 import instance from "../../server";
-import { ContentMovie } from "./ContentMovie";
+import "./MovieDetail.css";
 
 const MovieDetail: React.FC = () => {
   const { id } = useParams();
@@ -13,7 +11,6 @@ const MovieDetail: React.FC = () => {
   const [actor, setActor] = useState<string | null>(null);
   const [director, setDirector] = useState<string | null>(null);
   const [category, setCategory] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -25,49 +22,45 @@ const MovieDetail: React.FC = () => {
         // Fetch actor name
         if (movieResponse.data.data.actor_id) {
           const actorResponse = await instance.get(`/actor/${movieResponse.data.data.actor_id}`);
-          setActor(actorResponse.data.data.actor_name); // Giả định có trường actor_name
+          setActor(actorResponse.data.data.actor_name);
         }
 
         // Fetch director name
         if (movieResponse.data.data.director_id) {
           const directorResponse = await instance.get(`/director/${movieResponse.data.data.director_id}`);
-          setDirector(directorResponse.data.data.director_name); // Giả định có trường director_name
+          setDirector(directorResponse.data.data.director_name);
         }
 
         // Fetch movie category name
         if (movieResponse.data.data.movie_category_id) {
           const categoryResponse = await instance.get(`/movie-category/${movieResponse.data.data.movie_category_id}`);
-          setCategory(categoryResponse.data.data.category_name); // Giả định có trường category_name
+          setCategory(categoryResponse.data.data.category_name);
         }
-
-        setLoading(false);
       } catch (error) {
         console.error(error);
-        
-        setLoading(false);
+    
       }
     };
     fetchMovie();
   }, [id]);
 
-  if (loading) return <div>Loading...</div>;
   if (error) return <div>Error loading movie details</div>;
 
   return (
     <>
       <Header />
       <div className="movie-detail-container">
-        <div className="boxbig" style={{ backgroundImage: `url(${movie.poster || 'https://example.com/default-image.jpg'})` }}>
+        <div className="boxbig" style={{ backgroundImage: `url(${movie?.poster || 'https://example.com/default-image.jpg'})` }}>
           <div className="info-section">
             <img
-              src={movie.poster || "placeholder.jpg"}
-              alt={movie.movie_name}
+              src={movie?.poster || "placeholder.jpg"}
+              alt={movie?.movie_name}
               className="poster"
             />
 
             <div className="movie-details-wrapper">
               <div className="movie-info">
-                <h1 className="title">{movie.movie_name}</h1>
+                <h1 className="title">{movie?.movie_name}</h1>
                 <p className="genre">Thể loại: {category || "Không có thể loại"}</p>
 
                 <div className="actions">
@@ -84,18 +77,18 @@ const MovieDetail: React.FC = () => {
                 </div>
 
                 <p className="description">
-                  {movie.description || "Không có mô tả"}
+                  {movie?.description || "Không có mô tả"}
                 </p>
 
                 <div className="movie-details">
                   <div>
-                    <span>📅 Khởi chiếu: </span>{movie.release_date || "Chưa có ngày phát hành"}
+                    <span>📅 Khởi chiếu: </span>{movie?.release_date || "Chưa có ngày phát hành"}
                   </div>
                   <div>
-                    <span>⏰ Thời lượng: </span>{movie.duration || "Chưa có thời lượng"}
+                    <span>⏰ Thời lượng: </span>{movie?.duration || "Chưa có thời lượng"}
                   </div>
                   <div>
-                    <span>🔞 Giới hạn tuổi: </span>{movie.age_limit ? `T${movie.age_limit}` : "Không có giới hạn tuổi"}
+                    <span>🔞 Giới hạn tuổi: </span>{movie?.age_limit ? `T${movie?.age_limit}` : "Không có giới hạn tuổi"}
                   </div>
                 </div>
               </div>
@@ -110,10 +103,10 @@ const MovieDetail: React.FC = () => {
 
         <div className="tabs">
           <Link to={`/moviedetail/${id}`} className="tab active">Thông tin phim</Link>
-          <Link to={`/lich-chieu/${id}`} className="tab">Lịch chiếu</Link>
-          <Link to={`/danh-gia/${id}`} className="tab">Đánh giá</Link>
-          <Link to={`/tin-tuc/${id}`} className="tab">Tin tức</Link>
-          <Link to={`/mua-ve/${id}`} className="tab">Mua vé</Link>
+          <Link to={`/schedule/${id}`} className="tab">Lịch chiếu</Link>
+          <Link to={`/reviews/${id}`} className="tab">Đánh giá</Link>
+          <Link to={`/news/${id}`} className="tab">Tin tức</Link>
+          <Link to={`/buy-now/${id}`} className="tab">Mua vé</Link>
         </div>
       </div>
     </>
