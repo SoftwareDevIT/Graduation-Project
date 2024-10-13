@@ -34,6 +34,21 @@ class FilterByDateController extends Controller
             return response()->json(['error' => 'Không có phim của ngày hôm nay'], 404);
         }
 
-        return response()->json($movies);
+        return $this->success($movies);
+    }
+
+    public function filterByDateByMovie(Request $request)
+    {
+        $locationId = $request->input('location_id');
+        $date = $request->input('showtime_date');
+        $movieName = $request->input('movie_name'); 
+        if (empty($date) || $date == '0') {
+            $date = Carbon::today()->toDateString();
+        }
+        if (empty($date) || empty($movieName)) {
+            return response()->json(['error' => 'Vui lòng cung cấp Ngày và Tên phim'], 400);
+        }
+        $movies = $this->filterByDateService->filterByDateOrMovie($date,$movieName,$locationId);
+        return $this->success($movies);
     }
 }

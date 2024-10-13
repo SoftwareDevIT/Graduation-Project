@@ -34,4 +34,8 @@ class Showtime extends Model
     {
         return $this->hasMany(Seats::class, 'showtime_id');
     }
+    public function cinema()
+{
+    return $this->belongsTo(Cinema::class);
+}
 }

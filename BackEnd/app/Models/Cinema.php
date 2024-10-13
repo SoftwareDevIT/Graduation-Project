@@ -20,4 +20,11 @@ class Cinema extends Model
     public function location(){
         return $this->belongsTo(Location::class);
     }
+    public function movies()
+    {
+        return $this->hasMany(Movie::class);
+    }
+    public function showtimes() {
+        return $this->hasMany(Showtime::class);
+    }
 }
