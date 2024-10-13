@@ -18,9 +18,9 @@ use App\Http\Controllers\Client\UserController;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+ Route::get('/', function () {
+     return view('welcome');
+ });
 
 Route::get('/test', function () {
     return view('test');
@@ -37,11 +37,11 @@ Route::post('register', [RegisterController::class, 'register'])->name('register
 
 
 // Check if user is logged in?
-Route::get('/', function () {
-    // return view('');
-    // If the user is successfully logged in, return here ...
-})->middleware('checkLogin');
-
+//Route::get('/', function () {
+//    // return view('');
+//    // If the user is successfully logged in, return here ...
+//})->middleware('checkLogin');
+//
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);

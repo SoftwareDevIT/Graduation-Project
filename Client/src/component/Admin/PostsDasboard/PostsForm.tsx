@@ -45,7 +45,7 @@ const PostsForm: React.FC = () => {
     await addOrUpdatePost(
       {
         ...data,
-        thumbnail: thumbnailFile, // Use 'thumbnail' instead of 'thumbnailFile'
+        thumnail: thumbnailFile, // Use 'thumbnail' instead of 'thumbnailFile'
         banner: bannerFile, // Use 'banner' instead of 'bannerFile'
       },
       id

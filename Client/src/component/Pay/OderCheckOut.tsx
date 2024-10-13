@@ -13,71 +13,56 @@ const OrderCheckout = () => {
   const location = useLocation();
   const { movieName, cinemaName, showtime, selectedSeats, totalPrice, selectedCombos } = location.state || {};
 
+  // State lưu phương thức thanh toán
+  const [paymentMethod, setPaymentMethod] = useState<string>(''); // Thêm state để lưu phương thức thanh toán
+
   const handleCheckout = async () => {
     const cinemaId = location.state?.cinemaId;
     const showtimeId = location.state?.showtimeId;
-    const roomId = location.state?.roomId;
-    const userId = localStorage.getItem('user_id'); // Lấy userId từ localStorage
-    const token = localStorage.getItem('token'); // Lấy token từ localStorage
-
-    // Kiểm tra xem người dùng đã đăng nhập chưa
+    const userId = localStorage.getItem('user_id');
+    const token = localStorage.getItem('token');
+  
     if (!token) {
-      message.warning('Vui lòng đăng nhập trước khi đặt vé.'); // Hiển thị thông báo
+      message.warning('Vui lòng đăng nhập trước khi đặt vé.');
       return;
     }
-
+  
     if (!cinemaId || !showtimeId || !selectedSeats || !userId) {
-      alert('Vui lòng kiểm tra lại thông tin, không tìm thấy cinemaId, showtimeId, ghế ngồi hoặc userId.');
+      message.warning('Thông tin không đầy đủ. Vui lòng kiểm tra lại.');
       return;
     }
-
-    const seats = selectedSeats.split(",").map((seatName: string) => {
-      const trimmedSeat = seatName.trim();
-      const row = trimmedSeat.charAt(0);
-      const column = parseInt(trimmedSeat.slice(1)) - 1;
-
-      return {
-        seat_name: trimmedSeat,
-        room_id: roomId,
-        showtime_id: showtimeId,
-        seat_row: row,
-        seat_column: column,
-      };
-    });
-
+  
+    if (!paymentMethod) {
+      message.warning('Vui lòng chọn phương thức thanh toán.');
+      return;
+    }
+  
     const bookingData = {
-      cinemaId: cinemaId,
-      showtimeId: showtimeId,
-      seats: seats,
+      showtime_id: showtimeId,
+      pay_method_id: paymentMethod === 'vnpay' ? 1 : 2,
       amount: totalPrice,
-      comboId: selectedCombos,
-      userId: userId,
     };
-
+  
     try {
-      console.log('Đang gửi yêu cầu đặt vé:', bookingData);
       const response = await instance.post('/book-ticket', bookingData, {
         headers: {
-          Authorization: `Bearer ${token}`, // Sử dụng token từ localStorage
+          Authorization: `Bearer ${token}`,
         },
       });
-      console.log('Đặt vé thành công:', response.data.data);
-
+  
       if (response.data.data) {
-        const vnpayUrl = response.data.data.data;
-        console.log('Chuyển hướng đến VNPAY:', vnpayUrl);
-
-        // Chuyển hướng người dùng đến VNPay
-        window.location.href = vnpayUrl;
-      } else {
-        console.error('Không tìm thấy URL VNPAY hoặc dữ liệu không hợp lệ');
+        if (paymentMethod === 'vnpay') {
+          window.location.href = response.data.data;
+        } else {
+          message.success('Đặt vé thành công.');
+        }
       }
     } catch (error) {
       console.error('Đặt vé thất bại:', error);
-      alert('Đặt vé thất bại. Vui lòng thử lại.');
+      message.error('Đặt vé thất bại. Vui lòng thử lại.');
     }
   };
-
+  
   return (
     <>
       <Header />
@@ -131,8 +116,19 @@ const OrderCheckout = () => {
             <h3>Hình thức thanh toán</h3>
             {/* Các phương thức thanh toán */}
             <ul>
-              <li><FontAwesomeIcon icon={faWallet} className="payment-icon" /> Fundiin</li>
-              <li><FontAwesomeIcon icon={faMobileAlt} className="payment-icon" /> Ví MoMo</li>
+              <li
+               onClick={() => {
+                setPaymentMethod('vnpay');
+                console.log('Phương thức thanh toán đã được chọn: vnpay');
+              }}
+              >
+                <FontAwesomeIcon icon={faWallet} className="payment-icon" /> VN Pay
+              </li>
+              <li
+                onClick={() => setPaymentMethod('momo')} // Các phương thức khác
+              >
+                <FontAwesomeIcon icon={faMobileAlt} className="payment-icon" /> Ví MoMo
+              </li>
               <li><FontAwesomeIcon icon={faQrcode} className="payment-icon" /> Quét mã QR</li>
               <li><FontAwesomeIcon icon={faUniversity} className="payment-icon" /> Chuyển khoản / Internet Banking</li>
               <li><FontAwesomeIcon icon={faWallet} className="payment-icon" /> Ví ShopeePay</li>
@@ -140,7 +136,7 @@ const OrderCheckout = () => {
               <li><FontAwesomeIcon icon={faWallet} className="payment-icon" /> Ví FPT Pay</li>
             </ul>
           </div>
-
+          
           {/* Thông tin cá nhân */}
           <div className="form-container">
             <h3>Thông tin cá nhân</h3>
@@ -151,8 +147,6 @@ const OrderCheckout = () => {
                   type="text"
                   id="fullname"
                   placeholder="Nhập họ và tên"
-              
-                 
                   required
                 />
               </div>
@@ -162,7 +156,6 @@ const OrderCheckout = () => {
                   type="email"
                   id="email"
                   placeholder="Nhập email"
-                 
                   required
                 />
               </div>
@@ -172,7 +165,6 @@ const OrderCheckout = () => {
                   type="tel"
                   id="phone"
                   placeholder="Nhập số điện thoại"
-                 
                   required
                 />
               </div>

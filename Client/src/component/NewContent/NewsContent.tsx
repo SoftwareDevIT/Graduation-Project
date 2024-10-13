@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import Slider from 'react-slick';
 import instance from '../../server';
-
 import './NewsContent.css'; 
 import { NewsItem } from '../../interface/NewsItem';
 
 const NewsContent = () => {
   const [newsData, setNewsData] = useState<NewsItem[]>([]);
-  const [loading, setLoading] = useState(true);
 
   const settings = {
     infinite: true,
@@ -30,20 +28,12 @@ const NewsContent = () => {
         }
       } catch (error) {
         console.error('Error fetching news data:', error);
-      } finally {
-        setLoading(false);
       }
     };
     fetchData();
   }, []);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!newsData || newsData.length === 0) {
-    return <div>No news available</div>;
-  }
+  
 
   // Display main news (first news item)
   const mainNews = newsData[0];
@@ -82,4 +72,3 @@ const NewsContent = () => {
 };
 
 export default NewsContent;
-

@@ -1,123 +1,73 @@
-/* Sidebar container styling */
+/* Sidebar Container */
 .sidebar {
     width: 250px;
-    background: #fff; /* Nền xanh nhạt */
+    background-color: #f8f9fa; /* Nền sáng */
+    color: #343a40; /* Màu chữ tối */
     padding: 20px;
-    color: #006064; /* Chữ xanh đậm */
     display: flex;
     flex-direction: column;
-    border-right: 1px solid rgba(0, 150, 136, 0.2); /* Đường viền xanh nhạt */
+   
+    border-right: 1px solid #dee2e6; /* Đường viền xám nhạt */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng nhẹ */
 }
 
-/* Logo styling */
-.sidebar .logo {
+/* Logo Section */
+.logo {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 
-.sidebar .logo img {
+.logo img {
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    border: 3px solid #00796b; /* Viền xanh đậm cho logo */
+    border: 3px solid #007bff; /* Viền màu xanh */
 }
 
-/* General section title styling */
-.sidebar .section-title {
-    color: #004d40; /* Màu xanh đậm cho tiêu đề */
-    font-size: 0.85rem;
-    letter-spacing: 0.05rem;
-    margin: 20px 0 10px 15px;
-    text-transform: uppercase;
+.logo h2 {
+    margin-top: 10px;
+    font-size: 1.3rem;
+    color: #007bff; /* Màu xanh cho tiêu đề */
 }
 
-/* List styling */
+/* Navigation Menu */
 .sidebar ul {
     list-style-type: none;
     padding: 0;
-    margin: 0;
-    width: 100%;
 }
 
-/* Individual list item styling */
+/* Individual Menu Item */
 .sidebar ul li {
-    margin: 5px 0;
+    margin: 15px 0;
 }
 
-/* Link styling */
+/* Link Styling */
 .sidebar ul li a {
-    color: #004d40; /* Màu xanh đậm cho chữ */
+    color: #343a40; /* Màu chữ tối */
     text-decoration: none;
-    font-size: 1rem;
     display: flex;
     align-items: center;
-    padding: 12px 20px;
-    border-radius: 12px;
-    background-color: transparent;
-    transition: all 0.3s ease;
+    padding: 12px;
+    border-radius: 5px;
+    transition: background 0.3s, color 0.3s; /* Hiệu ứng chuyển đổi */
 }
 
-/* Icon styling */
-.sidebar ul li a svg {
-    margin-right: 15px;
-    font-size: 1.5rem; /* Kích thước lớn hơn cho icon */
-    color: #00796b; /* Màu xanh đậm cho icon */
-    transition: color 0.3s ease;
-}
-
-/* Hover effect */
+/* Hover Effect */
 .sidebar ul li a:hover {
-    background-color: rgba(0, 121, 107, 0.1); /* Nền xanh nhạt khi hover */
-    color: #00796b; /* Màu xanh đậm khi hover */
-    transform: translateX(10px); /* Hiệu ứng di chuyển khi hover */
-    box-shadow: 0 6px 12px rgba(0, 150, 136, 0.3); /* Shadow nhạt hơn */
-    transition: all 0.3s ease-in-out;
+    background-color: #007bff; /* Nền xanh khi hover */
+    color: #ffffff; /* Chữ trắng khi hover */
 }
 
-/* Active or focused state */
-.sidebar ul li a.active,
-.sidebar ul li a:focus {
-    background-color: rgba(0, 121, 107, 0.2); /* Nền xanh nhạt hơn khi active */
-    color: #00796b; /* Màu xanh đậm */
-    transform: translateX(10px);
-    box-shadow: inset 4px 0 0 #00796b; /* Thanh highlight xanh đậm */
+/* Icon Styling */
+.sidebar ul li a svg {
+    margin-right: 10px; /* Khoảng cách giữa icon và chữ */
+    font-size: 1.2rem; /* Kích thước icon */
 }
 
-/* Submenu styling */
-.sidebar ul li ul {
-    margin-left: 20px;
-    display: none; /* Ẩn submenu */
-}
-
-/* When submenu is active */
-.sidebar ul li.active ul {
-    display: block;
-}
-
-/* Submenu item */
-.sidebar ul li ul li {
-    margin: 5px 0;
-}
-
-.sidebar ul li ul li a {
-    font-size: 0.9rem;
-    padding: 8px 20px; /* Padding cho submenu */
-}
-
-/* Media query for responsiveness */
-@media (max-width: 768px) {
-    .sidebar {
-        width: 200px;
-    }
-
-    .sidebar ul li a {
-        font-size: 0.9rem;
-        padding: 10px 15px;
-    }
-
-    .sidebar ul li ul li a {
-        padding: 8px 15px;
-    }
+/* Active State */
+.sidebar ul li a.active {
+    background-color: #0056b3; /* Nền đậm hơn cho trạng thái active */
+    color: #ffffff; /* Chữ trắng */
 }

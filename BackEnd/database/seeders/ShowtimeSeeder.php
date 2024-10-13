@@ -17,7 +17,7 @@ class ShowtimeSeeder extends Seeder
         DB::table('showtimes')->insert([
             [
                 'movie_id' => 1,
-                'cinema_id' => 1, // Giả sử đây là ID của phòng chiếu
+                // 'cinema_id' => 1, // Giả sử đây là ID của phòng chiếu
                 'showtime_date' => now()->addDays(1)->toDateString(), // Ngày chiếu
                 'showtime_start' => now(), // Thời gian bắt đầu
                 'showtime_end' => now(), // Thời gian kết thúc
@@ -27,7 +27,7 @@ class ShowtimeSeeder extends Seeder
             ],
             [
                 'movie_id' => 1,
-                'cinema_id' => 2, // Giả sử đây là ID của phòng chiếu khác
+                // 'cinema_id' => 2, // Giả sử đây là ID của phòng chiếu khác
                 'showtime_date' => now()->addDays(1)->toDateString(), // Ngày chiếu
                 'showtime_start' => now()->addDays(1), // Thời gian bắt đầu
                 'showtime_end' => now()->addDays(1), // Thời gian kết thúc

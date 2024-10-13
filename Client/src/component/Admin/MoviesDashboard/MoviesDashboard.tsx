@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './MoviesDashboard.css';
-
-
 import { useMovieContext } from '../../../Context/MoviesContext';
-
 import { Link } from 'react-router-dom';
 import instance from '../../../server';
 import { Categories } from '../../../interface/Categories';
@@ -13,13 +10,17 @@ const MoviesDashboard: React.FC = () => {
     const [categories, setCategories] = useState<Categories[]>([]);
     const { state, dispatch } = useMovieContext();
     const { movies } = state;
-    
+
+    // Pagination states
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [moviesPerPage] = useState<number>(5);
+
     useEffect(() => {
         const fetchCategories = async () => {
-          const categoryResponse = await instance.get('/movie-category');
-          setCategories(categoryResponse.data);
+            const categoryResponse = await instance.get('/movie-category');
+            setCategories(categoryResponse.data);
         };
-      
+
         fetchCategories();
     }, []);
 
@@ -32,23 +33,30 @@ const MoviesDashboard: React.FC = () => {
                 console.error('Error fetching movies:', error);
             }
         };
-    
+
         fetchMovies();
     }, [dispatch]);
-    
 
     const deleteMovie = async (id: number) => {
-        await instance.delete(`/movies/${id}`);
-        dispatch({ type: 'DELETE_MOVIE', payload: id });
+        if (window.confirm('Are you sure you want to delete this movie?')) {
+            await instance.delete(`/movies/${id}`);
+            dispatch({ type: 'DELETE_MOVIE', payload: id });
+        }
     };
+
+    // Pagination logic
+    const indexOfLastMovie = currentPage * moviesPerPage;
+    const indexOfFirstMovie = indexOfLastMovie - moviesPerPage;
+    const currentMovies = movies.slice(indexOfFirstMovie, indexOfLastMovie);
+
+    const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
     return (
         <div className="movies-dashboard">
-            <h2>Movie Management</h2>
             <div className="actions">
                 <Link to={`/admin/movies/add`} className="add-movie-btn">Add New Movie</Link>
             </div>
-            <div className="table-container">
+            <div className="table-container-movie">
                 <table className="movie-table">
                     <thead>
                         <tr>
@@ -62,8 +70,8 @@ const MoviesDashboard: React.FC = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {Array.isArray(movies) && movies.length > 0 ? (
-                            movies.map((movie: Movie) => (
+                        {Array.isArray(currentMovies) && currentMovies.length > 0 ? (
+                            currentMovies.map((movie: Movie) => (
                                 <tr key={movie.id}>
                                     <td>{movie.id}</td>
                                     <td>{movie.movie_name}</td>
@@ -76,15 +84,10 @@ const MoviesDashboard: React.FC = () => {
                                     <td>{movie.duration}</td>
                                     <td>{movie.description}</td>
                                     <td className="action-buttons">
-                                        <button className="view-btn">👁</button>
                                         <Link to={`/admin/movies/edit/${movie.id}`} className="edit-btn">✏️</Link>
                                         <button
                                             className="delete-btn"
-                                            onClick={() => {
-                                                if (window.confirm(`Are you sure you want to delete ${movie.movie_name}?`)) {
-                                                    deleteMovie(movie.id);
-                                                }
-                                            }}
+                                            onClick={() => deleteMovie(movie.id)}
                                         >
                                             🗑
                                         </button>
@@ -96,12 +99,34 @@ const MoviesDashboard: React.FC = () => {
                                 <td colSpan={7}>No movies available</td>
                             </tr>
                         )}
-
                     </tbody>
-
-                        </tbody>
-
                 </table>
+            </div>
+            {/* Pagination Section */}
+            <div className="pagination">
+                <button 
+                    className="prev-btn" 
+                    onClick={() => setCurrentPage(currentPage - 1)} 
+                    disabled={currentPage === 1}
+                >
+                    Previous
+                </button>
+                {Array.from({ length: Math.ceil(movies.length / moviesPerPage) }, (_, index) => (
+                    <button 
+                        key={index + 1}
+                        className={`page-btn ${currentPage === index + 1 ? 'active' : ''}`}
+                        onClick={() => paginate(index + 1)}
+                    >
+                        {index + 1}
+                    </button>
+                ))}
+                <button 
+                    className="next-btn" 
+                    onClick={() => setCurrentPage(currentPage + 1)} 
+                    disabled={indexOfLastMovie >= movies.length}
+                >
+                    Next
+                </button>
             </div>
         </div>
     );

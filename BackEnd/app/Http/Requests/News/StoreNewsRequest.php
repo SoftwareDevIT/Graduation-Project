@@ -27,6 +27,7 @@ class StoreNewsRequest extends FormRequest
             'thumnail' => 'required|mimes:jpeg,png,jpg,gif',
             'banner' => 'required|mimes:jpeg,png,jpg,gif',
             'content' => 'required|string',
+            'user_id' => 'required',
         ];
     }
     public function messages(): array
