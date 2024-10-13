@@ -21,7 +21,6 @@ const Sidebar = () => {
                 <li><Link to={'/admin/combo'}><FaCogs /> Quản lí combo nước</Link></li>
                 <li><Link to={'/admin/cinemas'}><FaTheaterMasks /> Quản lí rạp chiếu phim</Link></li>
                 <li><Link to={'/admin/movies'}><FaFilm /> Quản lí phim</Link></li>
-                <li><Link to={'/admin/schedules'}><FaCalendarAlt /> Quản lí lịch chiếu</Link></li>
                 <li><Link to={'/admin/RevenueByCinema'}><FaChartLine /> Doanh thu theo rạp</Link></li>
                 <li><Link to={'/admin/RevenueByMovie'}><FaChartLine /> Doanh thu theo phim</Link></li>
             </ul>

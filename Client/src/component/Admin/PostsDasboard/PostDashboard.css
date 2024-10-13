@@ -44,7 +44,7 @@
 }
 
 /* Table container styling */
-.table-container {
+.table-container-posts {
     width: 100%;
     max-width: 1300px;
     overflow-x: auto;
@@ -146,4 +146,39 @@
     .view-btn, .edit-btn, .delete-btn {
         padding: 8px 12px;
     }
+}
+/* Phân trang */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.page-btn, .prev-btn, .next-btn {
+    padding: 10px 15px;
+    margin: 0 5px;
+    background-color: #00796b; /* Màu xanh */
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+}
+
+.page-btn.active {
+    background-color: #004d40; /* Màu khi đang hoạt động */
+}
+
+.page-btn:hover:not(.active), 
+.prev-btn:hover, 
+.next-btn:hover {
+    background-color: #004d40; /* Màu khi hover */
+}
+
+.prev-btn:disabled,
+.next-btn:disabled {
+    background-color: #b2dfdb; /* Màu cho nút vô hiệu hóa */
+    cursor: not-allowed; /* Hiệu ứng con trỏ cho nút vô hiệu hóa */
 }

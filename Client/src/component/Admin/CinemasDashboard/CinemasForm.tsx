@@ -83,15 +83,15 @@ const CinemaForm = () => {
   if (isEditMode && !cinema) return <div>Loading...</div>;
 
   return (
-    <div>
-      <form onSubmit={handleSubmit(handleFormSubmit)}>
-        <h1>{isEditMode ? "Edit Cinema" : "Add Cinema"}</h1>
+    <div className="container mt-5">
+      <form onSubmit={handleSubmit(handleFormSubmit)} className="shadow p-4 rounded bg-light">
+        <h1 className="text-center mb-4">{isEditMode ? "Edit Cinema" : "Add Cinema"}</h1>
 
         <div className="mb-3">
           <label htmlFor="cinema_name" className="form-label">Cinema Name</label>
           <input
             type="text"
-            className="form-control"
+            className={`form-control ${errors.cinema_name ? "is-invalid" : ""}`}
             {...register("cinema_name")}
             defaultValue={cinema?.cinema_name || ""}
           />
@@ -102,7 +102,7 @@ const CinemaForm = () => {
           <label htmlFor="phone" className="form-label">Phone</label>
           <input
             type="text"
-            className="form-control"
+            className={`form-control ${errors.phone ? "is-invalid" : ""}`}
             {...register("phone")}
             defaultValue={cinema?.phone || ""}
           />
@@ -113,7 +113,7 @@ const CinemaForm = () => {
           <label htmlFor="cinema_address" className="form-label">Cinema Address</label>
           <input
             type="text"
-            className="form-control"
+            className={`form-control ${errors.cinema_address ? "is-invalid" : ""}`}
             {...register("cinema_address")}
             defaultValue={cinema?.cinema_address || ""}
           />
@@ -121,10 +121,10 @@ const CinemaForm = () => {
         </div>
 
         <div className="mb-3">
-          <label htmlFor="location_id" className="form-label">Location ID</label>
+          <label htmlFor="location_id" className="form-label">Location</label>
           <select
             {...register("location_id")}
-            className="form-control"
+            className={`form-control ${errors.location_id ? "is-invalid" : ""}`}
             defaultValue={cinema?.location_id || ""}
           >
             <option value="">Select Location</option>

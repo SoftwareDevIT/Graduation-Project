@@ -14,7 +14,7 @@ const OrdersDashboard = () => {
             <div className="actions">
                 <button className="add-order-btn">Add Order</button>
             </div>
-            <div className="table-container">
+            <div className="table-container1">
                 <table className="order-table">
                     <thead>
                         <tr>

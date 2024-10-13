@@ -6,6 +6,7 @@ use App\Models\Movie;
 use App\Services\Booking\Handlers\AbstractBookingStep;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class SelectMovie extends AbstractBookingStep
 {
@@ -15,14 +16,18 @@ class SelectMovie extends AbstractBookingStep
      * @param Request $request
      * @return ?array
      */
-    protected function process(Request $request): ?array
+    protected function process(Request $request): ?JsonResponse
     {
         // $error= [];
+
         $cinemaId = $request->input('cinemaId');
         $showtimeId = $request->input('showtimeId');
 
         if (!$cinemaId || !$showtimeId) {
-            return ['errors' => ['Both cinema ID and showtime ID are required.']];
+            return response()->json([
+                'status' => false,
+                'message' => 'Cinema or Showtime not found.'
+            ]);
         }
 
         $movies = Movie::where('id', $cinemaId)
@@ -32,13 +37,20 @@ class SelectMovie extends AbstractBookingStep
             ->get();
 
         if ($movies->isEmpty() || $movies->first()->showtimes->isEmpty()) {
-            return ['errors' => ['No movies found for the given cinema and showtime.']];
+            return response()->json([
+                'status' => false,
+                'message' => 'Cinema or Showtime not found.'
+            ]);
         }
 
         Session::put('reserved_showtime', compact('showtimeId', 'movies'));
 
         // return ['movies' => $movies];
-        return ['movies' => $movies];
+        // return response()->json([
+        //     'status' => true,
+        //     'message' => 'Success',
+        //     'data' => $movies
+        // ]);
+        return null;
     }
-
 }

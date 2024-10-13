@@ -44,7 +44,7 @@
 }
 
 /* Table container styling */
-.table-container {
+.table-container-ticket {
     width: 100%;
     max-width: 1300px;
     overflow-x: auto;

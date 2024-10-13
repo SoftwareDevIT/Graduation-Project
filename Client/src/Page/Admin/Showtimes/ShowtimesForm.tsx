@@ -2,6 +2,7 @@ import React from 'react';
 import './Showtimes.css'
 import Sidebar from '../../../component/Admin/SidebarDashboard/Sidebar';
 import Header from '../../../component/Admin/HeaderDashboard/Header1';
+import ShowtimesForm from '../../../component/Admin/ShowtimesDashboard/ShowtimesForm';
 
 
 
@@ -12,7 +13,7 @@ function ShowtimesFormManager() {
             <Sidebar />
             <div className="showtimesadmin">
                 <Header />
-               
+               <ShowtimesForm/>
             </div>
         </div>
     );  

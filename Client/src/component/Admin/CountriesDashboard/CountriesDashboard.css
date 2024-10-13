@@ -37,6 +37,7 @@
     transition: background-color 0.3s ease;
     text-transform: uppercase;
     font-weight: bold;
+    text-decoration: none;
 }
 
 .add-country-btn:hover {
@@ -44,7 +45,7 @@
 }
 
 /* Table container styling */
-.table-container {
+.table-container-country {
     width: 100%;
     max-width: 1300px;
     overflow-x: auto;
@@ -155,4 +156,38 @@
     .view-btn, .edit-btn, .delete-btn {
         padding: 8px 12px;
     }
+}
+/* Pagination styles */
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.prev-btn, .next-btn, .page-btn {
+    padding: 10px 15px;
+    margin: 0 5px;
+    background-color: #00796b; /* Button color */
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.page-btn.active {
+    background-color: #004d40; /* Active button color */
+}
+
+.prev-btn:disabled,
+.next-btn:disabled {
+    background-color: #b2dfdb; /* Disabled button color */
+    cursor: not-allowed; /* Cursor for disabled */
+}
+
+.prev-btn:hover:not(:disabled),
+.next-btn:hover:not(:disabled),
+.page-btn:hover:not(.active) {
+    background-color: #004d40; /* Hover color */
 }
