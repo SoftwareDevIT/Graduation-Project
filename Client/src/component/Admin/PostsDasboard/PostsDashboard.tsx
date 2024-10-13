@@ -47,7 +47,6 @@ const PostsDashboard: React.FC = () => {
               <th>Thumbnail</th>
               <th>Category</th>
               <th>Date Published</th>
-              <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -66,7 +65,6 @@ const PostsDashboard: React.FC = () => {
                   </td>
                   <td>{post.news_category_id}</td>
                   <td>{new Date(post.created_at).toLocaleDateString()}</td>
-                  <td>{post.status}</td>
                   <td className="action-buttons">
                     <button className="view-btn">👁</button>
                     <Link to={`/admin/posts/edit/${post.id}`} className="edit-btn">✏️</Link>

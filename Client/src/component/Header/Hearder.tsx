@@ -22,7 +22,7 @@ const Header = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("userId"); // Xóa userId khỏi localStorage
+    localStorage.removeItem("user_id"); // Xóa userId khỏi localStorage
     setIsLoggedIn(false); // Cập nhật trạng thái đăng nhập
   };
 
