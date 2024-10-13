@@ -13,6 +13,9 @@ const OrderCheckout = () => {
   const location = useLocation();
   const { movieName, cinemaName, showtime, selectedSeats, totalPrice, selectedCombos } = location.state || {};
 
+  // State lưu phương thức thanh toán
+  const [paymentMethod, setPaymentMethod] = useState<string>(''); // Thêm state để lưu phương thức thanh toán
+
   const handleCheckout = async () => {
     const cinemaId = location.state?.cinemaId;
     const showtimeId = location.state?.showtimeId;
@@ -46,12 +49,9 @@ const OrderCheckout = () => {
     });
 
     const bookingData = {
-      cinemaId: cinemaId,
-      showtimeId: showtimeId,
-      seats: seats,
+      showtime_id: showtimeId,
       amount: totalPrice,
-      comboId: selectedCombos,
-      userId: userId,
+      pay_method_id: paymentMethod === 'vnpay' ? 1 : 2, // Phương thức thanh toán: 1 cho VNPay, 2 cho phương thức khác
     };
 
     try {
@@ -63,15 +63,15 @@ const OrderCheckout = () => {
       });
       console.log('Đặt vé thành công:', response.data.data);
 
-      if (response.data.data) {
-        const vnpayUrl = response.data.data.data;
-        console.log('Chuyển hướng đến VNPAY:', vnpayUrl);
+      // if (response.data.data && paymentMethod === 'vnpay') {
+      //   const vnpayUrl = response.data.data;
+      //   console.log('Chuyển hướng đến VNPAY:', vnpayUrl);
 
-        // Chuyển hướng người dùng đến VNPay
-        window.location.href = vnpayUrl;
-      } else {
-        console.error('Không tìm thấy URL VNPAY hoặc dữ liệu không hợp lệ');
-      }
+      //   // Chuyển hướng người dùng đến VNPay nếu chọn phương thức này
+      //   window.location.href = vnpayUrl;
+      // } else {
+      //   message.success('Đặt vé thành công.');
+      // }
     } catch (error) {
       console.error('Đặt vé thất bại:', error);
       alert('Đặt vé thất bại. Vui lòng thử lại.');
@@ -131,8 +131,19 @@ const OrderCheckout = () => {
             <h3>Hình thức thanh toán</h3>
             {/* Các phương thức thanh toán */}
             <ul>
-              <li><FontAwesomeIcon icon={faWallet} className="payment-icon" /> Fundiin</li>
-              <li><FontAwesomeIcon icon={faMobileAlt} className="payment-icon" /> Ví MoMo</li>
+              <li
+               onClick={() => {
+                setPaymentMethod('vnpay');
+                console.log('Phương thức thanh toán đã được chọn: vnpay');
+              }}
+              >
+                <FontAwesomeIcon icon={faWallet} className="payment-icon" /> VN Pay
+              </li>
+              <li
+                onClick={() => setPaymentMethod('momo')} // Các phương thức khác
+              >
+                <FontAwesomeIcon icon={faMobileAlt} className="payment-icon" /> Ví MoMo
+              </li>
               <li><FontAwesomeIcon icon={faQrcode} className="payment-icon" /> Quét mã QR</li>
               <li><FontAwesomeIcon icon={faUniversity} className="payment-icon" /> Chuyển khoản / Internet Banking</li>
               <li><FontAwesomeIcon icon={faWallet} className="payment-icon" /> Ví ShopeePay</li>
@@ -140,7 +151,7 @@ const OrderCheckout = () => {
               <li><FontAwesomeIcon icon={faWallet} className="payment-icon" /> Ví FPT Pay</li>
             </ul>
           </div>
-
+          
           {/* Thông tin cá nhân */}
           <div className="form-container">
             <h3>Thông tin cá nhân</h3>
@@ -151,8 +162,6 @@ const OrderCheckout = () => {
                   type="text"
                   id="fullname"
                   placeholder="Nhập họ và tên"
-              
-                 
                   required
                 />
               </div>
@@ -162,7 +171,6 @@ const OrderCheckout = () => {
                   type="email"
                   id="email"
                   placeholder="Nhập email"
-                 
                   required
                 />
               </div>
@@ -172,7 +180,6 @@ const OrderCheckout = () => {
                   type="tel"
                   id="phone"
                   placeholder="Nhập số điện thoại"
-                 
                   required
                 />
               </div>

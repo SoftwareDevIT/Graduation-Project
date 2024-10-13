@@ -265,7 +265,7 @@ import { Cinema } from "../../interface/Cinema";
                   <Link to="/login" className="icon-link">
                     {/* Biểu tượng đăng nhập */}
                   </Link>
-                  <Link to="/register" className="icon-link">
+                  <Link to="/login" className="icon-link">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="25"

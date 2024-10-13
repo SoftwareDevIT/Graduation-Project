@@ -1,9 +1,0 @@
-.postsmanager {
-    display: flex;
-}
-
-.postsadmin {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-}

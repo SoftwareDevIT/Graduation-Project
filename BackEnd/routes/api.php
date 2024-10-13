@@ -128,29 +128,11 @@ Route::get('cinema-by-location/{id}', [CinemaController::class, 'showCinemaByLoc
 
 
 Route::apiResource('order', OrderController::class);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Route::group(['middleware' => ['auth:sanctum','api']], function ()
 {
     Route::post('/slectMovieAndSeats',[BookingController::class,'slectMovieAndSeats']);
     Route::post('/selectCombo',[BookingController::class,'selectCombos']);
     Route::post('/book-ticket', [BookingController::class, 'bookTicket']);
 });
-
-
 Route::get('session',[BookingController::class,'getSession']);
 
