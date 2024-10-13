@@ -1,15 +1,14 @@
   import React, { useEffect, useState } from "react";
   import "./Hearder.css";
   import { Link, useNavigate } from "react-router-dom";
-import instance from "../../server";
-import { Cinema } from "../../interface/Cinema";
+
 
   const Header = () => {
     const [isHeaderLeftVisible, setHeaderLeftVisible] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const navigate = useNavigate();
-    const [cinemas, setCinemas] = useState<Cinema[]>([]);
+  
  
   
   
@@ -28,47 +27,29 @@ import { Cinema } from "../../interface/Cinema";
 
     const handleLogout = () => {
       localStorage.removeItem("token");
-      localStorage.removeItem("userId"); // Xóa userId khỏi localStorage
+      localStorage.removeItem("user_id"); // Xóa userId khỏi localStorage
       setIsLoggedIn(false); // Cập nhật trạng thái đăng nhập
     };
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
       setSearchTerm(e.target.value); // Cập nhật giá trị tìm kiếm vào state
     };
 
-<<<<<<< HEAD
+
     // Hàm khi nhấn nút tìm kiếm
     const handleSearchSubmit = (e: React.FormEvent) => {
       e.preventDefault();
       if (searchTerm.trim()) {
         // Chuyển sang trang kết quả tìm kiếm, truyền từ khóa qua URL
         navigate(`/movie/search/${encodeURIComponent(searchTerm)}`);
-=======
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user_id"); // Xóa userId khỏi localStorage
-    setIsLoggedIn(false); // Cập nhật trạng thái đăng nhập
-  };
->>>>>>> 508cf7845fc58f5773978fca5e496e2412c033d3
+
+ 
 
 
       }
     };
-    useEffect(() => {
-      const fetchCinemas = async () => {
-        try {
-          const response = await instance.get('/api/cinemas'); // Đổi đường dẫn API nếu cần
-          setCinemas(response.data);
-        } catch (error) {
-          console.error("Error fetching cinemas:", error);
-        }
-      };
+    
   
-      fetchCinemas();
-    }, []);
-  
-    const filteredCinemas = cinemas.filter(cinema =>
-      cinema.cinema_name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+   
 
     return (
       <header className="header">

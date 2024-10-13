@@ -90,7 +90,7 @@ Route::get('/vnpay-return', [BookingController::class, 'vnPayReturn']);
 Route::get('/all-user', [AuthController::class, 'allUser']);
 
 // Các route quản trị và quản lý
-Route::middleware(['auth:sanctum', 'role:admin|manager'])->group(function () {
+// Route::middleware(['auth:sanctum', 'role:admin|manager'])->group(function () {
 Route::apiResource('location', LocationController::class)->except(['index', 'show']);
 Route::apiResource('cinema', CinemaController::class)->except(['index', 'show']);
 Route::apiResource('room', RoomController::class);
@@ -105,7 +105,7 @@ Route::apiResource('method', PayMethodController::class);
 Route::apiResource('combo', ComboController::class);
 Route::apiResource('seat', SeatController::class);
 
-});
+// });
 
 
 // });
@@ -129,11 +129,12 @@ Route::get('cinema-by-location/{id}', [CinemaController::class, 'showCinemaByLoc
 
 
 Route::apiResource('order', OrderController::class);
-Route::group(['middleware' => ['auth:sanctum','api']], function ()
+Route::group(['middleware' => ['auth:sanctum']], function ()
 {
     Route::post('/slectMovieAndSeats',[BookingController::class,'slectMovieAndSeats']);
     Route::post('/selectCombo',[BookingController::class,'selectCombos']);
     Route::post('/book-ticket', [BookingController::class, 'bookTicket']);
+    
 });
 Route::get('session',[BookingController::class,'getSession']);
 

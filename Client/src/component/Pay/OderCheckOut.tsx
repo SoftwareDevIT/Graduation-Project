@@ -19,65 +19,50 @@ const OrderCheckout = () => {
   const handleCheckout = async () => {
     const cinemaId = location.state?.cinemaId;
     const showtimeId = location.state?.showtimeId;
-    const roomId = location.state?.roomId;
-    const userId = localStorage.getItem('user_id'); // Lấy userId từ localStorage
-    const token = localStorage.getItem('token'); // Lấy token từ localStorage
-
-    // Kiểm tra xem người dùng đã đăng nhập chưa
+    const userId = localStorage.getItem('user_id');
+    const token = localStorage.getItem('token');
+  
     if (!token) {
-      message.warning('Vui lòng đăng nhập trước khi đặt vé.'); // Hiển thị thông báo
+      message.warning('Vui lòng đăng nhập trước khi đặt vé.');
       return;
     }
-
+  
     if (!cinemaId || !showtimeId || !selectedSeats || !userId) {
-      alert('Vui lòng kiểm tra lại thông tin, không tìm thấy cinemaId, showtimeId, ghế ngồi hoặc userId.');
+      message.warning('Thông tin không đầy đủ. Vui lòng kiểm tra lại.');
       return;
     }
-
-    const seats = selectedSeats.split(",").map((seatName: string) => {
-      const trimmedSeat = seatName.trim();
-      const row = trimmedSeat.charAt(0);
-      const column = parseInt(trimmedSeat.slice(1)) - 1;
-
-      return {
-        seat_name: trimmedSeat,
-        room_id: roomId,
-        showtime_id: showtimeId,
-        seat_row: row,
-        seat_column: column,
-      };
-    });
-
+  
+    if (!paymentMethod) {
+      message.warning('Vui lòng chọn phương thức thanh toán.');
+      return;
+    }
+  
     const bookingData = {
       showtime_id: showtimeId,
+      pay_method_id: paymentMethod === 'vnpay' ? 1 : 2,
       amount: totalPrice,
-      pay_method_id: paymentMethod === 'vnpay' ? 1 : 2, // Phương thức thanh toán: 1 cho VNPay, 2 cho phương thức khác
     };
-
+  
     try {
-      console.log('Đang gửi yêu cầu đặt vé:', bookingData);
       const response = await instance.post('/book-ticket', bookingData, {
         headers: {
-          Authorization: `Bearer ${token}`, // Sử dụng token từ localStorage
+          Authorization: `Bearer ${token}`,
         },
       });
-      console.log('Đặt vé thành công:', response.data.data);
-
-      // if (response.data.data && paymentMethod === 'vnpay') {
-      //   const vnpayUrl = response.data.data;
-      //   console.log('Chuyển hướng đến VNPAY:', vnpayUrl);
-
-      //   // Chuyển hướng người dùng đến VNPay nếu chọn phương thức này
-      //   window.location.href = vnpayUrl;
-      // } else {
-      //   message.success('Đặt vé thành công.');
-      // }
+  
+      if (response.data.data) {
+        if (paymentMethod === 'vnpay') {
+          window.location.href = response.data.data;
+        } else {
+          message.success('Đặt vé thành công.');
+        }
+      }
     } catch (error) {
       console.error('Đặt vé thất bại:', error);
-      alert('Đặt vé thất bại. Vui lòng thử lại.');
+      message.error('Đặt vé thất bại. Vui lòng thử lại.');
     }
   };
-
+  
   return (
     <>
       <Header />

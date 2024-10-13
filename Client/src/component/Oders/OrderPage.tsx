@@ -62,7 +62,7 @@ const OrderPage: React.FC = () => {
       const response = await instance.post("/selectCombo", {
         comboId: selectedCombos, 
       });
-  console.log(selectedCombos);
+  console.log("Gửi api thành công:",selectedCombos);
   
       console.log("API response:", response.data);
   
