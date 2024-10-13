@@ -57,6 +57,7 @@ Route::apiResource('actor', ActorController::class)->only(['index', 'show']);   
 Route::apiResource('director', DirectorController::class)->only(['index', 'show']);                 // Danh sách giám đốc
 Route::apiResource('movie-category', MovieCategoryController::class)->only(['index', 'show']);      // Liệt kê các thể loại phim
 Route::apiResource('movies', MovieController::class)->only(['index', 'show']);                      // Liệt kê phim
+Route::apiResource('room', RoomController::class)->only(['index', 'show']);
 
 // Các tuyến có thể truy cập được cho người dùng được xác thực
 Route::middleware(['auth:sanctum'])->group(function () {
