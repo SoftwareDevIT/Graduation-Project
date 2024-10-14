@@ -31,7 +31,7 @@ class FilterByDateController extends Controller
 
 
         if ($movies->isEmpty()) {
-            return response()->json(['error' => 'Không có phim của ngày hôm nay'], 404);
+            return $this->error('Không có phim của ngày hôm nay');
         }
 
         return $this->success($movies);
@@ -41,14 +41,14 @@ class FilterByDateController extends Controller
     {
         $locationId = $request->input('location_id');
         $date = $request->input('showtime_date');
-        $movieName = $request->input('movie_name'); 
+        $movieid = $request->input('movie_id'); 
         if (empty($date) || $date == '0') {
             $date = Carbon::today()->toDateString();
         }
-        if (empty($date) || empty($movieName)) {
-            return response()->json(['error' => 'Vui lòng cung cấp Ngày và Tên phim'], 400);
+        if (empty($date) || empty($movieid)) {
+            return $this->error('Vui lòng cung cấp Ngày và ID phim');
         }
-        $movies = $this->filterByDateService->filterByDateOrMovie($date,$movieName,$locationId);
+        $movies = $this->filterByDateService->filterByDateOrMovie($date,$movieid,$locationId);
         return $this->success($movies);
     }
 }

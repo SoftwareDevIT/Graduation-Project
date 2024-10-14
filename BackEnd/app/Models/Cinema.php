@@ -24,7 +24,11 @@ class Cinema extends Model
     {
         return $this->hasMany(Movie::class);
     }
-    public function showtimes() {
-        return $this->hasMany(Showtime::class);
+    // public function showtimes() {
+    //     return $this->hasMany(Showtime::class);
+    // }
+
+    public function movieincinemas(){
+        return $this->hasMany(MovieInCinema::class);
     }
 }
