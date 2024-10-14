@@ -2,11 +2,8 @@
 
 namespace App\Services\Filter;
 
-use App\Models\Cinema;
-use App\Models\Movie;
 use App\Models\MovieInCinema;
-use App\Models\Showtime;
-use Carbon\Carbon;
+
 
 class FilterByDateService
 {

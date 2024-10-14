@@ -21,6 +21,7 @@ use App\Http\Controllers\Api\Movie\MovieCategoryController;
 use App\Http\Controllers\Api\PayMethod\PayMethodController;
 use App\Http\Controllers\Api\Auth\AccountVerificationController;
 use App\Http\Controllers\Api\Auth\ResetPasswordController;
+use App\Http\Controllers\Api\Filter\FilterMovieByNewController;
 use App\Http\Controllers\Api\Google\GoogleController;
 use App\Http\Controllers\Api\Movie\RatingController;
 use App\Http\Controllers\Api\Order\OrderController;
@@ -128,7 +129,7 @@ Route::get('/movie/{category}', [MovieController::class, 'movieByCategory']);   
 Route::get('/new/{category}', [NewController::class, 'newByCategory']);                             // Lọc chuyên đề theo thể loại
 Route::get('/filterByDateByMovie', [FilterByDateController::class, 'filterByDateByMovie']);         // lọc rạp theo phim và ngày và khu vực
 Route::get('cinema-by-location/{id}', [CinemaController::class, 'showCinemaByLocation']);
-
+Route::get('filterMovieByNew', [FilterMovieByNewController::class, 'filterMovieByNew']);
 
 Route::apiResource('order', OrderController::class);
 Route::group(['middleware' => ['auth:sanctum']], function ()
