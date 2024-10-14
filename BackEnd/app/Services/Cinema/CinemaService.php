@@ -44,6 +44,13 @@ class CinemaService
         $cinema = Cinema::findOrFail($id);
         return $cinema;
     }
+    public function showCinemaByLocation(int $location_id){
+        $location = Location::where('id', $location_id)->first();
+        if (!$location) {
+            throw new ModelNotFoundException('Cinema not found');
+        }
+        return $location->cinema;
+    }
 
 
 }

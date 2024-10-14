@@ -67,13 +67,14 @@ class CinemaController extends Controller
     }
 
 
-    public function filterMovie($id){
+    public function filterMovie($id)
+    {
         try {
             $movies = Movie::where('cinema_id', $id)->with('showtimes')->get();
-            if($movies->isEmpty()){
+            if ($movies->isEmpty()) {
                 return $this->error('Không có phim trong rạp này .');
             }
-            return $this->success($movies,'Lấy phim thành công');
+            return $this->success($movies, 'Lấy phim thành công');
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => 'fail',
@@ -81,5 +82,19 @@ class CinemaController extends Controller
             ]);
         }
 
+    }
+    public function showCinemaByLocation($id)
+    {
+        try {
+            $cinema = $this->cinemaService->showCinemaByLocation($id);
+            if ($cinema) {
+                return $this->success($cinema);
+            }
+            return $this->error('');
+
+        }
+        catch (\Throwable $th) {
+            return $th->getMessage();
+        }
     }
 }

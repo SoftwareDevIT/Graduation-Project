@@ -21,6 +21,9 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\InvoiceCreated::class => [
             \App\Listeners\SendInvoiceEmail::class,
         ],
+        // \App\Events\SeatReset::class => [
+
+        // ],
     ];
 
     /**

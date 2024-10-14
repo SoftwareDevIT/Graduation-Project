@@ -1,43 +1,36 @@
-import { User } from '../../../interface/User';
-import instance from '../../../server';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import ReactPaginate from 'react-paginate';
-import { useEffect, useState } from 'react';
+import instance from '../../../server';
+import { User } from '../../../interface/User';
+import './User.css'
 
 const UserDashboard: React.FC = () => {
     const [users, setUsers] = useState<User[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-    const itemsPerPage = 2; // Number of users per page
-    const [currentPage, setCurrentPage] = useState(0);
 
-    // Calculate total pages
-    const pageCount = Math.ceil(users.length / itemsPerPage);
+    // Pagination states
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [usersPerPage] = useState<number>(3);
 
-    const handlePageClick = (data: { selected: number }) => {
-        setCurrentPage(data.selected);
-    };
-
-    const currentUsers = users.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
-
-    // Fetch users from the API when the component mounts
     useEffect(() => {
         const fetchUsers = async () => {
             try {
 
 
-                const response1 = await instance.get('/all-user');
+                // const response = await instance.get('/all-user');
 
-                const response = await instance.get('/lists');
+                // const response = await instance.get('/lists');
 
 
-                console.log('API Response:', response1);  // Log the full response object
-                console.log('Data:', response.data.data);      // Log the data part specifically
-                setUsers(response.data.data);
+                // console.log('API Response:', response);  // Log the full response object
+                // console.log('Data:', response.data.data);      // Log the data part specifically
+                // setUsers(response.data.data);
+                const response = await instance.get('/all-user');
+                setUsers(response.data);
                 setLoading(false);
             } catch (err) {
-                console.error('Fetch error:', err); // Log the error
-                setError('Failed to fetch users');
+                setError('Failed to load users');
                 setLoading(false);
             }
         };
@@ -45,78 +38,101 @@ const UserDashboard: React.FC = () => {
         fetchUsers();
     }, []);
 
+    const handleDelete = async (id: number) => {
+        if (window.confirm('Are you sure you want to delete this user?')) {
+            try {
+                await instance.delete(`/all-user/${id}`);
+                setUsers(users.filter(user => user.id !== id));
+                alert('User deleted successfully!');
+            } catch (err) {
+                setError('Failed to delete user');
+            }
+        }
+    };
+
+    const indexOfLastUser = currentPage * usersPerPage;
+    const indexOfFirstUser = indexOfLastUser - usersPerPage;
+    const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+
     if (loading) {
-        return <div>Loading...</div>;
+        return <p>Loading...</p>;
     }
 
     if (error) {
-        return <div>{error}</div>;
+        return <p>{error}</p>;
     }
 
+    const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
     return (
-        <div className="user-management">
-
-            <div className="table-container">
-                <div className="table-header">
-                    <h3>All Users List</h3>
-                    <div className="add-user-container">
-
-                     <Link to={'/admin/user/add'}>   <button className="add-user-btn">Add User</button></Link>
-
-                     <Link to={'/admin/user/add'}><button className="add-user-btn">Add User</button></Link>
-
-                    </div>
-                </div>
-
-                <table className="user-table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Phone</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {Array.isArray(currentUsers) && currentUsers.length > 0 ? (
-                            currentUsers.map(user => (
+        <div className="user-dashboard">
+            <h2>All Users</h2>
+            <div className="actions">
+                <Link to={'/admin/user/add'} className="add-user-btn">Add User</Link>
+            </div>
+            <div className="table-pagination-container">
+                <div className="table-container2">
+                    <table className="user-table">
+                        <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>Username</th>
+                                <th>Full Name</th>
+                                <th>Email</th>
+                                <th>Role ID</th>
+                                <th>Created At</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {currentUsers.map((user: User) => (
                                 <tr key={user.id}>
                                     <td>{user.id}</td>
+                                    <td>{user.user_name}</td>
                                     <td>{user.fullname}</td>
                                     <td>{user.email || 'N/A'}</td>
                                     <td>{user.role_id}</td>
-                                    <td>{user.phone}</td>
-
+                                    <td>{new Date(user.created_at!).toLocaleDateString()}</td>
                                     <td className="action-buttons">
-                                        <button className="view-btn">👁</button>
-                                        <button className="edit-btn">✏️</button>
-                                        <button className="delete-btn">🗑</button>
+                                        <Link to={`/admin/user/edit/${user.id}`} className="edit-btn">✏️</Link>
+                                        <button 
+                                            className="delete-btn" 
+                                            onClick={() => handleDelete(user.id)} 
+                                        >
+                                            🗑
+                                        </button>
                                     </td>
                                 </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td colSpan={6}>No users available</td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
-                <ReactPaginate
-                    breakLabel={"..."}
-                    pageCount={pageCount}
-                    marginPagesDisplayed={2}
-                    pageRangeDisplayed={4} // Number of page buttons to display
-                    onPageChange={handlePageClick}
-                    containerClassName={"pagination"}
-                    pageClassName={"page-item"}
-                    pageLinkClassName={"page-link"}
-                    activeClassName={"active"}
-                />
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-
-
+            <div className="pagination">
+                <button 
+                    className="prev-btn" 
+                    onClick={() => setCurrentPage(currentPage - 1)} 
+                    disabled={currentPage === 1}
+                >
+                    Previous
+                </button>
+                {Array.from({ length: Math.ceil(users.length / usersPerPage) }, (_, index) => (
+                    <button 
+                        key={index + 1}
+                        className={`page-btn ${currentPage === index + 1 ? 'active' : ''}`}
+                        onClick={() => paginate(index + 1)}
+                    >
+                        {index + 1}
+                    </button>
+                ))}
+                <button 
+                    className="next-btn" 
+                    onClick={() => setCurrentPage(currentPage + 1)} 
+                    disabled={indexOfLastUser >= users.length}
+                >
+                    Next
+                </button>
+            </div>
         </div>
     );
 };

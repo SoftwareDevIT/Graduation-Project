@@ -45,36 +45,50 @@ const OrderPage: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const navigate = useNavigate();
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     const selectedCombos = comboQuantities
       .map((quantity, index) => {
         if (quantity > 0) {
           return {
-            id: combos[index].id, 
-            quantity: quantity, // Số lượng combo đã chọn
-            // price: combos[index].price, // Giá của combo
+            id: combos[index].id,
+            quantity: quantity,
           };
         }
         return null;
       })
       .filter((combo) => combo !== null);
-
-    console.log("Selected combos with price:", selectedCombos); // Kiểm tra combo với giá
-
-    navigate("/pay", {
-      state: {
-        movieName,
-        cinemaName,
-        showtime,
-        selectedSeats,
-        totalPrice,
-        showtimeId: showtimeId, // Truyền showtimeId
-        roomId: roomId, // Truyền roomId
-        cinemaId: cinemaId, // Truyền cinemaId
-        selectedCombos, // Truyền thông tin combo đã chọn bao gồm giá
-      },
-    });
+  
+    try {
+      const response = await instance.post("/selectCombo", {
+        comboId: selectedCombos, 
+      });
+  console.log("Gửi api thành công:",selectedCombos);
+  
+      console.log("API response:", response.data);
+  
+      if (response.data.status) {
+        navigate("/pay", {
+          state: {
+            movieName,
+            cinemaName,
+            showtime,
+            selectedSeats,
+            totalPrice,
+            showtimeId,
+            roomId,
+            cinemaId,
+            selectedCombos, // Pass the selected combos to the next page
+          },
+        });
+      } else {
+        setErrorMessage(response.data.message || "Failed to select combos.");
+      }
+    } catch (error) {
+      console.error("Error submitting combo selection:", error);
+      setErrorMessage("Có lỗi xảy ra khi chọn combo.");
+    }
   };
+  
 
   useEffect(() => {
     const fetchCombos = async () => {

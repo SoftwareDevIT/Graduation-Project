@@ -64,7 +64,7 @@ const MovieBanner = () => {
             {movies.map((movie) => (
               <div key={movie.id}>
                 <div className="movie-item">
-                  <Link to={`/moviedetail/${movie.id}`}>
+                  <Link to={`/movie-detail/${movie.id}`}>
                     <img
                       src={movie.poster || "placeholder.jpg"}
                       alt={movie.movie_name}

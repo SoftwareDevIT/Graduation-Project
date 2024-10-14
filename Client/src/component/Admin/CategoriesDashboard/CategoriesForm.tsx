@@ -7,6 +7,7 @@ import { useCategoryContext } from '../../../Context/CategoriesContext';
 import { MovieCategory } from '../../../interface/MovieCategory';
 import instance from '../../../server';
 
+// Define the schema for form validation using Zod
 const categorySchema = z.object({
   category_name: z.string().min(1, 'Category Name is required.'),
 });
@@ -33,7 +34,6 @@ const CategoriesForm = () => {
       if (isEditMode) {
         try {
           const response = await instance.get(`/movie-category/${id}`);
-          // Access the 'data' property from the response
           const fetchedCategory = response.data.data; // Assuming your data is nested under 'data'
           setCategory(fetchedCategory);
           reset(fetchedCategory); // Populate the form with fetched data
@@ -66,15 +66,15 @@ const CategoriesForm = () => {
   if (isEditMode && !category) return <div>Loading...</div>; // Loading state
 
   return (
-    <div>
-      <form onSubmit={handleSubmit(handleFormSubmit)}>
-        <h1>{isEditMode ? 'Edit Category' : 'Add Category'}</h1>
+    <div className="container mt-5">
+      <form onSubmit={handleSubmit(handleFormSubmit)} className="shadow p-4 rounded bg-light">
+        <h1 className="text-center mb-4">{isEditMode ? 'Edit Category' : 'Add Category'}</h1>
 
         <div className="mb-3">
           <label htmlFor="category_name" className="form-label">Category Name</label>
           <input
             type="text"
-            className="form-control"
+            className={`form-control ${errors.category_name ? 'is-invalid' : ''}`}
             {...register('category_name')}
             defaultValue={category?.category_name || ''} // Bind the input value correctly
           />

@@ -1,21 +1,23 @@
 import React, { useEffect } from 'react';
 import './ComboDashboard.css';
-
 import { Link } from 'react-router-dom';
 import { useComboContext } from '../../../Context/ComboContext';
 import instance from '../../../server';
 
 const ComboDashboard: React.FC = () => {
-    const { state, deleteCombo } = useComboContext(); // Sử dụng useComboContext để lấy state và deleteCombo
-    const { combos } = state; // Lấy combos từ state
-    const [loading, setLoading] = React.useState<boolean>(true); // Biến loading để xử lý trạng thái tải
-    const [error, setError] = React.useState<string | null>(null); // Biến error để xử lý lỗi
+    const { state, deleteCombo } = useComboContext(); 
+    const { combos } = state; 
+    const [loading, setLoading] = React.useState<boolean>(true); 
+    const [error, setError] = React.useState<string | null>(null); 
 
-    // Fetch combos when the component mounts
+    // Pagination states
+    const [currentPage, setCurrentPage] = React.useState<number>(1);
+    const [combosPerPage] = React.useState<number>(5);
+
     useEffect(() => {
         const fetchCombos = async () => {
             try {
-                await instance.get('/combo'); // Lấy combos từ API
+                await instance.get('/combo'); 
                 setLoading(false);
             } catch (err) {
                 setError('Failed to load combos');
@@ -26,11 +28,10 @@ const ComboDashboard: React.FC = () => {
         fetchCombos();
     }, []);
 
-    // Function to handle deleting a combo
     const handleDelete = async (id: number) => {
         if (window.confirm('Are you sure you want to delete this combo?')) {
             try {
-                await deleteCombo(id); // Sử dụng hàm deleteCombo từ context
+                await deleteCombo(id);
                 alert('Combo deleted successfully!');
             } catch (err) {
                 setError('Failed to delete combo');
@@ -38,7 +39,10 @@ const ComboDashboard: React.FC = () => {
         }
     };
 
-    // Display loading and error states if applicable
+    const indexOfLastCombo = currentPage * combosPerPage; 
+    const indexOfFirstCombo = indexOfLastCombo - combosPerPage; 
+    const currentCombos = combos.slice(indexOfFirstCombo, indexOfLastCombo); 
+
     if (loading) {
         return <p>Loading...</p>;
     }
@@ -47,13 +51,15 @@ const ComboDashboard: React.FC = () => {
         return <p>{error}</p>;
     }
 
+    const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
     return (
         <div className="combo-dashboard">
             <h2>All Combos</h2>
             <div className="actions">
                 <Link to={'/admin/combo/add'} className="add-combo-btn">Add Combo</Link>
             </div>
-            <div className="table-container">
+            <div className="table-container-combo">
                 <table className="combo-table">
                     <thead>
                         <tr>
@@ -62,30 +68,24 @@ const ComboDashboard: React.FC = () => {
                             <th>Description</th>
                             <th>Price</th>
                             <th>Volume</th>
-                            <th>Status</th>
                             <th>Created At</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {combos.map((combo) => (
+                        {currentCombos.map((combo) => (
                             <tr key={combo.id}>
                                 <td>{combo.id}</td>
                                 <td>{combo.combo_name}</td>
                                 <td>{combo.descripton}</td>
                                 <td>{combo.price}</td>
                                 <td>{combo.volume}</td>
-                                <td>{combo.status}</td>
-
-                            
-
                                 <td>{new Date(combo.created_at).toLocaleDateString()}</td>
                                 <td className="action-buttons">
-                                    <button className="view-btn">👁</button>
                                     <Link to={`/admin/combo/edit/${combo.id}`} className="edit-btn">✏️</Link>
                                     <button 
                                         className="delete-btn" 
-                                        onClick={() => handleDelete(combo.id)} // Attach delete handler
+                                        onClick={() => handleDelete(combo.id)} 
                                     >
                                         🗑
                                     </button>
@@ -95,6 +95,32 @@ const ComboDashboard: React.FC = () => {
                     </tbody>
                 </table>
             </div>
+             {/* Pagination Section */}
+             <div className="pagination">
+                    <button 
+                        className="prev-btn" 
+                        onClick={() => setCurrentPage(currentPage - 1)} 
+                        disabled={currentPage === 1}
+                    >
+                        Previous
+                    </button>
+                    {Array.from({ length: Math.ceil(combos.length / combosPerPage) }, (_, index) => (
+                        <button 
+                            key={index + 1}
+                            className={`page-btn ${currentPage === index + 1 ? 'active' : ''}`}
+                            onClick={() => paginate(index + 1)}
+                        >
+                            {index + 1}
+                        </button>
+                    ))}
+                    <button 
+                        className="next-btn" 
+                        onClick={() => setCurrentPage(currentPage + 1)} 
+                        disabled={indexOfLastCombo >= combos.length}
+                    >
+                        Next
+                    </button>
+                </div>
         </div>
     );
 };

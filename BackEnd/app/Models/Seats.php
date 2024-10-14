@@ -47,9 +47,9 @@ class Seats extends Model
         return $this->belongsToMany(Booking::class, 'booking_seats');
     }
 
-    public static function updateSeatsStatus(array $seatIds, string $status)
+    public static function updateSeatsStatus(array $seatIds, string $newStatus)
     {
-        // Cập nhật cột 'status' với giá trị mới cho tất cả các ghế có ID nằm trong danh sách $seatIds
-        self::whereIn('id', $seatIds)->update(['status' => $status, 'reserved_until' => null]);
+        return self::whereIn('id', $seatIds)
+            ->update(['status' => $newStatus]);
     }
 }

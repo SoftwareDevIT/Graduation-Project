@@ -42,14 +42,13 @@
 }
 
 /* Table container styling */
-.table-container {
-    margin-top: 30px;
-    background-color: #ffffff; /* Nền trắng giống bảng đơn hàng */
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Bóng nhẹ */
-    padding: 20px;
+.table-container1 {
+    width: 100%;
     max-width: 1300px;
     overflow-x: auto;
+    border-radius: 8px;
+    background-color: #f4f6f7; /* Background sáng hơn */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Nhẹ hơn */
 }
 
 /* Table styling */

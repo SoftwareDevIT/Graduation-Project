@@ -8,6 +8,7 @@ use App\Http\Requests\News\UpdateNewsRequest;
 use App\Models\News;
 use App\Services\News\NewService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class NewController extends Controller
 {
@@ -48,6 +49,7 @@ class NewController extends Controller
 
         $new['thumnail'] = $thumbnailLink;
         $new['banner'] = $bannerLink;
+        $new['user_id'] = Auth::user()->id;
         $new = $this->newservice->store($new);
         return $this->success($new, 'Thêm thành công');
     }
