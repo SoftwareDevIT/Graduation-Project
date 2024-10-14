@@ -137,7 +137,7 @@ Route::group(['middleware' => ['auth:sanctum']], function ()
     Route::post('/slectMovieAndSeats',[BookingController::class,'slectMovieAndSeats']);
     Route::post('/selectCombo',[BookingController::class,'selectCombos']);
     Route::post('/book-ticket', [BookingController::class, 'bookTicket']);
-    
+
 });
 Route::get('session',[BookingController::class,'getSession']);
 
