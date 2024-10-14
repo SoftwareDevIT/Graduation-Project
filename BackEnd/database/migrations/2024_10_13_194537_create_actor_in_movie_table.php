@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -14,9 +13,13 @@ return new class extends Migration
         Schema::create('actor_in_movie', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('movie_id');
+            $table->unsignedBigInteger('movie_category_id');
             $table->unsignedBigInteger('actor_id');
-            $table->foreign('actor_id')->references('id')->on('actor');
+            $table->unsignedBigInteger('director_id');
             $table->foreign('movie_id')->references('id')->on('movies');
+            $table->foreign('actor_id')->references('id')->on('actor');
+            $table->foreign('director_id')->references('id')->on('director');
+            $table->foreign('movie_category_id')->references('id')->on('movie_category');
             $table->timestamps();
         });
     }
