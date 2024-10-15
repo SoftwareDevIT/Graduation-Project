@@ -26,4 +26,14 @@ class ActorInMovie extends Model
     {
         return $this->belongsTo(Movie::class);
     }
+
+    public function director()
+    {
+        return $this->belongsTo(Director::class);
+    }
+
+    public function movieCategory()
+    {
+        return $this->belongsTo(MovieCategory::class);
+    }
 }
