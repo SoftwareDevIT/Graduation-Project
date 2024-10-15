@@ -49,6 +49,7 @@ import CategoriesFormManager from "./Page/Admin/Categories/CategoriesForm";
 import MuaVe from "./component/MovieDetail/MuaVe";
 import Profile from "./component/PersonalPage/Profile";
 import SerachMovies from "./component/SerachMovies/SerachMovies";
+import FilmNews from "./component/Film news/FilmNews";
 
 function App() {
   return (
@@ -67,6 +68,7 @@ function App() {
         <Route path="/headerticket" element={<Headerticket />} />
         <Route path="/confirm" element={<EmailConfirm />} />
         <Route path="/payment-callback" element={<PaymentCallback />} />
+        <Route path="/FilmNews" element={<FilmNews/>} />
        
 
         <Route path="/movie/search/:movie_name" element={<SerachMovies />} />

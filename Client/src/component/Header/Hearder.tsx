@@ -1,12 +1,20 @@
   import React, { useEffect, useState } from "react";
   import "./Hearder.css";
   import { Link, useNavigate } from "react-router-dom";
+import { Cinema } from "../../interface/Cinema";
+import { Location } from "../../interface/Location";
+import instance from "../../server";
 
 
   const Header = () => {
     const [isHeaderLeftVisible, setHeaderLeftVisible] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
+    const [isProfileMenuVisible, setProfileMenuVisibles] = useState(false); 
+    const [locations, setLocations] = useState<Location[]>([]);
+  const [cinemas, setCinemas] = useState<Cinema[]>([]);
+  const [selectedLocation, setSelectedLocation] = useState<number | null>(null);
+  
     const navigate = useNavigate();
   
  
@@ -19,12 +27,33 @@
       if (user_id && token) {
         setIsLoggedIn(true); // Cập nhật trạng thái đăng nhập
       }
+      const fetchLocations = async () => {
+        try {
+          const response = await instance.get("/location");
+          console.log(response.data); // Kiểm tra dữ liệu nhận về từ API
+          setLocations(response.data.data);
+        } catch (error) {
+          console.error("Error fetching locations:", error);
+        }
+      };
+    
+      fetchLocations();
     }, []);
-
+    useEffect(() => {
+      if (selectedLocation !== null) {
+        instance.get(`/cinema-by-location/${selectedLocation}`).then((response) => {
+          setCinemas(response.data.data);
+          console.log(setCinemas);
+          
+        });
+      }
+    }, [selectedLocation]);
     const toggleHeaderLeft = () => {
       setHeaderLeftVisible((prev) => !prev);
     };
-
+    const toggleProfileMenu = () => {
+      setProfileMenuVisibles((prev) => !prev); // Toggle the profile menu visibility
+    };
     const handleLogout = () => {
       localStorage.removeItem("token");
       localStorage.removeItem("user_id"); // Xóa userId khỏi localStorage
@@ -48,7 +77,9 @@
       }
     };
     
-  
+    const handleLocationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+      setSelectedLocation(Number(e.target.value));
+    };
    
 
     return (
@@ -81,7 +112,7 @@
 
                 <a href="#">Lịch chiếu</a>
                 <div className="dropdown">
-                  <a href="#" className="dropbtn1">
+                  <a href="#" className="dropbtn1" >
                     Rạp{" "}
                     <span className="arrow">
                       <svg
@@ -90,6 +121,7 @@
                         viewBox="0 0 16 16"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
+                        
                       >
                         <path
                           d="M4 6L8 10L12 6"
@@ -102,27 +134,45 @@
                     </span>
                   </a>
                   <div className="dropdown-content">
-                    <input
-                      type="text"
-                      placeholder="Tìm rạp tại"
-                      style={{
-                        width: "100%",
-                        padding: "8px",
-                        marginBottom: "12px",
-                        boxSizing: "border-box",
-                      }}
-                    />
-                    <a href="#">Đống Đa</a>
-                    <a href="#">Beta Quang Trung</a>
-                    <a href="#">Beta Trần Quang Khải</a>
-                    <a href="#">Cinestar Hai Bà Trưng</a>
-                    <a href="#">Cinestar Quốc Thanh</a>
-                    <a href="#">DCINE Bến Thành</a>
-                    <a href="#">Mega GS Cao Thắng</a>
-                    <a href="#">Mega GS Lý Chính Thắng</a>
-                    <a href="#">BHD Star 3/2</a>
-                    <a href="#">BHD Star Lê Văn Việt</a>
-                  </div>
+          <div className="timkiemrap">
+            <input
+              type="text"
+              placeholder="Tìm rạp tại"
+              style={{
+                width: "120px",
+                padding: "4px",
+                marginBottom: "12px",
+                boxSizing: "border-box",
+                marginRight: "5px",
+              }}
+            />
+            <select
+              name="location"
+              id="location-select"
+              onChange={handleLocationChange}
+              style={{
+                width: "100px",
+                padding: "4px",
+                marginBottom: "12px",
+                boxSizing: "border-box",
+              }}
+            >
+              <option value="">Chọn khu vực</option>
+              {locations.map((location) => (
+                <option key={location.id} value={location.id}>
+                  {location.location_name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {cinemas.map((cinema) => (
+            <a key={cinema.id} href="#">
+              {cinema.cinema_name}
+            </a>
+          ))}
+        </div>
+      
                 </div>
                 <div className="dropdown">
                   <a href="#" className="dropbtn">
@@ -174,7 +224,7 @@
                     </span>
                   </a>
                   <div className="dropdown-content">
-                    <a href="#">Tin điện ảnh</a>
+                    <Link to={'/FilmNews'}>Tin điện ảnh</Link>
                     <a href="#">Đánh giá phim</a>
                     <a href="#">Video</a>
                     <a href="#">TV Series</a>
@@ -227,7 +277,7 @@
                 </svg>
               </Link>
               {isLoggedIn ? (
-                <div className="icon-link" onClick={handleLogout}>
+                <div className="icon-link" onClick={toggleProfileMenu}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="25"
@@ -239,16 +289,17 @@
                     <path d="M10.5 11a3.5 3.5 0 1 1-5 0 5.5 5.5 0 0 0 5 0" />
                     <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm0 1a7 7 0 1 1 0 14A7 7 0 0 1 8 1z" />
                   </svg>
-                  {/* Menu cho người dùng đã đăng nhập */}
-                  <div className="dropdown-menu">
-                    <Link to="/profile" className="dropdown-item">
-                      Xem trang cá nhân
-                    </Link>
-                    <div className="" onClick={handleLogout}>
-                      Đăng xuất
-                    </div>
+                  {isProfileMenuVisible && (
+                  <div className="profile-dropdown">
+                    <Link to="/profile">Trang cá nhân</Link>
+                    <Link to="/account">Quản lý tài khoản</Link>
+                    <Link to="/movies">Vé phim</Link>
+                    <Link to="/credits">Moveek Credits</Link>
+                    <div onClick={handleLogout}>Đăng xuất</div>
                   </div>
+                )}
                 </div>
+                
               ) : (
                 <>
                   <Link to="/login" className="icon-link">
