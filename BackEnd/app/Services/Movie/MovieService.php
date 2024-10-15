@@ -40,7 +40,7 @@ class MovieService
 
     public function show(int $id)
     {
-        return Movie::query()->with(['actorInMovies.actor', 'actorInMovies.director', 'actorInMovies.movieCategory'])->findOrFail($id);
+        return Movie::query()->with(['movieInCinemas.showtimes', 'ratings'])->findOrFail($id);
     }
 
     public function get(int $id): Movie
