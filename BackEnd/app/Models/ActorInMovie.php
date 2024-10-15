@@ -13,6 +13,8 @@ class ActorInMovie extends Model
     protected $fillable = [
         'actor_id',
         'movie_id',
+        'movie_category_id',
+        'director_id',
     ];
 
     public function actor()
