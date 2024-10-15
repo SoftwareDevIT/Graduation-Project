@@ -13,7 +13,7 @@ class MovieInCinema extends Seeder
      */
     public function run(): void
     {
-        DB::table('movie_in_cinema')->insert([
+        DB::table('movie_in_cinemas')->insert([
             [
                 'movie_id' => 1,
                 'cinema_id' => 1,
@@ -34,7 +34,7 @@ class MovieInCinema extends Seeder
                 'movie_id' => 5,
                 'cinema_id' => 1,
             ],
-            
+
         ]);
     }
 }
