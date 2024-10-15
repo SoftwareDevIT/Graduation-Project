@@ -50,6 +50,10 @@ import TinTuc from "./component/MovieDetail/TinTuc";
 import MuaVe from "./component/MovieDetail/MuaVe";
 import Profile from "./component/PersonalPage/Profile";
 import ChangePassword from "./component/PersonalPage/ChangePassword";
+import Deponsit from "./component/PersonalPage/Deposit";
+import Credits from "./component/PersonalPage/Credits";
+import Transaction from "./component/PersonalPage/Transaction";
+import Personal from "./component/PersonalPage/Personal";
 
 
 
@@ -73,6 +77,10 @@ function App() {
 
       <Route path="/profile" element={<Profile/>} />
       <Route path="/changepassword" element={<ChangePassword/>} />
+      <Route path="/deponsit" element={<Deponsit/>} />
+      <Route path="/credits" element={<Credits/>} />
+      <Route path="/transaction" element={<Transaction/>} />
+      <Route path="/personal" element={<Personal/>} />
 
       
 

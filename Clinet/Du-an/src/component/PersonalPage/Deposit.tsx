@@ -1,34 +1,22 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Select, Upload, Avatar, notification } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import './Profile.css'; // Import file CSS
+import './Deposit.css'; // Import file CSS
 import Footer from '../Footer/Footer';
 import Header from '../Header/Hearder';
- import './ChangePassword.css'
+import './Profile.css'
 import { Link } from 'react-router-dom';
 
 const { Option } = Select;
 
-const Profile: React.FC = () => {
+const Deponsit: React.FC = () => {
     const [avatar, setAvatar] = useState('https://cdn.moveek.com/bundles/ornweb/img/no-avatar.png'); // Khởi tạo giá trị avatar mặc định
 
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
   
-    const handleSubmit = (e: React.FormEvent) => {
-      e.preventDefault();
-      if (newPassword !== confirmPassword) {
-        notification.error({ message: 'Mật khẩu xác minh không trùng khớp!' });
-        return;
-      }
-      // Xử lý logic đổi mật khẩu ở đây
-      notification.success({ message: 'Đổi mật khẩu thành công!' });
-      // Reset form sau khi đổi mật khẩu
-      setCurrentPassword('');
-      setNewPassword('');
-      setConfirmPassword('');
-    };
+ 
   
 
   return (
@@ -57,7 +45,7 @@ const Profile: React.FC = () => {
       <div className="account-nav-item">
         <span className="account-nav-title">Tài khoản</span>
         <ul className="account-submenu">
-          <li className="account-submenu-item"><Link to={'/profile'}>Quản lí tài khoản</Link></li>
+        <li className="account-submenu-item"><Link to={'/profile'}>Quản lí tài khoản</Link></li>
           <li className="account-submenu-item"><Link to={'/changepassword'}>Đổi mật khẩu</Link></li>
         </ul>
       </div>
@@ -70,61 +58,37 @@ const Profile: React.FC = () => {
       <div className="account-nav-item">
         <span className="account-nav-title">Nạp tiền</span>
         <ul className="account-submenu">
-        <li className="account-submenu-item"><Link to={'/credits'}> Nạp tiền</Link></li>
-        <li className="account-submenu-item"><Link to={'/deponsit'}>Lịch sử nạp tiền</Link></li>
-        <li className="account-submenu-item"><Link to={'/transaction'}>Lịch sử gia dịch</Link></li>
+          <li className="account-submenu-item">Nạp tiền</li>
+          <li className="account-submenu-item">Lịch sử nạp tiền</li>
+          <li className="account-submenu-item"><Link to={'/transaction'}>Lịch sử giao dịch</Link></li>
         </ul>
       </div>
     </div>
   </div>
 </div>
-
-</div>
 <div className="divider"></div> 
-      </div>
-    
-      <div className="change-password-container">
-  <form className="change-password-form" onSubmit={handleSubmit}>
-    <div className="form-group">
-      <label htmlFor="currentPassword">Mật khẩu hiện tại:</label>
-      <input
-      
-        type="password"
-        id="currentPassword"
-        value={currentPassword}
-        onChange={(e) => setCurrentPassword(e.target.value)}
-        required
-      />
-    </div>
-
-    <div className="form-group">
-      <label htmlFor="newPassword">Mật khẩu mới:</label>
-      <input
-        type="password"
-        id="newPassword"
-        value={newPassword}
-        onChange={(e) => setNewPassword(e.target.value)}
-        required
-      />
-    </div>
-
-    <div className="form-group">
-      <label htmlFor="confirmPassword">Xác minh:</label>
-      <input
-        type="password"
-        id="confirmPassword"
-        value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
-        required
-      />
-    </div>
-
-    <button type="submit" className="submit-button">
-      Đổi mật khẩu
-    </button>
-  </form>
 </div>
+<div className="transaction-table-wrapper">
+            <table className="transaction-table">
+                <thead>
+                    <tr>
+                        <th>THỜI GIAN</th>
+                        <th>HÌNH THỨC</th>
+                        <th>SỐ TIỀN</th>
+                        <th>TRẠNG THÁI</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colSpan={4} className="transaction-empty">
+                            Bạn chưa có giao dịch nạp tiền nào. Nhấn vào <a href="#">đây</a> để nạp.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
+      </div>
       </div>
       </div>
       
@@ -133,4 +97,4 @@ const Profile: React.FC = () => {
   );
 };  
 
-export default Profile;
+export default Deponsit;

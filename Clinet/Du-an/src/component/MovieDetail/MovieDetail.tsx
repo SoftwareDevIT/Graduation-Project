@@ -3,9 +3,10 @@ import "./MovieDetail.css";
 import Header from "../Header/Hearder";
 import Footer from "../Footer/Footer";
 import { ContentMovie } from "./ContentMovie";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const MovieDetail: React.FC = () => {
+    const location = useLocation();
     return (
         <>
             <Header />
@@ -71,14 +72,22 @@ const MovieDetail: React.FC = () => {
                 </div>
                 {/* Tabs */}
                 <div className="tabs">
-                    <Link to={"/moviedetail"} className="tab active">Thông tin phim</Link>
-                    <Link to={"/lich-chieu"} className="tab ">Lịch chiếu</Link>
-                    <Link to={"/danh-gia"} className="tab ">Đánh giá</Link>
-                    <Link to={"/tin-tuc"} className="tab ">Tin tức</Link>
-                    <Link to={"/mua-ve"} className="tab ">Mua vé</Link>
-
-                </div>
-
+            <Link to="/moviedetail" className={`tab ${location.pathname === "/moviedetail" ? "active" : ""}`}>
+                Thông tin phim
+            </Link>
+            <Link to="/lich-chieu" className={`tab ${location.pathname === "/lich-chieu" ? "active" : ""}`}>
+                Lịch chiếu
+            </Link>
+            <Link to="/danh-gia" className={`tab ${location.pathname === "/danh-gia" ? "active" : ""}`}>
+                Đánh giá
+            </Link>
+            <Link to="/tin-tuc" className={`tab ${location.pathname === "/tin-tuc" ? "active" : ""}`}>
+                Tin tức
+            </Link>
+            <Link to="/mua-ve" className={`tab ${location.pathname === "/mua-ve" ? "active" : ""}`}>
+                Mua vé
+            </Link>
+        </div>
                 {/* Phần chọn lịch chiếu */}
 
             </div>

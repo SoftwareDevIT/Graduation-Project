@@ -379,11 +379,11 @@ left: 10px;
   .community-section h3 {
     font-size: 15px;
     margin-bottom: 20px;
-    font-weight:600;
-    color: #2c3e50;
+    font-weight:500;
+    color: black;
     padding: 10px; /* Thêm padding để tạo không gian */
-    background-color: #77e1f1; /* Màu nền cho tiêu đề */
-    border: 1px solid #b0bec5; /* Đường viền xung quanh */
+        background-color: #dfe8f3; /* Màu nền cho tiêu đề */
+        border: 1px solid #b0bec5; /* Đường viền xung quanh */
     border-radius: 5px; /* Bo góc cho đường viền */
     text-align: center;
   }

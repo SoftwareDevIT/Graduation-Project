@@ -5,6 +5,7 @@ import './Profile.css'; // Import file CSS
 import Footer from '../Footer/Footer';
 import Header from '../Header/Hearder';
 import './Profile.css'
+import { Link } from 'react-router-dom';
 
 const { Option } = Select;
 
@@ -56,8 +57,8 @@ const Profile: React.FC = () => {
       <div className="account-nav-item">
         <span className="account-nav-title">Tài khoản</span>
         <ul className="account-submenu">
-          <li className="account-submenu-item">Quản lí tài khoản</li>
-          <li className="account-submenu-item">Đổi mật khẩu</li>
+        <li className="account-submenu-item"><Link to={'/profile'}>Quản lí tài khoản</Link></li>
+          <li className="account-submenu-item"><Link to={'/changepassword'}>Đổi mật khẩu</Link></li>
         </ul>
       </div>
       <div className="account-nav-item">
@@ -69,18 +70,21 @@ const Profile: React.FC = () => {
       <div className="account-nav-item">
         <span className="account-nav-title">Nạp tiền</span>
         <ul className="account-submenu">
-          <li className="account-submenu-item">Nạp tiền</li>
-          <li className="account-submenu-item">Lịch sử nạp tiền</li>
-          <li className="account-submenu-item">Lịch sử giao dịch</li>
+        <li className="account-submenu-item"><Link to={'/credits'}> Nạp tiền</Link></li>
+          <li className="account-submenu-item"><Link to={'/deponsit'}>Lịch sử nạp tiền</Link></li>
+          <li className="account-submenu-item"><Link to={'/transaction'}>Lịch sử gia dịch</Link></li>
         </ul>
+
+        
       </div>
     </div>
   </div>
 </div>
 
 </div>
-
+<div className="divider"></div> 
       </div>
+     
       <div className="profile-container">
   <form className="profile-form">
     <div className="form-row">
