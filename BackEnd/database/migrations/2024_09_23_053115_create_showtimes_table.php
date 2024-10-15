@@ -21,7 +21,7 @@ return new class extends Migration
             $table->time('showtime_end');
             $table->boolean('status')->default(true);
             $table->timestamps();
-            $table->foreign('movie_in_cinema_id')->references('id')->on('movie_in_cinema');
+            $table->foreign('movie_in_cinema_id')->references('id')->on('movie_in_cinemas');
             // $table->foreign('movie_id')->references('id')->on('movies');
             // $table->foreign('cinema_id')->references('id')->on('cinema');
         });

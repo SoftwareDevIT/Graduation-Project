@@ -13,6 +13,8 @@ class ActorInMovie extends Model
     protected $fillable = [
         'actor_id',
         'movie_id',
+        'director_id',
+        'movie_category_id',
     ];
 
     public function actor()
@@ -23,5 +25,15 @@ class ActorInMovie extends Model
     public function movie()
     {
         return $this->belongsTo(Movie::class);
+    }
+
+    public function director()
+    {
+        return $this->belongsTo(Director::class);
+    }
+
+    public function movieCategory()
+    {
+        return $this->belongsTo(MovieCategory::class);
     }
 }
