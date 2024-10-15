@@ -127,9 +127,12 @@ Route::get('/filterByDate', [FilterByDateController::class, 'filterByDate']);   
 Route::get('filterMovie/{id}', [CinemaController::class, 'filterMovie']);                            // Phim lọc của điện ảnh
 Route::get('/movie/{category}', [MovieController::class, 'movieByCategory']);                       // Lọc Phim theo thể loại
 Route::get('/new/{category}', [NewController::class, 'newByCategory']);                             // Lọc chuyên đề theo thể loại
+
+Route::get('/fillMovies/upcoming', [MovieController::class, 'getUpcomingMovies']);                       // Lọc Phim sắp chiếu
 Route::get('/filterByDateByMovie', [FilterByDateController::class, 'filterByDateByMovie']);         // lọc rạp theo phim và ngày và khu vực
 Route::get('cinema-by-location/{id}', [CinemaController::class, 'showCinemaByLocation']);
 Route::get('filterMovieByNew', [FilterMovieByNewController::class, 'filterMovieByNew']);
+
 
 Route::apiResource('order', OrderController::class);
 Route::group(['middleware' => ['auth:sanctum']], function ()
