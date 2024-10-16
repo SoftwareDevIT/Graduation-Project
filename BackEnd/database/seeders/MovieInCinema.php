@@ -34,7 +34,7 @@ class MovieInCinema extends Seeder
                 'movie_id' => 5,
                 'cinema_id' => 1,
             ],
-            
+
         ]);
     }
 }
