@@ -30,7 +30,7 @@ import instance from "../../server";
       const fetchLocations = async () => {
         try {
           const response = await instance.get("/location");
-          console.log(response.data); // Kiểm tra dữ liệu nhận về từ API
+          // console.log(response.data); // Kiểm tra dữ liệu nhận về từ API
           setLocations(response.data.data);
         } catch (error) {
           console.error("Error fetching locations:", error);
@@ -43,7 +43,7 @@ import instance from "../../server";
       if (selectedLocation !== null) {
         instance.get(`/cinema-by-location/${selectedLocation}`).then((response) => {
           setCinemas(response.data.data);
-          console.log(setCinemas);
+          // console.log(setCinemas);
           
         });
       }

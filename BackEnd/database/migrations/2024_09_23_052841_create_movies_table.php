@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('movies', function (Blueprint $table) {
             $table->id('id');
-            $table->unsignedBigInteger('movie_category_id');
-            $table->unsignedBigInteger('cinema_id');
-            $table->unsignedBigInteger('actor_id');
-            $table->unsignedBigInteger('director_id');
+            // $table->unsignedBigInteger('movie_category_id');
+            // $table->unsignedBigInteger('cinema_id');
+            // $table->unsignedBigInteger('actor_id');
+            // $table->unsignedBigInteger('director_id');
             $table->string('movie_name');
             $table->string('poster')->nullable();
             $table->string('duration')->nullable();
@@ -27,10 +27,10 @@ return new class extends Migration
             $table->float('rating')->nullable();
             $table->boolean('status')->default(true);
             $table->timestamps();
-            $table->foreign('movie_category_id')->references('id')->on('movie_category');
-            $table->foreign('actor_id')->references('id')->on('actor');
-            $table->foreign('cinema_id')->references('id')->on('cinema');
-            $table->foreign('director_id')->references('id')->on('director');
+            // $table->foreign('movie_category_id')->references('id')->on('movie_category');
+            // $table->foreign('actor_id')->references('id')->on('actor');
+            // $table->foreign('cinema_id')->references('id')->on('cinema');
+            // $table->foreign('director_id')->references('id')->on('director');
         });
     }
 

@@ -21,10 +21,10 @@ class Showtime extends Model
         'status',
     ];
 
-    public function movie()
-    {
-        return $this->belongsTo(Movie::class);
-    }
+    // public function movie()
+    // {
+    //     return $this->belongsTo(Movie::class);
+    // }
 
     public function room()
     {
@@ -33,5 +33,14 @@ class Showtime extends Model
     public function seats()
     {
         return $this->hasMany(Seats::class, 'showtime_id');
+    }
+    // public function cinema()
+    // {
+    //     return $this->belongsTo(Cinema::class);
+    // }
+
+    public function movieincinemas()
+    {
+        return $this->hasMany(MovieInCinema::class);
     }
 }
