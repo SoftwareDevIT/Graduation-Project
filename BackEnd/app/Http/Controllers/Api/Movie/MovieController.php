@@ -42,6 +42,25 @@ class MovieController extends Controller
             $movie['poster'] = $file ? $this->uploadImage($file) : null;
 
             $movie = $this->movieService->store($movie);
+
+            $movie->category()->attach($request->movie_category_id);
+            $movie->actor()->attach($request->actor);
+            $movie->director()->attach($request->director);
+
+            if ($request->actor) {
+                $movie->actor()->attach($request->actor);
+            }
+            
+            if ($request->director) {
+                $movie->director()->attach($request->director);
+            }
+            
+            if ($request->movie_category_id) {
+                $movie->category()->attach($request->movie_category_id);
+            }
+         
+
+            // $product->tags()->attach($request->tags);
             return $this->success($movie, 'Thêm thành công Movie');
         } catch (Exception $e) {
             return $this->error('Có lỗi xảy ra: ' . $e->getMessage(), 500);

@@ -20,6 +20,13 @@ class Director extends Model
 
     public function movies()
     {
-        return $this->hasMany(Movie::class);
+        return $this->belongsToMany(Movie::class, 'actor_in_movies', 'director_id', 'movie_id')
+            ->withPivot('actor_id', 'movie_category_id')
+            ->withTimestamps();
+    }
+
+    public function actorInMovies()
+    {
+        return $this->hasMany(ActorInMovie::class);
     }
 }
