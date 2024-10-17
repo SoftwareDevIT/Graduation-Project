@@ -18,13 +18,13 @@ class MovieCategory extends Model
 
     public function movies()
     {
-        return $this->belongsToMany(Movie::class, 'actor_in_movies', 'movie_category_id', 'movie_id')
-            ->withPivot('actor_id', 'director_id')
+        return $this->belongsToMany(Movie::class, 'category_in_movie', 'movie_category_id', 'movie_id')
+         
             ->withTimestamps();
     }
 
-    public function actorInMovies()
+    public function movieCategoryInMovie()
     {
-        return $this->hasMany(ActorInMovie::class);
+        return $this->hasMany(MovieCategoryInMovie::class);
     }
 }

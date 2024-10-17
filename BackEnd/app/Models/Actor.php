@@ -21,7 +21,7 @@ class Actor extends Model
     public function movies()
     {
         return $this->belongsToMany(Movie::class, 'actor_in_movies', 'actor_id', 'movie_id')
-            ->withPivot('director_id', 'movie_category_id')
+         
             ->withTimestamps();
     }
 

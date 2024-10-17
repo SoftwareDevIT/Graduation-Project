@@ -57,19 +57,19 @@ class MovieService
 
     public function update(int $id, array $data)
     {
-        $movieCategory = Movie::query()->findOrFail($id);
-        $movieCategory->update($data);
+        $movie = Movie::query()->findOrFail($id);
+        $movie->update($data);
 
-        return $movieCategory;
+        return $movie;
     }
 
     public function delete(int $id)
     {
-        $movieCategory = Movie::query()->findOrFail($id);
+        $movie = Movie::query()->findOrFail($id);
 
         // $movieCategory->showtimes($id)->delete();    // Xóa suất chiếu phim
 
-        return $movieCategory->delete();
+        return $movie->delete();
     }
 
     public function show($id)
@@ -108,7 +108,7 @@ class MovieService
 
     public function get(int $id): Movie
     {
-        return Movie::query()->with(['actorInMovies.actor', 'actorInMovies.director', 'actorInMovies.movieCategory'])->findOrFail($id);
+        return Movie::query()->with(['actorInMovies.actor', 'directorInMovie.director', 'movieCategoryInMovie.movieCategory'])->findOrFail($id);
     }
 
     public function getMovieByMovieName(string $movie_name)

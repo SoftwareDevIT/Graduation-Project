@@ -21,30 +21,22 @@ class Movie extends Model
         'rating'
     ];
 
-    // public function category()
-    // {
-    //     return $this->belongsTo(MovieCategory::class, 'movie_category_id');
-    // }
-
     public function actor()
     {
         return $this->belongsToMany(Actor::class, 'actor_in_movies', 'movie_id', 'actor_id')
-            ->withPivot('director_id', 'movie_category_id')
             ->withTimestamps();
     }
 
 
     public function director()
     {
-        return $this->belongsToMany(Director::class, 'actor_in_movies', 'movie_id', 'director_id')
-            ->withPivot('actor_id', 'movie_category_id')
+        return $this->belongsToMany(Director::class, 'director_in_movie', 'movie_id', 'director_id')
             ->withTimestamps();
     }
 
     public function category()
     {
-        return $this->belongsToMany(MovieCategory::class, 'actor_in_movies', 'movie_id', 'movie_category_id')
-            ->withPivot('actor_id', 'director_id')
+        return $this->belongsToMany(MovieCategory::class, 'category_in_movie', 'movie_id', 'movie_category_id')
             ->withTimestamps();
     }
 
@@ -76,6 +68,16 @@ class Movie extends Model
     public function actorInMovies()
     {
         return $this->hasMany(ActorInMovie::class);
+    }
+
+    public function directorInMovie()
+    {
+        return $this->hasMany(DirectorInMovie::class);
+    }
+
+    public function movieCategoryInMovie()
+    {
+        return $this->hasMany(MovieCategoryInMovie::class);
     }
 
     public function news()
