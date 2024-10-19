@@ -1,3 +1,4 @@
+import { Showtime } from "./Showtime";
 
 export interface Cinema {
   id?: number;
@@ -6,4 +7,5 @@ export interface Cinema {
   location_id: number;
   cinema_address: string;
   status: string;
+  showtimes:Showtime[]
 }

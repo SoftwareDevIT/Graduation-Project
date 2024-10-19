@@ -15,7 +15,7 @@ const MovieBanner = () => {
     const fetchMovies = async () => {
       try {
         const response = await instance.get("/movies");
-        setMovies(response.data.data);
+        setMovies(response.data.data.original);
       } catch (error) {
         console.error("Failed to fetch movies:", error);
       }
