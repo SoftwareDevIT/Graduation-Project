@@ -13,8 +13,42 @@ class MovieService
 {
     public function index()
     {
-        return Movie::with('movieInCinemas.showtimes')->get();        
+        $movies = Movie::with(
+            [
+                'actor:actor_name',
+                'director:director_name',
+                'category:category_name',
+                'movieInCinemas.cinema:id,cinema_name'
+            ]
+        )->get();
+
+        $formattedMovies = $movies->map(function ($movie) {
+            return [
+                'id' => $movie->id,
+                'movie_name' => $movie->movie_name,
+                'poster' => $movie->poster,
+                'duration' => $movie->duration,
+                'release_date' => $movie->release_date,
+                'age_limit' => $movie->age_limit,
+                'description' => $movie->description,
+                'trailer' => $movie->trailer,
+                'rating' => $movie->rating,
+                'status' => $movie->status,
+                'actor' =>  $movie->actor->pluck('actor_name'),
+                'director' => $movie->director->pluck('director_name'),
+                'category' => $movie->category->pluck('category_name'),
+                'movie_in_cinemas' => $movie->movieInCinemas->map(function ($cinema) {
+                    return [
+                        'id' => $cinema->id,
+                        'cinema_name' => $cinema->cinema->cinema_name  // Lấy tên rạp từ quan hệ
+                    ];
+                }),
+            ];
+        });
+
+        return response()->json($formattedMovies);
     }
+
 
     public function store(array $data)
     {
@@ -23,29 +57,58 @@ class MovieService
 
     public function update(int $id, array $data)
     {
-        $movieCategory = Movie::query()->findOrFail($id);
-        $movieCategory->update($data);
+        $movie = Movie::query()->findOrFail($id);
+        $movie->update($data);
 
-        return $movieCategory;
+        return $movie;
     }
 
     public function delete(int $id)
     {
-        $movieCategory = Movie::query()->findOrFail($id);
+        $movie = Movie::query()->findOrFail($id);
 
         // $movieCategory->showtimes($id)->delete();    // Xóa suất chiếu phim
 
-        return $movieCategory->delete();
+        return $movie->delete();
     }
 
-    public function show(int $id)
+    public function show($id)
     {
-        return Movie::query()->with(['movieInCinemas.showtimes', 'ratings'])->findOrFail($id);
+        $movie = Movie::with([
+            'actor:actor_name',
+            'director:director_name',
+            'category:category_name',
+            'movieInCinemas.cinema:id,cinema_name'
+        ])->findOrFail($id);
+
+        $formattedMovies = [
+            'id' => $movie->id,
+            'movie_name' => $movie->movie_name,
+            'poster' => $movie->poster,
+            'duration' => $movie->duration,
+            'release_date' => $movie->release_date,
+            'age_limit' => $movie->age_limit,
+            'description' => $movie->description,
+            'trailer' => $movie->trailer,
+            'rating' => $movie->rating,
+            'status' => $movie->status,
+            'actor' =>  $movie->actor->pluck('actor_name'),
+            'director' => $movie->director->pluck('director_name'),
+            'category' => $movie->category->pluck('category_name'),
+            'movie_in_cinemas' => $movie->movieInCinemas->map(function ($cinema) {
+                return [
+                    'id' => $cinema->id,
+                    'cinema_name' => $cinema->cinema->cinema_name  // Lấy tên rạp từ quan hệ
+                ];
+            }),
+        ];
+
+        return response()->json($formattedMovies);
     }
 
     public function get(int $id): Movie
     {
-        return Movie::query()->with(['actorInMovies.actor', 'actorInMovies.director', 'actorInMovies.movieCategory'])->findOrFail($id);
+        return Movie::query()->with(['actorInMovies.actor', 'directorInMovie.director', 'movieCategoryInMovie.movieCategory'])->findOrFail($id);
     }
 
     public function getMovieByMovieName(string $movie_name)
