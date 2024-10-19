@@ -12,6 +12,7 @@ use App\Services\Movie\MovieService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\DB;
 use League\Flysystem\WhitespacePathNormalizer;
 use Throwable;
 
@@ -41,12 +42,19 @@ class MovieController extends Controller
             $movie = $request->validated();
             $movie['poster'] = $file ? $this->uploadImage($file) : null;
 
-            $movie = $this->movieService->store($movie);
+            DB::transaction(function () use ($movie, $request) {
+                // Lưu movie
+                $movie = $this->movieService->store($movie);
+        
+                // Gắn các mối quan hệ
+                // $movie->category()->sync($request->movie_category_id);
+                // $movie->actor()->sync($request->actor_id);
+                // $movie->director()->sync($request->director_id);
 
-            $movie->category()->attach($request->movie_category_id);
-            $movie->actor()->attach($request->actor_id);
-            $movie->director()->attach($request->director_id);
-
+                $movie->category()->attach($request->movie_category_id);
+                $movie->actor()->attach($request->actor_id);
+                $movie->director()->attach($request->director_id);
+            });
             return $this->success($movie, 'Thêm thành công Movie');
         } catch (Exception $e) {
             return $this->error('Có lỗi xảy ra: ' . $e->getMessage(), 500);
