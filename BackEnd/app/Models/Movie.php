@@ -10,10 +10,6 @@ class Movie extends Model
     use HasFactory;
     protected $table = 'movies';
     protected $fillable = [
-        'movie_category_id',
-        'cinema_id',
-        'actor_id',
-        'director_id',
         'movie_name',
         'poster',
         'duration',
@@ -25,25 +21,29 @@ class Movie extends Model
         'rating'
     ];
 
-    public function category()
-    {
-        return $this->belongsTo(MovieCategory::class, 'movie_category_id');
-    }
-
     public function actor()
     {
-        return $this->belongsTo(Actor::class, 'actor_id');
+        return $this->belongsToMany(Actor::class, 'actor_in_movies', 'movie_id', 'actor_id')
+            ->withTimestamps();
     }
+
 
     public function director()
     {
-        return $this->belongsTo(Director::class, 'director_id');
+        return $this->belongsToMany(Director::class, 'director_in_movie', 'movie_id', 'director_id')
+            ->withTimestamps();
     }
 
-    public function showtimes()
+    public function category()
     {
-        return $this->hasMany(Showtime::class);
+        return $this->belongsToMany(MovieCategory::class, 'category_in_movie', 'movie_id', 'movie_category_id')
+            ->withTimestamps();
     }
+
+    // public function showtimes()
+    // {
+    //     return $this->hasMany(Showtime::class);
+    // }
     public function cinema()
     {
         return $this->belongsTo(Cinema::class);
@@ -60,4 +60,28 @@ class Movie extends Model
         return $this->hasMany(Rating::class);
     }
 
+    public function movieInCinemas()
+    {
+        return $this->hasMany(MovieInCinema::class);
+    }
+
+    public function actorInMovies()
+    {
+        return $this->hasMany(ActorInMovie::class);
+    }
+
+    public function directorInMovie()
+    {
+        return $this->hasMany(DirectorInMovie::class);
+    }
+
+    public function movieCategoryInMovie()
+    {
+        return $this->hasMany(MovieCategoryInMovie::class);
+    }
+
+    public function news()
+    {
+        return $this->hasMany(News::class);
+    }
 }

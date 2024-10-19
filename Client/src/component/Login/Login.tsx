@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate, Link } from "react-router-dom";
-
 import instance from "../../server";
 import { loginSchema, LoginSchema } from "../../utils/validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,6 +8,7 @@ import "./Login.css";
 import { notification } from "antd";
 
 const Login = () => {
+
   const { register, handleSubmit, formState: { errors } } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
   });
@@ -20,34 +20,18 @@ const Login = () => {
       description,
     });
   };
+
   const onSubmit: SubmitHandler<LoginSchema> = async (data) => {
     try {
       const response = await instance.post("/login", data);
-      
-      // Ghi lại phản hồi để kiểm tra
-      console.log("Login response:", response);
-  
-      // Kiểm tra và lấy token từ response
       if (response.status === 200 && response.data.data.token) {
-        const token = response.data.data.token; // Đường dẫn chính xác để lấy token
-  
-        // Lưu token vào localStorage
+        const token = response.data.data.token;
         localStorage.setItem("token", token);
-  
-        // Thiết lập token cho các request tiếp theo
         instance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-  
-        // Gọi API để lấy thông tin user_id từ token
         const userResponse = await instance.get("/user");
-  
-        console.log("User response:", userResponse); // Ghi lại phản hồi từ API /user
-  
         if (userResponse.status === 200 && userResponse.data) {
           const user_id = userResponse.data.id;
-  
-          
           localStorage.setItem("user_id", user_id);
-  
           openNotificationWithIcon("success", "Đăng nhập thành công", "Bạn đã đăng nhập thành công.");
           navigate("/");
         } else {
@@ -57,8 +41,6 @@ const Login = () => {
         openNotificationWithIcon("error", "Lỗi", "Đăng nhập không thành công.");
       }
     } catch (error: any) {
-      console.log("Login error:", error); // Ghi lại lỗi để kiểm tra chi tiết
-  
       if (error.response) {
         if (error.response.status === 401) {
           openNotificationWithIcon("error", "Lỗi đăng nhập", "Mật khẩu không chính xác.");
@@ -74,12 +56,20 @@ const Login = () => {
       }
     }
   };
-  
-  
-  
-  
-  
-  
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const response = await instance.post("/get-google-sign-in-url");
+      if (response.status === 200 && response.data.url) {
+        window.location.href = response.data.url;
+       
+      } else {
+        openNotificationWithIcon("error", "Lỗi", "Không lấy được đường dẫn đăng nhập bằng Google.");
+      }
+    } catch (error: any) {
+      openNotificationWithIcon("error", "Lỗi", "Đã xảy ra lỗi khi yêu cầu đăng nhập bằng Google.");
+    }
+  };
 
   useEffect(() => {
     if (errors.email) {
@@ -107,6 +97,10 @@ const Login = () => {
             Đăng nhập
           </button>
         </form>
+
+        <button className="google-login-button login-button" onClick={handleGoogleSignIn}>
+          Đăng nhập bằng Google
+        </button>
 
         <div className="form-footer">
           <a href="/" className="forgot-password">

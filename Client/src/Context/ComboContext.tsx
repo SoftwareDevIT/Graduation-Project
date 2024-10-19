@@ -51,14 +51,25 @@ const comboReducer = (state: ComboState, action: Action): ComboState => {
 export const ComboProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(comboReducer, { combos: [] });
 
-  const fetchCombos = async () => {
-    try {
-      const { data } = await instance.get('/combo');
-      dispatch({ type: 'SET_COMBOS', payload: data.data });
-    } catch (error) {
-      console.error('Failed to fetch combos:', error);
+const fetchCombos = async () => {
+  try {
+    const token = localStorage.getItem('token'); // Lấy token từ localStorage hoặc nơi lưu trữ token khác
+    if (!token) {
+      console.error('Token not found');
+      return;
     }
-  };
+
+    const { data } = await instance.get('/combo', {
+      headers: {
+        Authorization: `Bearer ${token}`, // Thêm token vào headers của yêu cầu
+      },
+    });
+    dispatch({ type: 'SET_COMBOS', payload: data.data });
+  } catch (error) {
+    console.error('Failed to fetch combos:', error);
+  }
+};
+
 
   const addCombo = async (combo: Combo) => {
     try {

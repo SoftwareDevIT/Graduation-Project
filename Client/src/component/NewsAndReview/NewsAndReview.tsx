@@ -6,7 +6,6 @@ import { NewsItem } from '../../interface/NewsItem';
 const NewsAndReview = () => {
   const [newsData, setNewsData] = useState<NewsItem[]>([]);
   const [visibleItems, setVisibleItems] = useState(5); 
-  const [loading, setLoading] = useState(true);
   const [showAll, setShowAll] = useState(false); // State to toggle between showing all items or initial set
 
   useEffect(() => {
@@ -16,8 +15,6 @@ const NewsAndReview = () => {
         setNewsData(response.data.data || []);
       } catch (error) {
         console.error('Error fetching news data:', error);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -32,10 +29,6 @@ const NewsAndReview = () => {
     }
     setShowAll(!showAll); // Toggle the state
   };
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <div className='new-container'>
@@ -76,6 +69,7 @@ const NewsAndReview = () => {
           <h3>Ma Da – Một câu chuyện ma đáng tiếc nhiều hơn đáng sợ</h3>
           <span className="time">10 ngày trước</span> - <span className="reviewer">Ivy_Trat</span>
         </div>
+        {/* Các mục review khác */}
         <div className="review-item">
           <h3>Ma Da – Một câu chuyện ma đáng tiếc nhiều hơn đáng sợ</h3>
           <span className="time">10 ngày trước</span> - <span className="reviewer">Ivy_Trat</span>

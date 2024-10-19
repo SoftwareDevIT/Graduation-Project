@@ -13,15 +13,17 @@ return new class extends Migration
     {
         Schema::create('showtimes', function (Blueprint $table) {
             $table->id('id');
-            $table->unsignedBigInteger('movie_id');
-            $table->unsignedBigInteger('cinema_id');
+            $table->unsignedBigInteger('movie_in_cinema_id');
+            // $table->unsignedBigInteger('movie_id');
+            // $table->unsignedBigInteger('cinema_id');
             $table->date('showtime_date');
             $table->time('showtime_start');
             $table->time('showtime_end');
             $table->boolean('status')->default(true);
             $table->timestamps();
-            $table->foreign('movie_id')->references('id')->on('movies');
-            $table->foreign('cinema_id')->references('id')->on('cinema');
+            $table->foreign('movie_in_cinema_id')->references('id')->on('movie_in_cinemas');
+            // $table->foreign('movie_id')->references('id')->on('movies');
+            // $table->foreign('cinema_id')->references('id')->on('cinema');
         });
     }
 

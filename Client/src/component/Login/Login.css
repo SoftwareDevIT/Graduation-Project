@@ -152,3 +152,7 @@
 .form-group input{
   background-color: #fff !important;
 }
+.google-login-button{
+  margin-top: 10px;
+  background: red;
+}

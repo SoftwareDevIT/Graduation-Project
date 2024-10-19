@@ -43,7 +43,7 @@ const CinemaSelector: React.FC = () => {
         const response = await instance.get("/location");
         setLocations(response.data.data || []);
       } catch (error) {
-        console.error("Lỗi khi lấy danh sách vị trí:", error);
+        console.error("không có dữ liệu:", error);
       }
     };
 
@@ -52,7 +52,7 @@ const CinemaSelector: React.FC = () => {
         const response = await instance.get("/cinema");
         setCinemas(response.data.data || []);
       } catch (error) {
-        console.error("Lỗi khi lấy danh sách rạp:", error);
+        console.error("không có dữ liệu:", error);
       }
     };
 
@@ -61,7 +61,7 @@ const CinemaSelector: React.FC = () => {
         const response = await instance.get("/actor");
         setActors(response.data || []);
       } catch (error) {
-        console.error("Lỗi khi lấy danh sách diễn viên:", error);
+        console.error("không có dữ liệu:", error);
       }
     };
 
@@ -239,20 +239,22 @@ useEffect(() => {
         </div>
 
         <div className="showtimes">
-          <div className="date-selection">
-            {generateDateList().map((date) => (
-              <span
-                key={date}
-                className={`date ${selectedDate === date ? "selected" : ""}`}
-                onClick={() => {
-                  setSelectedDate(date);
-                  console.log("Ngày được chọn:", date);
-                }}
-              >
-                <p>{dayjs(date).format("DD/MM")}</p>
-              </span>
-            ))}
-          </div>
+        <div className="calendar-custom-1">
+  {generateDateList().map((date) => (
+    <div
+      key={date}
+      className={`date-custom-1 ${selectedDate === date ? "active" : ""}`}
+      onClick={() => {
+        setSelectedDate(date);
+        console.log("Ngày được chọn:", date);
+      }}
+    >
+      <span>{dayjs(date).format("DD/MM")}</span>
+      <small>{dayjs(date).format("dd") === "CN" ? "CN" : `Th ${dayjs(date).day()}`}</small>
+    </div>
+  ))}
+</div>
+
 
           {/* Hiển thị danh sách phim */}
           {movies.length > 0 ? (

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Store\StoreCinemaRequest;
 use App\Http\Requests\Update\UpdateCinemaRequest;
 use App\Models\Movie;
+use App\Models\MovieInCinema;
 use Illuminate\Http\Request;
 use App\Services\Cinema\CinemaService;
 use Exception;
@@ -70,7 +71,7 @@ class CinemaController extends Controller
     public function filterMovie($id)
     {
         try {
-            $movies = Movie::where('cinema_id', $id)->with('showtimes')->get();
+            $movies = MovieInCinema::where('cinema_id', $id)->with('showtimes')->get();
             if ($movies->isEmpty()) {
                 return $this->error('Không có phim trong rạp này .');
             }
