@@ -14,16 +14,17 @@ class Showtime extends Model
     protected $fillable = [
         'movie_id',
         'room_id',
+        'cinema_id',
         'showtime_date',
         'showtime_start',
         'showtime_end',
         'status',
     ];
 
-    public function movie()
-    {
-        return $this->belongsTo(Movie::class);
-    }
+    // public function movie()
+    // {
+    //     return $this->belongsTo(Movie::class);
+    // }
 
     public function room()
     {
@@ -32,5 +33,14 @@ class Showtime extends Model
     public function seats()
     {
         return $this->hasMany(Seats::class, 'showtime_id');
+    }
+    // public function cinema()
+    // {
+    //     return $this->belongsTo(Cinema::class);
+    // }
+
+    public function movieincinemas()
+    {
+        return $this->hasMany(MovieInCinema::class);
     }
 }

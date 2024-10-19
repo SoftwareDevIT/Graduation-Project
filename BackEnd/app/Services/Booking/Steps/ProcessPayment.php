@@ -23,8 +23,8 @@ class ProcessPayment
         $vnp_HashSecret = "UPJTP6WYL5P1DRCDK7M003GD8MNNP0SI"; // Chuỗi bí mật
 
         // Lấy dữ liệu từ request
-        $bookingId = $request->input('boking_id'); // Booking ID từ bước trước
-        Log::info('Booking ID: ' . json_encode($request->all()));
+        $bookingId = session('booking'); // Booking ID từ bước trước
+        Log::info('Booking ID: ' . $bookingId);
         if (!$bookingId) {
             return null; // Trả về null nếu không có Booking ID
         }

@@ -47,6 +47,6 @@ class Booking extends Model
 
     public function payMethod()
     {
-        return $this->belongsTo(PayMethod::class, 'pay_method_id', 'pay_method_id');
+        return $this->belongsTo(PayMethod::class, 'pay_method_id', 'id');
     }
 }

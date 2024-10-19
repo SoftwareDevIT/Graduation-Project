@@ -2,26 +2,34 @@
 
 namespace App\Services\Filter;
 
-use App\Models\Movie;
-use App\Models\Showtime;
-use Carbon\Carbon;
+use App\Models\MovieInCinema;
+
 
 class FilterByDateService
 {
     public function filterByDate(string $date, $cinemaId = null)
-{
-    $filteredShowtimes = function($query) use ($date) {
-        $query->where('showtime_date', $date)
-              ->where('status', '1');
-    };
-
-    $query = Movie::whereHas('showtimes', $filteredShowtimes)
-                  ->with(['showtimes' => $filteredShowtimes]);
-
-    if ($cinemaId) {
-        $query->where('cinema_id', $cinemaId);
+    {
+        $query = MovieInCinema::where('cinema_id', $cinemaId)
+            ->whereHas('showtimes', function ($query) use ($date) {
+                $query->where('showtime_date', $date);
+            })->with(['showtimes' => function ($query) use ($date) {
+                $query->where('showtime_date', $date);
+            }])
+            ->with('movie');
+        return $query->get();
     }
 
-    return $query->get();
-}
+    public function filterByDateOrMovie(string $date, $movieid, $locationId)
+    {
+        $query = MovieInCinema::where('movie_id', $movieid)
+            ->whereHas('cinema', function ($query) use ($locationId) {
+                $query->where('location_id', $locationId);
+            })->whereHas('showtimes', function ($query) use ($date) {
+                $query->where('showtime_date', $date);
+            })
+            ->with(['showtimes' => function ($query) use ($date) {
+                $query->where('showtime_date', $date);
+            }])->with('cinema');
+        return $query->get();
+    }
 }

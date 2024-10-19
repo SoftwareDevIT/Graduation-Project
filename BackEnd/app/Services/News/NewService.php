@@ -35,11 +35,12 @@ class NewService
     public function delete(int $id)
     {
         $news = News::findOrFail($id);
-
-        if ($news->thumnail && Storage::disk('public')->exists($news->thumnail)) {
-            Storage::disk('public')->delete($news->thumnail);
-        }
-
-        return$news->delete();
+        return $news->delete();
     }
+
+    public function show(int $id)
+    {
+        $news = News::with('newsCategory')->findOrFail($id);
+        return $news;
+    }   
 }

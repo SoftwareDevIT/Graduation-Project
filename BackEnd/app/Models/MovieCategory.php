@@ -15,4 +15,16 @@ class MovieCategory extends Model
         'descripcion',
         'status',
     ];
+
+    public function movies()
+    {
+        return $this->belongsToMany(Movie::class, 'category_in_movie', 'movie_category_id', 'movie_id')
+         
+            ->withTimestamps();
+    }
+
+    public function movieCategoryInMovie()
+    {
+        return $this->hasMany(MovieCategoryInMovie::class);
+    }
 }

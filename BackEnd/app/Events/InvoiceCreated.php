@@ -9,21 +9,17 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
 class InvoiceCreated
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
+
     /**
      * Create a new event instance.
      */
-    public $booking;
-    public function __construct($booking)
+    public function __construct()
     {
-        $this->booking = $booking;
-        Log::info('InvoiceCreated Event fired', [
-            'invoiceData' => $this->booking
-        ]);
+        //
     }
 
     /**
