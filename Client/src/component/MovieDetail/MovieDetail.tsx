@@ -17,25 +17,11 @@ const MovieDetail: React.FC = () => {
     const fetchMovie = async () => {
       try {
         const movieResponse = await instance.get(`/movies/${id}`);
-        setMovie(movieResponse.data.data);
+        setMovie(movieResponse.data.data.original);
 
-        // Fetch actor name
-        if (movieResponse.data.data.actor_id) {
-          const actorResponse = await instance.get(`/actor/${movieResponse.data.data.actor_id}`);
-          setActor(actorResponse.data.data.actor_name);
-        }
+    
 
-        // Fetch director name
-        if (movieResponse.data.data.director_id) {
-          const directorResponse = await instance.get(`/director/${movieResponse.data.data.director_id}`);
-          setDirector(directorResponse.data.data.director_name);
-        }
-
-        // Fetch movie category name
-        if (movieResponse.data.data.movie_category_id) {
-          const categoryResponse = await instance.get(`/movie-category/${movieResponse.data.data.movie_category_id}`);
-          setCategory(categoryResponse.data.data.category_name);
-        }
+       
       } catch (error) {
         console.error(error);
     
@@ -61,7 +47,7 @@ const MovieDetail: React.FC = () => {
             <div className="movie-details-wrapper">
               <div className="movie-info">
                 <h1 className="title">{movie?.movie_name}</h1>
-                <p className="genre">Thể loại: {category || "Không có thể loại"}</p>
+                <p className="genre">Thể loại: {movie?.category || "Không có thể loại"}</p>
 
                 <div className="actions">
                   <div className="button like">
@@ -94,8 +80,8 @@ const MovieDetail: React.FC = () => {
               </div>
 
               <div className="additional-info">
-                <strong>Diễn viên:</strong> <p>{actor || "Không có diễn viên"}</p>
-                <strong>Đạo diễn:</strong><p>{director || "Không có đạo diễn"}</p>
+                <strong>Diễn viên:</strong> <p>{movie?.actor || "Không có diễn viên"}</p>
+                <strong>Đạo diễn:</strong><p>{movie?.director || "Không có đạo diễn"}</p>
               </div>
             </div>
           </div>

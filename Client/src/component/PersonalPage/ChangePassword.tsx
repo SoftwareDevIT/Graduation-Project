@@ -4,12 +4,12 @@ import { UploadOutlined } from '@ant-design/icons';
 import './Profile.css'; // Import file CSS
 import Footer from '../Footer/Footer';
 import Header from '../Header/Hearder';
-import './Profile.css'
+ import './ChangePassword.css'
 import { Link } from 'react-router-dom';
 
 const { Option } = Select;
 
-const Profile: React.FC = () => {
+const ChangePassword: React.FC = () => {
     const [avatar, setAvatar] = useState('https://cdn.moveek.com/bundles/ornweb/img/no-avatar.png'); // Khởi tạo giá trị avatar mặc định
 
     const [currentPassword, setCurrentPassword] = useState('');
@@ -57,7 +57,7 @@ const Profile: React.FC = () => {
       <div className="account-nav-item">
         <span className="account-nav-title">Tài khoản</span>
         <ul className="account-submenu">
-        <li className="account-submenu-item"><Link to={'/profile'}>Quản lí tài khoản</Link></li>
+          <li className="account-submenu-item"><Link to={'/profile'}>Quản lí tài khoản</Link></li>
           <li className="account-submenu-item"><Link to={'/changepassword'}>Đổi mật khẩu</Link></li>
         </ul>
       </div>
@@ -71,11 +71,9 @@ const Profile: React.FC = () => {
         <span className="account-nav-title">Nạp tiền</span>
         <ul className="account-submenu">
         <li className="account-submenu-item"><Link to={'/credits'}> Nạp tiền</Link></li>
-          <li className="account-submenu-item"><Link to={'/deponsit'}>Lịch sử nạp tiền</Link></li>
-          <li className="account-submenu-item"><Link to={'/transaction'}>Lịch sử gia dịch</Link></li>
+        <li className="account-submenu-item"><Link to={'/deponsit'}>Lịch sử nạp tiền</Link></li>
+        <li className="account-submenu-item"><Link to={'/transaction'}>Lịch sử gia dịch</Link></li>
         </ul>
-
-        
       </div>
     </div>
   </div>
@@ -84,56 +82,48 @@ const Profile: React.FC = () => {
 </div>
 <div className="divider"></div> 
       </div>
-     
-      <div className="profile-container">
-  <form className="profile-form">
-    <div className="form-row">
-      <div className="form-group">
-        <label >Tên tài khoản</label>
-        <input type="text" id="username" value="giang1234" />
-      </div>
-      <div className="form-group">
-        <label >Email</label>
-        <input type="email" id="email" value="nguyenvanthien24032004@gmail.com"  />
-      </div>
+    
+      <div className="change-password-container">
+  <form className="change-password-form" onSubmit={handleSubmit}>
+    <div className="form-group">
+      <label htmlFor="currentPassword">Mật khẩu hiện tại:</label>
+      <input
+      
+        type="password"
+        id="currentPassword"
+        value={currentPassword}
+        onChange={(e) => setCurrentPassword(e.target.value)}
+        required
+      />
     </div>
 
-    <div className="form-row">
-      <div className="form-group">
-        <label >Họ và tên</label>
-        <input type="text" id="fullname" value="" />
-      </div>
-      <div className="form-group">
-        <label >Khu vực</label>
-        <select id="region">
-          <option value="hcm">Tp. Hồ Chí Minh</option>
-          <option value="hcm">Hà Nội</option>
-          <option value="hcm">Đà Nẵng</option>
-        </select>
-      </div>
+    <div className="form-group">
+      <label htmlFor="newPassword">Mật khẩu mới:</label>
+      <input
+        type="password"
+        id="newPassword"
+        value={newPassword}
+        onChange={(e) => setNewPassword(e.target.value)}
+        required
+      />
     </div>
 
-    <div className="form-row">
-      <div className="form-group">
-        <label>Số điện thoại</label>
-        <input type="text" id="phone" placeholder="Số điện thoại" />
-      </div>
-      <div className="form-group">
-        <button type="button" className="verify-phone">Xác thực số điện thoại</button>
-      </div>
+    <div className="form-group">
+      <label htmlFor="confirmPassword">Xác minh:</label>
+      <input
+        type="password"
+        id="confirmPassword"
+        value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
+        required
+      />
     </div>
 
-    <div className="form-row">
-      <div className="form-group">
-        <label >Ảnh đại diện</label>
-        <input type="file" id="avatar" />
-      </div>
-    </div>
-
-    <button type="submit" className="update-btn">Cập nhật</button>
+    <button type="submit" className="submit-button">
+      Đổi mật khẩu
+    </button>
   </form>
 </div>
-
 
       </div>
       </div>
@@ -143,4 +133,4 @@ const Profile: React.FC = () => {
   );
 };  
 
-export default Profile;
+export default ChangePassword;

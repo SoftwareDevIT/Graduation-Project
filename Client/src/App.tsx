@@ -47,9 +47,15 @@ import MoviesAddManager from "./Page/Admin/Movies/MoviesForm";
 import CategoriesFormManager from "./Page/Admin/Categories/CategoriesForm";
 
 import MuaVe from "./component/MovieDetail/MuaVe";
-import Profile from "./component/PersonalPage/Profile";
+
 import SerachMovies from "./component/SerachMovies/SerachMovies";
 import FilmNews from "./component/Film news/FilmNews";
+
+import Personal from "./component/PersonalPage/Personal";
+import ChangePassword from "./component/PersonalPage/ChangePassword";
+import Profile from "./component/PersonalPage/Profile";
+
+
 
 function App() {
   return (
@@ -72,8 +78,11 @@ function App() {
        
 
         <Route path="/movie/search/:movie_name" element={<SerachMovies />} />
-        <Route path="/profile" element={<Profile />} />
 
+        <Route path="/profile" element={<Profile/>} />
+        <Route path="/Personal" element={<Personal/>} />
+        <Route path="/ChangePassword" element={<ChangePassword/>} />
+    
         <Route path="/register" element={<RegisterCinema />} />
         <Route path="/login" element={<LoginCinema />} />
         <Route path="/admin" element={<Dashboard />} />
