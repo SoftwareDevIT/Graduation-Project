@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import Header from "../Header/Hearder";
 import Footer from "../Footer/Footer";
 import instance from "../../server";
@@ -43,7 +43,7 @@ const MovieDetail: React.FC = () => {
     };
     fetchMovie();
   }, [id]);
-
+  const location = useLocation();
   if (error) return <div>Error loading movie details</div>;
 
   return (
@@ -102,11 +102,21 @@ const MovieDetail: React.FC = () => {
         </div>
 
         <div className="tabs">
-          <Link to={`/moviedetail/${id}`} className="tab active">Thông tin phim</Link>
-          <Link to={`/schedule/${id}`} className="tab">Lịch chiếu</Link>
-          <Link to={`/reviews/${id}`} className="tab">Đánh giá</Link>
-          <Link to={`/news/${id}`} className="tab">Tin tức</Link>
-          <Link to={`/buy-now/${id}`} className="tab">Mua vé</Link>
+          <Link to={`/movie-detail/${id}`} className={`tab ${location.pathname === `/movie-detail/${id}` ? "active" : ""}`}>
+            Thông tin phim
+          </Link>
+          <Link to={`/schedule/${id}`} className={`tab ${location.pathname === `/schedule/${id}` ? "active" : ""}`}>
+            Lịch chiếu
+          </Link>
+          <Link to={`/reviews/${id}`} className={`tab ${location.pathname === `/reviews/${id}` ? "active" : ""}`}>
+            Đánh giá
+          </Link>
+          <Link to={`/news/${id}`} className={`tab ${location.pathname === `/news/${id}` ? "active" : ""}`}>
+            Tin tức
+          </Link>
+          <Link to={`/buy-now/${id}`} className={`tab ${location.pathname === `/buy-now/${id}` ? "active" : ""}`}>
+            Mua vé
+          </Link>
         </div>
       </div>
     </>

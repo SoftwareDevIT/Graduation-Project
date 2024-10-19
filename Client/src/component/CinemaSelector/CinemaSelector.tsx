@@ -123,64 +123,41 @@ useEffect(() => {
       setFilteredCinemas(cinemas);
     }
   }, [selectedCity, cinemas]);
-// Lọc phim theo rạp và ngày
-useEffect(() => {
-  const fetchMoviesForSelectedCinemaAndDate = async () => {
-    if (selectedCinema && selectedDate) {
-      try {
-        setLoading(true);
-        // Gọi API lọc phim theo rạp
-        const cinemaResponse = await instance.get(`/filterMovie/${selectedCinema}`);
-        const cinemaMovies: Movie[] = cinemaResponse.data?.data || [];
-  
-        // Nếu không có phim cho rạp này
-        if (cinemaMovies.length === 0) {
-          setMovies([]);
-          return;
-        }
-  
-        // Gọi API lọc theo ngày
-        const dateResponse = await instance.get(`/filterByDate`, {
-          params: {
-            cinema_id: selectedCinema,
-            showtime_date: selectedDate,
-          },
-        });
-        const dateMovies: Movie[] = Array.isArray(dateResponse.data) ? dateResponse.data : [];
-  
-        // Lọc những phim có trong cả hai API (lọc rạp và lọc ngày)
-        const filteredMovies = cinemaMovies.filter((cinemaMovie: Movie) =>
-          dateMovies.some((dateMovie: Movie) => dateMovie.id === cinemaMovie.id)
-        );
-  
-        // Lọc showtime theo ngày cho mỗi phim
-        const moviesWithFilteredShowtimes = filteredMovies.map((movie: Movie) => {
-          const correspondingDateMovie = dateMovies.find((dateMovie) => dateMovie.id === movie.id);
-          if (correspondingDateMovie) {
-            // Lọc showtimes dựa trên selectedDate
-            const filteredShowtimes = correspondingDateMovie.showtimes.filter(
-              (showtime) => showtime.showtime_date === selectedDate
-            );
-            return { ...movie, showtimes: filteredShowtimes };
-          }
-          return movie;
-        });
-  
-        // Cập nhật danh sách phim với showtime đã được lọc
-        setMovies(moviesWithFilteredShowtimes.length > 0 ? moviesWithFilteredShowtimes : []);
-      } catch (error) {
-        console.error("Lỗi khi lấy phim cho rạp và ngày:", error);
-        setMovies([]); // Xóa danh sách phim khi gặp lỗi
-      }
-      finally {
-        setLoading(false); // Tắt loading sau khi dữ liệu được tải
-      }
-    }
-  };
-  
-  fetchMoviesForSelectedCinemaAndDate();
-}, [selectedCinema, selectedDate]);
 
+  useEffect(() => {
+    const fetchMoviesForSelectedCinemaAndDate = async () => {
+      if (selectedCinema && selectedDate) {
+        try {
+          setLoading(true);
+          // Gọi API lọc phim theo rạp
+          const cinemaResponse = await instance.get(`/filterByDate`, {
+            params: {
+              cinema_id: selectedCinema,
+              showtime_date: selectedDate,
+            },
+          });
+  
+          const cinemaMovies = cinemaResponse.data?.data || [];
+  
+          // Nếu không có phim cho rạp này
+          if (cinemaMovies.length === 0) {
+            setMovies([]);
+            return;
+          }
+  
+          // Cập nhật danh sách phim
+          setMovies(cinemaMovies);
+        } catch (error) {
+          console.error("Lỗi khi lấy phim cho rạp và ngày:", error);
+          setMovies([]); // Xóa danh sách phim khi gặp lỗi
+        } finally {
+          setLoading(false); // Tắt loading sau khi dữ liệu được tải
+        }
+      }
+    };
+  
+    fetchMoviesForSelectedCinemaAndDate();
+  }, [selectedCinema, selectedDate]);
 
   const selectedCinemaDetails = cinemas.find(
     (cinema) => cinema.id === selectedCinema
@@ -270,52 +247,55 @@ useEffect(() => {
       
                 {/* Hiển thị danh sách phim */}
                 {movies.length > 0 ? (
-                  <div className="movies">
-                    {movies.map((movie) => {
-                      const actor = actors.find((a) => a.id === movie.actor_id);
-      
-                      return (
-                        <div key={movie.id} className="movie">
-                          <img src={movie.poster ?? undefined} alt={movie.movie_name} />
-                          <div className="details">
-                            <h4>{movie.movie_name}</h4>
-                            <p>
-                              Đạo Diễn:{" "}
-                              {actor ? actor.actor_name : "Không có thông tin"}
-                            </p>
-                            <p>Thời gian: {movie.duraion}</p>
-                            <p>Giới hạn tuổi: {movie.age_limit}+</p>
-                            <div className="showtimes-list">
-                              {movie.showtimes.map((showtime) => (
-                                <button
-                                  key={showtime.id}
-                                  onClick={() => {
-                                    navigate("/seat", {
-                                      state: {
-                                        movieName: movie.movie_name,
-                                        cinemaName:
-                                          selectedCinemaDetails?.cinema_name,
-                                        showtime: showtime.showtime_start,
-                                        showtimeId: showtime.id, // Truyền showtimeId
-                                        cinemaId: selectedCinemaDetails?.id, // Truyền cinemaId
-                                      },
-                                    });
-                                  }}
-                                >
-                                  {showtime.showtime_start.slice(0, 5)}
-                                </button>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <div className="no-showtimes">
-                    <p>Không có phim cho rạp này.</p>
-                  </div>
-                )}
+  <div className="movies">
+    {movies.map((movieData) => {
+      const movie = movieData.movie; // Truy xuất thông tin chi tiết phim từ movieData
+      const actor = actors.find((a) => a.id === movie.actor_id);
+
+      return (
+        <div key={movie.id} className="movie">
+          <img src={movie.poster ?? undefined} alt={movie.movie_name} />
+          <div className="details">
+            <h4>{movie.movie_name}</h4>
+            <p>
+              Đạo Diễn: {actor ? actor.actor_name : "Không có thông tin"}
+            </p>
+            <p>Thời gian: {movie.duraion}</p>
+            <p>Giới hạn tuổi: {movie.age_limit}+</p>
+            <div className="showtimes-list">
+              {movieData.showtimes.length > 0 ? (
+                movieData.showtimes.map((showtime) => (
+                  <button
+                    key={showtime.id}
+                    onClick={() => {
+                      navigate("/seat", {
+                        state: {
+                          movieName: movie.movie_name,
+                          cinemaName: selectedCinemaDetails?.cinema_name,
+                          showtime: showtime.showtime_start,
+                          showtimeId: showtime.id, // Truyền showtimeId
+                          cinemaId: selectedCinemaDetails?.id, // Truyền cinemaId
+                        },
+                      });
+                    }}
+                  >
+                    {showtime.showtime_start.slice(0, 5)}
+                  </button>
+                ))
+              ) : (
+                <p>Không có suất chiếu cho ngày này</p>
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    })}
+  </div>
+) : (
+  <div className="no-showtimes">
+    <p>Không có phim cho rạp này.</p>
+  </div>
+)}
               </div>
             </div>
            </div>
