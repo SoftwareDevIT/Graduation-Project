@@ -1,76 +1,48 @@
-import React, { useEffect, useState } from 'react';
-import './MovieDetail.css';
-import MovieDetail from './MovieDetail';
-import Footer from '../Footer/Footer';
-import instance from '../../server'; // Import API instance
-import { Location } from '../../interface/Location'; // Interface for Location
+import React from 'react'
+import './MovieDetail.css'
+import MovieDetail from './MovieDetail'
+import Footer from '../Footer/Footer'
+interface Props {
+    
+}
 
-export const ContentMovie: React.FC = () => {
-    // State hooks for locations, selected location, and error handling
-    const [locations, setLocations] = useState<Location[]>([]);
-    const [selectedLocation, setSelectedLocation] = useState<string>("");
-    const [error, setError] = useState<string | null>(null);
-
-    // Fetch locations from the API
-    useEffect(() => {
-        const fetchLocations = async () => {
-            try {
-                const response = await instance.get("/location");
-                setLocations(response.data?.data || []);
-                if (response.data?.data.length > 0) {
-                    setSelectedLocation(response.data?.data[0].id.toString()); // Set default selected location
-                }
-            } catch (error) {
-                console.error("Error fetching locations:", error);
-                setError("Không thể tải danh sách khu vực.");
-            }
-        };
-        fetchLocations();
-    }, []);
-
-    // JSX for rendering the component
+export const ContentMovie = (props: Props) => {
     return (
         <div>
-            <MovieDetail />
-            <div className="content">
-                <div className="container content-1">
-                    <div className="video-section">
-                        <iframe
-                            width="735px"
-                            height="400"
-                            src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-                            title="Movie Trailer"
-                            frameBorder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                        ></iframe>
-                    </div>
+            <MovieDetail/>
+             <div className="content">
+                    <div className="container content-1">
+                        <div className="video-section">
+                            <iframe
+                                width="735px"
+                                height="400"
+                                src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                                title="Transformers Một trailer"
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                            ></iframe>
 
-                    {/* Schedule section with dynamic location select */}
-                    <div className="schedule-section">
-                        <h3>Lịch chiếu</h3>
-                        <p>Chọn khu vực bạn muốn xem lịch chiếu cho phim.</p>
 
-                        <div className="schedule-actions">
-                            <select
-                                className="city-select"
-                                value={selectedLocation}
-                                onChange={(e) => setSelectedLocation(e.target.value)}
-                            >
-                                {locations.map((location) => (
-                                    <option key={location.id} value={location.id.toString()}>
-                                        {location.location_name}
-                                    </option>
-                                ))}
-                            </select>
-                            <button className="button xem-lich-chieu">Xem lịch chiếu</button>
                         </div>
 
-                        {error && <p>{error}</p>}
-                    </div>
+                        {/* Phần chọn khu vực và xem lịch chiếu */}
+                        <div className="schedule-section">
 
-                    {/* Related posts and community sections */}
-                    <div className="title-2">
+                            <h3>Lịch chiếu</h3>
+                            <p>Chọn khu vực bạn muốn xem lịch chiếu cho phim <strong>Transformers Một</strong>.</p>
+
+                            <div className="schedule-actions">
+                                <select className="city-select">
+                                    <option value="hcm">Tp. Hồ Chí Minh</option>
+                                    <option value="hn">Hà Nội</option>
+                                    <option value="dn">Đà Nẵng</option>
+                                </select>
+                                <button className="button xem-lich-chieu">Xem lịch chiếu</button>
+                            </div>
+
+                        </div>
+                        <div className="title-2">
                             <h3>Bài viết liên quan</h3>
                         </div>
                         <div className="related-posts">
@@ -129,12 +101,9 @@ export const ContentMovie: React.FC = () => {
                             </div>
                         </div>
 
-
+                    </div>
                 </div>
-            </div>
-            <Footer />
+                <Footer/>
         </div>
-    );
-};
-
-export default ContentMovie;
+    )
+}
