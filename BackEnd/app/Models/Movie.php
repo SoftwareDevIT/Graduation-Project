@@ -16,6 +16,7 @@ class Movie extends Model
         'release_date',
         'age_limit',
         'description',
+        'thumbnail',
         'trailer',
         'status',
         'rating'
