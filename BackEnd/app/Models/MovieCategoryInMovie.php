@@ -5,25 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ActorInMovie extends Model
+class MovieCategoryInMovie extends Model
 {
     use HasFactory;
 
-    protected $table = 'actor_in_movies';
+    protected $table = 'category_in_movie';
     protected $fillable = [
-        'actor_id',
+        'movie_category_id  ',
         'movie_id',
     ];
-
-    public function actor()
-    {
-        return $this->belongsTo(Actor::class);
-    }
 
     public function movie()
     {
         return $this->belongsTo(Movie::class);
     }
 
-
+    public function movieCategory()
+    {
+        return $this->belongsTo(MovieCategory::class);
+    }
 }

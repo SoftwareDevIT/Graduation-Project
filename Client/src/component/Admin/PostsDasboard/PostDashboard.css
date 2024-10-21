@@ -27,7 +27,7 @@
 }
 
 .add-post-btn {
-    padding: 10px 20px;
+    padding: 10px 20px !important;
     background-color: #f39c12; /* Màu giống UserDashboard */
     border: none;
     border-radius: 5px;
@@ -37,6 +37,7 @@
     transition: background-color 0.3s ease;
     text-transform: uppercase;
     font-weight: bold;
+    width: 200px !important;
 }
 
 .add-post-btn:hover {

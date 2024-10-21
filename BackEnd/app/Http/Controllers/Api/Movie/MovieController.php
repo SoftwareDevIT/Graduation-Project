@@ -12,6 +12,7 @@ use App\Services\Movie\MovieService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\DB;
 use League\Flysystem\WhitespacePathNormalizer;
 use Throwable;
 
@@ -41,7 +42,19 @@ class MovieController extends Controller
             $movie = $request->validated();
             $movie['poster'] = $file ? $this->uploadImage($file) : null;
 
-            $movie = $this->movieService->store($movie);
+            DB::transaction(function () use ($movie, $request) {
+                // Lưu movie
+                $movie = $this->movieService->store($movie);
+        
+                // Gắn các mối quan hệ
+                // $movie->category()->sync($request->movie_category_id);
+                // $movie->actor()->sync($request->actor_id);
+                // $movie->director()->sync($request->director_id);
+
+                $movie->category()->attach($request->movie_category_id);
+                $movie->actor()->attach($request->actor_id);
+                $movie->director()->attach($request->director_id);
+            });
             return $this->success($movie, 'Thêm thành công Movie');
         } catch (Exception $e) {
             return $this->error('Có lỗi xảy ra: ' . $e->getMessage(), 500);
@@ -67,20 +80,25 @@ class MovieController extends Controller
     public function update(UpdateMovieRequest $request, string $id)
     {
         try {
-            $file = $request->file('photo');
+            $file = $request->file('poster');
             $oldImgageActor  = $this->movieService->get($id);
 
             $imageLink =  $file ? $this->uploadImage($file) :  $oldImgageActor->poster;
 
             // Lấy dữ liệu đã được xác thực từ request
             $movie = $request->validated();
-            $movie['photo'] = $imageLink;
+            $movie['poster'] = $imageLink;
 
             $movie = $this->movieService->update($id, $movie);
+          
+
+            $movie->category()->sync($request->movie_category_id);
+            $movie->actor()->sync($request->actor_id);
+            $movie->director()->sync($request->director_id);
 
             return $this->success($movie, 'Cập nhập thành công');
         } catch (Throwable $th) {
-            return $this->error('Movie not found id = ' . $id, 500);
+            return $this->error($th->getMessage(), 500);
         }
     }
 
@@ -89,10 +107,17 @@ class MovieController extends Controller
      */
     public function destroy(string $id)
     {
-        $showtimes = Showtime::where('movie_id', $id)->exists();
+        // $showtimes = Showtime::where('movie_id', $id)->exists();
 
-        if ($showtimes) {
-            return $this->error('Phim đang công chiếu, không thể xóa', 400);
+        // if ($showtimes) {
+        //     return $this->error('Phim đang công chiếu, không thể xóa', 400);
+        // }
+
+        $movie = $this->movieService->get($id);
+        if ($movie) {
+            $movie->actor()->detach();
+            $movie->category()->detach();
+            $movie->director()->detach();
         }
 
         $this->movieService->delete($id);
