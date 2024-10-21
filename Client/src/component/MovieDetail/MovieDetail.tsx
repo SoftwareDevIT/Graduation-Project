@@ -8,27 +8,22 @@ import "./MovieDetail.css";
 const MovieDetail: React.FC = () => {
   const { id } = useParams();
   const [movie, setMovie] = useState<any>(null);
-  const [actor, setActor] = useState<string | null>(null);
-  const [director, setDirector] = useState<string | null>(null);
-  const [category, setCategory] = useState<string | null>(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchMovie = async () => {
       try {
         const movieResponse = await instance.get(`/movies/${id}`);
+        // Cập nhật lại theo dữ liệu trả về
         setMovie(movieResponse.data.data.original);
-
-    
-
-       
       } catch (error) {
         console.error(error);
-    
+   
       }
     };
     fetchMovie();
   }, [id]);
+
   const location = useLocation();
   if (error) return <div>Error loading movie details</div>;
 
@@ -47,7 +42,9 @@ const MovieDetail: React.FC = () => {
             <div className="movie-details-wrapper">
               <div className="movie-info">
                 <h1 className="title">{movie?.movie_name}</h1>
-                <p className="genre">Thể loại: {movie?.category || "Không có thể loại"}</p>
+                
+                {/* Hiển thị thể loại phim */}
+                <p className="genre">Thể loại: {movie?.category?.map((cat: any) => cat.director_name).join(', ') || "Không có thể loại"}</p>
 
                 <div className="actions">
                   <div className="button like">
@@ -80,8 +77,13 @@ const MovieDetail: React.FC = () => {
               </div>
 
               <div className="additional-info">
-                <strong>Diễn viên:</strong> <p>{movie?.actor || "Không có diễn viên"}</p>
-                <strong>Đạo diễn:</strong><p>{movie?.director || "Không có đạo diễn"}</p>
+                {/* Hiển thị diễn viên */}
+                <strong>Diễn viên:</strong>
+                <p>{movie?.actor?.map((act: any) => act.actor_name).join(', ') || "Không có diễn viên"}</p>
+                
+                {/* Hiển thị đạo diễn */}
+                <strong>Đạo diễn:</strong>
+                <p>{movie?.director?.map((dir: any) => dir.director_name).join(', ') || "Không có đạo diễn"}</p>
               </div>
             </div>
           </div>
