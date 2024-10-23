@@ -21,10 +21,10 @@ class Showtime extends Model
         'status',
     ];
 
-    // public function movie()
-    // {
-    //     return $this->belongsTo(Movie::class);
-    // }
+    public function movie()
+    {
+        return $this->belongsTo(Movie::class);
+    }
 
     public function room()
     {

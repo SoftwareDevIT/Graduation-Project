@@ -49,7 +49,7 @@ class MovieService
                 'category' => $movie->category->map(function ($category) {
                     return [
                         'id' => $category->id,
-                        'director_name' => $category->category_name
+                        'category_name' => $category->category_name
                     ];
                 }),
                 'movie_in_cinemas' => $movie->movieInCinemas->map(function ($cinema) {
@@ -122,7 +122,7 @@ class MovieService
             'category' => $movie->category->map(function ($category) {
                 return [
                     'id' => $category->id,
-                    'director_name' => $category->category_name
+                    'category_name' => $category->category_name
                 ];
             }),
             'movie_in_cinemas' => $movie->movieInCinemas->map(function ($cinema) {

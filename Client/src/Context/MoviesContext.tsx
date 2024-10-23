@@ -47,9 +47,9 @@ export const MovieProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     const addOrUpdateMovie = async (data: any, id?: string) => {
         const formData = new FormData();
         formData.append('movie_name', data.movie_name);
-        formData.append('movie_category_id', data.movie_category_id);
-        formData.append('actor_id', data.actor_id);
-        formData.append('director_id', data.director_id);
+        formData.append('movie_category_id[]', data.movie_category_id);
+        formData.append('actor_id[]', data.actor_id);
+        formData.append('director_id[]', data.director_id);
         formData.append('cinema_id', data.cinema_id);
         formData.append('release_date', data.release_date);
         formData.append('age_limit', data.age_limit);
