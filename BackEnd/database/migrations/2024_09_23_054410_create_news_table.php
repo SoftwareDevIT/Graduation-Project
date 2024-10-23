@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('news', function (Blueprint $table) {
             $table->id('id');
+            $table->unsignedBigInteger('movie_id')->nullable();
             $table->string('title')->nullable();
             $table->unsignedBigInteger('news_category_id');
             $table->string('thumnail')->nullable();// ảnh nhỏ bên dưới
@@ -21,6 +22,7 @@ return new class extends Migration
             $table->boolean('status')->default(true);
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
+            $table->foreign('movie_id')->references('id')->on('movies');
             $table->foreign('news_category_id')->references('id')->on('news_category');
             $table->foreign('user_id')->references('id')->on('users');
         });
