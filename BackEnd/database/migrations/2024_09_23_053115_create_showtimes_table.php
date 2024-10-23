@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -19,6 +18,7 @@ return new class extends Migration
             $table->date('showtime_date');
             $table->time('showtime_start');
             $table->time('showtime_end');
+            $table->integer('price');
             $table->boolean('status')->default(true);
             $table->timestamps();
             $table->foreign('movie_in_cinema_id')->references('id')->on('movie_in_cinemas');
