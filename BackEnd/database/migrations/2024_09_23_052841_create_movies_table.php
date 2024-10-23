@@ -19,6 +19,7 @@ return new class extends Migration
             // $table->unsignedBigInteger('director_id');
             $table->string('movie_name');
             $table->string('poster')->nullable();
+            $table->string('thumbnail')->nullable();
             $table->string('duration')->nullable();
             $table->date('release_date')->nullable();
             $table->integer('age_limit')->nullable();

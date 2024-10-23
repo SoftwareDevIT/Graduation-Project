@@ -4,6 +4,7 @@ namespace App\Services\Cinema;
 
 use App\Models\Cinema;
 use App\Models\Location;
+use App\Models\MovieInCinema;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -23,6 +24,10 @@ class CinemaService
     public function store(array $data): Cinema
     {
         return Cinema::create($data);
+    }
+    public function storeMovie(array $data): MovieInCinema
+    {
+        return MovieInCinema::create($data);
     }
 
     public function update(int $id, array $data): Cinema
@@ -44,7 +49,8 @@ class CinemaService
         $cinema = Cinema::findOrFail($id);
         return $cinema;
     }
-    public function showCinemaByLocation(int $location_id){
+    public function showCinemaByLocation(int $location_id)
+    {
         $location = Location::where('id', $location_id)->first();
         if (!$location) {
             throw new ModelNotFoundException('Cinema not found');

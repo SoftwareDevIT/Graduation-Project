@@ -17,6 +17,7 @@ class News extends Model
         'content',
         'status',
         'user_id',
+        'movie_id',
     ];
 
     public function newsCategory()
