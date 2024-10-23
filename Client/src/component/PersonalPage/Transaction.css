@@ -4,7 +4,7 @@
   }
   
   .transaction-table {
-    width: 100%;
+    width: 80%;
     border-collapse: collapse;
     background-color: #fff;
   }
@@ -41,3 +41,7 @@
     position: relative;
    left: 80px;
   }
+  .account-nav-item.active .account-nav-title {
+    color: #007bff;
+    font-weight: bold;
+}

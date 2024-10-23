@@ -54,6 +54,10 @@ import FilmNews from "./component/Film news/FilmNews";
 import Personal from "./component/PersonalPage/Personal";
 import ChangePassword from "./component/PersonalPage/ChangePassword";
 import Profile from "./component/PersonalPage/Profile";
+import Credits from "./component/PersonalPage/Credits";
+import Deponsit from "./component/PersonalPage/Deposit";
+import Transaction from "./component/PersonalPage/Transaction";
+import MovieDetail from "./component/MovieDetail/MovieDetail";
 
 
 
@@ -79,9 +83,14 @@ function App() {
 
         <Route path="/movie/search/:movie_name" element={<SerachMovies />} />
 
+        <Route path="/moviedetail" element={<MovieDetail/>} />
+
         <Route path="/profile" element={<Profile/>} />
         <Route path="/Personal" element={<Personal/>} />
         <Route path="/ChangePassword" element={<ChangePassword/>} />
+        <Route path="/credits" element={<Credits/>} />
+        <Route path="/deponsit" element={<Deponsit/>} />
+        <Route path="/transaction" element={<Transaction/>} />
     
         <Route path="/register" element={<RegisterCinema />} />
         <Route path="/login" element={<LoginCinema />} />

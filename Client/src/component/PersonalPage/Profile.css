@@ -1,4 +1,6 @@
-
+.content-acount{
+  margin-bottom: 50px;
+}
 .profile-container {
   position: relative;
   max-width: 600px;
@@ -10,8 +12,6 @@
   bottom: 580px;
   right: 270px;
   margin-top: 30px;
-  
-  
 }
 
 .profile-form {
@@ -91,4 +91,8 @@ input[type="file"] {
   position: relative;
   right: 50px;
 
+}
+.account-nav-item.active .account-nav-title {
+  color: #007bff;
+  font-weight: bold;
 }

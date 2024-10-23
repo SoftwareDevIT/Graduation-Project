@@ -1,136 +1,225 @@
 .main-content{
-    text-align: center;
-    margin-top: 20px;
-  /* background-color: #f0f6f7; */
+  text-align: center;
+  margin-top: 20px;
+/* background-color: #f0f6f7; */
 }
 .acounntone{
 display: flex;
 }
 .avatas{
-    border-color: #fff;
+  border-color: #fff;
 }
 .avatas img{
-    position: relative;
-    width: 120px;
-    height: 120px;
-    margin-left: 20px;
-    bottom: 40px;
-    border-radius: 80px;
-    border-color: #fff;
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin-left: 20px;
+  bottom: 40px;
+  border-radius: 80px;
+  border-color: #fff;
 }
 .cover{
-    border-radius: 8px;
+  border-radius: 8px;
 }
 .nameacount{
 
-    padding-left: 20px;
-    padding-top: 30px;
-   
+  padding-left: 20px;
+  padding-top: 30px;
+ 
 }
 .nameacount h3{
-    font-size: 30px;
-    font-family: "Cerebri Sans, sans-serif";
-    font-weight: 600px;
+  font-size: 30px;
+  font-family: "Cerebri Sans, sans-serif";
+  font-weight: 600px;
 }
 .acounntone{
-    border: 1px solid #edf2f9;
-    border-radius:0 0 .5rem .5rem ;
-    background-clip: border-box;
-    background-color: #fff;
- width: 851px;
- margin-left: 223px;
- box-shadow: 0 .75rem 1.5rem rgba(18,38,63,.03)
+  border: 1px solid #edf2f9;
+  border-radius:0 0 .5rem .5rem ;
+  background-clip: border-box;
+  background-color: #fff;
+width: 851px;
+margin-left: 223px;
+box-shadow: 0 .75rem 1.5rem rgba(18,38,63,.03)
 }
 
 .nutlike{
-    border-color: #edf2f9;
-    box-shadow: 0 .75rem 1.5rem rgba(18,38,63,.03);
-    background-color: #fff;
-    border: 1px solid #edf2f9;
-    border-radius:0 0 .5rem .5rem;
-    padding-right: 30px;
+  border-color: #edf2f9;
+  box-shadow: 0 .75rem 1.5rem rgba(18,38,63,.03);
+  background-color: #fff;
+  border: 1px solid #edf2f9;
+  border-radius:0 0 .5rem .5rem;
+  padding-right: 30px;
 }
 .nutlike span{
-  padding-left: 10px;
-  font-family: Feather !important;
-  color: #00d97e;
-  font-weight: 500;
+padding-left: 10px;
+font-family: Feather !important;
+color: #00d97e;
+font-weight: 500;
+
   
-    
 }
 .nobackground {
-    color: #95aac9 !important;
+  color: #95aac9 !important;
 }
 .item-phim .img img{
-    width: 126px;
-    height: 190px;
+  width: 126px;
+  height: 190px;
 }
 .phimyeuthich{
-    display: flex;
-    margin-left: 450px;
+  display: flex;
+  margin-left: 450px;
 }
 .moveslike{
-    margin-top: 16px;
+  margin-top: 16px;
+}
+.moveslike h3{
+  margin-bottom: 16px;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: rgb(18, 38, 63);
+  font-family: "Cerebri Sans, sans-serif";
+}
+.activities {
+  width: 60%; /* Giảm kích thước xuống 60% */
+  margin: 0 auto; /* Căn giữa theo chiều ngang */
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 40px;
+  margin-bottom: 30px;
+}
+
+.activity-list {
+
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.activity-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  padding: 12px 16px;
+  margin-bottom: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.activity-info {
+  display: flex;
+  align-items: center;
+}
+
+.activity-dot {
+  color: #4071f4;
+  margin-right: 8px;
+}
+
+.activity-text {
+  font-size: 14px;
+  color: #333;
+}
+
+.activity-time {
+  font-size: 12px;
+  color: #999;
+}
+
+.see-more {
+  text-align: center;
+  background-color: #e9f1ff;
+  color: #4071f4;
+  padding: 10px 0;
+  border-radius: 8px;
+  cursor: pointer;
+} 
+
+
+/* Các quy tắc CSS hiện tại của bạn ở đây */
+
+/* Responsive cho máy tính bảng */
+@media (max-width: 768px) {
+  .main-content {
+      margin-top: 10px;
   }
-  .moveslike h3{
-    margin-bottom: 16px;
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: rgb(18, 38, 63);
-    font-family: "Cerebri Sans, sans-serif";
+
+  .acounntone {
+      flex-direction: column; /* Đặt lại hướng của flex thành cột */
+      align-items: center; /* Căn giữa các phần tử */
   }
+
+  .avatas {
+      margin-bottom: 10px; /* Giảm khoảng cách dưới avatar */
+  }
+
+  .nameacount {
+      padding-left: 0; /* Xóa padding bên trái */
+      padding-top: 10px; /* Giảm padding trên */
+      text-align: center; /* Căn giữa tiêu đề */
+  }
+
+  .phimyeuthich {
+      flex-direction: column; /* Đặt lại hướng của flex thành cột */
+      align-items: center; /* Căn giữa các phần tử */
+      margin-left: 0; /* Xóa khoảng cách bên trái */
+  }
+
+  .item-phim {
+      margin-bottom: 20px; /* Giảm khoảng cách giữa các item phim */
+  }
+
   .activities {
-    width: 60%; /* Giảm kích thước xuống 60% */
-    margin: 0 auto; /* Căn giữa theo chiều ngang */
-    padding: 20px;
-    border-radius: 8px;
-    margin-top: 40px;
-    margin-bottom: 30px;
+      width: 90%; /* Mở rộng kích thước */
   }
-  
-  .activity-list {
-  
-    padding: 20px;
-    border-radius: 8px;
-  }
-  
+
   .activity-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: white;
-    padding: 12px 16px;
-    margin-bottom: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      flex-direction: column; /* Đặt lại hướng của flex thành cột */
+      align-items: flex-start; /* Căn trái cho các phần tử */
   }
-  
-  .activity-info {
-    display: flex;
-    align-items: center;
-  }
-  
-  .activity-dot {
-    color: #4071f4;
-    margin-right: 8px;
-  }
-  
-  .activity-text {
-    font-size: 14px;
-    color: #333;
-  }
-  
+
   .activity-time {
-    font-size: 12px;
-    color: #999;
+      margin-top: 5px; /* Thêm khoảng cách trên cho thời gian hoạt động */
   }
-  
+
   .see-more {
-    text-align: center;
-    background-color: #e9f1ff;
-    color: #4071f4;
-    padding: 10px 0;
-    border-radius: 8px;
-    cursor: pointer;
+      width: 100%; /* Mở rộng chiều rộng */
+      margin-top: 10px; /* Thêm khoảng cách trên */
   }
-  
+}
+
+/* Responsive cho điện thoại */
+@media (max-width: 576px) {
+  .avatas img {
+      width: 100px; /* Giảm kích thước avatar */
+      height: 100px; /* Giảm kích thước avatar */
+  }
+
+  .nameacount h3 {
+      font-size: 24px; /* Giảm kích thước font cho tên tài khoản */
+  }
+
+  .item-phim .img img {
+      width: 100px; /* Giảm kích thước hình ảnh phim */
+      height: 150px; /* Giảm kích thước hình ảnh phim */
+  }
+
+  .activity-item {
+      padding: 8px 12px; /* Giảm padding cho activity item */
+  }
+
+  .activity-info {
+      font-size: 12px; /* Giảm kích thước font cho thông tin hoạt động */
+  }
+
+  .activity-time {
+      font-size: 10px; /* Giảm kích thước font cho thời gian hoạt động */
+  }
+
+  .see-more {
+      padding: 8px 0; /* Giảm padding cho nút xem thêm */
+  }
+  .nutlike{
+    width: 100px;
+    margin-left: 165px;
+  }
+}
