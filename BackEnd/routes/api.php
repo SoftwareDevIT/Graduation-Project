@@ -73,11 +73,10 @@ Route::apiResource('news', NewController::class)->only(['index', 'show']);      
 Route::apiResource('actor', ActorController::class)->only(['index', 'show']);                       // Liệt kê các diễn viên
 Route::apiResource('director', DirectorController::class)->only(['index', 'show']);                 // Danh sách giám đốc
 Route::apiResource('movie-category', MovieCategoryController::class)->only(['index', 'show']);      // Liệt kê các thể loại phim
-Route::apiResource('movies', MovieController::class)->only(['index', 'show']);                      // Liệt kê phim
 Route::apiResource('room', RoomController::class)->only(['index', 'show']);
 
 // Các tuyến có thể truy cập được cho người dùng được xác thực
-Route::middleware(['auth:sanctum'])->group(function () {
+// Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('favorites/{movie_id}', [FavoriteController::class, 'store']);                 // Thêm phim yêu thích
     Route::delete('favorites/{movie_id}', [FavoriteController::class, 'destroy']);             // Xóa phim yêu thích
     Route::post('ratings', [RatingController::class, 'store']);                                // Phim đánh giá
@@ -88,7 +87,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         $user = $request->user()->load('favoriteMovies');
         return response()->json($user);
     });
-});
+// });
 Route::get('/vnpay-return', [BookingController::class, 'vnPayReturn']);
 Route::get('/all-user', [AuthController::class, 'allUser']);
 

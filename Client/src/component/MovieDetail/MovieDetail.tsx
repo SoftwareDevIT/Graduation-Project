@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import Header from "../Header/Hearder";
 import Footer from "../Footer/Footer";
 import instance from "../../server";
@@ -17,25 +17,11 @@ const MovieDetail: React.FC = () => {
     const fetchMovie = async () => {
       try {
         const movieResponse = await instance.get(`/movies/${id}`);
-        setMovie(movieResponse.data.data);
+        setMovie(movieResponse.data.data.original);
 
-        // Fetch actor name
-        if (movieResponse.data.data.actor_id) {
-          const actorResponse = await instance.get(`/actor/${movieResponse.data.data.actor_id}`);
-          setActor(actorResponse.data.data.actor_name);
-        }
+    
 
-        // Fetch director name
-        if (movieResponse.data.data.director_id) {
-          const directorResponse = await instance.get(`/director/${movieResponse.data.data.director_id}`);
-          setDirector(directorResponse.data.data.director_name);
-        }
-
-        // Fetch movie category name
-        if (movieResponse.data.data.movie_category_id) {
-          const categoryResponse = await instance.get(`/movie-category/${movieResponse.data.data.movie_category_id}`);
-          setCategory(categoryResponse.data.data.category_name);
-        }
+       
       } catch (error) {
         console.error(error);
     
@@ -43,7 +29,7 @@ const MovieDetail: React.FC = () => {
     };
     fetchMovie();
   }, [id]);
-
+  const location = useLocation();
   if (error) return <div>Error loading movie details</div>;
 
   return (
@@ -61,7 +47,7 @@ const MovieDetail: React.FC = () => {
             <div className="movie-details-wrapper">
               <div className="movie-info">
                 <h1 className="title">{movie?.movie_name}</h1>
-                <p className="genre">Thể loại: {category || "Không có thể loại"}</p>
+                <p className="genre">Thể loại: {movie?.category || "Không có thể loại"}</p>
 
                 <div className="actions">
                   <div className="button like">
@@ -94,19 +80,29 @@ const MovieDetail: React.FC = () => {
               </div>
 
               <div className="additional-info">
-                <strong>Diễn viên:</strong> <p>{actor || "Không có diễn viên"}</p>
-                <strong>Đạo diễn:</strong><p>{director || "Không có đạo diễn"}</p>
+                <strong>Diễn viên:</strong> <p>{movie?.actor || "Không có diễn viên"}</p>
+                <strong>Đạo diễn:</strong><p>{movie?.director || "Không có đạo diễn"}</p>
               </div>
             </div>
           </div>
         </div>
 
         <div className="tabs">
-          <Link to={`/moviedetail/${id}`} className="tab active">Thông tin phim</Link>
-          <Link to={`/schedule/${id}`} className="tab">Lịch chiếu</Link>
-          <Link to={`/reviews/${id}`} className="tab">Đánh giá</Link>
-          <Link to={`/news/${id}`} className="tab">Tin tức</Link>
-          <Link to={`/buy-now/${id}`} className="tab">Mua vé</Link>
+          <Link to={`/movie-detail/${id}`} className={`tab ${location.pathname === `/movie-detail/${id}` ? "active" : ""}`}>
+            Thông tin phim
+          </Link>
+          <Link to={`/schedule/${id}`} className={`tab ${location.pathname === `/schedule/${id}` ? "active" : ""}`}>
+            Lịch chiếu
+          </Link>
+          <Link to={`/reviews/${id}`} className={`tab ${location.pathname === `/reviews/${id}` ? "active" : ""}`}>
+            Đánh giá
+          </Link>
+          <Link to={`/news/${id}`} className={`tab ${location.pathname === `/news/${id}` ? "active" : ""}`}>
+            Tin tức
+          </Link>
+          <Link to={`/buy-now/${id}`} className={`tab ${location.pathname === `/buy-now/${id}` ? "active" : ""}`}>
+            Mua vé
+          </Link>
         </div>
       </div>
     </>

@@ -49,7 +49,7 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/home', function () {
     return view('home');
 })->middleware('auth');
-Route::middleware(['auth', 'role:admin|manager'])->group(function () {
+// Route::middleware(['auth', 'role:admin|manager'])->group(function () {
     // Resource route for roles, except for 'show'
     Route::resource('roles', RoleController::class)->except(['show']);
 
@@ -63,7 +63,7 @@ Route::middleware(['auth', 'role:admin|manager'])->group(function () {
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::post('/users/{user}/roles', [UserController::class, 'syncRoles'])->name('users.roles.sync');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
-});
+// });
 Route::get('/showtimes/create', [ShowtimeController::class, 'create'])->name('showtimes.create');
 Route::post('/showtimes', [ShowtimeController::class, 'store'])->name('showtimes.store');
 

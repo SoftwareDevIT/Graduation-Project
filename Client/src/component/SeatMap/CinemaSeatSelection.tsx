@@ -199,7 +199,8 @@ if (error) {
     <>
       <Header />
       <Headerticket />
-      <div className="container container-map">
+     <div className="box-map">
+     <div className="container container-map">
         <div className="seat-info-box">
           <div className="seat-map-box ">
             <div className="screen">MÀN HÌNH</div>
@@ -262,6 +263,7 @@ if (error) {
           </div>
         </div>
       </div>
+     </div>
       <Footer />
     </>
   );

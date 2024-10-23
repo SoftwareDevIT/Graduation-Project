@@ -15,7 +15,6 @@ import {
 import { Actor } from '../../../interface/Actor';
 import { Director } from '../../../interface/Director';
 import { Categories } from '../../../interface/Categories';
-import { Cinema } from '../../../interface/Cinema';
 
 import { useMovieContext } from '../../../Context/MoviesContext';
 import instance from '../../../server';
@@ -26,7 +25,7 @@ const MovieForm: React.FC = () => {
   const [actors, setActors] = useState<Actor[]>([]);
   const [directors, setDirectors] = useState<Director[]>([]);
   const [categories, setCategories] = useState<Categories[]>([]);
-  const [cinemas, setCinemas] = useState<Cinema[]>([]);
+  
   const [posterFile, setPosterFile] = useState<File | null>(null);
   const nav = useNavigate();
   const { addOrUpdateMovie } = useMovieContext();
@@ -37,29 +36,27 @@ const MovieForm: React.FC = () => {
         const actorResponse = await instance.get('/actor');
         const directorResponse = await instance.get('/director');
         const categoryResponse = await instance.get('/movie-category');
-        const cinemaResponse = await instance.get('/cinema');
 
         setActors(Array.isArray(actorResponse.data) ? actorResponse.data : []);
         setDirectors(Array.isArray(directorResponse.data) ? directorResponse.data : []);
         setCategories(Array.isArray(categoryResponse.data) ? categoryResponse.data : []);
-        setCinemas(Array.isArray(cinemaResponse.data.data) ? cinemaResponse.data.data : []);
 
         if (id) {
           const movieResponse = await instance.get(`/movies/${id}`);
-          const movieData = movieResponse.data.data;
-
+          const movieData = movieResponse.data.original;
+        
           reset({
             movie_name: movieData.movie_name,
-            movie_category_id: movieData.movie_category_id,
-            actor_id: movieData.actor_id,
-            director_id: movieData.director_id,
-            cinema_id: movieData.cinema_id,
+            movie_category_id: movieData.category?.length ? movieData.category[0].id : '', // Use optional chaining
+            actor_id: movieData.actor?.length ? movieData.actor[0].id : '', // Use optional chaining
+            director_id: movieData.director?.length ? movieData.director[0].id : '', // Use optional chaining
             release_date: moment(movieData.release_date).format('YYYY-MM-DD'),
             age_limit: movieData.age_limit,
-            description: movieData.description,
-            duration: movieData.duration,
+            description: movieData.description || '', // Ensure description is a string
+            duration: movieData.duration || '', // Handle duration as string if needed
           });
         }
+        
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -139,20 +136,6 @@ const MovieForm: React.FC = () => {
             {directors.map((director) => (
               <MenuItem key={director.id} value={director.id}>
                 {director.director_name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-
-        <FormControl fullWidth margin="normal">
-          <InputLabel>Cinema</InputLabel>
-          <Select label="Cinema" {...register('cinema_id')} required>
-            <MenuItem value="">
-              <em>Select Cinema</em>
-            </MenuItem>
-            {cinemas.map((cinema) => (
-              <MenuItem key={cinema.id} value={cinema.id}>
-                {cinema.cinema_name}
               </MenuItem>
             ))}
           </Select>
