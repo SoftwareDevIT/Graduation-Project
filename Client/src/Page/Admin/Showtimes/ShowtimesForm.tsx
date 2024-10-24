@@ -7,6 +7,7 @@ import ShowtimesForm from '../../../component/Admin/ShowtimesDashboard/Showtimes
 
 
 
+
 function ShowtimesFormManager() {
     return (
         <div className="showtimesmanager">

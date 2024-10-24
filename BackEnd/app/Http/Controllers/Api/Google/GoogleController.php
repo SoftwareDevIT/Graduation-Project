@@ -50,12 +50,12 @@ class GoogleController extends Controller
 
                 $token = $this->loginService->login($credentials);
                 $profile = $this->loginService->index();
-                // return $this->success(['token' => $token, 'profile' => $profile], 200);
-                return Redirect::to('http://localhost:5173')->with('success', [
-                    'message' => __('Google login successful'),
-                    'token' => $token,
-                    'profile' => $profile
-                ]);
+                return $this->success(['token' => $token, 'profile' => $profile], 200);
+                // return Redirect::to('http://localhost:5173')->with('success', [
+                //     'message' => __('Google login successful'),
+                //     'token' => $token,
+                //     'profile' => $profile
+                // ]);
 
                 // return response()->json([
                 // 'message' => __('Google login successful'),
@@ -78,12 +78,12 @@ class GoogleController extends Controller
                 ];
 
                 $token = $this->loginService->login($credentials);
-                // return $this->success(['token' => $token, 'profile' => $newUser], 200);
-                return Redirect::to('http://localhost:5173')->with('success', [
-                    'message' => __('Google login successful'),
-                    'token' => $token,
-                    'profile' => $newUser
-                ]);
+                return $this->success(['token' => $token, 'profile' => $newUser], 200);
+                // return Redirect::to('http://localhost:5173')->with('success', [
+                //     'message' => __('Google login successful'),
+                //     'token' => $token,
+                //     'profile' => $newUser
+                // ]);
                 // return response()->json([
                 //     'message' => __('Google sign in successful'),
                 //     'token' => $token,

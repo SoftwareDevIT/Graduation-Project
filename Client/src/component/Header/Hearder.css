@@ -184,7 +184,11 @@ bottom: 10px;
 .dropdown:hover .dropdown-content {
   display: block;
 }
-
+@media (max-width: 1122px) {
+  .fas{
+    display: none !important;
+  }
+}
 
 /* Media Queries for Responsive Design */
 @media (max-width: 768px) {
@@ -279,11 +283,12 @@ bottom: 10px;
   .thanhmenu{
     position: relative;
    right: 120px;
+  margin-top: 15px;
   }
   .header-logo a{
    position: relative;
    left: -104px;
-  top:10px;
+  top:8px;
      color: #e50914;
      text-decoration: none;
    }

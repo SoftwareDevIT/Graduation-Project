@@ -47,13 +47,13 @@ class MovieController extends Controller
                 $movie = $this->movieService->store($movie);
         
                 // Gắn các mối quan hệ
-                // $movie->category()->sync($request->movie_category_id);
-                // $movie->actor()->sync($request->actor_id);
-                // $movie->director()->sync($request->director_id);
+                $movie->category()->sync($request->movie_category_id);
+                $movie->actor()->sync($request->actor_id);
+                $movie->director()->sync($request->director_id);
 
-                $movie->category()->attach($request->movie_category_id);
-                $movie->actor()->attach($request->actor_id);
-                $movie->director()->attach($request->director_id);
+                // $movie->category()->attach($request->movie_category_id);
+                // $movie->actor()->attach($request->actor_id);
+                // $movie->director()->attach($request->director_id);
             });
             return $this->success($movie, 'Thêm thành công Movie');
         } catch (Exception $e) {
