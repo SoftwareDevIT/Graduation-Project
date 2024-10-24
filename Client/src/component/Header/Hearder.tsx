@@ -57,7 +57,9 @@ import instance from "../../server";
     const handleLogout = () => {
       localStorage.removeItem("token");
       localStorage.removeItem("user_id"); // Xóa userId khỏi localStorage
+      localStorage.removeItem("user_profile"); // Xóa userId khỏi localStorage
       setIsLoggedIn(false); // Cập nhật trạng thái đăng nhập
+      navigate('/')
     };
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
       setSearchTerm(e.target.value); // Cập nhật giá trị tìm kiếm vào state
@@ -70,10 +72,6 @@ import instance from "../../server";
       if (searchTerm.trim()) {
         // Chuyển sang trang kết quả tìm kiếm, truyền từ khóa qua URL
         navigate(`/movie/search/${encodeURIComponent(searchTerm)}`);
-
- 
-
-
       }
     };
     
@@ -278,17 +276,8 @@ import instance from "../../server";
               </Link>
               {isLoggedIn ? (
                 <div className="icon-link" onClick={toggleProfileMenu}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="25"
-                    height="25"
-                    fill="currentColor"
-                    className="bi bi-person-circle"
-                    viewBox="0 0 16 16"
-                  >
-                    <path d="M10.5 11a3.5 3.5 0 1 1-5 0 5.5 5.5 0 0 0 5 0" />
-                    <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm0 1a7 7 0 1 1 0 14A7 7 0 0 1 8 1z" />
-                  </svg>
+                 <img className="avtat-img" src="	https://cdn.moveek.com/bundles/ornweb/img/no-avatar.png" alt="" />
+                 <i className="fas fa-check checkmark"></i> 
                   {isProfileMenuVisible && (
                   <div className="profile-dropdown">
                     <Link to="/profile">Trang cá nhân</Link>

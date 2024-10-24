@@ -1,28 +1,70 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import Header from "../Header/Hearder";
-import Footer from "../Footer/Footer";
+
 import instance from "../../server";
 import "./MovieDetail.css";
+import { notification } from "antd"; 
 
 const MovieDetail: React.FC = () => {
   const { id } = useParams();
   const [movie, setMovie] = useState<any>(null);
   const [error, setError] = useState(null);
+  const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
     const fetchMovie = async () => {
       try {
         const movieResponse = await instance.get(`/movies/${id}`);
-        // Cập nhật lại theo dữ liệu trả về
         setMovie(movieResponse.data.data.original);
+
+        // Kiểm tra xem phim có trong danh sách yêu thích hay không
+        const favoriteResponse = await instance.get(`/favorites/${id}`);
+        if (favoriteResponse.data.status) {
+          setIsFavorite(true); // Đánh dấu phim đã được yêu thích
+        }
       } catch (error) {
         console.error(error);
-   
       }
     };
     fetchMovie();
   }, [id]);
+
+  const handleFavorite = async () => {
+    try {
+      if (isFavorite) {
+        // Xóa phim khỏi danh sách yêu thích
+        await instance.delete(`/favorites/${id}`);
+        notification.success({
+          message: 'Thành công',
+          description: 'Phim đã được xóa khỏi danh sách yêu thích!',
+        });
+        setIsFavorite(false); // Cập nhật lại trạng thái
+      } else {
+        // Thêm phim vào danh sách yêu thích
+        const response = await instance.post(`/favorites/${id}`);
+        if (response.data.status) {
+          notification.success({
+            message: 'Thành công',
+            description: 'Phim đã được thêm vào danh sách yêu thích!',
+          });
+          setIsFavorite(true); // Cập nhật trạng thái yêu thích
+        }
+      }
+    } catch (error: any) {
+      if (error.response && error.response.status === 409) {
+        notification.warning({
+          message: 'Thông báo',
+          description: 'Phim này đã được yêu thích!',
+        });
+      } else {
+        notification.error({
+          message: 'Lỗi',
+          description: 'Có lỗi xảy ra khi xử lý yêu thích phim.',
+        });
+      }
+    }
+  };
 
   const location = useLocation();
   if (error) return <div>Error loading movie details</div>;
@@ -38,18 +80,15 @@ const MovieDetail: React.FC = () => {
               alt={movie?.movie_name}
               className="poster"
             />
-
             <div className="movie-details-wrapper">
               <div className="movie-info">
                 <h1 className="title">{movie?.movie_name}</h1>
-                
-                {/* Hiển thị thể loại phim */}
                 <p className="genre">Thể loại: {movie?.category?.map((cat: any) => cat.director_name).join(', ') || "Không có thể loại"}</p>
 
                 <div className="actions">
-                  <div className="button like">
+                  <div className="button like" onClick={handleFavorite}>
                     <span role="img" aria-label="like">❤️</span>{" "}
-                    <span className="like-1">Thích</span>
+                    <span className="like-1">{isFavorite ? "Bỏ thích" : "Thích"}</span>
                   </div>
                   <div className="button rate like">
                     <span role="img" aria-label="rate">⭐</span>{" "}
@@ -77,11 +116,9 @@ const MovieDetail: React.FC = () => {
               </div>
 
               <div className="additional-info">
-                {/* Hiển thị diễn viên */}
                 <strong>Diễn viên:</strong>
                 <p>{movie?.actor?.map((act: any) => act.actor_name).join(', ') || "Không có diễn viên"}</p>
-                
-                {/* Hiển thị đạo diễn */}
+
                 <strong>Đạo diễn:</strong>
                 <p>{movie?.director?.map((dir: any) => dir.director_name).join(', ') || "Không có đạo diễn"}</p>
               </div>

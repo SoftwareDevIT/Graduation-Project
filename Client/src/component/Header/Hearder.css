@@ -153,6 +153,21 @@ bottom: 10px;
   overflow-y: auto;
   border: 1px solid #ddd;
 }
+.avtat-img { 
+  width: 25px;
+  height: 25px;
+  border-radius: 100%;
+  position: relative; /* Để sử dụng với tích xanh */
+ 
+}
+.checkmark {
+  position: absolute; /* Để định vị biểu tượng tích xanh */
+  bottom: 10px; /* Đưa tích xanh xuống dưới cùng */
+  right: 150px; /* Đưa tích xanh sang bên phải */
+  color:dodgerblue; /* Màu sắc cho tích xanh */
+  font-size: 17px; /* Kích thước cho biểu tượng tích xanh */
+  
+}
 
 .dropdown-content a {
   color: #6e84a3;

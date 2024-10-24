@@ -435,6 +435,7 @@ left: 10px;
   .dislike-btn:hover {
     opacity: 0.7;
   }
+  
   /* Cho màn hình máy tính bảng */
 @media (max-width: 1024px) {
     .movie-detail-container {

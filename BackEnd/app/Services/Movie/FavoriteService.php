@@ -8,6 +8,7 @@ use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Class MovieService.
@@ -26,7 +27,7 @@ class FavoriteService
             ->first();
     
         if ($existingFavorite) {
-            throw new Exception('Phim đã được yêu thích!', 409);
+            throw new HttpException(409, 'Phim đã được yêu thích!');
         }
     
         return Favorite::create([

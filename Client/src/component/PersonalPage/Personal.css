@@ -48,7 +48,9 @@ display: flex;
     background-color: #fff;
     border: 1px solid #edf2f9;
     border-radius:0 0 .5rem .5rem;
-    padding-right: 30px;
+   width: 126px;
+   position: relative;
+   left: 90px;
 }
 .nutlike span{
   padding-left: 10px;
@@ -65,10 +67,7 @@ display: flex;
     width: 126px;
     height: 190px;
 }
-.phimyeuthich{
-    display: flex;
-    margin-left: 450px;
-}
+
 .moveslike{
     margin-top: 16px;
   }
