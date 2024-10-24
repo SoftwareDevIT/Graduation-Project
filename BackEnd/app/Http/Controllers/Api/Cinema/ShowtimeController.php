@@ -77,15 +77,20 @@ class ShowtimeController extends Controller
             $createdShowtime = $this->showtimeService->store($showtimeData);
             return $this->success($createdShowtime, 'Single showtime created successfully.');
         }
+        
     }
 
     /**
-     * Helper function to determine if an array is multi-dimensional (i.e., multiple showtimes).
+     * Helper function to check if an array is multidimensional.
+     *
+     * @param array $array
+     * @return bool
      */
-    private function isMultiDimensionalArray($array)
+    private function isMultiDimensionalArray(array $array): bool
     {
         return isset($array[0]) && is_array($array[0]);
     }
+
 
 
     public function update(UpdateShowtimeRequest $request, $id)

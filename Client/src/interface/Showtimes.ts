@@ -3,7 +3,7 @@ import { Movie } from "./Movie";
 
 
 export interface Showtime {
-
+    movie_in_cinema_id:number;
     id: number;
     movie_id: number;
     cinema_id: number;

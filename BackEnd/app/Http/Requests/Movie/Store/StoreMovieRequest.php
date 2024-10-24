@@ -31,11 +31,11 @@ class StoreMovieRequest extends FormRequest
             'trailer'               => 'string|max:255',
             'rating'                => 'numeric',
             'actor_id'                => 'required|array',
-            'actor_id.*'              => 'integer|exists:actor,id',
+            'actor_id.*'              => 'exists:actor,id',
             'director_id'                => 'required|array',
-            'director_id.*'              => 'integer|exists:director,id',
+            'director_id.*'              => 'exists:director,id',
             'movie_category_id'                => 'required|array',
-            'movie_category_id.*'              => 'integer|exists:movie_category,id',
+            'movie_category_id.*'              => 'exists:movie_category,id',
         ];
     }
 
