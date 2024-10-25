@@ -1,10 +1,10 @@
 /* Bố cục chung của bảng */
 .transaction-table-wrapper {
-    width: 60%;
+    width: 70%;
     text-align: center;
     padding: 20px;
     background-color: #f9f9f9;
-    margin-right: 390px;
+    margin-right:270px;
 }
 
 /* Bảng */
@@ -55,3 +55,7 @@
     position: relative;
    left: 80px;
   }
+  .account-nav-item.active .account-nav-title {
+    color: #007bff;
+    font-weight: bold;
+}
