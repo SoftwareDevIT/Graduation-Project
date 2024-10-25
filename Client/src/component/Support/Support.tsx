@@ -117,6 +117,9 @@ const SupportCenter: React.FC = () => {
               <li><a href="#">Thanh toán bằng Thẻ / tài khoản ngân hàng nội địa</a></li>
               <li><a href="#">Thanh toán bằng Thẻ tín dụng / ghi nợ quốc tế</a></li>
               <li><a href="#">Thanh toán tại Cửa hàng gần nhà</a></li>
+              <li><a href="#">Thanh toán bằng Ví điện tử MoMo</a></li>
+              <li><a href="#">Thanh toán bằng Ví điện tử FPT Pay</a></li>
+              <li><a href="#">Thanh toán bằng ví điện tử ShopeePay</a></li>
             </ul>
           </div>
         </section>

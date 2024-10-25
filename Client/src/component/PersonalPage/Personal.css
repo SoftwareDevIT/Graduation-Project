@@ -187,6 +187,58 @@ font-weight: 500;
   }
 }
 
+/* Responsive cho máy tính bảng */
+@media (max-width: 768px) {
+  .main-content {
+      margin-top: 10px;
+  }
+
+  .acounntone {
+      flex-direction: column; /* Đặt lại hướng của flex thành cột */
+      align-items: center; /* Căn giữa các phần tử */
+  }
+
+  .avatas {
+      margin-bottom: 10px; /* Giảm khoảng cách dưới avatar */
+  }
+
+  .nameacount {
+      padding-left: 0; /* Xóa padding bên trái */
+      padding-top: 10px; /* Giảm padding trên */
+      text-align: center; /* Căn giữa tiêu đề */
+  }
+
+  .phimyeuthich {
+      flex-direction: column; /* Đặt lại hướng của flex thành cột */
+      align-items: center; /* Căn giữa các phần tử */
+      margin-left: 0; /* Xóa khoảng cách bên trái */
+  }
+
+  .item-phim {
+      margin-bottom: 20px; /* Giảm khoảng cách giữa các item phim */
+      width: 100%; /* Mở rộng chiều rộng item phim */
+      max-width: 300px; /* Giới hạn chiều rộng tối đa */
+  }
+
+  .activities {
+      width: 90%; /* Mở rộng kích thước */
+  }
+
+  .activity-item {
+      flex-direction: column; /* Đặt lại hướng của flex thành cột */
+      align-items: flex-start; /* Căn trái cho các phần tử */
+  }
+
+  .activity-time {
+      margin-top: 5px; /* Thêm khoảng cách trên cho thời gian hoạt động */
+  }
+
+  .see-more {
+      width: 100%; /* Mở rộng chiều rộng */
+      margin-top: 10px; /* Thêm khoảng cách trên */
+  }
+}
+
 /* Responsive cho điện thoại */
 @media (max-width: 576px) {
   .avatas img {
@@ -218,8 +270,12 @@ font-weight: 500;
   .see-more {
       padding: 8px 0; /* Giảm padding cho nút xem thêm */
   }
-  .nutlike{
-    width: 100px;
-    margin-left: 165px;
+
+  .nutlike {
+      width: 100px;
+      margin-left: 0; /* Căn giữa nút thích */
+      display: flex;
+      justify-content: center; /* Căn giữa nội dung bên trong */
   }
 }
+

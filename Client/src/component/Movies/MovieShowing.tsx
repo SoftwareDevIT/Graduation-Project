@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import "./MovieShowing.css"
+import "./MovieShowing.css";
 import Footer from '../Footer/Footer';
-import Header from '../Header/Hearder';
+
 import instance from "../../server";
 import { Movie } from "../../interface/Movie";
+import Header from '../Header/Hearder';
 
 const MovieShowing: React.FC = () => {
   const [selectedPopular, setSelectedPopular] = useState('');
@@ -71,18 +72,17 @@ const MovieShowing: React.FC = () => {
             </select>
           </div>
 
-          <div className="movie-list">
+          <div className="danh-sach-phim"> {/* Đổi tên class ở đây */}
             {/* Hiển thị danh sách phim từ API */}
             {movies.map((movie) => (
-              <div key={movie.id} className="movie-card">
-                <img src={movie.poster || "placeholder.jpg"} alt={movie.movie_name} className="movie-image" />
-                <div className="movie-info">
+              <div key={movie.id} className="phim-card"> {/* Đổi tên class ở đây */}
+                <img src={movie.poster || "placeholder.jpg"} alt={movie.movie_name} className="phim-hinh" /> {/* Đổi tên class ở đây */}
+                <div className="phim-thong-tin"> {/* Đổi tên class ở đây */}
                   <h3>{movie.movie_name}</h3>
                   <p>Khởi chiếu: {movie.release_date ? new Date(movie.release_date).toLocaleDateString("vi-VN") : "N/A"}</p>
-                  {/* Nếu cần, có thể thêm thông tin thể loại, ngôn ngữ, đánh giá ở đây */}
                 </div>
-                {movie.release_date === '2024-10-25' && ( // Thay đổi điều kiện phù hợp
-                  <div className="early-access-tag">Chiếu sớm</div>
+                {movie.release_date === '2024-10-25' && (
+                  <div className="tag-chieu-som">Chiếu sớm</div> 
                 )}
               </div>
             ))}

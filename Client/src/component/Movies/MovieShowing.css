@@ -4,14 +4,15 @@
     font-family: 'Roboto', sans-serif;
     max-width: 1200px;
     margin: 0 auto;
+   margin-top: -40px;
   }
   
   /* Phần Banner */
   .banner {
-    background-image: url('https://genk.mediacdn.vn/2018/7/1/photo-3-15304300780411118089224.jpg'); /* Đường dẫn ảnh banner */
+    background-image: url('https://cdn.moveek.com/build/images/tix-banner.ed8b6071.png');
     background-size: cover;
     background-position: center;
-    height: 250px;
+    height: 150px;
     color: white;
     display: flex;
     flex-direction: column;
@@ -21,9 +22,10 @@
   }
   
   .banner h2 {
-    font-size: 36px;
-    font-weight: bold;
+    font-size: 28px;
+    font-weight:550px;
     margin-bottom: 10px;
+    color: white;
   }
   
   .banner p {
@@ -31,15 +33,10 @@
     max-width: 800px;
     line-height: 1.5;
   }
-  .titleg{
-    display: flex;
-  }
   
-  /* Tạo bố cục ngang cho bộ lọc và danh sách phim bên dưới banner */
-  .content-wrapper {
+  .titleg {
     display: flex;
-    align-items: flex-start;
-    margin-top: 20px; /* Đẩy bộ lọc và danh sách phim xuống dưới banner */
+    padding:30px
   }
   
   /* Phần bộ lọc */
@@ -56,8 +53,8 @@
     border-radius: 5px;
     border: 1px solid #ddd;
     background-color: #fff;
-    width: 180px; /* Đặt độ rộng cố định cho bộ lọc */
-    height: 45px;
+    width: 160px; /* Giảm chiều rộng */
+    height: 40px; /* Giảm chiều cao */
     transition: all 0.3s ease;
   }
   
@@ -68,110 +65,184 @@
   }
   
   /* Hiển thị danh sách phim nằm ngang */
-  .movie-list {
+  .danh-sach-phim { /* Đổi tên class ở đây */
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
-    flex: 1; /* Cho phép phần này chiếm hết chiều rộng còn lại */
+    gap: 15px; /* Giảm khoảng cách giữa các phim */
+    flex: 1;
   }
   
-  .movie-card {
-    width: 250px;
+  .phim-card { /* Đổi tên class ở đây */
+    width: 150px; /* Kích thước nhỏ hơn */
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 15px;
+    padding: 5px; /* Giảm padding */
     text-align: center;
     position: relative;
     transition: transform 0.3s, box-shadow 0.3s;
   }
   
-  .movie-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-  }
-  
-  .movie-image {
+  .phim-hinh { /* Đổi tên class ở đây */
     width: 100%;
-    height: 350px;
+    height: 200px; /* Giảm chiều cao */
     object-fit: cover;
     border-radius: 10px;
-    margin-bottom: 15px;
+    margin-bottom: 5px; /* Giảm khoảng cách dưới */
   }
   
-  .movie-info h3 {
-    font-size: 20px;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 10px;
+  .phim-thong-tin { /* Đổi tên class ở đây */
+    h3 {
+      font-size: 14px; /* Giảm kích thước chữ */
+      font-weight: 600;
+      color: #0c3154;
+      margin-bottom: 3px; /* Giảm khoảng cách dưới */
+    }
+    p {
+      font-size: 12px; /* Giảm kích thước chữ */
+      color: #777;
+      margin-bottom: 5px;
+    }
   }
   
-  .movie-info p {
-    font-size: 14px;
-    color: #777;
-    margin-bottom: 5px;
-  }
-  
-  .movie-info p:last-child {
-    margin-bottom: 0;
-  }
-  
-  .early-access-tag {
+  /* Đổi tên class tag chiếu sớm */
+  .tag-chieu-som {
     position: absolute;
     top: 10px;
     left: 10px;
     background-color: #ff4d4f;
     color: white;
-    padding: 5px 10px;
+    padding: 3px 8px; /* Giảm padding */
     font-size: 12px;
     border-radius: 5px;
     text-transform: uppercase;
   }
   
   /* Đáp ứng màn hình nhỏ hơn */
-  @media (max-width: 1024px) {
+/* Responsive cho các màn hình nhỏ hơn */
+@media (max-width: 1024px) {
+    .titleg {
+        gap: 15px;
+    }
+
     .filters {
-      margin-right: 20px;
+        width: 100%;
+        max-width: 200px;
     }
-    
-    .movie-card {
-      width: 220px;
+
+    .phim-card {
+        width: 140px;
     }
-  }
-  
-  @media (max-width: 768px) {
+
+    .banner h2 {
+        font-size: 30px;
+    }
+
+    .banner p {
+        font-size: 14px;
+        max-width: 80%;
+    }
+}
+
+@media (max-width: 768px) {
+    .titleg {
+        flex-direction: column;
+        align-items: center;
+    }
+
     .filters {
-      margin-right: 15px;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        justify-content: center;
+        margin-bottom: 20px;
     }
-  
-    .movie-card {
-      width: 200px;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .content-wrapper {
-      flex-direction: column;
-    }
-  
-    .filters {
-      flex-direction: row;
-      justify-content: space-between;
-      width: 100%;
-      margin-bottom: 20px;
-    }
-  
-    .movie-list {
-      justify-content: center;
-    }
-  
+
     .filter-select {
-      width: 30%;
+        width: auto;
+        height: 36px;
+        font-size: 14px;
     }
-  
-    .movie-card {
-      width: 100%;
-      max-width: 300px;
+
+    .danh-sach-phim {
+        justify-content: center;
+        gap: 10px;
     }
-  }
-  
+
+    .phim-card {
+        width: 120px;
+        padding: 4px;
+    }
+
+    .phim-hinh {
+        height: 160px;
+    }
+
+    .phim-thong-tin h3 {
+        font-size: 13px;
+    }
+
+    .phim-thong-tin p {
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 480px) {
+    .banner {
+        height: 150px;
+        padding: 20px;
+    }
+
+    .banner h2 {
+        font-size: 24px;
+        margin-bottom: 5px;
+    }
+
+    .banner p {
+        font-size: 12px;
+        max-width: 90%;
+    }
+
+    .titleg {
+        padding: 15px;
+        gap: 10px;
+    }
+
+    .filters {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .filter-select {
+        width: 100%;
+        height: 34px;
+    }
+
+    .danh-sach-phim {
+        gap: 8px;
+    }
+
+    .phim-card {
+        width: 100px;
+        padding: 3px;
+    }
+
+    .phim-hinh {
+        height: 130px;
+    }
+
+    .phim-thong-tin h3 {
+        font-size: 12px;
+    }
+
+    .phim-thong-tin p {
+        font-size: 10px;
+    }
+
+    .tag-chieu-som {
+        font-size: 10px;
+        padding: 2px 6px;
+    }
+}
