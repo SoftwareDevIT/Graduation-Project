@@ -49,11 +49,17 @@ import CategoriesFormManager from "./Page/Admin/Categories/CategoriesForm";
 import MuaVe from "./component/MovieDetail/MuaVe";
 
 import SerachMovies from "./component/SerachMovies/SerachMovies";
-import FilmNews from "./component/Film news/FilmNews";
+import FilmNews from "./component/News/FilmNews";
 
 import Personal from "./component/PersonalPage/Personal";
 import ChangePassword from "./component/PersonalPage/ChangePassword";
 import Profile from "./component/PersonalPage/Profile";
+import Credits from "./component/PersonalPage/Credits";
+import Deponsit from "./component/PersonalPage/Deposit";
+import Transaction from "./component/PersonalPage/Transaction";
+import MovieDetail from "./component/MovieDetail/MovieDetail";
+import SupportCenter from "./component/Support/Support";
+import MovieShowing from "./component/Movies/MovieShowing";
 
 
 
@@ -74,20 +80,28 @@ function App() {
         <Route path="/headerticket" element={<Headerticket />} />
         <Route path="/confirm" element={<EmailConfirm />} />
         <Route path="/payment-callback" element={<PaymentCallback />} />
-        <Route path="/FilmNews" element={<FilmNews/>} />
+        <Route path="/filmnews" element={<FilmNews/>} />
+        <Route path="/sp" element={<SupportCenter/>} />
        
 
         <Route path="/movie/search/:movie_name" element={<SerachMovies />} />
 
+        <Route path="/moviedetail" element={<MovieDetail/>} />
+
         <Route path="/profile" element={<Profile/>} />
-        <Route path="/Personal" element={<Personal/>} />
-        <Route path="/ChangePassword" element={<ChangePassword/>} />
+        <Route path="/personal" element={<Personal/>} />
+        <Route path="/changePassword" element={<ChangePassword/>} />
+        <Route path="/credits" element={<Credits/>} />
+        <Route path="/deponsit" element={<Deponsit/>} />
+        <Route path="/transaction" element={<Transaction/>} />
     
         <Route path="/register" element={<RegisterCinema />} />
         <Route path="/login" element={<LoginCinema />} />
         <Route path="/admin" element={<Dashboard />} />
         <Route path="admin/user" element={<User />} />
         <Route path="admin/user/add" element={<UserAddManager />} />
+
+        <Route path="movieshowing" element={<MovieShowing/>} />
 
         <Route path="admin/showtimes" element={<ShowtimesManager />} />
         <Route path="admin/showtimes/add" element={<ShowtimesFormManager />} />
