@@ -1,36 +1,61 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
-import Header from "../Header/Hearder";
-
 import instance from "../../server";
 import "./MovieDetail.css";
 import { notification } from "antd"; 
+import Header from "../Header/Hearder";
 
 const MovieDetail: React.FC = () => {
   const { id } = useParams();
   const [movie, setMovie] = useState<any>(null);
-  const [error, setError] = useState(null);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Kiểm tra đăng nhập
+  const [favoriteMovies, setFavoriteMovies] = useState<any[]>([]); // Khai báo state cho danh sách phim yêu thích
 
   useEffect(() => {
     const fetchMovie = async () => {
       try {
         const movieResponse = await instance.get(`/movies/${id}`);
         setMovie(movieResponse.data.data.original);
+  
+        const token = localStorage.getItem("token");
+        if (token) {
+          setIsLoggedIn(true);
+          const userId = localStorage.getItem('user_id');
+  
+          if (userId) {
+            const userResponse = await instance.get(`/user/${userId}`);
 
-        // Kiểm tra xem phim có trong danh sách yêu thích hay không
-        const favoriteResponse = await instance.get(`/favorites/${id}`);
-        if (favoriteResponse.data.status) {
-          setIsFavorite(true); // Đánh dấu phim đã được yêu thích
+            const favoriteMoviesData = userResponse.data.data.favorite_movies || [];
+            setFavoriteMovies(favoriteMoviesData); // Cập nhật danh sách phim yêu thích
+  
+            console.log("Danh sách phim yêu thích:", favoriteMoviesData); // Debug danh sách yêu thích
+            
+            // Kiểm tra if id of movie is in favoriteMovies
+            const isMovieFavorite = favoriteMoviesData.some((favMovie: any) => favMovie.id === parseInt(id as string, 10));
+            console.log(`Phim ${id} có trong danh sách yêu thích: ${isMovieFavorite}`); // Debug trạng thái yêu thích
+            setIsFavorite(isMovieFavorite);
+          }
         }
       } catch (error) {
-        console.error(error);
+        console.error("Lỗi khi lấy dữ liệu:", error);
       }
     };
+  
     fetchMovie();
   }, [id]);
+  
 
   const handleFavorite = async () => {
+    if (!isLoggedIn) {
+      // Nếu chưa đăng nhập, hiển thị thông báo yêu cầu đăng nhập
+      notification.warning({
+        message: 'Yêu cầu đăng nhập',
+        description: 'Vui lòng đăng nhập để thêm phim vào danh sách yêu thích!',
+      });
+      return;
+    }
+  
     try {
       if (isFavorite) {
         // Xóa phim khỏi danh sách yêu thích
@@ -39,35 +64,27 @@ const MovieDetail: React.FC = () => {
           message: 'Thành công',
           description: 'Phim đã được xóa khỏi danh sách yêu thích!',
         });
-        setIsFavorite(false); // Cập nhật lại trạng thái
+        setIsFavorite(false); // Cập nhật trạng thái
       } else {
         // Thêm phim vào danh sách yêu thích
-        const response = await instance.post(`/favorites/${id}`);
-        if (response.data.status) {
-          notification.success({
-            message: 'Thành công',
-            description: 'Phim đã được thêm vào danh sách yêu thích!',
-          });
-          setIsFavorite(true); // Cập nhật trạng thái yêu thích
-        }
+        await instance.post(`/favorites/${id}`); // Cần kiểm tra API
+        notification.success({
+          message: 'Thành công',
+          description: 'Phim đã được thêm vào danh sách yêu thích!',
+        });
+        setIsFavorite(true); // Cập nhật trạng thái yêu thích
       }
     } catch (error: any) {
-      if (error.response && error.response.status === 409) {
-        notification.warning({
-          message: 'Thông báo',
-          description: 'Phim này đã được yêu thích!',
-        });
-      } else {
-        notification.error({
-          message: 'Lỗi',
-          description: 'Có lỗi xảy ra khi xử lý yêu thích phim.',
-        });
-      }
+      notification.error({
+        message: 'Lỗi',
+        description: 'Có lỗi xảy ra khi xử lý yêu thích phim.',
+      });
     }
   };
 
   const location = useLocation();
-  if (error) return <div>Error loading movie details</div>;
+  
+  if (!movie) return <div>Đang tải...</div>; // Thêm kiểm tra nếu phim chưa được tải
 
   return (
     <>
@@ -87,9 +104,14 @@ const MovieDetail: React.FC = () => {
 
                 <div className="actions">
                   <div className="button like" onClick={handleFavorite}>
-                    <span role="img" aria-label="like">❤️</span>{" "}
-                    <span className="like-1">{isFavorite ? "Bỏ thích" : "Thích"}</span>
+                    {isFavorite ? (
+                      <span role="img" aria-label="liked">❤️</span> // Hiển thị biểu tượng đã thích
+                    ) : (
+                      <span role="img" aria-label="unliked">🤍</span> // Hiển thị biểu tượng chưa thích
+                    )}
+                    <span className="like-1">Thích</span>
                   </div>
+
                   <div className="button rate like">
                     <span role="img" aria-label="rate">⭐</span>{" "}
                     <span className="like-1 like2">Đánh giá</span>

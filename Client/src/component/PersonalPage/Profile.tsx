@@ -17,11 +17,13 @@ import { Link } from "react-router-dom";
 import instance from "../../server";
 
 const Profile: React.FC = () => {
-  const [avatar, setAvatar] = useState(
+  const [avatar, setAvatar] = useState<string>(
     "https://cdn.moveek.com/bundles/ornweb/img/no-avatar.png"
   );
   const [userProfile, setUserProfile] = useState<any>(null);
-  const [locations, setLocations] = useState<any[]>([]); // Lưu trữ danh sách khu vực
+  const [locations, setLocations] = useState<any[]>([]);
+  const [avatarFile, setAvatarFile] = useState<File | null>(null); // Thêm state để lưu file avatar
+
   useEffect(() => {
     const profileData = localStorage.getItem("user_profile");
     if (profileData) {
@@ -37,7 +39,7 @@ const Profile: React.FC = () => {
             setUserProfile(userProfileData);
             setAvatar(
               userProfileData.avatar ||
-                "https://cdn.moveek.com/bundles/ornweb/img/no-avatar.png"
+              "https://cdn.moveek.com/bundles/ornweb/img/no-avatar.png"
             );
           }
         } catch (error) {
@@ -63,15 +65,24 @@ const Profile: React.FC = () => {
     }
   }, []);
 
-  // Hàm xử lý cập nhật thông tin người dùng
   const handleUpdateProfile = async (e: React.FormEvent) => {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append("_method", "PUT");
+    formData.append("user_name", userProfile.user_name);
+    
+    // Kiểm tra xem avatarFile có tồn tại không trước khi thêm vào formData
+    if (avatarFile) {
+      formData.append("avatar", avatarFile);
+    }
+  
     try {
-      const response = await instance.put(`/user/${userProfile.id}`, {
-        fullname: userProfile.fullname,
-        avatar, // Có thể xử lý upload file avatar tại đây nếu cần
+      const response = await instance.post(`/user/${userProfile.id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       });
-
+  
       if (response.data.status) {
         notification.success({ message: "Cập nhật thông tin thành công" });
       }
@@ -89,8 +100,10 @@ const Profile: React.FC = () => {
         setAvatar(event.target.result);
       };
       reader.readAsDataURL(file);
+      setAvatarFile(file); // Lưu file vào state để sử dụng khi cập nhật
     }
   };
+
 
   return (
     <>

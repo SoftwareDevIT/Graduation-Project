@@ -280,8 +280,8 @@ import instance from "../../server";
                  <i className="fas fa-check checkmark"></i> 
                   {isProfileMenuVisible && (
                   <div className="profile-dropdown">
-                    <Link to="/profile">Trang cá nhân</Link>
-                    <Link to="/account">Quản lý tài khoản</Link>
+                    <Link to="/Personal">Trang cá nhân</Link>
+                    <Link to="/profile">Quản lý tài khoản</Link>
                     <Link to="/movies">Vé phim</Link>
                     <Link to="/credits">Moveek Credits</Link>
                     <div onClick={handleLogout}>Đăng xuất</div>
