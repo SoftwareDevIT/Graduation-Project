@@ -60,7 +60,7 @@ const OrdersDashboard: React.FC = () => {
                   <td>{booking.amount}</td>
                   <td>{booking.seat_status}</td> {/* Hiển thị trạng thái */}
                   <td className="action-buttons">
-                    <button className="view-btn">👁</button>
+                   
                     <button className="edit-btn">✏️</button>
                     <button className="delete-btn">🗑</button>
                   </td>
@@ -68,7 +68,7 @@ const OrdersDashboard: React.FC = () => {
               ))
             ) : (
               <tr>
-                <td colSpan={9} style={{ textAlign: "center" }}>
+                <td colSpan={10} style={{ textAlign: "center" }}>
                   No booking available.
                 </td>
               </tr>

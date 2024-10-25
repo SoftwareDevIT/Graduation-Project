@@ -2,6 +2,7 @@ import { Cinema } from "./Cinema";
 import { Movie } from "./Movie";
 
 
+
 export interface Showtime {
     movie_in_cinema_id:number;
     id: number;
@@ -11,7 +12,9 @@ export interface Showtime {
     showtime_start: string;
     showtime_end: string;
     status: string;
+    price: number;
     movie: Movie;  
+    
     cinema:Cinema;
     // Include the Movie interface
 }

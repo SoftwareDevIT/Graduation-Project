@@ -94,7 +94,7 @@ Route::get('/vnpay-return', [BookingController::class, 'vnPayReturn']);
 Route::get('/all-user', [AuthController::class, 'allUser']);
 
 // Các route quản trị và quản lý
-// Route::middleware(['auth:sanctum', 'role:admin|manager'])->group(function () {
+Route::middleware(['auth:sanctum', 'role:admin|manager'])->group(function () {
 Route::apiResource('location', LocationController::class)->except(['index', 'show']);
 Route::apiResource('cinema', CinemaController::class)->except(['index', 'show']);
 Route::apiResource('room', RoomController::class);
@@ -126,7 +126,7 @@ Route::delete('/delete-user/{id}', [RoleController::class, 'destroy'])->name('ro
 // Route::get('/users', [UserController::class, 'index'])->name('users.index');
 // Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
-// });
+});
 
 
 // });

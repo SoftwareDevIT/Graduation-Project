@@ -5,26 +5,21 @@ import { Showtime } from '../../../interface/Showtimes';
 import { useShowtimeContext } from '../../../Context/ShowtimesContext'; // Import context
 import instance from '../../../server';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Cinema } from '../../../interface/Cinema';
+
 
 const ShowtimesForm: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const { register, handleSubmit, reset } = useForm<Showtime>();
     const { addOrUpdateShowtime } = useShowtimeContext();
     const [movies, setMovies] = useState([]);
-    const [cinemas, setCinemas] = useState<Cinema[]>([]);
+    
     const nav = useNavigate();
     const [showtimesList, setShowtimesList] = useState<Showtime[]>([]);
 
     useEffect(() => {
         const fetchMovies = async () => {
             const movieResponse = await instance.get('/movies');
-            setMovies(movieResponse.data.data);
-        };
-
-        const fetchCinemas = async () => {
-            const cinemaResponse = await instance.get('/cinema');
-            setCinemas(cinemaResponse.data.data);
+            setMovies(movieResponse.data.data.original);
         };
 
         const fetchShowtime = async () => {
@@ -33,7 +28,7 @@ const ShowtimesForm: React.FC = () => {
                 const showtimeData = response.data.data;
                 reset({
                     movie_id: showtimeData.movie_id,
-                    cinema_id: showtimeData.cinema_id,
+                    
                     showtime_date: showtimeData.showtime_date,
                     showtime_start: showtimeData.showtime_start,
                     showtime_end: showtimeData.showtime_end,
@@ -42,7 +37,7 @@ const ShowtimesForm: React.FC = () => {
         };
 
         fetchMovies();
-        fetchCinemas();
+        
         fetchShowtime();
     }, [id, reset]);
 
@@ -80,18 +75,6 @@ const ShowtimesForm: React.FC = () => {
                 </div>
 
                 <div className="mb-3">
-                    <label className="form-label">Chọn Rạp</label>
-                    <select {...register('cinema_id')} required className="form-select">
-                        <option value="">Chọn Rạp</option>
-                        {cinemas.map((cinema: any) => (
-                            <option key={cinema.id} value={cinema.id}>
-                                {cinema.cinema_name}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-
-                <div className="mb-3">
                     <label className="form-label">Ngày chiếu</label>
                     <input type="date" {...register('showtime_date')} required className="form-control" />
                 </div>
@@ -105,6 +88,12 @@ const ShowtimesForm: React.FC = () => {
                     <label className="form-label">Giờ kết thúc</label>
                     <input type="time" {...register('showtime_end')} required className="form-control" />
                 </div>
+
+                <div className="mb-3">
+                    <label className="form-label">Giá</label>
+                    <input type="number" {...register('price')} required className="form-control" />
+                </div>
+
 
                 <div className="mb-3">
                     {id ? (
@@ -139,7 +128,7 @@ const ShowtimesForm: React.FC = () => {
                             <tr key={index}>
                                 <th scope="row">{index + 1}</th>
                                 <td>{showtime.movie_id}</td>
-                                <td>{showtime.cinema_id}</td>
+                                <td>{showtime.price}</td>
                                 <td>{showtime.showtime_date}</td>
                                 <td>{showtime.showtime_start}</td>
                                 <td>{showtime.showtime_end}</td>
