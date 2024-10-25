@@ -3,11 +3,9 @@ import './MoviesDashboard.css';
 import { useMovieContext } from '../../../Context/MoviesContext';
 import { Link } from 'react-router-dom';
 import instance from '../../../server';
-import { Categories } from '../../../interface/Categories';
 import { Movie } from '../../../interface/Movie';
 
 const MoviesDashboard: React.FC = () => {
-    const [categories, setCategories] = useState<Categories[]>([]);
     const { state, dispatch } = useMovieContext();
     const { movies } = state;
 
@@ -16,19 +14,10 @@ const MoviesDashboard: React.FC = () => {
     const [moviesPerPage] = useState<number>(5);
 
     useEffect(() => {
-        const fetchCategories = async () => {
-            const categoryResponse = await instance.get('/movie-category');
-            setCategories(categoryResponse.data);
-        };
-
-        fetchCategories();
-    }, []);
-
-    useEffect(() => {
         const fetchMovies = async () => {
             try {
                 const movieResponse = await instance.get('/movies');
-                dispatch({ type: 'SET_MOVIES', payload: movieResponse.data.data });
+                dispatch({ type: 'SET_MOVIES', payload: movieResponse.data.data.original });
             } catch (error) {
                 console.error('Error fetching movies:', error);
             }
@@ -47,7 +36,7 @@ const MoviesDashboard: React.FC = () => {
     // Pagination logic
     const indexOfLastMovie = currentPage * moviesPerPage;
     const indexOfFirstMovie = indexOfLastMovie - moviesPerPage;
-    const currentMovies = movies.slice(indexOfFirstMovie, indexOfLastMovie);
+    const currentMovies = Array.isArray(movies) ? movies.slice(indexOfFirstMovie, indexOfLastMovie) : [];
 
     const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
@@ -63,7 +52,9 @@ const MoviesDashboard: React.FC = () => {
                             <th>Movie ID</th>
                             <th>Title</th>
                             <th>Thumbnail</th>
-                            <th>Movie Category</th>
+                            <th>Category</th>
+                            <th>Actors</th>
+                            <th>Director</th>
                             <th>Duration</th>
                             <th>Description</th>
                             <th>Actions</th>
@@ -79,7 +70,13 @@ const MoviesDashboard: React.FC = () => {
                                         <img src={movie.poster ?? undefined} style={{ width: "40px", height: "40px" }} alt={`${movie.movie_name} poster`} />
                                     </td>
                                     <td>
-                                        {categories.find(category => category.id === movie.movie_category_id)?.category_name || 'No Category'}
+                                        {movie.category.map(category => category.category_name).join(',')}
+                                    </td>
+                                    <td>
+                                        {movie.actor.map(actor => actor.actor_name).join(', ')}
+                                    </td>
+                                    <td>
+                                        {movie.director.map(director => director.director_name).join(',')}
                                     </td>
                                     <td>{movie.duration}</td>
                                     <td>{movie.description}</td>
@@ -96,7 +93,7 @@ const MoviesDashboard: React.FC = () => {
                             ))
                         ) : (
                             <tr>
-                                <td colSpan={7}>No movies available</td>
+                                <td colSpan={8}>No movies available</td>
                             </tr>
                         )}
                     </tbody>
