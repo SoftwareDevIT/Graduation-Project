@@ -4,7 +4,7 @@ import './CinemasDashboard.css';
 import instance from '../../../server'; // Đảm bảo bạn có đường dẫn chính xác
 import { useCinemaContext } from '../../../Context/CinemasContext';
 import { Movie } from '../../../interface/Movie';
-import { Showtime } from '../../../interface/Showtimes';
+import { MovieInCinema } from '../../../interface/MovieInCinema'; // Import interface MovieInCinema
 
 const CinemasDashboard: React.FC = () => {
     const { state, dispatch } = useCinemaContext();
@@ -16,7 +16,7 @@ const CinemasDashboard: React.FC = () => {
     const totalPages = Math.ceil(totalCinemas / cinemasPerPage);
 
     const [expandedCinemaId, setExpandedCinemaId] = useState<number | null>(null);
-    const [selectedCinemaMovies, setSelectedCinemaMovies] = useState<Showtime[]>([]); // State để lưu trữ phim của rạp đã chọn
+    const [selectedCinemaMovies, setSelectedCinemaMovies] = useState<MovieInCinema[]>([]); // State để lưu trữ phim của rạp đã chọn
     const [allMovies, setAllMovies] = useState<Movie[]>([]); // State để lưu danh sách tất cả các phim
 
     // Lấy danh sách tất cả các phim khi component mount
@@ -54,24 +54,26 @@ const CinemasDashboard: React.FC = () => {
     const fetchMoviesForCinema = async (cinemaId: number) => {
         try {
             const response = await instance.get(`/show-movie-in-cinema/${cinemaId}`);
-            const moviesInCinema: Showtime[] = response.data.data; // Giả sử data là mảng showtime
-
-            // Ánh xạ tên phim dựa trên movie_in_cinema_id
-            const moviesWithNames = moviesInCinema.map((showtime: Showtime) => {
-                const movie = allMovies.find((m: Movie) => m.id === showtime.movie_in_cinema_id); // Lấy ID từ showtime
+            const moviesInCinema = response.data.data; // Giả sử data là mảng phim
+    
+            console.log(moviesInCinema);
+    
+            // Ánh xạ tên phim dựa trên movie_id
+            const moviesWithNames = moviesInCinema.map((movie: MovieInCinema) => {
+                const movieDetails = allMovies.find(m => m.id === movie.movie_id); // Tìm kiếm tên phim dựa trên movie.id
                 return {
-                    ...showtime,
-                    movie_name: movie ? movie.movie_name : 'Unknown Movie', // Gán tên phim
+                    ...movie,
+                    movie_name: movieDetails ? movieDetails.movie_name : 'Unknown Movie', // Gán tên phim
                 };
             });
-
+    
             setSelectedCinemaMovies(moviesWithNames);
         } catch (error) {
             console.error("Failed to fetch movies for cinema:", error);
             alert("Failed to fetch movies for this cinema.");
         }
     };
-
+    
     // Xử lý sự kiện bấm vào tên rạp
     const handleCinemaClick = (cinemaId: number) => {
         if (expandedCinemaId === cinemaId) {
@@ -88,17 +90,16 @@ const CinemasDashboard: React.FC = () => {
         if (window.confirm("Are you sure you want to delete this movie from the cinema?")) {
             try {
                 await instance.delete(`/cinema/${cinemaId}/movie/${movieId}`);
-                // Cập nhật lại danh sách phim
-                const updatedMovies = selectedCinemaMovies.filter(movie => movie.id !== movieId);
+                const updatedMovies = selectedCinemaMovies.filter(movie => movie.movie_id !== movieId); // Sử dụng movie.movie_id
                 setSelectedCinemaMovies(updatedMovies);
                 alert("Movie deleted successfully from cinema!");
             } catch (error) {
                 console.error("Failed to delete movie from cinema:", error);
-                alert("Failed to delete movie from cinema.");
+                alert("Failed to delete movie from cinema.");   
             }
         }
     };
-
+    
     // Xử lý thay đổi trang
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
@@ -130,14 +131,13 @@ const CinemasDashboard: React.FC = () => {
                                 <tr>
                                     <td>{cinema.id}</td>
                                     <td>
-    <span 
-        onClick={() => handleCinemaClick(cinema.id!)} 
-        style={{ color: '#00796b', cursor: 'pointer', textDecoration: '' }}
-    >
-        {cinema.cinema_name}
-    </span>
-</td>
-
+                                        <span 
+                                            onClick={() => handleCinemaClick(cinema.id!)} 
+                                            style={{ color: '#00796b', cursor: 'pointer', textDecoration: '' }}
+                                        >
+                                            {cinema.cinema_name}
+                                        </span>
+                                    </td>
                                     <td>{cinema.phone}</td>
                                     <td>{cinema.cinema_address}</td>
                                     <td>{cinema.status}</td>
@@ -156,18 +156,17 @@ const CinemasDashboard: React.FC = () => {
                                                         <li key={movie.id}>
                                                             {movie.movie_id} {/* Hiển thị tên phim */}
                                                             <button 
-    onClick={() => handleDeleteMovie(cinema.id!, movie.id!)} 
-    style={{
-        backgroundColor: 'transparent',
-        border: 'none',
-        cursor: 'pointer',
-        fontSize: '16px', 
-        color: 'red',
-    }}
->
-    🗑
-</button>
-
+                                                                onClick={() => handleDeleteMovie(cinema.id!, movie.movie_id)} // Đảm bảo movie.movie_id là đúng
+                                                                style={{
+                                                                    backgroundColor: 'transparent',
+                                                                    border: 'none',
+                                                                    cursor: 'pointer',
+                                                                    fontSize: '16px', 
+                                                                    color: 'red',
+                                                                }}
+                                                            >
+                                                                🗑
+                                                            </button>
                                                         </li>
                                                     ))}
                                                 </ul>

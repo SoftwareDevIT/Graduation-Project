@@ -113,7 +113,7 @@ Route::post('add-movie-in-cinema/{cinema_id}', [CinemaController::class, 'synCin
 Route::get('show-movie-in-cinema/{cinema_id}', [CinemaController::class, 'showCinemaHasMovie']);
 Route::delete('cinema/{cinema_id}/movie/{movie_id}', [CinemaController::class, 'destroyCinemaHasMovie']);
 
-
+ 
 
 // phan quyen
 Route::resource('roles', RoleController::class); // add roles and show

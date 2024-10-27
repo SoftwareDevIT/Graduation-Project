@@ -5,10 +5,11 @@ import { z } from "zod";
 import { useNavigate, useParams } from "react-router-dom";
 import instance from "../../../server";
 import { Cinema } from "../../../interface/Cinema";
-import { Location } from "../../../interface/Location"; 
+import { Location } from "../../../interface/Location";
+import { Movie } from "../../../interface/Movie";  // Import Movie interface
 import { useCinemaContext } from "../../../Context/CinemasContext";
 
-// Define the schema for form validation using Zod
+// Định nghĩa schema kiểm tra cho biểu mẫu Cinema
 const cinemaSchema = z.object({
   cinema_name: z.string().min(1, "Cinema Name is required."),
   phone: z
@@ -21,7 +22,7 @@ const cinemaSchema = z.object({
 
 const CinemaForm = () => {
   const nav = useNavigate();
-  const { id } = useParams<{ id: string }>(); 
+  const { id } = useParams<{ id: string }>();
   const isEditMode = Boolean(id);
   const { addCinema, updateCinema } = useCinemaContext();
 
@@ -35,7 +36,9 @@ const CinemaForm = () => {
   });
 
   const [locations, setLocations] = useState<Location[]>([]);
-  const [cinema, setCinema] = useState<Cinema | null>(null); 
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [selectedMovies, setSelectedMovies] = useState<string[]>([]);
+  const [cinema, setCinema] = useState<Cinema | null>(null);
 
   useEffect(() => {
     const fetchLocations = async () => {
@@ -52,15 +55,26 @@ const CinemaForm = () => {
         try {
           const { data } = await instance.get(`/cinema/${id}`);
           setCinema(data.data);
-          reset(data.data); 
+          reset(data.data);
+          setSelectedMovies(data.data.movies.map((movie: Movie) => movie.id.toString())); // Convert ID to string
         } catch (error) {
           console.error("Failed to fetch cinema:", error);
         }
       }
     };
 
+    const fetchMovies = async () => {
+      try {
+        const { data } = await instance.get(`/movies`);
+        setMovies(data.data.original);
+      } catch (error) {
+        console.error("Failed to fetch movies:", error);
+      }
+    };
+
     fetchLocations();
     fetchCinema();
+    fetchMovies();
   }, [id, isEditMode, reset]);
 
   const handleFormSubmit = async (data: Cinema) => {
@@ -73,20 +87,37 @@ const CinemaForm = () => {
         alert("Cinema added successfully!");
       }
       nav('/admin/cinemas');
-      reset(); 
+      reset();
     } catch (error) {
       console.error("Failed to submit form:", error);
       alert("Failed to submit form");
     }
   };
 
-  if (isEditMode && !cinema) return <div>Loading...</div>;
+  const handleAddMoviesToCinema = async () => {
+    try {
+      // Create an array of objects with the structure { movie_id: movieId }
+      const moviePayload = selectedMovies.map(movieId => ({ movie_id: movieId }));
+      
+      console.log("Selected Movies Payload:", moviePayload); // Log the payload
+  
+      // Send the formatted data to the API
+      await instance.post(`/add-movie-in-cinema/${id}`, { movie_in_cinema: moviePayload });
+      alert("Movies added to cinema successfully!");
+      nav('/admin/cinemas');
+    } catch (error) {
+      console.error("Failed to add movies to cinema:", error);
+      alert("Failed to add movies to cinema");
+    }
+  };
+
 
   return (
     <div className="container mt-5">
       <form onSubmit={handleSubmit(handleFormSubmit)} className="shadow p-4 rounded bg-light">
         <h1 className="text-center mb-4">{isEditMode ? "Edit Cinema" : "Add Cinema"}</h1>
 
+        {/* Trường Cinema Name */}
         <div className="mb-3">
           <label htmlFor="cinema_name" className="form-label">Cinema Name</label>
           <input
@@ -98,6 +129,7 @@ const CinemaForm = () => {
           {errors.cinema_name && <span className="text-danger">{errors.cinema_name.message}</span>}
         </div>
 
+        {/* Trường Phone */}
         <div className="mb-3">
           <label htmlFor="phone" className="form-label">Phone</label>
           <input
@@ -109,6 +141,7 @@ const CinemaForm = () => {
           {errors.phone && <span className="text-danger">{errors.phone.message}</span>}
         </div>
 
+        {/* Trường Cinema Address */}
         <div className="mb-3">
           <label htmlFor="cinema_address" className="form-label">Cinema Address</label>
           <input
@@ -120,6 +153,7 @@ const CinemaForm = () => {
           {errors.cinema_address && <span className="text-danger">{errors.cinema_address.message}</span>}
         </div>
 
+        {/* Trường Location */}
         <div className="mb-3">
           <label htmlFor="location_id" className="form-label">Location</label>
           <select
@@ -137,9 +171,39 @@ const CinemaForm = () => {
           {errors.location_id && <span className="text-danger">{errors.location_id.message}</span>}
         </div>
 
+        {/* Trường Chọn Phim */}
+        <div className="mb-3">
+          <label htmlFor="movies" className="form-label">Select Movies</label>
+          <select
+            multiple
+            className="form-control"
+            value={selectedMovies}  // Đảm bảo kiểu dữ liệu là string[]
+            onChange={(e) => {
+              const selected = Array.from(e.target.selectedOptions, option => option.value);
+              setSelectedMovies(selected);
+            }}
+          >
+            {movies.map((movie) => (
+              <option key={movie.id} value={movie.id.toString()}>
+                {movie.movie_name}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <button type="submit" className="btn btn-primary">
           {isEditMode ? "Update Cinema" : "Add Cinema"}
         </button>
+
+        {isEditMode && (
+          <button
+            type="button"
+            className="btn btn-secondary mt-3"
+            onClick={handleAddMoviesToCinema}
+          >
+            Add Selected Movies to Cinema
+          </button>
+        )}
       </form>
     </div>
   );
