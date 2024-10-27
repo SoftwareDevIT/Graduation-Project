@@ -13,7 +13,7 @@ class ActorInMovie extends Seeder
      */
     public function run(): void
     {
-        DB::table('actor_in_movie')->insert([
+        DB::table('actor_in_movies')->insert([
             [
                 'movie_id' => 1,
                 'actor_id' => 1,
