@@ -1,7 +1,6 @@
 .dashboard {
     padding: 30px;
-    background: #f0f4f8; /* Nền sáng xanh nhạt */
-    background: #f0f4f8; /* Nền sáng xanh nhạt */
+    background: rgb(229, 240, 242); /* Nền xanh nhạt */
     min-height: 170vh;
     display: flex;
     flex-direction: column;

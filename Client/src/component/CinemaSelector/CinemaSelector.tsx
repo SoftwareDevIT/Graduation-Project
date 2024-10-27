@@ -264,7 +264,7 @@ useEffect(() => {
             <p>Giới hạn tuổi: {movie.age_limit}+</p>
             <div className="showtimes-list">
               {movieData.showtimes.length > 0 ? (
-                movieData.showtimes.map((showtime) => (
+                movieData.showtimes.map((showtime:any) => (
                   <button
                     key={showtime.id}
                     onClick={() => {
