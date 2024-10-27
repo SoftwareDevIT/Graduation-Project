@@ -92,7 +92,7 @@ Route::get('/vnpay-return', [BookingController::class, 'vnPayReturn']);
 Route::get('/all-user', [AuthController::class, 'allUser']);
 
 // Các route quản trị và quản lý
-// Route::middleware(['auth:sanctum', 'role:admin|manager'])->group(function () {
+Route::middleware(['auth:sanctum', 'role:admin|manager'])->group(function () {
 Route::apiResource('location', LocationController::class)->except(['index', 'show']);
 Route::apiResource('cinema', CinemaController::class)->except(['index', 'show']);
 Route::apiResource('room', RoomController::class);
@@ -111,7 +111,7 @@ Route::post('add-movie-in-cinema/{cinema_id}', [CinemaController::class, 'synCin
 Route::get('show-movie-in-cinema/{cinema_id}', [CinemaController::class, 'showCinemaHasMovie']);
 Route::delete('cinema/{cinema_id}/movie/{movie_id}', [CinemaController::class, 'destroyCinemaHasMovie']);
 
-
+ 
 
 // phan quyen
 Route::resource('roles', RoleController::class); // add roles and show
@@ -124,7 +124,7 @@ Route::delete('/delete-user/{id}', [RoleController::class, 'destroy'])->name('ro
 // Route::get('/users', [UserController::class, 'index'])->name('users.index');
 // Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
-// });
+});
 
 
 // });

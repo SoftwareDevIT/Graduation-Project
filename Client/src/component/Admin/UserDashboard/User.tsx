@@ -57,9 +57,7 @@ const UserDashboard: React.FC = () => {
     return (
         <div className="user-dashboard">
             <h2>All Users</h2>
-            <div className="actions">
-                <Link to={'/admin/user/add'} className="add-user-btn">Add User</Link>
-            </div>
+           
             <div className="table-pagination-container">
                 <div className="table-container2">
                     <table className="user-table">
