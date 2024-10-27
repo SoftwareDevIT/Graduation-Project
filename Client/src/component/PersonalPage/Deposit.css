@@ -1,0 +1,61 @@
+/* Bố cục chung của bảng */
+.transaction-table-wrapper {
+    width: 70%;
+    text-align: center;
+    padding: 20px;
+    background-color: #f9f9f9;
+    margin-right:270px;
+}
+
+/* Bảng */
+.transaction-table {    
+    width: 80%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 100px;
+}
+
+/* Phần đầu bảng */
+.transaction-table th {
+    background-color: #f1f1f1;
+    padding: 15px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #666;
+    text-transform: uppercase;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Dòng nội dung không có giao dịch */
+.transaction-empty {
+    padding: 20px;
+    color: #999;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* Đường link */
+.transaction-empty a {
+    color: #0056b3;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.transaction-empty a:hover {
+    text-decoration: underline;
+}
+.divider {
+    border-bottom: 1px solid #cdc5c5; /* Màu và độ dày của đường kẻ */
+   top:70px;
+    width: 100%; /* Độ rộng của đường kẻ */
+    position: relative;
+   left: 80px;
+  }
+  .account-nav-item.active .account-nav-title {
+    color: #007bff;
+    font-weight: bold;
+}

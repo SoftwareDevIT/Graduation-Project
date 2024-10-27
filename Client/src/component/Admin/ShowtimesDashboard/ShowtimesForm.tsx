@@ -46,19 +46,17 @@ const ShowtimesForm: React.FC = () => {
         fetchShowtime();
     }, [id, reset]);
 
-    const onSubmit: SubmitHandler<Showtime> = async (data) => {
-        if (!id) {
-            setShowtimesList([...showtimesList, data]);
-        } else {
-            await addOrUpdateShowtime({
-                ...data,
-                cinema_id: data.cinema_id,
-            }, id);
-            nav('/admin/showtimes');
-            return;
-        }
-        reset();
-    };
+   const onSubmit: SubmitHandler<Showtime> = async (data) => {
+    if (!id) {
+        setShowtimesList(prevList => [...prevList, data]); // Use functional state update
+    } else {
+        await addOrUpdateShowtime({...data}, id);
+        nav('/admin/showtimes');
+        return;
+    }
+    reset();
+};
+
 
     const handleSubmitAll = async () => {
         await addOrUpdateShowtime(showtimesList);

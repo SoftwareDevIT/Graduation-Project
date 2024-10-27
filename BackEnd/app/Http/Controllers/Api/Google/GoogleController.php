@@ -9,6 +9,7 @@ use Illuminate\Http\Response;
 use App\Models\User;
 use App\Services\Auth\LoginService;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redirect;
 
 class GoogleController extends Controller
 {
@@ -50,11 +51,16 @@ class GoogleController extends Controller
                 $token = $this->loginService->login($credentials);
                 $profile = $this->loginService->index();
                 return $this->success(['token' => $token, 'profile' => $profile], 200);
-
-                // return response()->json([
+                // return Redirect::to('http://localhost:5173')->with('success', [
                 //     'message' => __('Google login successful'),
                 //     'token' => $token,
                 //     'profile' => $profile
+                // ]);
+
+                // return response()->json([
+                // 'message' => __('Google login successful'),
+                // 'token' => $token,
+                // 'profile' => $profile
                 // ], Response::HTTP_OK);
 
             } else {
@@ -73,6 +79,11 @@ class GoogleController extends Controller
 
                 $token = $this->loginService->login($credentials);
                 return $this->success(['token' => $token, 'profile' => $newUser], 200);
+                // return Redirect::to('http://localhost:5173')->with('success', [
+                //     'message' => __('Google login successful'),
+                //     'token' => $token,
+                //     'profile' => $newUser
+                // ]);
                 // return response()->json([
                 //     'message' => __('Google sign in successful'),
                 //     'token' => $token,

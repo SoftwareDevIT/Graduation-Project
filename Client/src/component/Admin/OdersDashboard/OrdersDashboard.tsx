@@ -1,26 +1,29 @@
+import { Booking } from "../../../interface/Booking";
 import instance from "../../../server";
 import "./OrdersDashboard.css";
-import { Booking } from "../../../interface/Booking";
+
 import { useEffect, useState } from "react";
+
 
 const OrdersDashboard: React.FC = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);
 
+
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const response = await instance.get<Booking[]>("/order");
+        const response = await instance.get("/order");
         console.log(response.data); // Kiểm tra dữ liệu trả về
-     
-        setBookings(response.data.data);
+  
+        setBookings(response.data.data); 
       } catch (error) {
         console.error("Error fetching bookings:", error);
       }
     };
-
+  
     fetchBookings();
   }, []);
-
+  
   return (
     <div className="orders-management">
       <h2>Order Management</h2>

@@ -41,13 +41,13 @@ class SelectCombos extends AbstractBookingStep
             Log::info('Combos: ' . json_encode(session('combos')));
         }
 
-        return response()->json(
-            [
-                'status' => true,
-                'message' => 'Combo selected successfully!',
-                'data' => $combos
-            ]
-        );
-        // return null;
+        // return response()->json(
+        //     [
+        //         'status' => true,
+        //         'message' => 'Combo selected successfully!',
+        //         'data' => $combos
+        //     ]
+        // );
+        return null;
     }
 }

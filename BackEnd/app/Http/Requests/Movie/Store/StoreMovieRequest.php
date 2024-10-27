@@ -22,10 +22,6 @@ class StoreMovieRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'movie_category_id'     => 'required|integer',
-            'cinema_id'             => 'required|integer',
-            'actor_id'              => 'required|integer',
-            'director_id'           => 'required|integer',
             'movie_name'            => 'required|string|max:255',
             'poster'                => 'mimes:jpeg,png,jpg,gif',
             'duration'              => 'string|max:225',
@@ -33,21 +29,19 @@ class StoreMovieRequest extends FormRequest
             'age_limit'             => 'required|integer',
             'description'            => 'string|max:255',
             'trailer'               => 'string|max:255',
-            'rating'                => 'numeric'
+            'rating'                => 'numeric',
+            'actor_id'                => 'required|array',
+            'actor_id.*'              => 'exists:actor,id',
+            'director_id'                => 'required|array',
+            'director_id.*'              => 'exists:director,id',
+            'movie_category_id'                => 'required|array',
+            'movie_category_id.*'              => 'exists:movie_category,id',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'movie_category_id.required' => 'The movie category field is required.',
-            'movie_category_id.integer' => 'The movie category must be an integer.',
-            'cinema_id.required' => 'The cinema field is required.',
-            'cinema_id.integer' => 'The cinema must be an integer.',
-            'actor_id.required' => 'The actor field is required.',
-            'actor_id.integer' => 'The actor must be an integer.',
-            'director_id.required' => 'The director field is required.',
-            'director_id.integer' => 'The director must be an integer.',
             'movie_name.required' => 'The movie name field is required.',
             'movie_name.string' => 'The movie name must be a string.',
             'movie_name.max' => 'The movie name may not be greater than 255 characters.',

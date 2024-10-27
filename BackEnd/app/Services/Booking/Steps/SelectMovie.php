@@ -4,6 +4,7 @@ namespace App\Services\Booking\Steps;
 
 use App\Models\Movie;
 use App\Services\Booking\Handlers\AbstractBookingStep;
+use App\Models\MovieInCinema;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -29,13 +30,13 @@ class SelectMovie extends AbstractBookingStep
                 'message' => 'Cinema or Showtime not found.'
             ]);
         }
-
-        $movies = Movie::where('id', $cinemaId)
-            ->with(['showtimes' => function ($query) use ($showtimeId) {
-                $query->where('id', $showtimeId);
-            }])
-            ->get();
-
+        $movies = MovieInCinema::where('id', $cinemaId)
+            ->with([
+                'movie', // Nạp chi tiết phim
+                'showtimes' => function ($q) use ($showtimeId) {
+                    $q->where('id', $showtimeId); // Nạp showtimes có id tương ứng
+                }
+            ])->get();
         if ($movies->isEmpty() || $movies->first()->showtimes->isEmpty()) {
             return response()->json([
                 'status' => false,

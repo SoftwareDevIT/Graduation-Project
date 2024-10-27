@@ -10,34 +10,35 @@ class Movie extends Model
     use HasFactory;
     protected $table = 'movies';
     protected $fillable = [
-        'movie_category_id',
-        'cinema_id',
-        'actor_id',
-        'director_id',
         'movie_name',
         'poster',
         'duration',
         'release_date',
         'age_limit',
         'description',
+        'thumbnail',
         'trailer',
         'status',
         'rating'
     ];
 
-    public function category()
+    public function actor()
     {
-        return $this->belongsTo(MovieCategory::class, 'movie_category_id');
+        return $this->belongsToMany(Actor::class, 'actor_in_movies', 'movie_id', 'actor_id')
+            ->withTimestamps();
     }
 
-    // public function actor()
-    // {
-    //     return $this->belongsTo(Actor::class, 'actor_id');
-    // }
 
     public function director()
     {
-        return $this->belongsTo(Director::class, 'director_id');
+        return $this->belongsToMany(Director::class, 'director_in_movie', 'movie_id', 'director_id')
+            ->withTimestamps();
+    }
+
+    public function category()
+    {
+        return $this->belongsToMany(MovieCategory::class, 'category_in_movie', 'movie_id', 'movie_category_id')
+            ->withTimestamps();
     }
 
     // public function showtimes()
@@ -68,6 +69,16 @@ class Movie extends Model
     public function actorInMovies()
     {
         return $this->hasMany(ActorInMovie::class);
+    }
+
+    public function directorInMovie()
+    {
+        return $this->hasMany(DirectorInMovie::class);
+    }
+
+    public function movieCategoryInMovie()
+    {
+        return $this->hasMany(MovieCategoryInMovie::class);
     }
 
     public function news()

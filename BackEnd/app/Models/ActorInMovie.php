@@ -24,4 +24,6 @@ class ActorInMovie extends Model
     {
         return $this->belongsTo(Movie::class);
     }
+
+
 }

@@ -291,3 +291,34 @@ color: #6e84a3;
     font-size: 15px;
     font-weight: 400;
 }
+.profile-dropdown {
+  position: absolute;
+  top:45px;
+  right: 70px;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  z-index: 100;
+}
+
+.profile-dropdown a,
+.profile-dropdown div {
+  display: block;
+  padding: 8px 12px;
+  color: #6e84a3;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.profile-dropdown a:hover,
+.profile-dropdown div:hover {
+  color: #333;
+  cursor: pointer;
+}
+.timkiemrap{
+  display: flex;
+}
+.profile-menu-container {
+  position: relative;
+  cursor: pointer;
+}

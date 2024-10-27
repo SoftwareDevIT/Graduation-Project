@@ -1,28 +1,22 @@
-
 import { Actor } from "./Actor";
+import { Categories } from "./Categories";
 import { Cinema } from "./Cinema";
-import { MovieCategory } from "./MovieCategory";
-
-import { Showtime } from "./Showtime";
+import { Director } from "./Director";
 
 export interface Movie {
-    rating: string;
     id: number;
-    movie_category: MovieCategory;
-    movie_category_id: number;
-    actor_id: number;
-    director_id: number;
     movie_name: string;
     poster: string | null;
-    cinema_id:string;
     duration: string | null;
-    cinema: Cinema;
     release_date: string | null;
     age_limit: number | null;
     description: string | null;
     trailer: string | null;
-    status: 'Show' | 'Hidden';
-    showtimes: Showtime[];
-    [key: string]: any;
-  }
-  
+    rating: string | null;
+    status: number; // Số nguyên từ API trả về (1: Show, 0: Hidden)
+    actor: Actor[];
+    category: Categories[]; // Mảng các đối tượng danh mục phim chứa category_name
+    director: Director[];
+    movie_in_cinemas: Cinema[];
+    [key: string]: any; // Có thể thêm các thuộc tính khác từ API nếu cần
+}

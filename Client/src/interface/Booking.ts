@@ -1,7 +1,8 @@
 import { User } from "./User";
-import { Showtime } from "./Showtime";
+
 import { PayMethod } from "./PayMethod";
 import { Movie } from "./Movie";
+import { Showtime } from "./Showtimes";
 
 export interface Booking {
   id: string;
