@@ -17,10 +17,12 @@ class Actor extends Model
         'country',
         'link_wiki',
     ];
-    
+
     public function movies()
     {
-        return $this->hasMany(Movie::class);
+        return $this->belongsToMany(Movie::class, 'actor_in_movies', 'actor_id', 'movie_id')
+         
+            ->withTimestamps();
     }
 
     public function actorInMovies()

@@ -5,7 +5,9 @@
   margin-left: 190px;
   max-width: 1600px; /* Increased width */
 }
-
+.box-map{
+  background: #fff;
+}
 .seat-info-box {
   display: flex;
   flex-direction: row;

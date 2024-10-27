@@ -6,15 +6,17 @@ import { FaTachometerAlt, FaUser, FaFilm, FaTicketAlt, FaTag, FaNewspaper, FaLis
 const Sidebar = () => {
     return (
         <div className="sidebar">
-            <div className="logo">
-                <img src="https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F8ed3d547-94ff-48e1-9f20-8c14a7030a02_2000x2000.jpeg" alt="Admin Dashboard Logo" />
+             <div className="header-logo col-lg-1 col-md-4 col-sm-4 col-4 ">
+              <Link to={"/"}>
+                {" "}
+                <span className="logo-first-letter1">F</span>lickHive
+              </Link>
             </div>
             <ul>
                 <li><Link to={'/admin'}><FaTachometerAlt /> Dashboard</Link></li>
                 <li><Link to={'/admin/user'}><FaUser /> Users</Link></li>
                 <li><Link to={'/admin/showtimes'}><FaCalendarAlt /> Quản lí xuất chiếu</Link></li>
                 <li><Link to={'/admin/orders'}><FaTag /> Quản lí đơn hàng</Link></li>
-                <li><Link to={'/admin/tickets'}><FaTicketAlt /> Quản lí vé</Link></li>
                 <li><Link to={'/admin/posts'}><FaNewspaper /> Quản lí bài viết</Link></li>
                 <li><Link to={'/admin/categories'}><FaList /> Quản lí thể loại</Link></li>
                 <li><Link to={'/admin/countries'}><FaGlobe /> Quản lí quốc gia</Link></li>

@@ -1,24 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import './ShowtimesDashboard.css';
 import { Link } from 'react-router-dom';
-import { Showtime } from '../../../interface/Showtimes';
+
 import { useShowtimeContext } from '../../../Context/ShowtimesContext';
 import instance from '../../../server';
-import { Cinema } from '../../../interface/Cinema';
+
+import { Movie } from '../../../interface/Movie'; // Import Movie if needed
 
 const ShowtimesDashboard: React.FC = () => {
     const { state, dispatch } = useShowtimeContext();
     const { showtimes } = state;
     const [error, setError] = useState<string | null>(null);
-    const [cinemas, setCinemas] = useState<Cinema[]>([]);
+    
+    const [movies, setMovies] = useState<Movie[]>([]); // To store movies if needed
 
-    // Phân trang
+    // Pagination
     const [currentPage, setCurrentPage] = useState(1);
-    const showtimesPerPage = 3; // Số showtime hiển thị trên mỗi trang
+    const showtimesPerPage = 3; // Number of showtimes per page
     const totalShowtimes = showtimes.length;
     const totalPages = Math.ceil(totalShowtimes / showtimesPerPage);
 
-    // Lấy các showtime theo trang hiện tại
+    // Get current showtimes for the current page
     const currentShowtimes = showtimes.slice(
         (currentPage - 1) * showtimesPerPage,
         currentPage * showtimesPerPage
@@ -27,9 +29,10 @@ const ShowtimesDashboard: React.FC = () => {
     useEffect(() => {
         const fetchShowtimes = async () => {
             try {
-                const response = await instance.get<{ data: Showtime[] }>('/showtimes');
+                const response = await instance.get('/showtimes');
                 if (Array.isArray(response.data.data)) {
                     dispatch({ type: 'SET_SHOWTIMES', payload: response.data.data });
+                    console.log(response.data.data);
                 } else {
                     setError('Không thể lấy showtime: Định dạng phản hồi không mong đợi');
                 }
@@ -38,21 +41,29 @@ const ShowtimesDashboard: React.FC = () => {
             }
         };
 
-        const fetchCinemas = async () => {
+       
+
+        const fetchMovies = async () => {
             try {
-                const cinemaResponse = await instance.get<{ data: Cinema[] }>('/cinema');
-                if (Array.isArray(cinemaResponse.data.data)) {
-                    setCinemas(cinemaResponse.data.data);
+                const movieResponse = await instance.get('/movies'); // Đảm bảo endpoint này là chính xác
+                console.log(movieResponse.data); // In ra phản hồi để kiểm tra định dạng
+                if (Array.isArray(movieResponse.data.data.original
+                )) {
+                    setMovies(movieResponse.data.data.original
+                    );
                 } else {
-                    setError('Không thể lấy danh sách rạp: Định dạng phản hồi không mong đợi');
+                    setError('Không thể lấy danh sách phim: Định dạng phản hồi không mong đợi');
                 }
             } catch (err) {
-                setError('Không thể lấy danh sách rạp');
+                console.error(err); // In ra lỗi để dễ dàng debug
+                setError('Không thể lấy danh sách phim');
             }
         };
+        
 
-        fetchCinemas();
+        
         fetchShowtimes();
+        fetchMovies(); // Fetch movies to use later
     }, [dispatch]);
 
     const deleteShowtime = async (id: number) => {
@@ -61,7 +72,6 @@ const ShowtimesDashboard: React.FC = () => {
                 await instance.delete(`/showtimes/${id}`);
                 dispatch({ type: 'DELETE_SHOWTIME', payload: id });
                 alert('Showtime đã được xóa thành công!');
-                // Kiểm tra nếu sau khi xóa, trang hiện tại không còn showtime nào thì quay về trang trước
                 const updatedTotalShowtimes = totalShowtimes - 1;
                 const updatedTotalPages = Math.ceil(updatedTotalShowtimes / showtimesPerPage);
                 if (currentPage > updatedTotalPages && updatedTotalPages > 0) {
@@ -73,7 +83,7 @@ const ShowtimesDashboard: React.FC = () => {
         }
     };
 
-    // Hàm để xử lý chuyển trang
+    // Function to handle page changes
     const handlePageChange = (page: number) => {
         if (page >= 1 && page <= totalPages) {
             setCurrentPage(page);
@@ -96,10 +106,10 @@ const ShowtimesDashboard: React.FC = () => {
                         <thead>
                             <tr>
                                 <th>Phim</th>
-                                <th>Rạp</th>
                                 <th>Ngày</th>
                                 <th>Giờ bắt đầu</th>
                                 <th>Giờ kết thúc</th>
+                                <th>Giá</th>
                                 <th>Hành động</th>
                             </tr>
                         </thead>
@@ -107,13 +117,14 @@ const ShowtimesDashboard: React.FC = () => {
                             {currentShowtimes.length > 0 ? (
                                 currentShowtimes.map((showtime) => (
                                     <tr key={showtime.id}>
-                                        <td>{showtime.movie.movie_name}</td>
                                         <td>
-                                            {cinemas.find(cinema => cinema.id === showtime.cinema_id)?.cinema_name || 'No Cinema'}
+                                            {movies.find(movie => movie.id === showtime.movie_in_cinema_id)?.movie_name || 'No Movie'}
                                         </td>
+                                     
                                         <td>{new Date(showtime.showtime_date).toLocaleDateString()}</td>
                                         <td>{showtime.showtime_start}</td>
                                         <td>{showtime.showtime_end}</td>
+                                        <td>{showtime.price}</td>
                                         <td className="action-buttons">
                                             <Link to={`/admin/showtimes/edit/${showtime.id}`} className="edit-btn">✏️</Link>
                                             <button
@@ -136,36 +147,34 @@ const ShowtimesDashboard: React.FC = () => {
                     </table>
                 </div>
 
-                {/* Phân trang */}
-               
-                    <div className="pagination">
+                {/* Pagination */}
+                <div className="pagination">
+                    <button
+                        className="prev-btn"
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                    >
+                        Prev
+                    </button>
+                    {Array.from({ length: totalPages }, (_, index) => (
                         <button
-                            className="prev-btn"
-                            onClick={() => handlePageChange(currentPage - 1)}
-                            disabled={currentPage === 1}
+                            key={index}
+                            className={`page-btn ${currentPage === index + 1 ? 'active' : ''}`}
+                            onClick={() => handlePageChange(index + 1)}
                         >
-                            Prev
+                            {index + 1}
                         </button>
-                        {Array.from({ length: totalPages }, (_, index) => (
-                            <button
-                                key={index}
-                                className={`page-btn ${currentPage === index + 1 ? 'active' : ''}`}
-                                onClick={() => handlePageChange(index + 1)}
-                            >
-                                {index + 1}
-                            </button>
-                        ))}
-                        <button
-                            className="next-btn"
-                            onClick={() => handlePageChange(currentPage + 1)}
-                            disabled={currentPage === totalPages}
-                        >
-                            Next
-                        </button>
-                    </div>
+                    ))}
+                    <button
+                        className="next-btn"
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                    >
+                        Next
+                    </button>
                 </div>
             </div>
-      
+        </div>
     );
 };
 

@@ -22,6 +22,7 @@ class ShowtimeSeeder extends Seeder
                 'showtime_date' => now()->addDays(1)->toDateString(), // Ngày chiếu
                 'showtime_start' => now(), // Thời gian bắt đầu
                 'showtime_end' => now(), // Thời gian kết thúc
+                'price' => 45000,
                 'status' => '1', // Hoặc 'Hidden' tùy thuộc vào trạng thái
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -33,6 +34,7 @@ class ShowtimeSeeder extends Seeder
                 'showtime_date' => now()->addDays(1)->toDateString(), // Ngày chiếu
                 'showtime_start' => now()->addDays(1), // Thời gian bắt đầu
                 'showtime_end' => now()->addDays(1), // Thời gian kết thúc
+                'price' => 45000,
                 'status' => '1', // Hoặc 'Hidden' tùy thuộc vào trạng thái
                 'created_at' => now(),
                 'updated_at' => now(),

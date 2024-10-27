@@ -1,26 +1,29 @@
+import { Booking } from "../../../interface/Booking";
 import instance from "../../../server";
 import "./OrdersDashboard.css";
-import { Booking } from "../../../interface/Booking";
+
 import { useEffect, useState } from "react";
+
 
 const OrdersDashboard: React.FC = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);
 
+
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const response = await instance.get<Booking[]>("/order");
+        const response = await instance.get("/order");
         console.log(response.data); // Kiểm tra dữ liệu trả về
-     
-        setBookings(response.data.data);
+  
+        setBookings(response.data.data); 
       } catch (error) {
         console.error("Error fetching bookings:", error);
       }
     };
-
+  
     fetchBookings();
   }, []);
-
+  
   return (
     <div className="orders-management">
       <h2>Order Management</h2>
@@ -50,14 +53,14 @@ const OrdersDashboard: React.FC = () => {
                   <td>{booking.id}</td>
                   <td>{booking.user.user_name}</td> {/* Hiển thị tên người dùng */}
                   <td>{booking.showtime.showtime_date}</td> {/* Hiển thị thời gian chiếu */}
-                  <td>{booking.showtime.movie.movie_name}</td> {/* Hiển thị tên phim */}
+                  <td>{booking.showtime.movie_in_cinema_id}</td> {/* Hiển thị tên phim */}
                   <td>{booking.pay_method.pay_method_name}</td> {/* Hiển thị phương thức thanh toán */}
                   <td>${booking.price_ticket}</td>
                   <td>${booking.price_combo}</td>
                   <td>{booking.amount}</td>
                   <td>{booking.seat_status}</td> {/* Hiển thị trạng thái */}
                   <td className="action-buttons">
-                    <button className="view-btn">👁</button>
+                   
                     <button className="edit-btn">✏️</button>
                     <button className="delete-btn">🗑</button>
                   </td>
@@ -65,7 +68,7 @@ const OrdersDashboard: React.FC = () => {
               ))
             ) : (
               <tr>
-                <td colSpan={9} style={{ textAlign: "center" }}>
+                <td colSpan={10} style={{ textAlign: "center" }}>
                   No booking available.
                 </td>
               </tr>
