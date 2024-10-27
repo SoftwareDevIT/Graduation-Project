@@ -7,12 +7,14 @@ use App\Http\Requests\Movie\Store\StoreMovieRequest;
 use App\Http\Requests\Movie\Update\UpdateMovieRequest;
 use App\Models\Movie;
 use App\Models\MovieCategory;
+use App\Models\MovieCategoryInMovie;
 use App\Models\Showtime;
 use App\Services\Movie\MovieService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use League\Flysystem\WhitespacePathNormalizer;
 use Throwable;
 
@@ -45,7 +47,7 @@ class MovieController extends Controller
             DB::transaction(function () use ($movie, $request) {
                 // Lưu movie
                 $movie = $this->movieService->store($movie);
-        
+
                 // Gắn các mối quan hệ
                 $movie->category()->sync($request->movie_category_id);
                 $movie->actor()->sync($request->actor_id);
@@ -90,7 +92,7 @@ class MovieController extends Controller
             $movie['poster'] = $imageLink;
 
             $movie = $this->movieService->update($id, $movie);
-          
+
 
             $movie->category()->sync($request->movie_category_id);
             $movie->actor()->sync($request->actor_id);
@@ -141,15 +143,20 @@ class MovieController extends Controller
     public function movieByCategory($id)
     {
         try {
-            $movies = Movie::where('movie_category_id', $id)->get();
+            // Lấy danh sách movie theo ID
+            $movies = MovieCategoryInMovie::where('movie_category_id', $id)->pluck('movie_id'); 
 
-            if ($movies->isEmpty()) {
+            // Lấy phim theo danh sách movie
+            $movie = Movie::whereIn('id', $movies)->get();
+
+            // Kiểm tra xem tồn tại hay không
+            if ($movie->isEmpty()) {
                 return $this->error('Không có phim nào thuộc Category này', 404);
             }
 
-            return $this->success($movies, 'Danh sách phim thuộc Category ', 200);
+            return $this->success($movie, 'Danh sách phim thuộc Category ', 200);
         } catch (Throwable $th) {
-            return $this->error('Fail', 500);
+            return $this->error('Lỗi: ' . $th->getMessage(), 500);
         }
     }
 
@@ -158,7 +165,6 @@ class MovieController extends Controller
         try {
             // Lấy tất cả phim sắp chiếu 
             // $moviesByWeek = Movie::where('release_date', '>', Carbon::now())->get(); 
-
 
             // Lấy phim sắp chiếu theo từng tuần
             $today = Carbon::now();
