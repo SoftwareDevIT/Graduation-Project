@@ -60,7 +60,7 @@ const Personal: React.FC = () => {
                 <img src={avatar} alt="avatar" />
               </div>
               <div className='nameacount'>
-                <h3>{userProfile?.fullname || "No name"}</h3>
+                <h3>{userProfile?.user_name || "No name"}</h3>
               </div>
             </div>
           </div>
@@ -78,12 +78,12 @@ const Personal: React.FC = () => {
         <div className="img">
           <img src={movie.poster || undefined} alt={movie.movie_name} />
         </div>
-        <div className="nutlike">
+        {/* <div className="nutlike">
           <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#00d97e"><path d="M720-144H264v-480l288-288 32 22q17 12 26 30.5t5 38.5l-1 5-38 192h264q30 0 51 21t21 51v57q0 8-1.5 14.5T906-467L786.93-187.8Q778-168 760-156t-40 12Zm-384-72h384l120-279v-57H488l49-243-201 201v378Zm0-378v378-378Zm-72-30v72H120v336h144v72H48v-480h216Z"/></svg>
           <span className='nobackground'>
             {ratingNumber ? `${(ratingNumber * 10).toFixed(0)}%` : 'Chưa có đánh giá'}
           </span>
-        </div>
+        </div> */}
       </div>
     );
   })

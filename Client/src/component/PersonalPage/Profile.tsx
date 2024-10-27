@@ -130,7 +130,7 @@ const Profile: React.FC = () => {
                     />
                     <div className="account-details">
                       <h2 className="account-name">
-                        {userProfile?.fullname || "No name"}
+                        {userProfile?.user_name || "No name"}
                       </h2>
                     </div>
                   </div>
@@ -193,7 +193,7 @@ const Profile: React.FC = () => {
                     type="email"
                     id="email"
                     value={
-                      userProfile?.email || "nguyenvanthien24032004@gmail.com"
+                      userProfile?.email || ""
                     }
                     readOnly
                   />

@@ -99,7 +99,7 @@ const MovieDetail: React.FC = () => {
             />
             <div className="movie-details-wrapper">
               <div className="movie-info">
-                <h1 className="title">{movie?.movie_name}</h1>
+                <h2 className="title">{movie?.movie_name}</h2>
                 <p className="genre">Thể loại: {movie?.category?.map((cat: any) => cat.director_name).join(', ') || "Không có thể loại"}</p>
 
                 <div className="actions">

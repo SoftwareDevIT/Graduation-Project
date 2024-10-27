@@ -194,7 +194,7 @@ import instance from "../../server";
                     </span>
                   </a>
                   <div className="dropdown-content">
-                    <a href="#">Đang chiếu</a>
+                    <Link to={"/movieshowing"}>Đang chiếu</Link>
                     <a href="#">Sắp chiếu</a>
                     <a href="#">Chiếu sớm</a>
                     <a href="#">Phim Việt Nam</a>
@@ -261,7 +261,7 @@ import instance from "../../server";
                   <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
                 </svg>
               </Link>
-              <Link to="/help" className="icon-link">
+              <Link to="/sp" className="icon-link">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="25"

@@ -40,11 +40,14 @@ import MoviesAddManager from "./Page/Admin/Movies/MoviesForm";
 import CategoriesFormManager from "./Page/Admin/Categories/CategoriesForm";
 import MuaVe from "./component/MovieDetail/MuaVe";
 import SerachMovies from "./component/SerachMovies/SerachMovies";
-import FilmNews from "./component/Film news/FilmNews";
+
 import Personal from "./component/PersonalPage/Personal";
 import ChangePassword from "./component/PersonalPage/ChangePassword";
 import Profile from "./component/PersonalPage/Profile";
 import PrivateRoute from "./PrivateRoute";
+import FilmNews from "./component/News/FilmNews";
+import MovieShowing from "./component/Movies/MovieShowing";
+import SupportCenter from "./component/Support/Support";
 
 
 function App() {
@@ -71,6 +74,8 @@ function App() {
         <Route path="/ChangePassword" element={<ChangePassword />} />
         <Route path="/register" element={<RegisterCinema />} />
         <Route path="/login" element={<LoginCinema />} />
+        <Route path="movieshowing" element={<MovieShowing/>} />
+        <Route path="/sp" element={<SupportCenter/>} />
 
         {/* Phân quyền cho các route admin */}
         <Route path="/admin" element={<PrivateRoute allowedRoles={['admin']}><Dashboard /></PrivateRoute>} />

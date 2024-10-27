@@ -68,7 +68,10 @@
 .movie-info {
     flex: 1;
 }
-
+.movie-info h2{
+    color: #fff;
+    margin-right: 380px;
+}
 .title {
     text-align: left;
     padding-bottom: 15px;
