@@ -40,18 +40,20 @@ const MovieShowing: React.FC = () => {
   return (
     <>
       <Header />
-      <div className="movie-showing">
-        {/* Phần Banner */}
-        <div className="banner">
+      <div className="banner">
           <h2>Phim đang chiếu</h2>
           <p>
             Danh sách các phim hiện đang chiếu rạp trên toàn quốc 24/10/2024. Xem lịch chiếu phim, giá vé tiện lợi, đặt vé nhanh chỉ với 1 bước!
           </p>
         </div>
+      <div className="movie-showing">
+        {/* Phần Banner */}
+      
+        <div className="container">
         <div className="titleg">
           <div className="filters">
             <select value={selectedPopular} onChange={handlePopularChange} className="filter-select">
-              <option value="">Phổ biến</option>
+              <option value="">Phổ biến</option>        
               <option value="most-popular">Phổ biến nhất</option>
               <option value="newest">Mới nhất</option>
               <option value="top-rated">Xếp hạng cao</option>
@@ -87,6 +89,7 @@ const MovieShowing: React.FC = () => {
               </div>
             ))}
           </div>
+        </div>
         </div>
       </div>
       <Footer />
