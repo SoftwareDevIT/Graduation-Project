@@ -67,6 +67,9 @@
 .related-news-item .title{
   font-size: 17px;
 }
+.related-news-item a{
+  text-decoration: none;
+}
 .related-news ul li a:hover {
   text-decoration: underline;
 }

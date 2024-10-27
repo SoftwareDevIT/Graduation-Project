@@ -60,6 +60,7 @@ import Transaction from "./component/PersonalPage/Transaction";
 import MovieDetail from "./component/MovieDetail/MovieDetail";
 import SupportCenter from "./component/Support/Support";
 import MovieShowing from "./component/Movies/MovieShowing";
+import PostDetail from "./component/Post/PostDetail";
 
 
 
@@ -82,6 +83,7 @@ function App() {
         <Route path="/payment-callback" element={<PaymentCallback />} />
         <Route path="/filmnews" element={<FilmNews/>} />
         <Route path="/sp" element={<SupportCenter/>} />
+        <Route path="/postdetail/:id" element={<PostDetail/>} />
        
 
         <Route path="/movie/search/:movie_name" element={<SerachMovies />} />

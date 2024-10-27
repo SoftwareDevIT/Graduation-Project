@@ -3,6 +3,7 @@ import Slider from 'react-slick';
 import instance from '../../server';
 import './NewsContent.css'; 
 import { NewsItem } from '../../interface/NewsItem';
+import { Link } from 'react-router-dom';
 
 const NewsContent = () => {
   const [newsData, setNewsData] = useState<NewsItem[]>([]);
@@ -62,7 +63,8 @@ const NewsContent = () => {
       <div className="related-news">
         {newsData.slice(1, 6).map((news, index) => (
           <div className="related-news-item" key={index}>
-            <a href="#" className='title'>{news.title}</a>
+            <Link to={`/postdetail/${news.id}`} className='title'> {news.title}</Link>
+          
             <span className="author">{news.user_id} • {new Date(news.created_at).toLocaleString()}</span>
           </div>
         ))}

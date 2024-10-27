@@ -6,6 +6,7 @@ import './FilmNews.css';
 import Header from "../Header/Hearder";
 import { NewsItem } from "../../interface/NewsItem";
 import instance from "../../server";
+import { Link } from "react-router-dom";
 
 function FilmNews() {
   const [news, setNews] = useState<NewsItem[]>([]);
@@ -58,7 +59,7 @@ function FilmNews() {
                         <img src={item.thumnail} alt={item.title} />
                       </div>
                       <div className="content-new">
-                        <h3>{item.title}</h3>
+                      <Link to={`/postdetail/${item.id}`}><h3>{item.title}</h3></Link>
                         <p>{item.content}</p>
                       </div>
                     </div>
