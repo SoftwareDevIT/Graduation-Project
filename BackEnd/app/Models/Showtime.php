@@ -44,4 +44,9 @@ class Showtime extends Model
     {
         return $this->hasMany(MovieInCinema::class);
     }
+    public function movieInCinema()
+    {
+        return $this->belongsTo(MovieInCinema::class);
+    }
+
 }
