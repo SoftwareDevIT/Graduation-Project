@@ -48,6 +48,8 @@ import PrivateRoute from "./PrivateRoute";
 import FilmNews from "./component/News/FilmNews";
 import MovieShowing from "./component/Movies/MovieShowing";
 import SupportCenter from "./component/Support/Support";
+import PostDetail from "./component/Post/PostDetail";
+
 
 
 function App() {
@@ -68,6 +70,11 @@ function App() {
         <Route path="/confirm" element={<EmailConfirm />} />
         <Route path="/payment-callback" element={<PaymentCallback />} />
         <Route path="/FilmNews" element={<FilmNews />} />
+        <Route path="/filmnews" element={<FilmNews/>} />
+        <Route path="/sp" element={<SupportCenter/>} />
+        <Route path="/postdetail/:id" element={<PostDetail/>} />
+       
+
         <Route path="/movie/search/:movie_name" element={<SerachMovies />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/Personal" element={<Personal />} />
@@ -75,7 +82,7 @@ function App() {
         <Route path="/register" element={<RegisterCinema />} />
         <Route path="/login" element={<LoginCinema />} />
         <Route path="movieshowing" element={<MovieShowing/>} />
-        <Route path="/sp" element={<SupportCenter/>} />
+       
 
         {/* Phân quyền cho các route admin */}
         <Route path="/admin" element={<PrivateRoute allowedRoles={['admin']}><Dashboard /></PrivateRoute>} />

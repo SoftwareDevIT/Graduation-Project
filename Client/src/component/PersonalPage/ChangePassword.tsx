@@ -70,7 +70,7 @@ const ChangePassword: React.FC = () => {
     }
 
     const token = localStorage.getItem("token"); // Lấy token từ localStorage (hoặc nơi bạn lưu trữ token)
-    
+    console.log(token);
     // Kiểm tra dữ liệu gửi lên
     console.log("Data sending to server:", {
         current_password: currentPassword,
@@ -85,9 +85,12 @@ const ChangePassword: React.FC = () => {
             new_password_confirmation: new_password_confirmation,
         }, {
             headers: {
-                Authorization: `Bearer ${token}`,
+                Authorization: `Bearer k6V8jtEAWxqfU8egsj3altRAE5rlPo0NmbjRCOGTd13b572f`,
             },
+            
+            
         });
+       
 
         if (response.data.status) {
             notification.success({ message: 'Đổi mật khẩu thành công!' });
