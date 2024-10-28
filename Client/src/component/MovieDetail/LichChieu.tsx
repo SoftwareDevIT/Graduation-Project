@@ -144,29 +144,40 @@ const navigate =useNavigate()
                                         <div className="sub-cinema-list">
                                             <p>{cinema.cinema_address}</p>
                                             <div className="cinema-showtimes">
-    {cinema.showtimes.length > 0 ? (
-        cinema.showtimes.map((showtime: Showtime) => (
+                                            {cinema.showtimes.length > 0 ? (
+    cinema.showtimes.map((showtime: Showtime) => {
+        const showtimeDateTime = new Date(`${selectedDate}T${showtime.showtime_start}`); // Tạo thời gian đầy đủ của suất chiếu
+        const isPastShowtime = showtimeDateTime < new Date(); // Kiểm tra nếu thời gian suất chiếu đã qua
+
+        return (
             <span
                 key={showtime.id}
                 onClick={() => {
-                    navigate("/seat", {
-                        state: {
-                            movieName: "Tên Phim", // Thay thế bằng tên phim thực tế
-                            cinemaName: cinema.cinema_name,
-                            showtime: showtime.showtime_start,
-                            showtimeId: showtime.id, // Truyền showtimeId
-                            cinemaId: cinema.id, // Truyền cinemaId
-                        },
-                    });
+                    if (!isPastShowtime) { // Chỉ điều hướng nếu suất chiếu chưa qua
+                        navigate("/seat", {
+                            state: {
+                                movieName: "Tên Phim", // Thay thế bằng tên phim thực tế
+                                cinemaName: cinema.cinema_name,
+                                showtime: showtime.showtime_start,
+                                showtimeId: showtime.id,
+                                cinemaId: cinema.id,
+                            },
+                        });
+                    }
                 }}
-                style={{ cursor: "pointer" }}
+                style={{
+                    cursor: isPastShowtime ? "not-allowed" : "pointer", // Đổi con trỏ chuột thành "not-allowed" nếu suất chiếu đã qua
+                    color: isPastShowtime ? "gray" : "black" // Đổi màu sắc để dễ nhận biết
+                }}
             >
                 {showtime.showtime_start}
             </span>
-        ))
-    ) : (
-        <p>Không có suất chiếu</p>
-    )}
+        );
+    })
+) : (
+    <p>Không có suất chiếu</p>
+)}
+
 </div>
 
                                         </div>

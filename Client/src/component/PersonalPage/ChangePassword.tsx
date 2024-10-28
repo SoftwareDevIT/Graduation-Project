@@ -7,7 +7,18 @@ import Header from '../Header/Hearder';
 import './Profile.css';
 import './ChangePassword.css';
 import instance from '../../server';
-
+const openNotificationWithIcon = (
+  type: "success" | "error",
+  message: string,
+  description: string
+) => {
+  notification[type]({
+    message: message ?? "Thông báo",
+    description,
+    // Sử dụng class CSS tùy chỉnh nếu cần để thay đổi màu
+    className: type === "success" ? "notification-success" : "notification-error",
+  });
+};
 const ChangePassword: React.FC = () => {
   const location = useLocation();
   const isAccountActive = location.pathname === '/profile' || location.pathname === '/changepassword';
@@ -27,7 +38,7 @@ const ChangePassword: React.FC = () => {
     if (profileData) {
       const profile = JSON.parse(profileData);
       const userId = profile.id;
-
+     
       // Lấy thông tin người dùng theo ID
       const fetchUserProfile = async () => {
         try {
@@ -65,43 +76,44 @@ const ChangePassword: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (newPassword !== new_password_confirmation) {
-        notification.error({ message: 'Mật khẩu không khớp' });
-        return;
+      openNotificationWithIcon("error", "Lỗi", "Mật khẩu không khớp");
+      return;
     }
-
-    const token = localStorage.getItem("token"); // Lấy token từ localStorage (hoặc nơi bạn lưu trữ token)
-    console.log(token);
-    // Kiểm tra dữ liệu gửi lên
-    console.log("Data sending to server:", {
-        current_password: currentPassword,
-        new_password: newPassword,
-        new_password_confirmation: new_password_confirmation,
-    });
-
+  
+    const token = localStorage.getItem("token");
+  
     try {
-        const response = await instance.post('/resetPassword', {
-            current_password: currentPassword,
-            new_password: newPassword,
-            new_password_confirmation: new_password_confirmation,
-        }, {
-            headers: {
-                Authorization: `Bearer k6V8jtEAWxqfU8egsj3altRAE5rlPo0NmbjRCOGTd13b572f`,
-            },
-            
-            
-        });
-       
-
-        if (response.data.status) {
-            notification.success({ message: 'Đổi mật khẩu thành công!' });
-        } else {
-            notification.error({ message: response.data.message || 'Cập nhật mật khẩu thất bại' });
+      const response = await instance.post(
+        '/resetPassword',
+        {
+          current_password: currentPassword,
+          new_password: newPassword,
+          new_password_confirmation: new_password_confirmation,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-    } catch (error) {
-        console.error("Error details:", error.response?.data || error.message);
-        notification.error({ message: 'Cập nhật mật khẩu thất bại', description: error.response?.data?.message || '' });
+      );
+    
+      console.log("API response:", response.data); // Kiểm tra phản hồi từ API
+    
+      if (response.data.message) {
+        openNotificationWithIcon("success", "Thành công", "Bạn đã đổi mật khẩu thành công.");
+      } else {
+        openNotificationWithIcon("error", "Lỗi", response.data.message || "Cập nhật mật khẩu thất bại");
+      }
+    } catch (error: any) {
+      if (error.response?.status === 400) {
+        openNotificationWithIcon("error", "Lỗi", "Mật khẩu hiện tại không chính xác.");
+      } else {
+        openNotificationWithIcon("error", "Lỗi", error.response?.data?.message || "Cập nhật mật khẩu thất bại");
+      }
     }
-};
+    
+  };
+  
 
 
 

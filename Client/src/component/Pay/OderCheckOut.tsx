@@ -37,9 +37,23 @@ const OrderCheckout = () => {
       return;
     }
   
+    // Xây dựng bookingData dựa trên dữ liệu thực tế
     const bookingData = {
+      cinemaId: cinemaId,
+      showtimeId: showtimeId,
       showtime_id: showtimeId,
       pay_method_id: paymentMethod === 'vnpay' ? 1 : 2,
+      seats: selectedSeats.map((seat: any) => ({
+        seat_name: seat.seat_name,
+        room_id: seat.room_id,
+        showtime_id: showtimeId,
+        seat_row: seat.seat_row,
+        seat_column: seat.seat_column,
+      })),
+      comboId: selectedCombos.map((combo: any) => ({
+        id: combo.id,
+        quantity: combo.quantity,
+      })),
       amount: totalPrice,
     };
   
@@ -62,6 +76,7 @@ const OrderCheckout = () => {
       message.error('Đặt vé thất bại. Vui lòng thử lại.');
     }
   };
+  
   
   return (
     <>
