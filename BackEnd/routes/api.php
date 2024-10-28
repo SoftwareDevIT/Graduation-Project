@@ -60,16 +60,14 @@ Route::apiResource('location', LocationController::class)->only(['index', 'show'
 Route::apiResource('cinema', CinemaController::class)->only(['index', 'show']);
 Route::apiResource('news_category', NewCategoryController::class)->only(['index', 'show']); // Liệt kê các danh mục tin tức
 
-Route::apiResource('news_category', NewCategoryController::class)->only(['index', 'show']);// Liệt kê các danh mục tin tức
+Route::apiResource('news_category', NewCategoryController::class)->only(['index', 'show']); // Liệt kê các danh mục tin tức
 Route::apiResource('news', NewController::class)->only(['index', 'show']); // List news
 Route::apiResource('actor', ActorController::class)->only(['index', 'show']); // Liệt kê các diễn viên
 Route::apiResource('director', DirectorController::class)->only(['index', 'show']); // Danh sách giám đốc
 Route::apiResource('movie-category', MovieCategoryController::class)->only(['index', 'show']); // Liệt kê các thể loại phim
 Route::apiResource('movies', MovieController::class)->only(['index', 'show']); // Liệt kê phim
-Route::apiResource('combo', ComboController::class)->only(['index', 'show']);
-;
-Route::apiResource('seat', SeatController::class)->only(['index', 'show']);
-;
+Route::apiResource('combo', ComboController::class)->only(['index', 'show']);;
+Route::apiResource('seat', SeatController::class)->only(['index', 'show']);;
 Route::apiResource('news_category', NewCategoryController::class)->only(['index', 'show']);         // Liệt kê các danh mục tin tức
 Route::apiResource('news', NewController::class)->only(['index', 'show']);                          // List news
 Route::apiResource('actor', ActorController::class)->only(['index', 'show']);                       // Liệt kê các diễn viên
@@ -82,8 +80,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('favorites/{movie_id}', [FavoriteController::class, 'store']);                 // Thêm phim yêu thích
     Route::delete('favorites/{movie_id}', [FavoriteController::class, 'destroy']);             // Xóa phim yêu thích
     Route::post('ratings', [RatingController::class, 'store']);                                // Phim đánh giá
+    Route::post('selectSeats', [BookingController::class, 'selectSeats']);
     Route::post('/book-ticket', [BookingController::class, 'bookTicket']);
-    Route::post('save-seat', [BookingController::class, 'saveSeat']);
     Route::apiResource('user', AuthController::class);
     Route::get('/user', function (Request $request) {
         $user = $request->user()->load('favoriteMovies');
@@ -94,7 +92,7 @@ Route::get('/vnpay-return', [BookingController::class, 'vnPayReturn']);
 Route::get('/all-user', [AuthController::class, 'allUser']);
 
 // Các route quản trị và quản lý
-// Route::middleware(['auth:sanctum', 'role:admin|manager'])->group(function () {
+Route::middleware(['auth:sanctum', 'role:admin|manager'])->group(function () {
 Route::apiResource('location', LocationController::class)->except(['index', 'show']);
 Route::apiResource('cinema', CinemaController::class)->except(['index', 'show']);
 Route::apiResource('room', RoomController::class);
@@ -113,7 +111,7 @@ Route::post('add-movie-in-cinema/{cinema_id}', [CinemaController::class, 'synCin
 Route::get('show-movie-in-cinema/{cinema_id}', [CinemaController::class, 'showCinemaHasMovie']);
 Route::delete('cinema/{cinema_id}/movie/{movie_id}', [CinemaController::class, 'destroyCinemaHasMovie']);
 
-
+ 
 
 // phan quyen
 Route::resource('roles', RoleController::class); // add roles and show
@@ -126,7 +124,7 @@ Route::delete('/delete-user/{id}', [RoleController::class, 'destroy'])->name('ro
 // Route::get('/users', [UserController::class, 'index'])->name('users.index');
 // Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
-// });
+});
 
 
 // });
@@ -154,11 +152,10 @@ Route::get('filterMovieByNew', [FilterMovieByNewController::class, 'filterMovieB
 
 
 Route::apiResource('order', OrderController::class);
-Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::post('/slectMovieAndSeats', [BookingController::class, 'slectMovieAndSeats']);
-    Route::post('/selectCombo', [BookingController::class, 'selectCombos']);
-    Route::post('/book-ticket', [BookingController::class, 'bookTicket']);
-
-});
+// Route::group(['middleware' => ['auth:sanctum']], function () {
+//     // Route::post('/slectMovieAndSeats', [BookingController::class, 'slectMovieAndSeats']);
+//     // Route::post('/selectCombo', [BookingController::class, 'selectCombos']);
+//     Route::post('selectSeats', [BookingController::class, 'selectSeats']);
+//     Route::post('/book-ticket', [BookingController::class, 'bookTicket']);
+// });
 Route::get('session', [BookingController::class, 'getSession']);
-
