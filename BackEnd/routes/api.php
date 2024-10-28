@@ -76,7 +76,7 @@ Route::apiResource('movie-category', MovieCategoryController::class)->only(['ind
 Route::apiResource('room', RoomController::class)->only(['index', 'show']);
 
 // Các tuyến có thể truy cập được cho người dùng được xác thực
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:sanctum','web'])->group(function () {
     Route::post('favorites/{movie_id}', [FavoriteController::class, 'store']);                 // Thêm phim yêu thích
     Route::delete('favorites/{movie_id}', [FavoriteController::class, 'destroy']);             // Xóa phim yêu thích
     Route::post('ratings', [RatingController::class, 'store']);                                // Phim đánh giá
@@ -111,7 +111,7 @@ Route::post('add-movie-in-cinema/{cinema_id}', [CinemaController::class, 'synCin
 Route::get('show-movie-in-cinema/{cinema_id}', [CinemaController::class, 'showCinemaHasMovie']);
 Route::delete('cinema/{cinema_id}/movie/{movie_id}', [CinemaController::class, 'destroyCinemaHasMovie']);
 
- 
+
 
 // phan quyen
 Route::resource('roles', RoleController::class); // add roles and show
