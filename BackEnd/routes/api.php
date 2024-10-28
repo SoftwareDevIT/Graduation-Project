@@ -77,7 +77,7 @@ Route::apiResource('room', RoomController::class)->only(['index', 'show']);
 Route::apiResource('showtimes', ShowtimeController::class)->only(['index', 'show']);
 
 // Các tuyến có thể truy cập được cho người dùng được xác thực
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:sanctum','web'])->group(function () {
     Route::post('favorites/{movie_id}', [FavoriteController::class, 'store']);                 // Thêm phim yêu thích
     Route::delete('favorites/{movie_id}', [FavoriteController::class, 'destroy']);             // Xóa phim yêu thích
     Route::post('ratings', [RatingController::class, 'store']);                                // Phim đánh giá
