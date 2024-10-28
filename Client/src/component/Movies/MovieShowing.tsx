@@ -62,8 +62,8 @@ const MovieShowing: React.FC = () => {
             <select value={selectedGenre} onChange={handleGenreChange} className="filter-select">
               <option value="">Thể loại</option>
               <option value="action">Hành động</option>
-              <option value="drama">Chính kịch</option>
-              <option value="comedy">Hài kịch</option>
+              <option value="drama">Gia Đình</option>
+              <option value="comedy">Tình Cảm</option>
             </select>
 
             <select value={selectedLanguage} onChange={handleLanguageChange} className="filter-select">

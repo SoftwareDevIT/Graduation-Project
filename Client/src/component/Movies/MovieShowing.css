@@ -127,6 +127,9 @@
         width: 100%;
         max-width: 200px;
     }
+    .filters .filter-select {
+        padding-top: 7px;
+    }
 
     .phim-card {
         width: 140px;
@@ -155,6 +158,9 @@
         gap: 10px;
         justify-content: center;
         margin-bottom: 20px;
+    }
+    .filters .filter-select {
+        padding-top: 6px;
     }
 
     .filter-select {
