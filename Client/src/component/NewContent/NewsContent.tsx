@@ -46,7 +46,7 @@ const NewsContent = () => {
           <Slider {...settings}>
             {newsData.slice(0, 3).map((news, index) => (
               <div key={index}>
-                <img src={news.banner || 'https://via.placeholder.com/800x400'} alt={news.title} />
+              <Link to={`/postdetail/${news.id}`} ><img src={news.banner || 'https://via.placeholder.com/800x400'} alt={news.title} /></Link>
               </div>
             ))}
           </Slider>

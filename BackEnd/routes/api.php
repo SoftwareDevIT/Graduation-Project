@@ -96,7 +96,7 @@ Route::get('/all-user', [AuthController::class, 'allUser']);
 Route::middleware(['auth:sanctum', 'role:admin|manager'])->group(function () {
 Route::apiResource('location', LocationController::class)->except(['index', 'show']);
 Route::apiResource('cinema', CinemaController::class)->except(['index', 'show']);
-Route::apiResource('room', RoomController::class);
+Route::apiResource('room', RoomController::class)->except(['index', 'show']);
 Route::apiResource('showtimes', ShowtimeController::class)->except(['index', 'show']);
 Route::apiResource('news_category', NewCategoryController::class)->except(['index', 'show']);
 Route::apiResource('news', NewController::class)->except(['index', 'show']);
@@ -104,9 +104,9 @@ Route::apiResource('actor', ActorController::class)->except(['index', 'show']);
 Route::apiResource('director', DirectorController::class)->except(['index', 'show']);
 Route::apiResource('movie-category', MovieCategoryController::class)->except(['index', 'show']);
 Route::apiResource('movies', MovieController::class)->except(['index', 'show']);
-Route::apiResource('method', PayMethodController::class);
-Route::apiResource('combo', ComboController::class);
-Route::apiResource('seat', SeatController::class);
+Route::apiResource('method', PayMethodController::class)->except(['index', 'show']);
+Route::apiResource('combo', ComboController::class)->except(['index', 'show']);
+Route::apiResource('seat', SeatController::class)->except(['index', 'show']);
 
 Route::post('add-movie-in-cinema/{cinema_id}', [CinemaController::class, 'synCinemaHasMovie']);
 Route::get('show-movie-in-cinema/{cinema_id}', [CinemaController::class, 'showCinemaHasMovie']);
@@ -130,7 +130,7 @@ Route::delete('/delete-user/{id}', [RoleController::class, 'destroy'])->name('ro
 
 // });
 Route::get('showtimes/movie/{movie_name}', [ShowtimeController::class, 'showtimeByMovieName']);
-Route::post('/resetPassword', [ResetPasswordController::class, 'resetPassword']);
+Route::post('/resetPassword', [ResetPasswordController::class, 'resetPassword'])->middleware('auth:sanctum');
 
 // });
 
