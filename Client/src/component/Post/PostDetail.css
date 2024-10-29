@@ -1,10 +1,10 @@
 .article-container {
   padding: 20px;
-  background-color: #f7f7f9;
+
   border-radius: 8px;
-  max-width: 800px;
+ 
   margin: auto;
-  margin-top:-70px !important;
+
 }
 
 .article-title {
@@ -23,7 +23,7 @@
     margin: auto;
     padding: 20px;
     background-color: #f7f7f9;
-    border-radius: 8px;
+   
 }
 
 /* Phần bài viết chính */
@@ -73,7 +73,7 @@
 
 }
 .article-movie-info h2{
-    font-size: 14px;
+    font-size: 19px !important;
     font-weight: bold;
    
 }
@@ -96,9 +96,9 @@
     text-align: left;
 }
 .article-description{
-    font-weight:600;
+   
     text-align: left;
-    font-size: 16px;
+   
     line-height: 1.6;
     margin-top: 10px;
 }
@@ -148,6 +148,7 @@
 
 .article-movie-info {
   flex: 1;
+  font-size: 14px;
 }
 
 .article-button {
@@ -160,7 +161,7 @@
 }
 
 .article-description {
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.6;
   margin-top: 10px;
 }

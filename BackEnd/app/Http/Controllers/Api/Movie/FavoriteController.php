@@ -9,6 +9,7 @@ use App\Services\Movie\FavoriteService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class FavoriteController extends Controller
 {
@@ -33,10 +34,12 @@ class FavoriteController extends Controller
     public function store($id)
     {
         try {
-           $this->favoriteService->store($id);
-    
+            $this->favoriteService->store($id);
             return $this->success(null, 'Thêm thành công phim yêu thích');
-        } catch (Exception $e) {
+        } catch (HttpException $e) {
+            if ($e->getStatusCode() == 409) {
+                return $this->error('Lỗi: ' . $e->getMessage(), 409);
+            }
             return $this->error('Lỗi: ' . $e->getMessage(), 500);
         }
     }

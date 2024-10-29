@@ -143,3 +143,14 @@ padding-top: 15px;
 padding-left: 20px;
 border-radius: 5px 5px 0 0;
 }
+
+@media (max-width:576px) {
+    .tintucmoi h2{
+        width: 430px;
+    }
+    .tintucmoi{
+        position: relative;
+        right: 90px;
+    }
+    
+}

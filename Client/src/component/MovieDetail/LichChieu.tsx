@@ -4,7 +4,7 @@ import Header from "../Header/Hearder";
 import Footer from "../Footer/Footer";
 import MovieDetail from "./MovieDetail";
 import instance from "../../server"; // API instance
-import { useParams } from "react-router-dom"; // Lấy ID phim từ URL
+import { useNavigate, useParams } from "react-router-dom"; // Lấy ID phim từ URL
 import { Location } from "../../interface/Location";
 import { Cinema } from "../../interface/Cinema";
 import { Showtime } from "../../interface/Showtime";
@@ -17,7 +17,7 @@ const LichChieuUpdated: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [expandedIndex, setExpandedIndex] = useState<number | null>(null); // Để mở rộng rạp chiếu
     const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split("T")[0]); // Lấy ngày hôm nay
-
+const navigate =useNavigate()
     // Fetch locations
     useEffect(() => {
         const fetchLocations = async () => {
@@ -144,14 +144,42 @@ const LichChieuUpdated: React.FC = () => {
                                         <div className="sub-cinema-list">
                                             <p>{cinema.cinema_address}</p>
                                             <div className="cinema-showtimes">
-                                                {cinema.showtimes.length > 0 ? (
-                                                    cinema.showtimes.map((showtime: Showtime) => (
-                                                        <span key={showtime.id}>{showtime.showtime_start}</span>
-                                                    ))
-                                                ) : (
-                                                    <p>Không có suất chiếu</p>
-                                                )}
-                                            </div>
+                                            {cinema.showtimes.length > 0 ? (
+    cinema.showtimes.map((showtime: Showtime) => {
+        const showtimeDateTime = new Date(`${selectedDate}T${showtime.showtime_start}`); // Tạo thời gian đầy đủ của suất chiếu
+        const isPastShowtime = showtimeDateTime < new Date(); // Kiểm tra nếu thời gian suất chiếu đã qua
+
+        return (
+            <span
+                key={showtime.id}
+                onClick={() => {
+                    if (!isPastShowtime) { // Chỉ điều hướng nếu suất chiếu chưa qua
+                        navigate("/seat", {
+                            state: {
+                                movieName: "Tên Phim", // Thay thế bằng tên phim thực tế
+                                cinemaName: cinema.cinema_name,
+                                showtime: showtime.showtime_start,
+                                showtimeId: showtime.id,
+                                cinemaId: cinema.id,
+                            },
+                        });
+                    }
+                }}
+                style={{
+                    cursor: isPastShowtime ? "not-allowed" : "pointer", // Đổi con trỏ chuột thành "not-allowed" nếu suất chiếu đã qua
+                    color: isPastShowtime ? "gray" : "black" // Đổi màu sắc để dễ nhận biết
+                }}
+            >
+                {showtime.showtime_start}
+            </span>
+        );
+    })
+) : (
+    <p>Không có suất chiếu</p>
+)}
+
+</div>
+
                                         </div>
                                     )}
                                 </React.Fragment>
