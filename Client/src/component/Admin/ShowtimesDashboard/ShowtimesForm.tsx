@@ -46,6 +46,8 @@ const ShowtimesForm: React.FC = () => {
     const fetchMovieInCinema = async (cinemaId: number) => {
         const response = await instance.get(`/show-movie-in-cinema/${cinemaId}`);
         setMovieInCinemas(response.data.data);
+        // console.log(setMovieInCinemas);
+        
     };
 
     const handleCinemaChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -83,6 +85,7 @@ const ShowtimesForm: React.FC = () => {
 
         reset();
     };
+   
 
     const handleSubmitAll = async () => {
         await addOrUpdateShowtime(showtimesList);

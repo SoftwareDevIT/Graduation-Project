@@ -13,7 +13,7 @@ const ShowtimesDashboard: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     
     const [movies, setMovies] = useState<Movie[]>([]); // To store movies if needed
-
+    console.log(movies);
     // Pagination
     const [currentPage, setCurrentPage] = useState(1);
     const showtimesPerPage = 3; // Number of showtimes per page
@@ -46,7 +46,6 @@ const ShowtimesDashboard: React.FC = () => {
         const fetchMovies = async () => {
             try {
                 const movieResponse = await instance.get('/movies'); // Đảm bảo endpoint này là chính xác
-                console.log(movieResponse.data); // In ra phản hồi để kiểm tra định dạng
                 if (Array.isArray(movieResponse.data.data.original
                 )) {
                     setMovies(movieResponse.data.data.original
@@ -118,9 +117,8 @@ const ShowtimesDashboard: React.FC = () => {
                                 currentShowtimes.map((showtime) => (
                                     <tr key={showtime.id}>
                                         <td>
-                                            {movies.find(movie => movie.id === showtime.movie_in_cinema_id)?.movie_name || 'No Movie'}
+                                            {showtime.movie_in_cinema_id}
                                         </td>
-                                     
                                         <td>{new Date(showtime.showtime_date).toLocaleDateString()}</td>
                                         <td>{showtime.showtime_start}</td>
                                         <td>{showtime.showtime_end}</td>
