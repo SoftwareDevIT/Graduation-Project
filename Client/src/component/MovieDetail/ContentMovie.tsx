@@ -1,5 +1,7 @@
 import React from 'react'
 import './MovieDetail.css'
+import './ContentMovie.css'
+
 import MovieDetail from './MovieDetail'
 import Footer from '../Footer/Footer'
 interface Props {

@@ -28,37 +28,50 @@ class TicketBookingService
         $this->selectSeatsStep = new SelectSeats();
         $this->selectCombosStep = new SelectCombos();
         $this->processPaymentStep = new ProcessPayment();
+        $this->selectMovieStep->setNext($this->selectSeatsStep)
+            ->setNext($this->selectCombosStep);
     }
-    public function selectMovieSeats(Request $request)
+    public function bookingTicket(Request $req)
     {
-        $result = $this->selectMovieStep->handle($request);
+        $result = $this->selectMovieStep->handle($req);
         if ($result instanceof JsonResponse) {
             return $result;
         }
-        //Xử lý đặt ghế
-        $result = $this->selectSeatsStep->handle($request);
-        session()->put('seatss', $result);
-        Log::info('Seats result: ' . json_encode($result));
-        if ($result instanceof JsonResponse) {
-            return $result;
-        }
-        return null;
+        $booking = $this->bookTicket($req);
+        return $result;
     }
+    // public function selectMovieSeats(Request $request)
+    // {
+    //     $result = $this->selectMovieStep->handle($request);
+    //     if ($result instanceof JsonResponse) {
+    //         return $result;
+    //     }
+    //     //Xử lý đặt ghế
+    //     $result = $this->selectSeatsStep->handle($request);
+    //     session()->put('seatss', $result);
+    //     Log::info('Seats result: ' . json_encode($result));
+    //     if ($result instanceof JsonResponse) {
+    //         return $result;
+    //     }
+    //     return null;
+    // }
 
 
-    public function selectCombos(Request $request)
-    {
-        $result = $this->selectCombosStep->handle($request);
-        if ($result instanceof JsonResponse) {
-            return $result;
-        }
-        return null;
-    }
-
-    public function bookTicket(TicketBookingRequest $request)
+    // public function selectCombos(Request $request)
+    // {
+    //     $result = $this->selectCombosStep->handle($request);
+    //     if ($result instanceof JsonResponse) {
+    //         return $result;
+    //     }
+    //     return null;
+    // }
+    public function ticketBooking() {}
+    public function bookTicket(Request $request)
     {
         Log::info('Booking request: ' . json_encode($request->all()));
         $bookTicket = $this->bookings($request);
+        session(['booking' => $bookTicket->id]);  // Lưu thông tin booking vào session
+        Log::info('Booking: ' . session('booking'));
         if ($bookTicket) {
             $this->bookTicketSaveSession($request, $bookTicket,);
         }
@@ -68,23 +81,28 @@ class TicketBookingService
 
     public function bookTicketSaveSession(Request $request, $booking)
     {
-        session(['booking' => $booking->id]);
-        Log::info('Booking: ' . session('booking'));
-        if (session()->has('combos')) {
-            Log::info('Combos: ' . json_encode(session('combos')));
+        // Kiểm tra xem session có chứa combos không
+        if (session()->has('combos') && session('combos')) {
             foreach (session('combos') as $combo) {
                 $booking->combos()->attach($combo->id, ['quantity' => $combo->quantity ?? 1]);
             }
+        } else {
+            Log::warning('No combos found in session.');
         }
-        if (session()->has('seats')) {
-            Log::info('Seats: ' . json_encode(session('seats')));
+
+        // Kiểm tra xem session có chứa seats không
+        if (session()->has('seats') && session('seats')) {
             $booking->seats()->sync(collect(session('seats'))->pluck('id'));
-            $seatIds = collect(session('seats'))->pluck('id')->toArray(); // Lấy danh sách các ID từ session
+            $seatIds = collect(session('seats'))->pluck('id')->toArray();
             Seats::updateSeatsStatus($seatIds, 'booked');
+        } else {
+            Log::warning('No seats found in session.');
         }
     }
 
-    public function bookings(TicketBookingRequest $request)
+
+
+    public function bookings(Request $request)
     {
         try {
             $booking = Booking::create($request->validated() + ['user_id' => Auth::user()->id]);
@@ -96,12 +114,18 @@ class TicketBookingService
 
     public function processPayment(Request $request)
     {
+        Log::info('Combos in session: ' . json_encode(session('combos')));
+        Log::info('Seats in session: ' . json_encode(session('seats')));
         if ($request->pay_method_id == 1) {
-            $urlPayment =   $this->processPaymentStep->process($request);
-            return $urlPayment;
+            $urlPayment = $this->processPaymentStep->vnpay($request);  // Gọi phương thức VNPAY
+            return response()->json(['url' => $urlPayment]);
+        } elseif ($request->pay_method_id == 2) {
+            $urlPayment = $this->processPaymentStep->momo($request);  // Gọi phương thức MOMO
+            return response()->json(['url' => $urlPayment]);
         } else {
+            // Xóa booking nếu phương thức thanh toán không hợp lệ
             Booking::where('id', session('booking'))->delete();
-            return response()->json(['message' => 'Phương thức thanh toán chưa hoàn thiện . Vui lòng chọn lại !']);
+            return response()->json(['message' => 'Phương thức thanh toán chưa hoàn thiện. Vui lòng chọn lại!'], 400);
         }
     }
 }

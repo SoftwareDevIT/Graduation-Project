@@ -6,6 +6,7 @@ import './FilmNews.css';
 import Header from "../Header/Hearder";
 import { NewsItem } from "../../interface/NewsItem";
 import instance from "../../server";
+import { Link } from "react-router-dom";
 
 function FilmNews() {
   const [news, setNews] = useState<NewsItem[]>([]);
@@ -49,7 +50,7 @@ function FilmNews() {
             </div>
             <div className="container box-cha2">
               <div className="row boxcha-4">
-                <div className="tintucmoi col-lg-8">
+                <div className="tintucmoi col-lg-8 col-md-10 col-sm-12">
                   <h2>Mới Nhất</h2>
 
                   {news.map((item) => (
@@ -58,13 +59,13 @@ function FilmNews() {
                         <img src={item.thumnail} alt={item.title} />
                       </div>
                       <div className="content-new">
-                        <h3>{item.title}</h3>
+                      <Link to={`/postdetail/${item.id}`}><h3>{item.title}</h3></Link>
                         <p>{item.content}</p>
                       </div>
                     </div>
                   ))}
                 </div>
-                <div className="chuyenmuc col-lg-4">
+                <div className="chuyenmuc col-lg-4 col-md-2 col-sm-12">
                   <h3>Chuyên mục</h3>
                   <div className="noidung">
                     <h4>Đánh giá phim</h4>

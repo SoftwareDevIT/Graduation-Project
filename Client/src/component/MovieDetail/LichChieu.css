@@ -295,3 +295,132 @@ select{
     color: #666;
    
 }
+@media (max-width: 992px) {
+   
+    .row-custom {
+     
+     position: relative;
+     right: 100px;
+    }
+  
+    .city-select-custom, .format-select-custom {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  
+    .calendar-custom{
+        width: 730px !important;
+        position: relative;
+        right: 100px;
+      }
+  
+    .date-custom {
+      width: 48%;
+      margin-bottom: 10px;
+    }
+    .cinema-list{
+        width: 730px !important;
+        position: relative;
+        right: 100px;
+      }
+  }
+  
+  /* Reponsive cho màn hình nhỏ hơn 768px */
+  @media (max-width: 768px) {
+    .cinema-list{
+        width: 570px !important;
+        position: relative;
+        right: 150px;
+      }
+    .row-custom {
+        width: 570px !important;
+  
+       position: relative;
+       right: 150px;
+    
+      }
+      .row-custom  select{
+        width: 150px !important;
+      }
+ 
+   
+  
+    .date-custom {
+      width: 100%;
+    }
+  .calendar-custom{
+    width: 570px !important;
+    position: relative;
+    right: 150px;
+  }
+    .cinema-item {
+     
+      align-items: flex-start;
+    }
+  
+    .cinema-logo img {
+      width: 40px;
+      height: 40px;
+    }
+  
+    .cinema-info {
+      margin-top: 10px;
+    }
+  }
+  
+  /* Reponsive cho màn hình nhỏ hơn 480px */
+  @media (max-width: 480px) {
+    .row-custom {
+        width: 420px !important;
+  
+       position: relative;
+       right: 180px;
+    
+      }
+      .row-custom  select{
+        width: 150px !important;
+      }
+    .calendar-custom{
+        width: 420px !important;
+        font-size: 10px;
+        position: relative;
+        right: 180px;
+        padding: 0;
+        
+      }
+      .date-custom span {
+        margin-bottom: 1px;
+        font-size: 11px !important;
+
+       
+    
+      }
+      .row-custom  select{
+        width: 380px !important;
+        border: none;
+      }
+    .city-select-custom, .format-select-custom {
+      font-size: 14px;
+    }
+  .cinema-list{
+    width: 420px !important;
+    position: relative;
+    right: 180px;
+  }
+    .cinema-item {
+      padding: 5px;
+    }
+  
+    .cinema-logo img {
+      width: 30px;
+      height: 30px;
+    }
+  
+    .sub-cinema-list {
+      padding: 5px 0;
+    }
+  
+    .calendar-custom {
+      justify-content: space-around;
+    }
+  }

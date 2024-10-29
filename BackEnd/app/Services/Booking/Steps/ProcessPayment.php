@@ -2,13 +2,12 @@
 
 namespace App\Services\Booking\Steps;
 
-use App\Services\Booking\Handlers\AbstractBookingStep;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class ProcessPayment
 {
-    public function process(Request $request): ?string
+    public function vnpay(Request $request): ?string
     {
         error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
         date_default_timezone_set('Asia/Ho_Chi_Minh');
@@ -85,5 +84,11 @@ class ProcessPayment
 
         // Trả về URL thanh toán
         return $vnp_Url;
+    }
+
+
+    public function momo(Request $req): ?String
+    {
+        return null;
     }
 }

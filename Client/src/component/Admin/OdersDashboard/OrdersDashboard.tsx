@@ -13,7 +13,7 @@ const OrdersDashboard: React.FC = () => {
     const fetchBookings = async () => {
       try {
         const response = await instance.get("/order");
-        console.log(response.data); // Kiểm tra dữ liệu trả về
+      
   
         setBookings(response.data.data); 
       } catch (error) {
@@ -53,25 +53,25 @@ const OrdersDashboard: React.FC = () => {
                   <td>{booking.id}</td>
                   <td>{booking.user.user_name}</td> {/* Hiển thị tên người dùng */}
                   <td>{booking.showtime.showtime_date}</td> {/* Hiển thị thời gian chiếu */}
-                  <td>{booking.showtime.movie_in_cinema_id}</td> {/* Hiển thị tên phim */}
+                  <td>{booking.showtime.movie_in_cinema.movie.movie_name}</td> {/* Hiển thị tên phim */}
                   <td>{booking.pay_method.pay_method_name}</td> {/* Hiển thị phương thức thanh toán */}
                   <td>${booking.price_ticket}</td>
                   <td>${booking.price_combo}</td>
                   <td>{booking.amount}</td>
                   <td>{booking.seat_status}</td> {/* Hiển thị trạng thái */}
-                  <td className="action-buttons">
-                   
+                  <td className="">
+                    <button className="view-btn">👁</button>
                     <button className="edit-btn">✏️</button>
                     <button className="delete-btn">🗑</button>
                   </td>
                 </tr>
               ))
             ) : (
-              <tr>
+             
                 <td colSpan={10} style={{ textAlign: "center" }}>
                   No booking available.
                 </td>
-              </tr>
+          
             )}
           </tbody>
         </table>

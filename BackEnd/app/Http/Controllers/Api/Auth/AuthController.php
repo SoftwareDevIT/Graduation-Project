@@ -37,7 +37,7 @@ class AuthController extends Controller
     public function show($id)
     {
         try {
-            $user = $this->loginService->get($id);
+            $user = $this->loginService->get($id)->load('favoriteMovies');
 
             if (!$user) {
                 return response()->json(['error' => 'user not found'], 404);

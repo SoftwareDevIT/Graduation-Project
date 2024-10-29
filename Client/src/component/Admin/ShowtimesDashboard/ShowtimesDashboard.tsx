@@ -1,26 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import './ShowtimesDashboard.css';
 import { Link } from 'react-router-dom';
-
 import { useShowtimeContext } from '../../../Context/ShowtimesContext';
 import instance from '../../../server';
-
-import { Movie } from '../../../interface/Movie'; // Import Movie if needed
+import { Movie } from '../../../interface/Movie';
 
 const ShowtimesDashboard: React.FC = () => {
     const { state, dispatch } = useShowtimeContext();
     const { showtimes } = state;
     const [error, setError] = useState<string | null>(null);
+    const [movies, setMovies] = useState<Movie[]>([]);
     
-    const [movies, setMovies] = useState<Movie[]>([]); // To store movies if needed
-    console.log(movies);
-    // Pagination
     const [currentPage, setCurrentPage] = useState(1);
-    const showtimesPerPage = 3; // Number of showtimes per page
+    const showtimesPerPage = 3;
     const totalShowtimes = showtimes.length;
     const totalPages = Math.ceil(totalShowtimes / showtimesPerPage);
 
-    // Get current showtimes for the current page
     const currentShowtimes = showtimes.slice(
         (currentPage - 1) * showtimesPerPage,
         currentPage * showtimesPerPage
@@ -32,7 +27,6 @@ const ShowtimesDashboard: React.FC = () => {
                 const response = await instance.get('/showtimes');
                 if (Array.isArray(response.data.data)) {
                     dispatch({ type: 'SET_SHOWTIMES', payload: response.data.data });
-                    console.log(response.data.data);
                 } else {
                     setError('Không thể lấy showtime: Định dạng phản hồi không mong đợi');
                 }
@@ -41,28 +35,21 @@ const ShowtimesDashboard: React.FC = () => {
             }
         };
 
-       
-
         const fetchMovies = async () => {
             try {
-                const movieResponse = await instance.get('/movies'); // Đảm bảo endpoint này là chính xác
-                if (Array.isArray(movieResponse.data.data.original
-                )) {
-                    setMovies(movieResponse.data.data.original
-                    );
+                const movieResponse = await instance.get('/movies');
+                if (Array.isArray(movieResponse.data.data.original)) {
+                    setMovies(movieResponse.data.data.original);
                 } else {
                     setError('Không thể lấy danh sách phim: Định dạng phản hồi không mong đợi');
                 }
             } catch (err) {
-                console.error(err); // In ra lỗi để dễ dàng debug
                 setError('Không thể lấy danh sách phim');
             }
         };
         
-
-        
         fetchShowtimes();
-        fetchMovies(); // Fetch movies to use later
+        fetchMovies();
     }, [dispatch]);
 
     const deleteShowtime = async (id: number) => {
@@ -82,7 +69,6 @@ const ShowtimesDashboard: React.FC = () => {
         }
     };
 
-    // Function to handle page changes
     const handlePageChange = (page: number) => {
         if (page >= 1 && page <= totalPages) {
             setCurrentPage(page);
@@ -117,7 +103,8 @@ const ShowtimesDashboard: React.FC = () => {
                                 currentShowtimes.map((showtime) => (
                                     <tr key={showtime.id}>
                                         <td>
-                                            {showtime.movie_in_cinema_id}
+                                          
+                                            {showtime.movie_in_cinema.movie.movie_name}
                                         </td>
                                         <td>{new Date(showtime.showtime_date).toLocaleDateString()}</td>
                                         <td>{showtime.showtime_start}</td>
@@ -145,7 +132,6 @@ const ShowtimesDashboard: React.FC = () => {
                     </table>
                 </div>
 
-                {/* Pagination */}
                 <div className="pagination">
                     <button
                         className="prev-btn"

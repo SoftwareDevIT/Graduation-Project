@@ -116,7 +116,7 @@ const ShowtimesForm: React.FC = () => {
                         <option value="">Chọn Phim</option>
                         {movieInCinemas.map((movie: any) => (
                             <option key={movie.id} value={movie.id}>
-                                {movie.movie_id} - {movie.cinema_id}
+                                {movie.movie.movie_name} 
                             </option>
                         ))}
                     </select>
@@ -159,7 +159,7 @@ const ShowtimesForm: React.FC = () => {
                     <table className="table table-bordered mt-3">
                         <thead>
                             <tr>
-                                <th>Phim ID</th>
+                                <th>Phim</th>
                                 <th>Ngày chiếu</th>
                                 <th>Giờ bắt đầu</th>
                                 <th>Giờ kết thúc</th>

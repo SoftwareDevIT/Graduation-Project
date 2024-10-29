@@ -1,23 +1,26 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './ComboDashboard.css';
 import { Link } from 'react-router-dom';
 import { useComboContext } from '../../../Context/ComboContext';
 import instance from '../../../server';
 
 const ComboDashboard: React.FC = () => {
-    const { state, deleteCombo } = useComboContext(); 
-    const { combos } = state; 
-    const [loading, setLoading] = React.useState<boolean>(true); 
-    const [error, setError] = React.useState<string | null>(null); 
+    const { state, deleteCombo } = useComboContext();
+    const { combos } = state;
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
 
     // Pagination states
-    const [currentPage, setCurrentPage] = React.useState<number>(1);
-    const [combosPerPage] = React.useState<number>(5);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [combosPerPage] = useState<number>(5);
+
+    // Search state
+    const [searchTerm, setSearchTerm] = useState<string>("");
 
     useEffect(() => {
         const fetchCombos = async () => {
             try {
-                await instance.get('/combo'); 
+                await instance.get('/combo');
                 setLoading(false);
             } catch (err) {
                 setError('Failed to load combos');
@@ -39,9 +42,14 @@ const ComboDashboard: React.FC = () => {
         }
     };
 
-    const indexOfLastCombo = currentPage * combosPerPage; 
-    const indexOfFirstCombo = indexOfLastCombo - combosPerPage; 
-    const currentCombos = combos.slice(indexOfFirstCombo, indexOfLastCombo); 
+    // Filter combos based on search term
+    const filteredCombos = combos.filter(combo =>
+        combo.combo_name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const indexOfLastCombo = currentPage * combosPerPage;
+    const indexOfFirstCombo = indexOfLastCombo - combosPerPage;
+    const currentCombos = filteredCombos.slice(indexOfFirstCombo, indexOfLastCombo);
 
     if (loading) {
         return <p>Loading...</p>;
@@ -58,7 +66,19 @@ const ComboDashboard: React.FC = () => {
             <h2>All Combos</h2>
             <div className="actions">
                 <Link to={'/admin/combo/add'} className="add-combo-btn">Add Combo</Link>
+                 <div className="search-container">
+                <input 
+                    type="text" 
+                    placeholder="Search by Combo Name..." 
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="search-input"
+                />
             </div>
+            </div>
+            {/* Search Input */}
+           
+
             <div className="table-container-combo">
                 <table className="combo-table">
                     <thead>
@@ -95,32 +115,33 @@ const ComboDashboard: React.FC = () => {
                     </tbody>
                 </table>
             </div>
-             {/* Pagination Section */}
-             <div className="pagination">
+
+            {/* Pagination Section */}
+            <div className="pagination">
+                <button 
+                    className="prev-btn" 
+                    onClick={() => setCurrentPage(currentPage - 1)} 
+                    disabled={currentPage === 1}
+                >
+                    Previous
+                </button>
+                {Array.from({ length: Math.ceil(filteredCombos.length / combosPerPage) }, (_, index) => (
                     <button 
-                        className="prev-btn" 
-                        onClick={() => setCurrentPage(currentPage - 1)} 
-                        disabled={currentPage === 1}
+                        key={index + 1}
+                        className={`page-btn ${currentPage === index + 1 ? 'active' : ''}`}
+                        onClick={() => paginate(index + 1)}
                     >
-                        Previous
+                        {index + 1}
                     </button>
-                    {Array.from({ length: Math.ceil(combos.length / combosPerPage) }, (_, index) => (
-                        <button 
-                            key={index + 1}
-                            className={`page-btn ${currentPage === index + 1 ? 'active' : ''}`}
-                            onClick={() => paginate(index + 1)}
-                        >
-                            {index + 1}
-                        </button>
-                    ))}
-                    <button 
-                        className="next-btn" 
-                        onClick={() => setCurrentPage(currentPage + 1)} 
-                        disabled={indexOfLastCombo >= combos.length}
-                    >
-                        Next
-                    </button>
-                </div>
+                ))}
+                <button 
+                    className="next-btn" 
+                    onClick={() => setCurrentPage(currentPage + 1)} 
+                    disabled={indexOfLastCombo >= filteredCombos.length}
+                >
+                    Next
+                </button>
+            </div>
         </div>
     );
 };

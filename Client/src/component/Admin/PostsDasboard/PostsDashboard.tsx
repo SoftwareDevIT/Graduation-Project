@@ -46,6 +46,7 @@ const PostsDashboard: React.FC = () => {
               <th>Title</th>
               <th>Thumbnail</th>
               <th>Category</th>
+              <th>Description</th>
               <th>Date Published</th>
               <th>Actions</th>
             </tr>
@@ -64,6 +65,7 @@ const PostsDashboard: React.FC = () => {
                     />
                   </td>
                   <td>{post.news_category_id}</td>
+                  <td>{post.content}</td>
                   <td>{new Date(post.created_at).toLocaleDateString()}</td>
                   <td className="action-buttons">
                     
