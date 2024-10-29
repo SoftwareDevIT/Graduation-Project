@@ -52,6 +52,7 @@ import PostDetail from "./component/Post/PostDetail";
 
 
 
+
 function App() {
   return (
     <>
@@ -82,6 +83,8 @@ function App() {
         <Route path="/register" element={<RegisterCinema />} />
         <Route path="/login" element={<LoginCinema />} />
         <Route path="movieshowing" element={<MovieShowing/>} />
+      
+    
        
 
         {/* Phân quyền cho các route admin */}

@@ -142,185 +142,184 @@
   border-radius: 5px;
   margin-left: 30px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1),
-              0 6px 6px rgba(0, 0, 0, 0.1),
-              0 20px 40px rgba(0, 0, 0, 0.05);
-  height: 150px;
- 
-}
-
-.details-box p {
-  color: #000000;
-  font-family: "Cerebri Sans, sans-serif;";
-  margin-bottom: 0rem
-}
-
-.details-box span {
-  font-weight: 600;
-  font-family: "Cerebri Sans";
-}
-.title-phim{
- font-weight: 400;
- 
-}
-.price-box {
-  border: 1px solid #EDF2F9;
-  background-color: #ffffff;
-  padding: 10px;
-  margin-bottom: 20px;
-  border-radius: 5px;
-  margin-left: 30px;
-  padding-left: 20px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1),
-              0 6px 6px rgba(0, 0, 0, 0.1),
-              0 20px 40px rgba(0, 0, 0, 0.05);
-}
-
-.price-box .price {
-  font-size:16px;
-  font-weight: bold;
-  color: #95AAC9;
-}
-
-.price-box .price span {
-  color: #000000;
-}
-
-.actions {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 30px;
-
-}
-
-.back-btn {
-  margin-left: 30px;
-  height: 37px;
-
-}
-
-.back-btn, .continue-btn {
-  width: 80px;
-  padding: 10px 15px;
-  font-size: 1em;
-  background-color: #ffffff;
-  color: black;
-  border: 1px solid black;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s;
-}
-
-.continue-btn {
-  border: none;
-  width: 250px;
-  background: #6E849B;
-  color: white;
-}
-
-.legend {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 15px;
-  width: 100%;
-}
-
-.legend div {
-  display: flex;
-  align-items: center;
-}
-
-.legend .seat {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  margin-right: 8px;
-  border-radius: 4px;
-}
-
-.legend div {
-  margin-right: 20px;
-}
-
-
-.seat-row-label {
-  width: 40px; /* Chiều rộng cố định của nhãn */
-  text-align: center;
-  color: white;
-  background-color: #727575;
-  border: 1px solid black;
-  padding: 5px 0;
-  margin-right: 190px; /* Khoảng cách giữa nhãn và hàng ghế */
-}
-
-.seat-row-seats {
-  display: flex;
-  flex-wrap: nowrap; /* Giữ các ghế trên cùng một dòng */
-}
-.seat-row-container {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px; /* Khoảng cách giữa các hàng ghế */
-}
-
-.seat-row-label {
-  width: 40px; /* Chiều rộng cố định của nhãn */
-  text-align: center;
-  color: white;
-  background-color: #727575;
-  border: 1px solid black;
-  padding: 5px 0;
-  margin-right: 140px; /* Khoảng cách giữa nhãn và hàng ghế */
-}
-
-.seat-row-seats {
-  display: flex;
-  flex-wrap: nowrap; /* Giữ các ghế trên cùng một dòng */
-  margin-right: 140px;
-}
-.back-btn, .continue-btn {
-
-  margin-left: 10px;
-}
-.actionst{
-  margin-left: 20px;
-}
-.actionst .back-btn{
-  position: relative;
- margin-right: 40px;
-  margin-top: 5px;
-  height: 45px;
-  width: 100px;
-}
-@media (max-width: 480px) {
-  .container-map {
-    margin-left: 0;
-    padding: 0;
-    max-width: 100%;
-  }
-
-  .seat-info-box {
-    flex-direction: column-reverse;
-    padding: 10px;
-  }
-
-  .seat-map-box {
-    margin-left: 0;
-    width: 100%;
-  }
-
-  .thongtinphim {
-   position: relative;
-   right: 50px;
-    margin-top: 10px;
-  }
-
-  .screen {
-    font-size: 1em;
-    padding: 6px 0;
-  }
-
-  .seat-map {
-    width: 100%;
+              0 6px 6px rgba(0, 0, 0, 0.1),0 20px 40px rgba(0, 0, 0, 0.05);
+              height: 150px;
+             
+            }
+            
+            .details-box p {
+              color: #000000;
+              font-family: "Cerebri Sans, sans-serif;";
+              margin-bottom: 0rem
+            }
+            
+            .details-box span {
+              font-weight: 600;
+              font-family: "Cerebri Sans";
+            }
+            .title-phim{
+             font-weight: 400;
+             
+            }
+            .price-box {
+              border: 1px solid #EDF2F9;
+              background-color: #ffffff;
+              padding: 10px;
+              margin-bottom: 20px;
+              border-radius: 5px;
+              margin-left: 30px;
+              padding-left: 20px;
+              box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1),
+                          0 6px 6px rgba(0, 0, 0, 0.1),
+                          0 20px 40px rgba(0, 0, 0, 0.05);
+            }
+            
+            .price-box .price {
+              font-size:16px;
+              font-weight: bold;
+              color: #95AAC9;
+            }
+            
+            .price-box .price span {
+              color: #000000;
+            }
+            
+            .actions {
+              display: flex;
+              justify-content: space-between;
+              margin-top: 30px;
+            
+            }
+            
+            .back-btn {
+              margin-left: 30px;
+              height: 37px;
+            
+            }
+            
+            .back-btn, .continue-btn {
+              width: 80px;
+              padding: 10px 15px;
+              font-size: 1em;
+              background-color: #ffffff;
+              color: black;
+              border: 1px solid black;
+              border-radius: 8px;
+              cursor: pointer;
+              transition: background-color 0.3s ease, transform 0.2s;
+            }
+            
+            .continue-btn {
+              border: none;
+              width: 250px;
+              background: #6E849B;
+              color: white;
+            }
+            
+            .legend {
+              display: flex;
+              justify-content: space-between;
+              margin-top: 15px;
+              width: 100%;
+            }
+            
+            .legend div {
+              display: flex;
+              align-items: center;
+            }
+            
+            .legend .seat {
+              display: inline-block;
+              width: 20px;
+              height: 20px;
+              margin-right: 8px;
+              border-radius: 4px;
+            }
+            
+            .legend div {
+              margin-right: 20px;
+            }
+            
+            
+            .seat-row-label {
+              width: 40px; /* Chiều rộng cố định của nhãn */
+              text-align: center;
+              color: white;
+              background-color: #727575;
+              border: 1px solid black;
+              padding: 5px 0;
+              margin-right: 190px; /* Khoảng cách giữa nhãn và hàng ghế */
+            }
+            
+            .seat-row-seats {
+              display: flex;
+              flex-wrap: nowrap; /* Giữ các ghế trên cùng một dòng */
+            }
+            .seat-row-container {
+              display: flex;
+              align-items: center;
+              margin-bottom: 10px; /* Khoảng cách giữa các hàng ghế */
+            }
+            
+            .seat-row-label {
+              width: 40px; /* Chiều rộng cố định của nhãn */
+              text-align: center;
+              color: white;
+              background-color: #727575;
+              border: 1px solid black;
+              padding: 5px 0;
+              margin-right: 140px; /* Khoảng cách giữa nhãn và hàng ghế */
+            }
+            
+            .seat-row-seats {
+              display: flex;
+              flex-wrap: nowrap; /* Giữ các ghế trên cùng một dòng */
+              margin-right: 140px;
+            }
+            .back-btn, .continue-btn {
+            
+              margin-left: 10px;
+            }
+            .actionst{
+              margin-left: 20px;
+            }
+            .actionst .back-btn{
+              position: relative;
+             margin-right: 40px;
+              margin-top: 5px;
+              height: 45px;
+              width: 100px;
+            }
+            @media (max-width: 480px) {
+              .container-map {
+                margin-left: 0;
+                padding: 0;
+                max-width: 100%;
+              }
+            
+              .seat-info-box {
+                flex-direction: column-reverse;
+                padding: 10px;
+              }
+            
+              .seat-map-box {
+                margin-left: 0;
+                width: 100%;
+              }
+            
+              .thongtinphim {
+               position: relative;
+               right: 50px;
+                margin-top: 10px;
+              }
+            
+              .screen {
+                font-size: 1em;
+                padding: 6px 0;
+              }
+            
+              .seat-map {
+                width: 100%;
   }
 
   .seat {

@@ -96,11 +96,7 @@ Route::get('/all-user', [AuthController::class, 'allUser']);
 Route::middleware(['auth:sanctum', 'role:admin|manager'])->group(function () {
 Route::apiResource('location', LocationController::class)->except(['index', 'show']);
 Route::apiResource('cinema', CinemaController::class)->except(['index', 'show']);
-<<<<<<< HEAD
 Route::apiResource('room', RoomController::class)->except(['index', 'show']);
-=======
-Route::apiResource('room', RoomController::class);
->>>>>>> 7243f68c87f34d6f81590606e646bb2748f16c04
 Route::apiResource('showtimes', ShowtimeController::class)->except(['index', 'show']);
 Route::apiResource('news_category', NewCategoryController::class)->except(['index', 'show']);
 Route::apiResource('news', NewController::class)->except(['index', 'show']);
