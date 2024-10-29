@@ -3,6 +3,7 @@
 namespace App\Services\Cinema;
 
 use App\Models\Movie;
+use App\Models\MovieInCinema;
 use App\Models\Showtime;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -15,8 +16,10 @@ class ShowtimeService
 
     public function index(): Collection
     {
-        return Showtime::with('movie.cinema')->get();
+        return Showtime::with('movieInCinema.movie') 
+            ->get();
     }
+
 
 
     public function store(array $data): Showtime
@@ -41,9 +44,12 @@ class ShowtimeService
 
     public function get(int $id): Showtime
     {
-        $showtime = Showtime::findOrFail($id);
+        $showtime = Showtime::with('movieInCinema.movie')
+            ->findOrFail($id);
+
         return $showtime;
     }
+
 
     public function getShowtimesByMovieName(string $movie_name)
     {

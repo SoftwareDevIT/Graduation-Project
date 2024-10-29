@@ -74,9 +74,10 @@ Route::apiResource('actor', ActorController::class)->only(['index', 'show']);   
 Route::apiResource('director', DirectorController::class)->only(['index', 'show']);                 // Danh sách giám đốc
 Route::apiResource('movie-category', MovieCategoryController::class)->only(['index', 'show']);      // Liệt kê các thể loại phim
 Route::apiResource('room', RoomController::class)->only(['index', 'show']);
+Route::apiResource('showtimes', ShowtimeController::class)->only(['index', 'show']);
 
 // Các tuyến có thể truy cập được cho người dùng được xác thực
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:sanctum','web'])->group(function () {
     Route::post('favorites/{movie_id}', [FavoriteController::class, 'store']);                 // Thêm phim yêu thích
     Route::delete('favorites/{movie_id}', [FavoriteController::class, 'destroy']);             // Xóa phim yêu thích
     Route::post('ratings', [RatingController::class, 'store']);                                // Phim đánh giá
@@ -95,7 +96,11 @@ Route::get('/all-user', [AuthController::class, 'allUser']);
 Route::middleware(['auth:sanctum', 'role:admin|manager'])->group(function () {
 Route::apiResource('location', LocationController::class)->except(['index', 'show']);
 Route::apiResource('cinema', CinemaController::class)->except(['index', 'show']);
+<<<<<<< HEAD
 Route::apiResource('room', RoomController::class)->except(['index', 'show']);
+=======
+Route::apiResource('room', RoomController::class);
+>>>>>>> 7243f68c87f34d6f81590606e646bb2748f16c04
 Route::apiResource('showtimes', ShowtimeController::class)->except(['index', 'show']);
 Route::apiResource('news_category', NewCategoryController::class)->except(['index', 'show']);
 Route::apiResource('news', NewController::class)->except(['index', 'show']);
@@ -111,7 +116,7 @@ Route::post('add-movie-in-cinema/{cinema_id}', [CinemaController::class, 'synCin
 Route::get('show-movie-in-cinema/{cinema_id}', [CinemaController::class, 'showCinemaHasMovie']);
 Route::delete('cinema/{cinema_id}/movie/{movie_id}', [CinemaController::class, 'destroyCinemaHasMovie']);
 
- 
+
 
 // phan quyen
 Route::resource('roles', RoleController::class); // add roles and show
