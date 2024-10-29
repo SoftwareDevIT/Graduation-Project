@@ -49,6 +49,7 @@ import FilmNews from "./component/News/FilmNews";
 import MovieShowing from "./component/Movies/MovieShowing";
 import SupportCenter from "./component/Support/Support";
 import PostDetail from "./component/Post/PostDetail";
+import Credits from "./component/PersonalPage/Credits";
 
 
 
@@ -79,6 +80,7 @@ function App() {
         <Route path="/movie/search/:movie_name" element={<SerachMovies />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/Personal" element={<Personal />} />
+        <Route path="/credits" element={<Credits />} />
         <Route path="/ChangePassword" element={<ChangePassword />} />
         <Route path="/register" element={<RegisterCinema />} />
         <Route path="/login" element={<LoginCinema />} />

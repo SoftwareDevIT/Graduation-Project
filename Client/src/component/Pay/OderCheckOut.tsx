@@ -71,7 +71,7 @@ const OrderCheckout = () => {
             seats: seatsData,
             amount: totalPrice,
             pay_method_id, // Gửi pay_method_id là số nguyên
-            combos: selectedCombos,
+            comboId: selectedCombos,
         };
         console.log(bookingData);
 
@@ -83,13 +83,13 @@ const OrderCheckout = () => {
              
             });
 
-            if (response.data) {
-                const redirectUrl = response.data.Url.original.url;
-                message.success("Đặt vé thành công!");
-                window.location.href = redirectUrl;
-            } else {
-                message.error("Có lỗi xảy ra khi đặt vé.");
-            }
+            // if (response.data) {
+            //     const redirectUrl = response.data.Url.original.url;
+            //     message.success("Đặt vé thành công!");
+            //     window.location.href = redirectUrl;
+            // } else {
+            //     message.error("Có lỗi xảy ra khi đặt vé.");
+            // }
         } catch (error) {
             message.error("Có lỗi xảy ra khi đặt vé.");
             console.error("Error during booking:", error);
@@ -141,7 +141,7 @@ const OrderCheckout = () => {
                         <div className="order-total">
                             <span className="total-title">Tổng</span>
                             <span className="total-price">{totalPrice?.toLocaleString('vi-VN')} đ</span>
-                            </div>
+                        </div>
                     </div>
 
                     {/* Hình thức thanh toán */}
