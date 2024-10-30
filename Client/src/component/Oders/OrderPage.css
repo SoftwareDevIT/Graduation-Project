@@ -1,181 +1,180 @@
 .combo-list {
 
-  display: flex;
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-margin-left: 130px;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 60px;
-}
-.thongtincombo{
-    margin-top: 0px;
-    border-radius: 10px;
-    width: 700px;
-    border: 1px solid #ddd;
-    
-}
-.combo-header {
-    border-color: inherit;
-    font-family: "Cerebri Sans, sans-serif";
-    height: 50px;
-    border-radius: 10px 10px 0 0;
-    display: grid;
-    grid-template-columns: 2.7fr 1fr 1fr;
-    font-weight: bold;
-    padding: 10px 0;
-    border-bottom: 1px solid #ddd ;
-    text-transform: uppercase;
-    color: #95aac9;
-    background-color:#fafafa;
-    font-weight: 500;
-}
-.combo-header .item{
-    line-height: 27px;
-    margin-left: 20px;
-}
-
-.combo-item {
-    font-family: "Cerebri Sans, sans-serif";
-    margin-left: 15px;
-    width: 650px;
-    display: grid;
-    grid-template-columns: 3fr 1fr 1fr;
-    align-items: center;
-    padding: 20px 0;
-    border-bottom: 1px solid #eee;
-    color: #12263f;
-
-
-}
-
-.combo-info {
     display: flex;
-    flex-direction: column;
-}
-
-.combo-name {
- font-weight: 400;
-    color: #12263f;
- padding-bottom: 5px;
-}
-
-.combo-description {
-    font-size: 15px;
-    color: #95aac9;
-}
-
-.combo-price {
-    font-weight: bold;
-    color: #333;
-    text-align: center;
-   
-   
-}
-
-.combo-quantity {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding-left: 30px;
-}
-.combo-quantity .iconcong{
-    border: 1px solid #e3ebf6;
-    width: 25px;
-    height: 25px;
-}
-.combo-quantity button {
-    width: 30px;
-    height: 30px;
-    font-size: 16px;
-    text-align: center;
-    background-color: #fff;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    color: #333;
-}
-
-
-
-.combo-quantity span {
-    margin: 0 10px;
-    font-size: 16px;
-    width: 20px;
-    text-align: center;
-}
-.box-thongtinphim{
-
-width: 100px;
-
-}
-.price-box{
-    width: 400px;
-}
-.actionsts{
-    display: flex;
-    justify-content: space-between;
-    margin-top: 30px;
-    width: 430px;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+  margin-left: 130px;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 60px;
   }
-  .back-btn2{
-    margin-left: 30px;
-    height: 37px;
-    width: 100px ;
-    padding-bottom: 15px;
-    
+  .thongtincombo{
+      margin-top: 0px;
+      border-radius: 10px;
+      width: 700px;
+      border: 1px solid #ddd;
+      
   }
-  .back-btn2, .continue-btn2 {
-    
- width: 120px;
- height: 40px;
-    padding: 10px 10px;
-    font-size: 1em;
-    background-color: #ffffff;
-    color: black;
-    border: 1px solid black;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s;
-    
+  .combo-header {
+      border-color: inherit;
+      font-family: "Cerebri Sans, sans-serif";
+      height: 50px;
+      border-radius: 10px 10px 0 0;
+      display: grid;
+      grid-template-columns: 2.7fr 1fr 1fr;
+      font-weight: bold;
+      padding: 10px 0;
+      border-bottom: 1px solid #ddd ;
+      text-transform: uppercase;
+      color: #95aac9;
+      background-color:#fafafa;
+      font-weight: 500;
   }
-  .descripton {
-color: #6E849B;
-font-size: 15px;
+  .combo-header .item{
+      line-height: 27px;
+      margin-left: 20px;
   }
   
-  .continue-btn2{
-    
-    border: none;
-    width: 200px;
-    background: #6E849B;
-    color: white;
-    
+  .combo-item {
+      font-family: "Cerebri Sans, sans-serif";
+      margin-left: 15px;
+      width: 650px;
+      display: grid;
+      grid-template-columns: 3fr 1fr 1fr;
+      align-items: center;
+      padding: 20px 0;
+      border-bottom: 1px solid #eee;
+      color: #12263f;
+  
+  
   }
-.back-btn2{
-    padding:7px;
-    padding-left: 15px;
-    text-decoration: none;
-   
-}
-.back-btn2 span{
-    margin-right: 5px;
-
-}
-/* Media Queries for devices with max width of 992px */
-@media (max-width: 992px) {
-    .combo-list {
-        flex-direction: column;
-        margin-left: 0;
-        padding: 10px;
+  
+  .combo-info {
+      display: flex;
+      flex-direction: column;
+  }
+  
+  .combo-name {
+   font-weight: 400;
+      color: #12263f;
+   padding-bottom: 5px;
+  }
+  
+  .combo-description {
+      font-size: 15px;
+      color: #95aac9;
+  }
+  
+  .combo-price {
+      font-weight: bold;
+      color: #333;
+      text-align: center;
+     
+     
+  }
+  
+  .combo-quantity {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-left: 30px;
+  }
+  .combo-quantity .iconcong{
+      border: 1px solid #e3ebf6;
+      width: 25px;
+      height: 25px;
+  }
+  .combo-quantity button {
+      width: 30px;
+      height: 30px;
+      font-size: 16px;
+      text-align: center;
+      background-color: #fff;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      color: #333;
+  }
+  
+  
+  
+  .combo-quantity span {
+      margin: 0 10px;
+      font-size: 16px;
+      width: 20px;
+      text-align: center;
+  }
+  .box-thongtinphim{
+  
+  width: 100px;
+  
+  }
+  .price-box{
+      width: 400px;
+  }
+  .actionsts{
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+      width: 430px;
     }
-
-    .thongtincombo {
-        width: 100%;
+    .back-btn2{
+      margin-left: 30px;
+      height: 37px;
+      width: 100px ;
+      padding-bottom: 15px;
+      
     }
-
-    .combo-header {
+    .back-btn2, .continue-btn2 {
+      
+   width: 120px;
+   height: 40px;
+      padding: 10px 10px;
+      font-size: 1em;
+      background-color: #ffffff;
+      color: black;
+      border: 1px solid black;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s;
+      
+    }
+    .descripton {
+  color: #6E849B;
+  font-size: 15px;
+    }
+    
+    .continue-btn2{
+      
+      border: none;
+      width: 200px;
+      background: #6E849B;
+      color: white;
+      
+    }
+  .back-btn2{
+      padding:7px;
+      padding-left: 15px;
+      text-decoration: none;
+     
+  }
+  .back-btn2 span{
+      margin-right: 5px;
+  
+  }
+  /* Media Queries for devices with max width of 992px */
+  @media (max-width: 992px) {
+      .combo-list {
+          flex-direction: column;
+          margin-left: 0;
+          padding: 10px;
+      }
+  
+      .thongtincombo {
+          width: 100%;
+      }
+      .combo-header {
         grid-template-columns: 2fr 1fr 1fr; /* Giữ cấu trúc 3 cột */
         text-align: center;
     }
