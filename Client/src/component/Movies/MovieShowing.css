@@ -123,10 +123,13 @@
       gap: 15px;
   }
 
-  .filters {
-      width: 100%;
-      max-width: 200px;
-  }
+    .filters {
+        width: 100%;
+        max-width: 200px;
+    }
+    .filters .filter-select {
+        padding-top: 7px;
+    }
 
   .phim-card {
       width: 140px;
@@ -147,14 +150,17 @@
     align-items: center;
 }
 
-.filters {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    justify-content: center;
-    margin-bottom: 20px;
-}
+    .filters {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+    .filters .filter-select {
+        padding-top: 6px;
+    }
 
 .filter-select {
     width: auto;

@@ -1,55 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import { Avatar, notification } from 'antd';
-import axios from 'axios';
-import { Link, useLocation } from 'react-router-dom';
+import { Form, Input, notification, Avatar } from 'antd';
+import './Profile.css'; 
 import Footer from '../Footer/Footer';
 import Header from '../Header/Hearder';
-import './Profile.css';
 import './ChangePassword.css';
+import { NavLink } from 'react-router-dom';
 import instance from '../../server';
-const openNotificationWithIcon = (
-  type: "success" | "error",
-  message: string,
-  description: string
-) => {
-  notification[type]({
-    message: message ?? "Thông báo",
-    description,
-    // Sử dụng class CSS tùy chỉnh nếu cần để thay đổi màu
-    className: type === "success" ? "notification-success" : "notification-error",
-  });
-};
-const ChangePassword: React.FC = () => {
-  const location = useLocation();
-  const isAccountActive = location.pathname === '/profile' || location.pathname === '/changepassword';
-  const isCreditsActive = location.pathname === '/credits' || location.pathname === '/deponsit' || location.pathname === '/transaction';
 
+const ChangePassword: React.FC = () => {
   const [avatar, setAvatar] = useState('https://cdn.moveek.com/bundles/ornweb/img/no-avatar.png');
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
-  const [new_password_confirmation, setConfirmPassword] = useState('');
- 
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [userProfile, setUserProfile] = useState<any>(null);
-  const [locations, setLocations] = useState<any[]>([]);
-  const [avatarFile, setAvatarFile] = useState<File | null>(null); // Thêm state để lưu file avatar
 
   useEffect(() => {
     const profileData = localStorage.getItem("user_profile");
     if (profileData) {
       const profile = JSON.parse(profileData);
       const userId = profile.id;
-     
-      // Lấy thông tin người dùng theo ID
+
       const fetchUserProfile = async () => {
         try {
           const response = await instance.get(`/user/${userId}`);
           if (response.data.status) {
-            const userProfileData = response.data.data;
-            setUserProfile(userProfileData);
-            setAvatar(
-              userProfileData.avatar ||
-              "https://cdn.moveek.com/bundles/ornweb/img/no-avatar.png"
-            );
+            setUserProfile(response.data.data);
+            setAvatar(response.data.data.avatar || "https://cdn.moveek.com/bundles/ornweb/img/no-avatar.png");
           }
         } catch (error) {
           console.error("Error fetching user profile:", error);
@@ -57,65 +33,40 @@ const ChangePassword: React.FC = () => {
       };
 
       fetchUserProfile();
-
-      // Lấy danh sách khu vực cho dropdown
-      const fetchLocations = async () => {
-        try {
-          const response = await instance.get("/location");
-          if (response.data.status) {
-            setLocations(response.data.data);
-          }
-        } catch (error) {
-          console.error("Error fetching locations:", error);
-        }
-      };
-
-      fetchLocations();
     }
   }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (newPassword !== new_password_confirmation) {
-      openNotificationWithIcon("error", "Lỗi", "Mật khẩu không khớp");
+    if (newPassword !== confirmPassword) {
+      notification.error({ message: 'Mật khẩu xác minh không trùng khớp!' });
       return;
     }
-  
-    const token = localStorage.getItem("token");
-  
+
     try {
-      const response = await instance.post(
-        '/resetPassword',
-        {
-          current_password: currentPassword,
-          new_password: newPassword,
-          new_password_confirmation: new_password_confirmation,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-    
-      console.log("API response:", response.data); // Kiểm tra phản hồi từ API
-    
+      const response = await instance.post('/resetPassword', {
+        current_password: currentPassword,
+        new_password: newPassword,
+        new_password_confirmation: confirmPassword,
+      });
+      
       if (response.data.message) {
-        openNotificationWithIcon("success", "Thành công", "Bạn đã đổi mật khẩu thành công.");
+        notification.success({ message: 'Đổi mật khẩu thành công!' });
       } else {
-        openNotificationWithIcon("error", "Lỗi", response.data.message || "Cập nhật mật khẩu thất bại");
+        notification.error({ message: response.data.message || 'Cập nhật mật khẩu thất bại' });
       }
     } catch (error: any) {
       if (error.response?.status === 400) {
-        openNotificationWithIcon("error", "Lỗi", "Mật khẩu hiện tại không chính xác.");
+        notification.error({ message: 'Mật khẩu hiện tại không chính xác.' });
       } else {
-        openNotificationWithIcon("error", "Lỗi", error.response?.data?.message || "Cập nhật mật khẩu thất bại");
+        notification.error({ message: error.response?.data?.message || 'Cập nhật mật khẩu thất bại' });
       }
     }
-    
+
+    setCurrentPassword('');
+    setNewPassword('');
+    setConfirmPassword('');
   };
-  
-
-
 
   return (
     <>
@@ -123,74 +74,86 @@ const ChangePassword: React.FC = () => {
       <div className="banner">
         <img src="https://cdn.moveek.com/bundles/ornweb/img/tix-banner.png" alt="Banner" className="banner-img" />
       </div>
-      <div className="content-acount">
+      <div className="content-acount1">
         <div className="container boxcha">
           <div className="profile-fullscreen">
             <div className="account-settings-container">
               <div className="account-avatar">
-              <div className="account-info">
-                    <Avatar
-                      size={128}
-                      src={avatar}
-                      alt="avatar"
-                      className="avatar"
-                    />
-                    <div className="account-details">
-                      <h2 className="account-name">
-                        {userProfile?.user_name || "No name"}
-                      </h2>
-                    </div>
-                  </div>
-
-
-                <div className="account-nav">
-                  <div className={`account-nav-item ${isAccountActive ? 'active' : ''}`}>
-                    <span className="account-nav-title">Tài khoản</span>
-                    <ul className="account-submenu">
-                      <li className="account-submenu-item">
-                        <Link to={'/profile'}>Quản lí tài khoản</Link>
-                      </li>
-                      <li className="account-submenu-item">
-                        <Link to={'/changepassword'}>Đổi mật khẩu</Link>
-                      </li>
-                    </ul>
-                  </div>
-
-                  <div className="account-nav-item">
-                    <span className="account-nav-title">Tủ phim</span>
-                  </div>
-
-                  <div className="account-nav-item">
-                    <span className="account-nav-title">Vé</span>
-                  </div>
-
-                  <div className={`account-nav-item ${isCreditsActive ? 'active' : ''}`}>
-                    <span className="account-nav-title">Nạp tiền</span>
-                    <ul className="account-submenu">
-                      <li className="account-submenu-item">
-                        <Link to={'/credits'}>Nạp tiền</Link>
-                      </li>
-                      <li className="account-submenu-item">
-                        <Link to={'/deponsit'}>Lịch sử nạp tiền</Link>
-                      </li>
-                      <li className="account-submenu-item">
-                        <Link to={'/transaction'}>Lịch sử giao dịch</Link>
-                      </li>
-                    </ul>
+                <div className="account-info fix-acount">
+                  <Avatar size={128} src={avatar} alt="avatar" className="avatar" />
+                  <div className="account-details">
+                    <h2 className="account-name">
+                      {userProfile?.user_name || "No name"}
+                    </h2>
                   </div>
                 </div>
+
+                <div className="account-nav">
+      <div className="account-nav-item">
+        <NavLink 
+          to="/profile" 
+          className={({ isActive }) => `account-nav-title ${isActive || location.pathname === '/changepassword' ? 'active' : ''}`}
+        >
+          Tài khoản
+        </NavLink>
+        <ul className="account-submenu">
+          <li className="account-submenu-item">
+            <NavLink to="/profile" className={({ isActive }) => (isActive ? 'active' : '')}>Quản lí tài khoản</NavLink>
+          </li>
+          <li className="account-submenu-item">
+            <NavLink to="/changepassword" className={({ isActive }) => (isActive ? 'active' : '')}>Đổi mật khẩu</NavLink>
+          </li>
+        </ul>
+      </div>
+
+      <div className="account-nav-item">
+        <NavLink 
+          to="/movie-library" 
+          className={({ isActive }) => `account-nav-title ${isActive ? 'active' : ''}`}
+        >
+          Tủ phim
+        </NavLink>
+      </div>
+
+      <div className="account-nav-item">
+        <NavLink 
+          to="/tickets" 
+          className={({ isActive }) => `account-nav-title ${isActive ? 'active' : ''}`}
+        >
+          Vé
+        </NavLink>
+      </div>
+
+      <div className="account-nav-item">
+        <NavLink 
+          to="/credits" 
+          className={({ isActive }) => `account-nav-title ${['/credits', '/deponsit', '/transaction'].includes(location.pathname) ? 'active' : ''}`}
+        >
+          Nạp tiền
+        </NavLink>
+        <ul className="account-submenu">
+          <li className="account-submenu-item">
+            <NavLink to="/credits" className={({ isActive }) => (isActive ? 'active' : '')}>Nạp tiền</NavLink>
+          </li>
+          <li className="account-submenu-item">
+            <NavLink to="/deponsit" className={({ isActive }) => (isActive ? 'active' : '')}>Lịch sử nạp tiền</NavLink>
+          </li>
+          <li className="account-submenu-item">
+            <NavLink to="/transaction" className={({ isActive }) => (isActive ? 'active' : '')}>Lịch sử giao dịch</NavLink>
+          </li>
+        </ul>
+      </div>
+    </div>
               </div>
             </div>
-
-            <div className="divider"></div>
           </div>
+          <div className="divider"></div>
 
           <div className="change-password-container">
             <form className="change-password-form" onSubmit={handleSubmit}>
               <div className="form-group">
                 <label htmlFor="currentPassword">Mật khẩu hiện tại:</label>
-                <input
-                  type="password"
+                <Input.Password
                   id="currentPassword"
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
@@ -200,8 +163,7 @@ const ChangePassword: React.FC = () => {
 
               <div className="form-group">
                 <label htmlFor="newPassword">Mật khẩu mới:</label>
-                <input
-                  type="password"
+                <Input.Password
                   id="newPassword"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
@@ -211,10 +173,9 @@ const ChangePassword: React.FC = () => {
 
               <div className="form-group">
                 <label htmlFor="confirmPassword">Xác minh:</label>
-                <input
-                  type="password"
+                <Input.Password
                   id="confirmPassword"
-                  value={new_password_confirmation}
+                  value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   required
                 />

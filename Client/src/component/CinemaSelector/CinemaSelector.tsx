@@ -250,7 +250,12 @@ useEffect(() => {
   <div className="movies">
     {movies.map((movieData) => {
       const movie = movieData.movie; // Truy xuất thông tin chi tiết phim từ movieData
-      const actor = actors.find((a) => a.id === movie.actor_id);
+      
+      
+      const actor = actors.find((a) => a.id === movie.id);
+      console.log("actors:", actors);
+console.log("movie.actor_id:", movie.actor_id);
+
 
       return (
         <div key={movie.id} className="movie">
@@ -260,7 +265,7 @@ useEffect(() => {
             <p>
               Đạo Diễn: {actor ? actor.actor_name : "Không có thông tin"}
             </p>
-            <p>Thời gian: {movie.duraion}</p>
+            <p>Thời gian: {movie.duration}</p>
             <p>Giới hạn tuổi: {movie.age_limit}+</p>
             <div className="showtimes-list">
             {movieData.showtimes.length > 0 ? (
