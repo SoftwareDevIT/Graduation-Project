@@ -50,7 +50,7 @@
 
 /* Container cho phần nội dung và poster */
 .article-content-container {
-    display: flex;
+    display: flex !important;
     align-items: center;
     gap: 20px;
     background-color: #e0e6ef;
@@ -480,4 +480,8 @@
     color: #333;
     border-radius: 15px;
     font-size: 12px;
+}
+.article-content-container {
+  
+    flex-direction:row
 }

@@ -216,6 +216,7 @@ if (error) {
                   onSeatClick={handleSeatClick}
                   selectedSeats={selectedSeats}
                   reservedSeats={reservedSeats}
+                  
                 />
               ))}
             </div>
@@ -232,7 +233,7 @@ if (error) {
             </div>
           </div>
           <div className="thongtinphim">
-            <div className="details-box">
+            <div className="details-box1">
               <p className="title-phim">{movieName}</p>
               <p>
                 Rạp:<span> {cinemaName}</span>
@@ -252,15 +253,15 @@ if (error) {
                   .join(", ")}
               </p>
             </div>
-            <div className="price-box">
+            <div className="price-box1">
               <div className="price">
                 Tổng đơn hàng
                 <br /> <span>{totalPrice.toLocaleString()} đ</span>
               </div>
             </div>
-            <div className="actionst">
-              <button className="back-btn">←</button>
-              <button className="continue-btn" onClick={handleSubmit}>
+            <div className="actionst1">
+              <button className="back-btn1">←</button>
+              <button className="continue-btn1" onClick={handleSubmit}>
                 Tiếp Tục
               </button>
             </div>
@@ -299,6 +300,7 @@ const SeatRow: React.FC<SeatRowProps> = ({
               onSeatClick={onSeatClick}
               isSelected={isSelected}
               isReserved={isReserved}
+              
             />
           );
         })}
@@ -320,16 +322,20 @@ const Seat: React.FC<SeatProps> = ({
       onSeatClick(row, index);
     }
   };
-
   const seatClassName = isReserved
-    ? "seat reserved"
-    : isSelected
-    ? "seat selected"
-    : type === "couple"
-    ? "seat couple-seat"
-    : "seat";
+  ? "seat reserved"
+  : isSelected
+  ? "seat selected"
+  : type === "couple"
+  ? "seat couple-seat"
+  : "seat";
 
-  return <span className={seatClassName} onClick={handleClick}></span>;
+// Tạo số ghế
+const seatNumber = `${row}${index + 1}`
+
+  return   <span className={seatClassName} onClick={handleClick}>
+  <span className="seat-number1">{seatNumber}</span> {/* Hiển thị số ghế ở đây */}
+</span>;
 };
 
 export default CinemaSeatSelection;

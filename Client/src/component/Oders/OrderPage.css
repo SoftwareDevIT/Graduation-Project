@@ -1,180 +1,228 @@
 .combo-list {
 
-    display: flex;
-      width: 100%;
-      max-width: 1200px;
-      margin: 0 auto;
-  margin-left: 130px;
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 60px;
-  }
-  .thongtincombo{
-      margin-top: 0px;
-      border-radius: 10px;
-      width: 700px;
-      border: 1px solid #ddd;
-      
-  }
-  .combo-header {
-      border-color: inherit;
-      font-family: "Cerebri Sans, sans-serif";
-      height: 50px;
-      border-radius: 10px 10px 0 0;
-      display: grid;
-      grid-template-columns: 2.7fr 1fr 1fr;
-      font-weight: bold;
-      padding: 10px 0;
-      border-bottom: 1px solid #ddd ;
-      text-transform: uppercase;
-      color: #95aac9;
-      background-color:#fafafa;
-      font-weight: 500;
-  }
-  .combo-header .item{
-      line-height: 27px;
-      margin-left: 20px;
-  }
-  
-  .combo-item {
-      font-family: "Cerebri Sans, sans-serif";
-      margin-left: 15px;
-      width: 650px;
-      display: grid;
-      grid-template-columns: 3fr 1fr 1fr;
-      align-items: center;
-      padding: 20px 0;
-      border-bottom: 1px solid #eee;
-      color: #12263f;
-  
-  
-  }
-  
-  .combo-info {
-      display: flex;
-      flex-direction: column;
-  }
-  
-  .combo-name {
-   font-weight: 400;
-      color: #12263f;
-   padding-bottom: 5px;
-  }
-  
-  .combo-description {
-      font-size: 15px;
-      color: #95aac9;
-  }
-  
-  .combo-price {
-      font-weight: bold;
-      color: #333;
-      text-align: center;
-     
-     
-  }
-  
-  .combo-quantity {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding-left: 30px;
-  }
-  .combo-quantity .iconcong{
-      border: 1px solid #e3ebf6;
-      width: 25px;
-      height: 25px;
-  }
-  .combo-quantity button {
-      width: 30px;
-      height: 30px;
-      font-size: 16px;
-      text-align: center;
-      background-color: #fff;
-      border: none;
-      border-radius: 50%;
-      cursor: pointer;
-      color: #333;
-  }
-  
-  
-  
-  .combo-quantity span {
-      margin: 0 10px;
-      font-size: 16px;
-      width: 20px;
-      text-align: center;
-  }
-  .box-thongtinphim{
-  
-  width: 100px;
-  
-  }
-  .price-box{
-      width: 400px;
-  }
-  .actionsts{
-      display: flex;
-      justify-content: space-between;
-      margin-top: 30px;
-      width: 430px;
-    }
-    .back-btn2{
-      margin-left: 30px;
-      height: 37px;
-      width: 100px ;
-      padding-bottom: 15px;
-      
-    }
-    .back-btn2, .continue-btn2 {
-      
-   width: 120px;
-   height: 40px;
-      padding: 10px 10px;
-      font-size: 1em;
-      background-color: #ffffff;
-      color: black;
-      border: 1px solid black;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.2s;
-      
-    }
-    .descripton {
-  color: #6E849B;
-  font-size: 15px;
-    }
+  display: flex;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+margin-left: 130px;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 60px;
+}
+.thongtincombo{
+    margin-top: 0px;
+    border-radius: 10px;
+    width: 700px;
+    border: 1px solid #ddd;
     
-    .continue-btn2{
-      
-      border: none;
-      width: 200px;
-      background: #6E849B;
-      color: white;
-      
-    }
+}
+.combo-header {
+    border-color: inherit;
+    font-family: "Cerebri Sans, sans-serif";
+    height: 50px;
+    border-radius: 10px 10px 0 0;
+    display: grid;
+    grid-template-columns: 2.7fr 1fr 1fr;
+    font-weight: bold;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd ;
+    text-transform: uppercase;
+    color: #95aac9;
+    background-color:#fafafa;
+    font-weight: 500;
+}
+.combo-header .item{
+    line-height: 27px;
+    margin-left: 20px;
+}
+
+.combo-item {
+    font-family: "Cerebri Sans, sans-serif";
+    margin-left: 15px;
+    width: 650px;
+    display: grid;
+    grid-template-columns: 3fr 1fr 1fr;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 1px solid #eee;
+    color: #12263f;
+
+
+}
+
+.combo-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.combo-name {
+ font-weight: 400;
+    color: #12263f;
+ padding-bottom: 5px;
+}
+
+.combo-description {
+    font-size: 15px;
+    color: #95aac9;
+}
+
+.combo-price {
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+   
+   
+}
+
+.combo-quantity {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left: 30px;
+}
+.combo-quantity .iconcong{
+    border: 1px solid #e3ebf6;
+    width: 25px;
+    height: 25px;
+}
+.combo-quantity button {
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+    text-align: center;
+    background-color: #fff;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    color: #333;
+}
+.details-box {
+    font-family: 'Cerebri Sans';
+    border: 1px solid #EDF2F9;
+    width: 400px;
+    color: rgba(0, 0, 0, 0);
+    padding: 10px;
+    background-color: #ffffff;
+    margin-bottom: 20px;
+    text-align: left;
+    border-radius: 5px;
+    margin-left: 30px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1),
+                0 6px 6px rgba(0, 0, 0, 0.1),
+                0 20px 40px rgba(0, 0, 0, 0.05);
+    height: 150px;
+   
+  }
+  .details-box span {
+    font-weight: 600;
+    font-family: "Cerebri Sans";
+  }
+  .details-box p {
+    color: #000000;
+    font-family: "Cerebri Sans, sans-serif;";
+    margin-bottom: 0rem
+  }
+  .price-box {
+    border: 1px solid #EDF2F9;
+    background-color: #ffffff;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    margin-left: 30px;
+    padding-left: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1),
+                0 6px 6px rgba(0, 0, 0, 0.1),
+                0 20px 40px rgba(0, 0, 0, 0.05);
+  }
+  
+  .price-box .price {
+    font-size:16px;
+    font-weight: bold;
+    color: #95AAC9;
+  }
+  
+  .price-box .price span {
+    color: #000000;
+  }
+  
+.combo-quantity span {
+    margin: 0 10px;
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+}
+.box-thongtinphim{
+
+width: 100px;
+
+}
+.price-box{
+    width: 400px;
+}
+.actionsts{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    width: 430px;
+  }
   .back-btn2{
-      padding:7px;
-      padding-left: 15px;
-      text-decoration: none;
-     
+    margin-left: 30px;
+    height: 37px;
+    width: 100px ;
+    padding-bottom: 15px;
+    
   }
-  .back-btn2 span{
-      margin-right: 5px;
-  
+  .back-btn2, .continue-btn2 {
+    
+ width: 120px;
+ height: 40px;
+    padding: 10px 10px;
+    font-size: 1em;
+    background-color: #ffffff;
+    color: black;
+    border: 1px solid black;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s;
+    
   }
-  /* Media Queries for devices with max width of 992px */
-  @media (max-width: 992px) {
-      .combo-list {
-          flex-direction: column;
-          margin-left: 0;
-          padding: 10px;
-      }
+  .descripton {
+color: #6E849B;
+font-size: 15px;
+  }
   
-      .thongtincombo {
-          width: 100%;
-      }
-      .combo-header {
+  .continue-btn2{
+    
+    border: none;
+    width: 200px;
+    background: #6E849B;
+    color: white;
+    
+  }
+.back-btn2{
+    padding:7px;
+    padding-left: 15px;
+    text-decoration: none;
+   
+}
+.back-btn2 span{
+    margin-right: 5px;
+
+}
+/* Media Queries for devices with max width of 992px */
+@media (max-width: 992px) {
+    .combo-list {
+        flex-direction: column;
+        margin-left: 0;
+        padding: 10px;
+    }
+
+    .thongtincombo {
+        width: 500px;
+        margin-left: 125px;
+    }
+
+    .combo-header {
         grid-template-columns: 2fr 1fr 1fr; /* Giữ cấu trúc 3 cột */
         text-align: center;
     }
@@ -200,8 +248,29 @@
 
 
     .back-btn2, .continue-btn2 {
-        width: 80%;
+        width: 100%;
     }
+   .price-box{
+    width: 500px;
+   }
+   .details-box{
+    margin-left: 80px !important;
+   
+   }
+   .price-box{
+    margin-left: 80px !important;
+   }
+   .actionsts{
+    margin-left: 80px;
+    width: 500px !important;
+   }
+   .back-btn2{
+       margin-left: 1px;
+       padding-left: 40px;
+   }
+   .continue-btn2{
+    margin-left: 50px;
+   }
 }
 
 /* Media Queries for devices with max width of 480px */
@@ -238,9 +307,12 @@
         padding: 10px;
         margin-left: 20px;
     }
+    .thongtincombo{
+        width: 100%;
+        margin-left: 1px;
+    }
 
     .actionsts {
-        flex-direction: column;
         align-items: center;
         width: 100%;
         gap: 10px;
@@ -249,5 +321,31 @@
     .back-btn2, .continue-btn2 {
         width: 90%; 
     }
-    
+    .back-btn2{
+        margin-left: 1px;
+        padding-left: 40px;
+    }
+    .price-box{
+        width: 413px;
+       }
+       .details-box{
+        margin-left:-3px !important;
+       width: 415px !important;
+       }
+       .price-box{
+        margin-left: -3px !important;
+        width: 415px !important;
+       }
+       .actionsts{
+        margin-left: -3px;
+        width: 415px !important;
+        
+       }
+       .back-btn2{
+           margin-left: 1px;
+           padding-left: 40px;
+       }
+       .continue-btn2{
+        margin-left: 50px;
+       }
 }

@@ -5,12 +5,26 @@ import { message } from 'antd'; // Import message from Ant Design
 import Headerticket from '../Headerticket/Headerticket';
 import Footer from '../Footer/Footer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faWallet, faMobileAlt, faQrcode, faUniversity, faCreditCard } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+
 import './OderCheckOut.css';
 import Header from '../Header/Hearder';
-
+import { Seat } from '../../interface/Seat';
+export interface LocationState {
+    movieName: string;
+    cinemaName: string;
+    showtime: string;
+    seats: Array<{ seat_name: string; room_id: number; showtime_id: number; seat_row: number; seat_column: number; }>;
+    totalPrice: number;
+    showtimeId: number;
+    roomId: number;
+    cinemaId: number;
+    selectedCombos :Array<{id:string,quantity:number}>
+  }
 const OrderCheckout = () => {
     const location = useLocation();
+    
+
     const {
         movieName,
         cinemaName,
@@ -21,7 +35,7 @@ const OrderCheckout = () => {
         roomId,
         cinemaId,
         selectedCombos,
-    } = location.state || {};
+    } = (location.state as LocationState) || {};
 
     // Log selectedSeats to verify data
     console.log(seats);
@@ -73,7 +87,7 @@ const OrderCheckout = () => {
             pay_method_id, // Gửi pay_method_id là số nguyên
             comboId: selectedCombos,
         };
-        console.log(bookingData);
+        console.log(selectedCombos);
 
         try {
             const response = await instance.post("/book-ticket", bookingData, {
@@ -83,13 +97,13 @@ const OrderCheckout = () => {
              
             });
 
-            // if (response.data) {
-            //     const redirectUrl = response.data.Url.original.url;
-            //     message.success("Đặt vé thành công!");
-            //     window.location.href = redirectUrl;
-            // } else {
-            //     message.error("Có lỗi xảy ra khi đặt vé.");
-            // }
+            if (response.data) {
+                const redirectUrl = response.data.Url.original.url;
+                message.success("Đặt vé thành công!");
+                window.location.href = redirectUrl;
+            } else {
+                message.error("Có lỗi xảy ra khi đặt vé.");
+            }
         } catch (error) {
             message.error("Có lỗi xảy ra khi đặt vé.");
             console.error("Error during booking:", error);
@@ -109,7 +123,7 @@ const OrderCheckout = () => {
                         </div>
                         <div className="item-header">
                             <span>Mô Tả</span>
-                            <span>Số Lượng</span>
+                            <span style={{marginLeft: "70px"}}>Số Lượng</span>
                             <span>Thành Tiền</span>
                         </div>
                         <div className="order-item">
@@ -144,33 +158,42 @@ const OrderCheckout = () => {
                         </div>
                     </div>
 
-                    {/* Hình thức thanh toán */}
-                    <div className="payment-methods">
-                        <h3>Hình thức thanh toán</h3>
-                        <ul>
-                            <li onClick={() => { setPaymentMethod(1); console.log('Phương thức thanh toán đã được chọn: VN Pay'); }}>
-                                <FontAwesomeIcon icon={faWallet} className="payment-icon" /> VN Pay
-                            </li>
-                            <li onClick={() => { setPaymentMethod(2); console.log('Phương thức thanh toán đã được chọn: MoMo'); }}>
-                                <FontAwesomeIcon icon={faMobileAlt} className="payment-icon" /> Ví MoMo
-                            </li>
-                            <li onClick={() => { setPaymentMethod(3); console.log('Phương thức thanh toán đã được chọn: Quét mã QR'); }}>
-                                <FontAwesomeIcon icon={faQrcode} className="payment-icon" /> Quét mã QR
-                            </li>
-                            <li onClick={() => { setPaymentMethod(4); console.log('Phương thức thanh toán đã được chọn: Chuyển khoản'); }}>
-                                <FontAwesomeIcon icon={faUniversity} className="payment-icon" /> Chuyển khoản / Internet Banking
-                            </li>
-                            <li onClick={() => { setPaymentMethod(5); console.log('Phương thức thanh toán đã được chọn: Ví ShopeePay'); }}>
-                                <FontAwesomeIcon icon={faWallet} className="payment-icon" /> Ví ShopeePay
-                            </li>
-                            <li onClick={() => { setPaymentMethod(6); console.log('Phương thức thanh toán đã được chọn: Thẻ ATM'); }}>
-                                <FontAwesomeIcon icon={faCreditCard} className="payment-icon" /> Thẻ ATM (Thẻ nội địa)
-                            </li>
-                            <li onClick={() => { setPaymentMethod(7); console.log('Phương thức thanh toán đã được chọn: Ví FPT Pay'); }}>
-                                <FontAwesomeIcon icon={faWallet} className="payment-icon" /> Ví FPT Pay
-                            </li>
-                        </ul>
-                    </div>
+
+                   {/* Phương thức thanh toán */}
+                   <div className="payment-methods">
+    <h3>Hình thức thanh toán</h3>
+    <ul>
+        <li onClick={() => setPaymentMethod(1)}>
+            <img src="https://vinadesign.vn/uploads/images/2023/05/vnpay-logo-vinadesign-25-12-57-55.jpg" alt="VN Pay" className="payment-icon" />
+            VN Pay {pay_method_id === 1 && <FontAwesomeIcon icon={faCheckCircle} className="check-icon" />}
+        </li>
+        <li onClick={() => setPaymentMethod(2)}>
+            <img src="https://developers.momo.vn/v3/assets/images/primary-momo-ddd662b09e94d85fac69e24431f87365.png" alt="MoMo" className="payment-icon" />
+            Ví MoMo {pay_method_id === 2 && <FontAwesomeIcon icon={faCheckCircle} className="check-icon" />}
+        </li>
+        <li onClick={() => setPaymentMethod(3)}>
+            <img src="https://icons.iconarchive.com/icons/fa-team/fontawesome/512/FontAwesome-Qrcode-icon.png" alt="QR Code" className="payment-icon" />
+            Quét mã QR {pay_method_id === 3 && <FontAwesomeIcon icon={faCheckCircle} className="check-icon" />}
+        </li>
+        <li onClick={() => setPaymentMethod(4)}>
+            <img src="https://img.icons8.com/?size=100&id=rCkWdjSPe99o&format=png&color=000000" alt="Bank Transfer" className="payment-icon" />
+            Chuyển khoản / Internet Banking {pay_method_id === 4 && <FontAwesomeIcon icon={faCheckCircle} className="check-icon" />}
+        </li>
+        <li onClick={() => setPaymentMethod(5)}>
+            <img src="https://cdn.moveek.com/bundles/ornweb/img/shopeepay-icon.png" alt="ShopeePay" className="payment-icon" />
+            Ví ShopeePay {pay_method_id === 5 && <FontAwesomeIcon icon={faCheckCircle} className="check-icon" />}
+        </li>
+        <li onClick={() => setPaymentMethod(6)}>
+            <img src="https://cdn.moveek.com/bundles/ornweb/img/zalopay-domestic_card-icon.png" alt="ATM Card" className="payment-icon" />
+            Thẻ ATM (Thẻ nội địa) {pay_method_id === 6 && <FontAwesomeIcon icon={faCheckCircle} className="check-icon" />}
+        </li>
+        <li onClick={() => setPaymentMethod(7)}>
+            <img src="https://cdn.moveek.com/bundles/ornweb/img/fptpay-icon.png" alt="FPT Pay" className="payment-icon" />
+            Ví FPT Pay {pay_method_id === 7 && <FontAwesomeIcon icon={faCheckCircle} className="check-icon" />}
+        </li>
+    </ul>
+</div>
+
 
                     {/* Thông tin cá nhân */}
                     <div className="form-container">
@@ -189,7 +212,7 @@ const OrderCheckout = () => {
                                 <input type="tel" id="phone" placeholder="Nhập số điện thoại" required />
                             </div>
                             <div className="form-group checkbox-group">
-                                <input type="checkbox" id="create-account" />
+                                <input type="checkbox" id="create-account"/>
                                 <label htmlFor="create-account">Tạo tài khoản với email và số điện thoại này</label>
                             </div>
                         </form>
