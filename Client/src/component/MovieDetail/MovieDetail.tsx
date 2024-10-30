@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import instance from "../../server";
 import "./MovieDetail.css";
 import { notification } from "antd"; 
@@ -11,7 +11,8 @@ const MovieDetail: React.FC = () => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Kiểm tra đăng nhập
   const [favoriteMovies, setFavoriteMovies] = useState<any[]>([]); // Khai báo state cho danh sách phim yêu thích
-
+  const navigate = useNavigate(); // Thêm useNavigate
+  
   useEffect(() => {
     const fetchMovie = async () => {
       try {
@@ -45,6 +46,7 @@ const MovieDetail: React.FC = () => {
     fetchMovie();
   }, [id]);
   
+
 
   const handleFavorite = async () => {
     if (!isLoggedIn) {
@@ -152,7 +154,7 @@ const MovieDetail: React.FC = () => {
           <Link to={`/movie-detail/${id}`} className={`tab ${location.pathname === `/movie-detail/${id}` ? "active" : ""}`}>
             Thông tin phim
           </Link>
-          <Link to={`/schedule/${id}`} className={`tab ${location.pathname === `/schedule/${id}` ? "active" : ""}`}>
+          <Link   state={{ movie }}  to={`/schedule/${id}`} className={`tab ${location.pathname === `/schedule/${id}` ? "active" : ""}`}>
             Lịch chiếu
           </Link>
           <Link to={`/reviews/${id}`} className={`tab ${location.pathname === `/reviews/${id}` ? "active" : ""}`}>

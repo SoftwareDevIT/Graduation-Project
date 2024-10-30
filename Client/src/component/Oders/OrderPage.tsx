@@ -44,6 +44,8 @@ const OrderPage: React.FC = () => {
           return {
             id: combos[index].id,
             quantity: quantity,
+            combo_name: combos[index].combo_name,
+            
           };
         }
         return null;

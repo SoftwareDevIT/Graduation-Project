@@ -108,7 +108,12 @@
   opacity: 0;
   transition: opacity 0.3s ease;
 }
-
+.seat-number1{
+  font-size: 10px;
+color: #727575;
+  font-weight: 600;
+ font-family: "LaTo";
+}
 .seat:hover .seat-number,
 .seat.selected .seat-number {
   opacity: 1;
@@ -130,7 +135,7 @@
   margin-right: 5px; /* Thêm khoảng cách giữa nhãn ghế và ghế đầu tiên */
 }
 
-.details-box {
+.details-box1 {
   font-family: 'Cerebri Sans';
   border: 1px solid #EDF2F9;
   width: 400px;
@@ -148,13 +153,13 @@
  
 }
 
-.details-box p {
+.details-box1 p {
   color: #000000;
   font-family: "Cerebri Sans, sans-serif;";
   margin-bottom: 0rem
 }
 
-.details-box span {
+.details-box1 span {
   font-weight: 600;
   font-family: "Cerebri Sans";
 }
@@ -162,7 +167,7 @@
  font-weight: 400;
  
 }
-.price-box {
+.price-box1 {
   border: 1px solid #EDF2F9;
   background-color: #ffffff;
   padding: 10px;
@@ -175,30 +180,30 @@
               0 20px 40px rgba(0, 0, 0, 0.05);
 }
 
-.price-box .price {
+.price-box1 .price {
   font-size:16px;
   font-weight: bold;
   color: #95AAC9;
 }
 
-.price-box .price span {
+.price-box1 .price span {
   color: #000000;
 }
 
-.actions {
+.actions1 {
   display: flex;
   justify-content: space-between;
   margin-top: 30px;
 
 }
 
-.back-btn {
+.back-btn1 {
   margin-left: 30px;
   height: 37px;
 
 }
 
-.back-btn, .continue-btn {
+.back-btn1, .continue-btn1 {
   width: 80px;
   padding: 10px 15px;
   font-size: 1em;
@@ -210,7 +215,7 @@
   transition: background-color 0.3s ease, transform 0.2s;
 }
 
-.continue-btn {
+.continue-btn1 {
   border: none;
   width: 250px;
   background: #6E849B;
@@ -277,19 +282,22 @@
   flex-wrap: nowrap; /* Giữ các ghế trên cùng một dòng */
   margin-right: 140px;
 }
-.back-btn, .continue-btn {
+.back-btn1, .continue-btn1 {
 
   margin-left: 10px;
 }
-.actionst{
+.actionst1{
   margin-left: 20px;
 }
-.actionst .back-btn{
+.actionst1 .back-btn1{
   position: relative;
  margin-right: 40px;
   margin-top: 5px;
   height: 45px;
   width: 100px;
+}
+.seat {
+  margin-left: 11px;
 }
 @media (max-width: 480px) {
   .container-map {
@@ -333,23 +341,25 @@
     width: 50px;
   }
 
-  .details-box {
-    width: 100%;
-    margin-left: 0;
+  .details-box1 {
+    position: relative;
+    width: 450px !important;
+   right: 90px;
   }
 
-  .price-box {
+  .price-box1 {
     margin-left: 0;
     padding-left: 10px;
+   width: 450px !important;
   }
 
-  .actions {
+  .actions1 {
     flex-direction: column;
     align-items: center;
     margin-top: 15px;
   }
 
-  .back-btn, .continue-btn {
+  .back-btn1, .continue-btn1 {
     width: 60%;
    margin-left: 40px;
    margin-bottom: 15px;
@@ -375,11 +385,11 @@
     margin-right: 0;
   }
 
-  .actionst {
+  .actionst1 {
     margin-left: 0;
   }
 
-  .actionst .back-btn {
+  .actionst1 .back-btn1 {
     width: 30%;
     margin: 5px 0;
   }
@@ -390,7 +400,9 @@
     padding: 0;
     max-width: 100%;
   }
-
+.thanh-tien-trinh{
+  
+}
   .seat-info-box {
     flex-direction: column;
     padding: 10px;
@@ -425,23 +437,23 @@
     width: 50px;
   }
 
-  .details-box {
-    width: 100%;
-    margin-left: 0;
+  .details-box1 {
+    width: 400px !important;
+    margin-left: 100px !important;
   }
 
-  .price-box {
+  .price-box1 {
     margin-left: 0;
     padding-left: 10px;
   }
 
-  .actions {
-    flex-direction: column;
+  .actions1 {
+    
     align-items: center;
     margin-top: 15px;
   }
 
-  .back-btn, .continue-btn {
+  .back-btn1, .continue-btn1 {
     width: 60%;
     margin-left: 40px;
     margin-bottom: 15px;
@@ -469,11 +481,11 @@
     margin-right: 0;
   }
 
-  .actionst {
+  .actionst1 {
     margin-left: 0;
   }
 
-  .actionst .back-btn {
+  .actionst1 .back-btn1 {
     width: 30%;
     margin: 5px 0;
   }
@@ -486,7 +498,7 @@
   }
 
   .seat-info-box {
-    flex-direction: column;
+   
     padding: 10px;
   }
 
@@ -519,7 +531,7 @@
     width: 50px;
   }
 
-  .details-box {
+  .details-box1 {
     width: 100%;
     margin-left: 0;
   }
@@ -529,13 +541,13 @@
     padding-left: 10px;
   }
 
-  .actions {
+  .actions1 {
     flex-direction: column;
     align-items: center;
     margin-top: 15px;
   }
 
-  .back-btn, .continue-btn {
+  .back-btn1, .continue-btn1 {
     width: 60%;
     margin-left: 40px;
     margin-bottom: 15px;
@@ -563,11 +575,11 @@
     margin-right: 0;
   }
 
-  .actionst {
+  .actionst1 {
     margin-left: 0;
   }
 
-  .actionst .back-btn {
+  .actionst1 .back-btn1 {
     width: 30%;
     margin: 5px 0;
   }
