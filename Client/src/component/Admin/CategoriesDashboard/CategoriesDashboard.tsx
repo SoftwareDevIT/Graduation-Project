@@ -42,7 +42,7 @@ const CategoriesDashboard = () => {
                                 <td>{category.id}</td>
                                 <td>{category.category_name}</td>
                                 <td className="action-buttons">
-                                    <button className="view-btn">👁</button>
+                                   
                                     <Link to={`/admin/categories/edit/${category.id}`} className="edit-btn">✏️</Link>
                                     <button onClick={() => deleteCategory(category.id)} className="delete-btn">🗑</button>
                                 </td>

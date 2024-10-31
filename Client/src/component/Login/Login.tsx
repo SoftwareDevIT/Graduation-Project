@@ -3,12 +3,12 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate, Link } from "react-router-dom";
 import instance from "../../server";
 import { loginSchema, LoginSchema } from "../../utils/validationSchema";
-import { zodResolver } from "@hookform/resolvers/zod";
+
 import "./Login.css";
 import { notification } from "antd";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const Login = () => {
-
   const { register, handleSubmit, formState: { errors } } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
   });
@@ -25,18 +25,16 @@ const Login = () => {
     try {
       const response = await instance.post("/login", data);
       if (response.status === 200 && response.data.data.token) {
-        const token = response.data.data.token;
+        const { token, profile } = response.data.data;
         localStorage.setItem("token", token);
+        localStorage.setItem("user_id", profile.id);
+        localStorage.setItem("user_profile", JSON.stringify(profile));
+
+        // Thiết lập token cho các yêu cầu API tiếp theo
         instance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-        const userResponse = await instance.get("/user");
-        if (userResponse.status === 200 && userResponse.data) {
-          const user_id = userResponse.data.id;
-          localStorage.setItem("user_id", user_id);
-          openNotificationWithIcon("success", "Đăng nhập thành công", "Bạn đã đăng nhập thành công.");
-          navigate("/");
-        } else {
-          openNotificationWithIcon("error", "Lỗi", "Không lấy được thông tin người dùng.");
-        }
+
+        openNotificationWithIcon("success", "Đăng nhập thành công", "Bạn đã đăng nhập thành công.");
+        navigate("/");
       } else {
         openNotificationWithIcon("error", "Lỗi", "Đăng nhập không thành công.");
       }
@@ -62,7 +60,6 @@ const Login = () => {
       const response = await instance.post("/get-google-sign-in-url");
       if (response.status === 200 && response.data.url) {
         window.location.href = response.data.url;
-       
       } else {
         openNotificationWithIcon("error", "Lỗi", "Không lấy được đường dẫn đăng nhập bằng Google.");
       }
@@ -70,6 +67,21 @@ const Login = () => {
       openNotificationWithIcon("error", "Lỗi", "Đã xảy ra lỗi khi yêu cầu đăng nhập bằng Google.");
     }
   };
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get("token");
+    const profile = urlParams.get("profile");
+
+    if (token && profile) {
+      localStorage.setItem("token", token);
+      localStorage.setItem("user_profile", profile);
+      instance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+      openNotificationWithIcon("success", "Đăng nhập thành công", "Bạn đã đăng nhập thành công bằng Google.");
+      navigate("/");
+    }
+  }, [navigate]);
 
   useEffect(() => {
     if (errors.email) {

@@ -1,36 +1,92 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
-import Header from "../Header/Hearder";
-import Footer from "../Footer/Footer";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import instance from "../../server";
 import "./MovieDetail.css";
+import { notification } from "antd"; 
+import Header from "../Header/Hearder";
 
 const MovieDetail: React.FC = () => {
   const { id } = useParams();
   const [movie, setMovie] = useState<any>(null);
-  const [actor, setActor] = useState<string | null>(null);
-  const [director, setDirector] = useState<string | null>(null);
-  const [category, setCategory] = useState<string | null>(null);
-  const [error, setError] = useState(null);
-
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Kiểm tra đăng nhập
+  const [favoriteMovies, setFavoriteMovies] = useState<any[]>([]); // Khai báo state cho danh sách phim yêu thích
+  const navigate = useNavigate(); // Thêm useNavigate
+  
   useEffect(() => {
     const fetchMovie = async () => {
       try {
         const movieResponse = await instance.get(`/movies/${id}`);
         setMovie(movieResponse.data.data.original);
+  
+        const token = localStorage.getItem("token");
+        if (token) {
+          setIsLoggedIn(true);
+          const userId = localStorage.getItem('user_id');
+  
+          if (userId) {
+            const userResponse = await instance.get(`/user/${userId}`);
 
-    
-
-       
+            const favoriteMoviesData = userResponse.data.data.favorite_movies || [];
+            setFavoriteMovies(favoriteMoviesData); // Cập nhật danh sách phim yêu thích
+  
+            console.log("Danh sách phim yêu thích:", favoriteMoviesData); // Debug danh sách yêu thích
+            
+            // Kiểm tra if id of movie is in favoriteMovies
+            const isMovieFavorite = favoriteMoviesData.some((favMovie: any) => favMovie.id === parseInt(id as string, 10));
+            console.log(`Phim ${id} có trong danh sách yêu thích: ${isMovieFavorite}`); // Debug trạng thái yêu thích
+            setIsFavorite(isMovieFavorite);
+          }
+        }
       } catch (error) {
-        console.error(error);
-    
+        console.error("Lỗi khi lấy dữ liệu:", error);
       }
     };
+  
     fetchMovie();
   }, [id]);
+  
+
+
+  const handleFavorite = async () => {
+    if (!isLoggedIn) {
+      // Nếu chưa đăng nhập, hiển thị thông báo yêu cầu đăng nhập
+      notification.warning({
+        message: 'Yêu cầu đăng nhập',
+        description: 'Vui lòng đăng nhập để thêm phim vào danh sách yêu thích!',
+      });
+      return;
+    }
+  
+    try {
+      if (isFavorite) {
+        // Xóa phim khỏi danh sách yêu thích
+        await instance.delete(`/favorites/${id}`);
+        notification.success({
+          message: 'Thành công',
+          description: 'Phim đã được xóa khỏi danh sách yêu thích!',
+        });
+        setIsFavorite(false); // Cập nhật trạng thái
+      } else {
+        // Thêm phim vào danh sách yêu thích
+        await instance.post(`/favorites/${id}`); // Cần kiểm tra API
+        notification.success({
+          message: 'Thành công',
+          description: 'Phim đã được thêm vào danh sách yêu thích!',
+        });
+        setIsFavorite(true); // Cập nhật trạng thái yêu thích
+      }
+    } catch (error: any) {
+      notification.error({
+        message: 'Lỗi',
+        description: 'Có lỗi xảy ra khi xử lý yêu thích phim.',
+      });
+    }
+  };
+
   const location = useLocation();
-  if (error) return <div>Error loading movie details</div>;
+  
+  if (!movie) return <div>Đang tải...</div>; // Thêm kiểm tra nếu phim chưa được tải
 
   return (
     <>
@@ -43,17 +99,21 @@ const MovieDetail: React.FC = () => {
               alt={movie?.movie_name}
               className="poster"
             />
-
             <div className="movie-details-wrapper">
               <div className="movie-info">
-                <h1 className="title">{movie?.movie_name}</h1>
-                <p className="genre">Thể loại: {movie?.category || "Không có thể loại"}</p>
+                <h2 className="title">{movie?.movie_name}</h2>
+                <p className="genre">Thể loại: {movie?.category?.map((cat: any) => cat.director_name).join(', ') || "Không có thể loại"}</p>
 
                 <div className="actions">
-                  <div className="button like">
-                    <span role="img" aria-label="like">❤️</span>{" "}
+                  <div className="button like" onClick={handleFavorite}>
+                    {isFavorite ? (
+                      <span role="img" aria-label="liked">❤️</span> // Hiển thị biểu tượng đã thích
+                    ) : (
+                      <span role="img" aria-label="unliked">🤍</span> // Hiển thị biểu tượng chưa thích
+                    )}
                     <span className="like-1">Thích</span>
                   </div>
+
                   <div className="button rate like">
                     <span role="img" aria-label="rate">⭐</span>{" "}
                     <span className="like-1 like2">Đánh giá</span>
@@ -80,8 +140,11 @@ const MovieDetail: React.FC = () => {
               </div>
 
               <div className="additional-info">
-                <strong>Diễn viên:</strong> <p>{movie?.actor || "Không có diễn viên"}</p>
-                <strong>Đạo diễn:</strong><p>{movie?.director || "Không có đạo diễn"}</p>
+                <strong>Diễn viên:</strong>
+                <p>{movie?.actor?.map((act: any) => act.actor_name).join(', ') || "Không có diễn viên"}</p>
+
+                <strong>Đạo diễn:</strong>
+                <p>{movie?.director?.map((dir: any) => dir.director_name).join(', ') || "Không có đạo diễn"}</p>
               </div>
             </div>
           </div>
@@ -91,7 +154,7 @@ const MovieDetail: React.FC = () => {
           <Link to={`/movie-detail/${id}`} className={`tab ${location.pathname === `/movie-detail/${id}` ? "active" : ""}`}>
             Thông tin phim
           </Link>
-          <Link to={`/schedule/${id}`} className={`tab ${location.pathname === `/schedule/${id}` ? "active" : ""}`}>
+          <Link   state={{ movie }}  to={`/schedule/${id}`} className={`tab ${location.pathname === `/schedule/${id}` ? "active" : ""}`}>
             Lịch chiếu
           </Link>
           <Link to={`/reviews/${id}`} className={`tab ${location.pathname === `/reviews/${id}` ? "active" : ""}`}>

@@ -66,7 +66,7 @@ const PostsDashboard: React.FC = () => {
                   <td>{post.news_category_id}</td>
                   <td>{new Date(post.created_at).toLocaleDateString()}</td>
                   <td className="action-buttons">
-                    <button className="view-btn">👁</button>
+                    
                     <Link to={`/admin/posts/edit/${post.id}`} className="edit-btn">✏️</Link>
                     <button className="delete-btn" onClick={() => handleDeletePost(post.id)}>🗑</button>
                   </td>
