@@ -131,7 +131,7 @@ Route::delete('/delete-user/{id}', [RoleController::class, 'destroy'])->name('ro
 
 // });
 Route::get('showtimes/movie/{movie_name}', [ShowtimeController::class, 'showtimeByMovieName']);
-Route::post('/resetPassword', [ResetPasswordController::class, 'resetPassword']);
+Route::post('/resetPassword', [ResetPasswordController::class, 'resetPassword'])->middleware('auth:sanctum');
 
 // });
 
