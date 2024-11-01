@@ -65,7 +65,13 @@
   color: #007bff;
 }
 .related-news-item .title{
-  font-size: 17px;
+  color: #12263f;
+  font-size: 15px;
+  font-family: "Cerebri Sans, sans-serif";
+  font-weight :600
+}
+.related-news-item a{
+  text-decoration: none;
 }
 .related-news ul li a:hover {
   text-decoration: underline;

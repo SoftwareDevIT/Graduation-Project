@@ -106,10 +106,10 @@ const ShowtimesDashboard: React.FC = () => {
                         <thead>
                             <tr>
                                 <th>Phim</th>
-                                
                                 <th>Ngày</th>
                                 <th>Giờ bắt đầu</th>
                                 <th>Giờ kết thúc</th>
+                                <th>Giá</th>
                                 <th>Hành động</th>
                             </tr>
                         </thead>
@@ -124,6 +124,7 @@ const ShowtimesDashboard: React.FC = () => {
                                         <td>{new Date(showtime.showtime_date).toLocaleDateString()}</td>
                                         <td>{showtime.showtime_start}</td>
                                         <td>{showtime.showtime_end}</td>
+                                        <td>{showtime.price}</td>
                                         <td className="action-buttons">
                                             <Link to={`/admin/showtimes/edit/${showtime.id}`} className="edit-btn">✏️</Link>
                                             <button

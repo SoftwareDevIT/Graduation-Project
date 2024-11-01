@@ -4,6 +4,7 @@ namespace App\Services\Booking\Steps;
 
 use App\Models\Movie;
 use App\Services\Booking\Handlers\AbstractBookingStep;
+use App\Models\MovieInCinema;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -21,21 +22,21 @@ class SelectMovie extends AbstractBookingStep
         // $error= [];
 
         $cinemaId = $request->input('cinemaId');
-        $showtimeId = $request->input('showtimeId');
+        $showtime_id = $request->input('showtime_id');
 
-        if (!$cinemaId || !$showtimeId) {
+        if (!$cinemaId || !$showtime_id) {
             return response()->json([
                 'status' => false,
                 'message' => 'Cinema or Showtime not found.'
             ]);
         }
-
-        $movies = Movie::where('id', $cinemaId)
-            ->with(['showtimes' => function ($query) use ($showtimeId) {
-                $query->where('id', $showtimeId);
-            }])
-            ->get();
-
+        $movies = MovieInCinema::where('id', $cinemaId)
+            ->with([
+                'movie', // Nạp chi tiết phim
+                'showtimes' => function ($q) use ($showtime_id) {
+                    $q->where('id', $showtime_id); // Nạp showtimes có id tương ứng
+                }
+            ])->get();
         if ($movies->isEmpty() || $movies->first()->showtimes->isEmpty()) {
             return response()->json([
                 'status' => false,
@@ -43,7 +44,7 @@ class SelectMovie extends AbstractBookingStep
             ]);
         }
 
-        Session::put('reserved_showtime', compact('showtimeId', 'movies'));
+        Session::put('reserved_showtime', compact('showtime_id', 'movies'));
 
         // return ['movies' => $movies];
         // return response()->json([

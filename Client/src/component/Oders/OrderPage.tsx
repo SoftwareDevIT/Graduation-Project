@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
-
 import Headerticket from "../Headerticket/Headerticket";
 import Footer from "../Footer/Footer";
 import instance from "../../server";
@@ -12,13 +11,11 @@ export interface LocationState {
   movieName: string;
   cinemaName: string;
   showtime: string;
-  selectedSeats: string;
+  seats: Array<{ seat_name: string; room_id: number; showtime_id: number; seat_row: number; seat_column: number; }>;
   totalPrice: number;
-  comboQuantities: number[];
-  combos: Combo[];
-  showtimeId: number; // Thêm showtimeId
-  roomId: number; // Thêm roomId
-  cinemaId: number; // Thêm cinemaId
+  showtimeId: number;
+  roomId: number;
+  cinemaId: number;
 }
 
 const OrderPage: React.FC = () => {
@@ -27,17 +24,12 @@ const OrderPage: React.FC = () => {
     movieName,
     cinemaName,
     showtime,
-    selectedSeats,
+    seats,
     totalPrice: initialTotalPrice,
-    showtimeId, // Lấy từ location.state
-    roomId, // Lấy từ location.state
-    cinemaId, // Lấy từ location.state
-  } = (location.state as LocationState) || {}; // Sử dụng as để ép kiểu
-
-  // Log ra giá trị showtimeId, roomId và cinemaId để kiểm tra
-  console.log("showtimeId:", showtimeId);
-  console.log("roomId:", roomId);
-  console.log("cinemaId:", cinemaId);
+    showtimeId,
+    roomId,
+    cinemaId,
+  } = (location.state as LocationState) || {};
 
   const [combos, setCombos] = useState<Combo[]>([]);
   const [totalPrice, setTotalPrice] = useState<number>(initialTotalPrice || 0);
@@ -45,50 +37,38 @@ const OrderPage: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const navigate = useNavigate();
 
-  const handleContinue = async () => {
+  const handleContinue = () => {
     const selectedCombos = comboQuantities
       .map((quantity, index) => {
         if (quantity > 0) {
           return {
             id: combos[index].id,
             quantity: quantity,
+            combo_name: combos[index].combo_name,
+            
           };
         }
         return null;
       })
       .filter((combo) => combo !== null);
-  
-    try {
-      const response = await instance.post("/selectCombo", {
-        comboId: selectedCombos, 
-      });
-  console.log("Gửi api thành công:",selectedCombos);
-  
-      console.log("API response:", response.data);
-  
-      if (response.data.status) {
-        navigate("/pay", {
-          state: {
-            movieName,
-            cinemaName,
-            showtime,
-            selectedSeats,
-            totalPrice,
-            showtimeId,
-            roomId,
-            cinemaId,
-            selectedCombos, // Pass the selected combos to the next page
-          },
-        });
-      } else {
-        setErrorMessage(response.data.message || "Failed to select combos.");
-      }
-    } catch (error) {
-      console.error("Error submitting combo selection:", error);
-      setErrorMessage("Có lỗi xảy ra khi chọn combo.");
-    }
+
+    // Chuyển hướng sang trang pay với tất cả thông tin cần thiết
+    navigate("/pay", {
+      state: {
+        movieName,
+        cinemaName,
+        showtime,
+        seats,
+        totalPrice,
+        showtimeId,
+        roomId,
+        cinemaId,
+        selectedCombos, // Pass the selected combos to the next page
+      },
+    });
+    console.log(cinemaName);
+    
   };
-  
 
   useEffect(() => {
     const fetchCombos = async () => {
@@ -108,22 +88,17 @@ const OrderPage: React.FC = () => {
     const newQuantities = [...comboQuantities];
     const newQuantity = newQuantities[index] + delta;
 
-    // Kiểm tra nếu người dùng chọn số lượng vượt quá số lượng tối đa
     if (delta > 0 && newQuantity > combos[index].volume) {
       alert(`Sản phẩm ${combos[index].combo_name} hiện hết hàng`);
       return;
     }
 
-    // Đảm bảo số lượng combo không âm
     if (newQuantity >= 0) {
       newQuantities[index] = newQuantity;
       setComboQuantities(newQuantities);
 
-      // Cập nhật tổng tiền
       const priceDifference = delta * combos[index].price;
       setTotalPrice((prevTotal) => prevTotal + priceDifference);
-
-      // Xóa thông báo lỗi nếu thay đổi số lượng hợp lệ
       setErrorMessage("");
     }
   };
@@ -146,7 +121,7 @@ const OrderPage: React.FC = () => {
               <div key={combo.id} className="combo-item">
                 <div className="combo-info">
                   <div className="combo-name">{combo.combo_name}</div>
-                  <div className="descripton">{combo.descripton}</div>
+                  <div className="description">{combo.descripton}</div>
                 </div>
                 <div className="combo-price">
                   {combo.price.toLocaleString("vi-VN")} đ
@@ -180,7 +155,7 @@ const OrderPage: React.FC = () => {
               Suất: <span> {showtime}</span>
             </p>
             <p>
-              Ghế: <span>{selectedSeats}</span>
+              Ghế: <span> {seats.map(seat => seat.seat_name).join(', ')}</span>
             </p>
           </div>
 
