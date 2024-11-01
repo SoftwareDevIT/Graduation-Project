@@ -21,7 +21,7 @@ return new class extends Migration
             $table->double('price_ticket')->nullable();
             $table->double('price_combo')->nullable();
             $table->double('amount');
-            $table->enum('seat_status', ['hold', 'no'])->default('hold');
+            $table->enum('status', ['Pending', 'Confirmed', 'Pain'])->default('Pending');
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
             // $table->foreign('seat_id')->references('id')->on('seats');

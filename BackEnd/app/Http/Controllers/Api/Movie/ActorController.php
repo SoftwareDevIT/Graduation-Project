@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Api\Movie;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Movie\Store\StoreActorRequest;
 use App\Http\Requests\Movie\Update\UpdateActorRequest;
-use App\Models\Actor;
+use App\Models\ActorInMovie;
+use App\Models\News;
 use App\Services\Movie\ActorService;
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use GuzzleHttp\Client;
+
+use function PHPUnit\Framework\isNull;
 
 class ActorController extends Controller
 {
@@ -27,7 +28,7 @@ class ActorController extends Controller
     public function index()
     {
         $actors = $this->actorService->index();
-        return response()->json($actors);
+        return $this->success($actors, 'Danh sách diễn viên', 200);
     }
 
     /**
@@ -36,14 +37,16 @@ class ActorController extends Controller
     public function store(StoreActorRequest $request)
     {
         try {
-            $file = $request->file('photo');
             $actor = $request->validated();
+            $file = $request->file('photo');
+        
             $actor['photo'] = $file ? $this->uploadImage($file) : null;
 
             $actor = $this->actorService->store($actor);
-            return $this->success($actor, 'Thêm thành công Diễn Viên');
+
+            return $this->success($actor, 'Thêm thành công diễn viên', 200);
         } catch (Exception $e) {
-            return $this->error('Có lỗi xảy ra: ' . $e->getMessage(), 500);
+            return $this->error('Lỗi: ' . $e->getMessage(), 500);
         }
     }
 
@@ -55,13 +58,13 @@ class ActorController extends Controller
         try {
             $actor = $this->actorService->get($id);
 
-            return $this->success($actor, 'Chi tiết diễn viên với id = ' . $id);
-        } catch (\Throwable $th) {
-            if ($th instanceof ModelNotFoundException) {
-                return $this->notFound('Actor not found id = ' . $id, 404);
+            return $this->success($actor, 'Chi tiết diễn viên');
+        } catch (Exception $e) {
+            if ($e instanceof ModelNotFoundException) {
+                return $this->notFound('Không tìm thấy diễn viên', 404);
             }
 
-            return $this->error('Actor not found id = ' . $id, 500);
+            return $this->error('Lỗi: ' . $e->getMessage(), 500);
         }
     }
 
@@ -79,12 +82,12 @@ class ActorController extends Controller
             // Lấy dữ liệu đã được xác thực từ request
             $actor = $request->validated();
             $actor['photo'] = $imageLink;
-          
+
             $actor = $this->actorService->update($id, $actor);
 
             return $this->success($actor, 'Cập nhập thành công');
-        } catch (\Throwable $th) {
-            return $this->error('Actor not found id = ' . $id, 500);
+        } catch (Exception $e) {
+            return $this->error('Lỗi: ' . $e->getMessage(), 500);
         }
     }
 
@@ -96,12 +99,25 @@ class ActorController extends Controller
         try {
             $this->actorService->delete($id);
             return $this->success(null, 'Xóa thành công diễn viên');
-        } catch (\Throwable $th) {
-            if ($th instanceof ModelNotFoundException) {
-                return $this->notFound('Actor not found id = ' . $id, 404);
+        } catch (Exception $e) {
+            return $this->error('Lỗi: ' . $e->getMessage(), 500);
+        }
+    }
+
+    public function filterNewByActor($id)
+    {
+        try {
+            $movie = ActorInMovie::where('actor_id', $id)->pluck('movie_id');
+
+            $new = News::WhereIn('movie_id', $movie)->get();
+
+            if($new->isEmpty()){
+                return $this->notFound('Không tìm thấy bài viết liên quan đến diễn viên',404);
             }
 
-            return $this->error('Actor not found id = ' . $id, 500);
+            return $this->success($new, 'Bài viết liên quan đến diễn viên', 200);
+        } catch (Exception $e) {
+            return $this->error('Lỗi: ' . $e->getMessage(), 500);
         }
     }
 }
