@@ -153,6 +153,7 @@ Route::get('cinema-by-location/{id}', [CinemaController::class, 'showCinemaByLoc
 Route::get('filterMovieByNew', [FilterMovieByNewController::class, 'filterMovieByNew']);
 Route::get('filterNewByActor/{actor}', [ActorController::class,'filterNewByActor']);                // Lọc bài viết liên quan tới diễn viễn
 Route::get('filterNewByDictor/{director}', [DirectorController::class,'filterNewByDictor']);        // Lọc bài viết liên quan tới đạo diễn
+Route::get('filterNewByMovie/{movie}', [MovieController::class,'filterNewByMovie']);                // Lọc bài viết liên quan tới phim
 
 
 Route::apiResource('order', OrderController::class);
