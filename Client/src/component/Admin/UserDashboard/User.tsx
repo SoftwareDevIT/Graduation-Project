@@ -2,12 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import instance from '../../../server';
 import { User } from '../../../interface/User';
-import './User.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import './User.css';
 
 const UserDashboard: React.FC = () => {
     const [users, setUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [searchTerm, setSearchTerm] = useState<string>(''); // Search input state
 
     // Pagination states
     const [currentPage, setCurrentPage] = useState<number>(1);
@@ -42,7 +45,14 @@ const UserDashboard: React.FC = () => {
 
     const indexOfLastUser = currentPage * usersPerPage;
     const indexOfFirstUser = indexOfLastUser - usersPerPage;
-    const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+
+    // Filter users based on the search term
+    const filteredUsers = users.filter(user =>
+        user.user_name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    // Paginate the filtered users
+    const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
 
     if (loading) {
         return <p>Loading...</p>;
@@ -59,6 +69,15 @@ const UserDashboard: React.FC = () => {
             <h2>All Users</h2>
            
             <div className="table-pagination-container">
+                <div className="search-container">
+                    <input
+                        type="text"
+                        placeholder="Search by name"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="search-input"
+                    />
+                </div>
                 <div className="table-container2">
                     <table className="user-table">
                         <thead>
@@ -82,12 +101,14 @@ const UserDashboard: React.FC = () => {
                                     <td>{user.role_id}</td>
                                     <td>{new Date(user.created_at!).toLocaleDateString()}</td>
                                     <td className="action-buttons">
-                                        <Link to={`/admin/user/edit/${user.id}`} className="edit-btn">✏️</Link>
+                                        <Link to={`/admin/user/edit/${user.id}`} className="edit-btn">
+                                            <FontAwesomeIcon icon={faEdit} />
+                                        </Link>
                                         <button 
                                             className="delete-btn" 
                                             onClick={() => handleDelete(user.id)} 
                                         >
-                                            🗑
+                                            <FontAwesomeIcon icon={faTrash} />
                                         </button>
                                     </td>
                                 </tr>
@@ -104,7 +125,7 @@ const UserDashboard: React.FC = () => {
                 >
                     Previous
                 </button>
-                {Array.from({ length: Math.ceil(users.length / usersPerPage) }, (_, index) => (
+                {Array.from({ length: Math.ceil(filteredUsers.length / usersPerPage) }, (_, index) => (
                     <button 
                         key={index + 1}
                         className={`page-btn ${currentPage === index + 1 ? 'active' : ''}`}
@@ -116,7 +137,7 @@ const UserDashboard: React.FC = () => {
                 <button 
                     className="next-btn" 
                     onClick={() => setCurrentPage(currentPage + 1)} 
-                    disabled={indexOfLastUser >= users.length}
+                    disabled={indexOfLastUser >= filteredUsers.length}
                 >
                     Next
                 </button>

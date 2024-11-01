@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 
 class TicketBookingService
 {
@@ -73,7 +74,18 @@ class TicketBookingService
         session(['booking' => $bookTicket->id]);  // Lưu thông tin booking vào session
         Log::info('Booking: ' . session('booking'));
         if ($bookTicket) {
-            $this->bookTicketSaveSession($request, $bookTicket,);
+            $seats = $request->input('seats');
+            $seatData = [];
+            foreach ($seats as $seat) {
+                $seat = Seats::where('seat_name', $seat['seat_name'])
+                    ->where('seat_row', $seat['seat_row'])
+                    ->where('seat_column', $seat['seat_column'])
+                    ->where('room_id', $seat['room_id'])
+                    ->first();
+                $seatData[] = $seat;    
+            }
+            Session::put('seats', $seatData);
+            $this->bookTicketSaveSession($request, $bookTicket);
         }
         return response()->json(['message' => 'Đặt vé thành công', 'booking' => $bookTicket]);
     }
@@ -89,9 +101,11 @@ class TicketBookingService
         } else {
             Log::warning('No combos found in session.');
         }
+    
 
         // Kiểm tra xem session có chứa seats không
         if (session()->has('seats') && session('seats')) {
+            Log::info('Seats Session111: ' . json_encode(session('seats')));
             $booking->seats()->sync(collect(session('seats'))->pluck('id'));
             $seatIds = collect(session('seats'))->pluck('id')->toArray();
             Seats::updateSeatsStatus($seatIds, 'booked');
@@ -104,12 +118,8 @@ class TicketBookingService
 
     public function bookings(Request $request)
     {
-        try {
-            $booking = Booking::create($request->validated() + ['user_id' => Auth::user()->id]);
-            return $booking;
-        } catch (\Throwable $th) {
-            Log::error($th->getMessage());
-        }
+        $booking = Booking::create($request->validated() + ['user_id' => Auth::user()->id]);
+        return $booking;
     }
 
     public function processPayment(Request $request)

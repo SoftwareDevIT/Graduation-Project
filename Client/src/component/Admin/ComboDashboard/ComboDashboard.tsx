@@ -3,18 +3,16 @@ import './ComboDashboard.css';
 import { Link } from 'react-router-dom';
 import { useComboContext } from '../../../Context/ComboContext';
 import instance from '../../../server';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 const ComboDashboard: React.FC = () => {
     const { state, deleteCombo } = useComboContext();
     const { combos } = state;
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-
-    // Pagination states
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [combosPerPage] = useState<number>(5);
-
-    // Search state
     const [searchTerm, setSearchTerm] = useState<string>("");
 
     useEffect(() => {
@@ -42,7 +40,6 @@ const ComboDashboard: React.FC = () => {
         }
     };
 
-    // Filter combos based on search term
     const filteredCombos = combos.filter(combo =>
         combo.combo_name.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -66,19 +63,16 @@ const ComboDashboard: React.FC = () => {
             <h2>All Combos</h2>
             <div className="actions">
                 <Link to={'/admin/combo/add'} className="add-combo-btn">Add Combo</Link>
-                 <div className="search-container">
-                <input 
-                    type="text" 
-                    placeholder="Search by Combo Name..." 
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="search-input"
-                />
+                <div className="search-container">
+                    <input 
+                        type="text" 
+                        placeholder="Search by Combo Name..." 
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="search-input"
+                    />
+                </div>
             </div>
-            </div>
-            {/* Search Input */}
-           
-
             <div className="table-container-combo">
                 <table className="combo-table">
                     <thead>
@@ -102,12 +96,14 @@ const ComboDashboard: React.FC = () => {
                                 <td>{combo.volume}</td>
                                 <td>{new Date(combo.created_at).toLocaleDateString()}</td>
                                 <td className="action-buttons">
-                                    <Link to={`/admin/combo/edit/${combo.id}`} className="edit-btn">✏️</Link>
+                                    <Link to={`/admin/combo/edit/${combo.id}`} className="edit-btn">
+                                        <FontAwesomeIcon icon={faEdit} />
+                                    </Link>
                                     <button 
                                         className="delete-btn" 
                                         onClick={() => handleDelete(combo.id)} 
                                     >
-                                        🗑
+                                        <FontAwesomeIcon icon={faTrashAlt} />
                                     </button>
                                 </td>
                             </tr>
@@ -115,8 +111,6 @@ const ComboDashboard: React.FC = () => {
                     </tbody>
                 </table>
             </div>
-
-            {/* Pagination Section */}
             <div className="pagination">
                 <button 
                     className="prev-btn" 

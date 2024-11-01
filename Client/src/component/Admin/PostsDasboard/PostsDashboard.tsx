@@ -3,29 +3,31 @@ import './PostDashboard.css';
 import { usePostsContext } from '../../../Context/PostContext';
 import { Link } from 'react-router-dom';
 import { NewsItem } from '../../../interface/NewsItem';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 
 const PostsDashboard: React.FC = () => {
   const { state, deletePost } = usePostsContext();
   const { posts } = state;
 
-  // Phân trang
+  // Pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const postsPerPage = 3; // Số bài viết hiển thị trên mỗi trang
+  const postsPerPage = 3; // Number of posts displayed per page
   const totalPosts = posts.length;
   const totalPages = Math.ceil(totalPosts / postsPerPage);
 
-  // Lấy các bài viết theo trang hiện tại
+  // Get current posts
   const currentPosts = posts.slice((currentPage - 1) * postsPerPage, currentPage * postsPerPage);
 
   const handleDeletePost = async (postId: number) => {
     if (window.confirm("Are you sure you want to delete this post?")) {
       await deletePost(postId);
       alert("Post deleted successfully!");
-      setCurrentPage(1); // Quay về trang đầu sau khi xóa
+      setCurrentPage(1); // Go back to the first page after deletion
     }
   };
 
-  // Hàm để xử lý chuyển trang
+  // Handle page change
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
@@ -68,9 +70,12 @@ const PostsDashboard: React.FC = () => {
                   <td>{post.content}</td>
                   <td>{new Date(post.created_at).toLocaleDateString()}</td>
                   <td className="action-buttons">
-                    
-                    <Link to={`/admin/posts/edit/${post.id}`} className="edit-btn">✏️</Link>
-                    <button className="delete-btn" onClick={() => handleDeletePost(post.id)}>🗑</button>
+                    <Link to={`/admin/posts/edit/${post.id}`} className="edit-btn">
+                      <FontAwesomeIcon icon={faEdit} />
+                    </Link>
+                    <button className="delete-btn" onClick={() => handleDeletePost(post.id)}>
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button>
                   </td>
                 </tr>
               ))
@@ -84,7 +89,7 @@ const PostsDashboard: React.FC = () => {
           </tbody>
         </table>
       </div>
-      {/* Phân trang */}
+      {/* Pagination */}
       <div className="pagination">
         <button
           className="prev-btn"

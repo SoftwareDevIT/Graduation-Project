@@ -20,15 +20,17 @@
 }
 
 /* Actions container */
+/* Actions container */
 .actions {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin-bottom: 20px;
 }
 
 .add-category-btn {
     padding: 10px 20px;
-    background-color: #f39c12; /* Màu giống UserDashboard */
+    background-color: #f39c12;
     border: none;
     border-radius: 5px;
     color: white;
@@ -41,8 +43,23 @@
 }
 
 .add-category-btn:hover {
-    background-color: #e67e22; /* Màu nền khi hover */
+    background-color: #e67e22;
 }
+
+/* Search input styling */
+.search-input {
+    padding: 10px;
+    width: 200px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+}
+
+.search-input:focus {
+    border-color: #00796b;
+}
+
 
 /* Table container styling */
 .table-container-category {
@@ -108,9 +125,7 @@
     transition: color 0.3s ease;
 }
 
-.view-btn:hover {
-    color: #1abc9c; /* Màu khi hover */
-}
+
 
 .edit-btn:hover {
     color: #f1c40f; /* Màu khi hover */

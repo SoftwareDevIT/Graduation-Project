@@ -67,7 +67,7 @@
     text-align: center;
     font-weight: 600;
     font-size: 1rem;
-    padding: 15px;
+    padding: 20px;
     text-transform: uppercase;
 }
 
@@ -81,19 +81,13 @@
     vertical-align: middle;
     text-align: center;
 }
-
-/* Hàng chẵn có nền xanh rất nhạt */
-.post-table tr:nth-child(even) {
-    background-color: #f1f8e9; /* Nền xanh rất nhạt */
+.post-table td:nth-child(5) { /* Description column */
+    max-width: 50px; /* Adjust as needed */
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
-/* Hiệu ứng hover cho hàng */
-.post-table tbody tr:hover {
-    background-color: #b2ebf2; /* Nền xanh nhạt khi hover */
-    transition: background-color 0.3s ease;
-}
-
-/* Button styles */
 .action-buttons {
     display: flex;
     justify-content: space-around;
@@ -107,15 +101,6 @@
     font-size: 1rem;
     transition: color 0.3s ease;
 }
-
-.view-btn {
-    color: #3498db;
-}
-
-.view-btn:hover {
-    color: #2980b9;
-}
-
 .edit-btn {
     color: #f1c40f;
 }

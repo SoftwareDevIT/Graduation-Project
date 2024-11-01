@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import './CountriesDashboard.css';
 import { useCountryContext } from '../../../Context/CountriesContext';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 const CountriesDashboard: React.FC = () => {
     const { state, deleteCountry } = useCountryContext();
@@ -48,7 +50,12 @@ const CountriesDashboard: React.FC = () => {
                                 <td>{country.id}</td>
                                 <td>{country.location_name}</td>
                                 <td className="action-buttons">
-                                    <button onClick={() => handleDelete(country.id)} className="delete-btn">🗑</button>
+                                    <button 
+                                        onClick={() => handleDelete(country.id)} 
+                                        className="delete-btn"
+                                    >
+                                        <FontAwesomeIcon icon={faTrash} />
+                                    </button>
                                 </td>
                             </tr>
                         ))}

@@ -85,7 +85,8 @@ function App() {
        
 
         {/* Phân quyền cho các route admin */}
-        <Route path="/admin" element={<PrivateRoute allowedRoles={['admin']}><Dashboard /></PrivateRoute>} />
+        
+        <Route path="/admin/dashboard" element={<PrivateRoute allowedRoles={['admin']}><Dashboard /></PrivateRoute>} />
         <Route path="/admin/user" element={<PrivateRoute allowedRoles={['admin']}><User /></PrivateRoute>} />
         <Route path="/admin/user/add" element={<PrivateRoute allowedRoles={['admin']}><UserAddManager /></PrivateRoute>} />
         <Route path="/admin/showtimes" element={<PrivateRoute allowedRoles={['admin']}><ShowtimesManager /></PrivateRoute>} />

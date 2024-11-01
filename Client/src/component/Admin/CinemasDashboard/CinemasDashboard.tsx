@@ -1,30 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './CinemasDashboard.css';
-import instance from '../../../server'; // Đảm bảo bạn có đường dẫn chính xác
+import instance from '../../../server'; 
 import { useCinemaContext } from '../../../Context/CinemasContext';
 import { Movie } from '../../../interface/Movie';
-import { MovieInCinema } from '../../../interface/MovieInCinema'; // Import interface MovieInCinema
+import { MovieInCinema } from '../../../interface/MovieInCinema'; 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; // Import Font Awesome
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'; // Import specific icons
 
 const CinemasDashboard: React.FC = () => {
     const { state, dispatch } = useCinemaContext();
     const { cinemas } = state;
 
     const [currentPage, setCurrentPage] = useState(1);
-    const cinemasPerPage = 5; // Số lượng rạp trên mỗi trang
+    const cinemasPerPage = 5; 
     const totalCinemas = cinemas.length;
     const totalPages = Math.ceil(totalCinemas / cinemasPerPage);
 
     const [expandedCinemaId, setExpandedCinemaId] = useState<number | null>(null);
-    const [selectedCinemaMovies, setSelectedCinemaMovies] = useState<MovieInCinema[]>([]); // State để lưu trữ phim của rạp đã chọn
-    const [allMovies, setAllMovies] = useState<Movie[]>([]); // State để lưu danh sách tất cả các phim
+    const [selectedCinemaMovies, setSelectedCinemaMovies] = useState<MovieInCinema[]>([]);
+    const [allMovies, setAllMovies] = useState<Movie[]>([]); 
 
-    // Lấy danh sách tất cả các phim khi component mount
     useEffect(() => {
         const fetchAllMovies = async () => {
             try {
-                const response = await instance.get('/movies'); // Gọi API để lấy danh sách tất cả các phim
-                setAllMovies(response.data.data.original); // Giả sử response.data.data là mảng phim
+                const response = await instance.get('/movies'); 
+                setAllMovies(response.data.data.original); 
             } catch (error) {
                 console.error("Failed to fetch movies:", error);
                 alert("Failed to fetch movies.");
@@ -34,7 +35,6 @@ const CinemasDashboard: React.FC = () => {
         fetchAllMovies();
     }, []);
 
-    // Lấy rạp cho trang hiện tại
     const currentCinemas = cinemas.slice((currentPage - 1) * cinemasPerPage, currentPage * cinemasPerPage);
 
     const handleDeleteCinema = async (id: number) => {
@@ -50,20 +50,18 @@ const CinemasDashboard: React.FC = () => {
         }
     };
 
-    // Lấy danh sách phim cho rạp cụ thể
     const fetchMoviesForCinema = async (cinemaId: number) => {
         try {
             const response = await instance.get(`/show-movie-in-cinema/${cinemaId}`);
-            const moviesInCinema = response.data.data; // Giả sử data là mảng phim
+            const moviesInCinema = response.data.data; 
     
             console.log(moviesInCinema);
     
-            // Ánh xạ tên phim dựa trên movie_id
             const moviesWithNames = moviesInCinema.map((movie: MovieInCinema) => {
-                const movieDetails = allMovies.find(m => m.id === movie.movie_id); // Tìm kiếm tên phim dựa trên movie.id
+                const movieDetails = allMovies.find(m => m.id === movie.movie_id);
                 return {
                     ...movie,
-                    movie_name: movieDetails ? movieDetails.movie_name : 'Unknown Movie', // Gán tên phim
+                    movie_name: movieDetails ? movieDetails.movie_name : 'Unknown Movie',
                 };
             });
     
@@ -74,23 +72,21 @@ const CinemasDashboard: React.FC = () => {
         }
     };
     
-    // Xử lý sự kiện bấm vào tên rạp
     const handleCinemaClick = (cinemaId: number) => {
         if (expandedCinemaId === cinemaId) {
-            setExpandedCinemaId(null); // Nếu rạp đang mở rộng, thu hẹp lại
-            setSelectedCinemaMovies([]); // Xóa danh sách phim
+            setExpandedCinemaId(null); 
+            setSelectedCinemaMovies([]); 
         } else {
-            fetchMoviesForCinema(cinemaId); // Lấy phim cho rạp này
-            setExpandedCinemaId(cinemaId); // Mở rộng rạp đã chọn
+            fetchMoviesForCinema(cinemaId); 
+            setExpandedCinemaId(cinemaId); 
         }
     };
 
-    // Xử lý xóa phim trong rạp
     const handleDeleteMovie = async (cinemaId: number, movieId: number) => {
         if (window.confirm("Are you sure you want to delete this movie from the cinema?")) {
             try {
                 await instance.delete(`/cinema/${cinemaId}/movie/${movieId}`);
-                const updatedMovies = selectedCinemaMovies.filter(movie => movie.movie_id !== movieId); // Sử dụng movie.movie_id
+                const updatedMovies = selectedCinemaMovies.filter(movie => movie.movie_id !== movieId);
                 setSelectedCinemaMovies(updatedMovies);
                 alert("Movie deleted successfully from cinema!");
             } catch (error) {
@@ -100,11 +96,10 @@ const CinemasDashboard: React.FC = () => {
         }
     };
     
-    // Xử lý thay đổi trang
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
-        setExpandedCinemaId(null); // Reset ID rạp khi thay đổi trang
-        setSelectedCinemaMovies([]); // Xóa danh sách phim khi thay đổi trang
+        setExpandedCinemaId(null); 
+        setSelectedCinemaMovies([]); 
     };
 
     return (
@@ -142,8 +137,12 @@ const CinemasDashboard: React.FC = () => {
                                     <td>{cinema.cinema_address}</td>
                                     <td>{cinema.status}</td>
                                     <td className="action-buttons">
-                                        <Link to={`/admin/cinemas/edit/${cinema.id}`} className="edit-btn">✏️</Link>
-                                        <button onClick={() => handleDeleteCinema(cinema.id!)} className="delete-btn">🗑</button>
+                                        <Link to={`/admin/cinemas/edit/${cinema.id}`} className="edit-btn">
+                                            <FontAwesomeIcon icon={faEdit} /> {/* Edit icon */}
+                                        </Link>
+                                        <button onClick={() => handleDeleteCinema(cinema.id!)} className="delete-btn">
+                                            <FontAwesomeIcon icon={faTrash} /> {/* Delete icon */}
+                                        </button>
                                     </td>
                                 </tr>
                                 {expandedCinemaId === cinema.id && selectedCinemaMovies.length > 0 && (
@@ -154,9 +153,9 @@ const CinemasDashboard: React.FC = () => {
                                                 <ul>
                                                     {selectedCinemaMovies.map(movie => (
                                                         <li key={movie.id}>
-                                                            {movie.movie_id} {/* Hiển thị tên phim */}
+                                                            {movie.movie_id} 
                                                             <button 
-                                                                onClick={() => handleDeleteMovie(cinema.id!, movie.movie_id)} // Đảm bảo movie.movie_id là đúng
+                                                                onClick={() => handleDeleteMovie(cinema.id!, movie.movie_id)}
                                                                 style={{
                                                                     backgroundColor: 'transparent',
                                                                     border: 'none',
@@ -165,7 +164,7 @@ const CinemasDashboard: React.FC = () => {
                                                                     color: 'red',
                                                                 }}
                                                             >
-                                                                🗑
+                                                                <FontAwesomeIcon icon={faTrash} /> {/* Delete icon for movie */}
                                                             </button>
                                                         </li>
                                                     ))}
@@ -187,7 +186,6 @@ const CinemasDashboard: React.FC = () => {
                 </table>
             </div>
 
-            {/* Phân trang */}
             <div className="pagination">
                 <button
                     className="prev-btn"

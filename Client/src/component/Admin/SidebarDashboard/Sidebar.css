@@ -42,6 +42,11 @@
 .sidebar ul li {
     margin: 15px 0;
 }
+.sidebar .active {
+    color: #ff0000; /* Example color for active link */
+    font-weight: bold;
+}
+
 
 /* Link Styling */
 .sidebar ul li a {

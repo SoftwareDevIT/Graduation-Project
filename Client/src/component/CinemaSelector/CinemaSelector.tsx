@@ -250,8 +250,10 @@ useEffect(() => {
   <div className="movies">
     {movies.map((movieData) => {
       const movie = movieData.movie; // Truy xuất thông tin chi tiết phim từ movieData
-      const actor = actors.find((a) => a.id === movie.actor_id);
-
+      
+      const actor = actors.find((a) => a.id === movie.id);
+    
+        
       return (
         <div key={movie.id} className="movie">
           <img src={movie.poster ?? undefined} alt={movie.movie_name} />

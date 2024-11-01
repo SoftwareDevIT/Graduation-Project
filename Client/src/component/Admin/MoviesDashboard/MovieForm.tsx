@@ -152,7 +152,7 @@ const MovieForm: React.FC = () => {
             ))}
           </Select>
         </FormControl>
-
+            
         <TextField
           
           type="date"
