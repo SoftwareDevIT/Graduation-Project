@@ -8,6 +8,7 @@ use App\Http\Requests\Movie\Update\UpdateMovieRequest;
 use App\Models\Movie;
 use App\Models\MovieCategory;
 use App\Models\MovieCategoryInMovie;
+use App\Models\News;
 use App\Models\Showtime;
 use App\Services\Movie\MovieService;
 use Carbon\Carbon;
@@ -109,7 +110,7 @@ class MovieController extends Controller
     {
         try {
             $movie = $this->movieService->get($id);
-            
+
             if ($movie) {
                 $movie->actor()->detach();
                 $movie->category()->detach();
@@ -177,6 +178,21 @@ class MovieController extends Controller
             }
 
             return $this->success($moviesByWeek, 'Danh sách phim sắp chiếu: ', 200);
+        } catch (Exception $e) {
+            return $this->error('Lỗi: ' . $e->getMessage(), 500);
+        }
+    }
+
+    public function filterNewByMovie($id)
+    {
+        try {
+            $new = News::Where('movie_id', $id)->get();
+
+            if ($new->isEmpty()) {
+                return $this->notFound('Không tìm thấy bài viết liên quan đến phim', 404);
+            }
+
+            return $this->success($new, 'Bài viết liên quan đến phim: ', 200);
         } catch (Exception $e) {
             return $this->error('Lỗi: ' . $e->getMessage(), 500);
         }
