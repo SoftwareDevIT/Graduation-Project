@@ -63,7 +63,7 @@ Route::apiResource('news_category', NewCategoryController::class)->only(['index'
 Route::apiResource('news_category', NewCategoryController::class)->only(['index', 'show']);// Liệt kê các danh mục tin tức
 Route::apiResource('news', NewController::class)->only(['index', 'show']); // List news
 Route::apiResource('actor', ActorController::class)->only(['index', 'show']); // Liệt kê các diễn viên
-Route::apiResource('director', DirectorController::class)->only(['index', 'show']); // Danh sách giám đốc
+Route::apiResource('director', DirectorController::class)->only(['index', 'show']); // Danh sách đạo diễn
 Route::apiResource('movie-category', MovieCategoryController::class)->only(['index', 'show']); // Liệt kê các thể loại phim
 Route::apiResource('movies', MovieController::class)->only(['index', 'show']); // Liệt kê phim
 Route::apiResource('combo', ComboController::class)->only(['index', 'show']);
@@ -81,7 +81,7 @@ Route::apiResource('room', RoomController::class)->only(['index', 'show']);
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('favorites/{movie_id}', [FavoriteController::class, 'store']);                 // Thêm phim yêu thích
     Route::delete('favorites/{movie_id}', [FavoriteController::class, 'destroy']);             // Xóa phim yêu thích
-    Route::post('ratings', [RatingController::class, 'store']);                                // Phim đánh giá
+    Route::post('ratings', [RatingController::class, 'store']);                                // Đánh giá phim
     Route::post('/book-ticket', [BookingController::class, 'bookTicket']);
     Route::post('save-seat', [BookingController::class, 'saveSeat']);
     Route::apiResource('user', AuthController::class);
@@ -136,21 +136,23 @@ Route::post('/resetPassword', [ResetPasswordController::class, 'resetPassword'])
 // });
 
 // Movie-specific routes
-Route::get('/movie/search/{movie_name}', [MovieController::class, 'search']);                       // Search for movies by name
+Route::get('/movie/search/{movie_name}', [MovieController::class, 'search']);                       // Tìm kiếm phim theo tên
 
 // Các tuyến đường dành riêng cho phim
 Route::get('/movie/search/{movie_name}', [MovieController::class, 'search']);                       // Tìm kiếm phim theo tên
 
 Route::get('showtimes/movie/{movie_name}', [ShowtimeController::class, 'showtimeByMovieName']);     // Showtimes by movie name
 Route::get('/filterByDate', [FilterByDateController::class, 'filterByDate']);                       // Phim lọc theo ngày
-Route::get('filterMovie/{id}', [CinemaController::class, 'filterMovie']);                            // Phim lọc của điện ảnh
+Route::get('filterMovie/{id}', [CinemaController::class, 'filterMovie']);                           // Phim lọc của điện ảnh
 Route::get('/movie/{category}', [MovieController::class, 'movieByCategory']);                       // Lọc Phim theo thể loại
 Route::get('/new/{category}', [NewController::class, 'newByCategory']);                             // Lọc chuyên đề theo thể loại
 
-Route::get('/fillMovies/upcoming', [MovieController::class, 'getUpcomingMovies']);                       // Lọc Phim sắp chiếu
+Route::get('/fillMovies/upcoming', [MovieController::class, 'getUpcomingMovies']);                  // Lọc Phim sắp chiếu
 Route::get('/filterByDateByMovie', [FilterByDateController::class, 'filterByDateByMovie']);         // lọc rạp theo phim và ngày và khu vực
 Route::get('cinema-by-location/{id}', [CinemaController::class, 'showCinemaByLocation']);
 Route::get('filterMovieByNew', [FilterMovieByNewController::class, 'filterMovieByNew']);
+Route::get('filterNewByActor/{actor}', [ActorController::class,'filterNewByActor']);                // Lọc bài viết liên quan tới diễn viễn
+Route::get('filterNewByDictor/{director}', [DirectorController::class,'filterNewByDictor']);        // Lọc bài viết liên quan tới đạo diễn
 
 
 Route::apiResource('order', OrderController::class);

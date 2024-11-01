@@ -31,7 +31,7 @@ class MovieController extends Controller
     public function index()
     {
         $movie = $this->movieService->index();
-        return $this->success($movie, 'success');
+        return $this->success($movie, 'success', 200);
     }
 
     /**
@@ -45,21 +45,16 @@ class MovieController extends Controller
             $movie['poster'] = $file ? $this->uploadImage($file) : null;
 
             DB::transaction(function () use ($movie, $request) {
-                // Lưu movie
                 $movie = $this->movieService->store($movie);
 
                 // Gắn các mối quan hệ
                 $movie->category()->sync($request->movie_category_id);
                 $movie->actor()->sync($request->actor_id);
                 $movie->director()->sync($request->director_id);
-
-                // $movie->category()->attach($request->movie_category_id);
-                // $movie->actor()->attach($request->actor_id);
-                // $movie->director()->attach($request->director_id);
             });
             return $this->success($movie, 'Thêm thành công Movie');
         } catch (Exception $e) {
-            return $this->error('Có lỗi xảy ra: ' . $e->getMessage(), 500);
+            return $this->error('Lỗi: ' . $e->getMessage(), 500);
         }
     }
 
@@ -71,8 +66,12 @@ class MovieController extends Controller
         try {
             $movie = $this->movieService->show($id);
             return $this->success($movie, 'Chi tiết phim ');
-        } catch (Throwable $th) {
-            return $this->error('Movie not found id = ' . $id, 500);
+        } catch (Exception $e) {
+            if ($e instanceof ModelNotFoundException) {
+                return $this->notFound('Movie not found id = ' . $id, 404);
+            }
+
+            return $this->error('Lỗi: ' . $e->getMessage(), 500);
         }
     }
 
@@ -93,14 +92,13 @@ class MovieController extends Controller
 
             $movie = $this->movieService->update($id, $movie);
 
-
             $movie->category()->sync($request->movie_category_id);
             $movie->actor()->sync($request->actor_id);
             $movie->director()->sync($request->director_id);
 
             return $this->success($movie, 'Cập nhập thành công');
-        } catch (Throwable $th) {
-            return $this->error($th->getMessage(), 500);
+        } catch (Exception $e) {
+            return $this->error('Lỗi: ' . $e->getMessage(), 500);
         }
     }
 
@@ -109,21 +107,20 @@ class MovieController extends Controller
      */
     public function destroy(string $id)
     {
-        // $showtimes = Showtime::where('movie_id', $id)->exists();
+        try {
+            $movie = $this->movieService->get($id);
+            
+            if ($movie) {
+                $movie->actor()->detach();
+                $movie->category()->detach();
+                $movie->director()->detach();
+            }
 
-        // if ($showtimes) {
-        //     return $this->error('Phim đang công chiếu, không thể xóa', 400);
-        // }
-
-        $movie = $this->movieService->get($id);
-        if ($movie) {
-            $movie->actor()->detach();
-            $movie->category()->detach();
-            $movie->director()->detach();
+            $this->movieService->delete($id);
+            return $this->success('Xoá phim Thành Công', 'success', 200);
+        } catch (Exception $e) {
+            return $this->error('Lỗi: ' . $e->getMessage(), 500);
         }
-
-        $this->movieService->delete($id);
-        return $this->success('Xoá Thành Công', 'success');
     }
 
     public function search($movie_name)
@@ -135,38 +132,30 @@ class MovieController extends Controller
                 return $this->notFound('Không tìm thấy phim', 404);
             }
             return $this->success($movie, 'Phim theo tên tìm kiếm là:');
-        } catch (ModelNotFoundException $e) {
-            return $e->getMessage();
+        } catch (Exception $e) {
+            return $this->error('Lỗi: ' . $e->getMessage(), 500);
         }
     }
 
     public function movieByCategory($id)
     {
         try {
-            // Lấy danh sách movie theo ID
-            $movies = MovieCategoryInMovie::where('movie_category_id', $id)->pluck('movie_id'); 
-
-            // Lấy phim theo danh sách movie
+            $movies = MovieCategoryInMovie::where('movie_category_id', $id)->pluck('movie_id');
             $movie = Movie::whereIn('id', $movies)->get();
 
-            // Kiểm tra xem tồn tại hay không
             if ($movie->isEmpty()) {
                 return $this->error('Không có phim nào thuộc Category này', 404);
             }
 
             return $this->success($movie, 'Danh sách phim thuộc Category ', 200);
-        } catch (Throwable $th) {
-            return $this->error('Lỗi: ' . $th->getMessage(), 500);
+        } catch (Exception $e) {
+            return $this->error('Lỗi: ' . $e->getMessage(), 500);
         }
     }
 
     public function getUpcomingMovies()
     {
         try {
-            // Lấy tất cả phim sắp chiếu 
-            // $moviesByWeek = Movie::where('release_date', '>', Carbon::now())->get(); 
-
-            // Lấy phim sắp chiếu theo từng tuần
             $today = Carbon::now();
             $moviesByWeek = [];
 
@@ -188,8 +177,8 @@ class MovieController extends Controller
             }
 
             return $this->success($moviesByWeek, 'Danh sách phim sắp chiếu: ', 200);
-        } catch (Throwable $th) {
-            return $this->error('Fail', 500);
+        } catch (Exception $e) {
+            return $this->error('Lỗi: ' . $e->getMessage(), 500);
         }
     }
 }
