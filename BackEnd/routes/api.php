@@ -83,13 +83,14 @@ Route::middleware(['auth:sanctum', 'web'])->group(function () {
     Route::post('ratings', [RatingController::class, 'store']);                                // Đánh giá phim
     // Route::post('selectSeats', [BookingController::class, 'selectSeats']);
     Route::post('/book-ticket', [BookingController::class, 'bookTicket']);
+    Route::get('/vnpay-return', [BookingController::class, 'vnPayReturn']);
     Route::apiResource('user', AuthController::class);
     Route::get('/user', function (Request $request) {
         $user = $request->user()->load('favoriteMovies');
         return response()->json($user);
     });
 });
-Route::get('/vnpay-return', [BookingController::class, 'vnPayReturn']);
+// Route::get('/vnpay-return', [BookingController::class, 'vnPayReturn']);
 Route::get('/all-user', [AuthController::class, 'allUser']);
 
 // Các route quản trị và quản lý
