@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\Movie;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Movie\Store\StoreDirectorRequest;
 use App\Http\Requests\Movie\Update\UpdateDirectorRequest;
+use App\Models\DirectorInMovie;
+use App\Models\News;
 use App\Services\Movie\DirectorService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -24,7 +26,7 @@ class DirectorController extends Controller
     public function index()
     {
         $directs = $this->directorService->index();
-        return response()->json($directs);
+        return $this->success($directs, 'Danh sách đạo diễn', 200);
     }
 
     /**
@@ -42,7 +44,7 @@ class DirectorController extends Controller
             $direct = $this->directorService->store($direct);
             return $this->success($direct, 'Thêm thành công đạo diễn');
         } catch (Exception $e) {
-            return $this->error('Có lỗi xảy ra: ' . $e->getMessage(), 500);
+            return $this->error('Lỗi: ' . $e->getMessage(), 500);
         }
     }
 
@@ -55,12 +57,12 @@ class DirectorController extends Controller
             $director = $this->directorService->get($id);
 
             return $this->success($director, 'Chi tiết đạo diễn với id = ' . $id);
-        } catch (\Throwable $th) {
-            if ($th instanceof ModelNotFoundException) {
-                return $this->notFound('Director not found id = ' . $id, 404);
+        } catch (Exception $e) {
+            if ($e instanceof ModelNotFoundException) {
+                return $this->notFound('Không tìm thấy id director', 404);
             }
 
-            return $this->error('Director not found id = ' . $id, 500);
+            return $this->error('Lỗi: ' . $e->getMessage(), 500);
         }
     }
 
@@ -79,12 +81,8 @@ class DirectorController extends Controller
 
             $direct = $this->directorService->update($id, $direct);
             return $this->success($direct, 'Cập nhập thành công');
-        } catch (\Throwable $th) {
-            if ($th instanceof ModelNotFoundException) {
-                return $this->notFound('Direct not found id = ' . $id, 404);
-            }
-
-            return $this->error('Direct not found id = ' . $id, 500);
+        } catch (Exception $e) {
+            return $this->error('Lỗi: ' . $e->getMessage(), 500);
         }
     }
 
@@ -96,12 +94,24 @@ class DirectorController extends Controller
         try {
             $this->directorService->delete($id);
             return $this->success(null, 'Xóa thành công đạo diễn');
-        } catch (\Throwable $th) {
-            if ($th instanceof ModelNotFoundException) {
-                return $this->notFound('Director not found id = ' . $id, 404);
+        } catch (Exception $e) {
+            return $this->error('Lỗi: ' . $e->getMessage(), 500);
+        }
+    }
+
+    public function filterNewByDictor($id)
+    {
+        try {
+            $movie = DirectorInMovie::where('director_id', $id)->pluck('movie_id');
+            $new = News::whereIn('movie_id', $movie)->get();
+
+            if ($new->isEmpty()) {
+                return $this->notFound('Không tìm thấy bài viết liên quan đến đạo diễn', 404);
             }
 
-            return $this->error('Director not found id = ' . $id, 500);
+            return $this->success($new, 'Bài viết liên quan đến đạo diễn', 200);
+        } catch (Exception $e) {
+            return $this->error('Lỗi: ' . $e->getMessage(), 500);
         }
     }
 }

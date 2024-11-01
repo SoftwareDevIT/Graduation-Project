@@ -68,12 +68,8 @@ class FavoriteController extends Controller
         try {
             $this->favoriteService->delete($id);
             return $this->success(null,'Xóa thành công');
-        } catch (\Throwable $th) {
-            if ($th instanceof ModelNotFoundException) {
-                return $this->notFound('Movie not found id = ' . $id, 404);
-            }
-
-            return $this->error('Movie not found id = ' . $id, 500);
+        } catch (Exception $e) {
+            return $this->error('Lỗi: ' . $e->getMessage(), 500);
         }
     }
 }
