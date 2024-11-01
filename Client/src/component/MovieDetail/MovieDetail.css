@@ -438,6 +438,19 @@ left: 10px;
   .dislike-btn:hover {
     opacity: 0.7;
   }
+  .danhgiaphim{
+    display: flex;
+  }
+.imgphim{
+  margin-right: 20px;
+}
+.rating{
+    margin-bottom: 40px;
+    font-size: 20px;
+}
+.ngoisao{
+    margin-top:7px;
+}
   /* Cho màn hình máy tính bảng */
 @media (max-width: 1024px) {
     .movie-detail-container {
@@ -560,12 +573,9 @@ margin-right: 0;
 width: 60px;
   
     }
-    
-    .actions .button.buy {
-
-        
+    .movie-info h2 {
+        margin-right: 190px;
     }
-   
       
       .movie-info span {
         margin-right: 12px;

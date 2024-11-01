@@ -153,10 +153,10 @@ Route::get('filterMovieByNew', [FilterMovieByNewController::class, 'filterMovieB
 
 
 Route::apiResource('order', OrderController::class);
-// Route::group(['middleware' => ['auth:sanctum']], function () {
-//     // Route::post('/slectMovieAndSeats', [BookingController::class, 'slectMovieAndSeats']);
-//     // Route::post('/selectCombo', [BookingController::class, 'selectCombos']);
-//     Route::post('selectSeats', [BookingController::class, 'selectSeats']);
-//     Route::post('/book-ticket', [BookingController::class, 'bookTicket']);
-// });
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::post('/slectMovieAndSeats', [BookingController::class, 'slectMovieAndSeats']);
+    Route::post('/selectCombo', [BookingController::class, 'selectCombos']);
+    Route::post('selectSeats', [BookingController::class, 'selectSeats']);
+    Route::post('/book-ticket', [BookingController::class, 'bookTicket']);
+});
 Route::get('session', [BookingController::class, 'getSession']);
