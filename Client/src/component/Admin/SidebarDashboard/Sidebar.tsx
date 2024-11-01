@@ -17,7 +17,6 @@ const Sidebar = () => {
                 <li><Link to={'/admin/user'}><FaUser /> Users</Link></li>
                 <li><Link to={'/admin/showtimes'}><FaCalendarAlt /> Quản lí xuất chiếu</Link></li>
                 <li><Link to={'/admin/orders'}><FaTag /> Quản lí đơn hàng</Link></li>
-                <li><Link to={'/admin/tickets'}><FaTicketAlt /> Quản lí vé</Link></li>
                 <li><Link to={'/admin/posts'}><FaNewspaper /> Quản lí bài viết</Link></li>
                 <li><Link to={'/admin/categories'}><FaList /> Quản lí thể loại</Link></li>
                 <li><Link to={'/admin/countries'}><FaGlobe /> Quản lí quốc gia</Link></li>

@@ -1,11 +1,4 @@
-/* Tổng quan */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f7f9fc;
-    margin: 0;
-    padding: 20px;
-    color: #333;
-  }
+
   
   .support-center {
     max-width: 1200px;
@@ -35,20 +28,21 @@ body {
   }
   
   /* Header */
-  header {
+  .headersp {
     text-align: center;
     margin-bottom: 40px;
   }
   
-  header h1 {
+.headersp h1 {
     font-size: 32px;
     margin-bottom: 10px;
+    margin-top: 10px;
     color: #333;
   }
   
-  header p {
+  .headersp p {
     font-size: 16px;
-    color: #7f8c8d;
+   
   }
   
   /* Thông tin liên hệ */
@@ -193,7 +187,12 @@ body {
     .headersp h1 {
       font-size: 28px; /* Giảm kích thước font cho tiêu đề */
     }
-  
+  .header-gt p {
+    text-align: left;
+  }
+  .header-gt{
+    padding: 20px;
+  }
     .contact-info {
       flex-direction: column; /* Xếp chồng các phương thức liên hệ */
       align-items: center;
@@ -229,9 +228,15 @@ body {
     }
   
     .headersp h1 {
+      margin-top: 40px;
       font-size: 26px; /* Giảm kích thước font cho tiêu đề */
     }
-  
+    .header-gt p {
+        text-align: left;
+      }
+      .header-gt{
+        padding: 20px;
+      }
     .contact-info {
       flex-direction: column; /* Xếp chồng cho mobile */
       align-items: center;

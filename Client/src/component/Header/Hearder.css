@@ -1,3 +1,7 @@
+#search-mobile{
+  display: none;
+
+}
 .header {
     display: flex;
     justify-content: space-between;
@@ -152,6 +156,22 @@ bottom: 10px;
   max-height: 300px;
   overflow-y: auto;
   border: 1px solid #ddd;
+  text-align: left;
+}
+.avtat-img { 
+  width: 25px;
+  height: 25px;
+  border-radius: 100%;
+  position: relative; /* Để sử dụng với tích xanh */
+ 
+}
+.checkmark {
+  position: absolute; /* Để định vị biểu tượng tích xanh */
+  bottom: 10px; /* Đưa tích xanh xuống dưới cùng */
+  right: 150px; /* Đưa tích xanh sang bên phải */
+  color:dodgerblue; /* Màu sắc cho tích xanh */
+  font-size: 17px; /* Kích thước cho biểu tượng tích xanh */
+  
 }
 
 .dropdown-content a {
@@ -169,7 +189,11 @@ bottom: 10px;
 .dropdown:hover .dropdown-content {
   display: block;
 }
-
+@media (max-width: 1122px) {
+  .fas{
+    display: none !important;
+  }
+}
 
 /* Media Queries for Responsive Design */
 @media (max-width: 768px) {
@@ -198,6 +222,11 @@ bottom: 10px;
   .header-right .icon-link {
       font-size: 20px; /* Giảm kích thước icon */
   }
+  #search-mobile{
+    display: block;
+  
+  }
+
 }
 
 
@@ -216,6 +245,10 @@ bottom: 10px;
   padding: 0 !important; /* Xóa padding với ưu tiên cao hơn */
 }
 @media (max-width: 992px) {
+  #menukkk{
+   height: 300px;
+   
+  }
   .menu button {
    
     background: rgb(237, 234, 234);
@@ -232,6 +265,7 @@ bottom: 10px;
     top: 60px; 
     left: 0;
     height: 220px;
+    padding-left: 80px !important;
     width: 100%;
     display: none; 
     flex-direction: column; /* Chuyển đổi sang menu dọc */
@@ -259,18 +293,31 @@ bottom: 10px;
   .header-left.visible {
     display: flex; /* Hiển thị menu khi class 'visible' được thêm vào */
   }
+  #search-mobile{
+    display: block;
+    margin-left: 85px;
+    border-radius: 15px;
+    width: 300px;
+  }
 }
 @media (max-width:576px) {
   .thanhmenu{
     position: relative;
    right: 120px;
+  margin-top: 15px;
   }
   .header-logo a{
    position: relative;
    left: -104px;
-  top:10px;
+  top:8px;
      color: #e50914;
      text-decoration: none;
+   }
+   .header-left{
+    position: absolute; 
+    top: 60px; 
+    left: 0;
+    padding-left: 10px !important;
    }
    .header-right{
     position: relative;
@@ -281,7 +328,12 @@ bottom: 10px;
     top:5px;
    padding-left: 0;
   }
- 
+  #search-mobile{
+    margin-left: 1px;
+  }
+  #menukkk{
+    height: 300px;
+  }
 }
 
 .dropdown{

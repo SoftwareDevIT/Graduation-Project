@@ -52,7 +52,7 @@ export const ShowtimeProvider: React.FC<{ children: ReactNode }> = ({ children }
             if (Array.isArray(data)) {
                 const responses = await Promise.all(data.map(async (showtime) => {
                     const response = await instance.post('/showtimes', showtime);
-                    return response.data;
+                    return response.data.data;
                 }));
                 dispatch({ type: 'ADD_SHOWTIMES', payload: responses });
             } else {

@@ -146,13 +146,13 @@ const CinemaSeatSelection: React.FC = () => {
   // Hàm submit xử lý việc đẩy dữ liệu
   const handleSubmit = async () => {
     const selectedSeatsArray = Array.from(selectedSeats.entries()).flatMap(
-      ([row, indices]) => 
+      ([row, indices]) =>
         indices.map((index) => ({
           seat_name: `${row}${index + 1}`,
-          room_id: roomData?.id, // thêm room_id
+          room_id: roomData?.id,
           showtime_id: showtimeId,
-          seat_row: row.charCodeAt(0) - 65 + 1, // chuyển đổi từ ký tự thành số hàng
-          seat_column: index + 1 // cột ghế
+          seat_row: row.charCodeAt(0) - 65 + 1,
+          seat_column: index + 1,
         }))
     );
   
@@ -163,10 +163,10 @@ const CinemaSeatSelection: React.FC = () => {
     };
   
     try {
-      const response = await instance.post('/slectMovieAndSeats', payload); // Chắc chắn rằng route đúng
+      const response = await instance.post("/selectSeats", payload);
       console.log(payload);
       if (response.status === 200) {
-        // Điều hướng đến trang 'orders' sau khi chọn ghế thành công
+        // Navigate to 'orders' with all required data, including seats as an array
         navigate("/orders", {
           state: {
             movieName,
@@ -175,10 +175,13 @@ const CinemaSeatSelection: React.FC = () => {
             showtimeId,
             cinemaId,
             roomId: roomData?.id,
-            selectedSeats: selectedSeatsArray.map(seat => seat.seat_name).join(", "), // hiển thị đúng tên ghế
+            seats: selectedSeatsArray, // Pass selectedSeatsArray as seats
             totalPrice,
           },
+          
         });
+        console.log(selectedSeatsArray);
+        
       } else {
         console.error("Error: API call successful but status is not 200");
       }
@@ -187,6 +190,7 @@ const CinemaSeatSelection: React.FC = () => {
       setError("Có lỗi xảy ra khi gửi thông tin, vui lòng thử lại.");
     }
   };
+  
   
 
 // Hiển thị thông báo lỗi nếu có lỗi trong việc chọn ghế hoặc submit API
@@ -199,8 +203,8 @@ if (error) {
     <>
       <Header />
       <Headerticket />
-     <div className="box-map">
-     <div className="container container-map">
+    <div className="box-map">
+    <div className="container container-map">
         <div className="seat-info-box">
           <div className="seat-map-box ">
             <div className="screen">MÀN HÌNH</div>
@@ -212,6 +216,7 @@ if (error) {
                   onSeatClick={handleSeatClick}
                   selectedSeats={selectedSeats}
                   reservedSeats={reservedSeats}
+                  
                 />
               ))}
             </div>
@@ -228,7 +233,7 @@ if (error) {
             </div>
           </div>
           <div className="thongtinphim">
-            <div className="details-box">
+            <div className="details-box1">
               <p className="title-phim">{movieName}</p>
               <p>
                 Rạp:<span> {cinemaName}</span>
@@ -248,22 +253,22 @@ if (error) {
                   .join(", ")}
               </p>
             </div>
-            <div className="price-box">
+            <div className="price-box1">
               <div className="price">
                 Tổng đơn hàng
                 <br /> <span>{totalPrice.toLocaleString()} đ</span>
               </div>
             </div>
-            <div className="actionst">
-              <button className="back-btn">←</button>
-              <button className="continue-btn" onClick={handleSubmit}>
+            <div className="actionst1">
+              <button className="back-btn1">←</button>
+              <button className="continue-btn1" onClick={handleSubmit}>
                 Tiếp Tục
               </button>
             </div>
           </div>
         </div>
       </div>
-     </div>
+    </div>
       <Footer />
     </>
   );
@@ -295,6 +300,7 @@ const SeatRow: React.FC<SeatRowProps> = ({
               onSeatClick={onSeatClick}
               isSelected={isSelected}
               isReserved={isReserved}
+              
             />
           );
         })}
@@ -316,16 +322,20 @@ const Seat: React.FC<SeatProps> = ({
       onSeatClick(row, index);
     }
   };
-
   const seatClassName = isReserved
-    ? "seat reserved"
-    : isSelected
-    ? "seat selected"
-    : type === "couple"
-    ? "seat couple-seat"
-    : "seat";
+  ? "seat reserved"
+  : isSelected
+  ? "seat selected"
+  : type === "couple"
+  ? "seat couple-seat"
+  : "seat";
 
-  return <span className={seatClassName} onClick={handleClick}></span>;
+// Tạo số ghế
+const seatNumber = `${row}${index + 1}`
+
+  return   <span className={seatClassName} onClick={handleClick}>
+  <span className="seat-number1">{seatNumber}</span> {/* Hiển thị số ghế ở đây */}
+</span>;
 };
 
 export default CinemaSeatSelection;

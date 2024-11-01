@@ -1,6 +1,8 @@
 .div-content{
   background: #f3f6fb;
   margin-top: -13px;
+  overflow-x: hidden;
+
 }
 .div-content .container {
   display: flex !important;
@@ -429,6 +431,8 @@ li.city.selected {
     display: block;
     border: none !important;
     margin-top: 20px;
+  
+   
   }
   .locations, .cinemas, .showtimes {
     padding: 5px; /* Giảm padding thêm nữa */
@@ -486,8 +490,18 @@ li.city.selected {
     width: 12px; /* Giảm kích thước vòng tròn */
     height: 12px; /* Giảm kích thước vòng tròn */
   }
+  .date-custom-1 {
+    flex: 1 1 22%; /* Đối với các màn hình trung bình, mỗi ngày chiếm 22% chiều rộng, 4 ngày mỗi hàng */
+    padding: 8px;
+  }
 }
 @media(max-width:576px){
+  .date-custom-1{
+    font-size: 9px;
+  }
+  .calendar-custom-1{
+    width: 400px !important;
+  }
   .list-tp .list{
     display: none;
   }
@@ -495,6 +509,11 @@ li.city.selected {
     display: block;
     border: none !important;
     margin-top: 20px;
+    
+      width: 390px !important;
+     
+    
+    
   }
   .khuvuc{
     height: 40px;
@@ -522,10 +541,10 @@ right: 15px;
   display: flex;
 
  color: #edf2f9;
-  width: 635px;
-  height: 60px;
+ 
+ 
   gap: 0;
-  overflow: hidden; /* Đảm bảo phần tử con không tràn ra ngoài */
+
 }
 
 .date-custom-1 {
@@ -534,7 +553,7 @@ right: 15px;
   align-items: center;
   justify-content: center;
   flex-grow: 1; /* Chia đều không gian */
-  padding: 15px; /* Tăng padding để cải thiện giao diện */
+  padding: 5px; /* Tăng padding để cải thiện giao diện */
   color: #555;
   
   cursor: pointer;

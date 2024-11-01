@@ -96,9 +96,55 @@ margin-left: 130px;
     cursor: pointer;
     color: #333;
 }
-
-
-
+.details-box {
+    font-family: 'Cerebri Sans';
+    border: 1px solid #EDF2F9;
+    width: 400px;
+    color: rgba(0, 0, 0, 0);
+    padding: 10px;
+    background-color: #ffffff;
+    margin-bottom: 20px;
+    text-align: left;
+    border-radius: 5px;
+    margin-left: 30px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1),
+                0 6px 6px rgba(0, 0, 0, 0.1),
+                0 20px 40px rgba(0, 0, 0, 0.05);
+    height: 150px;
+   
+  }
+  .details-box span {
+    font-weight: 600;
+    font-family: "Cerebri Sans";
+  }
+  .details-box p {
+    color: #000000;
+    font-family: "Cerebri Sans, sans-serif;";
+    margin-bottom: 0rem
+  }
+  .price-box {
+    border: 1px solid #EDF2F9;
+    background-color: #ffffff;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    margin-left: 30px;
+    padding-left: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1),
+                0 6px 6px rgba(0, 0, 0, 0.1),
+                0 20px 40px rgba(0, 0, 0, 0.05);
+  }
+  
+  .price-box .price {
+    font-size:16px;
+    font-weight: bold;
+    color: #95AAC9;
+  }
+  
+  .price-box .price span {
+    color: #000000;
+  }
+  
 .combo-quantity span {
     margin: 0 10px;
     font-size: 16px;
@@ -172,7 +218,8 @@ font-size: 15px;
     }
 
     .thongtincombo {
-        width: 100%;
+        width: 500px;
+        margin-left: 125px;
     }
 
     .combo-header {
@@ -201,8 +248,29 @@ font-size: 15px;
 
 
     .back-btn2, .continue-btn2 {
-        width: 80%;
+        width: 100%;
     }
+   .price-box{
+    width: 500px;
+   }
+   .details-box{
+    margin-left: 80px !important;
+   
+   }
+   .price-box{
+    margin-left: 80px !important;
+   }
+   .actionsts{
+    margin-left: 80px;
+    width: 500px !important;
+   }
+   .back-btn2{
+       margin-left: 1px;
+       padding-left: 40px;
+   }
+   .continue-btn2{
+    margin-left: 50px;
+   }
 }
 
 /* Media Queries for devices with max width of 480px */
@@ -239,9 +307,12 @@ font-size: 15px;
         padding: 10px;
         margin-left: 20px;
     }
+    .thongtincombo{
+        width: 100%;
+        margin-left: 1px;
+    }
 
     .actionsts {
-        flex-direction: column;
         align-items: center;
         width: 100%;
         gap: 10px;
@@ -250,5 +321,31 @@ font-size: 15px;
     .back-btn2, .continue-btn2 {
         width: 90%; 
     }
-    
+    .back-btn2{
+        margin-left: 1px;
+        padding-left: 40px;
+    }
+    .price-box{
+        width: 413px;
+       }
+       .details-box{
+        margin-left:-3px !important;
+       width: 415px !important;
+       }
+       .price-box{
+        margin-left: -3px !important;
+        width: 415px !important;
+       }
+       .actionsts{
+        margin-left: -3px;
+        width: 415px !important;
+        
+       }
+       .back-btn2{
+           margin-left: 1px;
+           padding-left: 40px;
+       }
+       .continue-btn2{
+        margin-left: 50px;
+       }
 }

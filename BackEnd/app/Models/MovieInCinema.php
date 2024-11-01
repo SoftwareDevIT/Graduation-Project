@@ -15,18 +15,20 @@ class MovieInCinema extends Model
         'cinema_id',
     ];
 
-    public function movie()
-    {
-        return $this->belongsTo(Movie::class);
-    }
-
-    public function cinema()
-    {
-        return $this->belongsTo(Cinema::class);
-    }
 
     public function showtimes()
     {
         return $this->hasMany(Showtime::class);
     }
+
+    public function movie()
+{
+    return $this->belongsTo(Movie::class);
+}
+
+public function cinema()
+{
+    return $this->belongsTo(Cinema::class);
+}
+
 }

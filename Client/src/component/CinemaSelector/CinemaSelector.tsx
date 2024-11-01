@@ -250,7 +250,12 @@ useEffect(() => {
   <div className="movies">
     {movies.map((movieData) => {
       const movie = movieData.movie; // Truy xuất thông tin chi tiết phim từ movieData
-      const actor = actors.find((a) => a.id === movie.actor_id);
+      
+      
+      const actor = actors.find((a) => a.id === movie.id);
+      console.log("actors:", actors);
+console.log("movie.actor_id:", movie.actor_id);
+
 
       return (
         <div key={movie.id} className="movie">
@@ -260,31 +265,45 @@ useEffect(() => {
             <p>
               Đạo Diễn: {actor ? actor.actor_name : "Không có thông tin"}
             </p>
-            <p>Thời gian: {movie.duraion}</p>
+            <p>Thời gian: {movie.duration}</p>
             <p>Giới hạn tuổi: {movie.age_limit}+</p>
             <div className="showtimes-list">
-              {movieData.showtimes.length > 0 ? (
-                movieData.showtimes.map((showtime) => (
-                  <button
-                    key={showtime.id}
-                    onClick={() => {
-                      navigate("/seat", {
-                        state: {
-                          movieName: movie.movie_name,
-                          cinemaName: selectedCinemaDetails?.cinema_name,
-                          showtime: showtime.showtime_start,
-                          showtimeId: showtime.id, // Truyền showtimeId
-                          cinemaId: selectedCinemaDetails?.id, // Truyền cinemaId
-                        },
-                      });
-                    }}
-                  >
-                    {showtime.showtime_start.slice(0, 5)}
-                  </button>
-                ))
-              ) : (
-                <p>Không có suất chiếu cho ngày này</p>
-              )}
+            {movieData.showtimes.length > 0 ? (
+  movieData.showtimes.map((showtime: any) => {
+    const showtimeDateTime = dayjs(`${selectedDate} ${showtime.showtime_start}`, "YYYY-MM-DD HH:mm");
+    const isPastShowtime = showtimeDateTime.isBefore(dayjs());
+
+    return (
+      <button
+        key={showtime.id}
+        disabled={isPastShowtime} // Vô hiệu hóa nút nếu suất chiếu đã qua
+        onClick={() => {
+          if (!isPastShowtime) {
+            navigate("/seat", {
+              state: {
+                movieName: movie.movie_name,
+                cinemaName: selectedCinemaDetails?.cinema_name,
+                showtime: showtime.showtime_start,
+                showtimeId: showtime.id,
+                cinemaId: selectedCinemaDetails?.id,
+              },
+            });
+          }
+        }}
+        style={{
+          cursor: isPastShowtime ? "not-allowed" : "pointer", // Đổi con trỏ chuột thành "not-allowed" nếu suất chiếu đã qua
+          color: isPastShowtime ? "gray" : "black" // Đổi màu sắc để dễ nhận biết
+      }}
+      >
+        {showtime.showtime_start.slice(0, 5)}
+      </button>
+    );
+  })
+) : (
+  <p>Không có suất chiếu cho ngày này</p>
+)}
+
+
             </div>
           </div>
         </div>

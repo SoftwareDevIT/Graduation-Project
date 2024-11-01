@@ -41,7 +41,9 @@
   font-size: 18px;
   margin-bottom: 10px;
 }
-
+.news-content a{
+text-decoration: none;
+}
 .news-content p {
   font-size: 14px;
   color: #666;
