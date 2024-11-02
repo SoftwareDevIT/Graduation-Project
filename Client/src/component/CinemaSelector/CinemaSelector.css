@@ -418,7 +418,7 @@ li.city.selected {
 
 /* Media queries cho các thiết bị nhỏ hơn nữa */
 .city-select{
-  display: none;
+  display: none !important;
 }
 @media (max-width: 768px) {
   .container {

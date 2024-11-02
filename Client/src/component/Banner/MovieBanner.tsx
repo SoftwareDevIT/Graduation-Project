@@ -10,12 +10,26 @@ import { Link } from "react-router-dom";
 
 const MovieBanner = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
+  const [movieDetails, setMovieDetails] = useState<Record<number, Movie>>({});
 
   useEffect(() => {
     const fetchMovies = async () => {
       try {
         const response = await instance.get("/movies");
         setMovies(response.data.data.original);
+
+        // Fetch movie details for each movie
+        const movieDetailsPromises = response.data.data.original.map((movie: Movie) =>
+          instance.get(`/movies/${movie.id}`) // Adjust the API endpoint according to your backend
+        );
+
+        const movieDetailsResponses = await Promise.all(movieDetailsPromises);
+        const detailsMap = movieDetailsResponses.reduce((acc: Record<number, Movie>, cur, index) => {
+          acc[response.data.data.original[index].id] = cur.data; // Assuming cur.data contains the movie detail
+          return acc;
+        }, {});
+        
+        setMovieDetails(detailsMap);
       } catch (error) {
         console.error("Failed to fetch movies:", error);
       }
@@ -64,7 +78,7 @@ const MovieBanner = () => {
             {movies.map((movie) => (
               <div key={movie.id}>
                 <div className="movie-item">
-                  <Link to={`/movie-detail/${movie.id}`}>
+                  <Link state={{ movieId: movie.id }} to={`/movie-detail/${movie.id}`}>
                     <img
                       src={movie.poster || "placeholder.jpg"}
                       alt={movie.movie_name}

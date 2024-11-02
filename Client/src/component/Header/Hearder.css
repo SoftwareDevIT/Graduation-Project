@@ -203,11 +203,11 @@ bottom: 10px;
    top:10px;
     background: rgb(237, 234, 234);
   }
-
+  
   .header-logo {
       width: 100%;
       text-align: center;
-      margin-bottom: 40px;
+     
   }
 
   .header-right {
@@ -249,6 +249,7 @@ bottom: 10px;
    height: 300px;
    
   }
+
   .menu button {
    
     background: rgb(237, 234, 234);
@@ -306,6 +307,11 @@ bottom: 10px;
    right: 120px;
   margin-top: 15px;
   }
+  .header-logo {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 40px;
+}
   .header-logo a{
    position: relative;
    left: -104px;
