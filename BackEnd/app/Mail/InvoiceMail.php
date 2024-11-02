@@ -39,7 +39,7 @@ class InvoiceMail extends Mailable implements ShouldQueue
     public function content(): Content
     {
         return new Content(
-            view: 'emails.invoice',
+            view: 'emails.order',
             with: [
                 'booking' => $this->booking
             ]
