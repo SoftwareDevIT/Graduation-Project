@@ -32,8 +32,12 @@ class Booking extends Model
 
     public function combos()
     {
-        return $this->belongsToMany(Combo::class, 'booking_combos');
+        return $this->belongsToMany(Combo::class, 'booking_combos')->withPivot('quantity');;
     }
+
+    // public function booking_combos(){
+    //     return $this->hasMany(BookingCombo::class);
+    // }
 
     public function user()
     {
