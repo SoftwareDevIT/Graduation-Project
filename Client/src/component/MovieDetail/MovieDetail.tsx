@@ -16,7 +16,8 @@ const MovieDetail: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState("");
-  const [isRated, setIsRated] = useState(false); // Thêm state kiểm tra đánh giá
+  const [isRated, setIsRated] = useState(false);
+  const [isTrailerVisible, setIsTrailerVisible] = useState(false); // State cho pop-up video
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -42,7 +43,6 @@ const MovieDetail: React.FC = () => {
             );
             setIsFavorite(isMovieFavorite);
 
-            // Kiểm tra nếu đã đánh giá
             const hasRated = userResponse.data.data.ratings.some(
               (rating: any) => rating.movie_id === parseInt(id as string, 10)
             );
@@ -108,7 +108,7 @@ const MovieDetail: React.FC = () => {
       setReview("");
       setRating(0);
       setIsModalVisible(false);
-      setIsRated(true); // Cập nhật trạng thái đã đánh giá
+      setIsRated(true);
     } catch (error) {
       notification.error({
         message: "Lỗi",
@@ -121,6 +121,15 @@ const MovieDetail: React.FC = () => {
     setIsModalVisible(false);
     setReview("");
     setRating(0);
+  };
+
+  // Mở và đóng modal trailer
+  const handleTrailerOpen = () => {
+    setIsTrailerVisible(true);
+  };
+
+  const handleTrailerClose = () => {
+    setIsTrailerVisible(false);
   };
 
   if (!movie) return <div>Đang tải...</div>;
@@ -170,12 +179,14 @@ const MovieDetail: React.FC = () => {
                   <div className="button rate like" onClick={handleRate}>
                     <FontAwesomeIcon
                       icon={faStar}
-                      color={isRated ? "#FFD700" : "#ccc"} // Đổi màu dựa trên trạng thái đánh giá
+                      color={isRated ? "#FFD700" : "#ccc"}
                       className="ngoisao"
                     />
                     <span className="like-1 like2">Đánh giá</span>
                   </div>
-                  <div className="button trailer">Trailer</div>
+                  <div className="button trailer" onClick={handleTrailerOpen}>
+                    Trailer
+                  </div>
                   <div className="button buy">Mua vé</div>
                 </div>
 
@@ -218,9 +229,26 @@ const MovieDetail: React.FC = () => {
             </div>
           </div>
         </div>
-        {/* Các phần khác không thay đổi */}
+        <div className="tabs">
+          <Link to={`/movie-detail/${id}`} className={`tab ${location.pathname === `/movie-detail/${id}` ? "active" : ""}`}>
+            Thông tin phim
+          </Link>
+          <Link   state={{ movie }}  to={`/schedule/${id}`} className={`tab ${location.pathname === `/schedule/${id}` ? "active" : ""}`}>
+            Lịch chiếu
+          </Link>
+          <Link to={`/reviews/${id}`} className={`tab ${location.pathname === `/reviews/${id}` ? "active" : ""}`}>
+            Đánh giá
+          </Link>
+          <Link to={`/news/${id}`} className={`tab ${location.pathname === `/news/${id}` ? "active" : ""}`}>
+            Tin tức
+          </Link>
+          <Link to={`/buy-now/${id}`} className={`tab ${location.pathname === `/buy-now/${id}` ? "active" : ""}`}>
+            Mua vé
+          </Link>
+        </div>
       </div>
-      {/* Modal đánh giá */}
+
+      {/* Modal Đánh Giá */}
       <Modal
         title="Đánh giá phim"
         visible={isModalVisible}
@@ -251,11 +279,28 @@ const MovieDetail: React.FC = () => {
               value={review}
               onChange={(e) => setReview(e.target.value)}
               placeholder="Nhập đánh giá của bạn"
-              rows={5}
-              style={{ width: "100%" }}
+              rows={4}
             />
           </div>
         </div>
+      </Modal>
+
+      {/* Modal Trailer */}
+      <Modal
+        title={movie?.movie_name}
+        visible={isTrailerVisible}
+        onCancel={handleTrailerClose}
+        footer={null}
+      >
+        <iframe
+          width="100%"
+          height="315"
+          src={movie?.trailer || "https://www.youtube.com/embed/dQw4w9WgXcQ"}
+          title="Trailer phim"
+          frameBorder="0"
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        ></iframe>
       </Modal>
     </>
   );
