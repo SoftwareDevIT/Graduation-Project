@@ -23,6 +23,8 @@ const LichChieuUpdated: React.FC = () => {
     // Nhận thông tin phim từ location
     const movie = location.state?.movie; // Lấy thông tin phim từ location state
 
+    
+
     // Fetch locations
     useEffect(() => {
         const fetchLocations = async () => {

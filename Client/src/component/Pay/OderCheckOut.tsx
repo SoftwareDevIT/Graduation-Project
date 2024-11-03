@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import instance from '../../server';
 import { message } from 'antd'; // Import message from Ant Design
 import Headerticket from '../Headerticket/Headerticket';
@@ -24,7 +24,7 @@ export interface LocationState {
 const OrderCheckout = () => {
     const location = useLocation();
     
-
+    const navigate = useNavigate();
     const {
         movieName,
         cinemaName,
@@ -43,6 +43,31 @@ const OrderCheckout = () => {
 
     // State for payment method
     const [pay_method_id, setPaymentMethod] = useState<number | null>(null); // Khởi tạo pay_method_id với null
+    const [timeLeft, setTimeLeft] = useState(50);
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setTimeLeft((prevTime) => {
+                if (prevTime <= 1) {
+                    clearInterval(timer);
+                    message.warning("Thời gian giữ ghế đã hết vui lòng đặt lại vé.");
+                    setTimeout(() => {
+                        navigate('/'); // Chuyển hướng về trang chủ
+                    }, 2000); // Chờ 2 giây trước khi chuyển trang
+                    return 0;
+                }
+                return prevTime - 1;
+            });
+        }, 1000);
+
+        return () => clearInterval(timer); // Dọn dẹp timer khi component unmount
+    }, [navigate]);
+
+    // Hàm chuyển đổi thời gian sang định dạng phút:giây
+    const formatTime = (seconds: number) => {
+        const minutes = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    };
 
     const handleCheckout = async () => {
         const token = localStorage.getItem("token");
@@ -228,7 +253,7 @@ const OrderCheckout = () => {
                         </div>
                         <div className="time-info">
                             <span className="time-title">Thời gian giữ ghế</span>
-                            <h2 className="time-remaining">03:32</h2>
+                            <h2 className="time-remaining">{formatTime(timeLeft)}</h2>
                         </div>
                     </div>
                     <div className="confirm-button">

@@ -4,7 +4,7 @@
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
-margin-left: 130px;
+    margin-left: 160px;
     border-radius: 8px;
     padding: 20px;
     margin-bottom: 60px;
@@ -218,7 +218,7 @@ font-size: 15px;
     }
 
     .thongtincombo {
-        width: 500px;
+        width: 658px;
         margin-left: 125px;
     }
 
@@ -254,14 +254,13 @@ font-size: 15px;
     width: 500px;
    }
    .details-box{
-    margin-left: 80px !important;
+    width: 500px;
+   
    
    }
-   .price-box{
-    margin-left: 80px !important;
-   }
+   
    .actionsts{
-    margin-left: 80px;
+    margin-left: 30px;
     width: 500px !important;
    }
    .back-btn2{
@@ -272,7 +271,18 @@ font-size: 15px;
     margin-left: 50px;
    }
 }
-
+@media (max-width: 768px){
+    .thongtincombo {
+        width: 500px;
+        margin-left: 140px;
+    }
+    .price-box, .details-box{
+        margin-left: 95px !important;
+    }
+    .actionsts{
+        margin-left: 95px;
+    }
+}
 /* Media Queries for devices with max width of 480px */
 @media (max-width: 480px) {
     .combo-list {
@@ -316,7 +326,10 @@ font-size: 15px;
         align-items: center;
         width: 100%;
         gap: 10px;
+       
+        
     }
+    
 
     .back-btn2, .continue-btn2 {
         width: 90%; 
@@ -329,15 +342,15 @@ font-size: 15px;
         width: 413px;
        }
        .details-box{
-        margin-left:-3px !important;
-       width: 415px !important;
+        margin-left: 8px !important;
+        width: 430px !important;
        }
        .price-box{
-        margin-left: -3px !important;
-        width: 415px !important;
+        margin-left: 8px !important;
+        width: 430px !important;
        }
        .actionsts{
-        margin-left: -3px;
+       margin-left: 10px;
         width: 415px !important;
         
        }
