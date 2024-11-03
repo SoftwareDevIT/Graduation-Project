@@ -50,6 +50,7 @@ import MovieShowing from "./component/Movies/MovieShowing";
 import SupportCenter from "./component/Support/Support";
 import PostDetail from "./component/Post/PostDetail";
 import Credits from "./component/PersonalPage/Credits";
+import Deponsit from "./component/PersonalPage/Deposit";
 
 
 
@@ -75,6 +76,7 @@ function App() {
         <Route path="/filmnews" element={<FilmNews/>} />
         <Route path="/sp" element={<SupportCenter/>} />
         <Route path="/postdetail/:id" element={<PostDetail/>} />
+        
        
 
         <Route path="/movie/search/:movie_name" element={<SerachMovies />} />
@@ -84,7 +86,8 @@ function App() {
         <Route path="/ChangePassword" element={<ChangePassword />} />
         <Route path="/register" element={<RegisterCinema />} />
         <Route path="/login" element={<LoginCinema />} />
-        <Route path="movieshowing" element={<MovieShowing/>} />
+        <Route path="/movieshowing" element={<MovieShowing/>} />
+        <Route path="/deponsit" element={<Deponsit/>} />
       
     
        
