@@ -72,7 +72,9 @@ const PostDetail: React.FC = () => {
                             <p className="related-meta">miduynph · 25 ngày trước</p>
                         </div>
                     </div>
+                    
                 </div>
+                
             </div>
             <Footer />
         </>

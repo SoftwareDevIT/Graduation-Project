@@ -144,21 +144,7 @@
     margin-bottom: 15px;
 }
 
-/* Responsive design for mobile devices */
-@media (max-width: 768px) {
-    .charts-container {
-        flex-direction: column; /* Chuyển sang hiển thị dọc trên màn hình nhỏ */
-    }
 
-    .revenue-summary, .quarterly-revenue {
-        width: 100%; /* Đảm bảo chúng chiếm toàn bộ chiều rộng khi ở màn hình nhỏ */
-        margin-bottom: 20px;
-    }
-
-    .revenue-chart, .area-chart {
-        height: 250px;
-    }
-}
 /* Bảng đơn hàng gần đây */
 .recent-orders {
     margin-top: 30px;

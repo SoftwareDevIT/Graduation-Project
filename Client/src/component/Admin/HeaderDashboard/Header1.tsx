@@ -22,9 +22,7 @@ const Header = () => {
                         <FaUserCircle />
                     </div>
                 </div>
-                <div className="search-container">
-                    <input type="text" placeholder="Search..." />
-                </div>
+                
             </div>
         </div>
     );

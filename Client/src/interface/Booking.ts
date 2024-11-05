@@ -14,7 +14,7 @@ export interface Booking {
   amount:number;
   seat_status: 'hold'|'no';
   user: User;
-  showtime : Showtime;
+  showtime: Showtime;
   pay_method : PayMethod;
   movie: Movie;
 }
