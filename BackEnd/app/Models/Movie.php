@@ -41,14 +41,16 @@ class Movie extends Model
             ->withTimestamps();
     }
 
+    public function cinema()
+    {
+        return $this->belongsToMany(Cinema::class, 'movie_in_cinemas', 'movie_id', 'cinema_id')
+            ->withTimestamps();
+    }
+
     // public function showtimes()
     // {
     //     return $this->hasMany(Showtime::class);
     // }
-    public function cinema()
-    {
-        return $this->belongsTo(Cinema::class);
-    }
 
 
     public function favorites()
@@ -56,8 +58,7 @@ class Movie extends Model
         return $this->hasMany(Favorite::class);
     }
 
-    public function ratings()
-    {
+    public function ratings() {
         return $this->hasMany(Rating::class);
     }
 

@@ -16,4 +16,12 @@ class Rating extends Model
         'rating',
         'review',
     ];
+
+    public function movies() {
+        return $this->belongsTo(Movie::class, 'movie_id');
+    }
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -24,7 +24,7 @@ class MovieCategoryController extends Controller
     public function index()
     {
         $movieCategory = $this->movieCategroyService->index();
-        return response()->json($movieCategory);
+        return $this->success($movieCategory, 'Danh sách danh mục phim', 200);
     }
 
     /**
@@ -32,8 +32,13 @@ class MovieCategoryController extends Controller
      */
     public function store(StoreMovieCategoryRequest $request)
     {
-        $movieCategory = $this->movieCategroyService->store($request->validated());
-        return $this->success($movieCategory, 'Thêm thành công');
+        try {
+            $movieCategory = $this->movieCategroyService->store($request->validated());
+
+            return $this->success($movieCategory, 'Thêm thành công danh mục');
+        } catch (Exception $e) {
+            return $this->error('Lỗi: ' . $e->getMessage(), 500);
+        }
     }
 
     /**
@@ -45,12 +50,12 @@ class MovieCategoryController extends Controller
             $movieCategory = $this->movieCategroyService->get($id);
 
             return $this->success($movieCategory, 'Chi tiết danh mục với id = ' . $id);
-        } catch (\Throwable $th) {
-            if ($th instanceof ModelNotFoundException) {
-                return $this->notFound('Movie Category not found id = ' . $id, 404);
+        } catch (Exception $e) {
+            if ($e instanceof ModelNotFoundException) {
+                return $this->notFound('Category not found id = ' . $id, 404);
             }
 
-            return $this->error('Movie Category not found id = ' . $id, 500);
+            return $this->error('Lỗi: ' . $e->getMessage(), 500);
         }
     }
 
@@ -62,12 +67,8 @@ class MovieCategoryController extends Controller
         try {
             $movieCategory = $this->movieCategroyService->update($id, $request->validated());
             return $this->success($movieCategory, 'Update thành công');
-        } catch (\Throwable $th) {
-            if ($th instanceof ModelNotFoundException) {
-                return $this->notFound('Movie Category not found id = ' . $id, 404);
-            }
-
-            return $this->error('Movie Category not found id = ' . $id, 500);
+        } catch (Exception $e) {
+            return $this->error('Lỗi: ' . $e->getMessage(), 500);
         }
     }
 
@@ -78,13 +79,14 @@ class MovieCategoryController extends Controller
     {
         try {
             $this->movieCategroyService->delete($id);
-            return $this->success(null,'Xóa thành công');
-        } catch (\Throwable $th) {
-            if ($th instanceof ModelNotFoundException) {
-                return $this->notFound('Movie Category not found id = ' . $id, 404);
+
+            return $this->success(null, 'Xóa thành công');
+        } catch (Exception $e) {
+            if ($e instanceof ModelNotFoundException) {
+                return $this->notFound('Category not found id = ' . $id, 404);
             }
 
-            return $this->error('Movie Category not found id = ' . $id, 500);
+            return $this->error('Lỗi: ' . $e->getMessage(), 500);
         }
     }
 }

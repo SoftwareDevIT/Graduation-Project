@@ -51,6 +51,8 @@ import SupportCenter from "./component/Support/Support";
 import PostDetail from "./component/Post/PostDetail";
 import Credits from "./component/PersonalPage/Credits";
 import Deponsit from "./component/PersonalPage/Deposit";
+import ForgetPass from "./component/Login/ForgetPass";
+import UpComingMovies from "./component/Movies/UpComingMovies";
 
 
 
@@ -64,7 +66,7 @@ function App() {
         <Route path="/orders" element={<OrderPage />} />
         <Route path="/pay" element={<OrderCheckout />} />
         <Route path="/seat" element={<CinemaSeatSelection />} />
-        <Route path="/movie-detail/:id" element={<ContentMovie />} />
+        <Route path="/movie-detail/:id"  element={<ContentMovie />} />
         <Route path="/schedule/:id" element={<LichChieu />} />
         <Route path="/reviews/:id" element={<DanhGia />} />
         <Route path="/news/:id" element={<TinTuc />} />
@@ -87,7 +89,9 @@ function App() {
         <Route path="/register" element={<RegisterCinema />} />
         <Route path="/login" element={<LoginCinema />} />
         <Route path="/movieshowing" element={<MovieShowing/>} />
+        <Route path="/upcomingmovies" element={<UpComingMovies/>} />
         <Route path="/deponsit" element={<Deponsit/>} />
+        <Route path="/forgetpass" element={<ForgetPass/>} />
       
     
        
