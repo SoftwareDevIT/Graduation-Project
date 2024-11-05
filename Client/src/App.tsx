@@ -50,11 +50,14 @@ import MovieShowing from "./component/Movies/MovieShowing";
 import SupportCenter from "./component/Support/Support";
 import PostDetail from "./component/Post/PostDetail";
 import Credits from "./component/PersonalPage/Credits";
+import AdminLogin from "./component/Admin/Login/LoginAdmin";
+import PostDetailManager from "./component/Admin/PostsDasboard/PostDetailManager";
 
 
 
 
 function App() {
+  
   return (
     <>
       <Routes>
@@ -90,15 +93,17 @@ function App() {
        
 
         {/* Phân quyền cho các route admin */}
-        <Route path="/admin" element={<PrivateRoute allowedRoles={['admin']}><Dashboard /></PrivateRoute>} />
+        <Route path="/admin" element={<PrivateRoute allowedRoles={['admin']}><AdminLogin/></PrivateRoute>}/>
+        <Route path="/admin/dashboard" element={<PrivateRoute allowedRoles={['admin']}><Dashboard /></PrivateRoute>} />
         <Route path="/admin/user" element={<PrivateRoute allowedRoles={['admin']}><User /></PrivateRoute>} />
-        <Route path="/admin/user/add" element={<PrivateRoute allowedRoles={['admin']}><UserAddManager /></PrivateRoute>} />
+        <Route path="/admin/user/roles" element={<PrivateRoute allowedRoles={['admin']}><UserAddManager /></PrivateRoute>} />
         <Route path="/admin/showtimes" element={<PrivateRoute allowedRoles={['admin']}><ShowtimesManager /></PrivateRoute>} />
         <Route path="/admin/showtimes/add" element={<PrivateRoute allowedRoles={['admin']}><ShowtimesFormManager /></PrivateRoute>} />
         <Route path="/admin/showtimes/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><ShowtimesFormManager /></PrivateRoute>} />
         <Route path="/admin/orders" element={<PrivateRoute allowedRoles={['admin']}><OrdersManager /></PrivateRoute>} />
         <Route path="/admin/tickets" element={<PrivateRoute allowedRoles={['admin']}><TicketsManager /></PrivateRoute>} />
         <Route path="/admin/posts" element={<PrivateRoute allowedRoles={['admin']}><PostsManager /></PrivateRoute>} />
+        <Route path="/admin/posts/:postId"element={<PrivateRoute allowedRoles={['admin']}><PostDetailManager/></PrivateRoute>} />
         <Route path="/admin/posts/add" element={<PrivateRoute allowedRoles={['admin']}><PostsFormManager /></PrivateRoute>} />
         <Route path="/admin/posts/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><PostsFormManager /></PrivateRoute>} />
         <Route path="/admin/categories" element={<PrivateRoute allowedRoles={['admin']}><CategoriesManager /></PrivateRoute>} />

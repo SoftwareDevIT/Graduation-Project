@@ -143,9 +143,9 @@ const OrderCheckout = () => {
                 <div className="left-panel">
                     <div className="order-summary">
                         {/* Hiển thị tóm tắt đơn hàng */}
-                        <div className="order-header">
+                       
                             <h3>Tóm tắt đơn hàng</h3>
-                        </div>
+                       
                         <div className="item-header">
                             <span>Mô Tả</span>
                             <span style={{marginLeft: "70px"}}>Số Lượng</span>
@@ -174,7 +174,7 @@ const OrderCheckout = () => {
                                         <span className="item-title">Combo: {combo.combo_name}</span>
                                         <span className="item-quantity">Số lượng: {combo.quantity}</span>
                                     </div>
-                                ))}
+                                ))} 
                             </div>
                         )}
                         <div className="order-total">
