@@ -50,6 +50,7 @@ import MovieShowing from "./component/Movies/MovieShowing";
 import SupportCenter from "./component/Support/Support";
 import PostDetail from "./component/Post/PostDetail";
 import Credits from "./component/PersonalPage/Credits";
+import NotFound from "./component/NotFoud/NotFound";
 
 
 
@@ -71,7 +72,9 @@ function App() {
         <Route path="/headerticket" element={<Headerticket />} />
         <Route path="/confirm" element={<EmailConfirm />} />
         <Route path="/payment-callback" element={<PaymentCallback />} />
-        <Route path="/FilmNews" element={<FilmNews />} />
+        <Route path="/*" element={<NotFound/>} />
+       
+      
         <Route path="/filmnews" element={<FilmNews/>} />
         <Route path="/sp" element={<SupportCenter/>} />
         <Route path="/postdetail/:id" element={<PostDetail/>} />

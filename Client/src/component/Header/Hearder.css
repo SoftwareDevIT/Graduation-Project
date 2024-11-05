@@ -380,3 +380,16 @@ color: #6e84a3;
   position: relative;
   cursor: pointer;
 }
+@media (max-width:480px) {
+  .profile-dropdown{
+  position: absolute;
+left: 20px;
+width: 90px;
+top:60px;
+font-size: 10px;
+  }
+  .profile-dropdown a{
+    padding: 1px 0px;
+    font-size: 5px;
+  }
+}
