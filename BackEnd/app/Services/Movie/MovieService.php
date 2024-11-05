@@ -17,7 +17,7 @@ class MovieService
             [
                 'actor:actor_name,id',
                 'director:director_name,id',
-                'category:category_name,id',
+                'movie_category:category_name,id',
                 'movieInCinemas.cinema:id,cinema_name'
             ]
         )->get();
@@ -46,7 +46,7 @@ class MovieService
                         'director_name' => $director->director_name
                     ];
                 }),
-                'category' => $movie->category->map(function ($category) {
+                'movie_category' => $movie->movie_category->map(function ($category) {
                     return [
                         'id' => $category->id,
                         'category_name' => $category->category_name
@@ -92,7 +92,7 @@ class MovieService
         $movie = Movie::with([
             'actor:actor_name,id',
             'director:director_name,id',
-            'category:category_name,id',
+            'movie_category:category_name,id',
             'movieInCinemas.cinema:id,cinema_name'
         ])->findOrFail($id);
 
@@ -119,7 +119,7 @@ class MovieService
                     'director_name' => $director->director_name
                 ];
             }),
-            'category' => $movie->category->map(function ($category) {
+            'movie_category' => $movie->movie_category->map(function ($category) {
                 return [
                     'id' => $category->id,
                     'category_name' => $category->category_name
