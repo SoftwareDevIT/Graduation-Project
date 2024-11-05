@@ -1,7 +1,7 @@
 /* Sidebar Container */
 .sidebar {
     width: 250px;
-    background-color: #f8f9fa; /* Nền sáng */
+    background-color: #f8f9fa;
     color: #343a40; /* Màu chữ tối */
     padding: 20px;
     display: flex;
@@ -73,9 +73,77 @@
 
 /* Active State */
 .sidebar ul li a.active {
-    background-color: #0056b3; /* Nền đậm hơn cho trạng thái active */
+    background-color: #007bff; /* Nền đậm hơn cho trạng thái active */
     color: #ffffff; /* Chữ trắng */
 }
 .logo-first-letter1{
     padding-left: 100px;
+}
+/* Mặc định ẩn mũi tên trên màn hình lớn */
+.sidebar-toggle {
+    display: none;
+}
+@media (max-width: 768px) {
+    .sidebar {
+        display: none; /* Ẩn sidebar */
+        position: fixed; /* Đảm bảo sidebar hiển thị đúng khi được mở */
+        left: 0;
+        top: 0;
+        width: 250px; /* Chiều rộng của sidebar */
+        height: 100%; /* Chiều cao full màn hình */
+        background-color: #f8f9fa; /* Màu nền của sidebar */
+        z-index: 999; /* Đảm bảo sidebar hiển thị trên các phần tử khác */
+        overflow-y: auto;
+        transition: transform 0.3s ease; /* Thêm hiệu ứng chuyển đổi cho sidebar */
+        transform: translateX(-100%); /* Đẩy sidebar ra ngoài màn hình */
+    }
+
+    /* Khi sidebar được mở, hiển thị */
+    .sidebar.active {
+        display: block; /* Hiển thị lại sidebar */
+        transform: translateX(0); /* Đưa sidebar về vị trí hiển thị */
+    }
+
+    /* CSS cho nút toggle */
+    .sidebar-toggle {
+        display: block;
+        position: fixed;
+        top: 10px;
+        left: 1px;
+        cursor: pointer;
+        z-index: 1000; /* Đảm bảo nút mũi tên hiển thị trên sidebar */
+        font-size: 1.5rem;
+        color: #f8f9fa; /* Màu mũi tên */
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar {
+        display: none; /* Ẩn sidebar */
+        position: fixed; /* Đảm bảo sidebar hiển thị đúng khi được mở */
+        left: 0;
+        top: 0;
+        width: 250px; /* Chiều rộng của sidebar */
+        height: 100%; /* Chiều cao full màn hình */
+        background-color: #f8f9fa; /* Màu nền của sidebar */
+        z-index: 999; /* Đảm bảo sidebar hiển thị trên các phần tử khác */
+        overflow-y: auto;
+    }
+
+    /* Khi sidebar được mở, hiển thị */
+    .sidebar.active {
+        display: block; /* Hiển thị lại sidebar */
+    }
+   /* CSS cho nút toggle */
+.sidebar-toggle {
+    display: block;
+    position: fixed;
+    top: 10px;
+    left: 1px;
+    cursor: pointer;
+    z-index: 1000; /* Đảm bảo nút mũi tên hiển thị trên sidebar */
+    font-size: 1.5rem;
+    color: #f8f9fa; /* Màu mũi tên */
+}
+
 }

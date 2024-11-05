@@ -3,7 +3,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color:#fff; /* Nền xanh nhạt */
+    background-color:#f8f9fa;
     padding: 15px 30px;
     color: #004d40; /* Màu xanh đậm cho chữ */
 }
@@ -104,15 +104,10 @@
     }
 
     .icon {
-        margin: 0 10px;
-        font-size: 1rem;
+      display: none;
     }
 
     .profile-pic {
         font-size: 1.4rem;
-    }
-
-    .search-container input {
-        padding: 5px 10px;
     }
 }

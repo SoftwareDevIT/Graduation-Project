@@ -5,6 +5,7 @@ import { Showtime } from '../../../interface/Showtimes';
 import { useShowtimeContext } from '../../../Context/ShowtimesContext';
 import instance from '../../../server';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Cinema } from '../../../interface/Cinema';
 
 const ShowtimesForm: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -12,7 +13,7 @@ const ShowtimesForm: React.FC = () => {
     const { addOrUpdateShowtime } = useShowtimeContext();
     const nav = useNavigate();
     
-    const [cinemasList, setCinemasList] = useState<any[]>([]); // Danh sách rạp
+    const [cinemasList, setCinemasList] = useState<Cinema[]>([]); // Danh sách rạp
     const [movieInCinemas, setMovieInCinemas] = useState<any[]>([]); // Danh sách phim
     const [cinemaId, setCinemaId] = useState<number | null>(null); // ID rạp đang chọn
     const [showtimesList, setShowtimesList] = useState<Showtime[]>([]); // Danh sách showtimes

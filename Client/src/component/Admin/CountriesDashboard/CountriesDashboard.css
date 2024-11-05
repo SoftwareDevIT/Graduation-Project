@@ -20,20 +20,18 @@
 }
 
 /* Actions container */
-/* Actions container */
 .actions {
     display: flex;
-    justify-content: flex-end; /* Align items to the right */
+    justify-content: flex-end; /* Align to the right */
+    gap: 20px; /* Space between search and button */
     margin-bottom: 20px;
 }
 
-/* Search input styling */
 .search-input {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 1rem;
-    margin-left: 20px; /* Space between the button and search input */
 }
 
 /* Add country button styling */

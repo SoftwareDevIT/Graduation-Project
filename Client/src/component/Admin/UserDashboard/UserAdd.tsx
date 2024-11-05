@@ -1,108 +1,187 @@
-import React, { useState } from 'react';
-import './User.css';
+import React from 'react';
 
-const UserAdd: React.FC = () => {
-    const [name, setName] = useState<string>('');
-    const [email, setEmail] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
-    const [image, setImage] = useState<File | null>(null);
-    const [imagePreview, setImagePreview] = useState<string | null>(null);
-
-    // Handle image upload
-    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            setImage(file);
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImagePreview(reader.result as string);
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
-    // Handle form submit
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        // Handle form data submission (e.g., API call)
-        console.log({ name, email, password, image });
-    };
-
-    return (
-        <div className="user-add-container">
-            <h2>Add New User</h2>
-            <div className="product-container">
-                <div className="product-photo">
-               <img src="path/to/tshirt-image.jpg" alt="T-shirt"/>
+const RoleAndUserManagement = () => {
+  return (
+    <div
+      style={{
+        backgroundColor: '#ffffff',
+        color: '#000000',
+        padding: '20px',
         
-              </div>
+        width: '100%',
+        margin: 'auto',
+     
+      }}
+    >
+      <h2>Quản lý vai trò và quyền</h2>
+      <div style={{ marginBottom: '30px' }}>
+        <h3>Tạo vai trò mới</h3>
+        <input
+          type="text"
+          placeholder="Tên vai trò"
+          style={{
+            width: '100%',
+            padding: '8px',
+            marginBottom: '10px',
+            borderRadius: '5px',
+            border: '1px solid #ccc',
+            backgroundColor: '#f9f9f9',
+            color: '#000'
+          }}
+        />
+        <button
+          style={{
+            backgroundColor: '#007bff',
+            color: 'white',
+            border: 'none',
+            padding: '8px 12px',
+            borderRadius: '5px',
+            cursor: 'pointer'
+          }}
+        >
+          Tạo vai trò
+        </button>
 
-            <div className="upload-section">
+        <h3 style={{ marginTop: '20px' }}>Vai trò hiện có</h3>
+        <table
+          style={{
+            width: '100%',
+            borderCollapse: 'collapse',
+            marginTop: '20px'
+          }}
+        >
+          <thead>
+            <tr>
+              <th style={{ padding: '10px', border: '1px solid #ddd' }}>Tên vai trò</th>
+              <th style={{ padding: '10px', border: '1px solid #ddd' }}>Quyền</th>
+              <th style={{ padding: '10px', border: '1px solid #ddd' }}>Hành động</th>
+            </tr>
+          </thead>
+          <tbody>
+            {['admin', 'manager', 'staff', 'user'].map((role) => (
+              <tr key={role}>
+                <td style={{ padding: '10px', border: '1px solid #ddd' }}>{role}</td>
+                <td style={{ padding: '10px', border: '1px solid #ddd' }}>
+                  <textarea
+                    readOnly
+                    value="index\nshow\ncreate\nstore"
+                    style={{
+                      width: '100%',
+                      height: '80px',
+                      backgroundColor: '#f9f9f9',
+                      color: '#000',
+                      border: '1px solid #ccc',
+                      borderRadius: '5px',
+                      padding: '5px',
+                      resize: 'none'
+                    }}
+                  ></textarea>
+                </td>
+                <td style={{ padding: '10px', border: '1px solid #ddd' }}>
+                  <button
+                    style={{
+                      backgroundColor: '#28a745',
+                      color: 'white',
+                      border: 'none',
+                      padding: '8px 12px',
+                      borderRadius: '5px',
+                      cursor: 'pointer',
+                      marginRight: '10px'
+                    }}
+                  >
+                    Cập nhật quyền
+                  </button>
+                  <button
+                    style={{
+                      backgroundColor: '#dc3545',
+                      color: 'white',
+                      border: 'none',
+                      padding: '8px 12px',
+                      borderRadius: '5px',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Xóa vai trò
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-             {/* <h3>Add Product Photo</h3> */}
-
-             <h3>Add Product Photo</h3>
-
-        <div className="upload-box">
-            <input type="file" id="file-upload" accept="image/png, image/jpeg, image/gif" hidden/>
-            <label htmlFor="file-upload" className="upload-label">
-                <span>Drop your images here, or <a href="#">click to browse</a></span>
-                <p>1600 x 1200 (4:3) recommended. PNG, JPG and GIF files are allowed</p>
-            </label>
-        </div>
+      <h2>Quản lý người dùng</h2>
+      <div>
+        <table
+          style={{
+            width: '100%',
+            borderCollapse: 'collapse',
+            marginTop: '20px'
+          }}
+        >
+          <thead>
+            <tr>
+              <th style={{ padding: '10px', border: '1px solid #ddd' }}>Tên người dùng</th>
+              <th style={{ padding: '10px', border: '1px solid #ddd' }}>Vai trò</th>
+              <th style={{ padding: '10px', border: '1px solid #ddd' }}>Hành động</th>
+            </tr>
+          </thead>
+          <tbody>
+            {['Admin', 'manager', 'staff', 'User'].map((user) => (
+              <tr key={user}>
+                <td style={{ padding: '10px', border: '1px solid #ddd' }}>{user}</td>
+                <td style={{ padding: '10px', border: '1px solid #ddd' }}>
+                  <select
+                    multiple
+                    style={{
+                      width: '100%',
+                      backgroundColor: '#f9f9f9',
+                      color: '#000',
+                      border: '1px solid #ccc',
+                      borderRadius: '5px',
+                      padding: '5px'
+                    }}
+                  >
+                    <option>admin</option>
+                    <option>manager</option>
+                    <option>staff</option>
+                    <option>user</option>
+                  </select>
+                </td>
+                <td style={{ padding: '10px', border: '1px solid #ddd' }}>
+                  <button
+                    style={{
+                      backgroundColor: '#28a745',
+                      color: 'white',
+                      border: 'none',
+                      padding: '8px 12px',
+                      borderRadius: '5px',
+                      cursor: 'pointer',
+                      marginRight: '10px'
+                    }}
+                  >
+                    Cập nhật vai trò
+                  </button>
+                  <button
+                    style={{
+                      backgroundColor: '#dc3545',
+                      color: 'white',
+                      border: 'none',
+                      padding: '8px 12px',
+                      borderRadius: '5px',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Xóa người dùng
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
-</div>
-
-<div className="box-container">
-  
-        <h3>User Information</h3>
-
-        <form>
-            <div className="form-group">
-                <label htmlFor="id">ID</label>
-                <input type="text" id="id" placeholder="Enter ID"/>
-            </div>
-
-            <div className="form-group">
-                <label htmlFor="username">Username</label>
-                <input type="text" id="username" placeholder="Enter Username"/>
-            </div>
-
-            <div className="form-group">
-                <label htmlFor="email">Email</label>
-                <input type="email" id="email" placeholder="Enter Email"/>
-            </div>
-
-            <div className="form-group">
-                <label htmlFor="role">Role ID</label>
-                <input type="text" id="role" placeholder="Enter Role ID"/>
-            </div>
-
-            <div className="form-group">
-                <label htmlFor="sex">Sex</label>
-                <select id="sex">
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                    <option value="other">Other</option>
-                </select>
-            </div>
-
-            <div className="form-group">
-                <label htmlFor="status">Status</label>
-                <input type="text" id="status" placeholder="Enter Status"/>
-            </div>
-
-            <div className="form-group actions">
-
-                <button type="submit" className='button1'>Submit</button>
-
-                <button type="submit">Submit</button>
-
-            </div>
-        </form>
-    </div>
-</div>
-    );
+  );
 };
 
-export default UserAdd;
+export default RoleAndUserManagement;

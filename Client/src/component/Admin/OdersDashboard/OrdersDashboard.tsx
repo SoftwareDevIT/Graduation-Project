@@ -1,9 +1,10 @@
 import { Booking } from "../../../interface/Booking";
 import instance from "../../../server";
-import "./OrdersDashboard.css";
+
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const OrdersDashboard: React.FC = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);
@@ -21,17 +22,15 @@ const OrdersDashboard: React.FC = () => {
     fetchBookings();
   }, []);
 
-
-
   return (
-    <div className="orders-management">
-      <h2>Order Management</h2>
-      <div className="actions">
-        <button className="add-order-btn">Add Order</button>
+    <div className="container mt-5">
+      <h2 className="text-center text-primary mb-4">Order Management</h2>
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <button className="btn btn-outline-primary">Add Order</button>
       </div>
-      <div className="table-container">
-        <table className="order-table">
-          <thead>
+      <div className="table-responsive">
+        <table className="table table-bordered table-hover shadow-sm">
+          <thead className="thead-light">
             <tr>
               <th>Order ID</th>
               <th>User</th>
@@ -59,10 +58,10 @@ const OrdersDashboard: React.FC = () => {
                   <td>{booking.amount}</td>
                   <td>{booking.seat_status}</td>
                   <td className="action-buttons">
-                    <button className="edit-btn" title="Edit">
+                    <button className="btn btn-warning btn-sm mx-1" title="Edit">
                       <FontAwesomeIcon icon={faEdit} />
                     </button>
-                    <button className="delete-btn" title="Delete" >
+                    <button className="btn btn-danger btn-sm" title="Delete">
                       <FontAwesomeIcon icon={faTrash} />
                     </button>
                   </td>
@@ -70,7 +69,7 @@ const OrdersDashboard: React.FC = () => {
               ))
             ) : (
               <tr>
-                <td colSpan={10} style={{ textAlign: "center" }}>
+                <td colSpan={10} className="text-center">
                   No bookings available.
                 </td>
               </tr>

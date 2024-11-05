@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { usePostsContext } from '../../../Context/PostContext';
 import instance from '../../../server'; // Adjust the path as needed
 import { NewsCategory } from '../../../interface/NewsCategory';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css'; // Import styles
 
 const PostsForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { register, handleSubmit, reset, control } = useForm();
-  const [categories, setCategories] = useState<NewsCategory[]>([]);
+  const { register, handleSubmit, reset } = useForm();
+  const [categories, setCategories] = useState<NewsCategory[]>([]); // For post categories
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   const [bannerFile, setBannerFile] = useState<File | null>(null);
   const { addOrUpdatePost } = usePostsContext();
@@ -25,11 +23,11 @@ const PostsForm: React.FC = () => {
         if (id) {
           const postResponse = await instance.get(`/news/${id}`);
           const postData = postResponse.data.data;
-          console.log(postData);
-          
+            console.log(postData);
+            
           reset({
             title: postData.title,
-            news_category_id: postData.news_category_id,
+            news_category_id: postData.news_category_id, // This will set the category ID
             content: postData.content,
             status: postData.status,
           });
@@ -43,16 +41,16 @@ const PostsForm: React.FC = () => {
   }, [id, reset]);
 
   const onSubmit = async (data: any) => {
-    console.log('Selected Category ID:', data.news_category_id);
+    console.log('Selected Category ID:', data.news_category_id); // Log the selected category ID
     await addOrUpdatePost(
       {
         ...data,
-        thumbnail: thumbnailFile,
-        banner: bannerFile,
+        thumnail: thumbnailFile, // Use 'thumbnail' instead of 'thumbnailFile'
+        banner: bannerFile, // Use 'banner' instead of 'bannerFile'
       },
       id
     );
-    nav('/admin/posts');
+    nav('/admin/posts'); // Redirect after submission
   };
 
   return (
@@ -79,9 +77,8 @@ const PostsForm: React.FC = () => {
             ))}
           </select>
         </div>
-        
         <div className="mb-3">
-          <label className="form-label">Thumbnail:</label>
+          <label className="form-label ">Thumbnail:</label>
           <input
             type="file"
             className="form-control d-block"
@@ -92,7 +89,6 @@ const PostsForm: React.FC = () => {
             }}
           />
         </div>
-
         <div className="mb-3">
           <label className="form-label">Banner:</label>
           <input
@@ -105,20 +101,14 @@ const PostsForm: React.FC = () => {
             }}
           />
         </div>
-
         <div className="mb-3">
           <label className="form-label">Content:</label>
-          <Controller
-            name="content"
-            control={control}
-            defaultValue=""
-            render={({ field }) => (
-              <ReactQuill {...field} />
-            )}
-            rules={{ required: true }} // Ensure the content is required
-          />
+          <textarea
+            className="form-control"
+            {...register('content')}
+            required
+          ></textarea>
         </div>
-
         <div className="mb-3">
           <label className="form-label">Status:</label>
           <select {...register('status')} className="form-select" required>
@@ -126,7 +116,6 @@ const PostsForm: React.FC = () => {
             <option value="Hidden">Hidden</option>
           </select>
         </div>
-
         <button type="submit" className="btn btn-primary">
           {id ? 'Update Post' : 'Add Post'}
         </button>

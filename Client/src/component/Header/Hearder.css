@@ -1,3 +1,7 @@
+#search-mobile{
+  display: none;
+
+}
 .header {
     display: flex;
     justify-content: space-between;
@@ -218,6 +222,11 @@ bottom: 10px;
   .header-right .icon-link {
       font-size: 20px; /* Giảm kích thước icon */
   }
+  #search-mobile{
+    display: block;
+  
+  }
+
 }
 
 
@@ -236,6 +245,10 @@ bottom: 10px;
   padding: 0 !important; /* Xóa padding với ưu tiên cao hơn */
 }
 @media (max-width: 992px) {
+  #menukkk{
+   height: 300px;
+   
+  }
   .menu button {
    
     background: rgb(237, 234, 234);
@@ -252,6 +265,7 @@ bottom: 10px;
     top: 60px; 
     left: 0;
     height: 220px;
+    padding-left: 80px !important;
     width: 100%;
     display: none; 
     flex-direction: column; /* Chuyển đổi sang menu dọc */
@@ -279,6 +293,12 @@ bottom: 10px;
   .header-left.visible {
     display: flex; /* Hiển thị menu khi class 'visible' được thêm vào */
   }
+  #search-mobile{
+    display: block;
+    margin-left: 85px;
+    border-radius: 15px;
+    width: 300px;
+  }
 }
 @media (max-width:576px) {
   .thanhmenu{
@@ -293,6 +313,12 @@ bottom: 10px;
      color: #e50914;
      text-decoration: none;
    }
+   .header-left{
+    position: absolute; 
+    top: 60px; 
+    left: 0;
+    padding-left: 10px !important;
+   }
    .header-right{
     position: relative;
    left: -60px;
@@ -302,7 +328,12 @@ bottom: 10px;
     top:5px;
    padding-left: 0;
   }
- 
+  #search-mobile{
+    margin-left: 1px;
+  }
+  #menukkk{
+    height: 300px;
+  }
 }
 
 .dropdown{

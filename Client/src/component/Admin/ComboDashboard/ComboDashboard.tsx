@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import './ComboDashboard.css';
 import { Link } from 'react-router-dom';
 import { useComboContext } from '../../../Context/ComboContext';
 import instance from '../../../server';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+
 
 const ComboDashboard: React.FC = () => {
     const { state, deleteCombo } = useComboContext();
@@ -59,23 +59,23 @@ const ComboDashboard: React.FC = () => {
     const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
     return (
-        <div className="combo-dashboard">
-            <h2>All Combos</h2>
-            <div className="actions">
-                <Link to={'/admin/combo/add'} className="add-combo-btn">Add Combo</Link>
-                <div className="search-container">
-                    <input 
-                        type="text" 
-                        placeholder="Search by Combo Name..." 
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="search-input"
-                    />
-                </div>
+        <div className="container mt-5">
+            <h2 className="text-center text-primary mb-4">All Combos</h2>
+            <div className="d-flex justify-content-between align-items-center mb-4">
+                <Link to={'/admin/combo/add'} className="btn btn-outline-primary">
+                    Add Combo
+                </Link>
+                <input 
+                    type="text" 
+                    placeholder="Search by Combo Name..." 
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="form-control w-25"
+                />
             </div>
-            <div className="table-container-combo">
-                <table className="combo-table">
-                    <thead>
+            <div className="table-responsive">
+                <table className="table table-bordered table-hover shadow-sm">
+                    <thead className="thead-light">
                         <tr>
                             <th>Combo ID</th>
                             <th>Combo Name</th>
@@ -95,47 +95,45 @@ const ComboDashboard: React.FC = () => {
                                 <td>{combo.price}</td>
                                 <td>{combo.volume}</td>
                                 <td>{new Date(combo.created_at).toLocaleDateString()}</td>
-                                <td className="action-buttons">
-                                    <Link to={`/admin/combo/edit/${combo.id}`} className="edit-btn">
-                                        <FontAwesomeIcon icon={faEdit} />
-                                    </Link>
-                                    <button 
-                                        className="delete-btn" 
-                                        onClick={() => handleDelete(combo.id)} 
-                                    >
-                                        <FontAwesomeIcon icon={faTrashAlt} />
-                                    </button>
+                                <td>
+                                    <div className="d-flex justify-content-around">
+                                        <Link to={`/admin/combo/edit/${combo.id}`} className="btn btn-warning btn-sm">
+                                            <FontAwesomeIcon icon={faEdit} />
+                                        </Link>
+                                        <button 
+                                            className="btn btn-danger btn-sm" 
+                                            onClick={() => handleDelete(combo.id)}
+                                        >
+                                            <FontAwesomeIcon icon={faTrashAlt} />
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
-            <div className="pagination">
-                <button 
-                    className="prev-btn" 
-                    onClick={() => setCurrentPage(currentPage - 1)} 
-                    disabled={currentPage === 1}
-                >
-                    Previous
-                </button>
-                {Array.from({ length: Math.ceil(filteredCombos.length / combosPerPage) }, (_, index) => (
-                    <button 
-                        key={index + 1}
-                        className={`page-btn ${currentPage === index + 1 ? 'active' : ''}`}
-                        onClick={() => paginate(index + 1)}
-                    >
-                        {index + 1}
-                    </button>
-                ))}
-                <button 
-                    className="next-btn" 
-                    onClick={() => setCurrentPage(currentPage + 1)} 
-                    disabled={indexOfLastCombo >= filteredCombos.length}
-                >
-                    Next
-                </button>
-            </div>
+            <nav className="d-flex justify-content-center mt-4">
+                <ul className="pagination">
+                    <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                        <button className="page-link" onClick={() => setCurrentPage(currentPage - 1)}>
+                            Previous
+                        </button>
+                    </li>
+                    {Array.from({ length: Math.ceil(filteredCombos.length / combosPerPage) }, (_, index) => (
+                        <li key={index + 1} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
+                            <button className="page-link" onClick={() => paginate(index + 1)}>
+                                {index + 1}
+                            </button>
+                        </li>
+                    ))}
+                    <li className={`page-item ${indexOfLastCombo >= filteredCombos.length ? 'disabled' : ''}`}>
+                        <button className="page-link" onClick={() => setCurrentPage(currentPage + 1)}>
+                            Next
+                        </button>
+                    </li>
+                </ul>
+            </nav>
         </div>
     );
 };

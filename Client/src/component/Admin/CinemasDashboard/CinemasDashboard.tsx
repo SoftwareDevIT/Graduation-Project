@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import './CinemasDashboard.css';
 import instance from '../../../server'; 
 import { useCinemaContext } from '../../../Context/CinemasContext';
 import { Movie } from '../../../interface/Movie';
 import { MovieInCinema } from '../../../interface/MovieInCinema'; 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; // Import Font Awesome
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'; // Import specific icons
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; 
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'; 
 
 const CinemasDashboard: React.FC = () => {
     const { state, dispatch } = useCinemaContext();
@@ -16,10 +15,11 @@ const CinemasDashboard: React.FC = () => {
     const cinemasPerPage = 5; 
     const totalCinemas = cinemas.length;
     const totalPages = Math.ceil(totalCinemas / cinemasPerPage);
-
+    
     const [expandedCinemaId, setExpandedCinemaId] = useState<number | null>(null);
     const [selectedCinemaMovies, setSelectedCinemaMovies] = useState<MovieInCinema[]>([]);
     const [allMovies, setAllMovies] = useState<Movie[]>([]); 
+    const [searchTerm, setSearchTerm] = useState<string>(''); // State cho tìm kiếm
 
     useEffect(() => {
         const fetchAllMovies = async () => {
@@ -35,7 +35,12 @@ const CinemasDashboard: React.FC = () => {
         fetchAllMovies();
     }, []);
 
-    const currentCinemas = cinemas.slice((currentPage - 1) * cinemasPerPage, currentPage * cinemasPerPage);
+    const currentCinemas = cinemas
+        .filter(cinema => 
+            cinema.cinema_name &&
+            cinema.cinema_name.toLowerCase().includes(searchTerm.toLowerCase())
+        ) // Lọc các rạp chiếu phim theo từ khóa tìm kiếm
+        .slice((currentPage - 1) * cinemasPerPage, currentPage * cinemasPerPage);
 
     const handleDeleteCinema = async (id: number) => {
         if (window.confirm("Are you sure you want to delete this cinema?")) {
@@ -54,9 +59,6 @@ const CinemasDashboard: React.FC = () => {
         try {
             const response = await instance.get(`/show-movie-in-cinema/${cinemaId}`);
             const moviesInCinema = response.data.data; 
-    
-            console.log(moviesInCinema);
-    
             const moviesWithNames = moviesInCinema.map((movie: MovieInCinema) => {
                 const movieDetails = allMovies.find(m => m.id === movie.movie_id);
                 return {
@@ -64,7 +66,6 @@ const CinemasDashboard: React.FC = () => {
                     movie_name: movieDetails ? movieDetails.movie_name : 'Unknown Movie',
                 };
             });
-    
             setSelectedCinemaMovies(moviesWithNames);
         } catch (error) {
             console.error("Failed to fetch movies for cinema:", error);
@@ -103,14 +104,21 @@ const CinemasDashboard: React.FC = () => {
     };
 
     return (
-        <div className="cinemas-dashboard">
-            <h2>All Cinemas</h2>
-            <div className="actions">
-                <Link to={'/admin/cinemas/add'} className="add-cinema-btn">Add Cinema</Link>
+        <div className="container mt-5">
+            <h2 className="text-center text-primary mb-4">Cinemas Dashboard</h2>
+            <div className="d-flex justify-content-between align-items-center mb-4">
+                <Link to={'/admin/cinemas/add'} className="btn btn-outline-primary">Add Cinema</Link>
+                <input
+                    type="text"
+                    placeholder="Search by name"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="form-control w-25"  
+                />
             </div>
-            <div className="table-container-cinemas">
-                <table className="cinema-table">
-                    <thead>
+            <div className="table-responsive">
+                <table className="table table-bordered table-hover shadow-sm">
+                    <thead className="thead-light">
                         <tr>
                             <th>Cinema ID</th>
                             <th>Cinema Name</th>
@@ -128,7 +136,7 @@ const CinemasDashboard: React.FC = () => {
                                     <td>
                                         <span 
                                             onClick={() => handleCinemaClick(cinema.id!)} 
-                                            style={{ color: '#00796b', cursor: 'pointer', textDecoration: '' }}
+                                            style={{ color: 'rgba(var(--bs-primary-rgb)', cursor: 'pointer' }}
                                         >
                                             {cinema.cinema_name}
                                         </span>
@@ -137,11 +145,11 @@ const CinemasDashboard: React.FC = () => {
                                     <td>{cinema.cinema_address}</td>
                                     <td>{cinema.status}</td>
                                     <td className="action-buttons">
-                                        <Link to={`/admin/cinemas/edit/${cinema.id}`} className="edit-btn">
-                                            <FontAwesomeIcon icon={faEdit} /> {/* Edit icon */}
+                                        <Link to={`/admin/cinemas/edit/${cinema.id}`} className="btn btn-warning btn-sm mx-1">
+                                            <FontAwesomeIcon icon={faEdit} />
                                         </Link>
-                                        <button onClick={() => handleDeleteCinema(cinema.id!)} className="delete-btn">
-                                            <FontAwesomeIcon icon={faTrash} /> {/* Delete icon */}
+                                        <button onClick={() => handleDeleteCinema(cinema.id!)} className="btn btn-danger btn-sm">
+                                            <FontAwesomeIcon icon={faTrash} />
                                         </button>
                                     </td>
                                 </tr>
@@ -150,21 +158,15 @@ const CinemasDashboard: React.FC = () => {
                                         <td colSpan={6}>
                                             <div className="movies-list">
                                                 <h4>Movies in Cinema {cinema.cinema_name}</h4>
-                                                <ul>
+                                                <ul className="list-unstyled">
                                                     {selectedCinemaMovies.map(movie => (
-                                                        <li key={movie.id}>
-                                                            {movie.movie_id} 
+                                                        <li key={movie.id} className="d-flex justify-content-between align-items-center">
+                                                            <span>{movie.movie_id}</span>
                                                             <button 
                                                                 onClick={() => handleDeleteMovie(cinema.id!, movie.movie_id)}
-                                                                style={{
-                                                                    backgroundColor: 'transparent',
-                                                                    border: 'none',
-                                                                    cursor: 'pointer',
-                                                                    fontSize: '16px', 
-                                                                    color: 'red',
-                                                                }}
+                                                                className="btn btn-danger btn-sm"
                                                             >
-                                                                <FontAwesomeIcon icon={faTrash} /> {/* Delete icon for movie */}
+                                                                <FontAwesomeIcon icon={faTrash} />
                                                             </button>
                                                         </li>
                                                     ))}
@@ -177,7 +179,7 @@ const CinemasDashboard: React.FC = () => {
                         ))}
                         {currentCinemas.length === 0 && (
                             <tr>
-                                <td colSpan={6} style={{ textAlign: 'center' }}>
+                                <td colSpan={6} className="text-center">
                                     No cinemas available.
                                 </td>
                             </tr>
@@ -186,9 +188,9 @@ const CinemasDashboard: React.FC = () => {
                 </table>
             </div>
 
-            <div className="pagination">
+            <div className="pagination d-flex justify-content-center mt-4">
                 <button
-                    className="prev-btn"
+                    className="btn btn-outline-secondary mx-2"
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
                 >
@@ -197,14 +199,14 @@ const CinemasDashboard: React.FC = () => {
                 {Array.from({ length: totalPages }, (_, index) => (
                     <button
                         key={index}
-                        className={`page-btn ${currentPage === index + 1 ? 'active' : ''}`}
+                        className={`btn ${currentPage === index + 1 ? 'btn-primary' : 'btn-outline-primary'} mx-1`}
                         onClick={() => handlePageChange(index + 1)}
                     >
                         {index + 1}
                     </button>
                 ))}
                 <button
-                    className="next-btn"
+                    className="btn btn-outline-secondary mx-2"
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
                 >

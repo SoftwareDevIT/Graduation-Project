@@ -187,7 +187,12 @@
     .headersp h1 {
       font-size: 28px; /* Giảm kích thước font cho tiêu đề */
     }
-  
+  .header-gt p {
+    text-align: left;
+  }
+  .header-gt{
+    padding: 20px;
+  }
     .contact-info {
       flex-direction: column; /* Xếp chồng các phương thức liên hệ */
       align-items: center;
@@ -223,9 +228,15 @@
     }
   
     .headersp h1 {
+      margin-top: 40px;
       font-size: 26px; /* Giảm kích thước font cho tiêu đề */
     }
-  
+    .header-gt p {
+        text-align: left;
+      }
+      .header-gt{
+        padding: 20px;
+      }
     .contact-info {
       flex-direction: column; /* Xếp chồng cho mobile */
       align-items: center;

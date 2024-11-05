@@ -9,9 +9,22 @@ import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
 import './OderCheckOut.css';
 import Header from '../Header/Hearder';
-
+import { Seat } from '../../interface/Seat';
+export interface LocationState {
+    movieName: string;
+    cinemaName: string;
+    showtime: string;
+    seats: Array<{ seat_name: string; room_id: number; showtime_id: number; seat_row: number; seat_column: number; }>;
+    totalPrice: number;
+    showtimeId: number;
+    roomId: number;
+    cinemaId: number;
+    selectedCombos :Array<{id:string,quantity:number}>
+  }
 const OrderCheckout = () => {
     const location = useLocation();
+    
+
     const {
         movieName,
         cinemaName,
@@ -22,7 +35,7 @@ const OrderCheckout = () => {
         roomId,
         cinemaId,
         selectedCombos,
-    } = location.state || {};
+    } = (location.state as LocationState) || {};
 
     // Log selectedSeats to verify data
     console.log(seats);
@@ -74,7 +87,7 @@ const OrderCheckout = () => {
             pay_method_id, // Gửi pay_method_id là số nguyên
             comboId: selectedCombos,
         };
-        console.log(bookingData);
+        console.log(selectedCombos);
 
         try {
             const response = await instance.post("/book-ticket", bookingData, {
