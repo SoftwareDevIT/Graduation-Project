@@ -1,11 +1,20 @@
-import { Cinema } from "./Cinema";
 import { Movie } from "./Movie";
-import { MovieInCinema } from "./MovieInCinema";
+
+
+
 
 
 
 export interface Showtime {
     movie_in_cinema_id: number;
+    movie_in_cinema: {
+        id: number;
+        movie_id: number;
+        cinema_id: number;
+        created_at: string;
+        updated_at: string;
+        movie: Movie; // Thuộc tính `movie` chứa thông tin về phim
+    }
     id: number;
     movie_id: number;
     cinema_id: number;
@@ -14,8 +23,7 @@ export interface Showtime {
     showtime_end: string;
     status: string;
     price: number;
-    movie: Movie;  
-    cinema:Cinema;
+  
     
     // Include the Movie interface
 }

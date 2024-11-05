@@ -20,15 +20,26 @@
 }
 
 /* Actions container */
+/* Actions container */
 .actions {
     display: flex;
     justify-content: flex-end;
     margin-bottom: 20px;
 }
 
+/* Search input styling */
+.search-input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    margin-left: 20px; /* Space between the button and search input */
+}
+
+/* Add movie button styling */
 .add-movie-btn {
     padding: 10px 20px;
-    background-color: #f39c12; /* Màu giống UserDashboard */
+    background-color: #f39c12; /* Button color */
     border: none;
     border-radius: 5px;
     color: white;
@@ -44,6 +55,7 @@
     background: linear-gradient(145deg, #a5f3ff, #00d2ff);
     transform: translateY(-5px);
 }
+
 
 /* Table container styling */
 .table-container-movie {

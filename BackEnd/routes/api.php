@@ -68,6 +68,7 @@ Route::apiResource('movie-category', MovieCategoryController::class)->only(['ind
 Route::apiResource('movies', MovieController::class)->only(['index', 'show']); // Liệt kê phim
 Route::apiResource('combo', ComboController::class)->only(['index', 'show']);
 Route::apiResource('seat', SeatController::class)->only(['index', 'show']);
+Route::apiResource('method', PayMethodController::class)->only(['index', 'show']);
 Route::apiResource('news_category', NewCategoryController::class)->only(['index', 'show']);         // Liệt kê các danh mục tin tức
 Route::apiResource('news', NewController::class)->only(['index', 'show']);                          // List news
 Route::apiResource('actor', ActorController::class)->only(['index', 'show']);                       // Liệt kê các diễn viên

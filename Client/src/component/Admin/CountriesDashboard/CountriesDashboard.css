@@ -22,13 +22,22 @@
 /* Actions container */
 .actions {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end; /* Align to the right */
+    gap: 20px; /* Space between search and button */
     margin-bottom: 20px;
 }
 
+.search-input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+/* Add country button styling */
 .add-country-btn {
     padding: 10px 20px;
-    background-color: #f39c12; /* Màu giống UserDashboard */
+    background-color: #f39c12; /* Button color */
     border: none;
     border-radius: 5px;
     color: white;
@@ -39,6 +48,7 @@
     font-weight: bold;
     text-decoration: none;
 }
+
 
 .add-country-btn:hover {
     background-color: #e67e22; /* Màu nền khi hover */

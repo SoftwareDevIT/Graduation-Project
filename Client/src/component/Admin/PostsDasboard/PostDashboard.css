@@ -1,185 +1,103 @@
-/* Main container */
-.posts-management {
-    padding: 20px;
-    background: rgb(229, 240, 242); /* Nền xanh nhạt */
-    min-height: 170vh;
-    color: #333; /* Màu chữ chính */
-    font-family: 'Roboto', sans-serif;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Title styling */
-.posts-management h2 {
-    margin-bottom: 20px;
+.container {
+    max-width: 1200px;
+  }
+  
+  .post-card {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  }
+  
+  .card-img-top {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+  
+  .card-title {
     font-size: 1.5rem;
-    color: #006064; /* Màu chữ tiêu đề */
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    text-align: center;
-}
-
-/* Actions container */
-.actions {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-}
-
-.add-post-btn {
-    padding: 10px 20px !important;
-    background-color: #f39c12; /* Màu giống UserDashboard */
+    line-height: 1.5;
+    color: #007bff;
+  }
+  .card-title-link {
+    text-decoration: none; /* Loại bỏ gạch chân */
+    
+  }
+  .custom-btn {
+    display: inline-block; /* Để đảm bảo nút không bị kéo dài */
+    padding: 10px 20px; /* Padding cho nút */
+    font-size: 16px; /* Kích thước chữ */
+    color: #007bff; /* Màu chữ */
+    background-color: transparent; /* Nền trong suốt */
+    border: 1px solid #007bff; /* Đường viền */
+    border-radius: 20px; /* Bo góc */
+    text-decoration: none; /* Không có gạch chân */
+    transition: background-color 0.3s, color 0.3s; /* Hiệu ứng chuyển đổi */
+  }
+  
+  .custom-btn:hover {
+    background-color: #007bff; /* Màu nền khi hover */
+    color: white; /* Màu chữ khi hover */
+  }
+  
+  
+  .btn-primary {
+    background-color: #007bff;
     border: none;
-    border-radius: 5px;
-    color: white;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    text-transform: uppercase;
     font-weight: bold;
-    width: 200px !important;
-}
-
-.add-post-btn:hover {
-    background-color: #e67e22; /* Màu nền khi hover */
-}
-
-/* Table container styling */
-.table-container-posts {
-    width: 100%;
-    max-width: 1300px;
-    overflow-x: auto;
+  }
+  
+  .btn-warning, .btn-danger {
+    margin-left: 15px;
+    font-size: 0.85rem;
+    padding: 0.4rem 1.2rem;
+  }
+  
+  .pagination .page-link {
+    color: #007bff;
+  }
+  
+  .pagination .page-item.active .page-link {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .pagination .page-link:hover {
+    background-color: #0056cc;
+    color: white;
+  }
+  
+  /* Chi tiết bài viết */
+  .post-detail {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    background-color: #fff;
     border-radius: 8px;
-    background-color: #f4f6f7; /* Background sáng hơn */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Nhẹ hơn */
-}
-
-/* Table styling */
-.post-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-/* Header styling */
-.post-table th {
-    background-color: #e0f7fa; /* Màu xanh nhạt */
-    color: #00796b;
-    text-align: center;
-    font-weight: 600;
-    font-size: 1rem;
-    padding: 15px;
-    text-transform: uppercase;
-}
-
-/* Row styling */
-.post-table td {
-    padding: 15px;
-    background-color: #ffffff; /* Màu nền hàng */
-    color: #00796b; /* Màu chữ trong bảng */
-    border-bottom: 1px solid #e5e5e5;
-    font-size: 0.875rem;
-    vertical-align: middle;
-    text-align: center;
-}
-
-/* Hàng chẵn có nền xanh rất nhạt */
-.post-table tr:nth-child(even) {
-    background-color: #f1f8e9; /* Nền xanh rất nhạt */
-}
-
-/* Hiệu ứng hover cho hàng */
-.post-table tbody tr:hover {
-    background-color: #b2ebf2; /* Nền xanh nhạt khi hover */
-    transition: background-color 0.3s ease;
-}
-
-/* Button styles */
-.action-buttons {
-    display: flex;
-    justify-content: space-around;
-}
-
-.action-buttons button {
-    background: none;
-    border: none;
-    cursor: pointer;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .post-detail h1 {
+    font-size: 2.5rem;
+    line-height: 1.2;
+  }
+  
+  .post-detail .content {
+    font-size: 1.1rem;
+    line-height: 1.7;
     color: #333;
-    font-size: 1rem;
-    transition: color 0.3s ease;
-}
-
-.view-btn {
-    color: #3498db;
-}
-
-.view-btn:hover {
-    color: #2980b9;
-}
-
-.edit-btn {
-    color: #f1c40f;
-}
-
-.edit-btn:hover {
-    color: #f39c12;
-}
-
-.delete-btn {
-    color: #e74c3c;
-}
-
-.delete-btn:hover {
-    color: #c0392b;
-}
-
-/* Responsive design for mobile */
-@media (max-width: 768px) {
-    .post-table th, .post-table td {
-        font-size: 0.875rem;
-        padding: 10px;
-    }
-
-    .add-post-btn {
-        width: 100%;
-        font-size: 0.875rem;
-    }
-
-    .view-btn, .edit-btn, .delete-btn {
-        padding: 8px 12px;
-    }
-}
-/* Phân trang */
-.pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     margin-top: 20px;
-}
-
-.page-btn, .prev-btn, .next-btn {
-    padding: 10px 15px;
-    margin: 0 5px;
-    background-color: #00796b; /* Màu xanh */
-    border: none;
-    border-radius: 5px;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    font-weight: bold;
-}
-
-.page-btn.active {
-    background-color: #004d40; /* Màu khi đang hoạt động */
-}
-
-.page-btn:hover:not(.active), 
-.prev-btn:hover, 
-.next-btn:hover {
-    background-color: #004d40; /* Màu khi hover */
-}
-
-.prev-btn:disabled,
-.next-btn:disabled {
-    background-color: #b2dfdb; /* Màu cho nút vô hiệu hóa */
-    cursor: not-allowed; /* Hiệu ứng con trỏ cho nút vô hiệu hóa */
-}
+    white-space: pre-line;
+  }
+  
+  .img-fluid {
+    max-height: 400px;
+    object-fit: cover;
+  }
+  
+  .btn-secondary {
+    font-size: 1rem;
+    padding: 10px 20px;
+  }
+  
