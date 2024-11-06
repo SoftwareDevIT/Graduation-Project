@@ -229,23 +229,7 @@ const MovieDetail: React.FC = () => {
             </div>
           </div>
         </div>
-        <div className="tabs">
-          <Link to={`/movie-detail/${id}`} className={`tab ${location.pathname === `/movie-detail/${id}` ? "active" : ""}`}>
-            Thông tin phim
-          </Link>
-          <Link   state={{ movie }}  to={`/schedule/${id}`} className={`tab ${location.pathname === `/schedule/${id}` ? "active" : ""}`}>
-            Lịch chiếu
-          </Link>
-          <Link to={`/reviews/${id}`} className={`tab ${location.pathname === `/reviews/${id}` ? "active" : ""}`}>
-            Đánh giá
-          </Link>
-          <Link to={`/news/${id}`} className={`tab ${location.pathname === `/news/${id}` ? "active" : ""}`}>
-            Tin tức
-          </Link>
-          <Link to={`/buy-now/${id}`} className={`tab ${location.pathname === `/buy-now/${id}` ? "active" : ""}`}>
-            Mua vé
-          </Link>
-        </div>
+        {/* Các phần khác không thay đổi */}
       </div>
 
       {/* Modal Đánh Giá */}

@@ -1,9 +1,9 @@
 /* Container for the entire movie banner section */
 .movie-banner {
   margin: 0;
-  padding: 30px;
+  padding: 65px;
   background-color: white;  
- 
+ margin-top: -40px;
 }
 
 /* Header for the banner with the currently showing and upcoming movies */

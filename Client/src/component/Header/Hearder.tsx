@@ -117,8 +117,8 @@ const Header = () => {
               >
                 Đặt vé phim chiếu rạp
               </Link>
-
-              <a href="#">Lịch chiếu</a>
+<Link to={'/buy-ticket'}>Lịch chiếu</Link>
+          
               <div className="dropdown">
                 <a href="#" className="dropbtn1" >
                   Rạp{" "}
@@ -293,7 +293,8 @@ const Header = () => {
                     <Link to="/profile">Quản lý tài khoản</Link>
                     <Link to="/movies">Vé phim</Link>
                     <Link to="/credits">Moveek Credits</Link>
-                    <div onClick={handleLogout}>Đăng xuất</div>
+                    <Link to="/credits" onClick={handleLogout}>Đăng xuất</Link>
+                  
                   </div>
                 )}
               </div>

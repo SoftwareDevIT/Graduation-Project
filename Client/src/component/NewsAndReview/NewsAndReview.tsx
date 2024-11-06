@@ -43,6 +43,7 @@ const NewsAndReview = () => {
               <Link to={`/postdetail/${news.id}`}><h3>{news.title}</h3></Link>
               
               <p>{news.content.substring(0, 100)}...</p>
+             
             </div>
           </div>
         ))}

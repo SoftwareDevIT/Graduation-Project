@@ -115,9 +115,8 @@ const Login = () => {
         </button>
 
         <div className="form-footer">
-          <a href="/" className="forgot-password">
-            Quên mật khẩu?
-          </a>
+      
+         <Link   className="forgot-password" to={'/forgetpass'}>   Quên mật khẩu?</Link>
           <p className="register-link">
             Chưa có tài khoản? <Link to="/register">Đăng ký ngay!</Link>
           </p>

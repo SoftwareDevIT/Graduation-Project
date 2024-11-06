@@ -51,7 +51,7 @@ const SearchMovies = () => {
           {/* Hiển thị kết quả tìm kiếm */}
           {!loading && !error && (
             <div className="movelikeone">
-              <h3>Phim</h3>
+              <h3 className="phimtile">Phim</h3>
               <div className={`row move-itemone ${movies.length > 1 ? "more-than-one" : ""}`}>
   {movies.length > 0 ? (
     movies.map((movie) => (

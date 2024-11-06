@@ -55,6 +55,9 @@ import ForgetPass from "./component/Login/ForgetPass";
 import UpComingMovies from "./component/Movies/UpComingMovies";
 import AdminLogin from "./component/Admin/Login/LoginAdmin";
 import PostDetailManager from "./component/Admin/PostsDasboard/PostDetailManager";
+import NotFound from "./component/NotFoud/NotFound";
+import Otp from "./component/Login/Otp";
+import ResetPasswod from "./component/Login/ResetPasswod";
 
 
 
@@ -77,7 +80,9 @@ function App() {
         <Route path="/headerticket" element={<Headerticket />} />
         <Route path="/confirm" element={<EmailConfirm />} />
         <Route path="/payment-callback" element={<PaymentCallback />} />
-        <Route path="/FilmNews" element={<FilmNews />} />
+        <Route path="/*" element={<NotFound/>} />
+       
+      
         <Route path="/filmnews" element={<FilmNews/>} />
         <Route path="/sp" element={<SupportCenter/>} />
         <Route path="/postdetail/:id" element={<PostDetail/>} />
@@ -95,6 +100,8 @@ function App() {
         <Route path="/upcomingmovies" element={<UpComingMovies/>} />
         <Route path="/deponsit" element={<Deponsit/>} />
         <Route path="/forgetpass" element={<ForgetPass/>} />
+        <Route path="/otp" element={<Otp/>} />
+        <Route path="/resetPassword" element={<ResetPasswod/>} />
       
     
        
