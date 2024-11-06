@@ -61,7 +61,7 @@ const CinemaSelector: React.FC = () => {
     const fetchActors = async () => {
       try {
         const response = await instance.get("/actor");
-        console.log("Actors response:", response);
+        // console.log("Actors response:", response);
         setActors(response.data.data || []);
       } catch (error) {
         console.error("không có dữ liệu:", error);
@@ -250,16 +250,13 @@ useEffect(() => {
       const movie = movieData.movie; 
       
  
-      console.log(movie);
-      
+      let actor;
       if (Array.isArray(actors)) {
-        const actor= actors.find((a) => a.id === movie.actor_id);
-       console.log(actor);
-       
+        actor = actors.find((a) => a.id === movie.id);
+        // console.log("Actor found:", actor?.actor_name);
       } else {
         console.error("Actors is not an array:", actors);
       }
-      
 
 
       return (
@@ -268,7 +265,7 @@ useEffect(() => {
           <div className="details">
             <h4>{movie.movie_name}</h4>
             <p>
-              {/* Đạo Diễn: {actors ? actors.actor_name : "Không có thông tin"} */}
+              Đạo Diễn: {actor?.actor_name}
             </p>
             <p>Thời gian: {movie.duration}</p>
             <p>Giới hạn tuổi: {movie.age_limit}+</p>

@@ -57,6 +57,7 @@ import AdminLogin from "./component/Admin/Login/LoginAdmin";
 import PostDetailManager from "./component/Admin/PostsDasboard/PostDetailManager";
 import NotFound from "./component/NotFoud/NotFound";
 import Otp from "./component/Login/Otp";
+import ResetPasswod from "./component/Login/ResetPasswod";
 
 
 
@@ -100,6 +101,7 @@ function App() {
         <Route path="/deponsit" element={<Deponsit/>} />
         <Route path="/forgetpass" element={<ForgetPass/>} />
         <Route path="/otp" element={<Otp/>} />
+        <Route path="/resetPassword" element={<ResetPasswod/>} />
       
     
        

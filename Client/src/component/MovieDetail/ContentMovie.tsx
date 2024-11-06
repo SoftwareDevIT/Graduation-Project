@@ -4,72 +4,97 @@ import './ContentMovie.css';
 import MovieDetail from './MovieDetail';
 import Footer from '../Footer/Footer';
 import { useLocation } from 'react-router-dom';
-import instance from '../../server'; // Đảm bảo import instance API của bạn
-import { Movie } from '../../interface/Movie'; // Nhập interface Movie
+import instance from '../../server'; // Ensure you import the API instance correctly
+import { Movie } from '../../interface/Movie'; // Import Movie interface
+import { Location } from '../../interface/Location'; // Import Location interface
 
 interface Props {}
 
 export const ContentMovie = (props: Props) => {
     const location = useLocation();
-    const movieId = location.state?.movieId; // Lấy ID của bộ phim
+    const movieId = location.state?.movieId; // Get the movieId from the location state
 
-    const [movie, setMovie] = useState<Movie | null>(null); // Khởi tạo state cho phim
+    const [movie, setMovie] = useState<Movie | null>(null); // Initialize state for the movie
+    const [locations, setLocations] = useState<Location[]>([]); // Initialize state for locations
+    const [selectedLocation, setSelectedLocation] = useState<string>(''); // Initialize state for the selected location
 
     useEffect(() => {
         const fetchMovieDetails = async () => {
             try {
-                const response = await instance.get(`/movies/${movieId}`); // Gọi API để lấy chi tiết phim
-                setMovie(response.data.data.original); // Lưu dữ liệu phim vào state
+                const response = await instance.get(`/movies/${movieId}`); // Fetch movie details
+                setMovie(response.data.data.original); // Store the movie data in state
             } catch (error) {
-                console.error("Không thể lấy thông tin phim:", error);
+                console.error("Error fetching movie details:", error);
             }
         };
 
         if (movieId) {
             fetchMovieDetails();
         }
-    }, [movieId]); // Chạy khi movieId thay đổi
+    }, [movieId]); // Fetch movie details when movieId changes
+
+    useEffect(() => {
+        const fetchLocations = async () => {
+            try {
+                const response = await instance.get('/location'); // Fetch locations from the API
+                setLocations(response.data?.data || []); // Store locations in state
+            } catch (error) {
+                console.error("Error fetching locations:", error);
+            }
+        };
+
+        fetchLocations(); // Fetch locations when the component mounts
+    }, []);
+
+    // Handle location change
+    const handleLocationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setSelectedLocation(e.target.value); // Update selected location
+    };
 
     if (!movie) {
-        return <div>Đang tải thông tin phim...</div>; // Hiển thị thông báo khi đang tải
+        return <div>Đang tải thông tin phim...</div>; // Show loading message if movie data is not yet available
     }
 
-        return (
-            <div>
-                <MovieDetail/>
-                <div className="content">
-                        <div className="container content-1">
-                            <div className="video-section">
-                                <iframe
-                                    width="735px"
-                                    height="400"
-                                    src={movie?.trailer || 'https://www.youtube.com/embed/defaultVideo'}
-                                    title={movie?.movie_name || "Movie Trailer"}
-                                    frameBorder="0"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowFullScreen
-                                ></iframe>
+    return (
+        <div>
+            <MovieDetail />
+            <div className="content">
+                <div className="container content-1">
+                    <div className="video-section">
+                        <iframe
+                            width="735px"
+                            height="400"
+                            src={movie?.trailer || 'https://www.youtube.com/embed/defaultVideo'}
+                            title={movie?.movie_name || "Movie Trailer"}
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                        ></iframe>
+                    </div>
 
+                    {/* Select location and view schedule */}
+                    <div className="schedule-section">
+                        <h3>Lịch chiếu</h3>
+                        <p>Chọn khu vực bạn muốn xem lịch chiếu cho phim <strong>{movie.movie_name}</strong>.</p>
 
-                            </div>
+                        <div className="schedule-actions">
+                            <select
+                                className="city-select"
+                                value={selectedLocation}
+                                onChange={handleLocationChange}
+                            >
+                                {locations.map((location) => (
+                                    <option key={location.id} value={location.id.toString()}>
+                                        {location.location_name}
+                                    </option>
+                                ))}
+                            </select>
+                            <button className="button xem-lich-chieu">Xem lịch chiếu</button>
+                        </div>
+                    </div>
 
-                            {/* Phần chọn khu vực và xem lịch chiếu */}
-                            <div className="schedule-section">
-
-                                <h3>Lịch chiếu</h3>
-                                <p>Chọn khu vực bạn muốn xem lịch chiếu cho phim <strong>Transformers Một</strong>.</p>
-
-                                <div className="schedule-actions">
-                                    <select className="city-select">
-                                        <option value="hcm">Tp. Hồ Chí Minh</option>
-                                        <option value="hn">Hà Nội</option>
-                                        <option value="dn">Đà Nẵng</option>
-                                    </select>
-                                    <button className="button xem-lich-chieu">Xem lịch chiếu</button>
-                                </div>
-
-                            </div>
-                            <div className="title-2">
+                    {/* Related posts section */}
+                    <div className="title-2">
                                 <h3>Bài viết liên quan</h3>
                             </div>
                             <div className="related-posts">

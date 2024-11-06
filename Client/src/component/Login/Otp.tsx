@@ -1,21 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './ForgetPass.css';
+import { useNavigate } from 'react-router-dom';
+import { Alert } from 'antd';
 
 const Otp = () => {
-    const [otp, setOtp] = useState(''); // Trạng thái lưu mã OTP
+    const [otp, setOtp] = useState('');
+    const [email, setEmail] = useState(''); // Get email from localStorage
     const [message, setMessage] = useState('');
+    const [messageType, setMessageType] = useState<'success' | 'error' | 'info' | 'warning' | undefined>(undefined);
+    const nav = useNavigate();
 
-    // Hàm xử lý xác minh OTP
+    useEffect(() => {
+        const storedEmail = localStorage.getItem('reset_email');
+        if (storedEmail) {
+            setEmail(storedEmail);
+        }
+    }, []);
+
     const handleVerifyOtp = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault(); // Ngăn chặn hành vi mặc định của form
+        e.preventDefault();
+        
+        // Ensure OTP is not empty before submitting
+        if (!otp.trim()) {
+            setMessage('Vui lòng nhập OTP.');
+            setMessageType('error');
+            return;
+        }
+
         try {
-            const response = await axios.post('http://127.0.0.1:8000/api/password/verify-otp', {
-                otp: otp,
+            // Send OTP and email to the backend to verify
+            await axios.post('http://127.0.0.1:8000/api/password/verify-otp', {
+                otp,
+                email,
             });
+
             setMessage('OTP hợp lệ! Bạn có thể tiếp tục.');
+            setMessageType('success');
+            nav('/resetPassword'); // Navigate to reset password page
         } catch (error) {
             setMessage('OTP không hợp lệ. Vui lòng thử lại.');
+            setMessageType('error');
         }
     };
 
@@ -35,7 +60,15 @@ const Otp = () => {
                     />
                     <button type="submit">Xác minh OTP</button>
                 </form>
-                {message && <p>{message}</p>}
+                
+                {message && (
+                    <Alert
+                        message={message}
+                        type={messageType} // Use messageType for success or error
+                        showIcon
+                        style={{ marginTop: '15px' }}
+                    />
+                )}
             </div>
             <div className="image-section">
                 <img src="https://cdn.moveek.com/bundles/ornweb/img/mascot.png" alt="Mascot" />

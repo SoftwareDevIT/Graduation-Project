@@ -2,23 +2,44 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import './ForgetPass.css';
 import { useNavigate } from 'react-router-dom';
+import { Alert } from 'antd';
 
 const ForgetPass = () => {
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
-const nav=useNavigate()
-    // Chỉ định kiểu cho tham số e
+    const [messageType, setMessageType] = useState<'success' | 'error' | 'info' | 'warning' | undefined>(undefined);
+    const navigate = useNavigate();
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault(); // Ngăn chặn hành vi mặc định của form
+        e.preventDefault();
+
+        // Validate if email is not empty
+        if (!email.trim()) {
+            setMessage('Vui lòng nhập email.');
+            setMessageType('error');
+            return;
+        }
+
         try {
-            const response = await axios.post('http://127.0.0.1:8000/api/password/send-otp', {
-                email: email,
-            });
+            await axios.post('http://127.0.0.1:8000/api/password/send-otp', { email });
             
+            // Store email in localStorage
+            localStorage.setItem('reset_email', email);
             setMessage('Mã OTP đã được gửi đến email của bạn.');
-            nav('/otp')
+            setMessageType('success');
+            navigate('/otp');
         } catch (error) {
-            setMessage('Đã xảy ra lỗi. Vui lòng kiểm tra lại email của bạn.');
+            if (axios.isAxiosError(error) && error.response) {
+                const serverMessage = error.response.data?.message;
+                if (serverMessage === 'Không tìm thấy người dùng với email này.') {
+                    setMessage('Tài khoản không tồn tại.');
+                } else {
+                    setMessage('Đã xảy ra lỗi. Vui lòng kiểm tra lại email của bạn.');
+                }
+            } else {
+                setMessage('Đã xảy ra lỗi không xác định.');
+            }
+            setMessageType('error');
         }
     };
 
@@ -29,7 +50,7 @@ const nav=useNavigate()
                 <form onSubmit={handleSubmit}>
                     <label htmlFor="username">Tài khoản</label>
                     <input
-                        type="email"
+                        type="text"
                         id="username"
                         placeholder="Nhập email của bạn"
                         value={email}
@@ -38,7 +59,15 @@ const nav=useNavigate()
                     />
                     <button type="submit">Quên mật khẩu</button>
                 </form>
-                {message && <p>{message}</p>}
+                
+                {message && (
+                    <Alert
+                        message={message}
+                        type={messageType}
+                        showIcon
+                        style={{ marginTop: '15px' }}
+                    />
+                )}
             </div>
             <div className="image-section">
                 <img src="https://cdn.moveek.com/bundles/ornweb/img/mascot.png" alt="Mascot" />
