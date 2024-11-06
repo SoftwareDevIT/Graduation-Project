@@ -41,13 +41,20 @@ class ForgotPasswordController extends Controller
     {
         $request->validated();
         try {
+            // Kiểm tra email trong session
+            $email = Session::get('reset_password_email');
+            if (!$email) {
+                return $this->error('Không tìm thấy email trong phiên làm việc.', 400);
+            }
+    
             $otp = $request->input('otp');
-            $message = $this->otpService->verifyOtp($otp);
+            $message = $this->otpService->verifyOtp($otp, $email); // Truyền email nếu cần
             return $this->success($message, 'success', 200);
         } catch (\Throwable $th) {
             return $this->error($th->getMessage(), 400);
         }
     }
+    
 
     public function forgotPassword(ForgotPasswordRequest $request)
     {

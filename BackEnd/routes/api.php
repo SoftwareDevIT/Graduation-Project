@@ -45,9 +45,11 @@ Route::post('/get-google-sign-in-url', [GoogleController::class, 'getGoogleSignI
 Route::get('/callback', [GoogleController::class, 'loginCallback']);  // login google
 Route::post('logout', [AuthController::class, 'logout']);
 Route::post('register', [AuthController::class, 'register']); // Đăng ký người dùng
+Route::middleware(['api', 'session'])->group(function () {
 Route::post('password/send-otp', [ForgotPasswordController::class, 'sendOtp']); // Gửi OTP đến email
 Route::post('password/verify-otp', [ForgotPasswordController::class, 'verifyOtp']); // Xác minh OTP
 Route::post('password/reset', [ForgotPasswordController::class, 'forgotPassword']); // Đặt lại mật khẩu
+});
 
 Route::post('register', [AuthController::class, 'register']);                                       // Đăng ký người dùng
 Route::post('password/send-otp', [ForgotPasswordController::class, 'sendOtp']);                     // Gửi OTP đến email
@@ -68,6 +70,7 @@ Route::apiResource('movie-category', MovieCategoryController::class)->only(['ind
 Route::apiResource('movies', MovieController::class)->only(['index', 'show']); // Liệt kê phim
 Route::apiResource('combo', ComboController::class)->only(['index', 'show']);
 Route::apiResource('seat', SeatController::class)->only(['index', 'show']);
+Route::apiResource('method', PayMethodController::class)->only(['index', 'show']);
 Route::apiResource('news_category', NewCategoryController::class)->only(['index', 'show']);         // Liệt kê các danh mục tin tức
 Route::apiResource('news', NewController::class)->only(['index', 'show']);                          // List news
 Route::apiResource('actor', ActorController::class)->only(['index', 'show']);                       // Liệt kê các diễn viên
@@ -154,6 +157,7 @@ Route::get('filterMovieByNew', [FilterMovieByNewController::class, 'filterMovieB
 Route::get('filterNewByActor/{actor}', [ActorController::class,'filterNewByActor']);                // Lọc bài viết liên quan tới diễn viễn
 Route::get('filterNewByDictor/{director}', [DirectorController::class,'filterNewByDictor']);        // Lọc bài viết liên quan tới đạo diễn
 Route::get('filterNewByMovie/{movie}', [MovieController::class,'filterNewByMovie']);                // Lọc bài viết liên quan tới phim
+Route::get('ratings/{movie}', [RatingController::class, 'show']);                                   // Xem dánh giá phim
 
 
 Route::apiResource('order', OrderController::class);
