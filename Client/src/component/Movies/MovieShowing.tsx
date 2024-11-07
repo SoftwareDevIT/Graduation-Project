@@ -103,6 +103,12 @@ const MovieShowing: React.FC = () => {
                 <option value="english">Tiếng Anh</option>
                 <option value="japanese">Tiếng Nhật</option>
               </select>
+              <select value={selectedLanguage} onChange={handleLanguageChange} className="filter-select">
+                <option value="">Phim sắp chiếu</option>
+                <option value="vietnamese">....</option>
+                <option value="english">......</option>
+                <option value="japanese">.....</option>
+              </select>
             </div>
 
             <div className="danh-sach-phim">
