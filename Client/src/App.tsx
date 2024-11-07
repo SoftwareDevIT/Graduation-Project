@@ -55,7 +55,13 @@ import ForgetPass from "./component/Login/ForgetPass";
 
 import AdminLogin from "./component/Admin/Login/LoginAdmin";
 import PostDetailManager from "./component/Admin/PostsDasboard/PostDetailManager";
+<<<<<<< HEAD
 import EarlyMovie from "./component/Movies/EarlyMovie";
+=======
+import NotFound from "./component/NotFoud/NotFound";
+import Otp from "./component/Login/Otp";
+import ResetPasswod from "./component/Login/ResetPasswod";
+>>>>>>> b68b047a17ad655e62ae8fb1e574160cce161084
 
 
 
@@ -78,7 +84,9 @@ function App() {
         <Route path="/headerticket" element={<Headerticket />} />
         <Route path="/confirm" element={<EmailConfirm />} />
         <Route path="/payment-callback" element={<PaymentCallback />} />
-        <Route path="/FilmNews" element={<FilmNews />} />
+        <Route path="/*" element={<NotFound/>} />
+       
+      
         <Route path="/filmnews" element={<FilmNews/>} />
         <Route path="/sp" element={<SupportCenter/>} />
         <Route path="/postdetail/:id" element={<PostDetail/>} />
@@ -96,7 +104,12 @@ function App() {
 
         <Route path="/deponsit" element={<Deponsit/>} />
         <Route path="/forgetpass" element={<ForgetPass/>} />
+<<<<<<< HEAD
         <Route path="/earlymovie" element={<EarlyMovie/>} />
+=======
+        <Route path="/otp" element={<Otp/>} />
+        <Route path="/resetPassword" element={<ResetPasswod/>} />
+>>>>>>> b68b047a17ad655e62ae8fb1e574160cce161084
       
     
        

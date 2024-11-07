@@ -45,9 +45,11 @@ Route::post('/get-google-sign-in-url', [GoogleController::class, 'getGoogleSignI
 Route::get('/callback', [GoogleController::class, 'loginCallback']);  // login google
 Route::post('logout', [AuthController::class, 'logout']);
 Route::post('register', [AuthController::class, 'register']); // Đăng ký người dùng
+Route::middleware(['api', 'session'])->group(function () {
 Route::post('password/send-otp', [ForgotPasswordController::class, 'sendOtp']); // Gửi OTP đến email
 Route::post('password/verify-otp', [ForgotPasswordController::class, 'verifyOtp']); // Xác minh OTP
 Route::post('password/reset', [ForgotPasswordController::class, 'forgotPassword']); // Đặt lại mật khẩu
+});
 
 Route::post('register', [AuthController::class, 'register']);                                       // Đăng ký người dùng
 Route::post('password/send-otp', [ForgotPasswordController::class, 'sendOtp']);                     // Gửi OTP đến email

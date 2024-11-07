@@ -70,6 +70,8 @@ const Profile: React.FC = () => {
     const formData = new FormData();
     formData.append("_method", "PUT");
     formData.append("user_name", userProfile.user_name);
+    formData.append("phone", userProfile.phone);
+ 
     
     // Kiểm tra xem avatarFile có tồn tại không trước khi thêm vào formData
     if (avatarFile) {
@@ -168,6 +170,7 @@ const Profile: React.FC = () => {
                     id="username"
                     value={userProfile?.user_name || "giang1234"}
                     readOnly
+                    disabled
                   />
                 </div>
                 <div className="form-group">
@@ -179,6 +182,7 @@ const Profile: React.FC = () => {
                       userProfile?.email || ""
                     }
                     readOnly
+                    disabled
                   />
                 </div>
               </div>
@@ -197,25 +201,7 @@ const Profile: React.FC = () => {
                     }
                   />
                 </div>
-                <div className="form-group">
-                  <label>Khu vực</label>
-                  <select
-                    id="region"
-                    value={userProfile?.address || ""}
-                    onChange={(e) =>
-                      setUserProfile({
-                        ...userProfile,
-                        address: e.target.value,
-                      })
-                    }
-                  >
-                    {locations.map((location) => (
-                      <option key={location.id} value={location.location_name}>
-                        {location.location_name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                
               </div>
               <div className="form-row">
                 <div className="form-group">
@@ -224,18 +210,15 @@ const Profile: React.FC = () => {
                     type="text"
                     id="phone"
                     value={userProfile?.phone || ""}
-                    placeholder="Số điện thoại"
+                    onChange={(e) =>
+                      setUserProfile({
+                        ...userProfile,
+                        phone: e.target.value,
+                      })
+                    }
                   />
                 </div>
-                <div className="form-group">
-                <input className="xacthucsdt"
-                    type="text"
-                    id="phone"
-                    value=" Xác thực số điện thoại"
-                    placeholder="Số điện thoại"
-                  />
-                 
-                </div>
+                
               </div>
               <div className="form-row">
                 <div className="form-group">

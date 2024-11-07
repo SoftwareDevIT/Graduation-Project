@@ -11,7 +11,7 @@ class MovieCategoryInMovie extends Model
 
     protected $table = 'category_in_movie';
     protected $fillable = [
-        'movie_category_id  ',
+        'movie_category_id',
         'movie_id',
     ];
 

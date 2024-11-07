@@ -277,10 +277,10 @@ font-size: 15px;
         margin-left: 140px;
     }
     .price-box, .details-box{
-        margin-left: 95px !important;
+        margin-left: 3px !important;
     }
     .actionsts{
-        margin-left: 95px;
+        margin-left: 10px;
     }
 }
 /* Media Queries for devices with max width of 480px */
@@ -342,16 +342,16 @@ font-size: 15px;
         width: 413px;
        }
        .details-box{
-        margin-left: 8px !important;
-        width: 430px !important;
+        margin-left: 23px !important;
+        width: 377px !important;
        }
        .price-box{
-        margin-left: 8px !important;
-        width: 430px !important;
+        margin-left: 23px !important;
+        width: 377px !important;
        }
        .actionsts{
-       margin-left: 10px;
-        width: 415px !important;
+        margin-left: 23px !important;
+        width: 377px !important;
         
        }
        .back-btn2{

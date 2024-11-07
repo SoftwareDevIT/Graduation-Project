@@ -18,7 +18,7 @@ const CinemaSelector: React.FC = () => {
   const [selectedCinema, setSelectedCinema] = useState<number | null>(null);
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [filteredCinemas, setFilteredCinemas] = useState<Cinema[]>([]);
-  const [loading, setLoading] = useState(true); // Thêm state loading
+
   const navigate = useNavigate();
 
   // Lấy ngày hiện tại theo định dạng YYYY-MM-DD
@@ -61,11 +61,14 @@ const CinemaSelector: React.FC = () => {
     const fetchActors = async () => {
       try {
         const response = await instance.get("/actor");
-        setActors(response.data || []);
+        // console.log("Actors response:", response);
+        setActors(response.data.data || []);
       } catch (error) {
         console.error("không có dữ liệu:", error);
+        setActors([]);
       }
     };
+    
 
     fetchActors();
     fetchLocations();
@@ -128,7 +131,7 @@ useEffect(() => {
     const fetchMoviesForSelectedCinemaAndDate = async () => {
       if (selectedCinema && selectedDate) {
         try {
-          setLoading(true);
+       
           // Gọi API lọc phim theo rạp
           const cinemaResponse = await instance.get(`/filterByDate`, {
             params: {
@@ -148,10 +151,10 @@ useEffect(() => {
           // Cập nhật danh sách phim
           setMovies(cinemaMovies);
         } catch (error) {
-          console.error("Lỗi khi lấy phim cho rạp và ngày:", error);
+          // console.error("Lỗi khi lấy phim cho rạp và ngày:", error);
           setMovies([]); // Xóa danh sách phim khi gặp lỗi
         } finally {
-          setLoading(false); // Tắt loading sau khi dữ liệu được tải
+        
         }
       }
     };
@@ -165,12 +168,7 @@ useEffect(() => {
 
   return (
     <>
-     {loading && (
-        <div className="overlay-loading">
-          <ClipLoader color={"#333"} loading={loading} size={150} />
-        </div>
-      )}
-      {!loading && (
+    
            <div className="div-content">
            <h2 className="title">Mua vé theo rạp</h2>
             <div className="container">
@@ -249,12 +247,16 @@ useEffect(() => {
                 {movies.length > 0 ? (
   <div className="movies">
     {movies.map((movieData) => {
-      const movie = movieData.movie; // Truy xuất thông tin chi tiết phim từ movieData
+      const movie = movieData.movie; 
       
-      
-      const actor = actors.find((a) => a.id === movie.id);
-      console.log("actors:", actors);
-console.log("movie.actor_id:", movie.actor_id);
+ 
+      let actor;
+      if (Array.isArray(actors)) {
+        actor = actors.find((a) => a.id === movie.id);
+        // console.log("Actor found:", actor?.actor_name);
+      } else {
+        console.error("Actors is not an array:", actors);
+      }
 
 
       return (
@@ -263,7 +265,7 @@ console.log("movie.actor_id:", movie.actor_id);
           <div className="details">
             <h4>{movie.movie_name}</h4>
             <p>
-              Đạo Diễn: {actor ? actor.actor_name : "Không có thông tin"}
+              Đạo Diễn: {actor?.actor_name}
             </p>
             <p>Thời gian: {movie.duration}</p>
             <p>Giới hạn tuổi: {movie.age_limit}+</p>
@@ -318,7 +320,7 @@ console.log("movie.actor_id:", movie.actor_id);
               </div>
             </div>
            </div>
-           )}
+   
   
     </>
   );

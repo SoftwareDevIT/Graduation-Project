@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\Auth;
 
 use App\Mail\ResetPasswordOtpMail;
@@ -29,17 +30,9 @@ class OtpService
         return 'Mã OTP đã được gửi đến email của bạn.';
     }
 
-    public function verifyOtp($otp)
+    public function verifyOtp($otp, $email)
     {
-
-        $email = Session::get('reset_password_email');
-      
-        if (!$email) {
-            throw new \Exception('Không tìm thấy email trong phiên làm việc.');
-        }
-
         $cachedOtp = Cache::get('otp_' . $email);
-      
 
         if (!$cachedOtp) {
             throw new \Exception('OTP đã hết hạn hoặc không hợp lệ.');
@@ -49,28 +42,19 @@ class OtpService
             throw new \Exception('Mã OTP không đúng.');
         }
 
-        // Xác thực OTP thành công, lưu trạng thái đã xác thực
-        Cache::forget('otp_' . $email); // Xóa OTP cũ
-        Cache::put('otp_verified_' . $email, true, $this->otpExpiration); // Đặt trạng thái đã xác thực
+        Cache::forget('otp_' . $email);
+        Cache::put('otp_verified_' . $email, true, $this->otpExpiration);
 
         return 'OTP đã xác thực thành công.';
     }
 
-    public function canResetPassword()
+    public function canResetPassword($email)
     {
-        $email = Session::get('reset_password_email');
-
-        if (!$email) {
-            return false;
-        }
-
-        return Cache::has('otp_verified_' . $email); // Kiểm tra OTP đã được xác thực chưa
+        return Cache::has('otp_verified_' . $email);
     }
 
-    public function clearOtpVerification()
+    public function clearOtpVerification($email)
     {
-        $email = Session::get('reset_password_email');
-        Cache::forget('otp_verified_' . $email); // Xóa trạng thái xác thực OTP
-        Session::forget('reset_password_email'); // Xóa email khỏi session
+        Cache::forget('otp_verified_' . $email);
     }
 }

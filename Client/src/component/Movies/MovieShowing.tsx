@@ -22,11 +22,13 @@ const MovieShowing: React.FC = () => {
   const fetchGenres = async () => {
     try {
       const response = await instance.get("/movie-category");
-      setGenres(response.data);
+      setGenres(response.data.data);
 
       // Tìm thể loại có nhiều phim nhất
-      if (response.data.length > 0) {
-        const mostPopularGenreId = response.data[1].id; // Giả sử thể loại đầu tiên là thể loại có nhiều phim nhất
+      if (response.data.data.length > 0) {
+        const mostPopularGenreId = response.data.data[0].id; // Giả sử thể loại đầu tiên là thể loại có nhiều phim nhất
+      
+        
         fetchMovies(mostPopularGenreId); // Gọi hàm fetchMovies với genreId
         setSelectedGenre(mostPopularGenreId); // Cập nhật trạng thái thể loại đã chọn
       }
