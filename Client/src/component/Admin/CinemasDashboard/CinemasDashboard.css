@@ -122,9 +122,7 @@
     color: #e74c3c;
 }
 
-.delete-btn:hover {
-    color: #c0392b;
-}
+
 
 /* Align the "Actions" header */
 .cinema-table th:last-child {

@@ -144,7 +144,7 @@ const CinemasDashboard: React.FC = () => {
                                     <td>{cinema.phone}</td>
                                     <td>{cinema.cinema_address}</td>
                                     <td>{cinema.status}</td>
-                                    <td className="action-buttons">
+                                    <td className="action-buttons1">
                                         <Link to={`/admin/cinemas/edit/${cinema.id}`} className="btn btn-warning btn-sm mx-1">
                                             <FontAwesomeIcon icon={faEdit} />
                                         </Link>
