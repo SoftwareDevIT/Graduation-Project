@@ -3,7 +3,7 @@ import './MovieDetail.css';
 import './ContentMovie.css';
 import MovieDetail from './MovieDetail';
 import Footer from '../Footer/Footer';
-import { useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';  // Import useParams
 import instance from '../../server'; // Ensure you import the API instance correctly
 import { Movie } from '../../interface/Movie'; // Import Movie interface
 import { Location } from '../../interface/Location'; // Import Location interface
@@ -11,26 +11,28 @@ import { Location } from '../../interface/Location'; // Import Location interfac
 interface Props {}
 
 export const ContentMovie = (props: Props) => {
-    const location = useLocation();
-    const movieId = location.state?.movieId; // Get the movieId from the location state
-
+    const { id } = useParams(); // Get the movieId from the route parameter
+    const movieId = id ? parseInt(id) : null; // Parse the id to an integer
+    const [ratings, setRatings] = useState<any[]>([]);  // State để lưu danh sách đánh giá
     const [movie, setMovie] = useState<Movie | null>(null); // Initialize state for the movie
     const [locations, setLocations] = useState<Location[]>([]); // Initialize state for locations
     const [selectedLocation, setSelectedLocation] = useState<string>(''); // Initialize state for the selected location
-
+    const [relatedPosts, setRelatedPosts] = useState<any[]>([]); // Initialize state for related posts
+    const [loading, setLoading] = useState<boolean>(true);  // Trạng thái tải
+    const [error, setError] = useState<string | null>(null);  // Trạng thái lỗi
     useEffect(() => {
         const fetchMovieDetails = async () => {
-            try {
-                const response = await instance.get(`/movies/${movieId}`); // Fetch movie details
-                setMovie(response.data.data.original); // Store the movie data in state
-            } catch (error) {
-                console.error("Error fetching movie details:", error);
+            if (movieId) {
+                try {
+                    const response = await instance.get(`/movies/${movieId}`); // Fetch movie details
+                    setMovie(response.data.data.original); // Store the movie data in state
+                } catch (error) {
+                    console.error("Error fetching movie details:", error);
+                }
             }
         };
 
-        if (movieId) {
-            fetchMovieDetails();
-        }
+        fetchMovieDetails(); // Fetch movie details when movieId changes
     }, [movieId]); // Fetch movie details when movieId changes
 
     useEffect(() => {
@@ -45,8 +47,45 @@ export const ContentMovie = (props: Props) => {
 
         fetchLocations(); // Fetch locations when the component mounts
     }, []);
+    useEffect(() => {
+        if (id) {
+            setLoading(true);
+            instance
+                .get(`/ratings/${id}`)  // Thay đổi từ fetch thành instance.get
+                .then((response) => {
+                    if (response.data.status) {
+                        setRatings(response.data.data);  // Lưu đánh giá vào state
+                    } else {
+                        setError("Không có đánh giá cho phim này.");
+                    }
+                    setLoading(false);
+                })
+                .catch((error) => {
+                    setError(error.message);
+                    setLoading(false);
+                });
+        } else {
+            setError("ID phim không tồn tại.");
+            setLoading(false);
+        }
+    }, [id]);
+    useEffect(() => {
+        const fetchRelatedPosts = async () => {
+            if (movieId) {
+                try {
+                    const response = await instance.get(`/filterNewByMovie/${movieId}`); // Fetch related posts by movieId
+                    if (response.data?.status) {
+                        setRelatedPosts(response.data.data); // Store related posts in state
+                    }
+                } catch (error) {
+                    console.error("Error fetching related posts:", error);
+                }
+            }
+        };
 
-    // Handle location change
+        fetchRelatedPosts(); // Fetch related posts when movieId is available
+    }, [movieId]);
+
     const handleLocationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedLocation(e.target.value); // Update selected location
     };
@@ -95,67 +134,55 @@ export const ContentMovie = (props: Props) => {
 
                     {/* Related posts section */}
                     <div className="title-2">
-                                <h3>Bài viết liên quan</h3>
-                            </div>
-                            <div className="related-posts">
-
-
-                                <div className="newcontent">
-                                    <div className="post">
-                                        <img
-                                            src="https://cdn-i.vtcnews.vn/resize/th/upload/2021/08/04/hinhanh0-07010768.jpg"
-                                            alt="Transformers Review"
-                                            className="post-image"
-                                        />
-                                        <div className="post-info">
-                                            <a href="#" className="post-title">Review Transformers Một – Hoành tráng và bùng nổ hơn cả kỳ vọng</a>
-                                            <p className="post-meta">Đánh giá phim • miduynph • 6 ngày trước</p>
-                                            <p className="post-meta-2">Khác với trailer không mấy hấp dẫn thì bộ phim Transformers Một (Transformers One) lại mang đến điều ngược lại.</p>
-                                        </div>
-                                    </div>
-                                    <div className="post">
-                                        <img
-                                            src="https://i.vietgiaitri.com/2019/5/10/vu-tru-dien-anh-marvel-da-ton-tai-mot-sieu-anh-hung-la-gay-nhung-103fd0.jpg"
-                                            alt="8 Phim Hoạt Hình Đáng Mong Đợi"
-                                            className="post-image"
-                                        />
-                                        <div className="post-info">
-                                            <a href="#" className="post-title">8 Phim hoạt hình đáng mong đợi nhất nửa cuối năm 2024</a>
-                                            <p className="post-meta">linhhuynh0257 • 2 tháng trước</p>
-                                            <p className="post-meta-2">Hàng loạt những phim hoạt hình đáng chú ý sẽ ra mắt vào thời điểm nửa cuối năm 2024 này. Liệu có bộ phim nào có thể đạt được thành tích mà Inside Out 2 đã làm được hay không?</p>
-                                        </div>
+                        <h3>Bài viết liên quan</h3>
+                    </div>
+                    <div className="related-posts">
+                        <div className="newcontent">
+                            {relatedPosts.map((post) => (
+                                <div className="post" key={post.id}>
+                                    <img
+                                        src={post.thumnail}
+                                        alt={post.title}
+                                        className="post-image"
+                                    />
+                                    <div className="post-info">
+                                        <a href="#" className="post-title">{post.title}</a>
+                                        <p className="post-meta">Đánh giá phim • miduynph • 6 ngày trước</p>
+                                        <p className="post-meta-2">{post.content.slice(0, 150)}...</p> {/* Display a truncated version of the content */}
                                     </div>
                                 </div>
-
-                            </div>
-
-                            <div className="community-section">
-                                <h3>Cộng đồng</h3>
-                                <div className="comment">
-                                    <p className="comment-user"><strong>VoDucTri744</strong> <span className="comment-rating">⭐ 8</span> • 4 ngày trước</p>
-                                    <p className="comment-text">
-                                        Lồng tiếng ok, hài hước còn lại nội dung nhưng do t chưa hiểu câu chuyện về TPM lắm nên chủ yếu lồng tiếng có ảnh KMT, QNT vs đặc biệt là CP nên sr sr.
-                                    </p>
-                                    <div className="comment-actions">
-                                        <button className="like-btn">👍</button>
-                                        <button className="dislike-btn">👎</button>
-                                    </div>
-                                </div>
-                                <div className="comment">
-                                    <p className="comment-user"><strong>VoDucTri744</strong> <span className="comment-rating">⭐ 8</span> • 4 ngày trước</p>
-                                    <p className="comment-text">
-                                        Lồng tiếng ok, hài hước còn lại nội dung nhưng do t chưa hiểu câu chuyện về TPM lắm nên chủ yếu lồng tiếng có ảnh KMT, QNT vs đặc biệt là CP nên sr sr.
-                                    </p>
-                                    <div className="comment-actions">
-                                        <button className="like-btn">👍</button>
-                                        <button className="dislike-btn">👎</button>
-                                    </div>
-                                </div>
-                            </div>
-
+                            ))}
                         </div>
                     </div>
-                    <Footer/>
+
+                    <div className="community-section">
+                            <h3>Cộng đồng</h3>
+
+                            {/* Lặp qua danh sách đánh giá và hiển thị */}
+                            {ratings.length > 0 ? (
+                                ratings.map((rating) => (
+                                    <div className="comment" key={rating.id}>
+                                        <p className="comment-user">
+                                            <i className="fas fa-user-circle avatar-icon"></i>
+                                            <strong>{rating.user_name}</strong>
+                                            <span className="comment-rating">⭐ {rating.rating}</span> • {new Date(rating.created_at).toLocaleDateString()}
+                                        </p>
+                                        <p className="comment-text">
+                                            {rating.review || "Không có nội dung đánh giá."}
+                                        </p>
+                                        <div className="comment-actions">
+                                            <button className="like-btn">👍</button>
+                                            <button className="dislike-btn">👎</button>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <p>Chưa có đánh giá nào cho phim này.</p>
+                            )}
+                        </div>
+                </div>
             </div>
-        )
-    }
+            <Footer />
+        </div>
+    );
+};
