@@ -52,12 +52,16 @@ import PostDetail from "./component/Post/PostDetail";
 import Credits from "./component/PersonalPage/Credits";
 import Deponsit from "./component/PersonalPage/Deposit";
 import ForgetPass from "./component/Login/ForgetPass";
-import UpComingMovies from "./component/Movies/UpComingMovies";
+
 import AdminLogin from "./component/Admin/Login/LoginAdmin";
 import PostDetailManager from "./component/Admin/PostsDasboard/PostDetailManager";
+<<<<<<< HEAD
+import EarlyMovie from "./component/Movies/EarlyMovie";
+=======
 import NotFound from "./component/NotFoud/NotFound";
 import Otp from "./component/Login/Otp";
 import ResetPasswod from "./component/Login/ResetPasswod";
+>>>>>>> b68b047a17ad655e62ae8fb1e574160cce161084
 
 
 
@@ -97,11 +101,15 @@ function App() {
         <Route path="/register" element={<RegisterCinema />} />
         <Route path="/login" element={<LoginCinema />} />
         <Route path="/movieshowing" element={<MovieShowing/>} />
-        <Route path="/upcomingmovies" element={<UpComingMovies/>} />
+
         <Route path="/deponsit" element={<Deponsit/>} />
         <Route path="/forgetpass" element={<ForgetPass/>} />
+<<<<<<< HEAD
+        <Route path="/earlymovie" element={<EarlyMovie/>} />
+=======
         <Route path="/otp" element={<Otp/>} />
         <Route path="/resetPassword" element={<ResetPasswod/>} />
+>>>>>>> b68b047a17ad655e62ae8fb1e574160cce161084
       
     
        
