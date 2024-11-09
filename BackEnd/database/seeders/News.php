@@ -32,12 +32,13 @@ class News extends Seeder
         $client = new Client();
         $response = $client->get('https://rapchieuphim.com/api/v1/posts');
         $data = json_decode($response->getBody()->getContents(), true);
-
+        $data = array_slice($data, 0, 100);
         foreach ($data as $item) {
             DB::table('news')->insert([
                 'user_id' => '1',
                 'title' => $item['name'],
                 'content' => $item['content'],
+                'banner' => 'https://rapchieuphim.com' . $item['thumbnail'],
                 'thumnail' => 'https://rapchieuphim.com' . $item['thumbnail'],
                 'news_category_id' => '3',
                 'created_at' => now(),
