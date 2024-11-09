@@ -105,7 +105,7 @@ const MoviesDashboard: React.FC = () => {
                                     <td>
                                         <img src={movie.poster ?? undefined} style={{ width: "60px", height: "90px" }} alt={`${movie.movie_name} poster`} />
                                     </td>
-                                    <td>{movie.category.map(category => category.category_name).join(', ')}</td>
+                                    <td>{movie.movie_category.map(movie_category => movie_category.category_name).join(', ')}</td>
                                     <td>{movie.actor.map(actor => actor.actor_name).join(', ')}</td>
                                     <td>{movie.director.map(director => director.director_name).join(', ')}</td>
                                     <td>{movie.duration}</td>

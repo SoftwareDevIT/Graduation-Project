@@ -17,7 +17,7 @@ const MovieBanner = () => {
       try {
         const response = await instance.get("/movies");
 
-        const limitedMovies = response.data.data.original.slice(0, 15); // Get only the first 20 movies
+      
 
         const limitedMovies = response.data.data.original.slice(0, 20); // Get only the first 20 movies
 

@@ -119,7 +119,7 @@ Route::middleware(['auth:sanctum', 'role:admin|manager'])->group(function () {
 
 
     // phan quyen
-    Route::resource('roles', RoleController::class); // add roles and show
+    Route::resource('roles', RoleController::class); 
     Route::post('/roles/{role}/permissions', [RoleController::class, 'syncPermissions'])->name('roles.permissions.sync'); // chia chuc nang cho quyen
     Route::post('/roles/{user}/users', [RoleController::class, 'syncRoles'])->name('users.roles.sync'); // cap quyen cho user
     Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy'); // delete role
