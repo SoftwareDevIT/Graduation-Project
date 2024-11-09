@@ -18,7 +18,7 @@ class DirectorSeeder extends Seeder
         $client = new Client();
         $response = $client->get('https://rapchieuphim.com/api/v1/directors');
         $data = json_decode($response->getBody()->getContents(), true);
-
+        $data = array_slice($data, 0, 100);
         foreach ($data as $item) {
             DB::table('director')->insert([
                 'director_name' => $item['name'],

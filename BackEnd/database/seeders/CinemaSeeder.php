@@ -14,9 +14,10 @@ class CinemaSeeder extends Seeder
         $client = new Client();
         $response = $client->get('https://rapchieuphim.com/api/v1/cinemas');
         $data = json_decode($response->getBody()->getContents(), true);
-
+        // $data = array_slice($data, 0, 10);
         foreach ($data as $item) {
             $locationId = DB::table('location')->where('location_name', $item['city'])->value('id');
+            $locationId = $locationId ?? 24;
             DB::table('cinema')->insert([
                 'cinema_name' => $item['name'],
                 'image' => 'https://rapchieuphim.com' . $item['image'],

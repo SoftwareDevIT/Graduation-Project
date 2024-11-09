@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use GuzzleHttp\Client;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -71,13 +72,22 @@ class LocationSeeder extends Seeder
             'Thanh Hóa',
             'Thừa Thiên Huế',
             'Tiền Giang',
-            'TP Hồ Chí Minh',
+            'Hồ Chí Minh',
             'Trà Vinh',
             'Tuyên Quang',
             'Vĩnh Long',
             'Vĩnh Phúc',
             'Yên Bái'
         ];
+        // $client = new Client();
+        // $response = $client->get('https://rapchieuphim.com/api/v1/cinemas');
+        // $data = json_decode($response->getBody()->getContents(), true);
+
+        // foreach ($data as $item) {
+        //     DB::table('location')->insert([
+        //         'location_name' => $item['city'],
+        //     ]);
+        // }
 
         $locations = [];
 
