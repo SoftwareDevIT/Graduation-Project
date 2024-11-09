@@ -43,6 +43,11 @@ class RoomService
         }
         return $room;
     }
+    public function getRoomByCinema(int $cinemaId): Collection
+    {
+        return Room::where('cinema_id', $cinemaId)->get();
+    }
+
 
     public function update(int $id, array $data): Room
     {

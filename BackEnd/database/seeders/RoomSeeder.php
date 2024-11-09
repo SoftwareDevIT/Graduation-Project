@@ -20,31 +20,31 @@ class RoomSeeder extends Seeder
             DB::table('room')->insert([
                 [
                     'room_name' => 'P1',
-                    'volume' => 100,
+                   'volume' => rand(50, 100),
                     'cinema_id' => $cinemaId,
                     'status' => '1',
                 ],
                 [
                     'room_name' => 'P2',
-                    'volume' => 100,
+                   'volume' => rand(50, 100),
                     'cinema_id' => $cinemaId,
                     'status' => '1',
                 ],
                 [
                     'room_name' => 'P3',
-                    'volume' => 100,
+                   'volume' => rand(50, 100),
                     'cinema_id' => $cinemaId,
                     'status' => '1',
                 ],
                 [
                     'room_name' => 'P4',
-                    'volume' => 100,
+                   'volume' => rand(50, 100),
                     'cinema_id' => $cinemaId,
                     'status' => '1',
                 ],
                 [
                     'room_name' => 'P5',
-                    'volume' => 100,
+                   'volume' => rand(50, 100),
                     'cinema_id' => $cinemaId,
                     'status' => '1',
                 ],
