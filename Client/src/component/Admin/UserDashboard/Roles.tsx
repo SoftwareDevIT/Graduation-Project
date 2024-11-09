@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Roles } from '../../../interface/Roles';
 import { User } from '../../../interface/User';
+import { Permission } from '../../../interface/Permissions';
 import instance from '../../../server';
 
 const RoleAndUserManagement = () => {
   const [roles, setRoles] = useState<Roles[]>([]);
   const [users, setUsers] = useState<User[]>([]);
+  const [permissions, setPermissions] = useState<Permission[]>([]);
   const [newRoleName, setNewRoleName] = useState(''); // State lưu tên vai trò mới
   
   // Fetch roles and users on component mount
@@ -16,6 +18,7 @@ const RoleAndUserManagement = () => {
         if (response.data.status) {
           setRoles(response.data.data.roles);
           setUsers(response.data.data.users);
+          setPermissions(response.data.data.permissions);
         } else {
           console.error('Failed to fetch data:', response.data.message);
         }
@@ -149,21 +152,23 @@ const RoleAndUserManagement = () => {
               <tr key={role.id}>
                 <td style={{ padding: '10px', border: '1px solid #ddd' }}>{role.name}</td>
                 <td style={{ padding: '10px', border: '1px solid #ddd' }}>
-                  <textarea
-                    readOnly
-                    value="index\nshow\ncreate\nstore"
-                    style={{
-                      width: '100%',
-                      height: '80px',
-                      backgroundColor: '#f9f9f9',
-                      color: '#000',
-                      border: '1px solid #ccc',
-                      borderRadius: '5px',
-                      padding: '5px',
-                      resize: 'none',
-                    }}
-                  ></textarea>
-                </td>
+                <select
+          multiple
+          style={{
+            width: '100%',
+            backgroundColor: '#f9f9f9',
+            color: '#000',
+            border: '1px solid #ccc',
+            borderRadius: '5px',
+            padding: '5px',
+          }}
+        >
+          {permissions.map((permission) => (
+            <option key={permission.id} value={permission.name}>{permission.name}</option>
+          ))}
+        </select>
+</td>
+
                 <td style={{ padding: '10px', border: '1px solid #ddd' }}>
                   <button
                     style={{

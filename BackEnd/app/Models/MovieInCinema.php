@@ -22,13 +22,13 @@ class MovieInCinema extends Model
     }
 
     public function movie()
-{
-    return $this->belongsTo(Movie::class);
-}
+    {
+        return $this->belongsTo(Movie::class);
+    }
 
-public function cinema()
-{
-    return $this->belongsTo(Cinema::class);
-}
+    public function cinema()
+    {
+        return $this->belongsTo(Cinema::class);
+    }
 
 }
