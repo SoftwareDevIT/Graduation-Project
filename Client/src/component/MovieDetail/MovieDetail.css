@@ -449,7 +449,7 @@ left: 10px;
     font-size: 20px;
 }
 .ngoisao{
-    margin-top:7px;
+    margin-top:6px;
 }
   /* Cho màn hình máy tính bảng */
 @media (max-width: 1024px) {
@@ -581,5 +581,12 @@ width: 60px;
         margin-right: 12px;
     
     }
+    .actions  {
+         gap :15px
+    }
 
+     .rate .like-1{
+        padding-left: 10px;
+        font-size: 12px !important;
+     }
 }
