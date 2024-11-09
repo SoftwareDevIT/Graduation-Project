@@ -86,14 +86,14 @@ Route::middleware(['auth:sanctum', 'web'])->group(function () {
     Route::post('ratings', [RatingController::class, 'store']);                                // Đánh giá phim
     // Route::post('selectSeats', [BookingController::class, 'selectSeats']);
     Route::post('/book-ticket', [BookingController::class, 'bookTicket']);
-    Route::get('/vnpay-return', [BookingController::class, 'vnPayReturn']);
+    // Route::get('/vnpay-return', [BookingController::class, 'vnPayReturn']);
     Route::apiResource('user', AuthController::class);
     Route::get('/user', function (Request $request) {
         $user = $request->user()->load('favoriteMovies');
         return response()->json($user);
     });
 });
-// Route::get('/vnpay-return', [BookingController::class, 'vnPayReturn']);
+Route::get('/vnpay-return', [BookingController::class, 'vnPayReturn']);
 Route::get('/all-user', [AuthController::class, 'allUser']);
 
 // Các route quản trị và quản lý
@@ -119,7 +119,7 @@ Route::middleware(['auth:sanctum', 'role:admin|manager'])->group(function () {
 
 
     // phan quyen
-    Route::resource('roles', RoleController::class); 
+    Route::resource('roles', RoleController::class);
     Route::post('/roles/{role}/permissions', [RoleController::class, 'syncPermissions'])->name('roles.permissions.sync'); // chia chuc nang cho quyen
     Route::post('/roles/{user}/users', [RoleController::class, 'syncRoles'])->name('users.roles.sync'); // cap quyen cho user
     Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy'); // delete role
@@ -166,6 +166,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/slectMovieAndSeats', [BookingController::class, 'slectMovieAndSeats']);
     Route::post('/selectCombo', [BookingController::class, 'selectCombos']);
     Route::post('selectSeats', [BookingController::class, 'selectSeats']);
-    Route::post('/book-ticket', [BookingController::class, 'bookTicket']);
+    // Route::post('/book-ticket', [BookingController::class, 'bookTicket']);
 });
 Route::get('session', [BookingController::class, 'getSession']);

@@ -87,7 +87,7 @@ class BookingController extends Controller
             $booking = Booking::where('id', $data['vnp_TxnRef'])->first();
             $booking->status = 'Pain';
             $booking->save();
-            Mail::to(Auth::user()->email)->queue(new InvoiceMail($booking));
+            // Mail::to(Auth::user()->email)->queue(new InvoiceMail($booking));
             // event(new InvoiceSendMail($booking));
             session()->flush();
             return redirect('http://localhost:5173/');

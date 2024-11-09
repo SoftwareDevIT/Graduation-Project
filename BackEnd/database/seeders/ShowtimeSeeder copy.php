@@ -28,7 +28,7 @@ class ShowtimeSeeder extends Seeder
             '23:00:00' => 59000,
         ];
         $showtimeDate = now()->addDays(1)->toDateString();
-        $batchSize = 1000; // Define the batch size
+        $batchSize = 1000; // Xác định kích thước lô
         $showtimeData = [];
 
         foreach ($movieInCinemaIds as $movieInCinemaId) {
@@ -45,12 +45,12 @@ class ShowtimeSeeder extends Seeder
 
                 if (count($showtimeData) >= $batchSize) {
                     DB::table('showtimes')->insert($showtimeData);
-                    $showtimeData = [];// Đặt lại mảng sau khi chèn hàng loạt
+                    $showtimeData = [];
                 }
             }
         }
 
-       // Chèn bất kỳ hồ sơ còn lại
+
         if (!empty($showtimeData)) {
             DB::table('showtimes')->insert($showtimeData);
         }
