@@ -79,7 +79,11 @@
     font-weight: bold;
     margin-bottom: 10px;
 }
-
+ .buy a{
+    text-decoration: none;
+    color:#fff;
+    font-weight: 600;
+ }
 .genre {
     font-size: 14px;
     padding-bottom: 15px !important;

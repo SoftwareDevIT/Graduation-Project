@@ -308,6 +308,10 @@ bottom: 10px;
    right: 120px;
   margin-top: 15px;
   }
+  .menu button{
+    position: relative;
+   right: 80px;
+  }
   .header-logo {
     width: 100%;
     text-align: center;
