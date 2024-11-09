@@ -1,6 +1,6 @@
 import React from 'react';
 import { Avatar } from 'antd';
-import { Link } from 'react-router-dom';
+
 import QRCode from 'react-qr-code';
 import Footer from '../Footer/Footer';
 import Header from '../Header/Hearder';
@@ -16,27 +16,14 @@ const MovieTicket: React.FC = () => {
     time: "09:40",
     room: "RẠP 7",
     seat: "GHẾ F7",
-    total: "45,000 VND",
-    imageUrl: "https://cdn.moveek.com/bundles/ornweb/img/tix-banner.png",
-    ticketInfo: {  // Đưa thông tin vé vào đây
-      code: "2912",
-      cinema: "GALAXY QUANG TRUNG",
-      date: "Chủ nhật, 3/12/2017",
-      time: "09:40",
-      room: "RẠP 7",
-      seat: "GHẾ F7",
-      total: "45,000 VND"
-    }
+    total: "45,000 VND"
   };
-
-  // Tạo chuỗi JSON từ dữ liệu vé
-  const qrData = JSON.stringify(ticketData.ticketInfo);
 
   return (
     <>
       <Header />
       <div className="banner">
-        <img src={ticketData.imageUrl} alt="Banner" className="banner-img" />
+        <img src="https://cdn.moveek.com/bundles/ornweb/img/tix-banner.png" alt="Banner" className="banner-img" />
       </div>
       <div className="content-account">
         <div className="container boxcha">
@@ -78,9 +65,10 @@ const MovieTicket: React.FC = () => {
                   <span className="item-price">{ticketData.total}</span>
                 </div>
               </div>
+
+              {/* QR Code */}
               <div className="ticket-qr">
-                {/* Mã QR sẽ chứa thông tin vé được mã hóa */}
-                <QRCode value={qrData} size={128} />
+                <QRCode value={JSON.stringify(ticketData)} size={128} />
               </div>
             </div>
           </div>
