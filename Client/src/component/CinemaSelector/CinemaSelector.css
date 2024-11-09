@@ -142,11 +142,11 @@ margin-top: 15px;
   margin-top: 20px;
   font-family: "Cerebri Sans";
 }
-.title{
+.titles{
   font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   text-align: center !important;
   padding-top: 15px;
-  font-size: 12px;
+  font-size: 22px;
   font-weight :500;
 }
 
@@ -536,7 +536,7 @@ right: 15px;
   margin: 0px; /* Giảm khoảng cách giữa các ngày để chúng sát nhau hơn */
 }
 }
-.title{
+.titles{
   text-align: center !important;
 }
 .calendar-custom-1 {

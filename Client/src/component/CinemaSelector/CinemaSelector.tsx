@@ -170,7 +170,7 @@ useEffect(() => {
     <>
     
            <div className="div-content">
-           <h2 className="title">Mua vé theo rạp</h2>
+           <h2 className="titles">Mua vé theo rạp</h2>
             <div className="container">
               <div className="locations">
                 <h3 className="khuvuc">Khu vực</h3>
