@@ -192,7 +192,7 @@ useEffect(() => {
                       })}
                     </div>
                    <select
-                  className="city-select"
+                  className="city-selects"
                   value={selectedCity ?? ""}
                   onChange={(e) => setSelectedCity(Number(e.target.value))}
                 >
