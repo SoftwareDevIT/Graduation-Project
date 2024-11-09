@@ -2,7 +2,7 @@
 export interface Combo {
     id: number;
     combo_name: string;
-    descripton: string;
+    description: string;
     price: number;
     volume: number; 
     status: string;

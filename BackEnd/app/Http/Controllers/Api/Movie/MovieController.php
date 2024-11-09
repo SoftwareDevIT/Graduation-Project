@@ -49,7 +49,7 @@ class MovieController extends Controller
                 $movie = $this->movieService->store($movie);
 
                 // Gắn các mối quan hệ
-                $movie->category()->sync($request->movie_category_id);
+                $movie->movie_category()->sync($request->movie_category_id);
                 $movie->actor()->sync($request->actor_id);
                 $movie->director()->sync($request->director_id);
             });
@@ -93,7 +93,7 @@ class MovieController extends Controller
 
             $movie = $this->movieService->update($id, $movie);
 
-            $movie->category()->sync($request->movie_category_id);
+            $movie->movie_category()->sync($request->movie_category_id);
             $movie->actor()->sync($request->actor_id);
             $movie->director()->sync($request->director_id);
 
@@ -113,7 +113,7 @@ class MovieController extends Controller
 
             if ($movie) {
                 $movie->actor()->detach();
-                $movie->category()->detach();
+                $movie->movie_category()->detach();
                 $movie->director()->detach();
             }
 

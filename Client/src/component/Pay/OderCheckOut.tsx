@@ -112,7 +112,7 @@ const OrderCheckout = () => {
             pay_method_id, // Gửi pay_method_id là số nguyên
             comboId: selectedCombos,
         };
-        console.log(showtimeId);
+        console.log();
 
         try {
             const response = await instance.post("/book-ticket", bookingData, {

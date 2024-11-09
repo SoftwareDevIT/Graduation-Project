@@ -7,8 +7,9 @@ import { useCountryContext } from '../../../Context/CountriesContext';
 import { Location } from '../../../interface/Location';
 import instance from '../../../server';
 
+// Define schema using Zod
 const countrySchema = z.object({
-  location_name: z.string().min(1, "Location Name is required."),
+  location_name: z.string().min(1, "Country Name is required."),
 });
 
 const CountriesForm: React.FC = () => {
@@ -32,7 +33,6 @@ const CountriesForm: React.FC = () => {
         }
       }
     };
-    
     fetchCountry();
   }, [id, isEditMode, reset]);
 
@@ -46,7 +46,7 @@ const CountriesForm: React.FC = () => {
         alert("Country added successfully!");
       }
       reset(); // Reset the form after submission
-      nav('/admin/countries'); // Redirect after resetting
+      nav('/admin/countries'); // Redirect to the country list page or desired route
     } catch (error) {
       console.error("Failed to submit form:", error);
       alert("Failed to submit form");
@@ -54,21 +54,23 @@ const CountriesForm: React.FC = () => {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit(handleFormSubmit)}>
-        <h1>{isEditMode ? "Edit Country" : "Add Country"}</h1>
+    <div className="container mt-5">
+      <form onSubmit={handleSubmit(handleFormSubmit)} className="shadow p-4 rounded bg-light">
+        <h1 className="text-center mb-4">{isEditMode ? "Edit Country" : "Add Country"}</h1>
         
+        {/* Country Name Field */}
         <div className="mb-3">
           <label htmlFor="location_name" className="form-label">Country Name</label>
           <input
             type="text"
-            className="form-control"
+            className={`form-control ${errors.location_name ? "is-invalid" : ""}`}
             {...register("location_name")}
           />
           {errors.location_name && <span className="text-danger">{errors.location_name.message}</span>}
         </div>
 
-        <button type="submit" className="btn btn-primary">
+        {/* Submit Button */}
+        <button type="submit" className="btn btn-primary w-100">
           {isEditMode ? "Update Country" : "Add Country"}
         </button>
       </form>
