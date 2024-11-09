@@ -16,19 +16,24 @@ const MovieBanner = () => {
     const fetchMovies = async () => {
       try {
         const response = await instance.get("/movies");
-        setMovies(response.data.data.original);
+
+      
+
+        const limitedMovies = response.data.data.original.slice(0, 20); // Get only the first 20 movies
+
+        setMovies(limitedMovies);
 
         // Fetch movie details for each movie
-        const movieDetailsPromises = response.data.data.original.map((movie: Movie) =>
-          instance.get(`/movies/${movie.id}`) // Adjust the API endpoint according to your backend
+        const movieDetailsPromises = limitedMovies.map((movie: Movie) =>
+          instance.get(`/movies/${movie.id}`)
         );
 
         const movieDetailsResponses = await Promise.all(movieDetailsPromises);
         const detailsMap = movieDetailsResponses.reduce((acc: Record<number, Movie>, cur, index) => {
-          acc[response.data.data.original[index].id] = cur.data; // Assuming cur.data contains the movie detail
+          acc[limitedMovies[index].id] = cur.data;
           return acc;
         }, {});
-        
+
         setMovieDetails(detailsMap);
       } catch (error) {
         console.error("Failed to fetch movies:", error);
@@ -37,6 +42,7 @@ const MovieBanner = () => {
 
     fetchMovies();
   }, []);
+
   var settings = {
     dots: true,
     infinite: true,
@@ -67,6 +73,7 @@ const MovieBanner = () => {
       },
     ],
   };
+
   return (
     <div className="movie-banner">
       <div className="banner-header">
@@ -85,16 +92,13 @@ const MovieBanner = () => {
                     />
                   </Link>
                   <div className="movie-info">
-                    <button className="buy-ticket">Mua vé</button>
+                    <button className="buy-ticket"><Link to={`/buy-now/${movie.id}`} >Mua vé</Link></button>
                     <p className="name_movie">{movie.movie_name}</p>
                     <span>
                       {movie.release_date
-                        ? new Date(movie.release_date).toLocaleDateString(
-                            "vi-VN"
-                          )
+                        ? new Date(movie.release_date).toLocaleDateString("vi-VN")
                         : "N/A"}
                     </span>
-                    {/* <span className="rating">{movie.age_limit ? `${movie.age_limit}` : 'N/A'}</span> */}
                   </div>
                 </div>
               </div>

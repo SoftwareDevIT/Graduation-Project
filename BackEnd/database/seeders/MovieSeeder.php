@@ -74,7 +74,7 @@ class MovieSeeder extends Seeder
         //         'movie_name' => 'Minh Hôn',
         //         'poster' => 'https://cdn.moveek.com/storage/media/cache/short/66e668c12aa05005198863.jpg',
         //         'duration' => '92',
-        // 'release_date' => now(),
+        //         'release_date' => now(),
         //         'age_limit' => '18',
         //         'description' => '',
         //         'trailer' => '',
@@ -129,7 +129,7 @@ class MovieSeeder extends Seeder
         $client = new Client();
         $response = $client->get('https://rapchieuphim.com/api/v1/movies');
         $data = json_decode($response->getBody()->getContents(), true);
-
+        $data = array_slice($data, 0, 100);
         foreach ($data as $item) {
             DB::table('movies')->insert([
                 'movie_name' => $item['name'],
@@ -145,4 +145,5 @@ class MovieSeeder extends Seeder
                 // Thêm các cột khác theo dữ liệu từ API
             ]);
         }
-        }}
+    }
+}

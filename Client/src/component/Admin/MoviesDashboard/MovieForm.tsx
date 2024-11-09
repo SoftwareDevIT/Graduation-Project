@@ -45,6 +45,7 @@ const MovieForm: React.FC = () => {
       if (id) {
         const movieResponse = await instance.get(`/movies/${id}`);
         const movieData = movieResponse.data.data.original;
+          console.log(movieData);
           
         reset({
           movie_name: movieData.movie_name || '',

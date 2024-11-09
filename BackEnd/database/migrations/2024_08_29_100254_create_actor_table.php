@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('actor', function (Blueprint $table) {
             $table->id('id');
             $table->string('actor_name');
-            $table->string('descripcion')->nullable();
+            $table->text('descripcion')->nullable();
             $table->string('photo')->nullable();
             $table->string('country')->nullable();
             $table->string('link_wiki')->nullable();

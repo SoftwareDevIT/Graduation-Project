@@ -23,7 +23,19 @@ class RatingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index() {}
+    public function index() {
+        $rating = $this->ratingService->index();
+
+        $formattedRatings = $rating->map(function ($rating) {
+            $ratingdata = $rating->toArray();
+
+            $ratingdata['movie_name'] = $rating->movies ? $rating->movies->movie_name : 'Không có tên phim';
+            $ratingdata['user_name'] = $rating->user->user_name;
+            return $ratingdata;
+        });
+
+        return $this->success($formattedRatings, 'Danh sách đánh giá!', 200);
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -50,8 +62,6 @@ class RatingController extends Controller
             if ($ratings->isEmpty()) {
                 return $this->notFound('Bộ phim chưa có đánh giá nào!', 404);
             }
-
-
 
             $formattedRatings = $ratings->map(function ($rating) {
                 $ratingdata = $rating->toArray();

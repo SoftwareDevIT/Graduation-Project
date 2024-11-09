@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('movies', function (Blueprint $table) {
             $table->id('id');
-      
+
             $table->string('movie_name');
             $table->string('poster')->nullable();
             $table->string('thumbnail')->nullable();

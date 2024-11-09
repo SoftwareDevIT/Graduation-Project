@@ -49,7 +49,6 @@ const RoleAndUserManagement = () => {
       console.error('Error creating role:', error);
     }
   };
-
   // Hàm xóa vai trò
   const handleDeleteRole = async (roleId: string) => {
     try {
@@ -62,21 +61,6 @@ const RoleAndUserManagement = () => {
       }
     } catch (error) {
       console.error('Error deleting role:', error);
-    }
-  };
-
-  // Hàm xóa người dùng
-  const handleDeleteUser = async (userId: string) => {
-    try {
-      const response = await instance.delete(`/delete-user/${userId}`);
-      if (response.data.status) {
-        // Xóa người dùng khỏi danh sách nếu thành công
-        setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
-      } else {
-        console.error('Failed to delete user:', response.data.message);
-      }
-    } catch (error) {
-      console.error('Error deleting user:', error);
     }
   };
 
@@ -223,7 +207,6 @@ const RoleAndUserManagement = () => {
                     Cập nhật vai trò
                   </button>
                   <button
-                    onClick={() => handleDeleteUser(user.id)} // Gọi hàm xóa người dùng
                     style={{
                       backgroundColor: '#dc3545',
                       color: 'white',

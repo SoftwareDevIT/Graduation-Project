@@ -95,6 +95,13 @@ const MovieDetail: React.FC = () => {
   };
 
   const handleModalOk = async () => {
+    if (!isLoggedIn) {
+      notification.warning({
+        message: "Yêu cầu đăng nhập",
+        description: "Vui lòng đăng nhập để thêm phim vào danh sách yêu thích!",
+      });
+      return;
+    }
     try {
       await instance.post("/ratings", {
         movie_id: id,
@@ -132,7 +139,7 @@ const MovieDetail: React.FC = () => {
     setIsTrailerVisible(false);
   };
 
-  if (!movie) return <div>Đang tải...</div>;
+
 
   return (
     <>
@@ -157,7 +164,7 @@ const MovieDetail: React.FC = () => {
                 <h2 className="title">{movie?.movie_name}</h2>
                 <p className="genre">
                   Thể loại:{" "}
-                  {movie?.category
+                  {movie?.movie_category
                     ?.map((cat: any) => cat.category_name)
                     .join(", ") || "Không có thể loại"}
                 </p>
@@ -187,7 +194,8 @@ const MovieDetail: React.FC = () => {
                   <div className="button trailer" onClick={handleTrailerOpen}>
                     Trailer
                   </div>
-                  <div className="button buy">Mua vé</div>
+                 
+                  <div className="button buy"> <Link to={`/buy-now/${id}`} > Mua vé</Link></div>
                 </div>
 
                 <p className="description">
@@ -215,21 +223,37 @@ const MovieDetail: React.FC = () => {
               <div className="additional-info">
                 <strong>Diễn viên:</strong>
                 <p>
-                  {movie?.actor?.map((act: any) => act.actor_name).join(", ") ||
+                  {movie?.director?.map((act: any) => act.director_name).join(", ") ||
                     "Không có diễn viên"}
                 </p>
 
                 <strong>Đạo diễn:</strong>
                 <p>
-                  {movie?.director
-                    ?.map((dir: any) => dir.director_name)
+                  {movie?.actor
+                    ?.map((dir: any) => dir.actor_name)
                     .join(", ") || "Không có đạo diễn"}
                 </p>
               </div>
             </div>
           </div>
         </div>
-        {/* Các phần khác không thay đổi */}
+        <div className="tabs">
+          <Link to={`/movie-detail/${id}`} className={`tab ${location.pathname === `/movie-detail/${id}` ? "active" : ""}`}>
+            Thông tin phim
+          </Link>
+          <Link to={`/schedule/${id}`} className={`tab ${location.pathname === `/schedule/${id}` ? "active" : ""}`}>
+            Lịch chiếu
+          </Link>
+          <Link to={`/reviews/${id}`} className={`tab ${location.pathname === `/reviews/${id}` ? "active" : ""}`}>
+            Đánh giá
+          </Link>
+          <Link to={`/news/${id}`} className={`tab ${location.pathname === `/news/${id}` ? "active" : ""}`}>
+            Tin tức
+          </Link>
+          <Link to={`/buy-now/${id}`} className={`tab ${location.pathname === `/buy-now/${id}` ? "active" : ""}`}>
+            Mua vé
+          </Link>
+        </div>
       </div>
 
       {/* Modal Đánh Giá */}

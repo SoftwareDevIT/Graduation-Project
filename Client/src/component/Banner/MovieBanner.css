@@ -88,7 +88,10 @@
   text-align: center;
   margin-top: -20px;
 }
-
+.buy-ticket a{
+  text-decoration: none;
+  color: aliceblue;
+}
 .buy-ticket:hover {
   background-color: #c82333;
 }
@@ -161,4 +164,20 @@
     font-size: 0.75em;
     padding: 5px;
   }
+}
+
+
+.slick-dots {
+  display: flex;
+  justify-content: center;
+  overflow: hidden; /* Ẩn các dấu chấm ngoài vùng hiển thị */
+}
+
+.slick-dots li {
+  max-width: 50px; /* Giới hạn độ rộng của mỗi dấu chấm */
+  flex-shrink: 0;
+}
+
+.slick-dots li:nth-child(n+5) {
+  display: none; /* Ẩn các dấu chấm từ thứ 5 trở đi */
 }

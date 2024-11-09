@@ -13,6 +13,7 @@ class Cinema extends Model
     protected $fillable = [
         'cinema_name',
         'phone',
+        'image',
         'location_id',
         'cinema_address',
         'status',
@@ -23,7 +24,7 @@ class Cinema extends Model
     public function movies()
     {
         return $this->belongsToMany(Movie::class, 'movie_in_cinemas', 'cinema_id', 'movie_id')
-         
+
             ->withTimestamps();
     }
     // public function showtimes() {
