@@ -151,3 +151,19 @@
     padding: 5px;
   }
 }
+
+
+.slick-dots {
+  display: flex;
+  justify-content: center;
+  overflow: hidden; /* Ẩn các dấu chấm ngoài vùng hiển thị */
+}
+
+.slick-dots li {
+  max-width: 50px; /* Giới hạn độ rộng của mỗi dấu chấm */
+  flex-shrink: 0;
+}
+
+.slick-dots li:nth-child(n+5) {
+  display: none; /* Ẩn các dấu chấm từ thứ 5 trở đi */
+}
