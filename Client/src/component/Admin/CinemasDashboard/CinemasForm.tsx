@@ -6,10 +6,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import instance from "../../../server";
 import { Cinema } from "../../../interface/Cinema";
 import { Location } from "../../../interface/Location";
-import { Movie } from "../../../interface/Movie";  // Import Movie interface
+import { Movie } from "../../../interface/Movie";
 import { useCinemaContext } from "../../../Context/CinemasContext";
 
-// Định nghĩa schema kiểm tra cho biểu mẫu Cinema
 const cinemaSchema = z.object({
   cinema_name: z.string().min(1, "Cinema Name is required."),
   phone: z
@@ -56,7 +55,7 @@ const CinemaForm = () => {
           const { data } = await instance.get(`/cinema/${id}`);
           setCinema(data.data);
           reset(data.data);
-          setSelectedMovies(data.data.movies.map((movie: Movie) => movie.id.toString())); // Convert ID to string
+          setSelectedMovies(data.data.movies.map((movie: Movie) => movie.id.toString()));
         } catch (error) {
           console.error("Failed to fetch cinema:", error);
         }
@@ -96,12 +95,7 @@ const CinemaForm = () => {
 
   const handleAddMoviesToCinema = async () => {
     try {
-      // Create an array of objects with the structure { movie_id: movieId }
       const moviePayload = selectedMovies.map(movieId => ({ movie_id: movieId }));
-      
-      console.log("Selected Movies Payload:", moviePayload); // Log the payload
-  
-      // Send the formatted data to the API
       await instance.post(`/add-movie-in-cinema/${id}`, { movie_in_cinema: moviePayload });
       alert("Movies added to cinema successfully!");
       nav('/admin/cinemas');
@@ -111,54 +105,53 @@ const CinemaForm = () => {
     }
   };
 
-
   return (
     <div className="container mt-5">
-      <form onSubmit={handleSubmit(handleFormSubmit)} className="shadow p-4 rounded bg-light">
-        <h1 className="text-center mb-4">{isEditMode ? "Edit Cinema" : "Add Cinema"}</h1>
+      <form onSubmit={handleSubmit(handleFormSubmit)} className="shadow-lg p-5 rounded bg-white">
+        <h2 className="text-center mb-5 text-primary">{isEditMode ? "Edit Cinema" : "Add New Cinema"}</h2>
 
-        {/* Trường Cinema Name */}
-        <div className="mb-3">
-          <label htmlFor="cinema_name" className="form-label">Cinema Name</label>
+        {/* Cinema Name */}
+        <div className="mb-4">
+          <label htmlFor="cinema_name" className="form-label fw-bold">Cinema Name</label>
           <input
             type="text"
             className={`form-control ${errors.cinema_name ? "is-invalid" : ""}`}
             {...register("cinema_name")}
             defaultValue={cinema?.cinema_name || ""}
           />
-          {errors.cinema_name && <span className="text-danger">{errors.cinema_name.message}</span>}
+          {errors.cinema_name && <div className="invalid-feedback">{errors.cinema_name.message}</div>}
         </div>
 
-        {/* Trường Phone */}
-        <div className="mb-3">
-          <label htmlFor="phone" className="form-label">Phone</label>
+        {/* Phone */}
+        <div className="mb-4">
+          <label htmlFor="phone" className="form-label fw-bold">Phone</label>
           <input
             type="text"
             className={`form-control ${errors.phone ? "is-invalid" : ""}`}
             {...register("phone")}
             defaultValue={cinema?.phone || ""}
           />
-          {errors.phone && <span className="text-danger">{errors.phone.message}</span>}
+          {errors.phone && <div className="invalid-feedback">{errors.phone.message}</div>}
         </div>
 
-        {/* Trường Cinema Address */}
-        <div className="mb-3">
-          <label htmlFor="cinema_address" className="form-label">Cinema Address</label>
+        {/* Cinema Address */}
+        <div className="mb-4">
+          <label htmlFor="cinema_address" className="form-label fw-bold">Cinema Address</label>
           <input
             type="text"
             className={`form-control ${errors.cinema_address ? "is-invalid" : ""}`}
             {...register("cinema_address")}
             defaultValue={cinema?.cinema_address || ""}
           />
-          {errors.cinema_address && <span className="text-danger">{errors.cinema_address.message}</span>}
+          {errors.cinema_address && <div className="invalid-feedback">{errors.cinema_address.message}</div>}
         </div>
 
-        {/* Trường Location */}
-        <div className="mb-3">
-          <label htmlFor="location_id" className="form-label">Location</label>
+        {/* Location */}
+        <div className="mb-4">
+          <label htmlFor="location_id" className="form-label fw-bold">Location</label>
           <select
             {...register("location_id")}
-            className={`form-control ${errors.location_id ? "is-invalid" : ""}`}
+            className={`form-select ${errors.location_id ? "is-invalid" : ""}`}
             defaultValue={cinema?.location_id || ""}
           >
             <option value="">Select Location</option>
@@ -168,16 +161,16 @@ const CinemaForm = () => {
               </option>
             ))}
           </select>
-          {errors.location_id && <span className="text-danger">{errors.location_id.message}</span>}
+          {errors.location_id && <div className="invalid-feedback">{errors.location_id.message}</div>}
         </div>
 
-        {/* Trường Chọn Phim */}
-        <div className="mb-3">
-          <label htmlFor="movies" className="form-label">Select Movies</label>
+        {/* Select Movies */}
+        <div className="mb-4">
+          <label htmlFor="movies" className="form-label fw-bold">Select Movies</label>
           <select
             multiple
-            className="form-control"
-            value={selectedMovies}  // Đảm bảo kiểu dữ liệu là string[]
+            className="form-select"
+            value={selectedMovies}
             onChange={(e) => {
               const selected = Array.from(e.target.selectedOptions, option => option.value);
               setSelectedMovies(selected);
@@ -191,19 +184,21 @@ const CinemaForm = () => {
           </select>
         </div>
 
-        <button type="submit" className="btn btn-primary">
-          {isEditMode ? "Update Cinema" : "Add Cinema"}
-        </button>
-
-        {isEditMode && (
-          <button
-            type="button"
-            className="btn btn-secondary mt-3"
-            onClick={handleAddMoviesToCinema}
-          >
-            Add Selected Movies to Cinema
+        {/* Submit and Add Movies Button */}
+        <div className="d-flex justify-content-between">
+          <button type="submit" className="btn btn-primary px-4 py-2">
+            {isEditMode ? "Update Cinema" : "Add Cinema"}
           </button>
-        )}
+          {isEditMode && (
+            <button
+              type="button"
+              className="btn btn-secondary px-4 py-2"
+              onClick={handleAddMoviesToCinema}
+            >
+              Add Selected Movies to Cinema
+            </button>
+          )}
+        </div>
       </form>
     </div>
   );

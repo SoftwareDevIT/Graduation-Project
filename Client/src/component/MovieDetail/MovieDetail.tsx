@@ -194,7 +194,8 @@ const MovieDetail: React.FC = () => {
                   <div className="button trailer" onClick={handleTrailerOpen}>
                     Trailer
                   </div>
-                  <div className="button buy">Mua vé</div>
+                 
+                  <div className="button buy"> <Link to={`/buy-now/${id}`} > Mua vé</Link></div>
                 </div>
 
                 <p className="description">

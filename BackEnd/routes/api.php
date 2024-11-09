@@ -119,7 +119,7 @@ Route::middleware(['auth:sanctum', 'role:admin|manager'])->group(function () {
 
 
     // phan quyen
-    Route::resource('roles', RoleController::class); // add roles and show
+    Route::resource('roles', RoleController::class); 
     Route::post('/roles/{role}/permissions', [RoleController::class, 'syncPermissions'])->name('roles.permissions.sync'); // chia chuc nang cho quyen
     Route::post('/roles/{user}/users', [RoleController::class, 'syncRoles'])->name('users.roles.sync'); // cap quyen cho user
     Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy'); // delete role
@@ -158,7 +158,7 @@ Route::get('filterNewByActor/{actor}', [ActorController::class,'filterNewByActor
 Route::get('filterNewByDictor/{director}', [DirectorController::class,'filterNewByDictor']);        // Lọc bài viết liên quan tới đạo diễn
 Route::get('filterNewByMovie/{movie}', [MovieController::class,'filterNewByMovie']);                // Lọc bài viết liên quan tới phim
 Route::get('ratings/{movie}', [RatingController::class, 'show']);                                   // Xem dánh giá phim
-Route::get('rating', [RatingController::class, 'index']);                                           // Xem all dánh giá 
+Route::get('rating', [RatingController::class, 'index']);                                           // Xem all dánh giá
 
 
 Route::apiResource('order', OrderController::class);
