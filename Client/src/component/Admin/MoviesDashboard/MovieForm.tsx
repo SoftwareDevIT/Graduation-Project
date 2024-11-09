@@ -14,18 +14,16 @@ import {
 } from '@mui/material';
 import { Actor } from '../../../interface/Actor';
 import { Director } from '../../../interface/Director';
-import { Categories } from '../../../interface/Categories';
-
-
 import { useMovieContext } from '../../../Context/MoviesContext';
 import instance from '../../../server';
+import { MovieCategory } from '../../../interface/MovieCategory';
 
 const MovieForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { register, handleSubmit, reset } = useForm();
   const [actors, setActors] = useState<Actor[]>([]);
   const [directors, setDirectors] = useState<Director[]>([]);
-  const [categories, setCategories] = useState<Categories[]>([]);
+  const [categories, setCategories] = useState<MovieCategory[]>([]);
 
   const [posterFile, setPosterFile] = useState<File | null>(null);
   const nav = useNavigate();
@@ -39,9 +37,9 @@ const MovieForm: React.FC = () => {
       const categoryResponse = await instance.get('/movie-category');
 
 
-      setActors(Array.isArray(actorResponse.data) ? actorResponse.data : []);
-      setDirectors(Array.isArray(directorResponse.data) ? directorResponse.data : []);
-      setCategories(Array.isArray(categoryResponse.data) ? categoryResponse.data : []);
+      setActors(Array.isArray(actorResponse.data.data) ? actorResponse.data.data : []);
+      setDirectors(Array.isArray(directorResponse.data.data) ? directorResponse.data.data : []);
+      setCategories(Array.isArray(categoryResponse.data.data) ? categoryResponse.data.data : []);
      
 
       if (id) {
@@ -123,9 +121,9 @@ const MovieForm: React.FC = () => {
             defaultValue={[]} // Ensure default value is an empty array
             multiple // Allow multiple selections
           >
-            {categories.map((category) => (
-              <MenuItem key={category.id} value={category.id}>
-                {category.category_name}
+            {categories.map((movie_category) => (
+              <MenuItem key={movie_category.id} value={movie_category.id}>
+                {movie_category.category_name}
               </MenuItem>
             ))}
           </Select>

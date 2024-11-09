@@ -345,7 +345,9 @@ li.city.selected {
   
 }
 /* CSS hiện tại của bạn */
-
+.calendar-custom-1{
+  border-bottom: 1px solid #c6d7ee;
+}
 /* Media queries cho các thiết bị nhỏ hơn */
 @media (max-width: 1024px) {
   .container {
@@ -418,7 +420,7 @@ li.city.selected {
 
 /* Media queries cho các thiết bị nhỏ hơn nữa */
 .city-select{
-  display: none;
+  display: none !important;
 }
 @media (max-width: 768px) {
   .container {

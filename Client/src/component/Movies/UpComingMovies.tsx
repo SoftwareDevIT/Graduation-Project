@@ -6,8 +6,8 @@ import { Movie } from "../../interface/Movie";
 import Header from '../Header/Hearder';
 import { MovieCategory } from '../../interface/MovieCategory';
 import { Link } from 'react-router-dom';
-
-const MovieShowing: React.FC = () => {
+import './UpComingMovies.css'
+const UpComingMovies: React.FC = () => {
   const [selectedPopular, setSelectedPopular] = useState('');
   const [selectedGenre, setSelectedGenre] = useState('');
   const [selectedLanguage, setSelectedLanguage] = useState('');
@@ -27,8 +27,6 @@ const MovieShowing: React.FC = () => {
       // Tìm thể loại có nhiều phim nhất
       if (response.data.data.length > 0) {
         const mostPopularGenreId = response.data.data[0].id; // Giả sử thể loại đầu tiên là thể loại có nhiều phim nhất
-      
-        
         fetchMovies(mostPopularGenreId); // Gọi hàm fetchMovies với genreId
         setSelectedGenre(mostPopularGenreId); // Cập nhật trạng thái thể loại đã chọn
       }
@@ -74,21 +72,16 @@ const MovieShowing: React.FC = () => {
     <>
       <Header />
       <div className="banner">
-        <h2>Phim đang chiếu</h2>
+        <h2>Phim Sắp Chiếu</h2>
         <p>
-          Danh sách các phim hiện đang chiếu rạp trên toàn quốc 24/10/2024. Xem lịch chiếu phim, giá vé tiện lợi, đặt vé nhanh chỉ với 1 bước!
+        Danh sách các phim dự kiến sẽ khởi chiếu tại các hệ thống rạp trên toàn quốc.
         </p>
       </div>
       <div className="movie-showing">
         <div className="container">
           <div className="titleg">
             <div className="filters">
-              <select value={selectedPopular} onChange={handlePopularChange} className="filter-select">
-                <option value="">Phổ biến</option>
-                <option value="most-popular">Phổ biến nhất</option>
-                <option value="newest">Mới nhất</option>
-                <option value="top-rated">Xếp hạng cao</option>
-              </select>
+          
 
               <select value={selectedGenre} onChange={handleGenreChange} className="filter-select">
                 <option value="">Thể loại</option>
@@ -105,9 +98,12 @@ const MovieShowing: React.FC = () => {
                 <option value="english">Tiếng Anh</option>
                 <option value="japanese">Tiếng Nhật</option>
               </select>
+              
             </div>
-
+         
             <div className="danh-sach-phim">
+     
+            
               {movies.length > 0 ? (
                 movies.map((movie) => (
                   <div key={movie.id} className="phim-card">
@@ -127,7 +123,9 @@ const MovieShowing: React.FC = () => {
                 <p>Không có phim nào cho thể loại này</p>
               )}
             </div>
+            
           </div>
+        
         </div>
       </div>
       <Footer />
@@ -135,4 +133,4 @@ const MovieShowing: React.FC = () => {
   );
 };
 
-export default MovieShowing;
+export default UpComingMovies;

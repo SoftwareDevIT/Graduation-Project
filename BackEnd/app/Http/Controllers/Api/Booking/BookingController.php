@@ -14,7 +14,9 @@ use App\Models\TemporaryBooking;
 use App\Services\Booking\TicketBookingService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 
 class BookingController extends Controller
@@ -85,9 +87,11 @@ class BookingController extends Controller
             $booking = Booking::where('id', $data['vnp_TxnRef'])->first();
             $booking->status = 'Pain';
             $booking->save();
-            event(new InvoiceSendMail($booking));
+            Mail::to(Auth::user()->email)->queue(new InvoiceMail($booking));
+            // event(new InvoiceSendMail($booking));
             session()->flush();
             return redirect('http://localhost:5173/');
+            // return $this->success($booking, 'success');
         }
     }
 

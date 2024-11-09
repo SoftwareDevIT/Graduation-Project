@@ -6,7 +6,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-  padding-left: 120px;
+    padding-left: 82px;
     background-color: #fff;
     border-bottom: 1px solid #ddd;
     position: sticky;
@@ -27,6 +27,7 @@ bottom: 4px;
     display: flex;
     align-items: center;
     gap: 12px;
+    right: 49px !important;
 }
 
 .header-left a {
@@ -168,7 +169,7 @@ bottom: 10px;
 .checkmark {
   position: absolute; /* Để định vị biểu tượng tích xanh */
   bottom: 10px; /* Đưa tích xanh xuống dưới cùng */
-  right: 150px; /* Đưa tích xanh sang bên phải */
+  right: 100px; /* Đưa tích xanh sang bên phải */
   color:dodgerblue; /* Màu sắc cho tích xanh */
   font-size: 17px; /* Kích thước cho biểu tượng tích xanh */
   
@@ -203,11 +204,11 @@ bottom: 10px;
    top:10px;
     background: rgb(237, 234, 234);
   }
-
+  
   .header-logo {
       width: 100%;
       text-align: center;
-      margin-bottom: 40px;
+     
   }
 
   .header-right {
@@ -249,6 +250,7 @@ bottom: 10px;
    height: 300px;
    
   }
+
   .menu button {
    
     background: rgb(237, 234, 234);
@@ -306,6 +308,11 @@ bottom: 10px;
    right: 120px;
   margin-top: 15px;
   }
+  .header-logo {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 40px;
+}
   .header-logo a{
    position: relative;
    left: -104px;
@@ -373,4 +380,17 @@ color: #6e84a3;
 .profile-menu-container {
   position: relative;
   cursor: pointer;
+}
+@media (max-width:480px) {
+  .profile-dropdown{
+  position: absolute;
+left: 20px;
+width: 90px;
+top:60px;
+font-size: 10px;
+  }
+  .profile-dropdown a{
+    padding: 1px 0px;
+    font-size: 5px;
+  }
 }

@@ -24,4 +24,13 @@ class News extends Model
     {
         return $this->belongsTo(NewsCategory::class, 'news_category_id');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+    public function movie()
+    {
+        return $this->belongsTo(Movie::class, 'movie_id');
+    }
 }

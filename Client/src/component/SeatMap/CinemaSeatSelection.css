@@ -318,7 +318,7 @@ color: #727575;
 
   .thongtinphim {
    position: relative;
-   right: 50px;
+ right: 155px;
     margin-top: 10px;
   }
 
@@ -344,11 +344,12 @@ color: #727575;
   .details-box1 {
     position: relative;
     width: 450px !important;
-   right: 90px;
+   
+
   }
 
   .price-box1 {
-    margin-left: 0;
+    margin-left: 10px !important;
     padding-left: 10px;
    width: 450px !important;
   }
@@ -393,6 +394,11 @@ color: #727575;
     width: 30%;
     margin: 5px 0;
   }
+  .price-box1 {
+    width: 400px !important;
+  
+  }
+  
 }
 @media (max-width: 992px) {
   .container-map {
@@ -400,9 +406,7 @@ color: #727575;
     padding: 0;
     max-width: 100%;
   }
-.thanh-tien-trinh{
-  
-}
+
   .seat-info-box {
     flex-direction: column;
     padding: 10px;
@@ -412,7 +416,9 @@ color: #727575;
     margin-left: 0;
     width: 100%;
   }
-
+  .price-box1 .price{
+    width: 200px;
+  }
   .thongtinphim {
     margin-left: 135px;
     margin-top: 10px;
@@ -439,7 +445,7 @@ color: #727575;
 
   .details-box1 {
     width: 400px !important;
-    margin-left: 100px !important;
+    margin-left: 8px !important;
   }
 
   .price-box1 {
@@ -508,7 +514,7 @@ color: #727575;
   }
 
   .thongtinphim {
-    margin-left: 45px; /* Giảm khoảng cách bên trái */
+    margin-left: 142px; /* Giảm khoảng cách bên trái */
     margin-top: 10px;
   }
 

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('duration')->nullable();
             $table->date('release_date')->nullable();
             $table->integer('age_limit')->nullable();
-            $table->string('description')->nullable();
+            $table->text('description')->nullable();
             $table->string('trailer')->nullable();
             $table->float('rating')->nullable();
             $table->boolean('status')->default(true);

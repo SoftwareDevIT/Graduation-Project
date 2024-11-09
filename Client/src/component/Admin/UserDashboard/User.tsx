@@ -27,19 +27,6 @@ const UserDashboard: React.FC = () => {
 
         fetchUsers();
     }, []);
-
-    const handleDelete = async (id: number) => {
-        if (window.confirm('Are you sure you want to delete this user?')) {
-            try {
-                await instance.delete(`/all-user/${id}`);
-                setUsers(users.filter(user => user.id !== id));
-                alert('User deleted successfully!');
-            } catch (err) {
-                setError('Failed to delete user');
-            }
-        }
-    };
-
     const indexOfLastUser = currentPage * usersPerPage;
     const indexOfFirstUser = indexOfLastUser - usersPerPage;
     const filteredUsers = users.filter(user =>
@@ -99,12 +86,7 @@ const UserDashboard: React.FC = () => {
                                         <Link to={`/admin/user/edit/${user.id}`} className="btn btn-warning btn-sm mr-2">
                                             <FontAwesomeIcon icon={faEdit} />
                                         </Link>
-                                        <button 
-                                            className="btn btn-danger btn-sm" 
-                                            onClick={() => handleDelete(user.id)}
-                                        >
-                                            <FontAwesomeIcon icon={faTrash} />
-                                        </button>
+                                        
                                     </div>
                                 </td>
                             </tr>

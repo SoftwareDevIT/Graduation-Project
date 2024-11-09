@@ -29,9 +29,8 @@ class ForgotPasswordController extends Controller
         $request->validated();
         try {
             $email = $request->input('email');
-            Session::put('reset_password_email', $email); // Lưu email vào session
             $message = $this->otpService->sendOtp($email);
-            return $this->success($message, 'success', 200);
+            return $this->success(['message' => $message, 'email' => $email], 'success', 200);
         } catch (\Throwable $th) {
             return $this->error($th->getMessage(), 400);
         }
@@ -42,7 +41,8 @@ class ForgotPasswordController extends Controller
         $request->validated();
         try {
             $otp = $request->input('otp');
-            $message = $this->otpService->verifyOtp($otp);
+            $email = $request->input('email'); // Nhận email từ yêu cầu
+            $message = $this->otpService->verifyOtp($otp, $email);
             return $this->success($message, 'success', 200);
         } catch (\Throwable $th) {
             return $this->error($th->getMessage(), 400);
@@ -54,16 +54,15 @@ class ForgotPasswordController extends Controller
         $request->validated();
         try {
             // Kiểm tra xem OTP đã được xác thực chưa
-            if (!$this->otpService->canResetPassword()) {
+            $email = $request->input('email'); // Nhận email từ yêu cầu
+            if (!$this->otpService->canResetPassword($email)) {
                 return $this->error('OTP chưa được xác thực.', 400);
             }
 
-            // Lấy email từ session
-            $email = Session::get('reset_password_email');
             // Gọi service để đặt lại mật khẩu
             $this->forgotpasswordService->ForgotPassword($email, $request->password);
-            // Xóa trạng thái xác thực OTP và email
-            $this->otpService->clearOtpVerification();
+            // Xóa trạng thái xác thực OTP
+            $this->otpService->clearOtpVerification($email);
 
             return $this->success('Mật khẩu đã được đặt lại thành công!', 'success', 200);
         } catch (\Throwable $th) {

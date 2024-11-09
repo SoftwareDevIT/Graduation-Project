@@ -23,6 +23,8 @@ const LichChieuUpdated: React.FC = () => {
     // Nhận thông tin phim từ location
     const movie = location.state?.movie; // Lấy thông tin phim từ location state
 
+    
+
     // Fetch locations
     useEffect(() => {
         const fetchLocations = async () => {
@@ -55,6 +57,8 @@ const LichChieuUpdated: React.FC = () => {
                         movie_id: id, // Sử dụng ID phim từ URL
                     },
                 });
+                console.log(selectedDate);
+                
                 const cinemaData = response.data?.data || [];
                 setCinemas(cinemaData.map((item: any) => ({
                     ...item.cinema,
@@ -78,18 +82,25 @@ const LichChieuUpdated: React.FC = () => {
     const generateWeekDays = () => {
         const days = [];
         const currentDate = new Date();
-
+    
         for (let i = 0; i < 7; i++) {
             const date = new Date(currentDate);
             date.setDate(currentDate.getDate() + i);
+    
+            // Tạo định dạng ngày theo cách thủ công, ví dụ: YYYY-MM-DD
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // Thêm số 0 nếu thiếu
+            const day = String(date.getDate()).padStart(2, '0'); // Thêm số 0 nếu thiếu
+    
             days.push({
-                date: date.toISOString().split("T")[0], // YYYY-MM-DD format
+                date: `${year}-${month}-${day}`, // YYYY-MM-DD format
                 day: date.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' }), // Định dạng dd/MM
                 weekDay: date.toLocaleDateString('vi-VN', { weekday: 'short' }) // Thứ trong tuần
             });
         }
         return days;
     };
+    
 
     return (
         <>

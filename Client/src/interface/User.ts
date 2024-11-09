@@ -1,6 +1,6 @@
 // src/interfaces/User.ts
 export interface User {
-    id: number;                      // bigint(20) -> number
+    id: string;                      // bigint(20) -> number
     user_name: string;               // varchar(255)
     sex: 'male' | 'female' | 'undisclosed';  // enum
     password: string;                // varchar(255)

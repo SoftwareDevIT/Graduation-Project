@@ -67,7 +67,7 @@
 .login-button {
   width: 100%;
   padding: 12px;
-  background-color: #0b203b;
+  background-color: #0b203b !important;
   color: #fff;
   border: none;
   border-radius: 6px;
@@ -156,5 +156,5 @@
 }
 .google-login-button{
   margin-top: 10px;
-  background: red;
+  background: red !important;
 }
