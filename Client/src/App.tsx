@@ -52,7 +52,7 @@ import PostDetail from "./component/Post/PostDetail";
 import Credits from "./component/PersonalPage/Credits";
 import Deponsit from "./component/PersonalPage/Deposit";
 import ForgetPass from "./component/Login/ForgetPass";
-import UpComingMovies from "./component/Movies/UpComingMovies";
+
 import AdminLogin from "./component/Admin/Login/LoginAdmin";
 import PostDetailManager from "./component/Admin/PostsDasboard/PostDetailManager";
 import NotFound from "./component/NotFoud/NotFound";
@@ -97,7 +97,7 @@ function App() {
         <Route path="/register" element={<RegisterCinema />} />
         <Route path="/login" element={<LoginCinema />} />
         <Route path="/movieshowing" element={<MovieShowing/>} />
-        <Route path="/upcomingmovies" element={<UpComingMovies/>} />
+
         <Route path="/deponsit" element={<Deponsit/>} />
         <Route path="/forgetpass" element={<ForgetPass/>} />
         <Route path="/otp" element={<Otp/>} />

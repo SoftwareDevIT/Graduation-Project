@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use GuzzleHttp\Client;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -17,49 +18,32 @@ class UserSeeder extends Seeder
         DB::table('users')->insert([
             [
                 'user_name' => 'admin',
-                'sex'=>'Male',
+                'sex' => 'Male',
                 'password' => Hash::make('password'),
                 'email' => 'admin@gmail.com',
                 'phone' => '0123456789',
-                // 'role_id' => 1,
                 'address' => 'Ha Noi',
                 'fullname' => 'Admin',
-                'email_verified_at'=> now(),
-            ],
-            [
-                'user_name' => 'manager',
-                'sex'=>'Male',
-                'password' => Hash::make('password'),
-                'email' => 'manager@gmail.com',
-                'phone' => '0123456789',
-                // 'role_id' => 1,
-                'address' => 'Ha Noi',
-                'fullname' => 'manager',
-                'email_verified_at'=> now(),
-            ],
-            [
-                'user_name' => 'staff',
-                'sex'=>'Male',
-                'password' => Hash::make('password'),
-                'email' => 'staff@gmail.com',
-                'phone' => '0123456789',
-                // 'role_id' => 1,
-                'address' => 'Ha Noi',
-                'fullname' => 'staff',
-                'email_verified_at'=> now(),
-            ],
-            [
-                'user_name' => 'user',
-                'sex'=>'Male',
-                'password' => Hash::make('password'),
-                'email' => 'user@gmail.com',
-                'phone' => '0123456789',
-                // 'role_id' => 1,
-                'address' => 'Ha Noi',
-                'fullname' => 'User',
-                'email_verified_at'=> now(),
+                'email_verified_at' => now(),
             ]
-
         ]);
+
+        $client = new Client();
+        $response = $client->get('https://rapchieuphim.com/api/v1/users');
+        $data = json_decode($response->getBody()->getContents(), true);
+        $data = array_slice($data, 0, 10);
+        foreach ($data as $item) {
+            DB::table('users')->insert([
+                'user_name' => $item['name'],
+                'avatar' => $item['avatar'],
+                'sex' => $item['sex'],
+                'password' => Hash::make('password'),
+                'phone' => $item['phone'],
+                'address' => 'Ha Noi',
+                'fullname' => $item['fullname'],
+                'email_verified_at' => now(),
+            ]);
+        }
+
     }
 }

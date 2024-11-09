@@ -39,14 +39,15 @@ const MovieForm: React.FC = () => {
       const categoryResponse = await instance.get('/movie-category');
 
 
-      setActors(Array.isArray(actorResponse.data) ? actorResponse.data : []);
-      setDirectors(Array.isArray(directorResponse.data) ? directorResponse.data : []);
-      setCategories(Array.isArray(categoryResponse.data) ? categoryResponse.data : []);
-     
+      setActors(Array.isArray(actorResponse.data.data) ? actorResponse.data.data : []);
+      setDirectors(Array.isArray(directorResponse.data.data) ? directorResponse.data.data : []);
+      setCategories(Array.isArray(categoryResponse.data.data) ? categoryResponse.data.data : []);
+
 
       if (id) {
         const movieResponse = await instance.get(`/movies/${id}`);
         const movieData = movieResponse.data.data.original;
+          console.log(movieData);
           
         reset({
           movie_name: movieData.movie_name || '',
