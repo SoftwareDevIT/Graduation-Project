@@ -2,57 +2,43 @@
 
 namespace Database\Seeders;
 
+use Carbon\Carbon;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
 class ShowtimeSeeder extends Seeder
 {
+    /**
+     * Run the database seeds.
+     */
     public function run(): void
     {
-        $movieInCinemaIds = DB::table('movie_in_cinemas')->pluck('id');
-        $showtimes = [
-            '09:00:00' => 45000,
-            '10:00:00' => 46000,
-            '11:00:00' => 47000,
-            '12:00:00' => 48000,
-            '13:00:00' => 49000,
-            '14:00:00' => 50000,
-            '15:00:00' => 51000,
-            '16:00:00' => 52000,
-            '17:00:00' => 53000,
-            '18:00:00' => 54000,
-            '19:00:00' => 55000,
-            '20:00:00' => 56000,
-            '21:00:00' => 57000,
-            '22:00:00' => 58000,
-            '23:00:00' => 59000,
-        ];
-        $showtimeDate = now()->addDays(1)->toDateString();
-        $batchSize = 1000; // Define the batch size
-        $showtimeData = [];
-
-        foreach ($movieInCinemaIds as $movieInCinemaId) {
-            foreach ($showtimes as $start => $price) {
-                $showtimeData[] = [
-                    'movie_in_cinema_id' => $movieInCinemaId,
-                    'showtime_date' => $showtimeDate,
-                    'showtime_start' => $start,
-                    'price' => $price,
-                    'status' => '1',
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ];
-
-                if (count($showtimeData) >= $batchSize) {
-                    DB::table('showtimes')->insert($showtimeData);
-                    $showtimeData = [];// Đặt lại mảng sau khi chèn hàng loạt
-                }
-            }
-        }
-
-       // Chèn bất kỳ hồ sơ còn lại
-        if (!empty($showtimeData)) {
-            DB::table('showtimes')->insert($showtimeData);
-        }
+        DB::table('showtimes')->insert([
+            [
+                //'movie_id' => 1,
+                // 'cinema_id' => 1, // Giả sử đây là ID của phòng chiếu
+                'movie_in_cinema_id' => 1,
+                'showtime_date' => now()->addDays(1)->toDateString(), // Ngày chiếu
+                'showtime_start' => now(), // Thời gian bắt đầu
+                'showtime_end' => now(), // Thời gian kết thúc
+                'price' => 45000,
+                'status' => '1', // Hoặc 'Hidden' tùy thuộc vào trạng thái
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                //'movie_id' => 1,
+                // 'cinema_id' => 2, // Giả sử đây là ID của phòng chiếu khác
+                'movie_in_cinema_id' => 1,
+                'showtime_date' => now()->addDays(1)->toDateString(), // Ngày chiếu
+                'showtime_start' => now()->addDays(1), // Thời gian bắt đầu
+                'showtime_end' => now()->addDays(1), // Thời gian kết thúc
+                'price' => 45000,
+                'status' => '1', // Hoặc 'Hidden' tùy thuộc vào trạng thái
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
+        ]);
     }
 }
