@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom"; // Lấy movie_name từ URL
+import { Link, useParams } from "react-router-dom"; // Lấy movie_name từ URL
 import Header from "../Header/Hearder";
 import Footer from "../Footer/Footer";
 import "./SerachMovies.css";
@@ -56,7 +56,8 @@ const SearchMovies = () => {
   {movies.length > 0 ? (
     movies.map((movie) => (
       <div key={movie.id} className="col-lg-2 move-itemone-1">
-        <img src={movie.poster || undefined} alt={movie.name} />
+         <Link state={{ movieId: movie.id }} to={`/movie-detail/${movie.id}`}> <img src={movie.poster || undefined} alt={movie.name} /></Link>
+       
         <h4>{movie.movie_name}</h4>
         <p>{movie.release_date}</p>
       </div>

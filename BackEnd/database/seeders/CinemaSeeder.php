@@ -4,62 +4,29 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use GuzzleHttp\Client;
 
 class CinemaSeeder extends Seeder
 {
     public function run()
     {
 
-        DB::table('cinema')->insert([
-            [
-                'cinema_name' => 'Meta Circle - Hoàng Mai',
-                'phone' => '0123456789',
-                'location_id' => DB::table('location')->where('location_name', 'Hà Nội')->value('id'),
-                'cinema_address' => '123 Đường ABC, Quận Hoàng Mai, Hà Nội',
+        $client = new Client();
+        $response = $client->get('https://rapchieuphim.com/api/v1/cinemas');
+        $data = json_decode($response->getBody()->getContents(), true);
+        // $data = array_slice($data, 0, 10);
+        foreach ($data as $item) {
+            $locationId = DB::table('location')->where('location_name', $item['city'])->value('id');
+            $locationId = $locationId ?? 24;
+            DB::table('cinema')->insert([
+                'cinema_name' => $item['name'],
+                'image' => 'https://rapchieuphim.com' . $item['image'],
+                'phone' => $item['phone'],
+                'location_id' => $locationId,
+                'cinema_address' => $item['address'],
                 'created_at' => now(),
                 'updated_at' => now(),
-            ],
-            [
-                'cinema_name' => 'Meta Circle - Hà Đông',
-                'phone' => '0123456789',
-                'location_id' => DB::table('location')->where('location_name', 'Hà Nội')->value('id'),
-                'cinema_address' => '123 Đường ABC, Quận Hà Đông, Hà Nội',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'cinema_name' => 'Meta Circle - Đống Đa',
-                'phone' => '0123456789',
-                'location_id' => DB::table('location')->where('location_name', 'Hà Nội')->value('id'),
-                'cinema_address' => '123 Đường ABC, Quận Đống Đa, Hà Nội',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'cinema_name' => 'Meta Circle - TP Hai Bà Trưng',
-                'phone' => '0123456789',
-                'location_id' => DB::table('location')->where('location_name', 'TP Hồ Chí Minh')->value('id'),
-                'cinema_address' => '123 Đường ABC, Quận TP Hai Bà Trưng, TP Hồ Chí Minh',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'cinema_name' => 'Meta Circle - Bến Thành',
-                'phone' => '0123456789',
-                'location_id' => DB::table('location')->where('location_name', 'TP Hồ Chí Minh')->value('id'),
-                'cinema_address' => '123 Đường ABC, Quận Bến Thành, TP Hồ Chí Minh',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'cinema_name' => 'Meta Circle - Vincom Đà Nẵng',
-                'phone' => '0123456789',
-                'location_id' => DB::table('location')->where('location_name', 'Đà Nẵng')->value('id'),
-                'cinema_address' => '123 Đường ABC, Quận Vincom, Đà Nẵng',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-
-        ]);
+            ]);
+        }
     }
 }

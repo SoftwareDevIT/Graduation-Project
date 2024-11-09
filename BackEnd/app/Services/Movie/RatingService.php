@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 class RatingService
 {
     public function index() {
-       
+       return Rating::all();
     }
        
     public function store(array $data)

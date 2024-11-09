@@ -61,6 +61,7 @@ import ResetPassword from "./component/Login/ResetPasswod";
 import Otp from "./component/Login/Otp";
 import NotFound from "./component/NotFoud/NotFound";
 import ResetPasswod from "./component/Login/ResetPasswod";
+import MovieTicket from "./component/PersonalPage/MovieTicket";
 
 
 
@@ -98,6 +99,7 @@ function App() {
         <Route path="/Personal" element={<Personal />} />
         <Route path="/credits" element={<Credits />} />
         <Route path="/ChangePassword" element={<ChangePassword />} />
+        <Route path="/movieticket" element={<MovieTicket/>} />
         <Route path="/register" element={<RegisterCinema />} />
         <Route path="/login" element={<LoginCinema />} />
         <Route path="/movieshowing" element={<MovieShowing/>} />

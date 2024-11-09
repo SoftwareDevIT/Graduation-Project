@@ -57,7 +57,7 @@ const OrdersDashboard: React.FC = () => {
                   <td>${booking.price_combo.toFixed(2)}</td>
                   <td>{booking.amount}</td>
                   <td>{booking.seat_status}</td>
-                  <td className="action-buttons">
+                  <td className="action-buttons2">
                     <button className="btn btn-warning btn-sm mx-1" title="Edit">
                       <FontAwesomeIcon icon={faEdit} />
                     </button>

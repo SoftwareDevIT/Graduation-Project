@@ -170,7 +170,7 @@ useEffect(() => {
     <>
     
            <div className="div-content">
-           <h2 className="title">Mua vé theo rạp</h2>
+           <h2 className="titlee">Mua vé theo rạp</h2>
             <div className="container">
               <div className="locations">
                 <h3 className="khuvuc">Khu vực</h3>
@@ -192,7 +192,7 @@ useEffect(() => {
                       })}
                     </div>
                    <select
-                  className="city-select"
+                  className="city-selects"
                   value={selectedCity ?? ""}
                   onChange={(e) => setSelectedCity(Number(e.target.value))}
                 >
