@@ -39,7 +39,7 @@ const CinemaSeatSelection: React.FC = () => {
   useEffect(() => {
     const fetchRoomAndSeats = async () => {
       try {
-        const roomResponse = await instance.get(`/room`);
+        const roomResponse = await instance.get(`/cinema/${cinemaId}/room`);
         const roomData = roomResponse.data;
     
         if (roomData && Array.isArray(roomData.data) && roomData.data.length > 0) {
