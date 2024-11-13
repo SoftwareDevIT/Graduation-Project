@@ -322,8 +322,9 @@
     font-size: 14px;
     color: #333;
     margin-bottom: 10px;
+    
   }
-  
+ 
   .comment-rating {
     font-size: 14px;
     color: #f5c518; /* Màu vàng cho rating */

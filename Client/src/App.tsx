@@ -50,11 +50,20 @@ import MovieShowing from "./component/Movies/MovieShowing";
 import SupportCenter from "./component/Support/Support";
 import PostDetail from "./component/Post/PostDetail";
 import Credits from "./component/PersonalPage/Credits";
+import Deponsit from "./component/PersonalPage/Deposit";
+import ForgetPass from "./component/Login/ForgetPass";
+
+import AdminLogin from "./component/Admin/Login/LoginAdmin";
+import PostDetailManager from "./component/Admin/PostsDasboard/PostDetailManager";
+import NotFound from "./component/NotFoud/NotFound";
+import Otp from "./component/Login/Otp";
+import ResetPasswod from "./component/Login/ResetPasswod";
 
 
 
 
 function App() {
+  
   return (
     <>
       <Routes>
@@ -63,7 +72,7 @@ function App() {
         <Route path="/orders" element={<OrderPage />} />
         <Route path="/pay" element={<OrderCheckout />} />
         <Route path="/seat" element={<CinemaSeatSelection />} />
-        <Route path="/movie-detail/:id" element={<ContentMovie />} />
+        <Route path="/movie-detail/:id"  element={<ContentMovie />} />
         <Route path="/schedule/:id" element={<LichChieu />} />
         <Route path="/reviews/:id" element={<DanhGia />} />
         <Route path="/news/:id" element={<TinTuc />} />
@@ -71,10 +80,13 @@ function App() {
         <Route path="/headerticket" element={<Headerticket />} />
         <Route path="/confirm" element={<EmailConfirm />} />
         <Route path="/payment-callback" element={<PaymentCallback />} />
-        <Route path="/FilmNews" element={<FilmNews />} />
+        <Route path="/*" element={<NotFound/>} />
+       
+      
         <Route path="/filmnews" element={<FilmNews/>} />
         <Route path="/sp" element={<SupportCenter/>} />
         <Route path="/postdetail/:id" element={<PostDetail/>} />
+        
        
 
         <Route path="/movie/search/:movie_name" element={<SerachMovies />} />
@@ -84,21 +96,28 @@ function App() {
         <Route path="/ChangePassword" element={<ChangePassword />} />
         <Route path="/register" element={<RegisterCinema />} />
         <Route path="/login" element={<LoginCinema />} />
-        <Route path="movieshowing" element={<MovieShowing/>} />
+        <Route path="/movieshowing" element={<MovieShowing/>} />
+
+        <Route path="/deponsit" element={<Deponsit/>} />
+        <Route path="/forgetpass" element={<ForgetPass/>} />
+        <Route path="/otp" element={<Otp/>} />
+        <Route path="/resetPassword" element={<ResetPasswod/>} />
       
     
        
 
         {/* Phân quyền cho các route admin */}
-        <Route path="/admin" element={<PrivateRoute allowedRoles={['admin']}><Dashboard /></PrivateRoute>} />
+        <Route path="/admin" element={<PrivateRoute allowedRoles={['admin']}><AdminLogin/></PrivateRoute>}/>
+        <Route path="/admin/dashboard" element={<PrivateRoute allowedRoles={['admin']}><Dashboard /></PrivateRoute>} />
         <Route path="/admin/user" element={<PrivateRoute allowedRoles={['admin']}><User /></PrivateRoute>} />
-        <Route path="/admin/user/add" element={<PrivateRoute allowedRoles={['admin']}><UserAddManager /></PrivateRoute>} />
+        <Route path="/admin/user/roles" element={<PrivateRoute allowedRoles={['admin']}><UserAddManager /></PrivateRoute>} />
         <Route path="/admin/showtimes" element={<PrivateRoute allowedRoles={['admin']}><ShowtimesManager /></PrivateRoute>} />
         <Route path="/admin/showtimes/add" element={<PrivateRoute allowedRoles={['admin']}><ShowtimesFormManager /></PrivateRoute>} />
         <Route path="/admin/showtimes/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><ShowtimesFormManager /></PrivateRoute>} />
         <Route path="/admin/orders" element={<PrivateRoute allowedRoles={['admin']}><OrdersManager /></PrivateRoute>} />
         <Route path="/admin/tickets" element={<PrivateRoute allowedRoles={['admin']}><TicketsManager /></PrivateRoute>} />
         <Route path="/admin/posts" element={<PrivateRoute allowedRoles={['admin']}><PostsManager /></PrivateRoute>} />
+        <Route path="/admin/posts/:postId"element={<PrivateRoute allowedRoles={['admin']}><PostDetailManager/></PrivateRoute>} />
         <Route path="/admin/posts/add" element={<PrivateRoute allowedRoles={['admin']}><PostsFormManager /></PrivateRoute>} />
         <Route path="/admin/posts/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><PostsFormManager /></PrivateRoute>} />
         <Route path="/admin/categories" element={<PrivateRoute allowedRoles={['admin']}><CategoriesManager /></PrivateRoute>} />

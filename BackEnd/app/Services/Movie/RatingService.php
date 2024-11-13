@@ -13,8 +13,10 @@ use Illuminate\Support\Facades\Auth;
  */
 class RatingService
 {
-    public function index() {}
-
+    public function index() {
+       return Rating::all();
+    }
+       
     public function store(array $data)
     {
         $existingRating = Rating::where('user_id',  Auth::id())
@@ -61,5 +63,11 @@ class RatingService
         return $favorite->delete();
     }
 
-    public function show(int $id) {}
+    public function show(int $id) {
+        $movie = Rating::where('movie_id', $id)->get();
+
+        return $movie;
+    }
+
+    
 }

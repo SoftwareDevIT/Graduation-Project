@@ -10,12 +10,30 @@ import { Link } from "react-router-dom";
 
 const MovieBanner = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
+  const [movieDetails, setMovieDetails] = useState<Record<number, Movie>>({});
 
   useEffect(() => {
     const fetchMovies = async () => {
       try {
         const response = await instance.get("/movies");
-        setMovies(response.data.data.original);
+
+      
+
+
+        setMovies(limitedMovies);
+
+        // Fetch movie details for each movie
+        const movieDetailsPromises = limitedMovies.map((movie: Movie) =>
+          instance.get(`/movies/${movie.id}`)
+        );
+
+        const movieDetailsResponses = await Promise.all(movieDetailsPromises);
+        const detailsMap = movieDetailsResponses.reduce((acc: Record<number, Movie>, cur, index) => {
+          acc[limitedMovies[index].id] = cur.data;
+          return acc;
+        }, {});
+
+        setMovieDetails(detailsMap);
       } catch (error) {
         console.error("Failed to fetch movies:", error);
       }
@@ -23,6 +41,7 @@ const MovieBanner = () => {
 
     fetchMovies();
   }, []);
+
   var settings = {
     dots: true,
     infinite: true,
@@ -53,6 +72,7 @@ const MovieBanner = () => {
       },
     ],
   };
+
   return (
     <div className="movie-banner">
       <div className="banner-header">
@@ -64,23 +84,20 @@ const MovieBanner = () => {
             {movies.map((movie) => (
               <div key={movie.id}>
                 <div className="movie-item">
-                  <Link to={`/movie-detail/${movie.id}`}>
+                  <Link state={{ movieId: movie.id }} to={`/movie-detail/${movie.id}`}>
                     <img
                       src={movie.poster || "placeholder.jpg"}
                       alt={movie.movie_name}
                     />
                   </Link>
                   <div className="movie-info">
-                    <button className="buy-ticket">Mua vé</button>
+                    <button className="buy-ticket"><Link to={`/buy-now/${movie.id}`} >Mua vé</Link></button>
                     <p className="name_movie">{movie.movie_name}</p>
                     <span>
                       {movie.release_date
-                        ? new Date(movie.release_date).toLocaleDateString(
-                            "vi-VN"
-                          )
+                        ? new Date(movie.release_date).toLocaleDateString("vi-VN")
                         : "N/A"}
                     </span>
-                    {/* <span className="rating">{movie.age_limit ? `${movie.age_limit}` : 'N/A'}</span> */}
                   </div>
                 </div>
               </div>

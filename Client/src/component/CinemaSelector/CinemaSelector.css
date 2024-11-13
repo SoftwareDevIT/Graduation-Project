@@ -144,7 +144,7 @@ margin-top: 15px;
 }
 .title{
   font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-  text-align: center;
+  text-align: center !important;
   padding-top: 15px;
   font-size: 12px;
   font-weight :500;
@@ -345,7 +345,9 @@ li.city.selected {
   
 }
 /* CSS hiện tại của bạn */
-
+.calendar-custom-1{
+  border-bottom: 1px solid #c6d7ee;
+}
 /* Media queries cho các thiết bị nhỏ hơn */
 @media (max-width: 1024px) {
   .container {
@@ -417,8 +419,8 @@ li.city.selected {
 }
 
 /* Media queries cho các thiết bị nhỏ hơn nữa */
-.city-select{
-  display: none;
+.city-selects{
+  display: none !important;
 }
 @media (max-width: 768px) {
   .container {
@@ -427,7 +429,7 @@ li.city.selected {
   .list-tp .list{
     display: none;
   }
-  .city-select{
+  .city-selects{
     display: block;
     border: none !important;
     margin-top: 20px;
@@ -505,7 +507,7 @@ li.city.selected {
   .list-tp .list{
     display: none;
   }
-  .city-select{
+  .city-selects{
     display: block;
     border: none !important;
     margin-top: 20px;

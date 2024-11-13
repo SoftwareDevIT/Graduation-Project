@@ -55,7 +55,7 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const fetchCategories = async () => {
     try {
       const response = await instance.get('/movie-category');
-      dispatch({ type: 'SET_CATEGORIES', payload: response.data }); // Assuming response.data contains the categories
+      dispatch({ type: 'SET_CATEGORIES', payload: response.data.data }); // Assuming response.data contains the categories
     } catch (error) {
       console.error('Failed to fetch categories:', error);
     }

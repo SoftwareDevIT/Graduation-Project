@@ -16,6 +16,17 @@
     text-transform: uppercase;
     text-align: center;
 }
+.search-container {
+    display: flex;
+    justify-content: flex-end; /* Aligns search input to the right */
+    margin-bottom: 10px; /* Adds spacing below the search input */
+}
+
+.search-input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
 
 .actions {
     display: flex;

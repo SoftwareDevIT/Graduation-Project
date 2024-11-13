@@ -1,23 +1,24 @@
-import React, { useEffect } from 'react';
-import './ComboDashboard.css';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useComboContext } from '../../../Context/ComboContext';
 import instance from '../../../server';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+
 
 const ComboDashboard: React.FC = () => {
-    const { state, deleteCombo } = useComboContext(); 
-    const { combos } = state; 
-    const [loading, setLoading] = React.useState<boolean>(true); 
-    const [error, setError] = React.useState<string | null>(null); 
-
-    // Pagination states
-    const [currentPage, setCurrentPage] = React.useState<number>(1);
-    const [combosPerPage] = React.useState<number>(5);
+    const { state, deleteCombo } = useComboContext();
+    const { combos } = state;
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [combosPerPage] = useState<number>(5);
+    const [searchTerm, setSearchTerm] = useState<string>("");
 
     useEffect(() => {
         const fetchCombos = async () => {
             try {
-                await instance.get('/combo'); 
+                await instance.get('/combo');
                 setLoading(false);
             } catch (err) {
                 setError('Failed to load combos');
@@ -39,9 +40,13 @@ const ComboDashboard: React.FC = () => {
         }
     };
 
-    const indexOfLastCombo = currentPage * combosPerPage; 
-    const indexOfFirstCombo = indexOfLastCombo - combosPerPage; 
-    const currentCombos = combos.slice(indexOfFirstCombo, indexOfLastCombo); 
+    const filteredCombos = combos.filter(combo =>
+        combo.combo_name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const indexOfLastCombo = currentPage * combosPerPage;
+    const indexOfFirstCombo = indexOfLastCombo - combosPerPage;
+    const currentCombos = filteredCombos.slice(indexOfFirstCombo, indexOfLastCombo);
 
     if (loading) {
         return <p>Loading...</p>;
@@ -54,14 +59,23 @@ const ComboDashboard: React.FC = () => {
     const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
     return (
-        <div className="combo-dashboard">
-            <h2>All Combos</h2>
-            <div className="actions">
-                <Link to={'/admin/combo/add'} className="add-combo-btn">Add Combo</Link>
+        <div className="container mt-5">
+            <h2 className="text-center text-primary mb-4">All Combos</h2>
+            <div className="d-flex justify-content-between align-items-center mb-4">
+                <Link to={'/admin/combo/add'} className="btn btn-outline-primary">
+                    Add Combo
+                </Link>
+                <input 
+                    type="text" 
+                    placeholder="Search by Combo Name..." 
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="form-control w-25"
+                />
             </div>
-            <div className="table-container-combo">
-                <table className="combo-table">
-                    <thead>
+            <div className="table-responsive">
+                <table className="table table-bordered table-hover shadow-sm">
+                    <thead className="thead-light">
                         <tr>
                             <th>Combo ID</th>
                             <th>Combo Name</th>
@@ -77,50 +91,49 @@ const ComboDashboard: React.FC = () => {
                             <tr key={combo.id}>
                                 <td>{combo.id}</td>
                                 <td>{combo.combo_name}</td>
-                                <td>{combo.descripton}</td>
+                                <td>{combo.description}</td>
                                 <td>{combo.price}</td>
                                 <td>{combo.volume}</td>
                                 <td>{new Date(combo.created_at).toLocaleDateString()}</td>
-                                <td className="action-buttons">
-                                    <Link to={`/admin/combo/edit/${combo.id}`} className="edit-btn">✏️</Link>
-                                    <button 
-                                        className="delete-btn" 
-                                        onClick={() => handleDelete(combo.id)} 
-                                    >
-                                        🗑
-                                    </button>
+                                <td>
+                                    <div className="d-flex justify-content-around">
+                                        <Link to={`/admin/combo/edit/${combo.id}`} className="btn btn-warning btn-sm">
+                                            <FontAwesomeIcon icon={faEdit} />
+                                        </Link>
+                                        <button 
+                                            className="btn btn-danger btn-sm" 
+                                            onClick={() => handleDelete(combo.id)}
+                                        >
+                                            <FontAwesomeIcon icon={faTrashAlt} />
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
-             {/* Pagination Section */}
-             <div className="pagination">
-                    <button 
-                        className="prev-btn" 
-                        onClick={() => setCurrentPage(currentPage - 1)} 
-                        disabled={currentPage === 1}
-                    >
-                        Previous
-                    </button>
-                    {Array.from({ length: Math.ceil(combos.length / combosPerPage) }, (_, index) => (
-                        <button 
-                            key={index + 1}
-                            className={`page-btn ${currentPage === index + 1 ? 'active' : ''}`}
-                            onClick={() => paginate(index + 1)}
-                        >
-                            {index + 1}
+            <nav className="d-flex justify-content-center mt-4">
+                <ul className="pagination">
+                    <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                        <button className="page-link" onClick={() => setCurrentPage(currentPage - 1)}>
+                            Previous
                         </button>
+                    </li>
+                    {Array.from({ length: Math.ceil(filteredCombos.length / combosPerPage) }, (_, index) => (
+                        <li key={index + 1} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
+                            <button className="page-link" onClick={() => paginate(index + 1)}>
+                                {index + 1}
+                            </button>
+                        </li>
                     ))}
-                    <button 
-                        className="next-btn" 
-                        onClick={() => setCurrentPage(currentPage + 1)} 
-                        disabled={indexOfLastCombo >= combos.length}
-                    >
-                        Next
-                    </button>
-                </div>
+                    <li className={`page-item ${indexOfLastCombo >= filteredCombos.length ? 'disabled' : ''}`}>
+                        <button className="page-link" onClick={() => setCurrentPage(currentPage + 1)}>
+                            Next
+                        </button>
+                    </li>
+                </ul>
+            </nav>
         </div>
     );
 };

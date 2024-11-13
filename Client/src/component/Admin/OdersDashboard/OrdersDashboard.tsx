@@ -1,38 +1,36 @@
 import { Booking } from "../../../interface/Booking";
 import instance from "../../../server";
-import "./OrdersDashboard.css";
 
 import { useEffect, useState } from "react";
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const OrdersDashboard: React.FC = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);
-
 
   useEffect(() => {
     const fetchBookings = async () => {
       try {
         const response = await instance.get("/order");
-        console.log(response.data); // Kiểm tra dữ liệu trả về
-  
-        setBookings(response.data.data); 
+        setBookings(response.data.data);
       } catch (error) {
         console.error("Error fetching bookings:", error);
       }
     };
-  
+
     fetchBookings();
   }, []);
-  
+
   return (
-    <div className="orders-management">
-      <h2>Order Management</h2>
-      <div className="actions">
-        <button className="add-order-btn">Add Order</button>
+    <div className="container mt-5">
+      <h2 className="text-center text-primary mb-4">Order Management</h2>
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <button className="btn btn-outline-primary">Add Order</button>
       </div>
-      <div className="table-container">
-        <table className="order-table">
-          <thead>
+      <div className="table-responsive">
+        <table className="table table-bordered table-hover shadow-sm">
+          <thead className="thead-light">
             <tr>
               <th>Order ID</th>
               <th>User</th>
@@ -51,27 +49,30 @@ const OrdersDashboard: React.FC = () => {
               bookings.map((booking: Booking) => (
                 <tr key={booking.id}>
                   <td>{booking.id}</td>
-                  <td>{booking.user.user_name}</td> {/* Hiển thị tên người dùng */}
-                  <td>{booking.showtime.showtime_date}</td> {/* Hiển thị thời gian chiếu */}
-                  <td>{booking.showtime.movie.movie_name}</td> {/* Hiển thị tên phim */}
-                  <td>{booking.pay_method.pay_method_name}</td> {/* Hiển thị phương thức thanh toán */}
-                  <td>${booking.price_ticket}</td>
-                  <td>${booking.price_combo}</td>
+                  <td>{booking.user.user_name}</td>
+                  <td>{booking.showtime.showtime_date}</td>
+                  <td>{booking.showtime.movie_in_cinema_id}</td>
+                  <td>{booking.pay_method.pay_method_name}</td>
+                  <td>${booking.price_ticket.toFixed(2)}</td>
+                  <td>${booking.price_combo.toFixed(2)}</td>
                   <td>{booking.amount}</td>
-                  <td>{booking.seat_status}</td> {/* Hiển thị trạng thái */}
-                  <td className="">
-                    <button className="view-btn">👁</button>
-                    <button className="edit-btn">✏️</button>
-                    <button className="delete-btn">🗑</button>
+                  <td>{booking.seat_status}</td>
+                  <td className="action-buttons2">
+                    <button className="btn btn-warning btn-sm mx-1" title="Edit">
+                      <FontAwesomeIcon icon={faEdit} />
+                    </button>
+                    <button className="btn btn-danger btn-sm" title="Delete">
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button>
                   </td>
                 </tr>
               ))
             ) : (
-             
-                <td colSpan={10} style={{ textAlign: "center" }}>
-                  No booking available.
+              <tr>
+                <td colSpan={10} className="text-center">
+                  No bookings available.
                 </td>
-          
+              </tr>
             )}
           </tbody>
         </table>
