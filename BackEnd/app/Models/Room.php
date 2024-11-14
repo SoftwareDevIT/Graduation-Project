@@ -13,6 +13,8 @@ class Room extends Model
 
         'room_name',
         'cinema_id',
+        'quantity_double_seats',
+        'quantity_vip_seats',
         'status',
     ];
 
