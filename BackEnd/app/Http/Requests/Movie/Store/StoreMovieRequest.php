@@ -27,7 +27,7 @@ class StoreMovieRequest extends FormRequest
             'duration'              => 'string|max:225',
             'release_date'          => 'date',
             'age_limit'             => 'required|integer',
-            'description'            => 'string|max:255',
+            'description'            => 'string',
             'trailer'               => 'string|max:255',
             'rating'                => 'numeric',
             'actor_id'                => 'required|array',

@@ -70,7 +70,6 @@ const UserDashboard: React.FC = () => {
                             <th>Username</th>
                             <th>Full Name</th>
                             <th>Email</th>
-                            <th>Role ID</th>
                             <th>Created At</th>
                             <th>Actions</th>
                         </tr>
@@ -82,9 +81,9 @@ const UserDashboard: React.FC = () => {
                                 <td>{user.user_name}</td>
                                 <td>{user.fullname}</td>
                                 <td>{user.email || 'N/A'}</td>
-                                <td>{user.role_id}</td>
+                               
                                 <td>{new Date(user.created_at!).toLocaleDateString()}</td>
-                                <td>
+                                <td>    
                                     <div className="d-flex justify-content-around">
                                         <Link to={`/admin/user/edit/${user.id}`} className="btn btn-warning btn-sm mr-2">
                                             <FontAwesomeIcon icon={faEdit} />

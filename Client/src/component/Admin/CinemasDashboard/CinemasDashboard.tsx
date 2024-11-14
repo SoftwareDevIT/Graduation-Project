@@ -103,6 +103,35 @@ const CinemasDashboard: React.FC = () => {
         setSelectedCinemaMovies([]); 
     };
 
+    // Pagination with limited page display and ellipsis
+    const renderPagination = () => {
+        const pageNumbers = [];
+        if (totalPages <= 5) {
+            for (let i = 1; i <= totalPages; i++) {
+                pageNumbers.push(i);
+            }
+        } else {
+            if (currentPage <= 3) {
+                pageNumbers.push(1, 2, 3, 4, '...', totalPages);
+            } else if (currentPage >= totalPages - 2) {
+                pageNumbers.push(1, '...', totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
+            } else {
+                pageNumbers.push(1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages);
+            }
+        }
+
+        return pageNumbers.map((page, index) => (
+            <button
+                key={index}
+                className={`btn ${currentPage === page ? 'btn-primary' : 'btn-outline-primary'} mx-1`}
+                onClick={() => typeof page === 'number' && handlePageChange(page)}
+                disabled={page === '...'}
+            >
+                {page}
+            </button>
+        ));
+    };
+
     return (
         <div className="container mt-5">
             <h2 className="text-center text-primary mb-4">Cinemas Dashboard</h2>
@@ -144,14 +173,15 @@ const CinemasDashboard: React.FC = () => {
                                     <td>{cinema.phone}</td>
                                     <td>{cinema.cinema_address}</td>
                                     <td>{cinema.status}</td>
-                                    <td className="action-buttons1">
-                                        <Link to={`/admin/cinemas/edit/${cinema.id}`} className="btn btn-warning btn-sm mx-1">
-                                            <FontAwesomeIcon icon={faEdit} />
-                                        </Link>
-                                        <button onClick={() => handleDeleteCinema(cinema.id!)} className="btn btn-danger btn-sm">
-                                            <FontAwesomeIcon icon={faTrash} />
-                                        </button>
-                                    </td>
+                                    <td className="action-buttons1 d-flex justify-content-center align-items-center">
+    <Link to={`/admin/cinemas/edit/${cinema.id}`} className="btn btn-warning btn-sm mx-1">
+        <FontAwesomeIcon icon={faEdit} />
+    </Link>
+    <button onClick={() => handleDeleteCinema(cinema.id!)} className="btn btn-danger btn-sm">
+        <FontAwesomeIcon icon={faTrash} />
+    </button>
+</td>
+
                                 </tr>
                                 {expandedCinemaId === cinema.id && selectedCinemaMovies.length > 0 && (
                                     <tr>
@@ -196,15 +226,7 @@ const CinemasDashboard: React.FC = () => {
                 >
                     Prev
                 </button>
-                {Array.from({ length: totalPages }, (_, index) => (
-                    <button
-                        key={index}
-                        className={`btn ${currentPage === index + 1 ? 'btn-primary' : 'btn-outline-primary'} mx-1`}
-                        onClick={() => handlePageChange(index + 1)}
-                    >
-                        {index + 1}
-                    </button>
-                ))}
+                {renderPagination()}
                 <button
                     className="btn btn-outline-secondary mx-2"
                     onClick={() => handlePageChange(currentPage + 1)}
