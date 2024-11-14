@@ -227,20 +227,24 @@ useEffect(() => {
       
               <div className="showtimes">
               <div className="calendar-custom-1">
-        {generateDateList().map((date) => (
-          <div
-            key={date}
-            className={`date-custom-1 ${selectedDate === date ? "active" : ""}`}
-            onClick={() => {
-              setSelectedDate(date);
-              console.log("Ngày được chọn:", date);
-            }}
-          >
-            <span>{dayjs(date).format("DD/MM")}</span>
-            <small>{dayjs(date).format("dd") === "CN" ? "CN" : `Th ${dayjs(date).day()}`}</small>
-          </div>
-        ))}
-      </div>
+  {generateDateList().map((date) => (
+    <div
+      key={date}
+      className={`date-custom-1 ${selectedDate === date ? "active" : ""}`}
+      onClick={() => {
+        setSelectedDate(date);
+        console.log("Ngày được chọn:", date);
+      }}
+    >
+      <span>{dayjs(date).format("DD/MM")}</span>
+      <small>
+        {dayjs(date).day() === 0
+          ? "CN"
+          : `Thứ ${dayjs(date).day() + 1}`}
+      </small>
+    </div>
+  ))}
+</div>
       
       
                 {/* Hiển thị danh sách phim */}

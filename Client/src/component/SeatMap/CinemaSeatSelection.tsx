@@ -39,7 +39,7 @@ const CinemaSeatSelection: React.FC = () => {
   useEffect(() => {
     const fetchRoomAndSeats = async () => {
       try {
-        const roomResponse = await instance.get(`/room`);
+        const roomResponse = await instance.get(`/cinema/${cinemaId}/room`);
         const roomData = roomResponse.data;
     
         if (roomData && Array.isArray(roomData.data) && roomData.data.length > 0) {
@@ -260,8 +260,8 @@ if (error) {
               </div>
             </div>
             <div className="actionst1">
-              <button className="back-btn1">←</button>
-              <button className="continue-btn1" onClick={handleSubmit}>
+              <button className="back-btn1" >←</button>
+              <button className="continue-btn1" onClick={handleSubmit}   disabled={totalSelectedSeats === 0}>
                 Tiếp Tục
               </button>
             </div>

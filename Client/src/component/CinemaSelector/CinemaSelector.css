@@ -508,7 +508,7 @@ li.city.selected {
     display: none;
   }
   .city-selects{
-    display: block;
+    display: block !important;
     border: none !important;
     margin-top: 20px;
     

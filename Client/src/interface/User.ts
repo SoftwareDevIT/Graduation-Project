@@ -8,7 +8,8 @@ export interface User {
     avatar?: string | null;          // varchar(255), optional
     phone?: string | null;           // varchar(255), optional
     address?: string | null;         // varchar(255), optional
-    fullname?: string | null;        // varchar(255), optional
+    fullname?: string | null;     
+       // varchar(255), optional
     coin?: number | null;            // double, optional
     status: 'Normal' | 'Ban';        // enum
     role_id: number;                 // bigint(20) -> number

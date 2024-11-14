@@ -21,7 +21,7 @@ const SearchMovies = () => {
       .get(`/movie/search/${movie_name}`)
       .then((response) => {
         setMovies(response.data.data);
-        setLoading(false); // Tải xong
+        setLoading(false); 
       })
       .catch((error) => {
         console.error("Có lỗi xảy ra khi tìm kiếm phim:", error);
