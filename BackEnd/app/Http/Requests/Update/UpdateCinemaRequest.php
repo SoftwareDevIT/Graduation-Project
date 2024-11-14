@@ -23,6 +23,7 @@ class UpdateCinemaRequest extends FormRequest
     {
         return [
             'cinema_name' => 'sometimes|string|max:255',
+            'image' => 'string',
             'location_id' => 'integer',
             'phone' => 'string',
             'cinema_address' => 'string',
