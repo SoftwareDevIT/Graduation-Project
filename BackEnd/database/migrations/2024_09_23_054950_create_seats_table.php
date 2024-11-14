@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('room_id');
             $table->string('seat_column');
             $table->timestamp('reserved_until')->nullable();
-            $table->enum('seat_type', ['single', 'double'])->default('single');
+            $table->enum('seat_type', ['Standard', 'Couple', 'VIP'])->default('Standard');
             $table->string('seat_row');
             $table->foreign('showtime_id')->references('id')->on('showtimes');
             $table->foreign('room_id')->references('id')->on('room');
