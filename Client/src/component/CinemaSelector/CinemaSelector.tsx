@@ -292,6 +292,8 @@ useEffect(() => {
                 showtime: showtime.showtime_start,
                 showtimeId: showtime.id,
                 cinemaId: selectedCinemaDetails?.id,
+                price:showtime.price,
+                roomId:showtime.room_id
               },
             });
           }
@@ -302,8 +304,12 @@ useEffect(() => {
       }}
       >
         {showtime.showtime_start.slice(0, 5)}
+        <p> {`${showtime.price / 1000}k`}</p>
       </button>
+      
     );
+   
+    
   })
 ) : (
   <p>Không có suất chiếu cho ngày này</p>
