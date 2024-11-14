@@ -41,9 +41,6 @@ const DanhGia: React.FC = () => {
         return <div>Đang tải đánh giá...</div>;
     }
 
-    if (error) {
-        return <div>{error}</div>;
-    }
 
     return (
         <>
@@ -51,7 +48,6 @@ const DanhGia: React.FC = () => {
        
                         <MovieDetail />
 
-                        {/* Phần đánh giá */}
                         <div className="community-section">
                             <h3>Cộng đồng</h3>
 

@@ -58,14 +58,14 @@ import PostDetailManager from "./component/Admin/PostsDasboard/PostDetailManager
 import NotFound from "./component/NotFoud/NotFound";
 import Otp from "./component/Login/Otp";
 import ResetPasswod from "./component/Login/ResetPasswod";
-
-
-
+import { QueryClientProvider } from "@tanstack/react-query";
+import queryClient from '../src/server/queryClient'; 
 
 function App() {
   
   return (
     <>
+      <QueryClientProvider client={queryClient}>
       <Routes>
         <Route index element={<Home />} />
         <Route path="/buy-ticket" element={<Bookcinematickets />} />
@@ -139,6 +139,7 @@ function App() {
         <Route path="/admin/revenuebycinema" element={<PrivateRoute allowedRoles={['admin']}><RevenueByCinemaManager /></PrivateRoute>} />
         <Route path="/admin/revenuebymovie" element={<PrivateRoute allowedRoles={['admin']}><RevenueByMoviesManager /></PrivateRoute>} />
       </Routes>
+      </QueryClientProvider>
     </>
   );
 }

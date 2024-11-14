@@ -26,7 +26,7 @@ interface SeatProps {
 const CinemaSeatSelection: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate(); // Khai báo useNavigate để điều hướng
-  const { movieName, cinemaName, showtime, showtimeId, cinemaId } =
+  const { movieName, cinemaName, showtime, showtimeId, cinemaId ,price,roomId} =
     location.state || {};
 
   const [selectedSeats, setSelectedSeats] = useState<Map<string, number[]>>(
@@ -39,23 +39,15 @@ const CinemaSeatSelection: React.FC = () => {
   useEffect(() => {
     const fetchRoomAndSeats = async () => {
       try {
-        const roomResponse = await instance.get(`/cinema/${cinemaId}/room`);
-        const roomData = roomResponse.data;
-    
-        if (roomData && Array.isArray(roomData.data) && roomData.data.length > 0) {
-          const randomRoom = roomData.data[Math.floor(Math.random() * roomData.data.length)];
-    
-          if (randomRoom && randomRoom.volume > 0) {
-            setRoomData(randomRoom);
-          } else {
-            setError("Room data is invalid");
-            return;
-          }
+        const roomResponse = await instance.get(`/room/${roomId}`);
+        const roomData = roomResponse.data.data;
+
+        if (roomData) {
+          setRoomData(roomData);
         } else {
-          setError("No rooms available");
+          setError("Room data is invalid");
           return;
         }
-    
         const seatResponse = await instance.get(`/seat/${showtimeId}`);
         const seatData = seatResponse.data;
     
@@ -135,11 +127,9 @@ const CinemaSeatSelection: React.FC = () => {
   const hours = showtime.split(":")[0];
 
   let price_ticket = 0;
-  if (hours < 22) {
-    price_ticket = 50000;
-  } else {
-    price_ticket = 45000;
-  }
+  
+    price_ticket =price ;
+  
   const totalPrice = totalSelectedSeats * price_ticket;
 
   // Hàm submit xử lý việc đẩy dữ liệu
@@ -245,7 +235,7 @@ if (error) {
                 Phòng chiếu: <span>{roomData.room_name || roomData.id}</span>
               </p>
               <p>
-                Ghế{" "}
+                Ghế:{" "}
                 {Array.from(selectedSeats.entries())
                   .map(([row, indices]) =>
                     indices.map((index) => `${row}${index + 1}`).join(", ")
@@ -260,8 +250,8 @@ if (error) {
               </div>
             </div>
             <div className="actionst1">
-              <button className="back-btn1">←</button>
-              <button className="continue-btn1" onClick={handleSubmit}>
+              <button className="back-btn1" >←</button>
+              <button className="continue-btn1" onClick={handleSubmit}   disabled={totalSelectedSeats === 0}>
                 Tiếp Tục
               </button>
             </div>
