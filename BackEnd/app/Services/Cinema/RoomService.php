@@ -21,28 +21,13 @@ class RoomService
 
     public function store(array $data): Room
     {
-        $room = Room::create($data);
-        if (!empty($data['volume'])) {
-            $volume = (int) $data['volume'];
-            $seatsPerRow = 15;
-
-            $numberOfRows = ceil($volume / $seatsPerRow);
-            for ($rowIndex = 0; $rowIndex < $numberOfRows; $rowIndex++) {
-                $row = chr(65 + $rowIndex);
-                for ($seatNumber = 1; $seatNumber <= $seatsPerRow; $seatNumber++) {
-                    $seatIndex = ($rowIndex * $seatsPerRow) + $seatNumber;
-                    if ($seatIndex <= $volume) {
-                        Seats::create([
-                            'room_id' => $room->id,
-                            'row' => $row,
-                            'number' => $seatNumber,
-                        ]);
-                    }
-                }
-            }
-        }
-        return $room;
+        return Room::create($data);
     }
+    public function getRoomByCinema(int $cinemaId): Collection
+    {
+        return Room::where('cinema_id', $cinemaId)->get();
+    }
+
 
     public function update(int $id, array $data): Room
     {

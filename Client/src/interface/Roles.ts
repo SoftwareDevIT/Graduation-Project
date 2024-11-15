@@ -1,9 +1,11 @@
-import { User } from "./User";
 
+import { User } from "./User";
+import {Permission} from './Permissions'
+import {RolesHasPermissions} from './Role_has_permissions'
 export interface Roles{
     id: string;
     name: string;
     user: User
-    guard_name: string;
-  
+    permissions: Permission[]
+    role_has_permissions: RolesHasPermissions
 }

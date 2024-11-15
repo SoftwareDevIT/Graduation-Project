@@ -39,6 +39,21 @@ class RoomController extends Controller
     //         return $e->getMessage();
     //     }
     // }
+    public function getRoomByCinema($id)
+{
+    try {
+        $rooms = $this->roomService->getRoomByCinema($id);
+
+        if ($rooms->isEmpty()) {
+            return $this->notFound();
+        }
+
+        return $this->success($rooms);
+    } catch (Exception $e) {
+        return $e->getMessage();
+    }
+}
+
 
 
     public function store(StoreRoomRequest $request)

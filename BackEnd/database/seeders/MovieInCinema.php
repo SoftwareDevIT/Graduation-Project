@@ -19,20 +19,40 @@ class MovieInCinema extends Seeder
                 'cinema_id' => 1,
             ],
             [
+                'movie_id' => 1,
+                'cinema_id' => 2,
+            ],
+            [
+                'movie_id' => 1,
+                'cinema_id' => 3,
+            ],
+            [
+                'movie_id' => 1,
+                'cinema_id' => 4,
+            ],
+            [
+                'movie_id' => 1,
+                'cinema_id' => 5,
+            ],
+            [
                 'movie_id' => 2,
-                'cinema_id' => 1,
-            ],
-            [
-                'movie_id' => 3,
                 'cinema_id' => 2,
             ],
             [
-                'movie_id' => 4,
+                'movie_id' => 2,
                 'cinema_id' => 2,
             ],
             [
-                'movie_id' => 5,
-                'cinema_id' => 1,
+                'movie_id' => 2,
+                'cinema_id' => 3,
+            ],
+            [
+                'movie_id' => 2,
+                'cinema_id' => 4,
+            ],
+            [
+                'movie_id' => 2,
+                'cinema_id' => 5,
             ],
 
         ]);

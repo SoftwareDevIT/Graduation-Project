@@ -57,7 +57,7 @@ const LichChieuUpdated: React.FC = () => {
                         movie_id: id, // Sử dụng ID phim từ URL
                     },
                 });
-                console.log(selectedDate);
+                console.log(response);
                 
                 const cinemaData = response.data?.data || [];
                 setCinemas(cinemaData.map((item: any) => ({
