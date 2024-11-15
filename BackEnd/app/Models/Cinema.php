@@ -22,7 +22,9 @@ class Cinema extends Model
     }
     public function movies()
     {
-        return $this->hasMany(Movie::class);
+        return $this->belongsToMany(Movie::class, 'movie_in_cinemas', 'cinema_id', 'movie_id')
+
+            ->withTimestamps();
     }
     // public function showtimes() {
     //     return $this->hasMany(Showtime::class);

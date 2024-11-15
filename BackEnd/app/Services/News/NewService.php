@@ -13,7 +13,7 @@ class NewService
 
     public function index()
     {
-        return News::all();
+        return News::with('user')->get();
     }
 
 
@@ -40,7 +40,7 @@ class NewService
 
     public function show(int $id)
     {
-        $news = News::with('newsCategory')->findOrFail($id);
+        $news = News::with('newsCategory','user')->findOrFail($id);
         return $news;
     }   
 }
