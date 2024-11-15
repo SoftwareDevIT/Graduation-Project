@@ -65,7 +65,7 @@ const NewsContent = () => {
           <div className="related-news-item" key={index}>
             <Link to={`/postdetail/${news.id}`} className='title'> {news.title}</Link>
           
-            <span className="author">{news.user_id} • {new Date(news.created_at).toLocaleString()}</span>
+            <span className="author">{news.user.fullname} • {new Date(news.created_at).toLocaleString()}</span>
           </div>
         ))}
       </div>

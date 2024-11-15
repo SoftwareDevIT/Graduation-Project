@@ -57,7 +57,7 @@ const OrderCheckout = () => {
                 }
                 return prevTime - 1;
             });
-        }, 1000);
+        }, 3000);
 
         return () => clearInterval(timer); // Dọn dẹp timer khi component unmount
     }, [navigate]);
@@ -112,7 +112,7 @@ const OrderCheckout = () => {
             pay_method_id, // Gửi pay_method_id là số nguyên
             comboId: selectedCombos,
         };
-        console.log(selectedCombos);
+        console.log();
 
         try {
             const response = await instance.post("/book-ticket", bookingData, {

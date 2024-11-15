@@ -238,8 +238,8 @@ const Header = () => {
                   <a href="#">TV Series</a>
                 </div>
               </div>
-              <a href="#">Cộng đồng</a>
-            </div>
+              <Link to={'/sp'}>Cộng đồng</Link>
+                         </div>
           </div>
 
           <div className="header-logo col-lg-1 col-md-4 col-sm-4 col-4 ">
@@ -293,7 +293,7 @@ const Header = () => {
                     <Link to="/profile">Quản lý tài khoản</Link>
                     <Link to="/movies">Vé phim</Link>
                     <Link to="/credits">Moveek Credits</Link>
-                    <Link to="/credits" onClick={handleLogout}>Đăng xuất</Link>
+                    <Link to="/login" onClick={handleLogout}>Đăng xuất</Link>
                   
                   </div>
                 )}

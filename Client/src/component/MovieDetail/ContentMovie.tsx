@@ -56,12 +56,12 @@ export const ContentMovie = (props: Props) => {
                     if (response.data.status) {
                         setRatings(response.data.data);  // Lưu đánh giá vào state
                     } else {
-                        setError("Không có đánh giá cho phim này.");
+                        // setError("Không có đánh giá cho phim này.");
                     }
                     setLoading(false);
                 })
                 .catch((error) => {
-                    setError(error.message);
+                    // setError(error.message);
                     setLoading(false);
                 });
         } else {
@@ -73,12 +73,12 @@ export const ContentMovie = (props: Props) => {
         const fetchRelatedPosts = async () => {
             if (movieId) {
                 try {
-                    const response = await instance.get(`/filterNewByMovie/${movieId}`); // Fetch related posts by movieId
-                    if (response.data?.status) {
-                        setRelatedPosts(response.data.data); // Store related posts in state
+                    const response = await instance.get(`/filterNewByMovie/${movieId}`); 
+                    if (response.data?.status) {    
+                        setRelatedPosts(response.data.data);
                     }
                 } catch (error) {
-                    console.error("Error fetching related posts:", error);
+                    // console.error("Error fetching related posts:", error);
                 }
             }
         };
