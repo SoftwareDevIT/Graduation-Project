@@ -5,6 +5,8 @@ import instance from '../../../server';
 import { Movie } from '../../../interface/Movie';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';  // Import the styles
 
 const MoviesDashboard: React.FC = () => {
     const { state, dispatch } = useMovieContext();
@@ -109,7 +111,18 @@ const MoviesDashboard: React.FC = () => {
                                     <td>{movie.actor.map(actor => actor.actor_name).join(', ')}</td>
                                     <td>{movie.director.map(director => director.director_name).join(', ')}</td>
                                     <td>{movie.duration}</td>
-                                    <td>{movie.description}</td>
+                                    <td>
+                                        {/* Using ReactQuill to render the description */}
+                                        <div>
+                                            <ReactQuill 
+                                                value={movie.description ?? ''}
+                                                readOnly={true} 
+                                                theme="snow" 
+                                                modules={{ toolbar: false }}
+                                                formats={['bold', 'underline', 'link']}
+                                            />
+                                        </div>
+                                    </td>
                                     <td>
                                         <div className="d-flex justify-content-around">
                                             <Link to={`/admin/movies/edit/${movie.id}`} className="btn btn-warning btn-sm mr-2">

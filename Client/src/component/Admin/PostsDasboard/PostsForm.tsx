@@ -29,7 +29,7 @@ const PostsForm: React.FC = () => {
             title: postData.title,
             news_category_id: postData.news_category_id, // This will set the category ID
             content: postData.content,
-            status: postData.status,
+          
           });
         }
       } catch (error) {
@@ -43,13 +43,16 @@ const PostsForm: React.FC = () => {
   const onSubmit = async (data: any) => {
     console.log('Selected Category ID:', data.news_category_id); // Log the selected category ID
     await addOrUpdatePost(
+      
       {
         ...data,
         thumnail: thumbnailFile, // Use 'thumbnail' instead of 'thumbnailFile'
         banner: bannerFile, // Use 'banner' instead of 'bannerFile'
       },
       id
+     
     );
+    alert(id ? 'Post updated successfully!' : 'Post added successfully!');
     nav('/admin/posts'); // Redirect after submission
   };
 
@@ -109,13 +112,7 @@ const PostsForm: React.FC = () => {
             required
           ></textarea>
         </div>
-        <div className="mb-3">
-          <label className="form-label">Status:</label>
-          <select {...register('status')} className="form-select" required>
-            <option value="Show">Show</option>
-            <option value="Hidden">Hidden</option>
-          </select>
-        </div>
+      
         <button type="submit" className="btn btn-primary">
           {id ? 'Update Post' : 'Add Post'}
         </button>

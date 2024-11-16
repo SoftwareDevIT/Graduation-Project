@@ -27,6 +27,7 @@ import { ShowtimeProvider } from './Context/ShowtimesContext.tsx'
 
 
 createRoot(document.getElementById('root')!).render(
+  
   <StrictMode>
     <BrowserRouter>
     <CinemaProvider>

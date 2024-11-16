@@ -24,7 +24,7 @@ class StoreComboRequest extends FormRequest
         return [
             "combo_name" => "string",
             "price" => "required|integer",
-            "descripton" => "nullable",
+            "descripton" => "string",
             "volume" => "required|integer",
             "status" => "integer",
         ];

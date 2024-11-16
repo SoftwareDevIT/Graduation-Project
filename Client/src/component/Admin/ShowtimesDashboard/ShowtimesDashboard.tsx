@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useShowtimeContext } from '../../../Context/ShowtimesContext';
 import instance from '../../../server';
@@ -78,6 +78,7 @@ const ShowtimesDashboard: React.FC = () => {
             setCurrentPage(page);
         }
     };
+    
 
     if (error) {
         return <div className="alert alert-danger">{error}</div>;
@@ -101,6 +102,7 @@ const ShowtimesDashboard: React.FC = () => {
                     <thead className="thead-light">
                         <tr>
                             <th>Phim</th>
+                            <th>Phòng</th>
                             <th>Ngày</th>
                             <th>Giờ bắt đầu</th>
                             <th>Giờ kết thúc</th>
@@ -113,6 +115,7 @@ const ShowtimesDashboard: React.FC = () => {
                             currentShowtimes.map((showtime) => (
                                 <tr key={showtime.id}>
                                     <td>{showtime.movie_in_cinema.movie.movie_name}</td>
+                                    <td>{showtime.room_id}</td>
                                     <td>{new Date(showtime.showtime_date).toLocaleDateString()}</td>
                                     <td>{showtime.showtime_start}</td>
                                     <td>{showtime.showtime_end}</td>

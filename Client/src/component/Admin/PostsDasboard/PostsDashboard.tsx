@@ -6,6 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './PostDashboard.css';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';  // Import the styles
 
 const PostsDashboard: React.FC = () => {
   const { state, deletePost } = usePostsContext();
@@ -13,11 +15,11 @@ const PostsDashboard: React.FC = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
-  const postsPerPage = 3;
+  const postsPerPage = 6; // Display more posts at once for the newspaper feel
   const totalPosts = posts.length;
   const totalPages = Math.ceil(totalPosts / postsPerPage);
 
-  // Lọc các bài viết theo tên
+  // Filter posts by title
   const filteredPosts = posts.filter(post =>
     post.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -28,7 +30,7 @@ const PostsDashboard: React.FC = () => {
     if (window.confirm("Bạn có chắc chắn muốn xóa bài viết này?")) {
       await deletePost(postId);
       alert("Xóa bài viết thành công!");
-      setCurrentPage(1); 
+      setCurrentPage(1);
     }
   };
 
@@ -36,37 +38,55 @@ const PostsDashboard: React.FC = () => {
     setCurrentPage(page);
   };
 
+  // Show a truncated version of the content
+  const truncateContent = (content: string, length: number) => {
+    if (content.length <= length) return content;
+    return `${content.slice(0, length)}...`;
+  };
+
   return (
-    <div className="container mt-4">
-      <h2 className="text-center mb-4 display-4 text-dark font-weight-bold">Quản lý Bài viết</h2>
+    <div className="container mt-5">
+      <h2 className="text-center mb-4 display-3 text-dark font-weight-bold">Quản lý Bài viết</h2>
+      
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <Link to="/admin/posts/add" className="btn custom-btn">Thêm Bài viết Mới</Link>
+        <Link to="/admin/posts/add" className="btn btn-primary rounded-pill px-4">Thêm Bài viết Mới</Link>
         <input
           type="text"
           placeholder="Tìm kiếm theo tên..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="form-control w-25"  
+          className="form-control w-25"
         />
       </div>
 
-      {/* Thẻ cho từng bài viết */}
-      <div className="row">
+      {/* Newspaper Layout (Multiple Columns) */}
+      <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         {currentPosts.length > 0 ? (
           currentPosts.map((post: NewsItem) => (
-            <div key={post.id} className="col-md-4 mb-4">
-              <div className="card post-card h-100">
+            <div key={post.id} className="col">
+              <div className="card shadow border-0 h-100">
                 <Link to={`/admin/posts/${post.id}`} className="card-img-top-link">
-                  <img src={post.thumnail} className="card-img-top rounded" alt={post.title} />
+                  <img src={post.thumnail} className="card-img-top" alt={post.title} />
                 </Link>
                 <div className="card-body d-flex flex-column">
                   <Link to={`/admin/posts/${post.id}`} className="card-title-link">
-                    <h5 className="card-title text-primary font-weight-bold">{post.title}</h5>
+                    <h5 className="card-title text-dark font-weight-bold">{post.title}</h5>
                   </Link>
-                  <p className="card-text text-muted">{post.content.slice(0, 400)}...</p>
-                  <p className="text-muted small mb-1">Thể loại: {post.news_category_id}</p>
+                  <div className="card-text text-muted truncated-text">
+                    <ReactQuill 
+                      value={truncateContent(post.content, 100)}  // Truncate content to 100 characters
+                      readOnly={true} 
+                      theme="snow" 
+                      modules={{ toolbar: false }}
+                      formats={['bold', 'underline', 'link']}
+                    />
+                    {post.content.length > 100 && (
+                      <Link to={`/admin/posts/${post.id}`} className="text-primary mt-2">Xem thêm</Link>
+                    )}
+                  </div>
+                  <p className="text-muted small mt-auto mb-2">Thể loại: {post.news_category_id}</p>
                   <p className="text-muted small mb-3">Ngày xuất bản: {new Date(post.created_at).toLocaleDateString()}</p>
-                  <div className="d-flex justify-content-around mt-auto">
+                  <div className="d-flex justify-content-between mt-auto">
                     <Link to={`/admin/posts/edit/${post.id}`} className="btn btn-warning rounded-pill btn-sm px-3">
                       <FontAwesomeIcon icon={faEdit} /> Chỉnh sửa
                     </Link>
@@ -85,13 +105,13 @@ const PostsDashboard: React.FC = () => {
         )}
       </div>
 
-      {/* Phân trang */}
+      {/* Pagination */}
       <nav className="d-flex justify-content-center mt-4">
-        <ul className="pagination">
+        <ul className="pagination pagination-lg">
           <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
             <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>Trước</button>
           </li>
-          {Array.from({ length: Math.ceil(filteredPosts.length / postsPerPage) }, (_, index) => (
+          {Array.from({ length: totalPages }, (_, index) => (
             <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
               <button className="page-link" onClick={() => handlePageChange(index + 1)}>{index + 1}</button>
             </li>

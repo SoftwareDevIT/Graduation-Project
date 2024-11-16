@@ -98,10 +98,10 @@ export const MovieProvider: React.FC<{ children: ReactNode }> = ({
   
       if (id) {
         dispatch({ type: "UPDATE_MOVIE", payload: response.data.data});
-        console.log("Movie updated successfully");
+        alert("Movie updated successfully");
       } else {
         dispatch({ type: "ADD_MOVIE", payload: response.data.data });
-        console.log("Movie added successfully");
+        alert("Movie added successfully");
       }
     } catch (error) {
       console.error("Error submitting form:", error);

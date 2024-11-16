@@ -190,8 +190,8 @@ const CinemasDashboard: React.FC = () => {
                                                 <h4>Movies in Cinema {cinema.cinema_name}</h4>
                                                 <ul className="list-unstyled">
                                                     {selectedCinemaMovies.map(movie => (
-                                                        <li key={movie.id} className="d-flex justify-content-between align-items-center">
-                                                            <span>{movie.movie_id}</span>
+                                                        <li key={movie.movie.id} className="d-flex justify-content-between align-items-center">
+                                                            <span>{movie.movie.movie_name}</span>
                                                             <button 
                                                                 onClick={() => handleDeleteMovie(cinema.id!, movie.movie_id)}
                                                                 className="btn btn-danger btn-sm"

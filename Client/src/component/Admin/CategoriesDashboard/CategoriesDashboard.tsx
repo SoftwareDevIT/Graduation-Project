@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { useCategoryContext } from '../../../Context/CategoriesContext';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 const CategoriesDashboard = () => {
     const { state, deleteCategory } = useCategoryContext();
@@ -59,13 +61,13 @@ const CategoriesDashboard = () => {
                                 <td>
                                     <div className="d-flex justify-content-around">
                                         <Link to={`/admin/categories/edit/${category.id}`} className="btn btn-warning btn-sm">
-                                            ✏️
+                                        <FontAwesomeIcon icon={faEdit} />
                                         </Link>
                                         <button
                                             onClick={() => deleteCategory(category.id)}
                                             className="btn btn-danger btn-sm"
                                         >
-                                            🗑
+                                            <FontAwesomeIcon icon={faTrashAlt} />
                                         </button>
                                     </div>
                                 </td>
