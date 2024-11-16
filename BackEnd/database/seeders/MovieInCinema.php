@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -13,48 +12,23 @@ class MovieInCinema extends Seeder
      */
     public function run(): void
     {
-        DB::table('movie_in_cinemas')->insert([
-            [
-                'movie_id' => 1,
-                'cinema_id' => 1,
-            ],
-            [
-                'movie_id' => 1,
-                'cinema_id' => 2,
-            ],
-            [
-                'movie_id' => 1,
-                'cinema_id' => 3,
-            ],
-            [
-                'movie_id' => 1,
-                'cinema_id' => 4,
-            ],
-            [
-                'movie_id' => 1,
-                'cinema_id' => 5,
-            ],
-            [
-                'movie_id' => 2,
-                'cinema_id' => 2,
-            ],
-            [
-                'movie_id' => 2,
-                'cinema_id' => 2,
-            ],
-            [
-                'movie_id' => 2,
-                'cinema_id' => 3,
-            ],
-            [
-                'movie_id' => 2,
-                'cinema_id' => 4,
-            ],
-            [
-                'movie_id' => 2,
-                'cinema_id' => 5,
-            ],
+        // Get all movie IDs and cinema IDs
+        $movieIds = DB::table('movies')->pluck('id');
+        $cinemaIds = DB::table('cinema')->pluck('id');
 
-        ]);
+        // Prepare data to insert each movie into each cinema
+        $movieInCinemaData = [];
+
+        foreach ($movieIds as $movieId) {
+            foreach ($cinemaIds as $cinemaId) {
+                $movieInCinemaData[] = [
+                    'movie_id' => $movieId,
+                    'cinema_id' => $cinemaId,
+                ];
+            }
+        }
+
+        // Insert all records in one query
+        DB::table('movie_in_cinemas')->insert($movieInCinemaData);
     }
 }

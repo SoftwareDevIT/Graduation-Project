@@ -61,7 +61,10 @@ import ResetPassword from "./component/Login/ResetPasswod";
 import Otp from "./component/Login/Otp";
 import NotFound from "./component/NotFoud/NotFound";
 import ResetPasswod from "./component/Login/ResetPasswod";
+import { QueryClientProvider } from "@tanstack/react-query";
+import queryClient from '../src/server/queryClient'; 
 import MovieTicket from "./component/PersonalPage/MovieTicket";
+import Video from "./component/News/Video";
 
 
 
@@ -71,6 +74,7 @@ function App() {
 
   return (
     <>
+      <QueryClientProvider client={queryClient}>
       <Routes>
         <Route index element={<Home />} />
         <Route path="/buy-ticket" element={<Bookcinematickets />} />
@@ -89,6 +93,7 @@ function App() {
 
 
         <Route path="/filmnews" element={<FilmNews />} />
+        <Route path="/video" element={<Video />} />
         <Route path="/sp" element={<SupportCenter />} />
         <Route path="/postdetail/:id" element={<PostDetail />} />
 
@@ -150,6 +155,7 @@ function App() {
         <Route path="/admin/revenuebycinema" element={<PrivateRoute allowedRoles={['admin']}><RevenueByCinemaManager /></PrivateRoute>} />
         <Route path="/admin/revenuebymovie" element={<PrivateRoute allowedRoles={['admin']}><RevenueByMoviesManager /></PrivateRoute>} />
       </Routes>
+      </QueryClientProvider>
     </>
   );
 }

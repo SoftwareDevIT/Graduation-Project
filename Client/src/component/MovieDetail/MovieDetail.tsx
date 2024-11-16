@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import instance from "../../server";
-import { notification, Modal } from "antd";
+import { notification, Modal } from "antd"; 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import "./MovieDetail.css";
@@ -9,56 +9,58 @@ import Header from "../Header/Hearder";
 
 const MovieDetail: React.FC = () => {
   const { id } = useParams();
-  const [movie, setMovie] = useState<any>(null);
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [favoriteMovies, setFavoriteMovies] = useState<any[]>([]);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [rating, setRating] = useState(0);
-  const [review, setReview] = useState("");
-  const [isRated, setIsRated] = useState(false);
-  const [isTrailerVisible, setIsTrailerVisible] = useState(false); // State cho pop-up video
-  const navigate = useNavigate();
   const location = useLocation();
+  const [movie, setMovie] = useState<any>(null);
+  const [userStatus, setUserStatus] = useState({
+    isLoggedIn: false,
+    isFavorite: false,
+    isRated: false,
+    favoriteMovies: [] as any[],
+  });
+  const [ratingData, setRatingData] = useState({
+    rating: 0,
+    review: "",
+    isModalVisible: false,
+  });
+  const [isTrailerVisible, setIsTrailerVisible] = useState(false);
+
+  const fetchMovieData = async () => {
+    try {
+      const movieResponse = await instance.get(`/movies/${id}`);
+      setMovie(movieResponse.data.data.original);
+
+      const token = localStorage.getItem("token");
+      const userId = localStorage.getItem("user_id");
+
+      if (token && userId) {
+        const userResponse = await instance.get(`/user/${userId}`);
+        const { favorite_movies = [], ratings = [] } = userResponse.data.data;
+
+        const isMovieFavorite = favorite_movies.some(
+          (favMovie: any) => favMovie.id === parseInt(id as string, 10)
+        );
+        const hasRated = ratings.some(
+          (rating: any) => rating.movie_id === parseInt(id as string, 10)
+        );
+
+        setUserStatus({
+          isLoggedIn: true,
+          isFavorite: isMovieFavorite,
+          isRated: hasRated,
+          favoriteMovies: favorite_movies,
+        });
+      }
+    } catch (error) {
+      console.error("Lỗi khi lấy dữ liệu:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchMovie = async () => {
-      try {
-        const movieResponse = await instance.get(`/movies/${id}`);
-        setMovie(movieResponse.data.data.original);
-
-        const token = localStorage.getItem("token");
-        if (token) {
-          setIsLoggedIn(true);
-          const userId = localStorage.getItem("user_id");
-
-          if (userId) {
-            const userResponse = await instance.get(`/user/${userId}`);
-            const favoriteMoviesData =
-              userResponse.data.data.favorite_movies || [];
-            setFavoriteMovies(favoriteMoviesData);
-
-            const isMovieFavorite = favoriteMoviesData.some(
-              (favMovie: any) => favMovie.id === parseInt(id as string, 10)
-            );
-            setIsFavorite(isMovieFavorite);
-
-            const hasRated = userResponse.data.data.ratings.some(
-              (rating: any) => rating.movie_id === parseInt(id as string, 10)
-            );
-            setIsRated(hasRated);
-          }
-        }
-      } catch (error) {
-        console.error("Lỗi khi lấy dữ liệu:", error);
-      }
-    };
-
-    fetchMovie();
+    fetchMovieData();
   }, [id]);
 
-  const handleFavorite = async () => {
-    if (!isLoggedIn) {
+  const handleFavoriteToggle = async () => {
+    if (!userStatus.isLoggedIn) {
       notification.warning({
         message: "Yêu cầu đăng nhập",
         description: "Vui lòng đăng nhập để thêm phim vào danh sách yêu thích!",
@@ -67,22 +69,24 @@ const MovieDetail: React.FC = () => {
     }
 
     try {
-      if (isFavorite) {
+      if (userStatus.isFavorite) {
         await instance.delete(`/favorites/${id}`);
         notification.success({
           message: "Thành công",
           description: "Phim đã được xóa khỏi danh sách yêu thích!",
         });
-        setIsFavorite(false);
       } else {
         await instance.post(`/favorites/${id}`);
         notification.success({
           message: "Thành công",
           description: "Phim đã được thêm vào danh sách yêu thích!",
         });
-        setIsFavorite(true);
       }
-    } catch (error: any) {
+      setUserStatus((prev) => ({
+        ...prev,
+        isFavorite: !prev.isFavorite,
+      }));
+    } catch {
       notification.error({
         message: "Lỗi",
         description: "Có lỗi xảy ra khi xử lý yêu thích phim.",
@@ -90,56 +94,34 @@ const MovieDetail: React.FC = () => {
     }
   };
 
-  const handleRate = () => {
-    setIsModalVisible(true);
-  };
-
-  const handleModalOk = async () => {
-    if (!isLoggedIn) {
+  const handleRatingSubmit = async () => {
+    if (!userStatus.isLoggedIn) {
       notification.warning({
         message: "Yêu cầu đăng nhập",
-        description: "Vui lòng đăng nhập để thêm phim vào danh sách yêu thích!",
+        description: "Vui lòng đăng nhập để đánh giá phim!",
       });
       return;
     }
+
     try {
       await instance.post("/ratings", {
         movie_id: id,
-        rating: rating,
-        review: review,
+        rating: ratingData.rating,
+        review: ratingData.review,
       });
       notification.success({
         message: "Thành công",
         description: "Cảm ơn bạn đã để lại đánh giá!",
       });
-      setReview("");
-      setRating(0);
-      setIsModalVisible(false);
-      setIsRated(true);
-    } catch (error) {
+      setRatingData({ rating: 0, review: "", isModalVisible: false });
+      setUserStatus((prev) => ({ ...prev, isRated: true }));
+    } catch {
       notification.error({
         message: "Lỗi",
         description: "Có lỗi xảy ra khi gửi đánh giá.",
       });
     }
   };
-
-  const handleModalCancel = () => {
-    setIsModalVisible(false);
-    setReview("");
-    setRating(0);
-  };
-
-  // Mở và đóng modal trailer
-  const handleTrailerOpen = () => {
-    setIsTrailerVisible(true);
-  };
-
-  const handleTrailerClose = () => {
-    setIsTrailerVisible(false);
-  };
-
-
 
   return (
     <>
@@ -148,168 +130,105 @@ const MovieDetail: React.FC = () => {
         <div
           className="boxbig"
           style={{
-            backgroundImage: `url(${
-              movie?.poster || "https://example.com/default-image.jpg"
-            })`,
+            backgroundImage: `url(${movie?.poster || "https://example.com/default-image.jpg"})`,
           }}
         >
           <div className="info-section">
-            <img
-              src={movie?.poster || "placeholder.jpg"}
-              alt={movie?.movie_name}
-              className="poster"
-            />
+            <img src={movie?.poster || "placeholder.jpg"} alt={movie?.movie_name} className="poster" />
             <div className="movie-details-wrapper">
               <div className="movie-info">
                 <h2 className="title">{movie?.movie_name}</h2>
                 <p className="genre">
-                  Thể loại:{" "}
-                  {movie?.movie_category
-                    ?.map((cat: any) => cat.category_name)
-                    .join(", ") || "Không có thể loại"}
+                  Thể loại: {movie?.movie_category?.map((cat: any) => cat.category_name).join(", ") || "Không có thể loại"}
                 </p>
 
                 <div className="actions">
-                  <div className="button like" onClick={handleFavorite}>
-                    {isFavorite ? (
-                      <span role="img" aria-label="liked">
-                        ❤️
-                      </span>
-                    ) : (
-                      <span role="img" aria-label="unliked">
-                        🤍
-                      </span>
-                    )}
-                    <span className="like-1">Thích</span>
+                  <div className="button like" onClick={handleFavoriteToggle}>
+                    {userStatus.isFavorite ? "❤️" : "🤍"} <span>Thích</span>
                   </div>
-
-                  <div className="button rate like" onClick={handleRate}>
-                    <FontAwesomeIcon
-                      icon={faStar}
-                      color={isRated ? "#FFD700" : "#ccc"}
-                      className="ngoisao"
-                    />
-                    <span className="like-1 like2">Đánh giá</span>
+                  <div className="button rate" onClick={() => setRatingData((prev) => ({ ...prev, isModalVisible: true }))}>
+                    <FontAwesomeIcon icon={faStar} color={userStatus.isRated ? "#FFD700" : "#ccc"} />
+                    <span>Đánh giá</span>
                   </div>
-                  <div className="button trailer" onClick={handleTrailerOpen}>
-                    Trailer
+                  <div className="button trailer" onClick={() => setIsTrailerVisible(true)}>Trailer</div>
+                  <div className="button buy">
+                    <Link to={`/buy-now/${id}`}>Mua vé</Link>
                   </div>
-                 
-                  <div className="button buy"> <Link to={`/buy-now/${id}`} > Mua vé</Link></div>
                 </div>
 
-                <p className="description">
-                  {movie?.description || "Không có mô tả"}
-                </p>
+                <p className="description">{movie?.description || "Không có mô tả"}</p>
 
                 <div className="movie-details">
-                  <div>
-                    <span>📅 Khởi chiếu: </span>
-                    {movie?.release_date || "Chưa có ngày phát hành"}
-                  </div>
-                  <div>
-                    <span>⏰ Thời lượng: </span>
-                    {movie?.duration || "Chưa có thời lượng"}
-                  </div>
-                  <div>
-                    <span>🔞 Giới hạn tuổi: </span>
-                    {movie?.age_limit
-                      ? `T${movie?.age_limit}`
-                      : "Không có giới hạn tuổi"}
-                  </div>
+                  <div>📅 Khởi chiếu: {movie?.release_date || "Chưa có ngày phát hành"}</div>
+                  <div>⏰ Thời lượng: {movie?.duration || "Chưa có thời lượng"}</div>
+                  <div>🔞 Giới hạn tuổi: {movie?.age_limit ? `T${movie.age_limit}` : "Không có giới hạn tuổi"}</div>
                 </div>
               </div>
 
               <div className="additional-info">
                 <strong>Diễn viên:</strong>
-                <p>
-                  {movie?.director?.map((act: any) => act.director_name).join(", ") ||
-                    "Không có diễn viên"}
-                </p>
+                <p>{movie?.actor?.map((actor: any) => actor.actor_name).join(", ") || "Không có diễn viên"}</p>
 
                 <strong>Đạo diễn:</strong>
-                <p>
-                  {movie?.actor
-                    ?.map((dir: any) => dir.actor_name)
-                    .join(", ") || "Không có đạo diễn"}
-                </p>
+                <p>{movie?.director?.map((director: any) => director.director_name).join(", ") || "Không có đạo diễn"}</p>
               </div>
             </div>
           </div>
         </div>
+
         <div className="tabs">
-          <Link to={`/movie-detail/${id}`} className={`tab ${location.pathname === `/movie-detail/${id}` ? "active" : ""}`}>
-            Thông tin phim
-          </Link>
-          <Link to={`/schedule/${id}`} className={`tab ${location.pathname === `/schedule/${id}` ? "active" : ""}`}>
-            Lịch chiếu
-          </Link>
-          <Link to={`/reviews/${id}`} className={`tab ${location.pathname === `/reviews/${id}` ? "active" : ""}`}>
-            Đánh giá
-          </Link>
-          <Link to={`/news/${id}`} className={`tab ${location.pathname === `/news/${id}` ? "active" : ""}`}>
-            Tin tức
-          </Link>
-          <Link to={`/buy-now/${id}`} className={`tab ${location.pathname === `/buy-now/${id}` ? "active" : ""}`}>
-            Mua vé
-          </Link>
+          {["Thông tin phim", "Lịch chiếu", "Đánh giá", "Tin tức", "Mua vé"].map((tab, index) => (
+            <Link key={index} to={`/${tab.toLowerCase().replace(" ", "-")}/${id}`} className={`tab ${location.pathname.includes(tab.toLowerCase()) ? "active" : ""}`}>
+              {tab}
+            </Link>
+          ))}
         </div>
       </div>
 
       {/* Modal Đánh Giá */}
-      <Modal
-        title="Đánh giá phim"
-        visible={isModalVisible}
-        onOk={handleModalOk}
-        onCancel={handleModalCancel}
-      >
+      <Modal title="Đánh giá phim" visible={ratingData.isModalVisible} onOk={handleRatingSubmit} onCancel={() => setRatingData({ ...ratingData, isModalVisible: false })}>
         <div className="danhgiaphim">
           <div className="imgphim">
-            <img
-              src={movie?.poster || "placeholder.jpg"}
-              alt={movie?.movie_name}
-            />
+            <img src={movie?.poster || "placeholder.jpg"} alt={movie?.movie_name} />
           </div>
           <div className="noidungdanhgia">
             <p>Hãy để lại đánh giá của bạn cho phim {movie?.movie_name}!</p>
             <div className="rating">
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((value) => (
-                <FontAwesomeIcon
-                  key={value}
-                  icon={faStar}
-                  color={value <= rating ? "#FFD700" : "#ccc"}
-                  onClick={() => setRating(value)}
-                  style={{ cursor: "pointer" }}
-                />
+              {[...Array(10).keys()].map((i) => (
+                <FontAwesomeIcon key={i} icon={faStar} color={i < ratingData.rating ? "#FFD700" : "#ccc"} onClick={() => setRatingData((prev) => ({ ...prev, rating: i + 1 }))} style={{ cursor: "pointer" }} />
               ))}
             </div>
-            <textarea
-              value={review}
-              onChange={(e) => setReview(e.target.value)}
-              placeholder="Nhập đánh giá của bạn"
-              rows={4}
-            />
+            <textarea value={ratingData.review} onChange={(e) => setRatingData((prev) => ({ ...prev, review: e.target.value }))} placeholder="Nhập đánh giá của bạn" rows={4} />
           </div>
         </div>
       </Modal>
 
-      {/* Modal Trailer */}
+    
       <Modal
-        title={movie?.movie_name}
-        visible={isTrailerVisible}
-        onCancel={handleTrailerClose}
-        footer={null}
-      >
-        <iframe
-          width="100%"
-          height="315"
-          src={movie?.trailer || "https://www.youtube.com/embed/dQw4w9WgXcQ"}
-          title="Trailer phim"
-          frameBorder="0"
-          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        ></iframe>
-      </Modal>
+  title={movie?.movie_name}  // Ẩn tiêu đề nếu không cần
+  visible={isTrailerVisible}
+  onCancel={() => setIsTrailerVisible(false)}
+  footer={null}
+  centered // Modal xuất hiện giữa màn hình
+  className="custom-modal"
+>
+  {movie?.trailer ? (
+    <iframe
+      width="100%"
+      height="100%"
+      src={movie.trailer}
+      title="Trailer"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowFullScreen
+      style={{ borderRadius: "10px", border: "none" }} // Tùy chỉnh giao diện iframe
+    ></iframe>
+  ) : (
+    <div className="no-trailer">
+      <p>Trailer không khả dụng</p>
+    </div>
+  )}
+</Modal>
+
     </>
   );
 };

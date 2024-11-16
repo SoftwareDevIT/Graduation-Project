@@ -95,6 +95,7 @@
 .buy-ticket:hover {
   background-color: #c82333;
 }
+
 .name_movie {
        /* Chiều rộng tối đa cho tên phim */
   white-space: nowrap;  /* Không cho xuống dòng */
@@ -143,12 +144,16 @@
     font-size: 0.8em;
     padding: 6px;
   }
+
 }
 
 /* Responsive styles for smaller mobile screens */
 @media (max-width: 480px) {
   .slider-container {
-    width: 100%; /* Full width for mobile */
+    width: 370px; /* Full width for mobile */
+  position: relative
+  ;
+  right: 50px;
   }
 
   .movie-item {
@@ -164,6 +169,7 @@
     font-size: 0.75em;
     padding: 5px;
   }
+
 }
 
 

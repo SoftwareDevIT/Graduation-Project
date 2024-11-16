@@ -170,7 +170,7 @@ useEffect(() => {
     <>
     
            <div className="div-content">
-           <h2 className="titlee">Mua vé theo rạp</h2>
+           <h2 className="titles">Mua vé theo rạp</h2>
             <div className="container">
               <div className="locations">
                 <h3 className="khuvuc">Khu vực</h3>
@@ -227,20 +227,24 @@ useEffect(() => {
       
               <div className="showtimes">
               <div className="calendar-custom-1">
-        {generateDateList().map((date) => (
-          <div
-            key={date}
-            className={`date-custom-1 ${selectedDate === date ? "active" : ""}`}
-            onClick={() => {
-              setSelectedDate(date);
-              console.log("Ngày được chọn:", date);
-            }}
-          >
-            <span>{dayjs(date).format("DD/MM")}</span>
-            <small>{dayjs(date).format("dd") === "CN" ? "CN" : `Th ${dayjs(date).day()}`}</small>
-          </div>
-        ))}
-      </div>
+  {generateDateList().map((date) => (
+    <div
+      key={date}
+      className={`date-custom-1 ${selectedDate === date ? "active" : ""}`}
+      onClick={() => {
+        setSelectedDate(date);
+        console.log("Ngày được chọn:", date);
+      }}
+    >
+      <span>{dayjs(date).format("DD/MM")}</span>
+      <small>
+        {dayjs(date).day() === 0
+          ? "CN"
+          : `Thứ ${dayjs(date).day() + 1}`}
+      </small>
+    </div>
+  ))}
+</div>
       
       
                 {/* Hiển thị danh sách phim */}
@@ -288,6 +292,8 @@ useEffect(() => {
                 showtime: showtime.showtime_start,
                 showtimeId: showtime.id,
                 cinemaId: selectedCinemaDetails?.id,
+                price:showtime.price,
+                roomId:showtime.room_id
               },
             });
           }
@@ -298,8 +304,12 @@ useEffect(() => {
       }}
       >
         {showtime.showtime_start.slice(0, 5)}
+        <p> {`${showtime.price / 1000}k`}</p>
       </button>
+      
     );
+   
+    
   })
 ) : (
   <p>Không có suất chiếu cho ngày này</p>

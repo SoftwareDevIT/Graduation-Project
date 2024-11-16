@@ -8,9 +8,9 @@ const RoleAndUserManagement = () => {
   const [roles, setRoles] = useState<Roles[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [permissions, setPermissions] = useState<Permission[]>([]);
-  const [newRoleName, setNewRoleName] = useState(''); // State lưu tên vai trò mới
-  
-  // Fetch roles and users on component mount
+  const [newRoleName, setNewRoleName] = useState('');
+  const [selectedPermissions, setSelectedPermissions] = useState<{ [key: string]: string[] }>({});
+
   useEffect(() => {
     const fetchRolesAndUsers = async () => {
       try {
@@ -26,24 +26,18 @@ const RoleAndUserManagement = () => {
         console.error('Error fetching roles and users:', error);
       }
     };
-
     fetchRolesAndUsers();
   }, []);
 
-  // Hàm tạo vai trò mới
   const handleCreateRole = async () => {
     if (!newRoleName) {
       alert('Tên vai trò không thể trống!');
       return;
     }
-
     try {
       const response = await instance.post('/roles', { name: newRoleName });
       if (response.data.status) {
-        // Thêm vai trò mới vào danh sách
         setRoles((prevRoles) => [...prevRoles, response.data.data.roles]);
-
-        // Reset input sau khi tạo thành công
         setNewRoleName('');
       } else {
         console.error('Failed to create role:', response.data.message);
@@ -53,33 +47,16 @@ const RoleAndUserManagement = () => {
     }
   };
 
-  // Hàm xóa vai trò
   const handleDeleteRole = async (roleId: string) => {
     try {
       const response = await instance.delete(`/roles/${roleId}`);
       if (response.data.status) {
-        // Xóa vai trò khỏi danh sách nếu thành công
         setRoles((prevRoles) => prevRoles.filter((role) => role.id !== roleId));
       } else {
         console.error('Failed to delete role:', response.data.message);
       }
     } catch (error) {
       console.error('Error deleting role:', error);
-    }
-  };
-
-  // Hàm xóa người dùng
-  const handleDeleteUser = async (userId: number) => {
-    try {
-      const response = await instance.delete(`/delete-user/${userId}`);
-      if (response.data.status) {
-        // Xóa người dùng khỏi danh sách nếu thành công
-        setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
-      } else {
-        console.error('Failed to delete user:', response.data.message);
-      }
-    } catch (error) {
-      console.error('Error deleting user:', error);
     }
   };
   const handleAssignRoles = async (userId: number, selectedRoles: string[]) => {
@@ -101,9 +78,38 @@ const RoleAndUserManagement = () => {
     } catch (error) {
       console.error('Lỗi khi cấp quyền:', error);
     }
+  }
+  const handleUpdatePermissions = async (roleId: string) => {
+    const permissionsToUpdate = selectedPermissions[roleId]?.map((permissionName) => {
+      const permission = permissions.find((p) => p.name === permissionName);
+      return { id: permission?.id, name: permissionName };
+    });
+  
+    console.log("Permissions to Update:", permissionsToUpdate); // Debugging line
+  
+    try {
+      const response = await instance.post(`/roles/${roleId}/permissions`, {
+        permissions: permissionsToUpdate,
+      });
+      console.log("API Response:", response); // Debugging line
+      if (response.data.status) {
+        alert('Cập nhật quyền thành công!');
+      } else {
+        console.error('Failed to update permissions:', response.data.message);
+      }
+    } catch (error) {
+      console.error('Error updating permissions:', error);
+    }
   };
   
-  
+
+  const handlePermissionChange = (roleId: string, selectedOptions: string[]) => {
+    setSelectedPermissions((prev) => ({
+      ...prev,
+      [roleId]: selectedOptions,
+    }));
+  };
+
   return (
     <div style={{ backgroundColor: '#ffffff', color: '#000000', padding: '20px', width: '100%', margin: 'auto' }}>
       <h2>Quản lý vai trò và quyền</h2>
@@ -152,25 +158,35 @@ const RoleAndUserManagement = () => {
               <tr key={role.id}>
                 <td style={{ padding: '10px', border: '1px solid #ddd' }}>{role.name}</td>
                 <td style={{ padding: '10px', border: '1px solid #ddd' }}>
-                <select
-          multiple
-          style={{
-            width: '100%',
-            backgroundColor: '#f9f9f9',
-            color: '#000',
-            border: '1px solid #ccc',
-            borderRadius: '5px',
-            padding: '5px',
-          }}
-        >
-          {permissions.map((permission) => (
-            <option key={permission.id} value={permission.name}>{permission.name}</option>
-          ))}
-        </select>
-</td>
+                  <select
+                    multiple
+                    value={selectedPermissions[role.id] || []}
+                    onChange={(e) =>
+                      handlePermissionChange(
+                        role.id,
+                        Array.from(e.target.selectedOptions, (option) => option.value)
+                      )
+                    }
+                    style={{
+                      width: '100%',
+                      backgroundColor: '#f9f9f9',
+                      color: '#000',
+                      border: '1px solid #ccc',
+                      borderRadius: '5px',
+                      padding: '5px',
+                    }}
+                  >
+                    {permissions.map((permission) => (
+                      <option key={permission.id} value={permission.name}>
+                        {permission.name}
+                      </option>
+                    ))}
+                  </select>
+                </td>
 
                 <td style={{ padding: '10px', border: '1px solid #ddd' }}>
                   <button
+                    onClick={() => handleUpdatePermissions(role.id)}
                     style={{
                       backgroundColor: '#28a745',
                       color: 'white',
@@ -184,7 +200,7 @@ const RoleAndUserManagement = () => {
                     Cập nhật quyền
                   </button>
                   <button
-                    onClick={() => handleDeleteRole(role.id)} // Gọi hàm xóa khi nhấn nút
+                    onClick={() => handleDeleteRole(role.id)}
                     style={{
                       backgroundColor: '#dc3545',
                       color: 'white',
@@ -202,7 +218,6 @@ const RoleAndUserManagement = () => {
           </tbody>
         </table>
       </div>
-
       <h2>Quản lý người dùng</h2>
       <div>
         <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
@@ -242,7 +257,7 @@ const RoleAndUserManagement = () => {
       <td style={{ padding: '10px', border: '1px solid #ddd' }}>
        
         <button
-          onClick={() => handleDeleteUser(user.id)} // Gọi hàm xóa người dùng
+          // Gọi hàm xóa người dùng
           style={{
             backgroundColor: '#dc3545',
             color: 'white',

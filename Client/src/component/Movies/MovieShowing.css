@@ -47,12 +47,12 @@
 }
 
 .filter-select {
-  padding: 10px 15px;
+  padding: 10px 10px;
   font-size: 16px;
   border-radius: 5px;
   border: 1px solid #ddd;
   background-color: #fff;
-  width: 160px; /* Giảm chiều rộng */
+  width: 170px; /* Giảm chiều rộng */
   height: 40px; /* Giảm chiều cao */
   transition: all 0.3s ease;
 }
@@ -189,6 +189,9 @@
 
 .phim-thong-tin p {
     font-size: 11px;
+}
+.banner h2{
+  padding-top: 50px;
 }
 }
 
