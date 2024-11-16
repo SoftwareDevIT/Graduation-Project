@@ -1,3 +1,63 @@
+
+import React, { useEffect, useState } from 'react';
+import { ClipLoader } from 'react-spinners'; 
+import { Link } from 'react-router-dom';
+import Footer from "../Footer/Footer";
+import Header from "../Header/Hearder";
+
+import './FilmNews.css';
+import { useNews } from '../../Context/NewsContext';
+
+function FilmNews() {
+  const { newsData, isLoading, error } = useNews();  // Lấy dữ liệu từ context
+
+  if (error) {
+    return <div className="error">Error: {error}</div>;  // Xử lý lỗi nếu có
+  }
+
+  return (
+    <>
+      {/* Hiển thị loading khi dữ liệu đang tải */}
+      {isLoading && (
+        <div className="overlay-loading">
+          <ClipLoader color={"#333"} loading={isLoading} size={150} />
+        </div>
+      )}
+
+      {/* Nội dung trang chỉ hiển thị khi dữ liệu đã tải xong */}
+      {!isLoading && (
+        <>
+          <Header />
+          <div className="Contentseach">
+            <div className="banner-movies">
+              <h2>Tin Điện Ảnh</h2>
+              <div className="text-white mt-0 description">
+                Tin tức điện ảnh Việt Nam & thế giới
+              </div>
+            </div>
+            <div className="container box-cha2">
+              <div className="row boxcha-4">
+                <div className="tintucmoi col-lg-8 col-md-10 col-sm-12">
+                  <h2>Mới Nhất</h2>
+                  
+                  {newsData.map((item) => (
+                    <div key={item.id} className="div-item">
+                      <div className="img">
+                        <img src={item.thumnail} alt={item.title} />
+                      </div>
+                      <div className="content-new">
+                        <Link to={`/postdetail/${item.id}`}><h3>{item.title}</h3></Link>
+                        <p>{item.content}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="chuyenmuc col-lg-4 col-md-2 col-sm-12">
+                  <h3>Chuyên mục</h3>
+                  <div className="noidung">
+                    <h4>Đánh giá phim</h4>
+                    <p>Góc nhìn chân thực, khách quan nhất về các bộ phim</p>
+=======
   import React, { useEffect, useState } from "react";
   import { ClipLoader } from "react-spinners"; // Import thư viện loading
   import axios from 'axios';
@@ -64,6 +124,7 @@
                         </div>
                       </div>
                     ))}
+
                   </div>
                   <div className="chuyenmuc col-lg-4 col-md-2 col-sm-12">
                     <h3>Chuyên mục</h3>
