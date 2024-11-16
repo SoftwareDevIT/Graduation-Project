@@ -117,49 +117,46 @@ const Profile: React.FC = () => {
       <div className="content-acount">
       <div className="container boxcha">
       <div className="profile-fullscreen">
-       
-       <div className="account-settings-container">
-       <div className="account-settings-container">
-  <div className="account-avatar">
-    <div className="account-info">
-      <Avatar size={128} src={avatar} alt="avatar" className="avatar" />
-      <div className="account-details">
-      <h3>{userProfile?.user_name || "No name"}</h3>
-        
+  <div className="account-settings-container">
+    <div className="account-avatar">
+      <div className="account-info">
+        <Avatar size={128} src={avatar} alt="avatar" className="avatar" />
+        <div className="account-details">
+        <h2 className="account-name">
+                      {userProfile?.user_name || "No name"}
+                    </h2>
+        </div>
       </div>
-    </div>
 
-    {/* Thêm menu điều hướng bên dưới avatar */}
-    <div className="account-nav">
-      <div className="account-nav-item">
-        <span className="account-nav-title">Tài khoản</span>
-        <ul className="account-submenu">
-          <li className="account-submenu-item"><Link to={'/profile'}>Quản lí tài khoản</Link></li>
-          <li className="account-submenu-item"><Link to={'/changepassword'}>Đổi mật khẩu</Link></li>
-        </ul>
-      </div>
-      <div className="account-nav-item">
-        <span className="account-nav-title">Tủ phim</span>
-      </div>
-      <div className="account-nav-item">
-        <span className="account-nav-title">Vé</span>
-      </div>
-      <div className="account-nav-item">
-        <span className="account-nav-title">Nạp tiền</span>
-        <ul className="account-submenu">
-        <li className="account-submenu-item"><Link to={'/credits'}> Nạp tiền</Link></li>
-        <li className="account-submenu-item"><Link to={'/deponsit'}>Lịch sử nạp tiền</Link></li>
-        <li className="account-submenu-item"><Link to={'/transaction'}>Lịch sử gia dịch</Link></li>
-        </ul> 
+      {/* Menu điều hướng bên dưới avatar */}
+      <div className="account-nav">
+        <div className="account-nav-item">
+          <span className="account-nav-title">Tài khoản</span>
+          <ul className="account-submenu">
+            <li className="account-submenu-item"><Link to={'/profile'}>Quản lí tài khoản</Link></li>
+            <li className="account-submenu-item"><Link to={'/changepassword'}>Đổi mật khẩu</Link></li>
+          </ul>
+        </div>
+        <div className="account-nav-item">
+          <span className="account-nav-title">Tủ phim</span>
+        </div>
+        <div className="account-nav-item">
+          <span className="account-nav-title">Vé</span>
+        </div>
+        <div className="account-nav-item">
+          <span className="account-nav-title">Nạp tiền</span>
+          <ul className="account-submenu">
+            <li className="account-submenu-item"><Link to={'/credits'}>Nạp tiền</Link></li>
+            <li className="account-submenu-item"><Link to={'/deponsit'}>Lịch sử nạp tiền</Link></li>
+            <li className="account-submenu-item"><Link to={'/transaction'}>Lịch sử giao dịch</Link></li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
-</div>
-
-      </div>
-      <div className="divider"></div> 
+<div className="divider"></div>
       <div className="profile-container">
             <form className="profile-form" onSubmit={handleUpdateProfile}>
               <div className="form-row">

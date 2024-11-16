@@ -2,28 +2,25 @@ import React, { createContext, useReducer, useContext, useEffect } from 'react';
 import instance from '../server';
 import { Location } from '../interface/Location';
 
-// Define action types
 type Action =
   | { type: 'SET_COUNTRIES'; payload: Location[] }
   | { type: 'ADD_COUNTRY'; payload: Location }
   | { type: 'UPDATE_COUNTRY'; payload: Location }
   | { type: 'DELETE_COUNTRY'; payload: number };
 
-// Define the initial state type
 interface CountryState {
   countries: Location[];
 }
 
-// Create context
 const CountryContext = createContext<{
   state: CountryState;
   dispatch: React.Dispatch<Action>;
   addCountry: (country: Location) => Promise<void>;
   updateCountry: (id: number, country: Location) => Promise<void>;
   deleteCountry: (id: number) => Promise<void>;
+  fetchCountries: () => Promise<void>; // Thêm function fetchCountries
 } | undefined>(undefined);
 
-// Reducer function
 const countryReducer = (state: CountryState, action: Action): CountryState => {
   switch (action.type) {
     case 'SET_COUNTRIES':
@@ -47,9 +44,11 @@ const countryReducer = (state: CountryState, action: Action): CountryState => {
   }
 };
 
-// Create a provider component
 export const CountryProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(countryReducer, { countries: [] });
+  useEffect(() => {
+    fetchCountries();
+  }, []); // Empty dependency array ensures it runs only once when the component mounts
 
   const fetchCountries = async () => {
     try {
@@ -60,32 +59,25 @@ export const CountryProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }
   };
 
-  useEffect(() => {
-    fetchCountries(); // Fetch countries when the provider mounts
-  }, []);
-
-  // Updated addCountry function
   const addCountry = async (country: Location) => {
     try {
       const response = await instance.post('/location', country);
       dispatch({ type: 'ADD_COUNTRY', payload: response.data });
-      fetchCountries()
+      fetchCountries();
     } catch (error) {
       console.error('Failed to add country:', error);
     }
   };
-  
-  // Updated updateCountry function using PUT
+
   const updateCountry = async (id: number, country: Location) => {
     try {
-      const response = await instance.put(`/location/${id}`, country); // Use PUT method
-      dispatch({ type: 'UPDATE_COUNTRY', payload: response.data }); // Ensure this matches your API response structure
+      const response = await instance.put(`/location/${id}`, country);
+      dispatch({ type: 'UPDATE_COUNTRY', payload: response.data });
     } catch (error) {
       console.error('Failed to update country:', error);
     }
   };
-  
-  // Updated deleteCountry function
+
   const deleteCountry = async (id: number) => {
     try {
       await instance.delete(`/location/${id}`);
@@ -94,15 +86,21 @@ export const CountryProvider: React.FC<{ children: React.ReactNode }> = ({ child
       console.error('Failed to delete country:', error);
     }
   };
-  
+
   return (
-    <CountryContext.Provider value={{ state, dispatch, addCountry, updateCountry, deleteCountry }}>
+    <CountryContext.Provider value={{
+      state,
+      dispatch,
+      addCountry,
+      updateCountry,
+      deleteCountry,
+      fetchCountries, // Đảm bảo `fetchCountries` có sẵn trong context
+    }}>
       {children}
     </CountryContext.Provider>
   );
 };
 
-// Custom hook to use the CountryContext
 export const useCountryContext = () => {
   const context = useContext(CountryContext);
   if (!context) {

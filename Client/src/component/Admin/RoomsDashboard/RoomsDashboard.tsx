@@ -112,7 +112,7 @@ const RoomDashboard: React.FC = () => {
             <tr>
               <th>ID</th>
               <th>Tên Phòng</th>
-              <th>Thể Tích</th>
+              <th>Tổng số ghế</th>
               <th>Số Ghế Đôi</th>
               <th>Số Ghế VIP</th>
               <th>Thao Tác</th>

@@ -21,7 +21,7 @@ const PostDetailManager: React.FC = () => {
     <div className="container post-detail mt-5">
       <h1 className="display-4 mb-4 text-primary font-weight-bold">{post.title}</h1>
       <p className="text-muted mb-2">Ngày xuất bản: {new Date(post.created_at).toLocaleDateString()}</p>
-      <p className="text-muted mb-4">Thể loại: {post.news_category_id}</p>
+      <p className="text-muted mb-4">Thể loại: {post.news_category.news_category_name}</p>
       <img src={post.thumnail} alt={post.title} className="img-fluid rounded mb-4" />
 
       {/* Inline CSS styles inside the <style> tag */}
@@ -48,7 +48,7 @@ const PostDetailManager: React.FC = () => {
           readOnly={true} 
           theme="snow" 
           modules={{ toolbar: false }}
-          formats={['bold', 'underline', 'link']}
+          formats={['bold', 'underline', 'link','image']}
         />
       </div>
 

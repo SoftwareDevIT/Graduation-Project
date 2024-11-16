@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class ShowtimeSeeder extends Seeder
 {
@@ -61,12 +62,16 @@ class ShowtimeSeeder extends Seeder
                 $start = $showtimesKeys[$key]; // Lấy thời gian chiếu tương ứng với phòng
                 $price = $showtimes[$start];   // Lấy giá vé tương ứng với thời gian chiếu
 
+                // Tính thời gian kết thúc là thời gian bắt đầu cộng 2 giờ
+                $end = Carbon::createFromFormat('H:i:s', $start)->addHours(2)->format('H:i:s');
+
                 // Thêm bản ghi vào showtimeData
                 $showtimeData[] = [
                     'room_id' => $roomId,
                     'movie_in_cinema_id' => $movieInCinema->id,
                     'showtime_date' => $showtimeDate,
                     'showtime_start' => $start,
+                    'showtime_end' => $end,
                     'price' => $price,
                     'status' => '1',
                     'created_at' => now(),

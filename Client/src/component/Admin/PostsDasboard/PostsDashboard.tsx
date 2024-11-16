@@ -84,7 +84,7 @@ const PostsDashboard: React.FC = () => {
                       <Link to={`/admin/posts/${post.id}`} className="text-primary mt-2">Xem thêm</Link>
                     )}
                   </div>
-                  <p className="text-muted small mt-auto mb-2">Thể loại: {post.news_category_id}</p>
+                  <p className="text-muted small mt-auto mb-2">Thể loại: {post.news_category.news_category_name}</p>
                   <p className="text-muted small mb-3">Ngày xuất bản: {new Date(post.created_at).toLocaleDateString()}</p>
                   <div className="d-flex justify-content-between mt-auto">
                     <Link to={`/admin/posts/edit/${post.id}`} className="btn btn-warning rounded-pill btn-sm px-3">

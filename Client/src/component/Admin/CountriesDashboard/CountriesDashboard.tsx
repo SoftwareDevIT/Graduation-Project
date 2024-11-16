@@ -58,7 +58,7 @@ const CountriesDashboard: React.FC = () => {
                 <table className="table table-bordered table-hover shadow-sm">
                     <thead className="thead-light">
                         <tr>
-                            <th>ID</th>
+                            <th>ID Quốc Gia</th>
                             <th>Tên Quốc Gia</th>
                             <th>Thao Tác</th>
                         </tr>

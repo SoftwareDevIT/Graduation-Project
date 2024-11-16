@@ -50,6 +50,14 @@ const ComboDashboard: React.FC = () => {
 
     const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
+    // Function to format price in VND
+    const formatPrice = (price: number) => {
+        return new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        }).format(price);
+    };
+
     return (
         <div className="container mt-5">
             <h2 className="text-center text-primary mb-4">Tất Cả Các Combo</h2>
@@ -73,7 +81,7 @@ const ComboDashboard: React.FC = () => {
                             <th>Tên Combo</th>
                             <th>Mô Tả</th>
                             <th>Giá</th>
-                            <th>Khối Lượng</th>
+                            <th>Số Lượng</th>
                             <th>Ngày Tạo</th>
                             <th>Thao Tác</th>
                         </tr>
@@ -84,7 +92,7 @@ const ComboDashboard: React.FC = () => {
                                 <td>{combo.id}</td>
                                 <td>{combo.combo_name}</td>
                                 <td>{combo.descripton}</td>
-                                <td>{combo.price}</td>
+                                <td>{formatPrice(combo.price)}</td> {/* Formatted price */}
                                 <td>{combo.volume}</td>
                                 <td>{new Date(combo.created_at).toLocaleDateString()}</td>
                                 <td>

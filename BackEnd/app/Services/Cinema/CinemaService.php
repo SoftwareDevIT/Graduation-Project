@@ -18,7 +18,7 @@ class CinemaService
     {
 
         // return Cinema::all();
-        return Cinema::with('location') 
+        return Cinema::with('Location') 
         ->get();
     }
 
