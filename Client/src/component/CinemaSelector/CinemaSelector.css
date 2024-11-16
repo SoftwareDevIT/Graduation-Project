@@ -504,12 +504,13 @@ li.city.selected {
     padding: 8px;
   }
 }
+
 @media(max-width:576px){
   .date-custom-1{
     font-size: 9px;
   }
   .calendar-custom-1{
-    width: 400px !important;
+    width: 400px;
   }
   .list-tp .list{
     display: none;
