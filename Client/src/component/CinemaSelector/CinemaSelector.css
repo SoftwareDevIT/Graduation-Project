@@ -519,7 +519,7 @@ li.city.selected {
     border: none !important;
     margin-top: 20px;
     
-      width: 390px !important;
+      width: 340px !important;
      
     
     
@@ -541,6 +541,11 @@ right: 15px;
 .date {
   padding: 0px; /* Giảm khoảng cách bên trong */
   margin: 0px; /* Giảm khoảng cách giữa các ngày để chúng sát nhau hơn */
+}
+@media (max-width:390px) {
+  .calendar-custom-1 {
+    width: 347px !important;
+}
 }
 }
 .titles{

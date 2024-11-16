@@ -74,7 +74,8 @@ const ChangePassword: React.FC = () => {
       <div className="banner">
         <img src="https://cdn.moveek.com/bundles/ornweb/img/tix-banner.png" alt="Banner" className="banner-img" />
       </div>
-      <div className="content-acount1">
+     <div className="container">
+     <div className="content-acount1">
         <div className="container boxcha">
           <div className="profile-fullscreen">
             <div className="account-settings-container">
@@ -188,6 +189,7 @@ const ChangePassword: React.FC = () => {
           </div>
         </div>
       </div>
+     </div>
       <Footer />
     </>
   );

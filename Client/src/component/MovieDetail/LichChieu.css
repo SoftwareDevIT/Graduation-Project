@@ -6,7 +6,8 @@
     padding: 20px;
     background-color: #f7f9fc;
     border-radius: 12px;
-    width: 100vw; /* Đặt chiều rộng là 100% của khung nhìn */
+    width: 108vw;
+
     margin-left: -20px; /* Loại bỏ khoảng trống hai bên nếu có */
     box-sizing: border-box; /* Đảm bảo padding không làm ảnh hưởng tới kích thước của container */
 }
@@ -371,7 +372,7 @@ select{
   /* Reponsive cho màn hình nhỏ hơn 480px */
   @media (max-width: 480px) {
     .row-custom {
-        width: 420px !important;
+        width: 395px !important;
   
        position: relative;
        right: 180px;
@@ -381,7 +382,7 @@ select{
         width: 150px !important;
       }
     .calendar-custom{
-        width: 420px !important;
+        width:395px !important;
         font-size: 10px;
         position: relative;
         right: 180px;
@@ -390,7 +391,7 @@ select{
       }
       .date-custom span {
         margin-bottom: 1px;
-        font-size: 11px !important;
+        font-size: 10px !important;
 
        
     

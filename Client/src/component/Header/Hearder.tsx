@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Cinema } from "../../interface/Cinema";
 import { Location } from "../../interface/Location";
 import instance from "../../server";
+import { useCountryContext } from "../../Context/CountriesContext";
 
 
 const Header = () => {
@@ -11,10 +12,11 @@ const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [isProfileMenuVisible, setProfileMenuVisibles] = useState(false);
-  const [locations, setLocations] = useState<Location[]>([]);
+
   const [cinemas, setCinemas] = useState<Cinema[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<number | null>(null);
-
+  const { state } = useCountryContext();
+  const locations = state.countries;
   const navigate = useNavigate();
 
 
@@ -27,17 +29,6 @@ const Header = () => {
     if (user_id && token) {
       setIsLoggedIn(true); // Cập nhật trạng thái đăng nhập
     }
-    const fetchLocations = async () => {
-      try {
-        const response = await instance.get("/location");
-        // console.log(response.data); // Kiểm tra dữ liệu nhận về từ API
-        setLocations(response.data.data);
-      } catch (error) {
-        console.error("Error fetching locations:", error);
-      }
-    };
-
-    fetchLocations();
   }, []);
   useEffect(() => {
     if (selectedLocation !== null) {
@@ -117,8 +108,8 @@ const Header = () => {
               >
                 Đặt vé phim chiếu rạp
               </Link>
-<Link to={'/buy-ticket'}>Lịch chiếu</Link>
-          
+
+              <a href="#">Lịch chiếu</a>
               <div className="dropdown">
                 <a href="#" className="dropbtn1" >
                   Rạp{" "}
@@ -238,8 +229,8 @@ const Header = () => {
                   <a href="#">TV Series</a>
                 </div>
               </div>
-              <Link to={'/sp'}>Cộng đồng</Link>
-                         </div>
+              <a href="#">Cộng đồng</a>
+            </div>
           </div>
 
           <div className="header-logo col-lg-1 col-md-4 col-sm-4 col-4 ">
@@ -293,8 +284,7 @@ const Header = () => {
                     <Link to="/profile">Quản lý tài khoản</Link>
                     <Link to="/movies">Vé phim</Link>
                     <Link to="/credits">Moveek Credits</Link>
-                    <Link to="/login" onClick={handleLogout}>Đăng xuất</Link>
-                  
+                    <div onClick={handleLogout}>Đăng xuất</div>
                   </div>
                 )}
               </div>
