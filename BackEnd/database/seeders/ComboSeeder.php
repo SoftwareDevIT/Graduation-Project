@@ -16,25 +16,25 @@ class ComboSeeder extends Seeder
         DB::table('combos')->insert([
             [
                 'combo_name' => 'Combo Gấu',
-                'descripton' => '',
+                'descripton' => 'Món ngon giá đẹp',
                 'price' => 119000,
                 'volume' => 999,
             ],
             [
                 'combo_name' => 'Poca Khoai Tây 54gr',
-                'descripton' => '',
+                'descripton' => 'Món ngon giá đẹp',
                 'price' => 28000,
                 'volume' => 999,
             ],
             [
                 'combo_name' => 'Poca Wavy 54gr',
-                'descripton' => '',
+                'descripton' => 'Món ngon giá đẹp',
                 'price' => 28000,
                 'volume' => 999,
             ],
             [
                 'combo_name' => 'Fanta 32oz',
-                'descripton' => '',
+                'descripton' => 'Món ngon giá đẹp',
                 'price' => 37000,
                 'volume' => 999,
             ],

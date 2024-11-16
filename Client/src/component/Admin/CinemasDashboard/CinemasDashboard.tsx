@@ -27,8 +27,8 @@ const CinemasDashboard: React.FC = () => {
                 const response = await instance.get('/movies'); 
                 setAllMovies(response.data.data.original); 
             } catch (error) {
-                console.error("Failed to fetch movies:", error);
-                alert("Failed to fetch movies.");
+                console.error("Lỗi khi lấy danh sách phim:", error);
+                alert("Lỗi khi lấy danh sách phim.");
             }
         };
 
@@ -43,14 +43,14 @@ const CinemasDashboard: React.FC = () => {
         .slice((currentPage - 1) * cinemasPerPage, currentPage * cinemasPerPage);
 
     const handleDeleteCinema = async (id: number) => {
-        if (window.confirm("Are you sure you want to delete this cinema?")) {
+        if (window.confirm("Bạn có chắc chắn muốn xóa rạp này?")) {
             try {
                 await instance.delete(`/cinema/${id}`);
                 dispatch({ type: 'DELETE_CINEMA', payload: id });
-                alert("Cinema deleted successfully!");
+                alert("Xóa rạp thành công!");
             } catch (err) {
-                console.error("Failed to delete cinema:", err);
-                alert("Failed to delete cinema");
+                console.error("Lỗi khi xóa rạp:", err);
+                alert("Lỗi khi xóa rạp.");
             }
         }
     };
@@ -63,13 +63,13 @@ const CinemasDashboard: React.FC = () => {
                 const movieDetails = allMovies.find(m => m.id === movie.movie_id);
                 return {
                     ...movie,
-                    movie_name: movieDetails ? movieDetails.movie_name : 'Unknown Movie',
+                    movie_name: movieDetails ? movieDetails.movie_name : 'Phim không xác định',
                 };
             });
             setSelectedCinemaMovies(moviesWithNames);
         } catch (error) {
-            console.error("Failed to fetch movies for cinema:", error);
-            alert("Failed to fetch movies for this cinema.");
+            console.error("Lỗi khi lấy phim của rạp:", error);
+            alert("Lỗi khi lấy phim của rạp này.");
         }
     };
     
@@ -84,15 +84,15 @@ const CinemasDashboard: React.FC = () => {
     };
 
     const handleDeleteMovie = async (cinemaId: number, movieId: number) => {
-        if (window.confirm("Are you sure you want to delete this movie from the cinema?")) {
+        if (window.confirm("Bạn có chắc chắn muốn xóa phim này khỏi rạp?")) {
             try {
                 await instance.delete(`/cinema/${cinemaId}/movie/${movieId}`);
                 const updatedMovies = selectedCinemaMovies.filter(movie => movie.movie_id !== movieId);
                 setSelectedCinemaMovies(updatedMovies);
-                alert("Movie deleted successfully from cinema!");
+                alert("Xóa phim khỏi rạp thành công!");
             } catch (error) {
-                console.error("Failed to delete movie from cinema:", error);
-                alert("Failed to delete movie from cinema.");   
+                console.error("Lỗi khi xóa phim khỏi rạp:", error);
+                alert("Lỗi khi xóa phim khỏi rạp.");   
             }
         }
     };
@@ -103,14 +103,43 @@ const CinemasDashboard: React.FC = () => {
         setSelectedCinemaMovies([]); 
     };
 
+    // Pagination với hiển thị giới hạn và dấu ba chấm
+    const renderPagination = () => {
+        const pageNumbers = [];
+        if (totalPages <= 5) {
+            for (let i = 1; i <= totalPages; i++) {
+                pageNumbers.push(i);
+            }
+        } else {
+            if (currentPage <= 3) {
+                pageNumbers.push(1, 2, 3, 4, '...', totalPages);
+            } else if (currentPage >= totalPages - 2) {
+                pageNumbers.push(1, '...', totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
+            } else {
+                pageNumbers.push(1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages);
+            }
+        }
+
+        return pageNumbers.map((page, index) => (
+            <button
+                key={index}
+                className={`btn ${currentPage === page ? 'btn-primary' : 'btn-outline-primary'} mx-1`}
+                onClick={() => typeof page === 'number' && handlePageChange(page)}
+                disabled={page === '...'}
+            >
+                {page}
+            </button>
+        ));
+    };
+
     return (
         <div className="container mt-5">
-            <h2 className="text-center text-primary mb-4">Cinemas Dashboard</h2>
+            <h2 className="text-center text-primary mb-4">Quản Lí Rạp Chiếu Phim</h2>
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <Link to={'/admin/cinemas/add'} className="btn btn-outline-primary">Add Cinema</Link>
+                <Link to={'/admin/cinemas/add'} className="btn btn-outline-primary">Thêm Rạp</Link>
                 <input
                     type="text"
-                    placeholder="Search by name"
+                    placeholder="Tìm kiếm theo tên"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="form-control w-25"  
@@ -120,12 +149,12 @@ const CinemasDashboard: React.FC = () => {
                 <table className="table table-bordered table-hover shadow-sm">
                     <thead className="thead-light">
                         <tr>
-                            <th>Cinema ID</th>
-                            <th>Cinema Name</th>
-                            <th>Phone</th>
-                            <th>Address</th>
-                            <th>Status</th>
-                            <th>Actions</th>
+                            <th>ID</th>
+                            <th>Tên Rạp</th>
+                            <th>Điện Thoại</th>
+                            <th>Vị Trí</th>
+                            <th>Địa Chỉ</th>
+                            <th>Hành Động</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -142,9 +171,9 @@ const CinemasDashboard: React.FC = () => {
                                         </span>
                                     </td>
                                     <td>{cinema.phone}</td>
+                                    <td>{cinema.location.location_name}</td>
                                     <td>{cinema.cinema_address}</td>
-                                    <td>{cinema.status}</td>
-                                    <td className="action-buttons1">
+                                    <td className="action-buttons1 d-flex justify-content-center align-items-center">
                                         <Link to={`/admin/cinemas/edit/${cinema.id}`} className="btn btn-warning btn-sm mx-1">
                                             <FontAwesomeIcon icon={faEdit} />
                                         </Link>
@@ -157,11 +186,11 @@ const CinemasDashboard: React.FC = () => {
                                     <tr>
                                         <td colSpan={6}>
                                             <div className="movies-list">
-                                                <h4>Movies in Cinema {cinema.cinema_name}</h4>
+                                                <h4>Phim trong Rạp {cinema.cinema_name}</h4>
                                                 <ul className="list-unstyled">
                                                     {selectedCinemaMovies.map(movie => (
-                                                        <li key={movie.id} className="d-flex justify-content-between align-items-center">
-                                                            <span>{movie.movie_id}</span>
+                                                        <li key={movie.movie.id} className="d-flex justify-content-between align-items-center">
+                                                            <span>{movie.movie.movie_name}</span>
                                                             <button 
                                                                 onClick={() => handleDeleteMovie(cinema.id!, movie.movie_id)}
                                                                 className="btn btn-danger btn-sm"
@@ -180,7 +209,7 @@ const CinemasDashboard: React.FC = () => {
                         {currentCinemas.length === 0 && (
                             <tr>
                                 <td colSpan={6} className="text-center">
-                                    No cinemas available.
+                                    Không có rạp nào.
                                 </td>
                             </tr>
                         )}
@@ -194,23 +223,15 @@ const CinemasDashboard: React.FC = () => {
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
                 >
-                    Prev
+                    Trước
                 </button>
-                {Array.from({ length: totalPages }, (_, index) => (
-                    <button
-                        key={index}
-                        className={`btn ${currentPage === index + 1 ? 'btn-primary' : 'btn-outline-primary'} mx-1`}
-                        onClick={() => handlePageChange(index + 1)}
-                    >
-                        {index + 1}
-                    </button>
-                ))}
+                {renderPagination()}
                 <button
                     className="btn btn-outline-secondary mx-2"
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
                 >
-                    Next
+                    Sau
                 </button>
             </div>
         </div>

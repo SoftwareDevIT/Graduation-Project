@@ -113,7 +113,7 @@ export const MovieProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         console.log("Movie updated successfully");
       } else {
         dispatch({ type: "ADD_MOVIE", payload: response.data.data });
-        console.log("Movie added successfully");
+        alert("Movie added successfully");
       }
     } catch (error) {
       console.error("Error submitting form:", error);

@@ -100,4 +100,62 @@
     font-size: 1rem;
     padding: 10px 20px;
   }
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+  }
+  
+  .card-text {
+    color: #555;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    height: 100px; /* Fixed height for the truncated text */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 4; /* Show a maximum of 4 lines */
+    -webkit-box-orient: vertical;
+  }
+  
+  .card-text a {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+    margin-top: 5px;
+    display: inline-block;
+  }
+  
+  .card-text a:hover {
+    text-decoration: underline;
+  }
+  
+  .card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .card-img-top {
+    object-fit: cover;
+    height: 200px;
+    width: 100%;
+    border-radius: 10px;
+  }
+  
+  .card-img-top-link {
+    display: block;
+    height: 100%;
+  }
+  
+  .truncated-text {
+    color: #6c757d; /* Light gray for the text */
+  }
+  
+  .card-body .btn {
+    text-align: center;
+    font-weight: bold;
+  }
   

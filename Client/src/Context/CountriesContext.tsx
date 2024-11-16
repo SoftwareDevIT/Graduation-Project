@@ -46,6 +46,9 @@ const countryReducer = (state: CountryState, action: Action): CountryState => {
 
 export const CountryProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(countryReducer, { countries: [] });
+  useEffect(() => {
+    fetchCountries();
+  }, []); // Empty dependency array ensures it runs only once when the component mounts
 
   const fetchCountries = async () => {
     try {

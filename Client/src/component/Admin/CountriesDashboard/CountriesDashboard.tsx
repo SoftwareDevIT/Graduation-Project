@@ -12,9 +12,9 @@ const CountriesDashboard: React.FC = () => {
 
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState('');
-    const countriesPerPage = 11; // Number of countries per page
+    const countriesPerPage = 11; // Số quốc gia mỗi trang
 
-    // Filter countries based on the search term
+    // Lọc quốc gia theo từ khóa tìm kiếm
     const filteredCountries = countries.filter(country =>
         country.location_name &&
         country.location_name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -23,32 +23,32 @@ const CountriesDashboard: React.FC = () => {
     const totalCountries = filteredCountries.length;
     const totalPages = Math.ceil(totalCountries / countriesPerPage);
 
-    // Get countries for the current page
+    // Lấy quốc gia cho trang hiện tại
     const currentCountries = filteredCountries.slice(
         (currentPage - 1) * countriesPerPage,
         currentPage * countriesPerPage
     );
 
     const handleDelete = async (id: number) => {
-        const confirmDelete = window.confirm("Are you sure you want to delete this country?");
+        const confirmDelete = window.confirm("Bạn có chắc chắn muốn xóa quốc gia này?");
         if (confirmDelete) {
             await deleteCountry(id);
         }
     };
 
-    // Handle page change
+    // Xử lý thay đổi trang
     const handlePageChange = (page: number) => setCurrentPage(page);
 
     return (
         <div className="container mt-5">
-            <h2 className="text-center text-primary mb-4">All Countries</h2>
+            <h2 className="text-center text-primary mb-4">Tất Cả Quốc Gia</h2>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Link to={'/admin/countries/add'} className="btn btn-outline-primary">
-                    Add Country
+                    Thêm Quốc Gia
                 </Link>
                 <input
                     type="text"
-                    placeholder="Search by name"
+                    placeholder="Tìm kiếm theo tên"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="form-control w-25"
@@ -58,9 +58,9 @@ const CountriesDashboard: React.FC = () => {
                 <table className="table table-bordered table-hover shadow-sm">
                     <thead className="thead-light">
                         <tr>
-                            <th>Country ID</th>
-                            <th>Country Name</th>
-                            <th>Actions</th>
+                            <th>ID Quốc Gia</th>
+                            <th>Tên Quốc Gia</th>
+                            <th>Thao Tác</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -81,19 +81,19 @@ const CountriesDashboard: React.FC = () => {
                         {currentCountries.length === 0 && (
                             <tr>
                                 <td colSpan={3} className="text-center">
-                                    No countries available.
+                                    Không có quốc gia nào.
                                 </td>
                             </tr>
                         )}
                     </tbody>
                 </table>
             </div>
-            {/* Pagination */}
+            {/* Phân trang */}
             <nav className="d-flex justify-content-center mt-4">
                 <ul className="pagination">
                     <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
                         <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>
-                            Prev
+                            Trước
                         </button>
                     </li>
                     {Array.from({ length: totalPages }, (_, index) => (
@@ -105,7 +105,7 @@ const CountriesDashboard: React.FC = () => {
                     ))}
                     <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
                         <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
-                            Next
+                            Tiếp
                         </button>
                     </li>
                 </ul>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Avatar } from 'antd';
 
-import QRCode from 'react-qr-code';
+
 import Footer from '../Footer/Footer';
 import Header from '../Header/Hearder';
 import './MovieTicket.css';
@@ -68,7 +68,7 @@ const MovieTicket: React.FC = () => {
 
               {/* QR Code */}
               <div className="ticket-qr">
-                <QRCode value={JSON.stringify(ticketData)} size={128} />
+               
               </div>
             </div>
           </div>

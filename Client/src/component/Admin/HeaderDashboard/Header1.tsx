@@ -1,10 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Header1.css';
 import { FaBell, FaCog, FaUserCircle } from 'react-icons/fa';
+import { User } from '../../../interface/User';
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
     const [isProfileOpen, setIsProfileOpen] = useState(false);
+    const [user, setUser] = useState<User | null>(null);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const navigate = useNavigate();
 
+    // Fetch user data from localStorage when the component mounts
+    useEffect(() => {
+        const storedUser = localStorage.getItem('user_profile');
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
+        }
+    }, []);
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user_id"); // Xóa userId khỏi localStorage
+        localStorage.removeItem("user_profile"); // Xóa userId khỏi localStorage
+        setIsLoggedIn(false); // Cập nhật trạng thái đăng nhập
+        navigate('/')
+      };
     const toggleProfile = () => {
         setIsProfileOpen(!isProfileOpen);
     };
@@ -23,20 +42,20 @@ const Header = () => {
                     </div>
                     <div className="icon profile-pic" onClick={toggleProfile}>
                         <FaUserCircle />
-                        {isProfileOpen && (
+                        {isProfileOpen && user && (
                             <div className="profile-dropdown">
                                 <div className="profile-info">
                                     <img 
-                                        src="https://via.placeholder.com/80" 
+                                        src={user.avatar || "https://via.placeholder.com/80"} 
                                         alt="User Avatar" 
                                         className="profile-avatar"
                                     />
                                     <div className="profile-details">
-                                        <p className="profile-name">Nguyễn Văn A</p>
-                                        <p className="profile-email">nguyenvana@example.com</p>
+                                        <p className="profile-name">{user.fullname || user.user_name}</p>
+                                        <p className="profile-email">{user.email}</p>
                                     </div>
                                 </div>
-                                <button className="logout-button">Đăng xuất</button>
+                                <button className="logout-button" onClick={handleLogout}>Đăng xuất</button>
                             </div>
                         )}
                     </div>
