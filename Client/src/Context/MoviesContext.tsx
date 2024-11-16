@@ -56,6 +56,7 @@ export const MovieProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   // Hàm gọi API để lấy danh sách phim
   const fetchMovies = useCallback(async () => {
     try {
+      
       const response = await instance.get("/movies"); // API GET để lấy phim
       if (response.data && response.data.data) {
         dispatch({ type: "SET_MOVIES", payload: response.data.data.original }); // Lưu danh sách phim vào state

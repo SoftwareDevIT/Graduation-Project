@@ -60,6 +60,7 @@ import Otp from "./component/Login/Otp";
 import ResetPasswod from "./component/Login/ResetPasswod";
 import { QueryClientProvider } from "@tanstack/react-query";
 import queryClient from '../src/server/queryClient'; 
+import MovieTicket from "./component/PersonalPage/Moviesicket";
 
 function App() {
   
@@ -97,7 +98,7 @@ function App() {
         <Route path="/register" element={<RegisterCinema />} />
         <Route path="/login" element={<LoginCinema />} />
         <Route path="/movieshowing" element={<MovieShowing/>} />
-
+        <Route path="/movieticket" element={<MovieTicket />} />
         <Route path="/deponsit" element={<Deponsit/>} />
         <Route path="/forgetpass" element={<ForgetPass/>} />
         <Route path="/otp" element={<Otp/>} />
