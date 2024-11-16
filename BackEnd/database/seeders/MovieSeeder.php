@@ -138,7 +138,7 @@ class MovieSeeder extends Seeder
                 'release_date' => now(),
                 'age_limit' => '16',
                 'description' => $item['description'],
-                'trailer' => $item['name'],
+                'trailer' => $item['trailer'],
                 'created_at' => now(),
                 'updated_at' => now(),
 

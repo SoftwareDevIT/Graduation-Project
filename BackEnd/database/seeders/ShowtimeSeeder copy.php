@@ -9,7 +9,7 @@ class ShowtimeSeeder extends Seeder
 {
     public function run(): void
     {
-        $movieInCinemaIds = DB::table('movie_in_cinemas')->pluck('id');
+        $movieInCinemaRecords = DB::table('movie_in_cinemas')->get(); // Lấy toàn bộ các bản ghi
         $showtimes = [
             '09:00:00' => 45000,
             '10:00:00' => 46000,
@@ -28,29 +28,39 @@ class ShowtimeSeeder extends Seeder
             '23:00:00' => 59000,
         ];
         $showtimeDate = now()->addDays(1)->toDateString();
-        $batchSize = 1000; // Xác định kích thước lô
+        $batchSize = 1000; // Kích thước lô
         $showtimeData = [];
 
-        foreach ($movieInCinemaIds as $movieInCinemaId) {
-            foreach ($showtimes as $start => $price) {
-                $showtimeData[] = [
-                    'movie_in_cinema_id' => $movieInCinemaId,
-                    'showtime_date' => $showtimeDate,
-                    'showtime_start' => $start,
-                    'price' => $price,
-                    'status' => '1',
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ];
+        foreach ($movieInCinemaRecords as $movieInCinema) {
+            // Lấy room_id từ bảng rooms theo cinema_id
+            $room = DB::table('rooms')
+                ->where('cinema_id', $movieInCinema->cinema_id)
+                ->inRandomOrder() // Chọn ngẫu nhiên một phòng nếu có nhiều
+                ->first();
 
-                if (count($showtimeData) >= $batchSize) {
-                    DB::table('showtimes')->insert($showtimeData);
-                    $showtimeData = [];
+            if ($room) {
+                foreach ($showtimes as $start => $price) {
+                    $showtimeData[] = [
+                        'room_id' => $room->id,
+                        'movie_in_cinema_id' => $movieInCinema->id,
+                        'showtime_date' => $showtimeDate,
+                        'showtime_start' => $start,
+                        'price' => $price,
+                        'status' => '1',
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+
+                    // Thực hiện chèn dữ liệu theo lô
+                    if (count($showtimeData) >= $batchSize) {
+                        DB::table('showtimes')->insert($showtimeData);
+                        $showtimeData = [];
+                    }
                 }
             }
         }
 
-
+        // Chèn phần dữ liệu còn lại nếu có
         if (!empty($showtimeData)) {
             DB::table('showtimes')->insert($showtimeData);
         }

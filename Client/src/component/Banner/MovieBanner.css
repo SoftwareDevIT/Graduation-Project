@@ -144,12 +144,13 @@
     font-size: 0.8em;
     padding: 6px;
   }
+
 }
 
 /* Responsive styles for smaller mobile screens */
 @media (max-width: 480px) {
   .slider-container {
-    width: 400px; /* Full width for mobile */
+    width: 370px; /* Full width for mobile */
   position: relative
   ;
   right: 50px;
@@ -168,6 +169,7 @@
     font-size: 0.75em;
     padding: 5px;
   }
+
 }
 
 
