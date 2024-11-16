@@ -11,7 +11,7 @@ import Dashboard from "./Page/Admin/Dashboard/Dashboard";
 import User from "./Page/Admin/User/UserManager";
 import ShowtimesManager from "./Page/Admin/Showtimes/ShowtimesManager";
 import OrdersManager from "./Page/Admin/Orders/OrdersManager";
-import TicketsManager from "./Page/Admin/Tickets/TicketsManager";
+
 import PostsManager from "./Page/Admin/Posts/PostsManager";
 import CategoriesManager from "./Page/Admin/Categories/CategoriesManager";
 import CountriesManager from "./Page/Admin/Countries/CountriesManager";
@@ -55,16 +55,21 @@ import ForgetPass from "./component/Login/ForgetPass";
 
 import AdminLogin from "./component/Admin/Login/LoginAdmin";
 import PostDetailManager from "./component/Admin/PostsDasboard/PostDetailManager";
-import NotFound from "./component/NotFoud/NotFound";
+
+import EarlyMovie from "./component/Movies/EarlyMovie";
+import ResetPassword from "./component/Login/ResetPasswod";
 import Otp from "./component/Login/Otp";
+import NotFound from "./component/NotFoud/NotFound";
 import ResetPasswod from "./component/Login/ResetPasswod";
 import { QueryClientProvider } from "@tanstack/react-query";
 import queryClient from '../src/server/queryClient'; 
 import RoomsManager from "./Page/Admin/Rooms/RoomsManager";
 import RoomsFormManager from "./Page/Admin/Rooms/RoomsForm";
+import Video from "./component/News/Video";
+import MovieTicket from "./component/PersonalPage/MovieTicket";
 
 function App() {
-  
+
   return (
     <>
       <QueryClientProvider client={queryClient}>
@@ -74,7 +79,7 @@ function App() {
         <Route path="/orders" element={<OrderPage />} />
         <Route path="/pay" element={<OrderCheckout />} />
         <Route path="/seat" element={<CinemaSeatSelection />} />
-        <Route path="/movie-detail/:id"  element={<ContentMovie />} />
+        <Route path="/movie-detail/:id" element={<ContentMovie />} />
         <Route path="/schedule/:id" element={<LichChieu />} />
         <Route path="/reviews/:id" element={<DanhGia />} />
         <Route path="/news/:id" element={<TinTuc />} />
@@ -82,31 +87,38 @@ function App() {
         <Route path="/headerticket" element={<Headerticket />} />
         <Route path="/confirm" element={<EmailConfirm />} />
         <Route path="/payment-callback" element={<PaymentCallback />} />
-        <Route path="/*" element={<NotFound/>} />
-       
-      
-        <Route path="/filmnews" element={<FilmNews/>} />
-        <Route path="/sp" element={<SupportCenter/>} />
-        <Route path="/postdetail/:id" element={<PostDetail/>} />
-        
-       
+        <Route path="/*" element={<NotFound />} />
+
+
+        <Route path="/filmnews" element={<FilmNews />} />
+        <Route path="/video" element={<Video />} />
+        <Route path="/sp" element={<SupportCenter />} />
+        <Route path="/postdetail/:id" element={<PostDetail />} />
+
+
 
         <Route path="/movie/search/:movie_name" element={<SerachMovies />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/Personal" element={<Personal />} />
         <Route path="/credits" element={<Credits />} />
         <Route path="/ChangePassword" element={<ChangePassword />} />
+        <Route path="/movieticket" element={<MovieTicket />} />
         <Route path="/register" element={<RegisterCinema />} />
         <Route path="/login" element={<LoginCinema />} />
-        <Route path="/movieshowing" element={<MovieShowing/>} />
+        <Route path="/movieshowing" element={<MovieShowing />} />
 
-        <Route path="/deponsit" element={<Deponsit/>} />
-        <Route path="/forgetpass" element={<ForgetPass/>} />
-        <Route path="/otp" element={<Otp/>} />
-        <Route path="/resetPassword" element={<ResetPasswod/>} />
-      
-    
-       
+        <Route path="/deponsit" element={<Deponsit />} />
+        <Route path="/forgetpass" element={<ForgetPass />} />
+
+
+        <Route path="/otp" element={<Otp />} />
+        <Route path="/resetPassword" element={<ResetPassword />} />
+        <Route path="/earlymovie" element={<EarlyMovie />} />
+        <Route path="/resetpass" element={<ResetPasswod />} />
+
+
+
+
 
         {/* Phân quyền cho các route admin */}
         <Route path="/admin" element={<PrivateRoute allowedRoles={['admin','manager','staff']}><AdminLogin/></PrivateRoute>}/>
@@ -117,9 +129,9 @@ function App() {
         <Route path="/admin/showtimes/add" element={<PrivateRoute allowedRoles={['admin']}><ShowtimesFormManager /></PrivateRoute>} />
         <Route path="/admin/showtimes/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><ShowtimesFormManager /></PrivateRoute>} />
         <Route path="/admin/orders" element={<PrivateRoute allowedRoles={['admin']}><OrdersManager /></PrivateRoute>} />
-        <Route path="/admin/tickets" element={<PrivateRoute allowedRoles={['admin']}><TicketsManager /></PrivateRoute>} />
+      
         <Route path="/admin/posts" element={<PrivateRoute allowedRoles={['admin']}><PostsManager /></PrivateRoute>} />
-        <Route path="/admin/posts/:postId"element={<PrivateRoute allowedRoles={['admin']}><PostDetailManager/></PrivateRoute>} />
+        <Route path="/admin/posts/:postId" element={<PrivateRoute allowedRoles={['admin']}><PostDetailManager /></PrivateRoute>} />
         <Route path="/admin/posts/add" element={<PrivateRoute allowedRoles={['admin']}><PostsFormManager /></PrivateRoute>} />
         <Route path="/admin/posts/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><PostsFormManager /></PrivateRoute>} />
         <Route path="/admin/categories" element={<PrivateRoute allowedRoles={['admin']}><CategoriesManager /></PrivateRoute>} />

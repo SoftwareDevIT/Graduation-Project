@@ -86,9 +86,9 @@ const ShowtimesDashboard: React.FC = () => {
 
     return (
         <div className="container mt-5">
-            <h2 className="text-center text-primary mb-4">Quản lý Showtime</h2>
+            <h2 className="text-center text-primary mb-4">Quản Lý Suất Chiếu</h2>
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <Link to="/admin/showtimes/add" className="btn btn-outline-primary">Thêm Showtime Mới</Link>
+                <Link to="/admin/showtimes/add" className="btn btn-outline-primary">Thêm Suất Chiếu</Link>
                 <input
                     type="text"
                     placeholder="Tìm kiếm theo tên phim"

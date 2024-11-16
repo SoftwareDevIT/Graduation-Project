@@ -103,6 +103,7 @@ const ShowtimesForm: React.FC = () => {
         setShowtimesList((prevList) => [...prevList, showtimeWithRoom]);
     } else {
         await addOrUpdateShowtime(showtimeWithRoom, id);
+        alert("Cập nhật thành công")
         nav('/admin/showtimes');
         return;
     }
@@ -114,13 +115,13 @@ const ShowtimesForm: React.FC = () => {
 
     const handleSubmitAll = async () => {
         await addOrUpdateShowtime(showtimesList);
-        alert("Gửi tất cả Showtime thành công!");
+        alert("Gửi tất cả Suất chiếu thành công!");
         nav('/admin/showtimes');
     };
 
     return (
         <div className="container mt-5">
-            <h2 className="text-center mb-4">{id ? "Cập nhật Showtime" : "Thêm Showtime"}</h2>
+            <h2 className="text-center mb-4">{id ? "Cập nhật Suất Chiếu" : "Thêm Suất Chiếu"}</h2>
             <form onSubmit={handleSubmit(onSubmit)} className="shadow p-4 rounded bg-light">
                 {/* Chọn Rạp */}
                 <div className="mb-3">

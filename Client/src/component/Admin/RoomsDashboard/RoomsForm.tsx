@@ -50,15 +50,16 @@ const RoomsForm: React.FC = () => {
     
         if (id) {
             await instance.put(`/room/${id}`, data);
+            alert("Cập nhật phòng thành công !")
         } else {
             const mappedData = {
                 ...data,
                 capacity: data.volume, // Map to the expected property name
             };
             await instance.post('/room', mappedData);
-            
+            alert("Thêm phòng thành công !")
         }
-    
+        
         nav('/admin/rooms');
         reset();
     };

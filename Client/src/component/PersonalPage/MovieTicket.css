@@ -1,0 +1,78 @@
+.divider {
+    border-bottom: 1px solid #cdc5c5; /* Màu và độ dày của đường kẻ */
+   top:70px;
+    width: 100%; /* Độ rộng của đường kẻ */
+    position: relative;
+   left: 80px;
+  }
+  .ticket-container {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 16px;
+  width: 300px;
+  font-family: Arial, sans-serif;
+}
+
+.ticket-header {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.ticket-format,
+.ticket-sub {
+  background-color: #ff9900;
+  color: white;
+  padding: 2px 6px;
+  font-size: 12px;
+  border-radius: 4px;
+}
+
+.ticket-code,
+.ticket-cinema,
+.ticket-date,
+.ticket-info,
+.ticket-details {
+  margin: 4px 0;
+}
+
+.ticket-cinema {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.ticket-info {
+  font-size: 16px;
+  display: flex;
+  gap: 8px;
+  font-weight: bold;
+}
+
+.ticket-details {
+  margin-top: 12px;
+}
+
+.ticket-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.total {
+  font-weight: bold;
+}
+
+.grand-total {
+  font-weight: bold;
+  font-size: 16px;
+  color: #333;
+}
+
+.ticket-qr {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px; /* Bạn có thể điều chỉnh khoảng cách ở đây */
+  }
+  
+  

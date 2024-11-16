@@ -134,7 +134,7 @@ const CinemasDashboard: React.FC = () => {
 
     return (
         <div className="container mt-5">
-            <h2 className="text-center text-primary mb-4">Bảng Điều Khiển Rạp Chiếu Phim</h2>
+            <h2 className="text-center text-primary mb-4">Quản Lí Rạp Chiếu Phim</h2>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Link to={'/admin/cinemas/add'} className="btn btn-outline-primary">Thêm Rạp</Link>
                 <input
@@ -152,8 +152,8 @@ const CinemasDashboard: React.FC = () => {
                             <th>ID</th>
                             <th>Tên Rạp</th>
                             <th>Điện Thoại</th>
+                            <th>Vị Trí</th>
                             <th>Địa Chỉ</th>
-                            <th>Trạng Thái</th>
                             <th>Hành Động</th>
                         </tr>
                     </thead>
@@ -171,8 +171,8 @@ const CinemasDashboard: React.FC = () => {
                                         </span>
                                     </td>
                                     <td>{cinema.phone}</td>
+                                    <td>{cinema.location.location_name}</td>
                                     <td>{cinema.cinema_address}</td>
-                                    <td>{cinema.status}</td>
                                     <td className="action-buttons1 d-flex justify-content-center align-items-center">
                                         <Link to={`/admin/cinemas/edit/${cinema.id}`} className="btn btn-warning btn-sm mx-1">
                                             <FontAwesomeIcon icon={faEdit} />

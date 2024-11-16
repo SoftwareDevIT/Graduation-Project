@@ -10,7 +10,7 @@ import instance from "../../../server";
 // Định nghĩa schema cho việc xác thực form sử dụng Zod
 const comboSchema = z.object({
   combo_name: z.string().min(1, "Tên combo là bắt buộc."),
-  description: z.string().min(1, "Mô tả là bắt buộc."), // sửa lỗi tên trường thành "description"
+  descripton: z.string().min(1, "Mô tả là bắt buộc."), // sửa lỗi tên trường thành "description"
   price: z.number().min(1, "Giá phải là một số dương."),
   volume: z.number().min(1, "Số lượng phải là một số dương."),
 });
@@ -81,10 +81,10 @@ const ComboForm = () => {
           <label htmlFor="description" className="form-label">Mô Tả</label>
           <input
             type="text"
-            className={`form-control ${errors.description ? "is-invalid" : ""}`}
-            {...register("description")}
+            className={`form-control ${errors.descripton ? "is-invalid" : ""}`}
+            {...register("descripton")}
           />
-          {errors.description && <span className="text-danger">{errors.description.message}</span>}
+          {errors.descripton && <span className="text-danger">{errors.descripton.message}</span>}
         </div>
 
         {/* Giá */}

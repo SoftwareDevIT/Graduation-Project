@@ -12,6 +12,7 @@ class Room extends Model
     protected $fillable = [
 
         'room_name',
+        'volume',
         'cinema_id',
         'quantity_double_seats',
         'quantity_vip_seats',

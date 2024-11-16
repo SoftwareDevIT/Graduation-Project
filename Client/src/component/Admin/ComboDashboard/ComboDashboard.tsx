@@ -83,7 +83,7 @@ const ComboDashboard: React.FC = () => {
                             <tr key={combo.id}>
                                 <td>{combo.id}</td>
                                 <td>{combo.combo_name}</td>
-                                <td>{combo.description}</td>
+                                <td>{combo.descripton}</td>
                                 <td>{combo.price}</td>
                                 <td>{combo.volume}</td>
                                 <td>{new Date(combo.created_at).toLocaleDateString()}</td>
