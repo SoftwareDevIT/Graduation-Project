@@ -5,11 +5,9 @@ import instance from '../../../server';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
-
 const ComboDashboard: React.FC = () => {
     const { state, deleteCombo } = useComboContext();
     const { combos } = state;
-    const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [combosPerPage] = useState<number>(5);
@@ -19,10 +17,8 @@ const ComboDashboard: React.FC = () => {
         const fetchCombos = async () => {
             try {
                 await instance.get('/combo');
-                setLoading(false);
             } catch (err) {
-                setError('Failed to load combos');
-                setLoading(false);
+                setError('Không thể tải các combo');
             }
         };
 
@@ -30,12 +26,12 @@ const ComboDashboard: React.FC = () => {
     }, []);
 
     const handleDelete = async (id: number) => {
-        if (window.confirm('Are you sure you want to delete this combo?')) {
+        if (window.confirm('Bạn có chắc muốn xóa combo này?')) {
             try {
                 await deleteCombo(id);
-                alert('Combo deleted successfully!');
+                alert('Combo đã được xóa thành công!');
             } catch (err) {
-                setError('Failed to delete combo');
+                setError('Không thể xóa combo');
             }
         }
     };
@@ -48,10 +44,6 @@ const ComboDashboard: React.FC = () => {
     const indexOfFirstCombo = indexOfLastCombo - combosPerPage;
     const currentCombos = filteredCombos.slice(indexOfFirstCombo, indexOfLastCombo);
 
-    if (loading) {
-        return <p>Loading...</p>;
-    }
-
     if (error) {
         return <p>{error}</p>;
     }
@@ -60,14 +52,14 @@ const ComboDashboard: React.FC = () => {
 
     return (
         <div className="container mt-5">
-            <h2 className="text-center text-primary mb-4">All Combos</h2>
+            <h2 className="text-center text-primary mb-4">Tất Cả Các Combo</h2>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Link to={'/admin/combo/add'} className="btn btn-outline-primary">
-                    Add Combo
+                    Thêm Combo
                 </Link>
                 <input 
                     type="text" 
-                    placeholder="Search by Combo Name..." 
+                    placeholder="Tìm kiếm theo tên combo..." 
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="form-control w-25"
@@ -77,13 +69,13 @@ const ComboDashboard: React.FC = () => {
                 <table className="table table-bordered table-hover shadow-sm">
                     <thead className="thead-light">
                         <tr>
-                            <th>Combo ID</th>
-                            <th>Combo Name</th>
-                            <th>Description</th>
-                            <th>Price</th>
-                            <th>Volume</th>
-                            <th>Created At</th>
-                            <th>Actions</th>
+                            <th>ID</th>
+                            <th>Tên Combo</th>
+                            <th>Mô Tả</th>
+                            <th>Giá</th>
+                            <th>Khối Lượng</th>
+                            <th>Ngày Tạo</th>
+                            <th>Thao Tác</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -117,7 +109,7 @@ const ComboDashboard: React.FC = () => {
                 <ul className="pagination">
                     <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
                         <button className="page-link" onClick={() => setCurrentPage(currentPage - 1)}>
-                            Previous
+                            Trước
                         </button>
                     </li>
                     {Array.from({ length: Math.ceil(filteredCombos.length / combosPerPage) }, (_, index) => (
@@ -129,7 +121,7 @@ const ComboDashboard: React.FC = () => {
                     ))}
                     <li className={`page-item ${indexOfLastCombo >= filteredCombos.length ? 'disabled' : ''}`}>
                         <button className="page-link" onClick={() => setCurrentPage(currentPage + 1)}>
-                            Next
+                            Tiếp Theo
                         </button>
                     </li>
                 </ul>

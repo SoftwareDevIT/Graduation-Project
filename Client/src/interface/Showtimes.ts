@@ -1,3 +1,4 @@
+
 import { Movie } from "./Movie";
 import { CinemaRoom } from "./Room";
 
@@ -27,6 +28,8 @@ export interface Showtime {
     price: number;
     room_id:number;
     room : CinemaRoom
+    
+    
    
     
     // Include the Movie interface

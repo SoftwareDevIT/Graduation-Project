@@ -17,7 +17,9 @@ class CinemaService
     public function index(): Collection
     {
 
-        return Cinema::all();
+        // return Cinema::all();
+        return Cinema::with('location') 
+        ->get();
     }
 
 

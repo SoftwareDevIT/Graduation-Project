@@ -7,7 +7,6 @@ import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 const UserDashboard: React.FC = () => {
     const [users, setUsers] = useState<User[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
@@ -18,17 +17,13 @@ const UserDashboard: React.FC = () => {
             try {
                 const response = await instance.get('/all-user');
                 setUsers(response.data);
-                setLoading(false);
             } catch (err) {
-                setError('Failed to load users');
-                setLoading(false);
+                setError('Lỗi khi tải người dùng');
             }
         };
 
         fetchUsers();
     }, []);
-
-    
 
     const indexOfLastUser = currentPage * usersPerPage;
     const indexOfFirstUser = indexOfLastUser - usersPerPage;
@@ -36,10 +31,6 @@ const UserDashboard: React.FC = () => {
         user.user_name.toLowerCase().includes(searchTerm.toLowerCase())
     );
     const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
-
-    if (loading) {
-        return <p>Loading...</p>;
-    }
 
     if (error) {
         return <p>{error}</p>;
@@ -49,14 +40,14 @@ const UserDashboard: React.FC = () => {
 
     return (
         <div className="container mt-5">
-            <h2 className="text-center text-primary mb-4">All Users</h2>
+            <h2 className="text-center text-primary mb-4">Tất Cả Người Dùng</h2>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Link to={'/admin/user/roles'} className="btn btn-outline-primary">
-                    Manage Roles
+                    Quản lý vai trò
                 </Link>
                 <input
                     type="text"
-                    placeholder="Search by name"
+                    placeholder="Tìm kiếm theo tên"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="form-control w-25"  
@@ -66,12 +57,12 @@ const UserDashboard: React.FC = () => {
                 <table className="table table-bordered table-hover shadow-sm">
                     <thead className="thead-light">
                         <tr>
-                            <th>User ID</th>
-                            <th>Username</th>
-                            <th>Full Name</th>
+                            <th>ID</th>
+                            <th>Tên Đăng Nhập</th>
+                            <th>Tên Đầy Đủ</th>
                             <th>Email</th>
-                            <th>Created At</th>
-                            <th>Actions</th>
+                            <th>Ngày Tạo</th>
+                            <th>Hành Động</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -80,8 +71,7 @@ const UserDashboard: React.FC = () => {
                                 <td>{user.id}</td>
                                 <td>{user.user_name}</td>
                                 <td>{user.fullname}</td>
-                                <td>{user.email || 'N/A'}</td>
-                               
+                                <td>{user.email || 'Chưa có'}</td>
                                 <td>{new Date(user.created_at!).toLocaleDateString()}</td>
                                 <td>    
                                     <div className="d-flex justify-content-around">
@@ -99,7 +89,7 @@ const UserDashboard: React.FC = () => {
                 <ul className="pagination">
                     <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
                         <button className="page-link" onClick={() => setCurrentPage(currentPage - 1)}>
-                            Previous
+                            Trước
                         </button>
                     </li>
                     {Array.from({ length: Math.ceil(filteredUsers.length / usersPerPage) }, (_, index) => (
@@ -111,7 +101,7 @@ const UserDashboard: React.FC = () => {
                     ))}
                     <li className={`page-item ${indexOfLastUser >= filteredUsers.length ? 'disabled' : ''}`}>
                         <button className="page-link" onClick={() => setCurrentPage(currentPage + 1)}>
-                            Next
+                            Tiếp
                         </button>
                     </li>
                 </ul>

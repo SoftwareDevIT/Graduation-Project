@@ -69,47 +69,47 @@ const ShowtimesForm: React.FC = () => {
         await fetchRoomsByCinema(selectedCinemaId);
     };
     const onSubmit: SubmitHandler<Showtime> = async (data) => {
-        const { showtime_start, showtime_end, room_id } = data;
-    
-        // Check that the end time is after the start time
-        if (new Date(`1970-01-01T${showtime_end}:00`) <= new Date(`1970-01-01T${showtime_start}:00`)) {
-            alert("Giờ kết thúc phải lớn hơn giờ bắt đầu.");
-            return;
-        }
-    
-        // Format the time fields to `H:i:s`
-        const formattedData = {
-            ...data,
-            showtime_start: `${showtime_start}:00`, // Append seconds
-            showtime_end: `${showtime_end}:00`,
-        };
-    
-        if (!formattedData.movie_in_cinema_id || !formattedData.room_id) {
-            alert("Vui lòng chọn phim và phòng trước khi gửi.");
-            return;
-        }
-    
-        // Fetch room details
-        const roomResponse = await instance.get(`/room/${room_id}`);
-        const roomDetails = roomResponse.data.data;
-    
-        // Add room details to the data
-        const showtimeWithRoom = {
-            ...formattedData,
-            room_id: roomDetails.id,
-        };
-    
-        if (!id) {
-            setShowtimesList((prevList) => [...prevList, showtimeWithRoom]);
-        } else {
-            await addOrUpdateShowtime(showtimeWithRoom, id);
-            nav('/admin/showtimes');
-            return;
-        }
-    
-        reset();
+    const { showtime_start, showtime_end, room_id } = data;
+
+    // Check that the end time is after the start time
+    if (new Date(`1970-01-01T${showtime_end}:00`) <= new Date(`1970-01-01T${showtime_start}:00`)) {
+        alert("Giờ kết thúc phải lớn hơn giờ bắt đầu.");
+        return;
+    }
+
+    // Format the time fields to `H:i:s`
+    const formattedData = {
+        ...data,
+        showtime_start: `${showtime_start}:00`, // Append seconds
+        showtime_end: `${showtime_end}:00`,
     };
-    
+
+    if (!formattedData.movie_in_cinema_id || !formattedData.room_id) {
+        alert("Vui lòng chọn phim và phòng trước khi gửi.");
+        return;
+    }
+
+    // Fetch room details
+    const roomResponse = await instance.get(`/room/${room_id}`);
+    const roomDetails = roomResponse.data.data;
+
+    // Add room details to the data
+    const showtimeWithRoom = {
+        ...formattedData,
+        room_id: roomDetails.id,
+    };
+
+    if (!id) {
+        setShowtimesList((prevList) => [...prevList, showtimeWithRoom]);
+    } else {
+        await addOrUpdateShowtime(showtimeWithRoom, id);
+        nav('/admin/showtimes');
+        return;
+    }
+
+    reset();
+};
+
     
 
     const handleSubmitAll = async () => {
@@ -134,7 +134,7 @@ const ShowtimesForm: React.FC = () => {
                         <option value="">Chọn Rạp</option>
                         {cinemasList.map(cinema => (
                             <option key={cinema.id} value={cinema.id}>
-                                {cinema.cinema_name}
+                                {cinema.cinema_name} - {cinema.location.location_name}
                             </option>
                         ))}
                     </select>

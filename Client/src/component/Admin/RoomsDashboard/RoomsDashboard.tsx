@@ -11,17 +11,17 @@ const RoomDashboard: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredRooms, setFilteredRooms] = useState<CinemaRoom[]>([]);
-  const roomsPerPage = 11; // Number of rooms per page
+  const roomsPerPage = 11; // Số lượng phòng hiển thị mỗi trang
 
   useEffect(() => {
-    // Fetch rooms from the API
+    // Lấy danh sách phòng từ API
     const fetchRooms = async () => {
       try {
         const response = await instance.get('/room');
         setRooms(response.data.data);
-        setFilteredRooms(response.data.data); // Initialize filtered rooms with all rooms
+        setFilteredRooms(response.data.data); // Khởi tạo danh sách phòng đã lọc với tất cả các phòng
       } catch (error) {
-        console.error('Error fetching rooms:', error);
+        console.error('Lỗi khi lấy dữ liệu phòng:', error);
       }
     };
 
@@ -29,47 +29,47 @@ const RoomDashboard: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    // Filter rooms based on the search term
+    // Lọc danh sách phòng theo từ khóa tìm kiếm
     const filtered = rooms.filter((room) =>
       room.room_name.toLowerCase().includes(searchTerm.trim().toLowerCase())
     );
     setFilteredRooms(filtered);
-    setCurrentPage(1); // Reset to first page when search term changes
+    setCurrentPage(1); // Đặt lại về trang đầu tiên khi từ khóa tìm kiếm thay đổi
   }, [searchTerm, rooms]);
 
   const totalRooms = filteredRooms.length;
   const totalPages = Math.ceil(totalRooms / roomsPerPage);
 
-  // Get rooms for the current page
+  // Lấy danh sách phòng cho trang hiện tại
   const currentRooms = filteredRooms.slice(
     (currentPage - 1) * roomsPerPage,
     currentPage * roomsPerPage
   );
 
   const handleDelete = async (id: number) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this room?");
+    const confirmDelete = window.confirm("Bạn có chắc chắn muốn xóa phòng này?");
     if (confirmDelete) {
       try {
         await instance.delete(`/room/${id}`);
-        setRooms(rooms.filter(room => room.id !== id)); // Update the state after deletion
-        setFilteredRooms(filteredRooms.filter(room => room.id !== id)); // Update the filtered list
+        setRooms(rooms.filter(room => room.id !== id)); // Cập nhật lại danh sách phòng sau khi xóa
+        setFilteredRooms(filteredRooms.filter(room => room.id !== id)); // Cập nhật danh sách phòng đã lọc
       } catch (error) {
-        console.error('Error deleting room:', error);
+        console.error('Lỗi khi xóa phòng:', error);
       }
     }
   };
 
-  // Handle page change
+  // Xử lý chuyển trang
   const handlePageChange = (page: number) => setCurrentPage(page);
 
-  // Generate pagination range (up to 5 pages)
+  // Tạo dãy trang phân trang (tối đa 5 trang)
   const paginationRange = () => {
     const range = [];
     const maxPagesToShow = 5;
     const halfMax = Math.floor(maxPagesToShow / 2);
 
     if (totalPages <= maxPagesToShow) {
-      // Show all pages if total pages are less than maxPagesToShow
+      // Hiển thị tất cả các trang nếu số trang nhỏ hơn hoặc bằng maxPagesToShow
       for (let i = 1; i <= totalPages; i++) {
         range.push(i);
       }
@@ -93,14 +93,14 @@ const RoomDashboard: React.FC = () => {
 
   return (
     <div className="container mt-5">
-      <h2 className="text-center text-primary mb-4">All Rooms</h2>
+      <h2 className="text-center text-primary mb-4">Tất Cả Các Phòng</h2>
       <div className="d-flex justify-content-between align-items-center mb-4">
         <Link to={'/admin/rooms/add'} className="btn btn-outline-primary">
-          Add Room
+          Thêm Phòng
         </Link>
         <input
           type="text"
-          placeholder="Search by room name"
+          placeholder="Tìm kiếm theo tên phòng"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="form-control w-25"
@@ -110,12 +110,12 @@ const RoomDashboard: React.FC = () => {
         <table className="table table-bordered table-hover shadow-sm">
           <thead className="thead-light">
             <tr>
-              <th>Room ID</th>
-              <th>Room Name</th>
-              <th>Volume</th>
-              <th>Double Seats</th>
-              <th>VIP Seats</th>
-              <th>Actions</th>
+              <th>ID</th>
+              <th>Tên Phòng</th>
+              <th>Thể Tích</th>
+              <th>Số Ghế Đôi</th>
+              <th>Số Ghế VIP</th>
+              <th>Thao Tác</th>
             </tr>
           </thead>
           <tbody>
@@ -128,9 +128,9 @@ const RoomDashboard: React.FC = () => {
                   <td>{room.quantity_double_seats}</td>
                   <td>{room.quantity_vip_seats}</td>
                   <td>
-                  <Link to={`/admin/rooms/edit/${room.id}`} className="btn btn-warning btn-sm mx-1">
-        <FontAwesomeIcon icon={faEdit} />
-    </Link>
+                    <Link to={`/admin/rooms/edit/${room.id}`} className="btn btn-warning btn-sm mx-1">
+                      <FontAwesomeIcon icon={faEdit} />
+                    </Link>
                     <button
                       onClick={() => handleDelete(room.id)}
                       className="btn btn-danger btn-sm"
@@ -143,19 +143,19 @@ const RoomDashboard: React.FC = () => {
             ) : (
               <tr>
                 <td colSpan={6} className="text-center">
-                  No rooms found.
+                  Không có phòng nào.
                 </td>
               </tr>
             )}
           </tbody>
         </table>
       </div>
-      {/* Pagination */}
+      {/* Phân trang */}
       <nav className="d-flex justify-content-center mt-4">
         <ul className="pagination">
           <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
             <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>
-              Prev
+              Trước
             </button>
           </li>
           {paginationRange().map((page, index) => (
@@ -171,7 +171,7 @@ const RoomDashboard: React.FC = () => {
           ))}
           <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
             <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
-              Next
+              Tiếp
             </button>
           </li>
         </ul>

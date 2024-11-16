@@ -78,7 +78,7 @@ const PostsDashboard: React.FC = () => {
                       readOnly={true} 
                       theme="snow" 
                       modules={{ toolbar: false }}
-                      formats={['bold', 'underline', 'link']}
+                      formats={['bold', 'underline', 'link','image']}
                     />
                     {post.content.length > 100 && (
                       <Link to={`/admin/posts/${post.id}`} className="text-primary mt-2">Xem thêm</Link>

@@ -1,14 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { usePostsContext } from '../../../Context/PostContext';
-import instance from '../../../server'; // Adjust the path as needed
+import instance from '../../../server'; // Adjust path if necessary
 import { NewsCategory } from '../../../interface/NewsCategory';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+// Define the Zod schema for validation
+const postSchema = z.object({
+  title: z.string().min(1, 'Tiêu đề là bắt buộc'), // Title is required
+  news_category_id: z.string().min(1, 'Chọn một danh mục'), // Category is required
+  content: z.string().min(1, 'Nội dung là bắt buộc'), // Content is required
+});
+
+type FormData = z.infer<typeof postSchema>;
 
 const PostsForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { register, handleSubmit, reset } = useForm();
-  const [categories, setCategories] = useState<NewsCategory[]>([]); // For post categories
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
+    resolver: zodResolver(postSchema), // Using Zod schema for validation
+  });
+  const [categories, setCategories] = useState<NewsCategory[]>([]);
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   const [bannerFile, setBannerFile] = useState<File | null>(null);
   const { addOrUpdatePost } = usePostsContext();
@@ -23,65 +36,63 @@ const PostsForm: React.FC = () => {
         if (id) {
           const postResponse = await instance.get(`/news/${id}`);
           const postData = postResponse.data.data;
-            console.log(postData);
-            
+          console.log(postData);
+
           reset({
             title: postData.title,
-            news_category_id: postData.news_category_id, // This will set the category ID
+            news_category_id: postData.news_category_id,
             content: postData.content,
-          
           });
         }
       } catch (error) {
-        console.error('Error fetching post data:', error);
+        console.error('Lỗi khi lấy dữ liệu bài viết:', error);
       }
     };
 
     fetchCategories();
   }, [id, reset]);
 
-  const onSubmit = async (data: any) => {
-    console.log('Selected Category ID:', data.news_category_id); // Log the selected category ID
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
+    console.log('ID danh mục đã chọn:', data.news_category_id);
     await addOrUpdatePost(
-      
       {
         ...data,
-        thumnail: thumbnailFile, // Use 'thumbnail' instead of 'thumbnailFile'
-        banner: bannerFile, // Use 'banner' instead of 'bannerFile'
+        thumnail: thumbnailFile,
+        banner: bannerFile,
       },
       id
-     
     );
-    alert(id ? 'Post updated successfully!' : 'Post added successfully!');
-    nav('/admin/posts'); // Redirect after submission
+    alert(id ? 'Cập nhật bài viết thành công!' : 'Thêm bài viết thành công!');
+    nav('/admin/posts');
   };
 
   return (
     <div className="container mt-5">
-      <h2>{id ? 'Edit Post' : 'Add Post'}</h2>
+      <h2>{id ? 'Chỉnh sửa bài viết' : 'Thêm bài viết'}</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="needs-validation" noValidate>
         <div className="mb-3">
-          <label className="form-label">Title:</label>
+          <label className="form-label">Tiêu đề:</label>
           <input
             type="text"
             className="form-control"
             {...register('title')}
-            required
           />
+          {errors.title && <span className="text-danger">{errors.title.message}</span>}
         </div>
         <div className="mb-3">
-          <label className="form-label">News Category:</label>
-          <select {...register('news_category_id')} className="form-select" required>
-            <option value="">Select Category</option>
+          <label className="form-label">Danh mục tin tức:</label>
+          <select {...register('news_category_id')} className="form-select">
+            <option value="">Chọn danh mục</option>
             {categories.map((category) => (
               <option key={category.id} value={category.id}>
                 {category.news_category_name}
               </option>
             ))}
           </select>
+          {errors.news_category_id && <span className="text-danger">{errors.news_category_id.message}</span>}
         </div>
         <div className="mb-3">
-          <label className="form-label ">Thumbnail:</label>
+          <label className="form-label">Ảnh thu nhỏ:</label>
           <input
             type="file"
             className="form-control d-block"
@@ -93,7 +104,7 @@ const PostsForm: React.FC = () => {
           />
         </div>
         <div className="mb-3">
-          <label className="form-label">Banner:</label>
+          <label className="form-label">Ảnh bìa:</label>
           <input
             type="file"
             className="form-control d-block"
@@ -105,16 +116,16 @@ const PostsForm: React.FC = () => {
           />
         </div>
         <div className="mb-3">
-          <label className="form-label">Content:</label>
+          <label className="form-label">Nội dung:</label>
           <textarea
             className="form-control"
             {...register('content')}
-            required
           ></textarea>
+          {errors.content && <span className="text-danger">{errors.content.message}</span>}
         </div>
-      
+
         <button type="submit" className="btn btn-primary">
-          {id ? 'Update Post' : 'Add Post'}
+          {id ? 'Cập nhật bài viết' : 'Thêm bài viết'}
         </button>
       </form>
     </div>
