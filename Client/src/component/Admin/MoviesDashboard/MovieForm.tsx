@@ -186,7 +186,7 @@ const MovieForm: React.FC = () => {
 
         <TextField
          
-          type="number"
+          type="text"
           variant="outlined"
           fullWidth
           margin="normal"
