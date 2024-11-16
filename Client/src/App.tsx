@@ -45,7 +45,7 @@ import Personal from "./component/PersonalPage/Personal";
 import ChangePassword from "./component/PersonalPage/ChangePassword";
 import Profile from "./component/PersonalPage/Profile";
 import PrivateRoute from "./PrivateRoute";
-import FilmNews from "./component/News/FilmNews";
+
 import MovieShowing from "./component/Movies/MovieShowing";
 import SupportCenter from "./component/Support/Support";
 import PostDetail from "./component/Post/PostDetail";
@@ -63,8 +63,10 @@ import NotFound from "./component/NotFoud/NotFound";
 import ResetPasswod from "./component/Login/ResetPasswod";
 import { QueryClientProvider } from "@tanstack/react-query";
 import queryClient from '../src/server/queryClient'; 
-import MovieTicket from "./component/PersonalPage/MovieTicket";
+
 import Video from "./component/News/Video";
+import FilmNews from "./component/News/FilmNews";
+import MovieTicket from "./component/PersonalPage/MovieTicket";
 
 
 
@@ -92,7 +94,7 @@ function App() {
         <Route path="/*" element={<NotFound />} />
 
 
-        <Route path="/filmnews" element={<FilmNews />} />
+        <Route path="/filmnews" element={<FilmNews/>} />
         <Route path="/video" element={<Video />} />
         <Route path="/sp" element={<SupportCenter />} />
         <Route path="/postdetail/:id" element={<PostDetail />} />
@@ -104,10 +106,11 @@ function App() {
         <Route path="/Personal" element={<Personal />} />
         <Route path="/credits" element={<Credits />} />
         <Route path="/ChangePassword" element={<ChangePassword />} />
-        <Route path="/movieticket" element={<MovieTicket />} />
+   
         <Route path="/register" element={<RegisterCinema />} />
         <Route path="/login" element={<LoginCinema />} />
         <Route path="/movieshowing" element={<MovieShowing />} />
+        <Route path="/movieticket" element={<MovieTicket />} />
 
         <Route path="/deponsit" element={<Deponsit />} />
         <Route path="/forgetpass" element={<ForgetPass />} />

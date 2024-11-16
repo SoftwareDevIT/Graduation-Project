@@ -3,6 +3,7 @@ import axios from 'axios';
 import './ForgetPass.css';
 
 import { Alert } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 const ForgetPass = () => {
     const [email, setEmail] = useState('');
