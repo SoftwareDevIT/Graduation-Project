@@ -10,13 +10,13 @@ import { Movie } from "../../../interface/Movie";
 import { useCinemaContext } from "../../../Context/CinemasContext";
 
 const cinemaSchema = z.object({
-  cinema_name: z.string().min(1, "Cinema Name is required."),
+  cinema_name: z.string().min(1, "Tên Rạp là bắt buộc."),
   phone: z
     .string()
-    .min(10, "Phone number must be at least 10 digits.")
-    .regex(/^[0-9]+$/, "Phone number must be numeric."),
-  cinema_address: z.string().min(1, "Cinema Address is required."),
-  location_id: z.string().nonempty("Location ID is required."),
+    .min(10, "Số điện thoại phải có ít nhất 10 chữ số.")
+    .regex(/^[0-9]+$/, "Số điện thoại phải là số."),
+  cinema_address: z.string().min(1, "Địa chỉ rạp là bắt buộc."),
+  location_id: z.string().nonempty("ID vị trí là bắt buộc."),
 });
 
 const CinemaForm = () => {
@@ -45,7 +45,7 @@ const CinemaForm = () => {
         const { data } = await instance.get(`/location`);
         setLocations(data.data);
       } catch (error) {
-        console.error("Failed to fetch locations:", error);
+        console.error("Lỗi khi tải vị trí:", error);
       }
     };
 
@@ -57,7 +57,7 @@ const CinemaForm = () => {
           reset(data.data);
           setSelectedMovies(data.data.movies.map((movie: Movie) => movie.id.toString()));
         } catch (error) {
-          console.error("Failed to fetch cinema:", error);
+          console.error("Lỗi khi tải thông tin rạp:", error);
         }
       }
     };
@@ -67,7 +67,7 @@ const CinemaForm = () => {
         const { data } = await instance.get(`/movies`);
         setMovies(data.data.original);
       } catch (error) {
-        console.error("Failed to fetch movies:", error);
+        console.error("Lỗi khi tải phim:", error);
       }
     };
 
@@ -80,16 +80,16 @@ const CinemaForm = () => {
     try {
       if (isEditMode) {
         await updateCinema(Number(id), data);
-        alert("Cinema updated successfully!");
+        alert("Cập nhật rạp thành công!");
       } else {
         await addCinema(data);
-        alert("Cinema added successfully!");
+        alert("Thêm rạp mới thành công!");
       }
       nav('/admin/cinemas');
       reset();
     } catch (error) {
-      console.error("Failed to submit form:", error);
-      alert("Failed to submit form");
+      console.error("Lỗi khi gửi form:", error);
+      alert("Gửi form thất bại");
     }
   };
 
@@ -97,22 +97,22 @@ const CinemaForm = () => {
     try {
       const moviePayload = selectedMovies.map(movieId => ({ movie_id: movieId }));
       await instance.post(`/add-movie-in-cinema/${id}`, { movie_in_cinema: moviePayload });
-      alert("Movies added to cinema successfully!");
+      alert("Thêm phim vào rạp thành công!");
       nav('/admin/cinemas');
     } catch (error) {
-      console.error("Failed to add movies to cinema:", error);
-      alert("Failed to add movies to cinema");
+      console.error("Lỗi khi thêm phim vào rạp:", error);
+      alert("Thêm phim vào rạp thất bại");
     }
   };
 
   return (
     <div className="container mt-5">
       <form onSubmit={handleSubmit(handleFormSubmit)} className="shadow-lg p-5 rounded bg-white">
-        <h2 className="text-center mb-5 text-primary">{isEditMode ? "Edit Cinema" : "Add New Cinema"}</h2>
+        <h2 className="text-center mb-5 text-primary">{isEditMode ? "Chỉnh sửa Rạp" : "Thêm Rạp Mới"}</h2>
 
         {/* Cinema Name */}
         <div className="mb-4">
-          <label htmlFor="cinema_name" className="form-label fw-bold">Cinema Name</label>
+          <label htmlFor="cinema_name" className="form-label fw-bold">Tên Rạp</label>
           <input
             type="text"
             className={`form-control ${errors.cinema_name ? "is-invalid" : ""}`}
@@ -124,7 +124,7 @@ const CinemaForm = () => {
 
         {/* Phone */}
         <div className="mb-4">
-          <label htmlFor="phone" className="form-label fw-bold">Phone</label>
+          <label htmlFor="phone" className="form-label fw-bold">Số Điện Thoại</label>
           <input
             type="text"
             className={`form-control ${errors.phone ? "is-invalid" : ""}`}
@@ -136,7 +136,7 @@ const CinemaForm = () => {
 
         {/* Cinema Address */}
         <div className="mb-4">
-          <label htmlFor="cinema_address" className="form-label fw-bold">Cinema Address</label>
+          <label htmlFor="cinema_address" className="form-label fw-bold">Địa Chỉ Rạp</label>
           <input
             type="text"
             className={`form-control ${errors.cinema_address ? "is-invalid" : ""}`}
@@ -148,13 +148,13 @@ const CinemaForm = () => {
 
         {/* Location */}
         <div className="mb-4">
-          <label htmlFor="location_id" className="form-label fw-bold">Location</label>
+          <label htmlFor="location_id" className="form-label fw-bold">Vị trí</label>
           <select
             {...register("location_id")}
             className={`form-select ${errors.location_id ? "is-invalid" : ""}`}
             defaultValue={cinema?.location_id || ""}
           >
-            <option value="">Select Location</option>
+            <option value="">Chọn Vị Trí</option>
             {locations.map((location) => (
               <option key={location.id} value={location.id}>
                 {location.location_name}
@@ -166,7 +166,7 @@ const CinemaForm = () => {
 
         {/* Select Movies */}
         <div className="mb-4">
-          <label htmlFor="movies" className="form-label fw-bold">Select Movies</label>
+          <label htmlFor="movies" className="form-label fw-bold">Chọn Phim</label>
           <select
             multiple
             className="form-select"
@@ -187,7 +187,7 @@ const CinemaForm = () => {
         {/* Submit and Add Movies Button */}
         <div className="d-flex justify-content-between">
           <button type="submit" className="btn btn-primary px-4 py-2">
-            {isEditMode ? "Update Cinema" : "Add Cinema"}
+            {isEditMode ? "Cập Nhật Rạp" : "Thêm Rạp"}
           </button>
           {isEditMode && (
             <button
@@ -195,7 +195,7 @@ const CinemaForm = () => {
               className="btn btn-secondary px-4 py-2"
               onClick={handleAddMoviesToCinema}
             >
-              Add Selected Movies to Cinema
+              Thêm Phim Đã Chọn vào Rạp
             </button>
           )}
         </div>

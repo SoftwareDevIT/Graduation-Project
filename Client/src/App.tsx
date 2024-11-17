@@ -11,7 +11,7 @@ import Dashboard from "./Page/Admin/Dashboard/Dashboard";
 import User from "./Page/Admin/User/UserManager";
 import ShowtimesManager from "./Page/Admin/Showtimes/ShowtimesManager";
 import OrdersManager from "./Page/Admin/Orders/OrdersManager";
-import TicketsManager from "./Page/Admin/Tickets/TicketsManager";
+
 import PostsManager from "./Page/Admin/Posts/PostsManager";
 import CategoriesManager from "./Page/Admin/Categories/CategoriesManager";
 import CountriesManager from "./Page/Admin/Countries/CountriesManager";
@@ -63,7 +63,8 @@ import NotFound from "./component/NotFoud/NotFound";
 import ResetPasswod from "./component/Login/ResetPasswod";
 import { QueryClientProvider } from "@tanstack/react-query";
 import queryClient from '../src/server/queryClient'; 
-
+import RoomsManager from "./Page/Admin/Rooms/RoomsManager";
+import RoomsFormManager from "./Page/Admin/Rooms/RoomsForm";
 import Video from "./component/News/Video";
 import FilmNews from "./component/News/FilmNews";
 import MovieTicket from "./component/PersonalPage/MovieTicket";
@@ -126,15 +127,15 @@ function App() {
 
 
         {/* Phân quyền cho các route admin */}
-        <Route path="/admin" element={<PrivateRoute allowedRoles={['admin']}><AdminLogin /></PrivateRoute>} />
-        <Route path="/admin/dashboard" element={<PrivateRoute allowedRoles={['admin']}><Dashboard /></PrivateRoute>} />
+        <Route path="/admin" element={<PrivateRoute allowedRoles={['admin','manager','staff']}><AdminLogin/></PrivateRoute>}/>
+        <Route path="/admin/dashboard" element={<PrivateRoute allowedRoles={['admin','manager','staff']}><Dashboard /></PrivateRoute>} />
         <Route path="/admin/user" element={<PrivateRoute allowedRoles={['admin']}><User /></PrivateRoute>} />
         <Route path="/admin/user/roles" element={<PrivateRoute allowedRoles={['admin']}><UserAddManager /></PrivateRoute>} />
         <Route path="/admin/showtimes" element={<PrivateRoute allowedRoles={['admin']}><ShowtimesManager /></PrivateRoute>} />
         <Route path="/admin/showtimes/add" element={<PrivateRoute allowedRoles={['admin']}><ShowtimesFormManager /></PrivateRoute>} />
         <Route path="/admin/showtimes/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><ShowtimesFormManager /></PrivateRoute>} />
         <Route path="/admin/orders" element={<PrivateRoute allowedRoles={['admin']}><OrdersManager /></PrivateRoute>} />
-        <Route path="/admin/tickets" element={<PrivateRoute allowedRoles={['admin']}><TicketsManager /></PrivateRoute>} />
+      
         <Route path="/admin/posts" element={<PrivateRoute allowedRoles={['admin']}><PostsManager /></PrivateRoute>} />
         <Route path="/admin/posts/:postId" element={<PrivateRoute allowedRoles={['admin']}><PostDetailManager /></PrivateRoute>} />
         <Route path="/admin/posts/add" element={<PrivateRoute allowedRoles={['admin']}><PostsFormManager /></PrivateRoute>} />
@@ -151,6 +152,9 @@ function App() {
         <Route path="/admin/cinemas" element={<PrivateRoute allowedRoles={['admin']}><CinemasManager /></PrivateRoute>} />
         <Route path="/admin/cinemas/add" element={<PrivateRoute allowedRoles={['admin']}><CinemasFormManager /></PrivateRoute>} />
         <Route path="/admin/cinemas/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><CinemasFormManager /></PrivateRoute>} />
+        <Route path="/admin/rooms" element={<PrivateRoute allowedRoles={['admin']}><RoomsManager/></PrivateRoute>} />
+        <Route path="/admin/rooms/add" element={<PrivateRoute allowedRoles={['admin']}><RoomsFormManager/></PrivateRoute>} />
+        <Route path="/admin/rooms/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><RoomsFormManager/></PrivateRoute>} />
         <Route path="/admin/movies" element={<PrivateRoute allowedRoles={['admin']}><MoviesManager /></PrivateRoute>} />
         <Route path="/admin/movies/add" element={<PrivateRoute allowedRoles={['admin']}><MoviesManagerForm /></PrivateRoute>} />
         <Route path="/admin/movies/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><MoviesAddManager /></PrivateRoute>} />

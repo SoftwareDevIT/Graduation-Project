@@ -75,5 +75,7 @@ function FilmNews() {
     </>
   );
 }
+           
 
 export default FilmNews;
+

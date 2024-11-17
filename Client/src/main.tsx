@@ -36,18 +36,18 @@ createRoot(document.getElementById('root')!).render(
       <ComboProvider>
       <MovieProvider>
      <PostProvider>
-          <CountryProvider>
+          
             <CategoryProvider>
               <ShowtimeProvider>
               <NewsProvider>
          
-                
+                <CountryProvider>
     <App />
-    
+    </CountryProvider>
     </NewsProvider>
     </ShowtimeProvider>
     </CategoryProvider>
-    </CountryProvider>
+   
     </PostProvider>
     </MovieProvider>
     </ComboProvider>
