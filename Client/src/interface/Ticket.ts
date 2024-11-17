@@ -1,3 +1,4 @@
+import { Combo } from "./Combo";
 import { Seat } from "./Seat";
 
 export default interface Ticket {
@@ -12,5 +13,6 @@ export default interface Ticket {
         room_name: string;
       };
     };
+    combos:Combo[];
   }
   
