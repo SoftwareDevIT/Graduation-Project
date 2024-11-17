@@ -88,7 +88,10 @@ class BookingController extends Controller
             $booking->status = 'Pain';
             $booking->save();
             Mail::to($booking->user->email)->queue(new InvoiceMail($booking));
+<<<<<<< HEAD
             // Mail::to(Auth::user()->email)->queue(new InvoiceMail($booking));
+=======
+>>>>>>> e66cc0c8b78ac2f5813e1dac16836872143211a9
             // event(new InvoiceSendMail($booking));
             session()->flush();
             // return redirect('http://localhost:5173/');

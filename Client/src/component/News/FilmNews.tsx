@@ -1,44 +1,30 @@
-import React, { useEffect, useState } from "react";
-import { ClipLoader } from "react-spinners"; // Import thư viện loading
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { ClipLoader } from 'react-spinners'; 
+import { Link } from 'react-router-dom';
 import Footer from "../Footer/Footer";
-import './FilmNews.css';
 import Header from "../Header/Hearder";
-import { NewsItem } from "../../interface/NewsItem";
-import instance from "../../server";
-import { Link } from "react-router-dom";
+import { stripHtml } from '../../assets/Font/quillConfig';
+import './FilmNews.css';
+import { useNews } from '../../Context/NewsContext';
 
 function FilmNews() {
-  const [news, setNews] = useState<NewsItem[]>([]);
-  const [loading, setLoading] = useState(true); // State quản lý loading cho cả trang
+  const { newsData, isLoading, error } = useNews();  // Lấy dữ liệu từ context
 
-  // Gọi API lấy dữ liệu tin tức
-  useEffect(() => {
-    const fetchNews = async () => {
-      try {
-        const response = await instance.get('/news'); // Gọi API
-        setNews(response.data.data); // Lưu dữ liệu vào state
-        setLoading(false); // Dừng loading sau khi tải xong
-      } catch (error) {
-        console.error('Error fetching news:', error);
-        setLoading(false); // Dừng loading nếu có lỗi
-      }
-    };
-
-    fetchNews();
-  }, []);
+  if (error) {
+    return <div className="error">Error: {error}</div>;  // Xử lý lỗi nếu có
+  }
 
   return (
     <>
-      {/* Hiển thị loading overlay cho cả trang */}
-      {loading && (
+      {/* Hiển thị loading khi dữ liệu đang tải */}
+      {isLoading && (
         <div className="overlay-loading">
-          <ClipLoader color={"#333"} loading={loading} size={150} />
+          <ClipLoader color={"#333"} loading={isLoading} size={150} />
         </div>
       )}
 
-      {/* Nội dung trang chỉ hiển thị khi loading = false */}
-      {!loading && (
+      {/* Nội dung trang chỉ hiển thị khi dữ liệu đã tải xong */}
+      {!isLoading && (
         <>
           <Header />
           <div className="Contentseach">
@@ -52,15 +38,15 @@ function FilmNews() {
               <div className="row boxcha-4">
                 <div className="tintucmoi col-lg-8 col-md-10 col-sm-12">
                   <h2>Mới Nhất</h2>
-
-                  {news.map((item) => (
+                  
+                  {newsData.map((item) => (
                     <div key={item.id} className="div-item">
                       <div className="img">
                         <img src={item.thumnail} alt={item.title} />
                       </div>
                       <div className="content-new">
-                      <Link to={`/postdetail/${item.id}`}><h3>{item.title}</h3></Link>
-                        <p>{item.content}</p>
+                        <Link to={`/postdetail/${item.id}`}><h3>{item.title}</h3></Link>
+                        <p>{stripHtml(item.content)}</p>
                       </div>
                     </div>
                   ))}
@@ -76,7 +62,7 @@ function FilmNews() {
                     <p>Tin tức điện ảnh Việt Nam & thế giới</p>
                   </div>
                   <div className="noidung">
-                    <h4>Video - Trailer</h4>
+                   <Link to={'/video'}> <h4>Video - Trailer</h4></Link>
                     <p>Trailer, video những phim chiếu rạp và truyền hình hot nhất</p>
                   </div>
                 </div>
@@ -89,5 +75,7 @@ function FilmNews() {
     </>
   );
 }
+           
 
 export default FilmNews;
+

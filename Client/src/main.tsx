@@ -17,6 +17,8 @@ import { CategoryProvider } from './Context/CategoriesContext.tsx'
 import { MovieProvider } from './Context/MoviesContext.tsx'
 import { PostProvider } from './Context/PostContext.tsx'
 import { ShowtimeProvider } from './Context/ShowtimesContext.tsx'
+import { NewsProvider } from './Context/NewsContext.tsx'
+
 
 
 
@@ -27,24 +29,29 @@ import { ShowtimeProvider } from './Context/ShowtimesContext.tsx'
 
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
+  
+  // <StrictMode>
     <BrowserRouter>
     <CinemaProvider>
       <ComboProvider>
       <MovieProvider>
      <PostProvider>
-          <CountryProvider>
+          
             <CategoryProvider>
               <ShowtimeProvider>
-                
+              <NewsProvider>
+         
+                <CountryProvider>
     <App />
+    </CountryProvider>
+    </NewsProvider>
     </ShowtimeProvider>
     </CategoryProvider>
-    </CountryProvider>
+   
     </PostProvider>
     </MovieProvider>
     </ComboProvider>
     </CinemaProvider>
     </BrowserRouter>
-  </StrictMode>,
+  // </StrictMode>,
 )

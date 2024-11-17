@@ -21,9 +21,9 @@ class CinemaSeeder extends Seeder
             DB::table('cinema')->insert([
                 'cinema_name' => $item['name'],
                 'image' => 'https://rapchieuphim.com' . $item['image'],
-                'phone' => $item['phone'],
+                'phone' => $item['phone'] ?? '0979620125',
                 'location_id' => $locationId,
-                'cinema_address' => $item['address'],
+                'cinema_address' => $item['address']??'Số 99 , VincomCenter ,32 Nguyen Huy',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

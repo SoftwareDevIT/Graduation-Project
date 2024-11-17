@@ -57,7 +57,7 @@ const OrderCheckout = () => {
                 }
                 return prevTime - 1;
             });
-        }, 1000);
+        }, 3000);
 
         return () => clearInterval(timer); // Dọn dẹp timer khi component unmount
     }, [navigate]);
@@ -101,7 +101,7 @@ const OrderCheckout = () => {
             seat_column: seat.seat_column,
         }));
 
-        console.log(seatsData);
+        // console.log(seatsData);
 
         const bookingData = {
             cinemaId,
@@ -112,7 +112,7 @@ const OrderCheckout = () => {
             pay_method_id, // Gửi pay_method_id là số nguyên
             comboId: selectedCombos,
         };
-        console.log(selectedCombos);
+        // console.log(bookingData);
 
         try {
             const response = await instance.post("/book-ticket", bookingData, {

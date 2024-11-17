@@ -131,18 +131,35 @@ class MovieSeeder extends Seeder
         $data = json_decode($response->getBody()->getContents(), true);
         $data = array_slice($data, 0, 20);
         foreach ($data as $item) {
+            $poster = $item['poster'];
+
+            // Kiểm tra nếu poster là đường dẫn tương đối
+            if (strpos($poster, 'http') === false) {
+                $poster = 'https://rapchieuphim.com' . $poster;
+            }
+
+            // Kiểm tra xem ảnh có tồn tại hay không
+            try {
+                $response = $client->head($poster);
+                if ($response->getStatusCode() !== 200) {
+                    // Nếu ảnh không tồn tại, thay thế bằng ảnh mặc định
+                    $poster = 'https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=1718&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
+                }
+            } catch (\Exception $e) {
+                // Nếu có lỗi khi kiểm tra, thay thế bằng ảnh mặc định
+                $poster = 'https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=1718&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
+            }
+
             DB::table('movies')->insert([
                 'movie_name' => $item['name'],
-                'poster' => 'https://rapchieuphim.com' . $item['poster'],
+                'poster' => $poster,
                 'duration' => $item['duration'],
                 'release_date' => now(),
                 'age_limit' => '16',
                 'description' => $item['description'],
-                'trailer' => $item['name'],
+                'trailer' => $item['trailer'],
                 'created_at' => now(),
                 'updated_at' => now(),
-
-                // Thêm các cột khác theo dữ liệu từ API
             ]);
         }
     }

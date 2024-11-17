@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Cinema } from "../../interface/Cinema";
 import { Location } from "../../interface/Location";
 import instance from "../../server";
+import { useCountryContext } from "../../Context/CountriesContext";
 
 
 const Header = () => {
@@ -11,10 +12,11 @@ const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [isProfileMenuVisible, setProfileMenuVisibles] = useState(false);
-  const [locations, setLocations] = useState<Location[]>([]);
+
   const [cinemas, setCinemas] = useState<Cinema[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<number | null>(null);
-
+  const { state } = useCountryContext();
+  const locations = state.countries;
   const navigate = useNavigate();
 
 
@@ -27,17 +29,6 @@ const Header = () => {
     if (user_id && token) {
       setIsLoggedIn(true); // Cập nhật trạng thái đăng nhập
     }
-    const fetchLocations = async () => {
-      try {
-        const response = await instance.get("/location");
-        // console.log(response.data); // Kiểm tra dữ liệu nhận về từ API
-        setLocations(response.data.data);
-      } catch (error) {
-        console.error("Error fetching locations:", error);
-      }
-    };
-
-    fetchLocations();
   }, []);
   useEffect(() => {
     if (selectedLocation !== null) {
@@ -118,7 +109,7 @@ const Header = () => {
                 Đặt vé phim chiếu rạp
               </Link>
 <Link to={'/buy-ticket'}>Lịch chiếu</Link>
-          
+             
               <div className="dropdown">
                 <a href="#" className="dropbtn1" >
                   Rạp{" "}
@@ -234,7 +225,7 @@ const Header = () => {
                 <div className="dropdown-content">
                   <Link to={'/FilmNews'}>Tin điện ảnh</Link>
                   <a href="#">Đánh giá phim</a>
-                  <a href="#">Video</a>
+                 <Link to={'/video'}>Video</Link>
                   <a href="#">TV Series</a>
                 </div>
               </div>
@@ -293,8 +284,7 @@ const Header = () => {
                     <Link to="/profile">Quản lý tài khoản</Link>
                     <Link to="/movies">Vé phim</Link>
                     <Link to="/credits">Moveek Credits</Link>
-                    <Link to="/credits" onClick={handleLogout}>Đăng xuất</Link>
-                  
+                    <div onClick={handleLogout}>Đăng xuất</div>
                   </div>
                 )}
               </div>

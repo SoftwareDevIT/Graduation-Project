@@ -1,7 +1,10 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { usePostsContext } from '../../../Context/PostContext';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';  // Import the styles
 import './PostDashboard.css'
+
 const PostDetailManager: React.FC = () => {
   const { postId } = useParams<{ postId: string }>(); // Lấy ID từ URL
   const { state } = usePostsContext();
@@ -18,9 +21,37 @@ const PostDetailManager: React.FC = () => {
     <div className="container post-detail mt-5">
       <h1 className="display-4 mb-4 text-primary font-weight-bold">{post.title}</h1>
       <p className="text-muted mb-2">Ngày xuất bản: {new Date(post.created_at).toLocaleDateString()}</p>
-      <p className="text-muted mb-4">Thể loại: {post.news_category_id}</p>
+      <p className="text-muted mb-4">Thể loại: {post.news_category.news_category_name}</p>
       <img src={post.thumnail} alt={post.title} className="img-fluid rounded mb-4" />
-      <p className="content">{post.content}</p>
+
+      {/* Inline CSS styles inside the <style> tag */}
+      <style>
+        {`
+          .content {
+            font-size: 1.125rem;
+            line-height: 1.75;
+            color: #333;
+            margin-top: 20px;
+            padding-left: 15px;
+            padding-right: 15px;
+            overflow-wrap: break-word; /* Correct property */
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+          }
+        `}
+      </style>
+
+      <div className="content">
+        <ReactQuill 
+          value={post.content}
+          readOnly={true} 
+          theme="snow" 
+          modules={{ toolbar: false }}
+          formats={['bold', 'underline', 'link','image']}
+        />
+      </div>
+
       <div className="text-center mt-5">
         <Link to="/admin/posts" className="btn btn-secondary btn-lg">Quay lại danh sách bài viết</Link>
       </div>

@@ -5,13 +5,14 @@ import instance from '../../../server';
 import { Movie } from '../../../interface/Movie';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';  // Import các style
 
 const MoviesDashboard: React.FC = () => {
     const { state, dispatch } = useMovieContext();
     const { movies } = state;
 
-    // Loading and error states
-    const [loading, setLoading] = useState<boolean>(true);
+    // Trạng thái error
     const [error, setError] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
@@ -22,11 +23,9 @@ const MoviesDashboard: React.FC = () => {
             try {
                 const movieResponse = await instance.get('/movies');
                 dispatch({ type: 'SET_MOVIES', payload: movieResponse.data.data.original });
-                setLoading(false);
             } catch (error) {
-                console.error('Error fetching movies:', error);
-                setError('Failed to load movies');
-                setLoading(false);
+                console.error('Lỗi khi lấy dữ liệu phim:', error);
+                setError('Không thể tải phim');
             }
         };
 
@@ -34,14 +33,14 @@ const MoviesDashboard: React.FC = () => {
     }, [dispatch]);
 
     const deleteMovie = async (id: number) => {
-        if (window.confirm('Are you sure you want to delete this movie?')) {
+        if (window.confirm('Bạn có chắc chắn muốn xóa phim này không?')) {
             try {
                 await instance.delete(`/movies/${id}`);
                 dispatch({ type: 'DELETE_MOVIE', payload: id });
-                alert("Movie deleted successfully!");
+                alert("Đã xóa phim thành công!");
             } catch (error) {
-                console.error('Error deleting movie:', error);
-                alert("Failed to delete movie.");
+                console.error('Lỗi khi xóa phim:', error);
+                alert("Không thể xóa phim.");
             }
         }
     };
@@ -49,7 +48,7 @@ const MoviesDashboard: React.FC = () => {
     const indexOfLastMovie = currentPage * moviesPerPage;
     const indexOfFirstMovie = indexOfLastMovie - moviesPerPage;
 
-    // Filter movies by search term
+    // Lọc phim theo từ khóa tìm kiếm
     const filteredMovies = Array.isArray(movies) 
         ? movies.filter(movie => 
             movie.movie_name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -57,10 +56,6 @@ const MoviesDashboard: React.FC = () => {
         : [];
 
     const currentMovies = filteredMovies.slice(indexOfFirstMovie, indexOfLastMovie);
-
-    if (loading) {
-        return <p>Loading...</p>;
-    }
 
     if (error) {
         return <p>{error}</p>;
@@ -70,12 +65,12 @@ const MoviesDashboard: React.FC = () => {
 
     return (
         <div className="container mt-5">
-            <h2 className="text-center text-primary mb-4">Movies Dashboard</h2>
+            <h2 className="text-center text-primary mb-4">Bảng điều khiển Phim</h2>
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <Link to={`/admin/movies/add`} className="btn btn-outline-primary">Add New Movie</Link>
+                <Link to={`/admin/movies/add`} className="btn btn-outline-primary">Thêm Phim Mới</Link>
                 <input
                     type="text"
-                    placeholder="Search by movie name"
+                    placeholder="Tìm kiếm theo tên phim"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="form-control w-25"
@@ -85,15 +80,15 @@ const MoviesDashboard: React.FC = () => {
                 <table className="table table-bordered table-hover shadow-sm">
                     <thead className="thead-light">
                         <tr>
-                            <th>Movie ID</th>
-                            <th>Title</th>
-                            <th>Thumbnail</th>
-                            <th>Category</th>
-                            <th>Actors</th>
-                            <th>Director</th>
-                            <th>Duration</th>
-                            <th>Description</th>
-                            <th>Actions</th>
+                            <th>ID</th>
+                            <th>Tiêu Đề</th>
+                            <th>Ảnh Đại Diện</th>
+                            <th>Thể Loại</th>
+                            <th>Diễn Viên</th>
+                            <th>Đạo Diễn</th>
+                            <th>Thời Lượng</th>
+                            <th>Mô Tả</th>
+                            <th>Hành Động</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -109,7 +104,18 @@ const MoviesDashboard: React.FC = () => {
                                     <td>{movie.actor.map(actor => actor.actor_name).join(', ')}</td>
                                     <td>{movie.director.map(director => director.director_name).join(', ')}</td>
                                     <td>{movie.duration}</td>
-                                    <td>{movie.description}</td>
+                                    <td>
+                                        {/* Sử dụng ReactQuill để hiển thị mô tả */}
+                                        <div>
+                                            <ReactQuill 
+                                                value={movie.description ?? ''}
+                                                readOnly={true} 
+                                                theme="snow" 
+                                                modules={{ toolbar: false }}
+                                                formats={['bold', 'underline', 'link']}
+                                            />
+                                        </div>
+                                    </td>
                                     <td>
                                         <div className="d-flex justify-content-around">
                                             <Link to={`/admin/movies/edit/${movie.id}`} className="btn btn-warning btn-sm mr-2">
@@ -127,18 +133,18 @@ const MoviesDashboard: React.FC = () => {
                             ))
                         ) : (
                             <tr>
-                                <td colSpan={9}>No movies available</td>
+                                <td colSpan={9}>Không có phim nào</td>
                             </tr>
                         )}
                     </tbody>
                 </table>
             </div>
-            {/* Pagination Section */}
+            {/* Phần phân trang */}
             <nav className="d-flex justify-content-center mt-4">
                 <ul className="pagination">
                     <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
                         <button className="page-link" onClick={() => setCurrentPage(currentPage - 1)}>
-                            Previous
+                            Trước
                         </button>
                     </li>
                     {Array.from({ length: Math.ceil(filteredMovies.length / moviesPerPage) }, (_, index) => (
@@ -150,7 +156,7 @@ const MoviesDashboard: React.FC = () => {
                     ))}
                     <li className={`page-item ${indexOfLastMovie >= filteredMovies.length ? 'disabled' : ''}`}>
                         <button className="page-link" onClick={() => setCurrentPage(currentPage + 1)}>
-                            Next
+                            Tiếp
                         </button>
                     </li>
                 </ul>

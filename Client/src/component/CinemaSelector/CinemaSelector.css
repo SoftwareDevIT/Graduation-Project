@@ -142,11 +142,11 @@ margin-top: 15px;
   margin-top: 20px;
   font-family: "Cerebri Sans";
 }
-.title{
+.titles{
   font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   text-align: center !important;
   padding-top: 15px;
-  font-size: 12px;
+  font-size: 22px;
   font-weight :500;
 }
 
@@ -271,6 +271,10 @@ gap: 10px;
 margin-top: 10px;
 
 }
+.showtimes-list p{
+  font-size: 12px;
+
+}
 
 .showtimes-list button {
 padding: 8px 12px;
@@ -281,6 +285,9 @@ cursor: pointer;
 font-size: 14px;
 color: #333;
 transition: background-color 0.2s ease;
+width: 70px;
+height: 50px;
+
 
 }
 
@@ -497,22 +504,23 @@ li.city.selected {
     padding: 8px;
   }
 }
+
 @media(max-width:576px){
   .date-custom-1{
     font-size: 9px;
   }
   .calendar-custom-1{
-    width: 400px !important;
+    width: 400px;
   }
   .list-tp .list{
     display: none;
   }
   .city-selects{
-    display: block;
+    display: block !important;
     border: none !important;
     margin-top: 20px;
     
-      width: 390px !important;
+      width: 340px !important;
      
     
     
@@ -535,8 +543,13 @@ right: 15px;
   padding: 0px; /* Giảm khoảng cách bên trong */
   margin: 0px; /* Giảm khoảng cách giữa các ngày để chúng sát nhau hơn */
 }
+@media (max-width:390px) {
+  .calendar-custom-1 {
+    width: 347px !important;
 }
-.title{
+}
+}
+.titles{
   text-align: center !important;
 }
 .calendar-custom-1 {

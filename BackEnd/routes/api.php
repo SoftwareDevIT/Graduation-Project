@@ -160,8 +160,8 @@ Route::get('filterNewByActor/{actor}', [ActorController::class,'filterNewByActor
 Route::get('filterNewByDictor/{director}', [DirectorController::class,'filterNewByDictor']);        // Lọc bài viết liên quan tới đạo diễn
 Route::get('filterNewByMovie/{movie}', [MovieController::class,'filterNewByMovie']);                // Lọc bài viết liên quan tới phim
 Route::get('ratings/{movie}', [RatingController::class, 'show']);                                   // Xem dánh giá phim
-Route::get('rating', [RatingController::class, 'index']);                                           // Xem all dánh giá 
-
+Route::get('rating', [RatingController::class, 'index']);                                           // Xem all dánh giá
+Route::get('filterMoviePopular', [MovieController::class,'moviePopular']);                // Lọc bài viết liên quan tới phim
 
 Route::apiResource('order', OrderController::class);
 Route::group(['middleware' => ['auth:sanctum']], function () {

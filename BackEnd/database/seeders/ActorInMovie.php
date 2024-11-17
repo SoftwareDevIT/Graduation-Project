@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -13,32 +12,24 @@ class ActorInMovie extends Seeder
      */
     public function run(): void
     {
-        DB::table('actor_in_movies')->insert([
-            [
-                'movie_id' => 1,
-                'actor_id' => 1,
-            
+        // Lấy danh sách tất cả movie_id từ bảng movies
+        $movies = DB::table('movies')->pluck('id');
 
-            ],
-            [
-                'movie_id' => 1,
-                'actor_id' => 2,
+        // Lặp qua từng movie_id
+        foreach ($movies as $movieId) {
+            // Lấy ngẫu nhiên 5 actor_id từ bảng actors
+            $randomActors = DB::table('actor')->inRandomOrder()->limit(5)->pluck('id');
 
-            ],
-            [
-                'movie_id' => 2,
-                'actor_id' => 3,
+            // Chuẩn bị dữ liệu để chèn
+            $actorInMoviesData = $randomActors->map(function ($actorId) use ($movieId) {
+                return [
+                    'movie_id' => $movieId,
+                    'actor_id' => $actorId,
+                ];
+            })->toArray();
 
-            ],
-            [
-                'movie_id' => 3,
-                'actor_id' => 4,
-
-            ],
-            [
-                'movie_id' => 4,
-                'actor_id' => 5,
-            ]
-        ]);
+            // Chèn dữ liệu vào bảng actor_in_movies
+            DB::table('actor_in_movies')->insert($actorInMoviesData);
+        }
     }
 }

@@ -88,7 +88,7 @@
     font-size: 18px;
     height: 50px;
 background: #edf2f9;
-width: 440px;
+width: 400px;
 right: 20px;
 top:-20px;
 padding-top: 12px;
@@ -103,7 +103,10 @@ font-weight: 600px;
     border-bottom: 1px solid #e3ebf6;
     padding-bottom: 15px;
 }
-
+.noidung a{
+    text-decoration: none;
+    color: #333;
+}
 .noidung h4 {
     margin: 0;
     font-size: 17px;
@@ -144,13 +147,34 @@ padding-left: 20px;
 border-radius: 5px 5px 0 0;
 }
 
-@media (max-width:576px) {
+@media (max-width:768px){
+ .tintucmoi{
+    margin-left: 90px;
+ }
+ .chuyenmuc{
+    margin-left: 90px ;
+    width: 600px;
+ }
+ .chuyenmuc h3{
+    width: 600px;
+ }
+}
+@media (max-width:576px ) {
     .tintucmoi h2{
-        width: 430px;
+        width: 393px;
     }
     .tintucmoi{
         position: relative;
+       
         right: 90px;
+        
+    }
+    .chuyenmuc{
+        width: 390px;
+   margin-left: 7px;
+    }
+    .chuyenmuc h3 {
+        width: 390px !important;
     }
     
 }

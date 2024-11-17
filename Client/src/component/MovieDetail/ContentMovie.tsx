@@ -6,8 +6,8 @@ import Footer from '../Footer/Footer';
 import { useParams } from 'react-router-dom';  // Import useParams
 import instance from '../../server'; // Ensure you import the API instance correctly
 import { Movie } from '../../interface/Movie'; // Import Movie interface
-import { Location } from '../../interface/Location'; // Import Location interface
-
+import { useCountryContext } from '../../Context/CountriesContext';
+import { stripHtml } from '../../assets/Font/quillConfig';
 interface Props {}
 
 export const ContentMovie = (props: Props) => {
@@ -15,7 +15,8 @@ export const ContentMovie = (props: Props) => {
     const movieId = id ? parseInt(id) : null; // Parse the id to an integer
     const [ratings, setRatings] = useState<any[]>([]);  // State để lưu danh sách đánh giá
     const [movie, setMovie] = useState<Movie | null>(null); // Initialize state for the movie
-    const [locations, setLocations] = useState<Location[]>([]); // Initialize state for locations
+    const { state, fetchCountries } = useCountryContext();
+
     const [selectedLocation, setSelectedLocation] = useState<string>(''); // Initialize state for the selected location
     const [relatedPosts, setRelatedPosts] = useState<any[]>([]); // Initialize state for related posts
     const [loading, setLoading] = useState<boolean>(true);  // Trạng thái tải
@@ -36,17 +37,8 @@ export const ContentMovie = (props: Props) => {
     }, [movieId]); // Fetch movie details when movieId changes
 
     useEffect(() => {
-        const fetchLocations = async () => {
-            try {
-                const response = await instance.get('/location'); // Fetch locations from the API
-                setLocations(response.data?.data || []); // Store locations in state
-            } catch (error) {
-                console.error("Error fetching locations:", error);
-            }
-        };
-
-        fetchLocations(); // Fetch locations when the component mounts
-    }, []);
+        fetchCountries(); // Gọi fetchCountries khi component mount
+      }, [fetchCountries]);
     useEffect(() => {
         if (id) {
             setLoading(true);
@@ -56,12 +48,12 @@ export const ContentMovie = (props: Props) => {
                     if (response.data.status) {
                         setRatings(response.data.data);  // Lưu đánh giá vào state
                     } else {
-                        setError("Không có đánh giá cho phim này.");
+                        // setError("Không có đánh giá cho phim này.");
                     }
                     setLoading(false);
                 })
                 .catch((error) => {
-                    setError(error.message);
+                    // setError(error.message);
                     setLoading(false);
                 });
         } else {
@@ -73,12 +65,12 @@ export const ContentMovie = (props: Props) => {
         const fetchRelatedPosts = async () => {
             if (movieId) {
                 try {
-                    const response = await instance.get(`/filterNewByMovie/${movieId}`); // Fetch related posts by movieId
-                    if (response.data?.status) {
-                        setRelatedPosts(response.data.data); // Store related posts in state
+                    const response = await instance.get(`/filterNewByMovie/${movieId}`); 
+                    if (response.data?.status) {    
+                        setRelatedPosts(response.data.data);
                     }
                 } catch (error) {
-                    console.error("Error fetching related posts:", error);
+                    // console.error("Error fetching related posts:", error);
                 }
             }
         };
@@ -122,7 +114,7 @@ export const ContentMovie = (props: Props) => {
                                 value={selectedLocation}
                                 onChange={handleLocationChange}
                             >
-                                {locations.map((location) => (
+                                {state.countries.map((location) => (
                                     <option key={location.id} value={location.id.toString()}>
                                         {location.location_name}
                                     </option>
@@ -148,7 +140,7 @@ export const ContentMovie = (props: Props) => {
                                     <div className="post-info">
                                         <a href="#" className="post-title">{post.title}</a>
                                         <p className="post-meta">Đánh giá phim • miduynph • 6 ngày trước</p>
-                                        <p className="post-meta-2">{post.content.slice(0, 150)}...</p> {/* Display a truncated version of the content */}
+                                        <p className="post-meta-2">{stripHtml(post.content.slice(0, 150))}...</p> {/* Display a truncated version of the content */}
                                     </div>
                                 </div>
                             ))}

@@ -27,6 +27,8 @@ class UpdateShowtimeRequest extends FormRequest
             'showtime_start'     => 'required|date_format:H:i:s',
             'showtime_end'       => 'required|date_format:H:i:s|after:showtime_start',
             'price'              => 'required|numeric|min:0',
+            "status" => "integer",
+            "room_id" => "integer",
         ];
     }
 }

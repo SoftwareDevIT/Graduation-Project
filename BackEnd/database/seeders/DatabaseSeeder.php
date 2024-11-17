@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
     {
 
         $this->call([
-                // RoleSeeder::class,
+            // RoleSeeder::class,
             LocationSeeder::class,
             CinemaSeeder::class,
             PayMethodSeeder::class,
@@ -32,9 +32,13 @@ class DatabaseSeeder extends Seeder
             RoomSeeder::class,
             MovieInCinema::class,
             ActorInMovie::class,
+            DirectorInMovie::class,
+            CategoryInMovieSeeder::class,
             ShowtimeSeeder::class,
             CategorySeatSeeder::class,
-            // SeatSeeder::class,
+            RatingSeeder::class,
+            FavoriteSeeder::class,
+
         ]);
         // Tạo các quyền
         $permissions = [
@@ -48,7 +52,7 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($permissions as $permission) {
-         // kiểm tra xem có phải sự cho phép đã tồn tại không, nếu không, hãy tạo nó
+            // kiểm tra xem có phải sự cho phép đã tồn tại không, nếu không, hãy tạo nó
             Permission::firstOrCreate(['name' => $permission]);
         }
 
@@ -61,7 +65,7 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($roles as $roleName) {
-          // kiểm tra xem vai trò đã tồn tại, nếu không, hãy tạo nó
+            // kiểm tra xem vai trò đã tồn tại, nếu không, hãy tạo nó
             $role = Role::firstOrCreate(['name' => $roleName]);
 
             // Gán tất cả các quyền cho vai trò 'admin'
@@ -73,12 +77,14 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-        // Gán vai trò 'admin' cho người dùng với ID 2
-        $user = User::find(1); // Giả sử người dùng có ID 2 tồn tại
-        if ($user) {
-            $user->assignRole('admin');
-        }else{
-            $user->assignRole('user');
+
+        $users = User::all();
+        foreach ($users as $user) {
+            if ($user->id === 1) {
+                $user->assignRole('admin');
+            } else {
+                $user->assignRole('user');
+            }
         }
     }
 }
