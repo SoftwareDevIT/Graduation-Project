@@ -26,7 +26,7 @@ class ActorSeeder extends Seeder
                 'slug' => $item['slug'],
                 'descripcion' => $item['description'],
                 'country' => $item['country'],
-                'link_wiki' => '',
+                'link_wiki' => 'https://vi.wikipedia.org/wiki/'.$item['name'],
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
