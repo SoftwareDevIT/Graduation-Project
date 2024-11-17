@@ -113,18 +113,3 @@
     color: #e74c3c;
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
-    .order-table th, .order-table td {
-        font-size: 0.875rem;
-        padding: 10px;
-    }
-
-    .action-buttons {
-        flex-direction: column;
-    }
-
-    .action-buttons button {
-        margin: 5px 0;
-    }
-}

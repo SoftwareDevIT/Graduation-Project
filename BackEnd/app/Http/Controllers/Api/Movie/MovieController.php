@@ -8,6 +8,7 @@ use App\Http\Requests\Movie\Update\UpdateMovieRequest;
 use App\Models\Movie;
 use App\Models\MovieCategory;
 use App\Models\MovieCategoryInMovie;
+use App\Models\MovieInCinema;
 use App\Models\News;
 use App\Models\Showtime;
 use App\Services\Movie\MovieService;
@@ -42,14 +43,16 @@ class MovieController extends Controller
     {
         try {
             $file = $request->file('poster');
+            $thumbnailFile = $request->file('thumbnail'); // Nhận tệp thumbnail
             $movie = $request->validated();
             $movie['poster'] = $file ? $this->uploadImage($file) : null;
+            $movie['thumbnail'] = $thumbnailFile ? $this->uploadImage($thumbnailFile) : null; // Tải lên thumbnail
 
             DB::transaction(function () use ($movie, $request) {
                 $movie = $this->movieService->store($movie);
 
                 // Gắn các mối quan hệ
-                $movie->category()->sync($request->movie_category_id);
+                $movie->movie_category()->sync($request->movie_category_id);
                 $movie->actor()->sync($request->actor_id);
                 $movie->director()->sync($request->director_id);
             });
@@ -82,18 +85,24 @@ class MovieController extends Controller
     public function update(UpdateMovieRequest $request, string $id)
     {
         try {
-            $file = $request->file('poster');
-            $oldImgageActor  = $this->movieService->get($id);
+            $posterFile = $request->file('poster');
+            $thumbnailFile = $request->file('thumbnail'); // Nhận tệp thumbnail
+            $oldImage = $this->movieService->get($id);
 
-            $imageLink =  $file ? $this->uploadImage($file) :  $oldImgageActor->poster;
+            // Xử lý hình ảnh poster
+            $imageLink = $posterFile ? $this->uploadImage($posterFile) : $oldImage->poster;
+
+            // Xử lý hình ảnh thumbnail
+            $thumbnailLink = $thumbnailFile ? $this->uploadImage($thumbnailFile) : $oldImage->thumbnail; // Giả sử có trường thumbnail trong $oldImageActor
 
             // Lấy dữ liệu đã được xác thực từ request
             $movie = $request->validated();
             $movie['poster'] = $imageLink;
+            $movie['thumbnail'] = $thumbnailLink; // Thêm trường thumbnail vào dữ liệu movie
 
             $movie = $this->movieService->update($id, $movie);
 
-            $movie->category()->sync($request->movie_category_id);
+            $movie->movie_category()->sync($request->movie_category_id);
             $movie->actor()->sync($request->actor_id);
             $movie->director()->sync($request->director_id);
 
@@ -113,7 +122,7 @@ class MovieController extends Controller
 
             if ($movie) {
                 $movie->actor()->detach();
-                $movie->category()->detach();
+                $movie->movie_category()->detach();
                 $movie->director()->detach();
             }
 
@@ -193,6 +202,27 @@ class MovieController extends Controller
             }
 
             return $this->success($new, 'Bài viết liên quan đến phim: ', 200);
+        } catch (Exception $e) {
+            return $this->error('Lỗi: ' . $e->getMessage(), 500);
+        }
+    }
+
+    public function moviePopular()
+    {
+        try {
+            $movieInCinemaIds = Showtime::pluck('movie_in_cinema_id')->unique();
+            $movies = Movie::whereIn(
+                'id',
+                MovieInCinema::whereIn(
+                    'id',
+                    $movieInCinemaIds
+                )->distinct()->pluck('movie_id')
+            )
+                ->orderBy('rating', 'desc')
+                ->get();
+
+            return $this->success($movies, 'Danh sách phim phổ biến: ', 200);
+            // return $this->success($moviesByWeek, 'Danh sách phim sắp chiếu: ', 200);
         } catch (Exception $e) {
             return $this->error('Lỗi: ' . $e->getMessage(), 500);
         }

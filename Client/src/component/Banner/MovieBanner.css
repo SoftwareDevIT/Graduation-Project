@@ -1,9 +1,9 @@
 /* Container for the entire movie banner section */
 .movie-banner {
   margin: 0;
-  padding: 30px;
+  padding: 65px;
   background-color: white;  
- 
+ margin-top: -40px;
 }
 
 /* Header for the banner with the currently showing and upcoming movies */
@@ -88,10 +88,14 @@
   text-align: center;
   margin-top: -20px;
 }
-
+.buy-ticket a{
+  text-decoration: none;
+  color: aliceblue;
+}
 .buy-ticket:hover {
   background-color: #c82333;
 }
+
 .name_movie {
        /* Chiều rộng tối đa cho tên phim */
   white-space: nowrap;  /* Không cho xuống dòng */
@@ -105,6 +109,20 @@
   font-weight: bold;
   text-align: right;
   margin-left: 127px;
+}
+.slick-dots {
+  display: flex;
+  justify-content: center;
+  overflow: hidden; /* Ẩn các dấu chấm ngoài vùng hiển thị */
+}
+
+.slick-dots li {
+  max-width: 50px; /* Giới hạn độ rộng của mỗi dấu chấm */
+  flex-shrink: 0;
+}
+
+.slick-dots li:nth-child(n+5) {
+  display: none; /* Ẩn các dấu chấm từ thứ 5 trở đi */
 }
 
 /* Responsive styles for mobile phones */
@@ -131,7 +149,10 @@
 /* Responsive styles for smaller mobile screens */
 @media (max-width: 480px) {
   .slider-container {
-    width: 100%; /* Full width for mobile */
+    width: 400px; /* Full width for mobile */
+  position: relative
+  ;
+  right: 50px;
   }
 
   .movie-item {
@@ -147,4 +168,20 @@
     font-size: 0.75em;
     padding: 5px;
   }
+}
+
+
+.slick-dots {
+  display: flex;
+  justify-content: center;
+  overflow: hidden; /* Ẩn các dấu chấm ngoài vùng hiển thị */
+}
+
+.slick-dots li {
+  max-width: 50px; /* Giới hạn độ rộng của mỗi dấu chấm */
+  flex-shrink: 0;
+}
+
+.slick-dots li:nth-child(n+5) {
+  display: none; /* Ẩn các dấu chấm từ thứ 5 trở đi */
 }

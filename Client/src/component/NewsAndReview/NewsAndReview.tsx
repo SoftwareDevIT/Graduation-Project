@@ -14,6 +14,9 @@ const NewsAndReview = () => {
       try {
         const response = await instance.get('/news');
         setNewsData(response.data.data || []);
+        console.log(response);
+        
+        
       } catch (error) {
         console.error('Error fetching news data:', error);
       }
@@ -40,9 +43,12 @@ const NewsAndReview = () => {
           <div className="news-item" key={index}>
             <img className="news-image-placeholder" src={news.thumnail || 'https://via.placeholder.com/150'} alt={news.title} />
             <div className="news-content">
-              <Link to={`/postdetail/${news.id}`}><h3>{news.title}</h3></Link>
-              
+              <Link to={`/postdetail/${news.id}`}><h3>{news.title}</h3>
+             
+              </Link>
+              <span>{news.user.fullname}</span>
               <p>{news.content.substring(0, 100)}...</p>
+             
             </div>
           </div>
         ))}

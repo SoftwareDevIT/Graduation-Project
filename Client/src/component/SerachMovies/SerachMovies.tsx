@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom"; // Lấy movie_name từ URL
+import { Link, useParams } from "react-router-dom"; // Lấy movie_name từ URL
 import Header from "../Header/Hearder";
 import Footer from "../Footer/Footer";
 import "./SerachMovies.css";
@@ -21,7 +21,7 @@ const SearchMovies = () => {
       .get(`/movie/search/${movie_name}`)
       .then((response) => {
         setMovies(response.data.data);
-        setLoading(false); // Tải xong
+        setLoading(false); 
       })
       .catch((error) => {
         console.error("Có lỗi xảy ra khi tìm kiếm phim:", error);
@@ -51,12 +51,13 @@ const SearchMovies = () => {
           {/* Hiển thị kết quả tìm kiếm */}
           {!loading && !error && (
             <div className="movelikeone">
-              <h3>Phim</h3>
+              <h3 className="phimtile">Phim</h3>
               <div className={`row move-itemone ${movies.length > 1 ? "more-than-one" : ""}`}>
   {movies.length > 0 ? (
     movies.map((movie) => (
       <div key={movie.id} className="col-lg-2 move-itemone-1">
-        <img src={movie.poster || undefined} alt={movie.name} />
+         <Link state={{ movieId: movie.id }} to={`/movie-detail/${movie.id}`}> <img src={movie.poster || undefined} alt={movie.name} /></Link>
+       
         <h4>{movie.movie_name}</h4>
         <p>{movie.release_date}</p>
       </div>

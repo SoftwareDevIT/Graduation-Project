@@ -1,4 +1,5 @@
 import { NewsCategory } from "./NewsCategory";
+import { User } from "./User";
 
 // News.interface.ts
 export interface NewsItem {
@@ -6,6 +7,7 @@ export interface NewsItem {
     title: string;
     news_category: NewsCategory
     news_category_id: number;
+    user:User;
     thumnail: string;
     banner:string;
     content: string;

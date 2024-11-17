@@ -198,9 +198,11 @@ bottom: 20px;
     font-weight: 400 !important;
  
     font-size: .9375rem;
-  
+  padding-left: 20px;
+  padding-top: 20px;
     border-top: 1px solid #e2e8f0; /* Đường viền trên để tách biệt */
 }
+
 
 .sub-cinema-item {
     padding: 10px; /* Padding cho rạp con */

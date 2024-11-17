@@ -22,11 +22,13 @@ const MovieShowing: React.FC = () => {
   const fetchGenres = async () => {
     try {
       const response = await instance.get("/movie-category");
-      setGenres(response.data);
+      setGenres(response.data.data);
 
       // Tìm thể loại có nhiều phim nhất
-      if (response.data.length > 0) {
-        const mostPopularGenreId = response.data[1].id; // Giả sử thể loại đầu tiên là thể loại có nhiều phim nhất
+      if (response.data.data.length > 0) {
+        const mostPopularGenreId = response.data.data[0].id; // Giả sử thể loại đầu tiên là thể loại có nhiều phim nhất
+      
+        
         fetchMovies(mostPopularGenreId); // Gọi hàm fetchMovies với genreId
         setSelectedGenre(mostPopularGenreId); // Cập nhật trạng thái thể loại đã chọn
       }
@@ -102,6 +104,12 @@ const MovieShowing: React.FC = () => {
                 <option value="vietnamese">Tiếng Việt</option>
                 <option value="english">Tiếng Anh</option>
                 <option value="japanese">Tiếng Nhật</option>
+              </select>
+              <select value={selectedLanguage} onChange={handleLanguageChange} className="filter-select">
+                <option value="">Phim sắp chiếu</option>
+                <option value="vietnamese">....</option>
+                <option value="english">......</option>
+                <option value="japanese">.....</option>
               </select>
             </div>
 

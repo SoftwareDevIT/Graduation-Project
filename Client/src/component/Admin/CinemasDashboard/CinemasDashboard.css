@@ -22,8 +22,17 @@
 .actions {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 20px;
+    align-items: center;
 }
+
+.search-cinema-input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    width: 200px;
+}
+
 
 .add-cinema-btn {
     padding: 10px 20px;
@@ -113,9 +122,7 @@
     color: #e74c3c;
 }
 
-.delete-btn:hover {
-    color: #c0392b;
-}
+
 
 /* Align the "Actions" header */
 .cinema-table th:last-child {

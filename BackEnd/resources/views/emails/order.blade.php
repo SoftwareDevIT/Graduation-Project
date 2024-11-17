@@ -278,7 +278,7 @@
 <body>
     <div class="email-confirm-container">
         <header class="email-confirm-header">
-            <h1 class="email-confirm-event-title">eventbrite</h1>
+            <h1 class="email-confirm-event-title">FlickHive</h1>
             <p class="email-confirm-confirmation-msg">Trần Quang Huy, you're good to go</p>
             <div class="email-confirm-ticket-icon">
                 <img src="https://img.icons8.com/?size=100&id=pwpz1tqVnCQy&format=png&color=000000" alt="ticket icon" />
@@ -336,7 +336,7 @@
             <p>Payment method: {{ $booking->payMethod->pay_method_name }}</p>
         </section>
         <footer class="email-confirm-footer">
-            <p class="footer-brand">Eventbrite</p>
+            <p class="footer-brand">FlickHive</p>
             <div class="email-confirm-social-links">
                 <a href="#" aria-label="Instagram">
                     <img src="https://img.icons8.com/?size=100&id=32292&format=png&color=ffffff" alt="Instagram" />

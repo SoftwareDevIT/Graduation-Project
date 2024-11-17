@@ -308,3 +308,8 @@ font-weight: 500;
   }
 }
 
+@media (max-width:390px) {
+  .main-content{
+    width: 390px !important;
+  }
+}

@@ -34,9 +34,9 @@ const CategoriesForm = () => {
       if (isEditMode) {
         try {
           const response = await instance.get(`/movie-category/${id}`);
-          const fetchedCategory = response.data.data; // Assuming your data is nested under 'data'
+          const fetchedCategory = response.data.data;
           setCategory(fetchedCategory);
-          reset(fetchedCategory); // Populate the form with fetched data
+          reset(fetchedCategory);
         } catch (error) {
           console.error('Failed to fetch category:', error);
         }
@@ -63,27 +63,31 @@ const CategoriesForm = () => {
     }
   };
 
-  if (isEditMode && !category) return <div>Loading...</div>; // Loading state
+  if (isEditMode && !category) return <div>Loading...</div>;
 
   return (
     <div className="container mt-5">
-      <form onSubmit={handleSubmit(handleFormSubmit)} className="shadow p-4 rounded bg-light">
-        <h1 className="text-center mb-4">{isEditMode ? 'Edit Category' : 'Add Category'}</h1>
+      <form onSubmit={handleSubmit(handleFormSubmit)} className="shadow-lg p-4 rounded bg-white">
+        <h2 className="text-center mb-4 text-primary">{isEditMode ? 'Edit Category' : 'Add New Category'}</h2>
 
-        <div className="mb-3">
-          <label htmlFor="category_name" className="form-label">Category Name</label>
+        <div className="form-group mb-3">
+          <label htmlFor="category_name" className="form-label fw-bold">Category Name</label>
           <input
             type="text"
             className={`form-control ${errors.category_name ? 'is-invalid' : ''}`}
             {...register('category_name')}
-            defaultValue={category?.category_name || ''} // Bind the input value correctly
+            defaultValue={category?.category_name || ''}
           />
-          {errors.category_name && <span className="text-danger">{errors.category_name.message}</span>}
+          {errors.category_name && (
+            <div className="invalid-feedback">{errors.category_name.message}</div>
+          )}
         </div>
 
-        <button type="submit" className="btn btn-primary">
-          {isEditMode ? 'Update Category' : 'Add Category'}
-        </button>
+        <div className="d-flex justify-content-center mt-4">
+          <button type="submit" className="btn btn-primary px-4 py-2">
+            {isEditMode ? 'Update Category' : 'Add Category'}
+          </button>
+        </div>
       </form>
     </div>
   );

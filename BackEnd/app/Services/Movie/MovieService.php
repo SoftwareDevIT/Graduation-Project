@@ -13,52 +13,21 @@ class MovieService
 {
     public function index()
     {
-        $movies = Movie::with(
-            [
-                'actor:actor_name,id',
-                'director:director_name,id',
-                'category:category_name,id',
-                'movieInCinemas.cinema:id,cinema_name'
-            ]
-        )->get();
+        $movies = Movie::with(['actor', 'director', 'movie_category', 'movieInCinemas'])->get();
 
         $formattedMovies = $movies->map(function ($movie) {
-            return [
-                'id' => $movie->id,
-                'movie_name' => $movie->movie_name,
-                'poster' => $movie->poster,
-                'duration' => $movie->duration,
-                'release_date' => $movie->release_date,
-                'age_limit' => $movie->age_limit,
-                'description' => $movie->description,
-                'trailer' => $movie->trailer,
-                'rating' => $movie->rating,
-                'status' => $movie->status,
-                'actor' =>  $movie->actor->map(function ($actor) {
-                    return [
-                        'id' => $actor->id,
-                        'actor_name' => $actor->actor_name
-                    ];
-                }),
-                'director' => $movie->director->map(function ($director) {
-                    return [
-                        'id' => $director->id,
-                        'director_name' => $director->director_name
-                    ];
-                }),
-                'category' => $movie->category->map(function ($category) {
-                    return [
-                        'id' => $category->id,
-                        'category_name' => $category->category_name
-                    ];
-                }),
-                'movie_in_cinemas' => $movie->movieInCinemas->map(function ($cinema) {
-                    return [
+            return array_merge(
+                $movie->toArray(),
+                [
+                    'actor' => $movie->actor->map(fn($actor) => $actor->only(['id', 'actor_name'])),
+                    'director' => $movie->director->map(fn($director) => $director->only(['id', 'director_name'])),
+                    'movie_category' => $movie->movie_category->map(fn($category) => $category->only(['id', 'category_name'])),
+                    'movie_in_cinemas' => $movie->movieInCinemas->map(fn($cinema) => [
                         'id' => $cinema->id,
-                        'cinema_name' => $cinema->cinema->cinema_name  // Lấy tên rạp từ quan hệ
-                    ];
-                }),
-            ];
+                        'cinema_name' => $cinema->cinema->cinema_name
+                    ]),
+                ]
+            );
         });
 
         return response()->json($formattedMovies);
@@ -89,51 +58,19 @@ class MovieService
 
     public function show($id)
     {
-        $movie = Movie::with([
-            'actor:actor_name,id',
-            'director:director_name,id',
-            'category:category_name,id',
-            'movieInCinemas.cinema:id,cinema_name'
-        ])->findOrFail($id);
+        $movie = Movie::with(['actor', 'director', 'movie_category', 'movieInCinemas'])->findOrFail($id);
 
-        $formattedMovies = [
-            'id' => $movie->id,
-            'movie_name' => $movie->movie_name,
-            'poster' => $movie->poster,
-            'duration' => $movie->duration,
-            'release_date' => $movie->release_date,
-            'age_limit' => $movie->age_limit,
-            'description' => $movie->description,
-            'trailer' => $movie->trailer,
-            'rating' => $movie->rating,
-            'status' => $movie->status,
-            'actor' =>  $movie->actor->map(function ($actor) {
-                return [
-                    'id' => $actor->id,
-                    'actor_name' => $actor->actor_name
-                ];
-            }),
-            'director' => $movie->director->map(function ($director) {
-                return [
-                    'id' => $director->id,
-                    'director_name' => $director->director_name
-                ];
-            }),
-            'category' => $movie->category->map(function ($category) {
-                return [
-                    'id' => $category->id,
-                    'category_name' => $category->category_name
-                ];
-            }),
-            'movie_in_cinemas' => $movie->movieInCinemas->map(function ($cinema) {
-                return [
-                    'id' => $cinema->id,
-                    'cinema_name' => $cinema->cinema->cinema_name  // Lấy tên rạp từ quan hệ
-                ];
-            }),
-        ];
+        // Chuyển đổi thành mảng và định dạng lại dữ liệu
+        $formattedMovie = $movie->toArray();
+        $formattedMovie['actor'] = $movie->actor->map(fn($actor) => $actor->only(['id', 'actor_name']));
+        $formattedMovie['director'] = $movie->director->map(fn($director) => $director->only(['id', 'director_name']));
+        $formattedMovie['movie_category'] = $movie->movie_category->map(fn($category) => $category->only(['id', 'category_name']));
+        $formattedMovie['movie_in_cinemas'] = $movie->movieInCinemas->map(fn($cinema) => [
+            'id' => $cinema->id,
+            'cinema_name' => $cinema->cinema->cinema_name,
+        ]);
 
-        return response()->json($formattedMovies);
+        return response()->json($formattedMovie);
     }
 
     public function get(int $id): Movie

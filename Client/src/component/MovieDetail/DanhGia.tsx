@@ -1,56 +1,79 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import "./MovieDetail.css";
-import Header from "../Header/Hearder";
+
 import Footer from "../Footer/Footer";
 import MovieDetail from "./MovieDetail";
+import instance from "../../server";
+
 
 const DanhGia: React.FC = () => {
+    const { id } = useParams<{ id: string }>();  // Lấy id từ URL
+    const [ratings, setRatings] = useState<any[]>([]);  // State để lưu danh sách đánh giá
+    const [loading, setLoading] = useState<boolean>(true);  // Trạng thái tải
+    const [error, setError] = useState<string | null>(null);  // Trạng thái lỗi
+
+    // Gọi API lấy danh sách đánh giá
+    useEffect(() => {
+        if (id) {
+            setLoading(true);
+            instance
+                .get(`/ratings/${id}`)  // Thay đổi từ fetch thành instance.get
+                .then((response) => {
+                    if (response.data.status) {
+                        setRatings(response.data.data);  // Lưu đánh giá vào state
+                    } else {
+                        setError("Không có đánh giá cho phim này.");
+                    }
+                    setLoading(false);
+                })
+                .catch((error) => {
+                    setError(error.message);
+                    setLoading(false);
+                });
+        } else {
+            setError("ID phim không tồn tại.");
+            setLoading(false);
+        }
+    }, [id]);
+
+    if (loading) {
+        return <div>Đang tải đánh giá...</div>;
+    }
+
+
     return (
         <>
+           
+       
+                        <MovieDetail />
 
-            <MovieDetail />
-            {/* Phần chọn lịch chiếu */}
-            <div className="content">
-                <div className="container">
-                    <div className="community-section">
-                        <h3>Cộng đồng</h3>
-                        <div className="comment">
-                            <p className="comment-user">
-                                <i className="fas fa-user-circle avatar-icon"></i> {/* Icon Font Awesome */}
-                                <strong>VoDucTri744</strong>
-                                <span className="comment-rating">⭐ 8</span> • 4 ngày trước
-                            </p>
-                            <p className="comment-text">
-                                Lồng tiếng ok, hài hước còn lại nội dung nhưng do t chưa hiểu câu chuyện về TPM lắm nên chủ yếu lồng tiếng có ảnh KMT, QNT vs đặc biệt là CP nên sr sr.
-                            </p>
-                            <div className="comment-actions">
-                                <button className="like-btn">👍</button>
-                                <button className="dislike-btn">👎</button>
-                            </div>
+                        <div className="community-section">
+                            <h3>Cộng đồng</h3>
+
+                            {/* Lặp qua danh sách đánh giá và hiển thị */}
+                            {ratings.length > 0 ? (
+                                ratings.map((rating) => (
+                                    <div className="comment" key={rating.id}>
+                                        <p className="comment-user">
+                                            <i className="fas fa-user-circle avatar-icon"></i>
+                                            <strong>{rating.user_name}</strong>
+                                            <span className="comment-rating">⭐ {rating.rating}</span> • {new Date(rating.created_at).toLocaleDateString()}
+                                        </p>
+                                        <p className="comment-text">
+                                            {rating.review || "Không có nội dung đánh giá."}
+                                        </p>
+                                        <div className="comment-actions">
+                                            <button className="like-btn">👍</button>
+                                            <button className="dislike-btn">👎</button>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <p>Chưa có đánh giá nào cho phim này.</p>
+                            )}
                         </div>
-
-
-                        <div className="comment">
-                            <p className="comment-user">
-                                <i className="fas fa-user-circle avatar-icon"></i> {/* Icon Font Awesome */}
-                                <strong>VoDucTri744</strong>
-                                <span className="comment-rating">⭐ 8</span> • 4 ngày trước
-                            </p>
-                            <p className="comment-text">
-                                Lồng tiếng ok, hài hước còn lại nội dung nhưng do t chưa hiểu câu chuyện về TPM lắm nên chủ yếu lồng tiếng có ảnh KMT, QNT vs đặc biệt là CP nên sr sr.
-                            </p>
-                            <div className="comment-actions">
-                                <button className="like-btn">👍</button>
-                                <button className="dislike-btn">👎</button>
-                            </div>
-                        </div>
-
-
-                    </div>
-
-                </div>
-            </div>
-
+                  
             <Footer />
         </>
     );
