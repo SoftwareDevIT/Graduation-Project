@@ -15,20 +15,19 @@ return new class extends Migration
             $table->id('id');
             $table->string('movie_name');
             $table->string('slug');
-            $table->integer('views');
-            $table->integer('like')->nullable();
             $table->string('poster')->nullable();
             $table->string('thumbnail')->nullable();
-            $table->string('duration')->nullable();
-            $table->date('release_date')->nullable();
-            $table->string('age_limit')->nullable();
-            $table->text('description')->nullable();
             $table->string('trailer')->nullable();
-            $table->float('rating')->nullable();
+            $table->string('duration')->nullable();
+            $table->string('age_limit')->nullable();
             $table->string('country')->nullable();
+            $table->text('description')->nullable();
+            $table->date('release_date')->nullable();
+            $table->float('rating')->nullable();
+            $table->integer('views');
+            $table->integer('like')->nullable();
             $table->boolean('status')->default(true);
             $table->timestamps();
-
         });
     }
 
