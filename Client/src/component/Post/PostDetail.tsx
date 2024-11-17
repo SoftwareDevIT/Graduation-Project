@@ -5,7 +5,7 @@ import Footer from '../Footer/Footer';
 import Header from '../Header/Hearder';
 import { NewsItem } from '../../interface/NewsItem';
 import instance from '../../server';
-
+import { stripHtml } from '../../assets/Font/quillConfig';
 const PostDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [article, setArticle] = useState<NewsItem | null>(null);
@@ -47,13 +47,13 @@ const PostDetail: React.FC = () => {
                     <div className="article-content-container">
                         <img src={article.thumnail} alt="Poster" className="article-poster" />
                         <div className="article-movie-info">
-                            <h2>{article.title}</h2>
+                            <h2>{stripHtml(article.title)}</h2>
                             {/* Bạn có thể thêm các thông tin khác nếu cần */}
                         </div>
                         <button className="article-button">Mua vé ngay</button>
                     </div>
 
-                    <p className="article-description">{article.content}</p>
+                    <p className="article-description">{stripHtml(article.content)}</p>
                     {/* Nếu bạn muốn giữ lại nội dung ban đầu, bạn có thể thêm phần nội dung ở đây */}
                 </div>
 

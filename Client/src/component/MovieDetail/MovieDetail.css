@@ -238,7 +238,7 @@ left: 10px;
 .content{
     background: #edf2f9;
    float: none;
-   padding-right: 150px;
+   padding-right: 261px;
    margin-top: 0px;
    margin-bottom:-30px;
    padding-bottom: 30px;
@@ -454,7 +454,7 @@ left: 10px;
     font-size: 20px;
 }
 .ngoisao{
-    margin-top:7px;
+    margin-top:6px;
 }
   /* Cho màn hình máy tính bảng */
 @media (max-width: 1024px) {
@@ -488,9 +488,9 @@ left: 10px;
         justify-content: space-between;
       }
     .tabs {
-        flex-direction: column;
+   
         gap: 10px;
-        padding-left: 0;
+        padding-left: 206px;
         margin-left: 0;
     }
 
@@ -586,5 +586,12 @@ width: 60px;
         margin-right: 12px;
     
     }
+    .actions  {
+         gap :15px
+    }
 
+     .rate .like-1{
+        padding-left: 10px;
+        font-size: 12px !important;
+     }
 }

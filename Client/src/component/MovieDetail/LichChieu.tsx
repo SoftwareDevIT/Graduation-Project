@@ -8,43 +8,35 @@ import { useNavigate, useParams, useLocation } from "react-router-dom"; // Lấy
 import { Location } from "../../interface/Location";
 import { Cinema } from "../../interface/Cinema";
 import { Showtime } from "../../interface/Showtime";
+import { useCountryContext } from "../../Context/CountriesContext";
 
 const LichChieuUpdated: React.FC = () => {
     const { id } = useParams<{ id: string }>(); // Lấy ID phim từ URL
     const location = useLocation(); // Lấy location để nhận dữ liệu từ MovieDetail
     const [cinemas, setCinemas] = useState<Cinema[]>([]);
-    const [locations, setLocations] = useState<Location[]>([]);
+ 
     const [selectedLocation, setSelectedLocation] = useState<string>("");
     const [error, setError] = useState<string | null>(null);
     const [expandedIndex, setExpandedIndex] = useState<number | null>(null); // Để mở rộng rạp chiếu
     const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split("T")[0]); // Lấy ngày hôm nay
     const navigate = useNavigate();
 
-    // Nhận thông tin phim từ location
     const movie = location.state?.movie; // Lấy thông tin phim từ location state
 
     
 
-    // Fetch locations
-    useEffect(() => {
-        const fetchLocations = async () => {
-            try {
-                const response = await instance.get("/location");
-                setLocations(response.data?.data || []);
-            } catch (error) {
-                console.error("Error fetching locations:", error);
-                setError("Không thể tải danh sách khu vực.");
-            }
-        };
-        fetchLocations();
-    }, []);
+    const { state, fetchCountries } = useCountryContext();
+
+  useEffect(() => {
+    fetchCountries(); // Lấy danh sách khu vực khi component được render
+  }, [fetchCountries]);
 
     // Cập nhật selectedLocation khi có locations
     useEffect(() => {
-        if (locations.length > 0 && !selectedLocation) {
-            setSelectedLocation(locations[0].id.toString()); // Lấy ID khu vực đầu tiên
+        if (state.countries.length > 0 && !selectedLocation) {
+            setSelectedLocation(state.countries[0].id.toString()); // Lấy ID khu vực đầu tiên
         }
-    }, [locations, selectedLocation]);
+    }, [state, selectedLocation]);
 
     // Fetch cinemas and showtimes
     useEffect(() => {
@@ -113,11 +105,10 @@ const LichChieuUpdated: React.FC = () => {
                             value={selectedLocation}
                             onChange={(e) => setSelectedLocation(e.target.value)}
                         >
-                            {locations.map((location) => (
-                                <option key={location.id} value={location.id.toString()}>
-                                    {location.location_name}
-                                </option>
-                            ))}
+                             {state.countries.map((location) => (
+          <option key={location.id}  value={location.id.toString()}>{location.location_name}</option>
+        ))}
+                            
                         </select>
                         <select className="format-select-custom">
                             <option>Định dạng</option>

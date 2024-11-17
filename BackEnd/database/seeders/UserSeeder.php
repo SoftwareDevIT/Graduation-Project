@@ -7,6 +7,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;  // Import the Str class
 
 class UserSeeder extends Seeder
 {
@@ -21,7 +22,7 @@ class UserSeeder extends Seeder
                 'sex' => 'Male',
                 'password' => Hash::make('password'),
                 'email' => 'admin@gmail.com',
-                'phone' => '0123456789',
+                'phone' => '0979620125',
                 'address' => 'Ha Noi',
                 'fullname' => 'Admin',
                 'email_verified_at' => now(),
@@ -31,19 +32,22 @@ class UserSeeder extends Seeder
         $client = new Client();
         $response = $client->get('https://rapchieuphim.com/api/v1/users');
         $data = json_decode($response->getBody()->getContents(), true);
-        $data = array_slice($data, 0, 5);
+        $data = array_slice($data, 0, 200);
+
         foreach ($data as $item) {
+            $randomEmail = strtolower(Str::random(10)) . '@example.com';
+            $randomPhone = '0' . rand(100000000, 999999999);
             DB::table('users')->insert([
                 'user_name' => $item['name'],
                 'avatar' => $item['avatar'],
                 'sex' => $item['sex'],
                 'password' => Hash::make('password'),
-                'phone' => $item['phone'],
+                'email' => $randomEmail,
+                'phone' => $item['phone'] ?? $randomPhone,
                 'address' => 'Ha Noi',
-                'fullname' => $item['fullname'],
+                'fullname' => $item['name'],
                 'email_verified_at' => now(),
             ]);
         }
-
     }
 }

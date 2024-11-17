@@ -3,6 +3,8 @@
 namespace App\Services\News;
 
 use App\Models\News;
+use App\Models\NewsCategory;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -11,9 +13,9 @@ use Illuminate\Support\Facades\Storage;
 class NewService
 {
 
-    public function index()
+    public function index():Collection
     {
-        return News::with('user')->get();
+        return News::with('user','newsCategory')->get();
     }
 
 

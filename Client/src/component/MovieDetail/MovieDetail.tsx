@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
-import instance from "../../server";
-import { notification, Modal } from "antd"; 
+import { notification, Modal } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { stripHtml } from '../../assets/Font/quillConfig';
 import "./MovieDetail.css";
 import Header from "../Header/Hearder";
+import { useMovieContext } from "../../Context/MoviesContext";
+import instance from "../../server";
 
 const MovieDetail: React.FC = () => {
   const { id } = useParams();
   const location = useLocation();
-  const [movie, setMovie] = useState<any>(null);
+  const { state, fetchMovies } = useMovieContext(); // Get state and functions from context
   const [userStatus, setUserStatus] = useState({
     isLoggedIn: false,
     isFavorite: false,
@@ -24,39 +26,45 @@ const MovieDetail: React.FC = () => {
   });
   const [isTrailerVisible, setIsTrailerVisible] = useState(false);
 
-  const fetchMovieData = async () => {
-    try {
-      const movieResponse = await instance.get(`/movies/${id}`);
-      setMovie(movieResponse.data.data.original);
+  // Fetch movie details from the context's movie state
+  const movie = state.movies.find((movie) => movie.id === Number(id));
 
+
+  useEffect(() => {
+    fetchMovies(); // Chỉ gọi lại dữ liệu khi `id` thay đổi
+  }, [id]);
+
+  // Fetch additional user data (favorite movies, ratings) after login check
+  useEffect(() => {
+    const fetchUserData = async () => {
       const token = localStorage.getItem("token");
       const userId = localStorage.getItem("user_id");
 
       if (token && userId) {
-        const userResponse = await instance.get(`/user/${userId}`);
-        const { favorite_movies = [], ratings = [] } = userResponse.data.data;
+        try {
+          const userResponse = await instance.get(`/user/${userId}`);
+          const { favorite_movies = [], ratings = [] } = userResponse.data.data;
 
-        const isMovieFavorite = favorite_movies.some(
-          (favMovie: any) => favMovie.id === parseInt(id as string, 10)
-        );
-        const hasRated = ratings.some(
-          (rating: any) => rating.movie_id === parseInt(id as string, 10)
-        );
+          const isMovieFavorite = favorite_movies.some(
+            (favMovie: any) => favMovie.id === parseInt(id as string, 10)
+          );
+          const hasRated = ratings.some(
+            (rating: any) => rating.movie_id === parseInt(id as string, 10)
+          );
 
-        setUserStatus({
-          isLoggedIn: true,
-          isFavorite: isMovieFavorite,
-          isRated: hasRated,
-          favoriteMovies: favorite_movies,
-        });
+          setUserStatus({
+            isLoggedIn: true,
+            isFavorite: isMovieFavorite,
+            isRated: hasRated,
+            favoriteMovies: favorite_movies,
+          });
+        } catch (error) {
+          // console.error("Error fetching user data:", error);
+        }
       }
-    } catch (error) {
-      console.error("Lỗi khi lấy dữ liệu:", error);
-    }
-  };
+    };
 
-  useEffect(() => {
-    fetchMovieData();
+    fetchUserData();
   }, [id]);
 
   const handleFavoriteToggle = async () => {
@@ -123,6 +131,7 @@ const MovieDetail: React.FC = () => {
     }
   };
 
+
   return (
     <>
       <Header />
@@ -156,7 +165,7 @@ const MovieDetail: React.FC = () => {
                   </div>
                 </div>
 
-                <p className="description">{movie?.description || "Không có mô tả"}</p>
+                <p className="description">{stripHtml(movie?.description || "Không có mô tả")}</p>
 
                 <div className="movie-details">
                   <div>📅 Khởi chiếu: {movie?.release_date || "Chưa có ngày phát hành"}</div>
@@ -177,12 +186,22 @@ const MovieDetail: React.FC = () => {
         </div>
 
         <div className="tabs">
-          {["Thông tin phim", "Lịch chiếu", "Đánh giá", "Tin tức", "Mua vé"].map((tab, index) => (
-            <Link key={index} to={`/${tab.toLowerCase().replace(" ", "-")}/${id}`} className={`tab ${location.pathname.includes(tab.toLowerCase()) ? "active" : ""}`}>
-              {tab}
+            <Link to={`/movie-detail/${id}`} className={`tab ${location.pathname === `/movie-detail/${id}` ? "active" : ""}`}>
+              Thông tin phim
             </Link>
-          ))}
-        </div>
+            <Link to={`/schedule/${id}`} className={`tab ${location.pathname === `/schedule/${id}` ? "active" : ""}`}>
+              Lịch chiếu
+            </Link>
+            <Link to={`/reviews/${id}`} className={`tab ${location.pathname === `/reviews/${id}` ? "active" : ""}`}>
+              Đánh giá
+            </Link>
+            <Link to={`/news/${id}`} className={`tab ${location.pathname === `/news/${id}` ? "active" : ""}`}>
+              Tin tức
+            </Link>
+            <Link to={`/buy-now/${id}`} className={`tab ${location.pathname === `/buy-now/${id}` ? "active" : ""}`}>
+              Mua vé
+            </Link>
+          </div>
       </div>
 
       {/* Modal Đánh Giá */}
@@ -198,15 +217,39 @@ const MovieDetail: React.FC = () => {
                 <FontAwesomeIcon key={i} icon={faStar} color={i < ratingData.rating ? "#FFD700" : "#ccc"} onClick={() => setRatingData((prev) => ({ ...prev, rating: i + 1 }))} style={{ cursor: "pointer" }} />
               ))}
             </div>
-            <textarea value={ratingData.review} onChange={(e) => setRatingData((prev) => ({ ...prev, review: e.target.value }))} placeholder="Nhập đánh giá của bạn" rows={4} />
+            <textarea value={ratingData.review} onChange={(e) => setRatingData((prev) => ({ ...prev, review: e.target.value }))} />
           </div>
         </div>
       </Modal>
 
-      {/* Modal Trailer */}
-      <Modal title={movie?.movie_name} visible={isTrailerVisible} onCancel={() => setIsTrailerVisible(false)} footer={null}>
-        <iframe width="100%" height="315" src={movie?.trailer} title="Trailer" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
-      </Modal>
+
+    
+      <Modal
+  title={movie?.movie_name}  // Ẩn tiêu đề nếu không cần
+  visible={isTrailerVisible}
+  onCancel={() => setIsTrailerVisible(false)}
+  footer={null}
+  centered // Modal xuất hiện giữa màn hình
+  className="custom-modal"
+>
+  {movie?.trailer ? (
+    <iframe
+      width="100%"
+      height="100%"
+      src={movie.trailer}
+      title="Trailer"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowFullScreen
+      style={{ borderRadius: "10px", border: "none" }} // Tùy chỉnh giao diện iframe
+    ></iframe>
+  ) : (
+    <div className="no-trailer">
+      <p>Trailer không khả dụng</p>
+    </div>
+  )}
+</Modal>
+
+
     </>
   );
 };

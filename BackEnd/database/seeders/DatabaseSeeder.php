@@ -32,9 +32,13 @@ class DatabaseSeeder extends Seeder
             RoomSeeder::class,
             MovieInCinema::class,
             ActorInMovie::class,
+            DirectorInMovie::class,
+            CategoryInMovieSeeder::class,
             ShowtimeSeeder::class,
             CategorySeatSeeder::class,
-            // SeatSeeder::class,
+            RatingSeeder::class,
+            FavoriteSeeder::class,
+
         ]);
         // Tạo các quyền
         $permissions = [
@@ -74,7 +78,7 @@ class DatabaseSeeder extends Seeder
         }
 
 
-        $users = User::all(); 
+        $users = User::all();
         foreach ($users as $user) {
             if ($user->id === 1) {
                 $user->assignRole('admin');
