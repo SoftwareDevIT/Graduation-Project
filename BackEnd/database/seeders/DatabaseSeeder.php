@@ -36,6 +36,8 @@ class DatabaseSeeder extends Seeder
             CategoryInMovieSeeder::class,
             ShowtimeSeeder::class,
             CategorySeatSeeder::class,
+            RatingSeeder::class,
+            FavoriteSeeder::class,
 
         ]);
         // Tạo các quyền

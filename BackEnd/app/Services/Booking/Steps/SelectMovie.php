@@ -30,19 +30,19 @@ class SelectMovie extends AbstractBookingStep
                 'message' => 'Cinema or Showtime not found.'
             ]);
         }
-        $movies = MovieInCinema::where('id', $cinemaId)
+        $movies = MovieInCinema::where('cinema_id', $cinemaId)
             ->with([
                 'movie', // Nạp chi tiết phim
                 'showtimes' => function ($q) use ($showtime_id) {
                     $q->where('id', $showtime_id); // Nạp showtimes có id tương ứng
                 }
             ])->get();
-        if ($movies->isEmpty() || $movies->first()->showtimes->isEmpty()) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Cinema or Showtime not found.'
-            ]);
-        }
+        // if ($movies->isEmpty() || $movies->first()->showtimes->isEmpty()) {
+        //     return response()->json([
+        //         'status' => false,
+        //         'message' => 'Cinema or Showtime not found.'
+        //     ]);
+        // }
 
         Session::put('reserved_showtime', compact('showtime_id', 'movies'));
 
