@@ -90,7 +90,7 @@ class BookingController extends Controller
             Mail::to($booking->user->email)->queue(new InvoiceMail($booking));
             // event(new InvoiceSendMail($booking));
             session()->flush();
-            return redirect('http://localhost:5173/');
+            return redirect('http://localhost:5173/movieticket');
             // return $this->success($booking, 'success');
         }
     }

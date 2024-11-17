@@ -256,29 +256,31 @@ const CinemaSelector: React.FC = () => {
                 {movies.map((movieData) => {
                   const movie = movieData.movie;
 
-
                   let actor;
                   if (Array.isArray(actors)) {
                     actor = actors.find((a) => a.id === movie.id);
-                    // console.log("Actor found:", actor?.actor_name);
                   } else {
                     console.error("Actors is not an array:", actors);
                   }
 
+                  // Sắp xếp showtimes theo giờ chiếu (theo showtime_start)
+                  const sortedShowtimes = movieData.showtimes.sort((a: any, b: any) => {
+                    const timeA = dayjs(`${selectedDate} ${a.showtime_start}`, "YYYY-MM-DD HH:mm");
+                    const timeB = dayjs(`${selectedDate} ${b.showtime_start}`, "YYYY-MM-DD HH:mm");
+                    return timeA.isBefore(timeB) ? -1 : 1;
+                  });
 
                   return (
                     <div key={movie.id} className="movie">
                       <img src={movie.poster ?? undefined} alt={movie.movie_name} />
                       <div className="details">
                         <h4>{movie.movie_name}</h4>
-                        <p>
-                          Đạo Diễn: {actor?.actor_name}
-                        </p>
+                        <p>Đạo Diễn: {actor?.actor_name}</p>
                         <p>Thời gian: {movie.duration}</p>
                         <p>Giới hạn tuổi: {movie.age_limit}+</p>
                         <div className="showtimes-list">
-                          {movieData.showtimes.length > 0 ? (
-                            movieData.showtimes.map((showtime: any) => {
+                          {sortedShowtimes.length > 0 ? (
+                            sortedShowtimes.map((showtime: any) => {
                               const showtimeDateTime = dayjs(`${selectedDate} ${showtime.showtime_start}`, "YYYY-MM-DD HH:mm");
                               const isPastShowtime = showtimeDateTime.isBefore(dayjs());
 
@@ -302,23 +304,18 @@ const CinemaSelector: React.FC = () => {
                                     }
                                   }}
                                   style={{
-                                    cursor: isPastShowtime ? "not-allowed" : "pointer", // Đổi con trỏ chuột thành "not-allowed" nếu suất chiếu đã qua
-                                    color: isPastShowtime ? "gray" : "black" // Đổi màu sắc để dễ nhận biết
+                                    cursor: isPastShowtime ? "not-allowed" : "pointer",
+                                    color: isPastShowtime ? "gray" : "black"
                                   }}
                                 >
                                   {showtime.showtime_start.slice(0, 5)}
                                   <p> {`${showtime.price / 1000}k`}</p>
                                 </button>
-
                               );
-
-
                             })
                           ) : (
                             <p>Không có suất chiếu cho ngày này</p>
                           )}
-
-
                         </div>
                       </div>
                     </div>
@@ -330,6 +327,7 @@ const CinemaSelector: React.FC = () => {
                 <p>Không có phim cho rạp này.</p>
               </div>
             )}
+
           </div>
         </div>
       </div>

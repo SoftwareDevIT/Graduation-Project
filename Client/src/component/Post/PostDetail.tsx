@@ -6,6 +6,8 @@ import Header from '../Header/Hearder';
 import { NewsItem } from '../../interface/NewsItem';
 import instance from '../../server';
 import { stripHtml } from '../../assets/Font/quillConfig';
+import dayjs from 'dayjs'; // Import dayjs
+
 const PostDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [article, setArticle] = useState<NewsItem | null>(null);
@@ -34,6 +36,9 @@ const PostDetail: React.FC = () => {
         return <p>Không tìm thấy bài viết</p>;
     }
 
+    // Định dạng ngày tháng
+    const formattedDate = dayjs(article.created_at).format('DD/MM/YYYY HH:mm');
+
     return (
         <>
             <Header />
@@ -41,7 +46,7 @@ const PostDetail: React.FC = () => {
                 <div className="main-content">
                     <h1 className="article-title">{article.title}</h1>
                     <p className="article-meta">
-                        {article.news_category.news_category_name} · {article.created_at}
+                        {article.news_category.news_category_name} · {formattedDate}
                     </p>
 
                     <div className="article-content-container">
