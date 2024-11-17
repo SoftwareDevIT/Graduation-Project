@@ -12,8 +12,11 @@ class Cinema extends Model
     protected $primaryKey = 'id';
     protected $fillable = [
         'cinema_name',
+        'slug',
         'phone',
+        'city',
         'image',
+        'description',
         'location_id',
         'cinema_address',
         'status',
