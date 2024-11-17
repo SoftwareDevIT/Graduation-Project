@@ -22,6 +22,7 @@ class DirectorSeeder extends Seeder
         foreach ($data as $item) {
             DB::table('director')->insert([
                 'director_name' => $item['name'],
+                'slug' => $item['slug'],
                 'photo' => $item['photo'],
                 'descripcion' => $item['description'],
                 'country' => $item['country'],
