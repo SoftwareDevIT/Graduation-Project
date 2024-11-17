@@ -170,7 +170,7 @@ const MovieDetail: React.FC = () => {
                 <div className="movie-details">
                   <div>📅 Khởi chiếu: {movie?.release_date || "Chưa có ngày phát hành"}</div>
                   <div>⏰ Thời lượng: {movie?.duration || "Chưa có thời lượng"}</div>
-                  <div>🔞 Giới hạn tuổi: {movie?.age_limit ? `T${movie.age_limit}` : "Không có giới hạn tuổi"}</div>
+                  <div>🔞 Giới hạn tuổi: {movie?.age_limit ? `${movie.age_limit}` : "Không có giới hạn tuổi"}</div>
                 </div>
               </div>
 

@@ -91,16 +91,16 @@ const Header = () => {
                 }`}
               id="menukkk"
             >
-       
-                <form onSubmit={handleSearchSubmit}>
-                  <input id="search-mobile"
-                    type="text"
-                    placeholder="Từ khóa tìm kiếm..."
-                    value={searchTerm}
-                    onChange={handleSearch}
-                  />
-                </form>
-              
+
+              <form onSubmit={handleSearchSubmit}>
+                <input id="search-mobile"
+                  type="text"
+                  placeholder="Từ khóa tìm kiếm..."
+                  value={searchTerm}
+                  onChange={handleSearch}
+                />
+              </form>
+
 
               <Link
                 to={"/buy-ticket"}
@@ -108,8 +108,8 @@ const Header = () => {
               >
                 Đặt vé phim chiếu rạp
               </Link>
-<Link to={'/buy-ticket'}>Lịch chiếu</Link>
-             
+              <Link to={'/buy-ticket'}>Lịch chiếu</Link>
+
               <div className="dropdown">
                 <a href="#" className="dropbtn1" >
                   Rạp{" "}
@@ -198,11 +198,11 @@ const Header = () => {
                   <Link to={"/movieshowing"}>Đang chiếu</Link>
                   <a href="#">Sắp chiếu</a>
                   <Link to={"/earlymovie"}>Chiếu sớm</Link>
-                
+
                 </div>
               </div>
               <div className="dropdown">
-                <a  className="dropbtn">
+                <a className="dropbtn">
                   Tin Tức{" "}
                   <span className="arrow">
                     <svg
@@ -225,7 +225,7 @@ const Header = () => {
                 <div className="dropdown-content">
                   <Link to={'/FilmNews'}>Tin điện ảnh</Link>
                   {/* <a href="#">Đánh giá phim</a> */}
-                 <Link to={'/video'}>Video</Link>
+                  <Link to={'/video'}>Video</Link>
                   {/* <a href="#">TV Series</a> */}
                 </div>
               </div>
@@ -276,7 +276,7 @@ const Header = () => {
             </Link>
             {isLoggedIn ? (
               <div className="icon-link" onClick={toggleProfileMenu}>
-                <img className="avtat-img" src="	https://cdn.moveek.com/bundles/ornweb/img/no-avatar.png" alt="" />
+                <img className="avtat-img" src="https://rapchieuphim.com/photos/36/poster/wall-phim-ong-trum.jpg" alt="" />
                 <i className="fas fa-check checkmark"></i>
                 {isProfileMenuVisible && (
                   <div className="profile-dropdown">
