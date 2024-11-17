@@ -75,4 +75,10 @@ class OrderController extends Controller
         $order = $this->orderService->destroy($id);
         return $this->success($order, 'success');
     }
+
+
+    public function order(){
+        $order = $this->orderService->order();
+        return $this->success($order, 'success');
+    }
 }

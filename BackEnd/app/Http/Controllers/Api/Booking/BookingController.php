@@ -90,8 +90,8 @@ class BookingController extends Controller
             Mail::to($booking->user->email)->queue(new InvoiceMail($booking));
             // event(new InvoiceSendMail($booking));
             session()->flush();
-            return redirect('http://localhost:5173/');
-            // return $this->success($booking, 'success');
+            // return redirect('http://localhost:5173/');
+            return $this->success($booking, 'success');
         }
     }
 
@@ -157,4 +157,6 @@ class BookingController extends Controller
         // Dispatch một job với toàn bộ các ID ghế đã được tạo
         ResetSeats::dispatch($seatIds)->delay(now()->addMinutes(5));
     }
+
+    
 }
