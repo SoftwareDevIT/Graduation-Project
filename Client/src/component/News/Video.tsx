@@ -10,7 +10,7 @@ import instance from "../../server";
 import { Link, useParams } from "react-router-dom";
 import { Movie } from "../../interface/Movie";
 import { Modal } from "antd";
-
+import { stripHtml } from '../../assets/Font/quillConfig';
 const fetchMovies = async (): Promise<Movie[]> => {
     const response = await instance.get("/movies");
     return response.data.data.original.slice(0, 15); // Giới hạn 15 bộ phim đầu tiên
@@ -112,7 +112,7 @@ function Video() {
                                     </div>
                                     <div className="content-new">
                                         <Link to={`/postdetail/${item.id}`}><h3>{item.title}</h3></Link>
-                                        <p>{item.content}</p>
+                                        <p>{stripHtml(item.content)}</p>
                                     </div>
                                 </div>
                             ))}

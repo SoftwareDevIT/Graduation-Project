@@ -108,8 +108,8 @@ const Header = () => {
               >
                 Đặt vé phim chiếu rạp
               </Link>
-
-              <a href="#">Lịch chiếu</a>
+<Link to={'/buy-ticket'}>Lịch chiếu</Link>
+             
               <div className="dropdown">
                 <a href="#" className="dropbtn1" >
                   Rạp{" "}
@@ -225,7 +225,7 @@ const Header = () => {
                 <div className="dropdown-content">
                   <Link to={'/FilmNews'}>Tin điện ảnh</Link>
                   <a href="#">Đánh giá phim</a>
-                  <a href="#">Video</a>
+                 <Link to={'/video'}>Video</Link>
                   <a href="#">TV Series</a>
                 </div>
               </div>

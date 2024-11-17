@@ -3,7 +3,7 @@ import { ClipLoader } from 'react-spinners';
 import { Link } from 'react-router-dom';
 import Footer from "../Footer/Footer";
 import Header from "../Header/Hearder";
-
+import { stripHtml } from '../../assets/Font/quillConfig';
 import './FilmNews.css';
 import { useNews } from '../../Context/NewsContext';
 
@@ -46,7 +46,7 @@ function FilmNews() {
                       </div>
                       <div className="content-new">
                         <Link to={`/postdetail/${item.id}`}><h3>{item.title}</h3></Link>
-                        <p>{item.content}</p>
+                        <p>{stripHtml(item.content)}</p>
                       </div>
                     </div>
                   ))}
@@ -62,7 +62,7 @@ function FilmNews() {
                     <p>Tin tức điện ảnh Việt Nam & thế giới</p>
                   </div>
                   <div className="noidung">
-                    <h4>Video - Trailer</h4>
+                   <Link to={'/video'}> <h4>Video - Trailer</h4></Link>
                     <p>Trailer, video những phim chiếu rạp và truyền hình hot nhất</p>
                   </div>
                 </div>

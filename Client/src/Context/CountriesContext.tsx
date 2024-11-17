@@ -18,7 +18,7 @@ const CountryContext = createContext<{
   addCountry: (country: Location) => Promise<void>;
   updateCountry: (id: number, country: Location) => Promise<void>;
   deleteCountry: (id: number) => Promise<void>;
-  fetchCountries: () => Promise<void>; // Thêm function fetchCountries
+  fetchCountries: () => void; // Cập nhật kiểu return
 } | undefined>(undefined);
 
 const countryReducer = (state: CountryState, action: Action): CountryState => {
@@ -46,24 +46,26 @@ const countryReducer = (state: CountryState, action: Action): CountryState => {
 
 export const CountryProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(countryReducer, { countries: [] });
-  useEffect(() => {
-    fetchCountries();
-  }, []); // Empty dependency array ensures it runs only once when the component mounts
 
-  const fetchCountries = async () => {
-    try {
-      const response = await instance.get('/location');
-      dispatch({ type: 'SET_COUNTRIES', payload: response.data.data });
-    } catch (error) {
-      console.error('Failed to fetch countries:', error);
-    }
-  };
+  // Fetch countries chỉ được gọi 1 lần khi CountryProvider được mount
+  useEffect(() => {
+    const fetchCountries = async () => {
+      try {
+        const response = await instance.get('/location');
+        dispatch({ type: 'SET_COUNTRIES', payload: response.data.data });
+      } catch (error) {
+        console.error('Failed to fetch countries:', error);
+      }
+    };
+
+    fetchCountries(); // Gọi API khi component được mount
+  }, []); // Chỉ chạy một lần khi component được mount
 
   const addCountry = async (country: Location) => {
     try {
       const response = await instance.post('/location', country);
       dispatch({ type: 'ADD_COUNTRY', payload: response.data });
-      fetchCountries();
+      // Không cần gọi lại fetchCountries ở đây vì bạn đã gọi rồi trong useEffect
     } catch (error) {
       console.error('Failed to add country:', error);
     }
@@ -94,7 +96,7 @@ export const CountryProvider: React.FC<{ children: React.ReactNode }> = ({ child
       addCountry,
       updateCountry,
       deleteCountry,
-      fetchCountries, // Đảm bảo `fetchCountries` có sẵn trong context
+      fetchCountries: () => {}, // Không cần phải gọi lại API
     }}>
       {children}
     </CountryContext.Provider>

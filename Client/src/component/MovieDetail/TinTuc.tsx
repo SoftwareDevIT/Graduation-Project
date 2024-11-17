@@ -3,7 +3,7 @@ import "./TinTuc.css";
 import Footer from "../Footer/Footer";
 import MovieDetail from "./MovieDetail";
 import instance from "../../server";
-
+import { stripHtml } from '../../assets/Font/quillConfig';
 const TinTuc: React.FC = () => {
     const [relatedPosts, setRelatedPosts] = useState<any[]>([]);
 
@@ -41,7 +41,7 @@ const TinTuc: React.FC = () => {
                                         <div className="post-info">
                                             <a href="#" className="post-title">{post.title}</a>
                                             <p className="post-meta">Đánh giá phim • {post.user_id} • {new Date(post.created_at).toLocaleDateString()}</p>
-                                            <p className="post-meta-2">{post.content.slice(0, 150)}...</p>
+                                            <p className="post-meta-2">{stripHtml(post.content.slice(0, 150))}...</p>
                                         </div>
                                     </div>
                                 ))}
