@@ -14,6 +14,9 @@ return new class extends Migration {
             $table->id('id');
             $table->string('cinema_name');
             $table->string('image')->nullable();
+            $table->string('slug')->nullable();
+            $table->string('city')->nullable();
+            $table->text('description')->nullable();
             $table->string('phone')->nullable();
             $table->unsignedBigInteger('location_id')->nullable();
             $table->string('cinema_address')->nullable();

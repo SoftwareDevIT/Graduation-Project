@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('director', function (Blueprint $table) {
             $table->id('id');
             $table->string('director_name');
+            $table->string('slug');
             $table->string('descripcion')->nullable();
             $table->string('photo')->nullable();
             $table->string('country')->nullable();

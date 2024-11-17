@@ -15,10 +15,12 @@ return new class extends Migration
             $table->id('id');
             $table->unsignedBigInteger('movie_id')->nullable();
             $table->string('title')->nullable();
+            $table->string('slug')->nullable();
             $table->unsignedBigInteger('news_category_id');
             $table->string('thumnail')->nullable();// ảnh nhỏ bên dưới
             $table->string('banner')->nullable();// ảnh để banner
             $table->longText('content')->nullable();
+            $table->integer('views');
             $table->boolean('status')->default(true);
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
