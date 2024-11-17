@@ -235,7 +235,7 @@ const MovieDetail: React.FC = () => {
   {movie?.trailer ? (
     <iframe
       width="100%"
-      height="100%"
+      height="390px"
       src={movie.trailer}
       title="Trailer"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
