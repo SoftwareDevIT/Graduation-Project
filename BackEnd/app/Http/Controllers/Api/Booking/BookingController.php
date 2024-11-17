@@ -160,4 +160,6 @@ class BookingController extends Controller
         ResetSeats::dispatch($seatIds)->delay(now()->addMinutes(5));
     }
 
+
 }
+

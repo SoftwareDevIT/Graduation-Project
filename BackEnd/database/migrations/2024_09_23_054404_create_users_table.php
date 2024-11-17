@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->string('fullname')->nullable();
             $table->string('google_id')->nullable();
-            $table->double('coin')->nullable();
+            // $table->double('coin')->nullable();
             $table->boolean('status')->default(true);
             // $table->unsignedBigInteger('role_id');
             $table->timestamp('email_verified_at')->nullable();
