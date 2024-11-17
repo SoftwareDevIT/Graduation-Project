@@ -221,6 +221,35 @@ const MovieDetail: React.FC = () => {
           </div>
         </div>
       </Modal>
+
+
+    
+      <Modal
+  title={movie?.movie_name}  // Ẩn tiêu đề nếu không cần
+  visible={isTrailerVisible}
+  onCancel={() => setIsTrailerVisible(false)}
+  footer={null}
+  centered // Modal xuất hiện giữa màn hình
+  className="custom-modal"
+>
+  {movie?.trailer ? (
+    <iframe
+      width="100%"
+      height="100%"
+      src={movie.trailer}
+      title="Trailer"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowFullScreen
+      style={{ borderRadius: "10px", border: "none" }} // Tùy chỉnh giao diện iframe
+    ></iframe>
+  ) : (
+    <div className="no-trailer">
+      <p>Trailer không khả dụng</p>
+    </div>
+  )}
+</Modal>
+
+
     </>
   );
 };

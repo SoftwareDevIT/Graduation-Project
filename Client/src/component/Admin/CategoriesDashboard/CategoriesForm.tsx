@@ -7,9 +7,9 @@ import { useCategoryContext } from '../../../Context/CategoriesContext';
 import { MovieCategory } from '../../../interface/MovieCategory';
 import instance from '../../../server';
 
-// Define the schema for form validation using Zod
+// Định nghĩa schema để xác thực form bằng Zod
 const categorySchema = z.object({
-  category_name: z.string().min(1, 'Category Name is required.'),
+  category_name: z.string().min(1, 'Tên thể loại là bắt buộc.'),
 });
 
 const CategoriesForm = () => {
@@ -38,7 +38,7 @@ const CategoriesForm = () => {
           setCategory(fetchedCategory);
           reset(fetchedCategory);
         } catch (error) {
-          console.error('Failed to fetch category:', error);
+          console.error('Lấy thông tin thể loại thất bại:', error);
         }
       }
     };
@@ -50,28 +50,28 @@ const CategoriesForm = () => {
     try {
       if (isEditMode) {
         await updateCategory(Number(id), data);
-        alert('Category updated successfully!');
+        alert('Cập nhật thể loại thành công!');
       } else {
         await addCategory(data);
-        alert('Category added successfully!');
+        alert('Thêm thể loại thành công!');
       }
       nav('/admin/categories');
       reset();
     } catch (error) {
-      console.error('Failed to submit form:', error);
-      alert('Failed to submit form');
+      console.error('Gửi form thất bại:', error);
+      alert('Gửi form thất bại');
     }
   };
 
-  if (isEditMode && !category) return <div>Loading...</div>;
+  if (isEditMode && !category) return <div>Đang tải...</div>;
 
   return (
     <div className="container mt-5">
       <form onSubmit={handleSubmit(handleFormSubmit)} className="shadow-lg p-4 rounded bg-white">
-        <h2 className="text-center mb-4 text-primary">{isEditMode ? 'Edit Category' : 'Add New Category'}</h2>
+        <h2 className="text-center mb-4 text-primary">{isEditMode ? 'Chỉnh Sửa Thể Loại' : 'Thêm Mới Thể Loại'}</h2>
 
         <div className="form-group mb-3">
-          <label htmlFor="category_name" className="form-label fw-bold">Category Name</label>
+          <label htmlFor="category_name" className="form-label fw-bold">Tên Thể Loại</label>
           <input
             type="text"
             className={`form-control ${errors.category_name ? 'is-invalid' : ''}`}
@@ -85,7 +85,7 @@ const CategoriesForm = () => {
 
         <div className="d-flex justify-content-center mt-4">
           <button type="submit" className="btn btn-primary px-4 py-2">
-            {isEditMode ? 'Update Category' : 'Add Category'}
+            {isEditMode ? 'Cập Nhật Thể Loại' : 'Thêm Thể Loại'}
           </button>
         </div>
       </form>

@@ -1,4 +1,4 @@
- import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useShowtimeContext } from '../../../Context/ShowtimesContext';
 import instance from '../../../server';
@@ -79,15 +79,51 @@ const ShowtimesDashboard: React.FC = () => {
         }
     };
 
+    // Pagination logic with ellipsis
+    const renderPagination = () => {
+        const pageNumbers = [];
+        if (totalPages <= 5) {
+            for (let i = 1; i <= totalPages; i++) {
+                pageNumbers.push(i);
+            }
+        } else {
+            if (currentPage <= 3) {
+                pageNumbers.push(1, 2, 3, 4, '...', totalPages);
+            } else if (currentPage >= totalPages - 2) {
+                pageNumbers.push(1, '...', totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
+            } else {
+                pageNumbers.push(1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages);
+            }
+        }
+
+        return pageNumbers.map((page, index) => (
+            <button
+                key={index}
+                className={`btn ${currentPage === page ? 'btn-primary' : 'btn-outline-primary'} mx-1`}
+                onClick={() => typeof page === 'number' && handlePageChange(page)}
+                disabled={page === '...'}
+            >
+                {page}
+            </button>
+        ));
+    };
+
+    const formatCurrency = (amount: number) => {
+        return new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        }).format(amount);
+    };
+
     if (error) {
         return <div className="alert alert-danger">{error}</div>;
     }
 
     return (
         <div className="container mt-5">
-            <h2 className="text-center text-primary mb-4">Quản lý Showtime</h2>
+            <h2 className="text-center text-primary mb-4">Quản Lý Suất Chiếu</h2>
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <Link to="/admin/showtimes/add" className="btn btn-outline-primary">Thêm Showtime Mới</Link>
+                <Link to="/admin/showtimes/add" className="btn btn-outline-primary">Thêm Suất Chiếu</Link>
                 <input
                     type="text"
                     placeholder="Tìm kiếm theo tên phim"
@@ -101,6 +137,7 @@ const ShowtimesDashboard: React.FC = () => {
                     <thead className="thead-light">
                         <tr>
                             <th>Phim</th>
+                            <th>Phòng</th>
                             <th>Ngày</th>
                             <th>Giờ bắt đầu</th>
                             <th>Giờ kết thúc</th>
@@ -113,10 +150,11 @@ const ShowtimesDashboard: React.FC = () => {
                             currentShowtimes.map((showtime) => (
                                 <tr key={showtime.id}>
                                     <td>{showtime.movie_in_cinema.movie.movie_name}</td>
+                                    <td>{showtime.room.room_name}</td>
                                     <td>{new Date(showtime.showtime_date).toLocaleDateString()}</td>
                                     <td>{showtime.showtime_start}</td>
                                     <td>{showtime.showtime_end}</td>
-                                    <td>{showtime.price}</td>
+                                    <td>{formatCurrency(showtime.price)}</td>
                                     <td>
                                         <div className="d-flex justify-content-around">
                                             <Link to={`/admin/showtimes/edit/${showtime.id}`} className="btn btn-warning btn-sm mr-2">
@@ -139,19 +177,9 @@ const ShowtimesDashboard: React.FC = () => {
             </div>
 
             <nav className="d-flex justify-content-center mt-4">
-                <ul className="pagination">
-                    <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                        <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>Trước</button>
-                    </li>
-                    {Array.from({ length: totalPages }, (_, index) => (
-                        <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
-                            <button className="page-link" onClick={() => handlePageChange(index + 1)}>{index + 1}</button>
-                        </li>
-                    ))}
-                    <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                        <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>Tiếp theo</button>
-                    </li>
-                </ul>
+                <div className="pagination">
+                    {renderPagination()}
+                </div>
             </nav>
         </div>
     );

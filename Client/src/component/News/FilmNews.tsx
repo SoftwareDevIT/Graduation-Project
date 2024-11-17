@@ -62,7 +62,7 @@ function FilmNews() {
                     <p>Tin tức điện ảnh Việt Nam & thế giới</p>
                   </div>
                   <div className="noidung">
-                    <h4>Video - Trailer</h4>
+                   <Link to={'/video'}> <h4>Video - Trailer</h4></Link>
                     <p>Trailer, video những phim chiếu rạp và truyền hình hot nhất</p>
                   </div>
                 </div>
