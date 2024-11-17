@@ -169,5 +169,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/selectCombo', [BookingController::class, 'selectCombos']);
     Route::post('selectSeats', [BookingController::class, 'selectSeats']);
     // Route::post('/book-ticket', [BookingController::class, 'bookTicket']);
+    Route::post('/historyOrder',[OrderController::class,'order']);
+    Route::post('/historyOrder/{id}',[OrderController::class,'orderDetail']);
 });
 Route::get('session', [BookingController::class, 'getSession']);

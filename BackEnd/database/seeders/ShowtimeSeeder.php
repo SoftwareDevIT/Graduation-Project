@@ -32,9 +32,6 @@ class ShowtimeSeeder extends Seeder
             '23:00:00' => 59000,
         ];
 
-        // Ngày chiếu
-        $showtimeDate = now()->addDays(1)->toDateString();
-
         // Batch insert để tối ưu hiệu suất
         $batchSize = 1000;
         $showtimeData = [];
@@ -49,39 +46,38 @@ class ShowtimeSeeder extends Seeder
                 continue; // Bỏ qua nếu không có phòng
             }
 
-            // Lấy tất cả khóa (thời gian chiếu) của showtimes
-            $showtimesKeys = array_keys($showtimes);
+            // Lặp qua từng ngày trong 7 ngày tiếp theo
+            for ($i = 0; $i < 7; $i++) {
+                $showtimeDate = now()->addDays($i)->toDateString(); // Ngày chiếu
 
-            // Đảm bảo rằng số lượng phòng không vượt quá số lượng thời gian chiếu
-            if (count($rooms) > count($showtimesKeys)) {
-                $showtimesKeys = array_merge($showtimesKeys, array_slice($showtimesKeys, 0, count($rooms) - count($showtimesKeys)));
-            }
+                // Lặp qua từng phòng và gán mỗi phòng một thời gian chiếu ngẫu nhiên
+                foreach ($rooms as $roomId) {
+                    // Lấy ngẫu nhiên một thời gian chiếu
+                    $randomStart = array_rand($showtimes);
+                    $start = $randomStart; // Thời gian chiếu ngẫu nhiên
+                    $price = $showtimes[$start]; // Giá vé tương ứng
 
-            // Lặp qua từng phòng và gán mỗi phòng một thời gian chiếu ngẫu nhiên
-            foreach ($rooms as $key => $roomId) {
-                $start = $showtimesKeys[$key]; // Lấy thời gian chiếu tương ứng với phòng
-                $price = $showtimes[$start];   // Lấy giá vé tương ứng với thời gian chiếu
+                    // Tính thời gian kết thúc là thời gian bắt đầu cộng 2 giờ
+                    $end = Carbon::createFromFormat('H:i:s', $start)->addHours(2)->format('H:i:s');
 
-                // Tính thời gian kết thúc là thời gian bắt đầu cộng 2 giờ
-                $end = Carbon::createFromFormat('H:i:s', $start)->addHours(2)->format('H:i:s');
+                    // Thêm bản ghi vào showtimeData
+                    $showtimeData[] = [
+                        'room_id' => $roomId,
+                        'movie_in_cinema_id' => $movieInCinema->id,
+                        'showtime_date' => $showtimeDate,
+                        'showtime_start' => $start,
+                        'showtime_end' => $end,
+                        'price' => $price,
+                        'status' => '1',
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
 
-                // Thêm bản ghi vào showtimeData
-                $showtimeData[] = [
-                    'room_id' => $roomId,
-                    'movie_in_cinema_id' => $movieInCinema->id,
-                    'showtime_date' => $showtimeDate,
-                    'showtime_start' => $start,
-                    'showtime_end' => $end,
-                    'price' => $price,
-                    'status' => '1',
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ];
-
-                // Chèn dữ liệu theo lô
-                if (count($showtimeData) >= $batchSize) {
-                    DB::table('showtimes')->insert($showtimeData);
-                    $showtimeData = [];
+                    // Chèn dữ liệu theo lô
+                    if (count($showtimeData) >= $batchSize) {
+                        DB::table('showtimes')->insert($showtimeData);
+                        $showtimeData = [];
+                    }
                 }
             }
         }

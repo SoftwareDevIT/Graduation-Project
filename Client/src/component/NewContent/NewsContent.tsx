@@ -47,7 +47,7 @@ const NewsContent = () => {
               {stripHtml(news.title)}
             </Link>
             <span className="author">
-              {news.user.fullname} • {new Date(news.created_at).toLocaleString()}
+              {news.user.fullname} • {new Date(news.created_at).toLocaleDateString()}
             </span>
           </div>
         ))}

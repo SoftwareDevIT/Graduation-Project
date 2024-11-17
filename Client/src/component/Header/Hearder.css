@@ -118,7 +118,9 @@ bottom: 10px;
   position: relative;
  
 }
-
+.dropbtn{
+  cursor: pointer;
+}
 .dropbtn1 {
   background-color: transparent;
   color: #6e84a3;
