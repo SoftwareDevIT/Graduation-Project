@@ -398,3 +398,83 @@ font-size: 10px;
     font-size: 5px;
   }
 }
+
+/* Container Modal */
+.timkiemrap {
+  display: flex;
+ 
+  align-items: flex-start;
+  gap: 12px;
+}
+
+/* Input Tìm Rạp */
+.timkiemrap input {
+  width: 100%;
+  max-width: 200px; /* Đảm bảo độ rộng hợp lý */
+  padding: 8px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  transition: border-color 0.3s ease;
+}
+
+.timkiemrap input:focus {
+  border-color: #4f8df7; /* Màu border khi input được focus */
+  outline: none;
+}
+
+/* Select Khu Vực */
+.timkiemrap select {
+  width: 100%;
+  max-width: 220px; /* Đảm bảo độ rộng hợp lý */
+  padding: 8px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  transition: border-color 0.3s ease;
+}
+
+.timkiemrap select:focus {
+  border-color: #4f8df7; /* Màu border khi select được focus */
+  outline: none;
+}
+
+/* Danh sách Rạp */
+.cinemas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 300px; /* Giới hạn chiều cao để có thể scroll */
+  overflow-y: auto;
+}
+
+.cinemas-list a {
+  padding: 10px;
+  font-size: 16px;
+  color: #333;
+  text-decoration: none;
+  border-radius: 4px;
+  background-color: #f4f4f4;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.cinemas-list a:hover {
+  background-color: #4f8df7; /* Màu nền khi hover */
+  color: white; /* Màu chữ khi hover */
+}
+
+/* Thiết lập cho Modal */
+.ant-modal-body {
+  padding: 20px;
+}
+
+.ant-modal-close-x {
+  color: #000; /* Màu đóng */
+  font-size: 20px;
+}
+
+.ant-modal-header {
+  border-bottom: 1px solid #ddd;
+}

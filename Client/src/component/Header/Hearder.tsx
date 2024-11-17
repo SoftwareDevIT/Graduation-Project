@@ -5,7 +5,7 @@ import { Cinema } from "../../interface/Cinema";
 import { Location } from "../../interface/Location";
 import instance from "../../server";
 import { useCountryContext } from "../../Context/CountriesContext";
-
+import { Modal } from "antd"; 
 
 const Header = () => {
   const [isHeaderLeftVisible, setHeaderLeftVisible] = useState(false);
@@ -21,7 +21,18 @@ const Header = () => {
 
 
 
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
+  // Hàm xử lý sự kiện khi người dùng click vào Rạp
+  const handleOpenModal = () => {
+    setIsModalVisible(true);
+  };
+  
+  // Hàm xử lý khi người dùng đóng Modal
+  const handleCloseModal = () => {
+    setIsModalVisible(false);
+  };
+  
   useEffect(() => {
     // Kiểm tra nếu có userId trong localStorage
     const token = localStorage.getItem("token");
@@ -110,69 +121,83 @@ const Header = () => {
               </Link>
 <Link to={'/buy-ticket'}>Lịch chiếu</Link>
              
-              <div className="dropdown">
-                <a href="#" className="dropbtn1" >
-                  Rạp{" "}
-                  <span className="arrow">
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 16 16"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
+<div className="dropdown">
+  <a
+    href="#"
+    className="dropbtn1"
+    onClick={handleOpenModal} // Mở Modal khi click vào "Rạp"
+  >
+    Rạp{" "}
+    <span className="arrow">
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M4 6L8 10L12 6"
+          stroke="#555"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </span>
+  </a>
+</div>
+<Modal
+      title="Tìm Rạp"
+      visible={isModalVisible}
+      onCancel={handleCloseModal}
+      footer={null}
+      style={{ maxWidth: '500px', margin: '0 auto' }} // Căn giữa modal
+    >
+      <div className="timkiemrap">
+        <input
+          type="text"
+          placeholder="Tìm rạp tại"
+          style={{
+            width: '100%',
+            padding: '8px',
+            marginBottom: '12px',
+            fontSize: '14px',
+            border: '1px solid #ddd',
+            borderRadius: '4px',
+          }}
+        />
+        <select
+          name="location"
+          id="location-select"
+          onChange={handleLocationChange}
+          style={{
+            width: '100%',
+            padding: '8px',
+            marginBottom: '12px',
+            fontSize: '14px',
+            border: '1px solid #ddd',
+            borderRadius: '4px',
+          }}
+        >
+          <option value="">Chọn khu vực</option>
+          {locations.map((location) => (
+            <option key={location.id} value={location.id}>
+              {location.location_name}
+            </option>
+          ))}
+        </select>
+      </div>
 
-                    >
-                      <path
-                        d="M4 6L8 10L12 6"
-                        stroke="#555"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
-                  </span>
-                </a>
-                <div className="dropdown-content">
-                  <div className="timkiemrap">
-                    <input
-                      type="text"
-                      placeholder="Tìm rạp tại"
-                      style={{
-                        width: "120px",
-                        padding: "4px",
-                        marginBottom: "12px",
-                        boxSizing: "border-box",
-                        marginRight: "5px",
-                      }}
-                    />
-                    <select
-                      name="location"
-                      id="location-select"
-                      onChange={handleLocationChange}
-                      style={{
-                        width: "100px",
-                        padding: "4px",
-                        marginBottom: "12px",
-                        boxSizing: "border-box",
-                      }}
-                    >
-                      <option value="">Chọn khu vực</option>
-                      {locations.map((location) => (
-                        <option key={location.id} value={location.id}>
-                          {location.location_name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+      <div className="cinemas-list">
+        {cinemas.map((cinema) => (
+          <a key={cinema.id} href="#">
+            {cinema.cinema_name}
+          </a>
+        ))}
+      </div>
+    </Modal>
 
-                  {cinemas.map((cinema) => (
-                    <a key={cinema.id} href="#">
-                      {cinema.cinema_name}
-                    </a>
-                  ))}
-                </div>
-
-              </div>
               <div className="dropdown">
                 <a href="#" className="dropbtn">
                   Phim{" "}

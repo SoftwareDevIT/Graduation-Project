@@ -14,7 +14,6 @@ const LichChieuUpdated: React.FC = () => {
     const { id } = useParams<{ id: string }>(); // Lấy ID phim từ URL
     const location = useLocation(); // Lấy location để nhận dữ liệu từ MovieDetail
     const [cinemas, setCinemas] = useState<Cinema[]>([]);
- 
     const [selectedLocation, setSelectedLocation] = useState<string>("");
     const [error, setError] = useState<string | null>(null);
     const [expandedIndex, setExpandedIndex] = useState<number | null>(null); // Để mở rộng rạp chiếu
@@ -23,20 +22,25 @@ const LichChieuUpdated: React.FC = () => {
 
     const movie = location.state?.movie; // Lấy thông tin phim từ location state
 
-    
-
     const { state, fetchCountries } = useCountryContext();
 
-  useEffect(() => {
-    fetchCountries(); // Lấy danh sách khu vực khi component được render
-  }, [fetchCountries]);
+    useEffect(() => {
+        fetchCountries(); // Lấy danh sách khu vực khi component được render
+    }, [fetchCountries]);
 
     // Cập nhật selectedLocation khi có locations
     useEffect(() => {
-        if (state.countries.length > 0 && !selectedLocation) {
-            setSelectedLocation(state.countries[0].id.toString()); // Lấy ID khu vực đầu tiên
+        if (state.countries.length > 0) {
+            const defaultLocation = state.countries.find(
+                (location) => location.location_name === "Hà Nội"
+            );
+            if (defaultLocation) {
+                setSelectedLocation(defaultLocation.id.toString()); // Nếu có Hà Nội, đặt nó là selectedLocation
+            } else {
+                setSelectedLocation(state.countries[0].id.toString()); // Nếu không có Hà Nội, chọn khu vực đầu tiên
+            }
         }
-    }, [state, selectedLocation]);
+    }, [state]);
 
     // Fetch cinemas and showtimes
     useEffect(() => {
@@ -50,7 +54,7 @@ const LichChieuUpdated: React.FC = () => {
                     },
                 });
                 console.log(response);
-                
+
                 const cinemaData = response.data?.data || [];
                 setCinemas(cinemaData.map((item: any) => ({
                     ...item.cinema,
@@ -74,16 +78,16 @@ const LichChieuUpdated: React.FC = () => {
     const generateWeekDays = () => {
         const days = [];
         const currentDate = new Date();
-    
+
         for (let i = 0; i < 7; i++) {
             const date = new Date(currentDate);
             date.setDate(currentDate.getDate() + i);
-    
+
             // Tạo định dạng ngày theo cách thủ công, ví dụ: YYYY-MM-DD
             const year = date.getFullYear();
             const month = String(date.getMonth() + 1).padStart(2, '0'); // Thêm số 0 nếu thiếu
             const day = String(date.getDate()).padStart(2, '0'); // Thêm số 0 nếu thiếu
-    
+
             days.push({
                 date: `${year}-${month}-${day}`, // YYYY-MM-DD format
                 day: date.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' }), // Định dạng dd/MM
@@ -92,7 +96,6 @@ const LichChieuUpdated: React.FC = () => {
         }
         return days;
     };
-    
 
     return (
         <>
@@ -106,9 +109,10 @@ const LichChieuUpdated: React.FC = () => {
                             onChange={(e) => setSelectedLocation(e.target.value)}
                         >
                              {state.countries.map((location) => (
-          <option key={location.id}  value={location.id.toString()}>{location.location_name}</option>
-        ))}
-                            
+                                <option key={location.id} value={location.id.toString()}>
+                                    {location.location_name}
+                                </option>
+                            ))}
                         </select>
                         <select className="format-select-custom">
                             <option>Định dạng</option>
