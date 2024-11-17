@@ -1,7 +1,8 @@
 // src/interfaces/Cinema.ts
 import { Location } from "./Location";
 import { Movie } from "./Movie";
-import { Showtime } from "./Showtime";
+import { Showtime } from "./Showtimes";
+
 
 export interface Cinema {
   id?: number;

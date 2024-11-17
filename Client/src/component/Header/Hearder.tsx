@@ -197,12 +197,12 @@ const Header = () => {
                 <div className="dropdown-content">
                   <Link to={"/movieshowing"}>Đang chiếu</Link>
                   <a href="#">Sắp chiếu</a>
-                  <a href="#">Chiếu sớm</a>
-                  <a href="#">Phim Việt Nam</a>
+                  <Link to={"/earlymovie"}>Chiếu sớm</Link>
+                
                 </div>
               </div>
               <div className="dropdown">
-                <a href="#" className="dropbtn">
+                <a  className="dropbtn">
                   Tin Tức{" "}
                   <span className="arrow">
                     <svg
@@ -224,9 +224,9 @@ const Header = () => {
                 </a>
                 <div className="dropdown-content">
                   <Link to={'/FilmNews'}>Tin điện ảnh</Link>
-                  <a href="#">Đánh giá phim</a>
+                  {/* <a href="#">Đánh giá phim</a> */}
                  <Link to={'/video'}>Video</Link>
-                  <a href="#">TV Series</a>
+                  {/* <a href="#">TV Series</a> */}
                 </div>
               </div>
               <a href="#">Cộng đồng</a>
@@ -282,8 +282,8 @@ const Header = () => {
                   <div className="profile-dropdown">
                     <Link to="/Personal">Trang cá nhân</Link>
                     <Link to="/profile">Quản lý tài khoản</Link>
-                    <Link to="/movies">Vé phim</Link>
-                    <Link to="/credits">Moveek Credits</Link>
+                    <Link to="/movieticket">Vé phim</Link>
+                    {/* <Link to="/credits">Moveek Credits</Link> */}
                     <div onClick={handleLogout}>Đăng xuất</div>
                   </div>
                 )}

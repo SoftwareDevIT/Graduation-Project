@@ -7,70 +7,70 @@ import instance from "../../server"; // API instance
 import { useNavigate, useParams } from "react-router-dom"; // Navigation hook
 import { Location } from "../../interface/Location";
 import { Cinema } from "../../interface/Cinema";
-import { Showtime } from "../../interface/Showtime";
+
+import { useCountryContext } from "../../Context/CountriesContext";
+import { useMovieContext } from "../../Context/MoviesContext";
+import { Showtime } from "../../interface/Showtimes";
 
 const MuaVe: React.FC = () => {
     const { id } = useParams<{ id: string }>(); // Lấy ID phim từ URL
-    const [cinemas, setCinemas] = useState<Cinema[]>([]);
-    const [locations, setLocations] = useState<Location[]>([]);
-    const [selectedLocation, setSelectedLocation] = useState<string>(""); // Selected location ID
-    const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split("T")[0]); // Today's date by default
-    const [expandedIndex, setExpandedIndex] = useState<number | null>(null); // For toggling cinema details
-    const [error, setError] = useState<string | null>(null); // To store error message
+    const { state: countryState, fetchCountries } = useCountryContext();
+    const { state: movieState } = useMovieContext(); // Lấy phim từ MovieContext
     const navigate = useNavigate();
 
-    // Fetch locations
-    useEffect(() => {
-        const fetchLocations = async () => {
-            try {
-                const response = await instance.get("/location");
-                setLocations(response.data?.data || []);
-            } catch (error) {
-                console.error("Error fetching locations:", error);
-                setError("Không thể tải danh sách khu vực.");
-            }
-        };
-        fetchLocations();
-    }, []);
+    const [cinemas, setCinemas] = useState<Cinema[]>([]);
+    const [selectedLocation, setSelectedLocation] = useState<string>("");
+    const [selectedDate, setSelectedDate] = useState<string>(
+        new Date().toISOString().split("T")[0]
+    ); // Ngày hiện tại
+    const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+    const [error, setError] = useState<string | null>(null);
 
-    // Update selectedLocation when locations are fetched
+    // Lấy phim theo ID
+    const movie = movieState.movies.find((movie) => movie.id === Number(id));
+
     useEffect(() => {
-        if (locations.length > 0 && !selectedLocation) {
-            setSelectedLocation(locations[0].id.toString()); // Default to the first location
+        fetchCountries(); // Lấy danh sách khu vực
+    }, [fetchCountries]);
+
+    useEffect(() => {
+        if (countryState.countries.length > 0 && !selectedLocation) {
+            setSelectedLocation(countryState.countries[0].id.toString()); // Mặc định chọn khu vực đầu tiên
         }
-    }, [locations, selectedLocation]);
+    }, [countryState, selectedLocation]);
 
-    // Fetch cinemas and showtimes based on selected location and date
+    // Lấy danh sách rạp chiếu
     useEffect(() => {
         const fetchCinemasAndShowtimes = async () => {
             try {
-                const response = await instance.get("/filterByDateByMovie", {
+                const response = await instance.get(`/filterByDateByMovie`, {
                     params: {
                         location_id: selectedLocation,
-                        showtime_date: selectedDate, // Sử dụng ngày được chọn
-                        movie_id: id, // Sử dụng ID phim từ URL
+                        showtime_date: selectedDate,
+                        movie_id: id,
                     },
                 });
+
                 const cinemaData = response.data?.data || [];
-                setCinemas(cinemaData.map((item: any) => ({
-                    ...item.cinema,
-                    showtimes: item.showtimes,
-                })));
+                setCinemas(
+                    cinemaData.map((item: any) => ({
+                        ...item.cinema,
+                        showtimes: item.showtimes,
+                    }))
+                );
             } catch (error) {
                 console.error("Error fetching cinemas and showtimes:", error);
-                setError("Không thể tải lịch chiếu.");
+                setError("Không thể tải lịch chiếu cho phim này.");
             }
         };
-        if (selectedLocation) {
-            fetchCinemasAndShowtimes();
-        }
-    }, [selectedLocation, selectedDate]);
+        if (selectedLocation) fetchCinemasAndShowtimes();
+    }, [selectedLocation, selectedDate, id]);
 
     const toggleCinemas = (index: number) => {
         setExpandedIndex(expandedIndex === index ? null : index);
     };
 
-    // Generate a list of days (7 days from today)
+    // Tạo danh sách ngày trong tuần
     const generateWeekDays = () => {
         const days = [];
         const currentDate = new Date();
@@ -78,20 +78,14 @@ const MuaVe: React.FC = () => {
         for (let i = 0; i < 7; i++) {
             const date = new Date(currentDate);
             date.setDate(currentDate.getDate() + i);
-
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-
             days.push({
-                date: `${year}-${month}-${day}`,
-                day: date.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' }),
-                weekDay: date.toLocaleDateString('vi-VN', { weekday: 'short' }),
+                date: date.toISOString().split("T")[0],
+                day: date.toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit" }),
+                weekDay: date.toLocaleDateString("vi-VN", { weekday: "short" }),
             });
         }
         return days;
     };
-
     return (
         <>
             <MovieDetail />
@@ -103,7 +97,7 @@ const MuaVe: React.FC = () => {
                             value={selectedLocation}
                             onChange={(e) => setSelectedLocation(e.target.value)}
                         >
-                            {locations.map((location) => (
+                            {countryState.countries.map((location) => (
                                 <option key={location.id} value={location.id.toString()}>
                                     {location.location_name}
                                 </option>
@@ -156,10 +150,13 @@ const MuaVe: React.FC = () => {
                                                                     if (!isPastShowtime) {
                                                                         navigate("/seat", {
                                                                             state: {
+                                                                                movieName: movie?.movie_name,
                                                                                 cinemaName: cinema.cinema_name,
                                                                                 showtime: showtime.showtime_start,
                                                                                 showtimeId: showtime.id,
                                                                                 cinemaId: cinema.id,
+                                                                                roomId: showtime.room_id,
+                                                                                price: showtime.price
                                                                             },
                                                                         });
                                                                     }
