@@ -50,6 +50,7 @@ class UserSeeder extends Seeder
             DB::table('users')->insert([
                 'user_name' => $item['name'],
                 'avatar' => $item['avatar'],
+                'description' => $item['about'],
                 'sex' => $item['sex'],
                 'password' => Hash::make('password'),
                 'email' => $randomEmail,

@@ -15,10 +15,11 @@ return new class extends Migration
             $table->id('id');
             $table->string('director_name');
             $table->string('slug');
-            $table->string('descripcion')->nullable();
             $table->string('photo')->nullable();
             $table->string('country')->nullable();
             $table->string('link_wiki')->nullable();
+            $table->string('descripcion')->nullable();
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }

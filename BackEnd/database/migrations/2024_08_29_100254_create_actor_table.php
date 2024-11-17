@@ -15,10 +15,11 @@ return new class extends Migration
             $table->id('id');
             $table->string('actor_name');
             $table->string('slug');
-            $table->text('descripcion')->nullable();
-            $table->string('photo')->nullable();
             $table->string('country')->nullable();
+            $table->string('photo')->nullable();
             $table->string('link_wiki')->nullable();
+            $table->text('descripcion')->nullable();
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }

@@ -13,17 +13,17 @@ return new class extends Migration {
         Schema::create('seats', function (Blueprint $table) {
             $table->id('id');
             $table->string('seat_name');
+            $table->string('seat_column');
+            $table->string('seat_row');
+            $table->enum('seat_type', ['Standard', 'Couple', 'VIP'])->default('Standard');
             $table->enum('status', ['Reserved Until', 'Booked'])->default('Reserved Until');
+            $table->timestamp('reserved_until')->nullable();
             $table->unsignedBigInteger('showtime_id');
             $table->unsignedBigInteger('room_id');
-            $table->string('seat_column');
-            $table->timestamp('reserved_until')->nullable();
-            $table->enum('seat_type', ['Standard', 'Couple', 'VIP'])->default('Standard');
-            $table->string('seat_row');
+            $table->timestamps();
             $table->foreign('showtime_id')->references('id')->on('showtimes');
             $table->foreign('room_id')->references('id')->on('room');
-            $table->timestamps();
-            // $table->foreign('room_id')->references('id')->on('room');
+
 
         });
     }
