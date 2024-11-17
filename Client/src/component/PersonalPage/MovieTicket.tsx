@@ -39,8 +39,8 @@ const MovieTicket = () => {
           if (response.data.status) {
             const ticketData = response.data.data;
             setTickets(ticketData);
-            console.log( response.data.data);
-            
+            console.log(response.data.data);
+
           }
         } catch (error) {
           console.error('Error fetching tickets:', error);
@@ -87,24 +87,24 @@ const MovieTicket = () => {
                       <span className="ticket-time">{ticket.showtime?.showtime_start}</span>
                       <span className="ticket-room">{ticket.showtime?.room?.room_name}</span>
                       <span className="ticket-seat">
-                      {ticket.seats?.map((seat, index) => (
-    <span key={index}>{seat.seat_name}</span>
-  ))}
+                        {ticket.seats?.map((seat, index) => (
+                          <span key={index}>{seat.seat_name}</span>
+                        ))}
                       </span>
                     </div>
                     <div className="ticket-details">
                       <div className="ticket-item">
                         <span className="item-name">Số vé</span>
-                       
+
                         <span className="item-quantity">{ticket.seats?.length || 0}</span>
                         <span className="item-price">{ticket.amount?.toLocaleString()} VND</span>
                       </div>
                       <div className="ticket-item">
                         <span className="item-name">Combo:</span>
-                       
+
                         <span className="item-quantity"> {ticket.combos?.map((combos, index) => (
-    <span key={index}>{combos.combo_name}</span>
-  ))}</span>
+                          <span key={index}>{combos.combo_name}</span>
+                        ))}</span>
                         <span className="item-price"></span>
                       </div>
                       <div className="ticket-item total">
