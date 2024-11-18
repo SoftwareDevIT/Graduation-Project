@@ -80,7 +80,6 @@ class MovieService
         return response()->json($formattedMovie);
     }
 
-
     public function get(int $id): Movie
     {
         return Movie::query()->with(['actorInMovies.actor', 'directorInMovie.director', 'movieCategoryInMovie.movieCategory'])->findOrFail($id);

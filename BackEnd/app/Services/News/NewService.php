@@ -13,9 +13,9 @@ use Illuminate\Support\Facades\Storage;
 class NewService
 {
 
-    public function index(): Collection
+    public function index():Collection
     {
-        return News::with('user', 'newsCategory')->get();
+        return News::with('user','newsCategory')->get();
     }
 
 
@@ -40,6 +40,11 @@ class NewService
         return $news->delete();
     }
 
+    // public function show(int $id)
+    // {
+    //     $news = News::with('newsCategory','user')->findOrFail($id);
+    //     return $news;
+    // }
     public function show($identifier)
     {
 
@@ -51,6 +56,6 @@ class NewService
             })
             ->firstOrFail();
 
-        return response()->json($news);
+        return $news;
     }
 }
