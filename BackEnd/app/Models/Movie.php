@@ -13,16 +13,18 @@ class Movie extends Model
         'id',
         'movie_name',
         'slug',
-        'country',
         'poster',
-        'duration',
-        'release_date',
-        'age_limit',
-        'description',
         'thumbnail',
         'trailer',
+        'duration',
+        'age_limit',
+        'country',
+        'release_date',
+        'description',
+        'rating',
+        'views',
+        'like',
         'status',
-        'rating'
     ];
 
     public function actor()
@@ -61,7 +63,8 @@ class Movie extends Model
         return $this->hasMany(Favorite::class);
     }
 
-    public function ratings() {
+    public function ratings()
+    {
         return $this->hasMany(Rating::class);
     }
 

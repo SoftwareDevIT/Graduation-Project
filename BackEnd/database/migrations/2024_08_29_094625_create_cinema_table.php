@@ -12,6 +12,7 @@ return new class extends Migration {
     {
         Schema::create('cinema', function (Blueprint $table) {
             $table->id('id');
+            $table->unsignedBigInteger('location_id')->nullable();
             $table->string('cinema_name');
             $table->string('slug')->nullable();
             $table->string('phone')->nullable();
@@ -19,7 +20,6 @@ return new class extends Migration {
             $table->string('cinema_address')->nullable();
             $table->text('description')->nullable();
             $table->string('image')->nullable();
-            $table->unsignedBigInteger('location_id')->nullable();
             $table->boolean('status')->default(true);
             $table->timestamps();
             $table->foreign('location_id')->references('id')->on('location');
