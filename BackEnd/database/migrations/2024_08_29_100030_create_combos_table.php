@@ -14,7 +14,6 @@ return new class extends Migration {
             $table->id('id');
             $table->string('combo_name');
             $table->string('descripton')->nullable();
-            ;
             $table->double('price');
             $table->integer('volume');
             $table->boolean('status')->default(true);

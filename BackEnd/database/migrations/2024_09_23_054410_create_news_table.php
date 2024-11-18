@@ -13,14 +13,16 @@ return new class extends Migration
     {
         Schema::create('news', function (Blueprint $table) {
             $table->id('id');
-            $table->unsignedBigInteger('movie_id')->nullable();
             $table->string('title')->nullable();
-            $table->unsignedBigInteger('news_category_id');
+            $table->string('slug')->nullable();
             $table->string('thumnail')->nullable();// ảnh nhỏ bên dưới
             $table->string('banner')->nullable();// ảnh để banner
             $table->longText('content')->nullable();
-            $table->boolean('status')->default(true);
+            $table->integer('views');
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('news_category_id');
+            $table->unsignedBigInteger('movie_id')->nullable();
+            $table->boolean('status')->default(true);
             $table->timestamps();
             $table->foreign('movie_id')->references('id')->on('movies');
             $table->foreign('news_category_id')->references('id')->on('news_category');
