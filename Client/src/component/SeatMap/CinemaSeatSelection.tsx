@@ -11,7 +11,7 @@ interface SeatRowProps {
   row: string | { row: string; seats: (string | null)[] };
   onSeatClick: (row: string, seatIndex: number) => void;
   selectedSeats: Map<string, number[]>;
-  reservedSeats: Set<string>; 
+  reservedSeats: Set<string>;
 }
 
 interface SeatProps {
@@ -26,7 +26,7 @@ interface SeatProps {
 const CinemaSeatSelection: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate(); // Khai báo useNavigate để điều hướng
-  const { movieName, cinemaName, showtime, showtimeId, cinemaId ,price,roomId} =
+  const { movieName, cinemaName, showtime, showtimeId, cinemaId, price, roomId } =
     location.state || {};
 
   const [selectedSeats, setSelectedSeats] = useState<Map<string, number[]>>(
@@ -50,9 +50,9 @@ const CinemaSeatSelection: React.FC = () => {
         }
         const seatResponse = await instance.get(`/seat/${showtimeId}`);
         const seatData = seatResponse.data;
-    
+
         const reservedSeatSet = new Set<string>();
-    
+
         if (seatData && Array.isArray(seatData.data) && seatData.data.length > 0) {
           seatData.data.forEach((seat: { seat_name: string; status: string }) => {
             if (seat.status === "Reserved Until" || seat.status === "Booked") {
@@ -63,7 +63,7 @@ const CinemaSeatSelection: React.FC = () => {
         } else {
           setReservedSeats(new Set());
         }
-    
+
       } catch (error) {
         console.error("Error fetching room or seat data", error);
         setReservedSeats(new Set());
@@ -127,9 +127,9 @@ const CinemaSeatSelection: React.FC = () => {
   const hours = showtime.split(":")[0];
 
   let price_ticket = 0;
-  
-    price_ticket =price ;
-  
+
+  price_ticket = price;
+
   const totalPrice = totalSelectedSeats * price_ticket;
 
   // Hàm submit xử lý việc đẩy dữ liệu
@@ -145,13 +145,13 @@ const CinemaSeatSelection: React.FC = () => {
           seat_column: index + 1,
         }))
     );
-  
+
     const payload = {
       cinemaId,
       showtimeId,
       seats: selectedSeatsArray,
     };
-  
+
     try {
       const response = await instance.post("/selectSeats", payload);
       console.log(payload);
@@ -168,10 +168,10 @@ const CinemaSeatSelection: React.FC = () => {
             seats: selectedSeatsArray, // Pass selectedSeatsArray as seats
             totalPrice,
           },
-          
+
         });
         console.log(selectedSeatsArray);
-        
+
       } else {
         console.error("Error: API call successful but status is not 200");
       }
@@ -180,85 +180,85 @@ const CinemaSeatSelection: React.FC = () => {
       setError("Có lỗi xảy ra khi gửi thông tin, vui lòng thử lại.");
     }
   };
-  
-  
 
-// Hiển thị thông báo lỗi nếu có lỗi trong việc chọn ghế hoặc submit API
-if (error) {
-  return <div>{error}</div>;
-}
+
+
+  // Hiển thị thông báo lỗi nếu có lỗi trong việc chọn ghế hoặc submit API
+  if (error) {
+    return <div>{error}</div>;
+  }
 
 
   return (
     <>
       <Header />
       <Headerticket />
-    <div className="box-map">
-    <div className="container container-map">
-        <div className="seat-info-box">
-          <div className="seat-map-box ">
-            <div className="screen">MÀN HÌNH</div>
-            <div className="seat-map">
-              {seatRows.map((row, index) => (
-                <SeatRow
-                  key={index}
-                  row={row}
-                  onSeatClick={handleSeatClick}
-                  selectedSeats={selectedSeats}
-                  reservedSeats={reservedSeats}
-                  
-                />
-              ))}
-            </div>
-            <div className="legend">
-              <div>
-                <span className="seat selected"></span> Ghế bạn chọn
+      <div className="box-map">
+        <div className="container container-map">
+          <div className="seat-info-box">
+            <div className="seat-map-box ">
+              <div className="screen">MÀN HÌNH</div>
+              <div className="seat-map">
+                {seatRows.map((row, index) => (
+                  <SeatRow
+                    key={index}
+                    row={row}
+                    onSeatClick={handleSeatClick}
+                    selectedSeats={selectedSeats}
+                    reservedSeats={reservedSeats}
+
+                  />
+                ))}
               </div>
-              <div>
-                <span className="seat couple-seat"></span> Ghế đôi
-              </div>
-              <div>
-                <span className="seat reserved"></span> Đã bán
-              </div>
-            </div>
-          </div>
-          <div className="thongtinphim">
-            <div className="details-box1">
-              <p className="title-phim">{movieName}</p>
-              <p>
-                Rạp:<span> {cinemaName}</span>
-              </p>
-              <p>
-                Suất: <span> {showtime}</span>
-              </p>
-              <p>
-                Phòng chiếu: <span>{roomData.room_name || roomData.id}</span>
-              </p>
-              <p>
-                Ghế:{" "}
-                {Array.from(selectedSeats.entries())
-                  .map(([row, indices]) =>
-                    indices.map((index) => `${row}${index + 1}`).join(", ")
-                  )
-                  .join(", ")}
-              </p>
-            </div>
-            <div className="price-box1">
-              <div className="price">
-                Tổng đơn hàng
-                <br /> <span>{totalPrice.toLocaleString()} đ</span>
+              <div className="legend">
+                <div>
+                  <span className="seat selected"></span> Ghế bạn chọn
+                </div>
+                <div>
+                  <span className="seat couple-seat"></span> Ghế đôi
+                </div>
+                <div>
+                  <span className="seat reserved"></span> Đã bán
+                </div>
               </div>
             </div>
-            <div className="actionst1">
-              <button className="back-btn1" >←</button>
-              <button className="continue-btn1" onClick={handleSubmit}   disabled={totalSelectedSeats === 0}>
-                Tiếp Tục
-              </button>
+            <div className="thongtinphim">
+              <div className="details-box1">
+                <p className="title-phim">{movieName}</p>
+                <p>
+                  Rạp:<span> {cinemaName}</span>
+                </p>
+                <p>
+                  Suất: <span> {showtime}</span>
+                </p>
+                <p>
+                  Phòng chiếu: <span>{roomData.room_name || roomData.id}</span>
+                </p>
+                <p>
+                  Ghế:{" "}
+                  {Array.from(selectedSeats.entries())
+                    .map(([row, indices]) =>
+                      indices.map((index) => `${row}${index + 1}`).join(", ")
+                    )
+                    .join(", ")}
+                </p>
+              </div>
+              <div className="price-box1">
+                <div className="price">
+                  Tổng đơn hàng
+                  <br /> <span>{totalPrice.toLocaleString()} đ</span>
+                </div>
+              </div>
+              <div className="actionst1">
+                <button className="back-btn1" >←</button>
+                <button className="continue-btn1" onClick={handleSubmit} disabled={totalSelectedSeats === 0}>
+                  Tiếp Tục
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
       <Footer />
     </>
   );
@@ -290,7 +290,7 @@ const SeatRow: React.FC<SeatRowProps> = ({
               onSeatClick={onSeatClick}
               isSelected={isSelected}
               isReserved={isReserved}
-              
+
             />
           );
         })}
@@ -313,19 +313,19 @@ const Seat: React.FC<SeatProps> = ({
     }
   };
   const seatClassName = isReserved
-  ? "seat reserved"
-  : isSelected
-  ? "seat selected"
-  : type === "couple"
-  ? "seat couple-seat"
-  : "seat";
+    ? "seat reserved"
+    : isSelected
+      ? "seat selected"
+      : type === "couple"
+        ? "seat couple-seat"
+        : "seat";
 
-// Tạo số ghế
-const seatNumber = `${row}${index + 1}`
+  // Tạo số ghế
+  const seatNumber = `${row}${index + 1}`
 
-  return   <span className={seatClassName} onClick={handleClick}>
-  <span className="seat-number1">{seatNumber}</span> {/* Hiển thị số ghế ở đây */}
-</span>;
+  return <span className={seatClassName} onClick={handleClick}>
+    <span className="seat-number1">{seatNumber}</span> {/* Hiển thị số ghế ở đây */}
+  </span>;
 };
 
 export default CinemaSeatSelection;

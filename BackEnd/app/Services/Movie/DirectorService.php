@@ -37,8 +37,21 @@ class DirectorService
         return $director->delete();
     }
 
-    public function get(int $id): Director
+    // public function get(int $id): Director
+    // {
+    //     return Director::query()->findOrFail($id);
+    // }
+
+    public function get($identifier): Director
     {
-        return Director::query()->findOrFail($id);
+        $Director = Director::query()
+            ->when(is_numeric($identifier), function ($query) use ($identifier) {
+                return $query->where('id', $identifier);
+            }, function ($query) use ($identifier) {
+                return $query->where('slug', $identifier);
+            })
+            ->firstOrFail();
+
+        return $Director;
     }
 }
