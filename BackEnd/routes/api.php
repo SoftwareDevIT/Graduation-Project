@@ -90,7 +90,7 @@ Route::middleware(['auth:sanctum', 'web'])->group(function () {
     Route::get('/user', function (Request $request) {
         $user = $request->user()->load('favoriteMovies');
         return response()->json($user);
-    }); 
+    });
 });
 Route::get('/vnpay-return', [BookingController::class, 'vnPayReturn']);
 
