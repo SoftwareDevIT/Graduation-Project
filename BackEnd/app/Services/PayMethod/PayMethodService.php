@@ -23,13 +23,13 @@ class PayMethodService
 
     public function store(array $data): PayMethod
     {
-        $this->authorizeInService('create', PayMethod::class);
+
         return PayMethod::create($data);
     }
 
     public function update(int $id, array $data): PayMethod
     {
-        $this->authorizeInService('update', PayMethod::class);
+
         $method = PayMethod::findOrFail($id);
         $method->update($data);
 
@@ -39,7 +39,7 @@ class PayMethodService
 
     public function delete(int $id): ?bool
     {
-        $this->authorizeInService('delete', PayMethod::class);
+      
         $method = PayMethod::findOrFail($id);
         return $method->delete();
     }

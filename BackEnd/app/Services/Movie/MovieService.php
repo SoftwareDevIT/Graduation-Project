@@ -39,13 +39,13 @@ class MovieService
 
     public function store(array $data)
     {
-        $this->authorizeInService('create', Movie::class);
+
         return Movie::create($data);
     }
 
     public function update(int $id, array $data)
     {
-        $this->authorizeInService('update', Movie::class);
+
         $movie = Movie::query()->findOrFail($id);
         $movie->update($data);
 
@@ -54,7 +54,7 @@ class MovieService
 
     public function delete(int $id)
     {
-        $this->authorizeInService('delete', Movie::class);
+     
         $movie = Movie::query()->findOrFail($id);
 
         // $movieCategory->showtimes($id)->delete();    // Xóa suất chiếu phim

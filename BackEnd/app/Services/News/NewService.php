@@ -22,14 +22,14 @@ class NewService
 
     public function store(array $data)
     {
-        $this->authorizeInService('create', News::class);
+
         $news = News::create($data);
         return $news;
     }
 
     public function update(int $id, array $data)
     {
-        $this->authorizeInService('update', News::class);
+
         $news = News::findOrFail($id);
         $news->update($data);
         return $news;
@@ -38,7 +38,7 @@ class NewService
 
     public function delete(int $id)
     {
-        $this->authorizeInService('delete', News::class);
+       
         $news = News::findOrFail($id);
         return $news->delete();
     }
