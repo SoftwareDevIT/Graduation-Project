@@ -7,33 +7,40 @@ use App\Models\Location;
 use App\Models\MovieInCinema;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Traits\AuthorizesInService;
+
 
 /**
  * Class LocationService.
  */
 class CinemaService
 {
-
+    use AuthorizesInService;
     public function index(): Collection
     {
 
         // return Cinema::all();
+
         return Cinema::with('Location')
             ->get();
+            
     }
 
 
     public function store(array $data): Cinema
     {
+        $this->authorizeInService('create', Cinema::class);
         return Cinema::create($data);
     }
     public function storeMovie(array $data): MovieInCinema
     {
+        $this->authorizeInService('create', Cinema::class);
         return MovieInCinema::create($data);
     }
 
     public function update(int $id, array $data): Cinema
     {
+        $this->authorizeInService('update', Cinema::class);
         $cinema = Cinema::findOrFail($id);
         $cinema->update($data);
 
@@ -43,6 +50,7 @@ class CinemaService
 
     public function delete(int $id): ?bool
     {
+        $this->authorizeInService('delete', Cinema::class);
         $cinema = Cinema::findOrFail($id);
         return $cinema->delete();
     }
