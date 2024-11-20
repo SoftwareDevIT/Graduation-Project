@@ -5,12 +5,14 @@ namespace App\Services\Cinema;
 use App\Models\Location;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Traits\AuthorizesInService;
 
 /**
  * Class LocationService.
  */
 class LocationService
 {
+    use AuthorizesInService;
 
     public function index(): Collection
     {
@@ -21,11 +23,13 @@ class LocationService
 
     public function store(array $data): Location
     {
+        $this->authorizeInService('create', Location::class);
         return Location::create($data);
     }
 
     public function update(int $id, array $data): Location
     {
+        $this->authorizeInService('update', Location::class);
         $location = Location::findOrFail($id);
         $location->update($data);
 
@@ -35,6 +39,7 @@ class LocationService
 
     public function delete(int $id): ?bool
     {
+        $this->authorizeInService('delete', Location::class);
         $location = Location::findOrFail($id);
         return $location->delete();
     }

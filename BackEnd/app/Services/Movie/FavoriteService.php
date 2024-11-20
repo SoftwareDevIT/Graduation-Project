@@ -9,12 +9,14 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use App\Traits\AuthorizesInService;
 
 /**
  * Class MovieService.
  */
 class FavoriteService
 {
+    use AuthorizesInService;
     public function index(): Collection
     {
         return Favorite::all();
@@ -25,11 +27,11 @@ class FavoriteService
         $existingFavorite = Favorite::where('user_id', Auth::id())
             ->where('movie_id', $movie)
             ->first();
-    
+
         if ($existingFavorite) {
             throw new HttpException(409, 'Phim đã được yêu thích!');
         }
-    
+
         return Favorite::create([
             'user_id' => Auth::id(),
             'movie_id' => $movie,

@@ -5,15 +5,18 @@ namespace App\Services\Movie;
 use App\Models\Movie;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Traits\AuthorizesInService;
 
 /**
  * Class MovieService.
  */
 class MovieService
 {
+    use AuthorizesInService;
     public function index()
     {
-        $movies = Movie::with(['actor', 'director', 'movie_category', 'movieInCinemas'])->get();
+
+        $movies = Movie::with(['actor', 'director', 'movie_category', 'movieInCinemas'])->orderBy('created_at','desc')->get();
 
         $formattedMovies = $movies->map(function ($movie) {
             return array_merge(
@@ -36,11 +39,13 @@ class MovieService
 
     public function store(array $data)
     {
+        $this->authorizeInService('create', Movie::class);
         return Movie::create($data);
     }
 
     public function update(int $id, array $data)
     {
+        $this->authorizeInService('update', Movie::class);
         $movie = Movie::query()->findOrFail($id);
         $movie->update($data);
 
@@ -49,6 +54,7 @@ class MovieService
 
     public function delete(int $id)
     {
+        $this->authorizeInService('delete', Movie::class);
         $movie = Movie::query()->findOrFail($id);
 
         // $movieCategory->showtimes($id)->delete();    // Xóa suất chiếu phim

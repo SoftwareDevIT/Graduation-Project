@@ -5,12 +5,14 @@ namespace App\Services\Cinema;
 use App\Models\Room;
 use App\Models\Seats;
 use Illuminate\Database\Eloquent\Collection;
+use App\Traits\AuthorizesInService;
 
 /**
  * Class LocationService.
  */
 class RoomService
 {
+    use AuthorizesInService;
 
     public function index(): Collection
     {
@@ -21,6 +23,7 @@ class RoomService
 
     public function store(array $data): Room
     {
+        $this->authorizeInService('create', Room::class);
         return Room::create($data);
     }
     public function getRoomByCinema(int $cinemaId): Collection
@@ -31,6 +34,7 @@ class RoomService
 
     public function update(int $id, array $data): Room
     {
+        $this->authorizeInService('update', Room::class);
         $room = Room::findOrFail($id);
 
         // Lưu trữ giá trị volume cũ
@@ -85,6 +89,7 @@ class RoomService
 
     public function delete(int $id): ?bool
     {
+        $this->authorizeInService('delete', Room::class);
         $room = Room::findOrFail($id);
         return $room->delete();
     }
