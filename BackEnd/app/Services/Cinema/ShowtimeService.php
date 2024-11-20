@@ -18,7 +18,7 @@ class ShowtimeService
     use AuthorizesInService;
     public function index()
     {
-        return Showtime::with(['movieInCinema.movie', 'room'])->paginate(5);
+        return Showtime::with(['movieInCinema.movie', 'room']);
     }
 
 

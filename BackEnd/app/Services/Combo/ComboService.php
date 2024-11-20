@@ -15,7 +15,7 @@ class ComboService
     use AuthorizesInService;
     public function index(): Collection
     {
-        $this->authorizeInService('create', Combo::class);
+       
         return Combo::all();
     }
 
@@ -37,7 +37,7 @@ class ComboService
 
     public function delete(int $id): ?bool
     {
-        $this->authorizeInService('delete', Combo::class);
+        // $this->authorizeInService('delete', Combo::class);
         $combo = Combo::findOrFail($id);
         return $combo->delete();
     }
