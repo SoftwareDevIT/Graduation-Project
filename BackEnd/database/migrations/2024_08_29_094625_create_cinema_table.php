@@ -22,7 +22,7 @@ return new class extends Migration {
             $table->string('image')->nullable();
             $table->boolean('status')->default(true);
             $table->timestamps();
-            $table->foreign('location_id')->references('id')->on('location');
+            $table->foreign('location_id')->references('id')->on('location')->onDelete('cascade');
         });
     }
 

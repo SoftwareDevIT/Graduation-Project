@@ -24,9 +24,9 @@ return new class extends Migration
             $table->integer('views');
             $table->boolean('status')->default(true);
             $table->timestamps();
-            $table->foreign('movie_id')->references('id')->on('movies');
-            $table->foreign('news_category_id')->references('id')->on('news_category');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('movie_id')->references('id')->on('movies')->onDelete('cascade');
+            $table->foreign('news_category_id')->references('id')->on('news_category')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

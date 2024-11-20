@@ -20,8 +20,8 @@ return new class extends Migration {
             $table->integer('price');
             $table->boolean('status')->default(true);
             $table->timestamps();
-            $table->foreign('room_id')->references('id')->on('room');
-            $table->foreign('movie_in_cinema_id')->references('id')->on('movie_in_cinemas');
+            $table->foreign('room_id')->references('id')->on('room')->onDelete('cascade');
+            $table->foreign('movie_in_cinema_id')->references('id')->on('movie_in_cinemas')->onDelete('cascade');
 
         });
     }
