@@ -77,7 +77,7 @@ class ShowtimeController extends Controller
             $createdShowtime = $this->showtimeService->store($showtimeData);
             return $this->success($createdShowtime, 'Single showtime created successfully.');
         }
-        
+
     }
 
     /**
