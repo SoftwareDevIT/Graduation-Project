@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { useCategoryContext } from '../../../Context/CategoriesContext';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { notification } from 'antd'; // Import the notification component
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 const CategoriesDashboard = () => {
     const { state, deleteCategory } = useCategoryContext();
@@ -23,10 +25,17 @@ const CategoriesDashboard = () => {
         (currentPage - 1) * categoriesPerPage,
         currentPage * categoriesPerPage
     );
+    
     const handleDelete = (id: number) => {
         const confirmDelete = window.confirm('Bạn có chắc chắn muốn xóa thể loại này?');
         if (confirmDelete) {
             deleteCategory(id);
+            // Show success notification after deleting
+            notification.success({
+                message: 'Thành Công',
+                description: 'Thể loại đã được xóa thành công!',
+                placement: 'topRight',
+            });
         }
     };
 
@@ -37,7 +46,7 @@ const CategoriesDashboard = () => {
             <h2 className="text-center text-primary mb-4">Tất Cả Thể Loại Phim</h2>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Link to={'/admin/categories/add'} className="btn btn-outline-primary">
-                    Thêm Thể Loại Phim
+                   + Thêm Thể Loại Phim
                 </Link>
                 <input
                     type="text"
