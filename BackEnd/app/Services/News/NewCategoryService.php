@@ -3,12 +3,13 @@
 namespace App\Services\News;
 
 use App\Models\NewsCategory;
+use App\Traits\AuthorizesInService;
 
 /**
  * Class LocationService.
  */
 class NewCategoryService
-{
+{use AuthorizesInService;
 
     public function index()
     {
@@ -18,12 +19,14 @@ class NewCategoryService
 
     public function store(array $data)
     {
+        $this->authorizeInService('create', NewsCategory::class);
         $new_category = NewsCategory::create($data);
         return $new_category;
     }
 
     public function update(int $id, array $data)
     {
+        $this->authorizeInService('update', NewsCategory::class);
         $new_category = NewsCategory::findOrFail($id);
         $new_category->update($data);
         return $new_category;
@@ -32,6 +35,7 @@ class NewCategoryService
 
     public function delete(int $id)
     {
+        $this->authorizeInService('delete', NewsCategory::class);
         $new_category = NewsCategory::findOrFail($id);
         return $new_category->delete();
     }

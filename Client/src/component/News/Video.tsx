@@ -10,7 +10,8 @@ import instance from "../../server";
 import { Link, useParams } from "react-router-dom";
 import { Movie } from "../../interface/Movie";
 import { Modal } from "antd";
-
+import { stripHtml } from '../../assets/Font/quillConfig';
+import { useNews } from "../../Context/NewsContext";
 const fetchMovies = async (): Promise<Movie[]> => {
     const response = await instance.get("/movies");
     return response.data.data.original.slice(0, 15); // Giới hạn 15 bộ phim đầu tiên
@@ -43,20 +44,12 @@ function Video() {
         ],
     };
 
-    // Gọi API lấy dữ liệu tin tức
-    useEffect(() => {
-        const fetchNews = async () => {
-            try {
-                const response = await instance.get('/news'); // Gọi API
-                setNews(response.data.data); // Lưu dữ liệu vào state
-            } catch (error) {
-                console.error('Error fetching news:', error);
-            }
-        };
+    const { newsData, error } = useNews();  // Lấy dữ liệu từ context
 
-        fetchNews();
-    }, []);
-
+    if (error) {
+      return <div className="error">Error: {error}</div>;  // Xử lý lỗi nếu có
+    }
+  
     // Hàm xử lý khi click vào poster
     const handleMovieClick = (selectedMovie: Movie) => {
         setMovie(selectedMovie); // Cập nhật state movie
@@ -105,17 +98,17 @@ function Video() {
                         <div className="tintucmoi col-lg-8 col-md-10 col-sm-12">
                             <h2>Mới Nhất</h2>
 
-                            {news.map((item) => (
-                                <div key={item.id} className="div-item">
-                                    <div className="img">
-                                        <img src={item.thumnail} alt={item.title} />
-                                    </div>
-                                    <div className="content-new">
-                                        <Link to={`/postdetail/${item.id}`}><h3>{item.title}</h3></Link>
-                                        <p>{item.content}</p>
-                                    </div>
-                                </div>
-                            ))}
+                            {newsData.map((item) => (
+                    <div key={item.id} className="div-item">
+                      <div className="img">
+                        <img src={item.thumnail} alt={item.title} />
+                      </div>
+                      <div className="content-new">
+                        <Link to={`/postdetail/${item.id}`}><h3>{item.title}</h3></Link>
+                        <p>{stripHtml(item.content)}</p>
+                      </div>
+                    </div>
+                  ))}
                         </div>
                         <div className="chuyenmuc col-lg-4 col-md-2 col-sm-12">
                             <h3>Chuyên mục</h3>
@@ -124,7 +117,7 @@ function Video() {
                                 <p>Góc nhìn chân thực, khách quan nhất về các bộ phim</p>
                             </div>
                             <div className="noidung">
-                                <h4>Tin điện ảnh</h4>
+                                <Link to={'/FilmNews'}><h4>Tin điện ảnh</h4></Link>
                                 <p>Tin tức điện ảnh Việt Nam & thế giới</p>
                             </div>
                             <div className="noidung">
@@ -147,7 +140,7 @@ function Video() {
 >
   <iframe
     width="100%"
-    height="100%"
+    height="340px"
     src={movie?.trailer || "https://youtu.be/eW4AM1539-g?si=LSsCYUB0CVCH04id"} // Video mặc định
     title="Trailer"
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

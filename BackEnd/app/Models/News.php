@@ -11,13 +11,15 @@ class News extends Model
     protected $table = 'news';
     protected $fillable = [
         'title',
-        'news_category_id',
+        'slug',
         'thumnail',
         'banner',
         'content',
-        'status',
+        'news_category_id',
         'user_id',
         'movie_id',
+        'views',
+        'status',
     ];
 
     public function newsCategory()

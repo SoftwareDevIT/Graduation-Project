@@ -31,8 +31,8 @@ const MovieDetail: React.FC = () => {
 
 
   useEffect(() => {
-    fetchMovies(); // Fetch the movies when the component mounts
-  }, [id, fetchMovies]);
+    fetchMovies(); // Chỉ gọi lại dữ liệu khi `id` thay đổi
+  }, [id]);
 
   // Fetch additional user data (favorite movies, ratings) after login check
   useEffect(() => {
@@ -170,7 +170,7 @@ const MovieDetail: React.FC = () => {
                 <div className="movie-details">
                   <div>📅 Khởi chiếu: {movie?.release_date || "Chưa có ngày phát hành"}</div>
                   <div>⏰ Thời lượng: {movie?.duration || "Chưa có thời lượng"}</div>
-                  <div>🔞 Giới hạn tuổi: {movie?.age_limit ? `T${movie.age_limit}` : "Không có giới hạn tuổi"}</div>
+                  <div>🔞 Giới hạn tuổi: {movie?.age_limit ? `${movie.age_limit}` : "Không có giới hạn tuổi"}</div>
                 </div>
               </div>
 
@@ -186,12 +186,22 @@ const MovieDetail: React.FC = () => {
         </div>
 
         <div className="tabs">
-          {["Thông tin phim", "Lịch chiếu", "Đánh giá", "Tin tức", "Mua vé"].map((tab, index) => (
-            <Link key={index} to={`/${tab.toLowerCase().replace(" ", "-")}/${id}`} className={`tab ${location.pathname.includes(tab.toLowerCase()) ? "active" : ""}`}>
-              {tab}
+            <Link to={`/movie-detail/${id}`} className={`tab ${location.pathname === `/movie-detail/${id}` ? "active" : ""}`}>
+              Thông tin phim
             </Link>
-          ))}
-        </div>
+            <Link to={`/schedule/${id}`} className={`tab ${location.pathname === `/schedule/${id}` ? "active" : ""}`}>
+              Lịch chiếu
+            </Link>
+            <Link to={`/reviews/${id}`} className={`tab ${location.pathname === `/reviews/${id}` ? "active" : ""}`}>
+              Đánh giá
+            </Link>
+            <Link to={`/news/${id}`} className={`tab ${location.pathname === `/news/${id}` ? "active" : ""}`}>
+              Tin tức
+            </Link>
+            <Link to={`/buy-now/${id}`} className={`tab ${location.pathname === `/buy-now/${id}` ? "active" : ""}`}>
+              Mua vé
+            </Link>
+          </div>
       </div>
 
       {/* Modal Đánh Giá */}
@@ -225,7 +235,7 @@ const MovieDetail: React.FC = () => {
   {movie?.trailer ? (
     <iframe
       width="100%"
-      height="100%"
+      height="390px"
       src={movie.trailer}
       title="Trailer"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

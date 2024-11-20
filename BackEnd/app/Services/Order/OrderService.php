@@ -3,6 +3,7 @@
 namespace App\Services\Order;
 
 use App\Models\Booking;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class LocationService.
@@ -20,7 +21,7 @@ class OrderService
         $order = Booking::with('showtime.movie','showtime.room','user','payMethod','seats','combos')->findOrFail($id);
         return $order;
     }
-    
+
     public function destroy($id)
     {
         $order = Booking::find($id);
@@ -32,6 +33,11 @@ class OrderService
     {
         $order = Booking::findOrFail($id);
         $order->update($data);
+        return $order;
+    }
+
+    public function order(){
+        $order = Booking::where('user_id',Auth::user()->id)->with('showtime.movie','showtime.room','user','payMethod','seats','combos')->get();
         return $order;
     }
 }

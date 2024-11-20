@@ -7,33 +7,40 @@ use App\Models\Location;
 use App\Models\MovieInCinema;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Traits\AuthorizesInService;
+
 
 /**
  * Class LocationService.
  */
 class CinemaService
 {
-
+    use AuthorizesInService;
     public function index(): Collection
     {
 
         // return Cinema::all();
-        return Cinema::with('Location') 
-        ->get();
+
+        return Cinema::with('Location')
+            ->get();
+            
     }
 
 
     public function store(array $data): Cinema
     {
+        $this->authorizeInService('create', Cinema::class);
         return Cinema::create($data);
     }
     public function storeMovie(array $data): MovieInCinema
     {
+        $this->authorizeInService('create', Cinema::class);
         return MovieInCinema::create($data);
     }
 
     public function update(int $id, array $data): Cinema
     {
+        $this->authorizeInService('update', Cinema::class);
         $cinema = Cinema::findOrFail($id);
         $cinema->update($data);
 
@@ -43,13 +50,27 @@ class CinemaService
 
     public function delete(int $id): ?bool
     {
+        $this->authorizeInService('delete', Cinema::class);
         $cinema = Cinema::findOrFail($id);
         return $cinema->delete();
     }
-    public function get(int $id): Cinema
+    // public function get(int $id): Cinema
+    // {
+    //     $cinema = Cinema::findOrFail($id);
+    //     return $cinema;
+    // }
+
+    public function get($identifier): Cinema
     {
-        $cinema = Cinema::findOrFail($id);
-        return $cinema;
+        $Cinema = Cinema::query()
+            ->when(is_numeric($identifier), function ($query) use ($identifier) {
+                return $query->where('id', $identifier);
+            }, function ($query) use ($identifier) {
+                return $query->where('slug', $identifier);
+            })
+            ->firstOrFail();
+
+        return $Cinema;
     }
     public function showCinemaByLocation(int $location_id)
     {
@@ -59,6 +80,4 @@ class CinemaService
         }
         return $location->cinema;
     }
-
-
 }

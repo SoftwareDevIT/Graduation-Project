@@ -4,7 +4,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Link } from "react-router-dom";
-import { Movie } from "../../interface/Movie";
+
 import { useMovieContext } from "../../Context/MoviesContext";
 
 const MovieBanner = () => {
@@ -43,10 +43,7 @@ const MovieBanner = () => {
     ],
   };
 
-  // Nếu không có dữ liệu phim hoặc mảng rỗng
-  if (!Array.isArray(movies) || movies.length === 0) {
-    return <div className="loading-message">No movies available</div>;
-  }
+
 
   return (
     <div className="movie-banner">
@@ -59,7 +56,7 @@ const MovieBanner = () => {
             {movies.map((movie) => (
               <div key={movie.id}>
                 <div className="movie-item">
-                  <Link state={{ movieId: movie.id }} to={`/movie-detail/${movie.id}`}>
+                  <Link to={`/movie-detail/${movie.id}`}>
                     <img
                       src={movie.poster || "placeholder.jpg"}
                       alt={movie.movie_name}
@@ -75,6 +72,8 @@ const MovieBanner = () => {
                         ? new Date(movie.release_date).toLocaleDateString("vi-VN")
                         : "N/A"}
                     </span>
+                    
+                  
                   </div>
                 </div>
               </div>

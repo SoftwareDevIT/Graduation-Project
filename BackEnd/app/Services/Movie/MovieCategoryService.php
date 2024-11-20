@@ -5,12 +5,13 @@ namespace App\Services\Movie;
 use App\Models\MovieCategory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Traits\AuthorizesInService;
 
 /**
  * Class MovieService.
  */
 class MovieCategoryService
-{
+{use AuthorizesInService;
     public function index(): Collection
     {
         return MovieCategory::all();
@@ -18,11 +19,13 @@ class MovieCategoryService
 
     public function store(array $data): MovieCategory
     {
+        $this->authorizeInService('create', MovieCategory::class);
         return MovieCategory::create($data);
     }
 
     public function update(int $id, array $data): MovieCategory
     {
+        $this->authorizeInService('update', MovieCategory::class);
         $movieCategory = MovieCategory::query()->findOrFail($id);
         $movieCategory->update($data);
 
@@ -31,6 +34,7 @@ class MovieCategoryService
 
     public function delete(int $id): ?bool
     {
+        $this->authorizeInService('delete', MovieCategory::class);
         $movieCategory = MovieCategory::query()->findOrFail($id);
         return $movieCategory->delete();
     }

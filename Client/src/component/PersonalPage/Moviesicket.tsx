@@ -5,6 +5,7 @@ import instance from '../../server';
 import Footer from '../Footer/Footer';
 import './MovieTicket.css';
 import Ticket from '../../interface/Ticket';
+import { NavLink } from 'react-router-dom';
 
 
 // Define the Seat interface
@@ -35,12 +36,12 @@ const MovieTicket = () => {
 
       const fetchTickets = async () => {
         try {
-          const response = await instance.post(`/historyOrder`);
+          const response = await instance.get(`/order/${userId}`);
           if (response.data.status) {
             const ticketData = response.data.data;
-            setTickets(ticketData);
-            console.log(response.data.data);
-
+            // console.log(ticketData);
+            
+            setTickets(ticketData ? [ticketData] : []);
           }
         } catch (error) {
           console.error('Error fetching tickets:', error);
@@ -70,6 +71,62 @@ const MovieTicket = () => {
                       <h2 className="account-name">{userProfile?.user_name || 'No name'}</h2>
                     </div>
                   </div>
+                  <div className="account-nav">
+      <div className="account-nav-item">
+        <NavLink 
+          to="/profile" 
+          className={({ isActive }) => `account-nav-title ${isActive || location.pathname === '/changepassword' ? 'active' : ''}`}
+        >
+          Tài khoản
+        </NavLink>
+        <ul className="account-submenu">
+          <li className="account-submenu-item">
+            <NavLink to="/profile" className={({ isActive }) => (isActive ? 'active' : '')}>Quản lí tài khoản</NavLink>
+          </li>
+          <li className="account-submenu-item">
+            <NavLink to="/changepassword" className={({ isActive }) => (isActive ? 'active' : '')}>Đổi mật khẩu</NavLink>
+          </li>
+        </ul>
+      </div>
+
+      <div className="account-nav-item">
+        <NavLink 
+          to="/movie-library" 
+          className={({ isActive }) => `account-nav-title ${isActive ? 'active' : ''}`}
+        >
+          Tủ phim
+        </NavLink>
+      </div>
+
+      <div className="account-nav-item">
+        <NavLink 
+          to="/tickets" 
+          className={({ isActive }) => `account-nav-title ${isActive ? 'active' : ''}`}
+        >
+          Vé
+        </NavLink>
+      </div>
+
+      <div className="account-nav-item">
+        <NavLink 
+          to="/credits" 
+          className={({ isActive }) => `account-nav-title ${['/credits', '/deponsit', '/transaction'].includes(location.pathname) ? 'active' : ''}`}
+        >
+          Nạp tiền
+        </NavLink>
+        <ul className="account-submenu">
+          <li className="account-submenu-item">
+            <NavLink to="/credits" className={({ isActive }) => (isActive ? 'active' : '')}>Nạp tiền</NavLink>
+          </li>
+          <li className="account-submenu-item">
+            <NavLink to="/deponsit" className={({ isActive }) => (isActive ? 'active' : '')}>Lịch sử nạp tiền</NavLink>
+          </li>
+          <li className="account-submenu-item">
+            <NavLink to="/transaction" className={({ isActive }) => (isActive ? 'active' : '')}>Lịch sử giao dịch</NavLink>
+          </li>
+        </ul>
+      </div>
+    </div>
                 </div>
               </div>
             </div>
@@ -81,31 +138,22 @@ const MovieTicket = () => {
                 tickets.map((ticket, index) => (
                   <div className="ticket-container" key={index}>
                     <p className="ticket-code">Mã đặt vé - {ticket.id}</p>
-                    {/* <h2 className="ticket-cinema">{ticket.showtime?.room?.cinema_name || 'N/A'}</h2> */}
+                    <h2 className="ticket-cinema">{ticket.showtime?.room?.cinema_name || 'N/A'}</h2>
                     <p className="ticket-date">{ticket.showtime?.showtime_date}</p>
                     <div className="ticket-info">
                       <span className="ticket-time">{ticket.showtime?.showtime_start}</span>
                       <span className="ticket-room">{ticket.showtime?.room?.room_name}</span>
                       <span className="ticket-seat">
-                        {ticket.seats?.map((seat, index) => (
-                          <span key={index}>{seat.seat_name}</span>
+                        {ticket.seats.map((seat) => (
+                          <span key={seat.seat_name}>{seat.seat_name}</span>
                         ))}
                       </span>
                     </div>
                     <div className="ticket-details">
                       <div className="ticket-item">
-                        <span className="item-name">Số vé</span>
-
+                        <span className="item-name">Số lượng</span>
                         <span className="item-quantity">{ticket.seats?.length || 0}</span>
                         <span className="item-price">{ticket.amount?.toLocaleString()} VND</span>
-                      </div>
-                      <div className="ticket-item">
-                        <span className="item-name">Combo:</span>
-
-                        <span className="item-quantity"> {ticket.combos?.map((combos, index) => (
-                          <span key={index}>{combos.combo_name}</span>
-                        ))}</span>
-                        <span className="item-price"></span>
                       </div>
                       <div className="ticket-item total">
                         <span className="item-name">TỔNG</span>
