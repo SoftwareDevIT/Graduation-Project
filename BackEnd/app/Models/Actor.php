@@ -10,18 +10,19 @@ class Actor extends Model
     use HasFactory;
     protected $table = 'actor';
     protected $fillable = [
-        'id',
         'actor_name',
+        'slug',
         'descripcion',
         'photo',
         'country',
         'link_wiki',
+        'status',
     ];
 
     public function movies()
     {
         return $this->belongsToMany(Movie::class, 'actor_in_movies', 'actor_id', 'movie_id')
-         
+
             ->withTimestamps();
     }
 

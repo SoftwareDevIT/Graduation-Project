@@ -4,22 +4,35 @@ import { Link, useNavigate } from "react-router-dom";
 import { Cinema } from "../../interface/Cinema";
 import { Location } from "../../interface/Location";
 import instance from "../../server";
-
+import { useCountryContext } from "../../Context/CountriesContext";
+import { Modal } from "antd"; 
 
 const Header = () => {
   const [isHeaderLeftVisible, setHeaderLeftVisible] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [isProfileMenuVisible, setProfileMenuVisibles] = useState(false);
-  const [locations, setLocations] = useState<Location[]>([]);
+
   const [cinemas, setCinemas] = useState<Cinema[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<number | null>(null);
-
+  const { state } = useCountryContext();
+  const locations = state.countries;
   const navigate = useNavigate();
 
 
 
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
+  // Hàm xử lý sự kiện khi người dùng click vào Rạp
+  const handleOpenModal = () => {
+    setIsModalVisible(true);
+  };
+  
+  // Hàm xử lý khi người dùng đóng Modal
+  const handleCloseModal = () => {
+    setIsModalVisible(false);
+  };
+  
   useEffect(() => {
     // Kiểm tra nếu có userId trong localStorage
     const token = localStorage.getItem("token");
@@ -27,17 +40,6 @@ const Header = () => {
     if (user_id && token) {
       setIsLoggedIn(true); // Cập nhật trạng thái đăng nhập
     }
-    const fetchLocations = async () => {
-      try {
-        const response = await instance.get("/location");
-        // console.log(response.data); // Kiểm tra dữ liệu nhận về từ API
-        setLocations(response.data.data);
-      } catch (error) {
-        console.error("Error fetching locations:", error);
-      }
-    };
-
-    fetchLocations();
   }, []);
   useEffect(() => {
     if (selectedLocation !== null) {
@@ -100,16 +102,16 @@ const Header = () => {
                 }`}
               id="menukkk"
             >
-       
-                <form onSubmit={handleSearchSubmit}>
-                  <input id="search-mobile"
-                    type="text"
-                    placeholder="Từ khóa tìm kiếm..."
-                    value={searchTerm}
-                    onChange={handleSearch}
-                  />
-                </form>
-              
+
+              <form onSubmit={handleSearchSubmit}>
+                <input id="search-mobile"
+                  type="text"
+                  placeholder="Từ khóa tìm kiếm..."
+                  value={searchTerm}
+                  onChange={handleSearch}
+                />
+              </form>
+
 
               <Link
                 to={"/buy-ticket"}
@@ -117,71 +119,87 @@ const Header = () => {
               >
                 Đặt vé phim chiếu rạp
               </Link>
+
 <Link to={'/buy-ticket'}>Lịch chiếu</Link>
-          
-              <div className="dropdown">
-                <a href="#" className="dropbtn1" >
-                  Rạp{" "}
-                  <span className="arrow">
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 16 16"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
+             
+<div className="dropdown">
+  <a
+    href="#"
+    className="dropbtn1"
+    onClick={handleOpenModal} // Mở Modal khi click vào "Rạp"
+  >
+    Rạp{" "}
+    <span className="arrow">
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M4 6L8 10L12 6"
+          stroke="#555"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </span>
+  </a>
+</div>
+<Modal
+      title="Tìm Rạp"
+      visible={isModalVisible}
+      onCancel={handleCloseModal}
+      footer={null}
+      style={{ maxWidth: '500px', margin: '0 auto' }} // Căn giữa modal
+    >
+      <div className="timkiemrap">
+        <input
+          type="text"
+          placeholder="Tìm rạp tại"
+          style={{
+            width: '100%',
+            padding: '8px',
+            marginBottom: '12px',
+            fontSize: '14px',
+            border: '1px solid #ddd',
+            borderRadius: '4px',
+          }}
+        />
+        <select
+          name="location"
+          id="location-select"
+          onChange={handleLocationChange}
+          style={{
+            width: '100%',
+            padding: '8px',
+            marginBottom: '12px',
+            fontSize: '14px',
+            border: '1px solid #ddd',
+            borderRadius: '4px',
+          }}
+        >
+          <option value="">Chọn khu vực</option>
+          {locations.map((location) => (
+            <option key={location.id} value={location.id}>
+              {location.location_name}
+            </option>
+          ))}
+        </select>
+      </div>
 
-                    >
-                      <path
-                        d="M4 6L8 10L12 6"
-                        stroke="#555"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
-                  </span>
-                </a>
-                <div className="dropdown-content">
-                  <div className="timkiemrap">
-                    <input
-                      type="text"
-                      placeholder="Tìm rạp tại"
-                      style={{
-                        width: "120px",
-                        padding: "4px",
-                        marginBottom: "12px",
-                        boxSizing: "border-box",
-                        marginRight: "5px",
-                      }}
-                    />
-                    <select
-                      name="location"
-                      id="location-select"
-                      onChange={handleLocationChange}
-                      style={{
-                        width: "100px",
-                        padding: "4px",
-                        marginBottom: "12px",
-                        boxSizing: "border-box",
-                      }}
-                    >
-                      <option value="">Chọn khu vực</option>
-                      {locations.map((location) => (
-                        <option key={location.id} value={location.id}>
-                          {location.location_name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
 
-                  {cinemas.map((cinema) => (
-                    <a key={cinema.id} href="#">
-                      {cinema.cinema_name}
-                    </a>
-                  ))}
-                </div>
+      <div className="cinemas-list">
+        {cinemas.map((cinema) => (
+          <a key={cinema.id} href="#">
+            {cinema.cinema_name}
+          </a>
+        ))}
+      </div>
+    </Modal>
 
-              </div>
               <div className="dropdown">
                 <a href="#" className="dropbtn">
                   Phim{" "}
@@ -206,12 +224,12 @@ const Header = () => {
                 <div className="dropdown-content">
                   <Link to={"/movieshowing"}>Đang chiếu</Link>
                   <a href="#">Sắp chiếu</a>
-                  <a href="#">Chiếu sớm</a>
-                  <a href="#">Phim Việt Nam</a>
+                  <Link to={"/earlymovie"}>Chiếu sớm</Link>
+
                 </div>
               </div>
               <div className="dropdown">
-                <a href="#" className="dropbtn">
+                <a className="dropbtn">
                   Tin Tức{" "}
                   <span className="arrow">
                     <svg
@@ -233,13 +251,13 @@ const Header = () => {
                 </a>
                 <div className="dropdown-content">
                   <Link to={'/FilmNews'}>Tin điện ảnh</Link>
-                  <a href="#">Đánh giá phim</a>
-                  <a href="#">Video</a>
-                  <a href="#">TV Series</a>
+                  {/* <a href="#">Đánh giá phim</a> */}
+                  <Link to={'/video'}>Video</Link>
+                  {/* <a href="#">TV Series</a> */}
                 </div>
               </div>
-              <Link to={'/sp'}>Cộng đồng</Link>
-                         </div>
+              <a href="#">Cộng đồng</a>
+            </div>
           </div>
 
           <div className="header-logo col-lg-1 col-md-4 col-sm-4 col-4 ">
@@ -285,16 +303,15 @@ const Header = () => {
             </Link>
             {isLoggedIn ? (
               <div className="icon-link" onClick={toggleProfileMenu}>
-                <img className="avtat-img" src="	https://cdn.moveek.com/bundles/ornweb/img/no-avatar.png" alt="" />
+                <img className="avtat-img" src="https://rapchieuphim.com/photos/36/poster/wall-phim-ong-trum.jpg" alt="" />
                 <i className="fas fa-check checkmark"></i>
                 {isProfileMenuVisible && (
                   <div className="profile-dropdown">
                     <Link to="/Personal">Trang cá nhân</Link>
                     <Link to="/profile">Quản lý tài khoản</Link>
-                    <Link to="/movies">Vé phim</Link>
-                    <Link to="/credits">Moveek Credits</Link>
-                    <Link to="/login" onClick={handleLogout}>Đăng xuất</Link>
-                  
+                    <Link to="/movieticket">Vé phim</Link>
+                    {/* <Link to="/credits">Moveek Credits</Link> */}
+                    <div onClick={handleLogout}>Đăng xuất</div>
                   </div>
                 )}
               </div>

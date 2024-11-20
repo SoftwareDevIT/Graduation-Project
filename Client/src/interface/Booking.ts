@@ -12,7 +12,7 @@ export interface Booking {
   price_ticket: number;
   price_combo: number;
   amount:number;
-  seat_status: 'hold'|'no';
+  status: string;
   user: User;
   showtime: Showtime;
   pay_method : PayMethod;

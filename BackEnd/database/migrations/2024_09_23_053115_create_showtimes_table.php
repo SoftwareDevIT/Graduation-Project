@@ -12,9 +12,8 @@ return new class extends Migration {
     {
         Schema::create('showtimes', function (Blueprint $table) {
             $table->id('id');
-            $table->unsignedBigInteger('movie_in_cinema_id');
             $table->unsignedBigInteger('room_id');
-
+            $table->unsignedBigInteger('movie_in_cinema_id');
             $table->date('showtime_date');
             $table->time('showtime_start');
             $table->time('showtime_end')->nullable();

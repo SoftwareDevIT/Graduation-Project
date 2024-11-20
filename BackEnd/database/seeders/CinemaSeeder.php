@@ -16,17 +16,21 @@ class CinemaSeeder extends Seeder
         $data = json_decode($response->getBody()->getContents(), true);
         // $data = array_slice($data, 0, 10);
         foreach ($data as $item) {
-            $locationId = DB::table('location')->where('location_name', $item['city'])->value('id');
-            $locationId = $locationId ?? 24;
-            DB::table('cinema')->insert([
-                'cinema_name' => $item['name'],
-                'image' => 'https://rapchieuphim.com' . $item['image'],
-                'phone' => $item['phone'],
-                'location_id' => $locationId,
-                'cinema_address' => $item['address'],
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+            if (!is_null($item['city'])) {
+                $locationId = DB::table('location')->where('location_name', $item['city'])->value('id');
+                DB::table('cinema')->insert([
+                    'cinema_name' => $item['name'],
+                    'slug' => $item['slug'],
+                    'city' => $item['city'],
+                    'description' => $item['description'],
+                    'image' => 'https://rapchieuphim.com' . $item['image'],
+                    'phone' => $item['phone'] ?? '0979620125',
+                    'location_id' => $locationId,
+                    'cinema_address' => $item['address'] ?? 'Số 99 , VincomCenter ,32 Nguyen Huy',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
         }
     }
 }

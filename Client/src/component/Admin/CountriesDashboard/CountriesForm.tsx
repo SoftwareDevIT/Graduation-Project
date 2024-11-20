@@ -7,9 +7,9 @@ import { useCountryContext } from '../../../Context/CountriesContext';
 import { Location } from '../../../interface/Location';
 import instance from '../../../server';
 
-// Define schema using Zod
+// Định nghĩa schema sử dụng Zod
 const countrySchema = z.object({
-  location_name: z.string().min(1, "Country Name is required."),
+  location_name: z.string().min(1, "Tên Quốc Gia là bắt buộc."),
 });
 
 const CountriesForm: React.FC = () => {
@@ -27,9 +27,9 @@ const CountriesForm: React.FC = () => {
       if (isEditMode) {
         try {
           const response = await instance.get(`/location/${id}`);
-          reset(response.data); // Reset form with fetched data
+          reset(response.data); // Reset form với dữ liệu lấy từ API
         } catch (error) {
-          console.error("Failed to fetch country:", error);
+          console.error("Không thể lấy thông tin quốc gia:", error);
         }
       }
     };
@@ -40,27 +40,27 @@ const CountriesForm: React.FC = () => {
     try {
       if (isEditMode) {
         await updateCountry(Number(id), data);
-        alert("Country updated successfully!");
+        alert("Quốc gia đã được cập nhật thành công!");
       } else {
         await addCountry(data);
-        alert("Country added successfully!");
+        alert("Quốc gia đã được thêm thành công!");
       }
-      reset(); // Reset the form after submission
-      nav('/admin/countries'); // Redirect to the country list page or desired route
+      reset(); // Reset form sau khi gửi
+      nav('/admin/countries'); // Điều hướng về trang danh sách quốc gia hoặc trang mong muốn
     } catch (error) {
-      console.error("Failed to submit form:", error);
-      alert("Failed to submit form");
+      console.error("Không thể gửi thông tin form:", error);
+      alert("Không thể gửi thông tin form");
     }
   };
 
   return (
     <div className="container mt-5">
       <form onSubmit={handleSubmit(handleFormSubmit)} className="shadow p-4 rounded bg-light">
-        <h1 className="text-center mb-4">{isEditMode ? "Edit Country" : "Add Country"}</h1>
+        <h1 className="text-center mb-4">{isEditMode ? "Chỉnh sửa Quốc Gia" : "Thêm Quốc Gia"}</h1>
         
-        {/* Country Name Field */}
+        {/* Trường tên quốc gia */}
         <div className="mb-3">
-          <label htmlFor="location_name" className="form-label">Country Name</label>
+          <label htmlFor="location_name" className="form-label">Tên Quốc Gia</label>
           <input
             type="text"
             className={`form-control ${errors.location_name ? "is-invalid" : ""}`}
@@ -69,9 +69,9 @@ const CountriesForm: React.FC = () => {
           {errors.location_name && <span className="text-danger">{errors.location_name.message}</span>}
         </div>
 
-        {/* Submit Button */}
+        {/* Nút gửi */}
         <button type="submit" className="btn btn-primary w-100">
-          {isEditMode ? "Update Country" : "Add Country"}
+          {isEditMode ? "Cập nhật Quốc Gia" : "Thêm Quốc Gia"}
         </button>
       </form>
     </div>

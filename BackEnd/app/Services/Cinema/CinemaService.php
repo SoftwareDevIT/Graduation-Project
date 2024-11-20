@@ -17,7 +17,9 @@ class CinemaService
     public function index(): Collection
     {
 
-        return Cinema::all();
+        // return Cinema::all();
+        return Cinema::with('Location')
+            ->get();
     }
 
 
@@ -44,10 +46,23 @@ class CinemaService
         $cinema = Cinema::findOrFail($id);
         return $cinema->delete();
     }
-    public function get(int $id): Cinema
+    // public function get(int $id): Cinema
+    // {
+    //     $cinema = Cinema::findOrFail($id);
+    //     return $cinema;
+    // }
+
+    public function get($identifier): Cinema
     {
-        $cinema = Cinema::findOrFail($id);
-        return $cinema;
+        $Cinema = Cinema::query()
+            ->when(is_numeric($identifier), function ($query) use ($identifier) {
+                return $query->where('id', $identifier);
+            }, function ($query) use ($identifier) {
+                return $query->where('slug', $identifier);
+            })
+            ->firstOrFail();
+
+        return $Cinema;
     }
     public function showCinemaByLocation(int $location_id)
     {
@@ -57,6 +72,4 @@ class CinemaService
         }
         return $location->cinema;
     }
-
-
 }

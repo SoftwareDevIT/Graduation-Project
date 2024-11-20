@@ -1,12 +1,13 @@
-import  { useEffect, useState } from 'react';
+import React from 'react';
 import Slider from 'react-slick';
-import instance from '../../server';
-import './NewsContent.css'; 
-import { NewsItem } from '../../interface/NewsItem';
 import { Link } from 'react-router-dom';
+import { stripHtml } from '../../assets/Font/quillConfig';
+
+import './NewsContent.css';
+import { useNews } from '../../Context/NewsContext';
 
 const NewsContent = () => {
-  const [newsData, setNewsData] = useState<NewsItem[]>([]);
+  const { newsData, isLoading, error } = useNews();
 
   const settings = {
     infinite: true,
@@ -18,26 +19,8 @@ const NewsContent = () => {
     arrows: true,
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await instance.get('/news');
-        if (Array.isArray(response.data.data)) {
-          setNewsData(response.data.data);
-        } else {
-          console.error("Expected an array in 'data', but received:", typeof response.data.data);
-        }
-      } catch (error) {
-        console.error('Error fetching news data:', error);
-      }
-    };
-    fetchData();
-  }, []);
-
-  
-
-  // Display main news (first news item)
-  const mainNews = newsData[0];
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="news-container">
@@ -46,26 +29,26 @@ const NewsContent = () => {
           <Slider {...settings}>
             {newsData.slice(0, 3).map((news, index) => (
               <div key={index}>
-              <Link to={`/postdetail/${news.id}`} ><img src={news.banner || 'https://via.placeholder.com/800x400'} alt={news.title} /></Link>
+                <Link to={`/postdetail/${news.id}`}>
+                  <img src={news.banner || 'https://via.placeholder.com/800x400'} alt={news.title} />
+                </Link>
               </div>
             ))}
           </Slider>
         </div>
         <div className="main-news-content">
-          <h2 className='PhimHot'>Phim Hot Trong Tuần</h2>
-          {/* <p className="category">
-            TV Series • {mainNews.user_id} • {new Date(mainNews.created_at).toLocaleString()}
-          </p>
-          <p className="description">{mainNews.content}</p> */}
+          <h2 className="PhimHot">Phim Hot Trong Tuần</h2>
         </div>
       </div>
-
       <div className="related-news">
         {newsData.slice(1, 6).map((news, index) => (
           <div className="related-news-item" key={index}>
-            <Link to={`/postdetail/${news.id}`} className='title'> {news.title}</Link>
-          
-            <span className="author">{news.user.fullname} • {new Date(news.created_at).toLocaleString()}</span>
+            <Link to={`/postdetail/${news.id}`} className="title">
+              {stripHtml(news.title)}
+            </Link>
+            <span className="author">
+              {news.user.fullname} • {new Date(news.created_at).toLocaleDateString()}
+            </span>
           </div>
         ))}
       </div>

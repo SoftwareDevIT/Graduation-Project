@@ -3,6 +3,8 @@
 namespace App\Services\News;
 
 use App\Models\News;
+use App\Models\NewsCategory;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -11,15 +13,15 @@ use Illuminate\Support\Facades\Storage;
 class NewService
 {
 
-    public function index()
+    public function index():Collection
     {
-        return News::with('user')->get();
+        return News::with('user','newsCategory')->get();
     }
 
 
     public function store(array $data)
     {
-        
+
         $news = News::create($data);
         return $news;
     }
@@ -38,9 +40,22 @@ class NewService
         return $news->delete();
     }
 
-    public function show(int $id)
+    // public function show(int $id)
+    // {
+    //     $news = News::with('newsCategory','user')->findOrFail($id);
+    //     return $news;
+    // }
+    public function show($identifier)
     {
-        $news = News::with('newsCategory','user')->findOrFail($id);
+
+        $news = News::with(['newsCategory', 'user'])
+            ->when(is_numeric($identifier), function ($query) use ($identifier) {
+                return $query->where('id', $identifier);
+            }, function ($query) use ($identifier) {
+                return $query->where('slug', $identifier);
+            })
+            ->firstOrFail();
+
         return $news;
-    }   
+    }
 }

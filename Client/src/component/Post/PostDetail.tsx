@@ -5,6 +5,8 @@ import Footer from '../Footer/Footer';
 import Header from '../Header/Hearder';
 import { NewsItem } from '../../interface/NewsItem';
 import instance from '../../server';
+import { stripHtml } from '../../assets/Font/quillConfig';
+import dayjs from 'dayjs'; // Import dayjs
 
 const PostDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -34,6 +36,9 @@ const PostDetail: React.FC = () => {
         return <p>Không tìm thấy bài viết</p>;
     }
 
+    // Định dạng ngày tháng
+    const formattedDate = dayjs(article.created_at).format('DD/MM/YYYY HH:mm');
+
     return (
         <>
             <Header />
@@ -41,19 +46,19 @@ const PostDetail: React.FC = () => {
                 <div className="main-content">
                     <h1 className="article-title">{article.title}</h1>
                     <p className="article-meta">
-                        {article.news_category.news_category_name} · {article.created_at}
+                        {article.news_category.news_category_name} · {formattedDate}
                     </p>
 
                     <div className="article-content-container">
                         <img src={article.thumnail} alt="Poster" className="article-poster" />
                         <div className="article-movie-info">
-                            <h2>{article.title}</h2>
+                            <h2>{stripHtml(article.title)}</h2>
                             {/* Bạn có thể thêm các thông tin khác nếu cần */}
                         </div>
                         <button className="article-button">Mua vé ngay</button>
                     </div>
 
-                    <p className="article-description">{article.content}</p>
+                    <p className="article-description">{stripHtml(article.content)}</p>
                     {/* Nếu bạn muốn giữ lại nội dung ban đầu, bạn có thể thêm phần nội dung ở đây */}
                 </div>
 

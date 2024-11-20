@@ -56,9 +56,16 @@ class MovieService
         return $movie->delete();
     }
 
-    public function show($id)
+    public function show($identifier)
     {
-        $movie = Movie::with(['actor', 'director', 'movie_category', 'movieInCinemas'])->findOrFail($id);
+        // Xác định xem identifier là ID hay slug
+        $movie = Movie::with(['actor', 'director', 'movie_category', 'movieInCinemas'])
+            ->when(is_numeric($identifier), function ($query) use ($identifier) {
+                return $query->where('id', $identifier);
+            }, function ($query) use ($identifier) {
+                return $query->where('slug', $identifier);
+            })
+            ->firstOrFail();
 
         // Chuyển đổi thành mảng và định dạng lại dữ liệu
         $formattedMovie = $movie->toArray();

@@ -47,7 +47,6 @@ const DanhGia: React.FC = () => {
            
        
                         <MovieDetail />
-
                         <div className="community-section">
                             <h3>Cộng đồng</h3>
 
