@@ -13,20 +13,20 @@ class NewCategoryService
 
     public function index()
     {
-        return NewsCategory::all();
+        return NewsCategory::orderByDesc('created_at')->get();
     }
 
 
     public function store(array $data)
     {
-        $this->authorizeInService('create', NewsCategory::class);
+
         $new_category = NewsCategory::create($data);
         return $new_category;
     }
 
     public function update(int $id, array $data)
     {
-        $this->authorizeInService('update', NewsCategory::class);
+
         $new_category = NewsCategory::findOrFail($id);
         $new_category->update($data);
         return $new_category;
@@ -35,7 +35,7 @@ class NewCategoryService
 
     public function delete(int $id)
     {
-        $this->authorizeInService('delete', NewsCategory::class);
+
         $new_category = NewsCategory::findOrFail($id);
         return $new_category->delete();
     }

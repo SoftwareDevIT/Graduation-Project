@@ -17,18 +17,18 @@ class ActorService
     use AuthorizesInService;
     public function index(): Collection
     {
-        return Actor::all();
+        return Actor::orderByDesc('created_at')->get();
     }
 
     public function store(array $data): Actor
     {
-        $this->authorizeInService('create', Actor::class);
+
         return Actor::create($data);
     }
 
     public function update(int $id, array $data): Actor
     {
-        $this->authorizeInService('update', Actor::class);
+
         $actor = Actor::query()->findOrFail($id);
         $actor->update($data);
 
@@ -37,7 +37,7 @@ class ActorService
 
     public function delete(int $id): ?bool
     {
-        $this->authorizeInService('delete', Actor::class);
+
         $actor = Actor::query()->findOrFail($id);
         return $actor->delete();
     }

@@ -18,20 +18,22 @@ class ShowtimeService
     use AuthorizesInService;
     public function index()
     {
-        return Showtime::with(['movieInCinema.movie', 'room']);
+
+        return Showtime::with(['movieInCinema.movie', 'room'])->orderByDesc('created_at')->paginate(5);
+
     }
 
 
 
     public function store(array $data): Showtime
     {
-        $this->authorizeInService('create', Showtime::class);
+
         return Showtime::create($data);
     }
 
     public function update(int $id, array $data): Showtime
     {
-        $this->authorizeInService('update', Showtime::class);
+
         $showtime = Showtime::findOrFail($id);
         $showtime->update($data);
 
@@ -41,7 +43,7 @@ class ShowtimeService
 
     public function delete(int $id): ?bool
     {
-        $this->authorizeInService('delete', Showtime::class);
+
         $showtime = Showtime::findOrFail($id);
         return $showtime->delete();
     }

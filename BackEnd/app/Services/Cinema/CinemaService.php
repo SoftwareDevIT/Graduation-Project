@@ -21,26 +21,26 @@ class CinemaService
 
         // return Cinema::all();
 
-        return Cinema::with('Location')
+        return Cinema::with('Location')->orderByDesc('created_at')
             ->get();
-            
+
     }
 
 
     public function store(array $data): Cinema
     {
-        $this->authorizeInService('create', Cinema::class);
+
         return Cinema::create($data);
     }
     public function storeMovie(array $data): MovieInCinema
     {
-        $this->authorizeInService('create', Cinema::class);
+
         return MovieInCinema::create($data);
     }
 
     public function update(int $id, array $data): Cinema
     {
-        $this->authorizeInService('update', Cinema::class);
+
         $cinema = Cinema::findOrFail($id);
         $cinema->update($data);
 
@@ -50,7 +50,7 @@ class CinemaService
 
     public function delete(int $id): ?bool
     {
-        $this->authorizeInService('delete', Cinema::class);
+
         $cinema = Cinema::findOrFail($id);
         return $cinema->delete();
     }

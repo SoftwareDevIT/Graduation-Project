@@ -17,19 +17,19 @@ class LocationService
     public function index(): Collection
     {
 
-        return Location::all();
+        return Location::orderByDesc('created_at')->get();
     }
 
 
     public function store(array $data): Location
     {
-        $this->authorizeInService('create', Location::class);
+
         return Location::create($data);
     }
 
     public function update(int $id, array $data): Location
     {
-        $this->authorizeInService('update', Location::class);
+
         $location = Location::findOrFail($id);
         $location->update($data);
 
@@ -39,7 +39,6 @@ class LocationService
 
     public function delete(int $id): ?bool
     {
-        $this->authorizeInService('delete', Location::class);
         $location = Location::findOrFail($id);
         return $location->delete();
     }

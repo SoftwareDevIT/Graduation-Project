@@ -22,21 +22,22 @@ class StoreMovieRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'movie_name'            => 'required|string|max:255',
-            'poster'                => 'mimes:jpeg,png,jpg,gif',
-            'thumbnail'                => 'mimes:jpeg,png,jpg,gif',
-            'duration'              => 'string|max:225',
-            'release_date'          => 'date',
-            'age_limit'             => 'required|integer',
-            'description'            => 'string',
-            'trailer'               => 'string|max:255',
-            'rating'        => 'numeric|between:1,10',
-            'actor_id'                => 'required|array',
-            'actor_id.*'              => 'exists:actor,id',
-            'director_id'                => 'required|array',
-            'director_id.*'              => 'exists:director,id',
-            'movie_category_id'                => 'required|array',
-            'movie_category_id.*'              => 'exists:movie_category,id',
+            'movie_name' => 'required|string|max:255',
+            'poster' => 'mimes:jpeg,png,jpg,gif',
+            'thumbnail' => 'mimes:jpeg,png,jpg,gif',
+            'duration' => 'string|max:225',
+            'release_date' => 'date',
+            'age_limit' => 'required|integer',
+            'description' => 'string',
+            'slug' => 'string',
+            'trailer' => 'string|max:255',
+            'rating' => 'numeric|between:1,10',
+            'actor_id' => 'required|array',
+            'actor_id.*' => 'exists:actor,id',
+            'director_id' => 'required|array',
+            'director_id.*' => 'exists:director,id',
+            'movie_category_id' => 'required|array',
+            'movie_category_id.*' => 'exists:movie_category,id',
         ];
     }
 

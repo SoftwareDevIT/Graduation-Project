@@ -47,7 +47,7 @@ class MovieSeeder extends Seeder
                 'slug' => $item['slug'],
                 'country' => $item['country'],
                 'poster' => $poster,
-                'duration' => $item['duration'],
+                'duration' => (int)str_replace(' phút', '', $item['duration']),
                 'release_date' => now(),
                 'age_limit' => $item['age_restricted'],
                 'description' => $item['description'],

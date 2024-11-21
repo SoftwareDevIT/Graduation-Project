@@ -21,8 +21,8 @@ return new class extends Migration {
             $table->enum('status', ['Reserved Until', 'Booked'])->default('Reserved Until');
             $table->timestamp('reserved_until')->nullable();
             $table->timestamps();
-            $table->foreign('showtime_id')->references('id')->on('showtimes');
-            $table->foreign('room_id')->references('id')->on('room');
+            $table->foreign('showtime_id')->references('id')->on('showtimes')->onDelete('cascade');
+            $table->foreign('room_id')->references('id')->on('room')->onDelete('cascade');
 
 
         });

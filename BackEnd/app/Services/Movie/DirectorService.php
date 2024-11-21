@@ -17,18 +17,18 @@ class DirectorService
     use AuthorizesInService;
     public function index(): Collection
     {
-        return Director::all();
+        return Director::orderByDesc('created_at')->get();
     }
 
     public function store(array $data): Director
     {
-        $this->authorizeInService('create', Director::class);
+
         return Director::create($data);
     }
 
     public function update(int $id, array $data): Director
     {
-        $this->authorizeInService('update', Director::class);
+
         $director = Director::query()->findOrFail($id);
         $director->update($data);
 
@@ -37,7 +37,7 @@ class DirectorService
 
     public function delete(int $id): ?bool
     {
-        $this->authorizeInService('delete', Director::class);
+
         $director = Director::query()->findOrFail($id);
         return $director->delete();
     }
