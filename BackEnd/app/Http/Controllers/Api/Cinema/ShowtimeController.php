@@ -77,7 +77,7 @@ class ShowtimeController extends Controller
             $createdShowtime = $this->showtimeService->store($showtimeData);
             return $this->success($createdShowtime, 'Single showtime created successfully.');
         }
-        
+
     }
 
     /**
@@ -98,6 +98,8 @@ class ShowtimeController extends Controller
         try {
             $showtime = $this->showtimeService->update($id, $request->validated());
             return $this->success($showtime);
+        } catch (ModelNotFoundException $e) {
+            return $this->notFound("Không có id {$id} trong cơ sở dữ liệu");
         } catch (Exception $e) {
             return $e->getMessage();
         }
@@ -107,6 +109,8 @@ class ShowtimeController extends Controller
     {
         try {
             return $this->success($this->showtimeService->delete($id));
+        } catch (ModelNotFoundException $e) {
+            return $this->notFound("Không có id {$id} trong cơ sở dữ liệu");
         } catch (Exception $e) {
             return $e->getMessage();
         }
@@ -116,12 +120,9 @@ class ShowtimeController extends Controller
     {
         try {
             $showtime = $this->showtimeService->get($id);
-
-            if (!$showtime) {
-                return $this->notFound();
-            }
-
             return $this->success($showtime);
+        } catch (ModelNotFoundException $e) {
+            return $this->notFound("Không có id {$id} trong cơ sở dữ liệu");
         } catch (Exception $e) {
             return $e->getMessage();
         }

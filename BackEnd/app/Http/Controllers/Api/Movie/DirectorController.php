@@ -36,7 +36,7 @@ class DirectorController extends Controller
     {
         try {
             $file = $request->file('photo');
-            $imageLink = $file ?  $this->uploadImage($file) : null;
+            $imageLink = $file ? $this->uploadImage($file) : null;
 
             $direct = $request->validated();
             $direct['photo'] = $imageLink;
@@ -94,6 +94,8 @@ class DirectorController extends Controller
         try {
             $this->directorService->delete($id);
             return $this->success(null, 'Xóa thành công đạo diễn');
+        } catch (ModelNotFoundException $e) {
+            return $this->notFound("Không có id {$id} trong cơ sở dữ liệu");
         } catch (Exception $e) {
             return $this->error('Lỗi: ' . $e->getMessage(), 500);
         }

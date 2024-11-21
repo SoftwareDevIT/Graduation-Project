@@ -39,7 +39,7 @@ class ActorController extends Controller
         try {
             $actor = $request->validated();
             $file = $request->file('photo');
-        
+
             $actor['photo'] = $file ? $this->uploadImage($file) : null;
 
             $actor = $this->actorService->store($actor);
@@ -53,7 +53,7 @@ class ActorController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int $id)
+    public function show($id)
     {
         try {
             $actor = $this->actorService->get($id);
@@ -75,9 +75,9 @@ class ActorController extends Controller
     {
         try {
             $file = $request->file('photo');
-            $oldImgageActor  = $this->actorService->get($id);
+            $oldImgageActor = $this->actorService->get($id);
 
-            $imageLink =  $file ? $this->uploadImage($file) :  $oldImgageActor->photo;
+            $imageLink = $file ? $this->uploadImage($file) : $oldImgageActor->photo;
 
             // Lấy dữ liệu đã được xác thực từ request
             $actor = $request->validated();
@@ -99,6 +99,8 @@ class ActorController extends Controller
         try {
             $this->actorService->delete($id);
             return $this->success(null, 'Xóa thành công diễn viên');
+        } catch (ModelNotFoundException $e) {
+            return $this->notFound("Không có id {$id} trong cơ sở dữ liệu");
         } catch (Exception $e) {
             return $this->error('Lỗi: ' . $e->getMessage(), 500);
         }
@@ -111,8 +113,8 @@ class ActorController extends Controller
 
             $new = News::WhereIn('movie_id', $movie)->get();
 
-            if($new->isEmpty()){
-                return $this->notFound('Không tìm thấy bài viết liên quan đến diễn viên',404);
+            if ($new->isEmpty()) {
+                return $this->notFound('Không tìm thấy bài viết liên quan đến diễn viên', 404);
             }
 
             return $this->success($new, 'Bài viết liên quan đến diễn viên', 200);

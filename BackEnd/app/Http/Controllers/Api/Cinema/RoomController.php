@@ -7,6 +7,7 @@ use App\Http\Requests\Store\StoreRoomRequest;
 use App\Http\Requests\Update\UpdateRoomRequest;
 use App\Services\Cinema\RoomService;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 class RoomController extends Controller
@@ -40,19 +41,19 @@ class RoomController extends Controller
     //     }
     // }
     public function getRoomByCinema($id)
-{
-    try {
-        $rooms = $this->roomService->getRoomByCinema($id);
+    {
+        try {
+            $rooms = $this->roomService->getRoomByCinema($id);
 
-        if ($rooms->isEmpty()) {
-            return $this->notFound();
+            if ($rooms->isEmpty()) {
+                return $this->notFound();
+            }
+
+            return $this->success($rooms);
+        } catch (Exception $e) {
+            return $e->getMessage();
         }
-
-        return $this->success($rooms);
-    } catch (Exception $e) {
-        return $e->getMessage();
     }
-}
 
 
 
@@ -67,6 +68,8 @@ class RoomController extends Controller
         try {
             $room = $this->roomService->update($id, $request->validated());
             return $this->success($room);
+        } catch (ModelNotFoundException $e) {
+            return $this->notFound("Không có id {$id} trong cơ sở dữ liệu");
         } catch (Exception $e) {
             return $e->getMessage();
         }
@@ -76,6 +79,8 @@ class RoomController extends Controller
     {
         try {
             return $this->success($this->roomService->delete($id));
+        } catch (ModelNotFoundException $e) {
+            return $this->notFound("Không có id {$id} trong cơ sở dữ liệu");
         } catch (Exception $e) {
             return $e->getMessage();
         }
@@ -85,12 +90,9 @@ class RoomController extends Controller
     {
         try {
             $room = $this->roomService->get($id);
-
-            if (!$room) {
-                return $this->notFound();
-            }
-
             return $this->success($room);
+        } catch (ModelNotFoundException $e) {
+            return $this->notFound("Không có id {$id} trong cơ sở dữ liệu");
         } catch (Exception $e) {
             return $e->getMessage();
         }

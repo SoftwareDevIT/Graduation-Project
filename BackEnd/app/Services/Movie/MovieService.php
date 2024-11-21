@@ -5,15 +5,18 @@ namespace App\Services\Movie;
 use App\Models\Movie;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Traits\AuthorizesInService;
 
 /**
  * Class MovieService.
  */
 class MovieService
 {
+    use AuthorizesInService;
     public function index()
     {
-        $movies = Movie::with(['actor', 'director', 'movie_category', 'movieInCinemas'])->get();
+
+        $movies = Movie::with(['actor', 'director', 'movie_category', 'movieInCinemas'])->orderBy('created_at','desc')->get();
 
         $formattedMovies = $movies->map(function ($movie) {
             return array_merge(
@@ -36,11 +39,13 @@ class MovieService
 
     public function store(array $data)
     {
+
         return Movie::create($data);
     }
 
     public function update(int $id, array $data)
     {
+
         $movie = Movie::query()->findOrFail($id);
         $movie->update($data);
 
@@ -49,6 +54,7 @@ class MovieService
 
     public function delete(int $id)
     {
+     
         $movie = Movie::query()->findOrFail($id);
 
         // $movieCategory->showtimes($id)->delete();    // Xóa suất chiếu phim
@@ -56,9 +62,16 @@ class MovieService
         return $movie->delete();
     }
 
-    public function show($id)
+    public function show($identifier)
     {
-        $movie = Movie::with(['actor', 'director', 'movie_category', 'movieInCinemas'])->findOrFail($id);
+        // Xác định xem identifier là ID hay slug
+        $movie = Movie::with(['actor', 'director', 'movie_category', 'movieInCinemas'])
+            ->when(is_numeric($identifier), function ($query) use ($identifier) {
+                return $query->where('id', $identifier);
+            }, function ($query) use ($identifier) {
+                return $query->where('slug', $identifier);
+            })
+            ->firstOrFail();
 
         // Chuyển đổi thành mảng và định dạng lại dữ liệu
         $formattedMovie = $movie->toArray();

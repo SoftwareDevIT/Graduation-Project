@@ -46,12 +46,12 @@ Route::get('/callback', [GoogleController::class, 'loginCallback']);  // login g
 Route::post('logout', [AuthController::class, 'logout']);
 Route::post('register', [AuthController::class, 'register']); // Đăng ký người dùng
 Route::middleware(['api', 'session'])->group(function () {
-Route::post('password/send-otp', [ForgotPasswordController::class, 'sendOtp']); // Gửi OTP đến email
-Route::post('password/verify-otp', [ForgotPasswordController::class, 'verifyOtp']); // Xác minh OTP
-Route::post('password/reset', [ForgotPasswordController::class, 'forgotPassword']); // Đặt lại mật khẩu
+    Route::post('password/send-otp', [ForgotPasswordController::class, 'sendOtp']); // Gửi OTP đến email
+    Route::post('password/verify-otp', [ForgotPasswordController::class, 'verifyOtp']); // Xác minh OTP
+    Route::post('password/reset', [ForgotPasswordController::class, 'forgotPassword']); // Đặt lại mật khẩu
 });
 
-Route::post('register', [AuthController::class, 'register']);                                       // Đăng ký người dùng
+
 Route::post('password/send-otp', [ForgotPasswordController::class, 'sendOtp']);                     // Gửi OTP đến email
 Route::post('password/verify-otp', [ForgotPasswordController::class, 'verifyOtp']);                 // Xác minh OTP
 Route::post('password/reset', [ForgotPasswordController::class, 'forgotPassword']);                 // Đặt lại mật khẩu
@@ -86,9 +86,6 @@ Route::middleware(['auth:sanctum', 'web'])->group(function () {
     Route::post('favorites/{movie_id}', [FavoriteController::class, 'store']);                 // Thêm phim yêu thích
     Route::delete('favorites/{movie_id}', [FavoriteController::class, 'destroy']);             // Xóa phim yêu thích
     Route::post('ratings', [RatingController::class, 'store']);                                // Đánh giá phim
-    // Route::post('selectSeats', [BookingController::class, 'selectSeats']);
-    Route::post('/book-ticket', [BookingController::class, 'bookTicket']);
-    // Route::get('/vnpay-return', [BookingController::class, 'vnPayReturn']);
     Route::apiResource('user', AuthController::class);
     Route::get('/user', function (Request $request) {
         $user = $request->user()->load('favoriteMovies');
@@ -96,7 +93,7 @@ Route::middleware(['auth:sanctum', 'web'])->group(function () {
     });
 });
 Route::get('/vnpay-return', [BookingController::class, 'vnPayReturn']);
-Route::get('/all-user', [AuthController::class, 'allUser']);
+
 
 // Các route quản trị và quản lý
 Route::middleware(['auth:sanctum', 'role:admin|manager'])->group(function () {
@@ -113,7 +110,7 @@ Route::middleware(['auth:sanctum', 'role:admin|manager'])->group(function () {
     Route::apiResource('method', PayMethodController::class)->except(['index', 'show']);
     Route::apiResource('combo', ComboController::class)->except(['index', 'show']);
     Route::apiResource('seat', SeatController::class)->except(['index', 'show']);
-
+    Route::get('/all-user', [AuthController::class, 'allUser']);
     Route::post('add-movie-in-cinema/{cinema_id}', [CinemaController::class, 'synCinemaHasMovie']);
     Route::get('show-movie-in-cinema/{cinema_id}', [CinemaController::class, 'showCinemaHasMovie']);
     Route::delete('cinema/{cinema_id}/movie/{movie_id}', [CinemaController::class, 'destroyCinemaHasMovie']);
@@ -126,10 +123,6 @@ Route::middleware(['auth:sanctum', 'role:admin|manager'])->group(function () {
     Route::post('/roles/{user}/users', [RoleController::class, 'syncRoles'])->name('users.roles.sync'); // cap quyen cho user
     Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy'); // delete role
     Route::delete('/delete-user/{id}', [RoleController::class, 'destroy'])->name('roles.destroyUser'); // delete role
-
-    // User management routes
-// Route::get('/users', [UserController::class, 'index'])->name('users.index');
-// Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
 });
 
@@ -156,20 +149,20 @@ Route::get('/fillMovies/upcoming', [MovieController::class, 'getUpcomingMovies']
 Route::get('/filterByDateByMovie', [FilterByDateController::class, 'filterByDateByMovie']);         // lọc rạp theo phim và ngày và khu vực
 Route::get('cinema-by-location/{id}', [CinemaController::class, 'showCinemaByLocation']);
 Route::get('filterMovieByNew', [FilterMovieByNewController::class, 'filterMovieByNew']);
-Route::get('filterNewByActor/{actor}', [ActorController::class,'filterNewByActor']);                // Lọc bài viết liên quan tới diễn viễn
-Route::get('filterNewByDictor/{director}', [DirectorController::class,'filterNewByDictor']);        // Lọc bài viết liên quan tới đạo diễn
-Route::get('filterNewByMovie/{movie}', [MovieController::class,'filterNewByMovie']);                // Lọc bài viết liên quan tới phim
+Route::get('filterNewByActor/{actor}', [ActorController::class, 'filterNewByActor']);                // Lọc bài viết liên quan tới diễn viễn
+Route::get('filterNewByDictor/{director}', [DirectorController::class, 'filterNewByDictor']);        // Lọc bài viết liên quan tới đạo diễn
+Route::get('filterNewByMovie/{movie}', [MovieController::class, 'filterNewByMovie']);                // Lọc bài viết liên quan tới phim
 Route::get('ratings/{movie}', [RatingController::class, 'show']);                                   // Xem dánh giá phim
 Route::get('rating', [RatingController::class, 'index']);                                           // Xem all dánh giá
-Route::get('filterMoviePopular', [MovieController::class,'moviePopular']);                // Lọc bài viết liên quan tới phim
+Route::get('filterMoviePopular', [MovieController::class, 'moviePopular']);                // Lọc bài viết liên quan tới phim
 
 Route::apiResource('order', OrderController::class);
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/slectMovieAndSeats', [BookingController::class, 'slectMovieAndSeats']);
     Route::post('/selectCombo', [BookingController::class, 'selectCombos']);
     Route::post('selectSeats', [BookingController::class, 'selectSeats']);
-    // Route::post('/book-ticket', [BookingController::class, 'bookTicket']);
-    Route::post('/historyOrder',[OrderController::class,'order']);
-    Route::post('/historyOrder/{id}',[OrderController::class,'orderDetail']);
+    Route::post('/book-ticket', [BookingController::class, 'bookTicket']);
+    Route::post('/historyOrder', [OrderController::class, 'order']);
+    Route::post('/historyOrder/{id}', [OrderController::class, 'orderDetail']);
+    Route::get('session', [BookingController::class, 'getSession']);
 });
-Route::get('session', [BookingController::class, 'getSession']);

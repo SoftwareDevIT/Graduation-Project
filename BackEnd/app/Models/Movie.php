@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Movie extends Model
 {
@@ -13,16 +14,18 @@ class Movie extends Model
         'id',
         'movie_name',
         'slug',
-        'country',
         'poster',
-        'duration',
-        'release_date',
-        'age_limit',
-        'description',
         'thumbnail',
         'trailer',
+        'duration',
+        'age_limit',
+        'country',
+        'release_date',
+        'description',
+        'rating',
+        'views',
+        'like',
         'status',
-        'rating'
     ];
 
     public function actor()
@@ -61,7 +64,8 @@ class Movie extends Model
         return $this->hasMany(Favorite::class);
     }
 
-    public function ratings() {
+    public function ratings()
+    {
         return $this->hasMany(Rating::class);
     }
 
@@ -88,5 +92,19 @@ class Movie extends Model
     public function news()
     {
         return $this->hasMany(News::class);
+    }
+
+    protected static function booted()
+    {
+        static::creating(function ($movie) {
+            $movie->slug = self::createSlug($movie->movie_name);
+        });
+    }
+
+
+
+    public static function createSlug($title)
+    {
+        return Str::slug($title);
     }
 }

@@ -22,8 +22,8 @@ return new class extends Migration
             $table->enum('status', ['Pending', 'Confirmed', 'Pain'])->default('Pending');
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('pay_method_id')->references('id')->on('pay_method');
-            $table->foreign('showtime_id')->references('id')->on('showtimes');
+            $table->foreign('pay_method_id')->references('id')->on('pay_method')->onDelete('cascade');
+            $table->foreign('showtime_id')->references('id')->on('showtimes')->onDelete('cascade');
         });
     }
 

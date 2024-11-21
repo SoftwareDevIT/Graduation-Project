@@ -21,7 +21,7 @@ class OrderService
         $order = Booking::with('showtime.movie','showtime.room','user','payMethod','seats','combos')->findOrFail($id);
         return $order;
     }
-    
+
     public function destroy($id)
     {
         $order = Booking::find($id);

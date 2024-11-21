@@ -12,14 +12,14 @@ return new class extends Migration {
     {
         Schema::create('room', function (Blueprint $table) {
             $table->id('id');
+            $table->unsignedBigInteger('cinema_id');
             $table->string('room_name');
             $table->integer('volume')->nullable();
             $table->integer('quantity_double_seats')->nullable();
             $table->integer('quantity_vip_seats')->nullable();
-            $table->unsignedBigInteger('cinema_id');
             $table->boolean('status')->default(true);
             $table->timestamps();
-            $table->foreign('cinema_id')->references('id')->on('cinema');
+            $table->foreign('cinema_id')->references('id')->on('cinema')->onDelete('cascade');
         });
     }
 
