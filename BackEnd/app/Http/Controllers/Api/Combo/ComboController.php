@@ -29,11 +29,9 @@ class ComboController extends Controller
         try {
             $combo = $this->comboService->get($id);
 
-            if (!$combo) {
-                return response()->json(['error' => 'combo not found'], 404);
-            }
-
             return $this->success($combo);
+        }catch (ModelNotFoundException $e) {
+            return $this->notFound("Không có id {$id} trong cơ sở dữ liệu");
         } catch (Exception $e) {
             return $e->getMessage();
         }
@@ -52,6 +50,8 @@ class ComboController extends Controller
         try {
             $combo = $this->comboService->update($id, $request->validated());
             return $this->success($combo);
+        }catch (ModelNotFoundException $e) {
+            return $this->notFound("Không có id {$id} trong cơ sở dữ liệu");
         } catch (Exception $e) {
             return $e->getMessage();
         }
@@ -61,6 +61,8 @@ class ComboController extends Controller
     {
         try {
             return $this->success($this->comboService->delete($id));
+        }catch (ModelNotFoundException $e) {
+            return $this->notFound("Không có id {$id} trong cơ sở dữ liệu");
         } catch (Exception $e) {
             return $e->getMessage();
         }
