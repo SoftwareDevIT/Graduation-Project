@@ -7,6 +7,7 @@ use App\Http\Requests\News\StoreNewsRequest;
 use App\Http\Requests\News\UpdateNewsRequest;
 use App\Models\News;
 use App\Services\News\NewService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -110,6 +111,8 @@ class NewController extends Controller
         try {
             $new = $this->newservice->delete($id);
             return $this->success($new, 'xoá thành công');
+        }catch (ModelNotFoundException $e) {
+            return $this->notFound("Không có id {$id} trong cơ sở dữ liệu");
         } catch (\Throwable $th) {
             return $this->error($th->getMessage());
         }

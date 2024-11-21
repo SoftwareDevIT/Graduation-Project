@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useComboContext } from "../../../Context/ComboContext"; // Import the Combo context
 import { Combo } from "../../../interface/Combo";
 import instance from "../../../server";
+import { notification } from 'antd'; // Import Ant Design's notification component
 
 // Định nghĩa schema cho việc xác thực form sử dụng Zod
 const comboSchema = z.object({
@@ -48,15 +49,21 @@ const ComboForm = () => {
     try {
       if (id) {
         await updateCombo(Number(id), data); // Cập nhật combo với yêu cầu PUT
-        alert("Cập nhật combo thành công!");
+        notification.success({
+          message: 'Cập nhật combo thành công!',
+        });
       } else {
         await addCombo(data); // Thêm combo với yêu cầu POST
-        alert("Thêm combo thành công!");
+        notification.success({
+          message: 'Thêm combo thành công!',
+        });
       }
       nav('/admin/combo'); // Chuyển hướng tới trang danh sách combo hoặc trang cần thiết
     } catch (error) {
       console.error("Lỗi khi gửi dữ liệu combo:", error);
-      alert("Lỗi khi gửi dữ liệu combo");
+      notification.error({
+        message: 'Lỗi khi gửi dữ liệu combo',
+      });
     }
   };
 

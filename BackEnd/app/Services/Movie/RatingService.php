@@ -7,16 +7,17 @@ use App\Models\Rating;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
+use App\Traits\AuthorizesInService;
 
 /**
  * Class MovieService.
  */
 class RatingService
-{
+{use AuthorizesInService;
     public function index() {
-       return Rating::all();
+       return Rating::orderByDesc('created_at')->get();
     }
-       
+
     public function store(array $data)
     {
         $existingRating = Rating::where('user_id',  Auth::id())
@@ -69,5 +70,5 @@ class RatingService
         return $movie;
     }
 
-    
+
 }

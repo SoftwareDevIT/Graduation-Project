@@ -29,11 +29,10 @@ class PayMethodController extends Controller
         try {
             $paymethod = $this->paymethodService->get($id);
 
-            if (!$paymethod) {
-                return response()->json(['error' => 'Paymethod not found'], 404);
-            }
 
             return $this->success($paymethod);
+        } catch (ModelNotFoundException $e) {
+            return $this->notFound("Không có id {$id} trong cơ sở dữ liệu");
         } catch (Exception $e) {
             return $e->getMessage();
         }
@@ -51,6 +50,8 @@ class PayMethodController extends Controller
         try {
             $paymethod = $this->paymethodService->update($id, $request->validated());
             return $this->success($paymethod);
+        } catch (ModelNotFoundException $e) {
+            return $this->notFound("Không có id {$id} trong cơ sở dữ liệu");
         } catch (Exception $e) {
             return $e->getMessage();
         }
@@ -60,6 +61,8 @@ class PayMethodController extends Controller
     {
         try {
             return $this->success($this->paymethodService->delete($id));
+        } catch (ModelNotFoundException $e) {
+            return $this->notFound("Không có id {$id} trong cơ sở dữ liệu");
         } catch (Exception $e) {
             return $e->getMessage();
         }

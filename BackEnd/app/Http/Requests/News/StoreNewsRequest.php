@@ -24,6 +24,7 @@ class StoreNewsRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'news_category_id' => 'required',
+            'slug' => 'string',
             'thumnail' => 'required|mimes:jpeg,png,jpg,gif',
             'banner' => 'required|mimes:jpeg,png,jpg,gif',
             'content' => 'required|string',

@@ -26,6 +26,7 @@ class UpdateDirectorRequest extends FormRequest
             'descripcion' => 'max:255',
             'photo' => 'mimes:jpeg,png,jpg,gif|max:2048',
             'country' => 'max:255',
+            'slug' => 'max:255',
             'link_wiki' => 'max:255',
         ];
     }
