@@ -12,13 +12,13 @@ trait Slugable
      * @param  string  $slugField  Tên trường lưu slug trong cơ sở dữ liệu
      * @return string
      */
-    public static function createSlug($field, $slugField = 'slug')
+    public static function createSlug($fieldValue, $slugField = 'slug')
     {
-        // Tạo slug từ trường field
-        $slug = Str::slug(self::{$field});
+        // Tạo slug từ giá trị của trường field
+        $slug = Str::slug($fieldValue);
 
         // Kiểm tra sự tồn tại của slug trong cơ sở dữ liệu
-        if (self::where($slugField, $slug)->exists()) {
+        if (static::where($slugField, $slug)->exists()) {
             // Nếu đã tồn tại, thêm hậu tố vào slug
             $slug = $slug . '-' . uniqid();
         }
