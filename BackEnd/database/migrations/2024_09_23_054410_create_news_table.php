@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('news_category_id');
             $table->unsignedBigInteger('movie_id')->nullable();
             $table->string('title')->nullable();
-            $table->string('slug')->nullable();
+            $table->string('slug')->nullable()->unique();
             $table->string('thumnail')->nullable();// ảnh nhỏ bên dưới
             $table->string('banner')->nullable();// ảnh để banner
             $table->longText('content')->nullable();
