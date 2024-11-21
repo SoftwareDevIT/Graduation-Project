@@ -27,6 +27,7 @@ class UpdateNewsRequest extends FormRequest
             'thumnail' => 'mimes:jpeg,png,jpg,gif|max:2048',
             'banner' => 'mimes:jpeg,png,jpg,gif|max:2048',
             'content' => 'required|string',
+            'slug' => 'string',
             // 'user_id' => 'required',
         ];
     }
