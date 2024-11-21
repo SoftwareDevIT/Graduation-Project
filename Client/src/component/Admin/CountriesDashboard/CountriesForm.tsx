@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useCountryContext } from '../../../Context/CountriesContext';
 import { Location } from '../../../interface/Location';
 import instance from '../../../server';
+import { notification } from 'antd';  // Import Ant Design notification
 
 // Định nghĩa schema sử dụng Zod
 const countrySchema = z.object({
@@ -29,7 +30,7 @@ const CountriesForm: React.FC = () => {
           const response = await instance.get(`/location/${id}`);
           reset(response.data); // Reset form với dữ liệu lấy từ API
         } catch (error) {
-          console.error("Không thể lấy thông tin quốc gia:", error);
+          console.error("Không thể lấy thông tin khu vực:", error);
         }
       }
     };
@@ -40,16 +41,28 @@ const CountriesForm: React.FC = () => {
     try {
       if (isEditMode) {
         await updateCountry(Number(id), data);
-        alert("Quốc gia đã được cập nhật thành công!");
+        notification.success({
+          message: 'Cập nhật Khu Vực',
+          description: 'Khu vực đã được cập nhật thành công!',
+          placement: 'topRight',
+        });
       } else {
         await addCountry(data);
-        alert("Quốc gia đã được thêm thành công!");
+        notification.success({
+          message: 'Thêm Khu Vực',
+          description: 'Khu vực đã được thêm thành công!',
+          placement: 'topRight',
+        });
       }
       reset(); // Reset form sau khi gửi
       nav('/admin/countries'); // Điều hướng về trang danh sách quốc gia hoặc trang mong muốn
     } catch (error) {
       console.error("Không thể gửi thông tin form:", error);
-      alert("Không thể gửi thông tin form");
+      notification.error({
+        message: 'Lỗi',
+        description: 'Không thể gửi thông tin form.',
+        placement: 'topRight',
+      });
     }
   };
 

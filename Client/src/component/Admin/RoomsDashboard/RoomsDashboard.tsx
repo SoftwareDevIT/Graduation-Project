@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { notification } from 'antd'; // Import notification from Ant Design
 import instance from '../../../server';
 import { CinemaRoom } from '../../../interface/Room';
 
@@ -53,6 +54,10 @@ const RoomDashboard: React.FC = () => {
         await instance.delete(`/room/${id}`);
         setRooms(rooms.filter(room => room.id !== id)); // Cập nhật lại danh sách phòng sau khi xóa
         setFilteredRooms(filteredRooms.filter(room => room.id !== id)); // Cập nhật danh sách phòng đã lọc
+        notification.success({
+          message: 'Xóa phòng thành công!',
+          description: 'Phòng đã được xóa khỏi hệ thống.',
+        }); // Hiển thị thông báo thành công
       } catch (error) {
         console.error('Lỗi khi xóa phòng:', error);
       }
@@ -96,7 +101,7 @@ const RoomDashboard: React.FC = () => {
       <h2 className="text-center text-primary mb-4">Tất Cả Các Phòng</h2>
       <div className="d-flex justify-content-between align-items-center mb-4">
         <Link to={'/admin/rooms/add'} className="btn btn-outline-primary">
-          Thêm Phòng
+         + Thêm Phòng
         </Link>
         <input
           type="text"

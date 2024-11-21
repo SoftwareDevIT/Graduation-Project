@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';  // Import các style
+import { notification } from 'antd';  // Import Ant Design notification
 
 const MoviesDashboard: React.FC = () => {
     const { state, dispatch } = useMovieContext();
@@ -37,10 +38,18 @@ const MoviesDashboard: React.FC = () => {
             try {
                 await instance.delete(`/movies/${id}`);
                 dispatch({ type: 'DELETE_MOVIE', payload: id });
-                alert("Đã xóa phim thành công!");
+                notification.success({
+                    message: 'Xóa Phim',
+                    description: 'Đã xóa phim thành công!',
+                    placement: 'topRight',
+                });
             } catch (error) {
                 console.error('Lỗi khi xóa phim:', error);
-                alert("Không thể xóa phim.");
+                notification.error({
+                    message: 'Lỗi',
+                    description: 'Không thể xóa phim.',
+                    placement: 'topRight',
+                });
             }
         }
     };
@@ -67,7 +76,7 @@ const MoviesDashboard: React.FC = () => {
         <div className="container mt-5">
             <h2 className="text-center text-primary mb-4">Bảng điều khiển Phim</h2>
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <Link to={`/admin/movies/add`} className="btn btn-outline-primary">Thêm Phim Mới</Link>
+                <Link to={`/admin/movies/add`} className="btn btn-outline-primary">+ Thêm Phim Mới</Link>
                 <input
                     type="text"
                     placeholder="Tìm kiếm theo tên phim"
@@ -82,7 +91,7 @@ const MoviesDashboard: React.FC = () => {
                         <tr>
                             <th>ID</th>
                             <th>Tiêu Đề</th>
-                            <th>Ảnh Đại Diện</th>
+                            <th>Ảnh</th>
                             <th>Thể Loại</th>
                             <th>Diễn Viên</th>
                             <th>Đạo Diễn</th>
@@ -96,17 +105,16 @@ const MoviesDashboard: React.FC = () => {
                             currentMovies.map((movie: Movie) => (
                                 <tr key={movie.id}>
                                     <td>{movie.id}</td>
-                                    <td>{movie.movie_name}</td>
+                                    <td  className="truncate-text"style={{ maxWidth: '150px' }} >{movie.movie_name}</td>
                                     <td>
-                                        <img src={movie.poster ?? undefined} style={{ width: "60px", height: "90px" }} alt={`${movie.movie_name} poster`} />
+                                        <img src={movie.poster ?? undefined} style={{ width: "80px", height: "120px", objectFit: 'cover' }} alt={`${movie.movie_name} poster`} />
                                     </td>
                                     <td>{movie.movie_category.map(movie_category => movie_category.category_name).join(', ')}</td>
                                     <td>{movie.actor.map(actor => actor.actor_name).join(', ')}</td>
                                     <td>{movie.director.map(director => director.director_name).join(', ')}</td>
                                     <td>{movie.duration}</td>
-                                    <td>
+                                    <td >
                                         {/* Sử dụng ReactQuill để hiển thị mô tả */}
-                                        <div>
                                             <ReactQuill 
                                                 value={movie.description ?? ''}
                                                 readOnly={true} 
@@ -114,7 +122,6 @@ const MoviesDashboard: React.FC = () => {
                                                 modules={{ toolbar: false }}
                                                 formats={['bold', 'underline', 'link']}
                                             />
-                                        </div>
                                     </td>
                                     <td>
                                         <div className="d-flex justify-content-around">
