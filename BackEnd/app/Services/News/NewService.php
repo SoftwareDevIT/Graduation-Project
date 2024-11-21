@@ -16,7 +16,7 @@ class NewService
     use AuthorizesInService;
     public function index():Collection
     {
-        return News::with('user','newsCategory')->get();
+        return News::with('user','newsCategory')->orderByDesc('created_at')->get();
     }
 
 
@@ -38,7 +38,7 @@ class NewService
 
     public function delete(int $id)
     {
-       
+
         $news = News::findOrFail($id);
         return $news->delete();
     }

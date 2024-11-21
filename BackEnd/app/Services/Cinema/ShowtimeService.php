@@ -18,14 +18,14 @@ class ShowtimeService
     use AuthorizesInService;
     public function index()
     {
-        return Showtime::with(['movieInCinema.movie', 'room'])->paginate(5);
+        return Showtime::with(['movieInCinema.movie', 'room'])->orderByDesc('created_at')->paginate(5);
     }
 
 
 
     public function store(array $data): Showtime
     {
-   
+
         return Showtime::create($data);
     }
 

@@ -17,13 +17,13 @@ class LocationService
     public function index(): Collection
     {
 
-        return Location::all();
+        return Location::orderByDesc('created_at')->get();
     }
 
 
     public function store(array $data): Location
     {
-      
+
         return Location::create($data);
     }
 

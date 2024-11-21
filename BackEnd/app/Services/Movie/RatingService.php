@@ -15,7 +15,7 @@ use App\Traits\AuthorizesInService;
 class RatingService
 {use AuthorizesInService;
     public function index() {
-       return Rating::all();
+       return Rating::orderByDesc('created_at')->get();
     }
 
     public function store(array $data)

@@ -14,7 +14,7 @@ class MovieCategoryService
 {use AuthorizesInService;
     public function index(): Collection
     {
-        return MovieCategory::all();
+        return MovieCategory::orderByDesc('created_at')->get();
     }
 
     public function store(array $data): MovieCategory
@@ -34,7 +34,7 @@ class MovieCategoryService
 
     public function delete(int $id): ?bool
     {
- 
+
         $movieCategory = MovieCategory::query()->findOrFail($id);
         return $movieCategory->delete();
     }

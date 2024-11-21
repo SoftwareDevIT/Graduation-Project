@@ -17,7 +17,7 @@ class PayMethodService
     public function index(): Collection
     {
 
-        return PayMethod::all();
+        return PayMethod::orderByDesc('created_at')->get();
     }
 
 
@@ -39,7 +39,7 @@ class PayMethodService
 
     public function delete(int $id): ?bool
     {
-      
+
         $method = PayMethod::findOrFail($id);
         return $method->delete();
     }

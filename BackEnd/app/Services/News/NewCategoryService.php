@@ -13,7 +13,7 @@ class NewCategoryService
 
     public function index()
     {
-        return NewsCategory::all();
+        return NewsCategory::orderByDesc('created_at')->get();
     }
 
 
@@ -35,7 +35,7 @@ class NewCategoryService
 
     public function delete(int $id)
     {
-   
+
         $new_category = NewsCategory::findOrFail($id);
         return $new_category->delete();
     }

@@ -17,7 +17,7 @@ class RoomService
     public function index(): Collection
     {
 
-        return Room::all();
+        return Room::orderByDesc('created_at')->get();
     }
 
 
@@ -89,7 +89,7 @@ class RoomService
 
     public function delete(int $id): ?bool
     {
-     
+
         $room = Room::findOrFail($id);
         return $room->delete();
     }

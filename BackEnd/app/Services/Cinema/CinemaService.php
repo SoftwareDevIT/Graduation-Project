@@ -21,7 +21,7 @@ class CinemaService
 
         // return Cinema::all();
 
-        return Cinema::with('Location')
+        return Cinema::with('Location')->orderByDesc('created_at')
             ->get();
 
     }
@@ -50,7 +50,7 @@ class CinemaService
 
     public function delete(int $id): ?bool
     {
-      
+
         $cinema = Cinema::findOrFail($id);
         return $cinema->delete();
     }

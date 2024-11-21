@@ -17,7 +17,7 @@ class DirectorService
     use AuthorizesInService;
     public function index(): Collection
     {
-        return Director::all();
+        return Director::orderByDesc('created_at')->get();
     }
 
     public function store(array $data): Director
@@ -37,7 +37,7 @@ class DirectorService
 
     public function delete(int $id): ?bool
     {
-      
+
         $director = Director::query()->findOrFail($id);
         return $director->delete();
     }

@@ -17,7 +17,7 @@ class ActorService
     use AuthorizesInService;
     public function index(): Collection
     {
-        return Actor::all();
+        return Actor::orderByDesc('created_at')->get();
     }
 
     public function store(array $data): Actor
@@ -37,7 +37,7 @@ class ActorService
 
     public function delete(int $id): ?bool
     {
-       
+
         $actor = Actor::query()->findOrFail($id);
         return $actor->delete();
     }
