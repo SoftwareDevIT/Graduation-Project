@@ -1,4 +1,4 @@
- export interface CinemaRoom {
+ export interface Room {
   id: number;
   room_name: string;
   volume: number;

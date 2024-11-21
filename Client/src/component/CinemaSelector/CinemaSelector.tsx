@@ -74,7 +74,7 @@ const CinemaSelector: React.FC = () => {
     fetchLocations();
     fetchCinemas();
 
-    // Đặt ngày hiện tại làm ngày mặc định
+
     setSelectedDate(getCurrentDate());
   }, []);
 
@@ -115,10 +115,10 @@ const CinemaSelector: React.FC = () => {
     }
   }, [selectedCity, filteredCinemas]);
 
-  // Khi chọn Hà Nội, chọn rạp đầu tiên của Hà Nội
+  
   useEffect(() => {
     if (selectedCity && filteredCinemas.length > 0) {
-      setSelectedCinema(filteredCinemas[0].id ?? null); // Chọn rạp đầu tiên hoặc null nếu không có id
+      setSelectedCinema(filteredCinemas[0].id ?? null);
     }
   }, [selectedCity, filteredCinemas]);
   // Lọc rạp theo khu vực
@@ -200,7 +200,7 @@ const CinemaSelector: React.FC = () => {
                 value={selectedCity ?? ""}
                 onChange={(e) => setSelectedCity(Number(e.target.value))}
               >
-                <option value="">Chọn khu vực</option>
+                <option className="city-selects-option" value="">Chọn khu vực</option>
                 {locations.map((location) => (
                   <option key={location.id} value={location.id}>
                     {location.location_name}

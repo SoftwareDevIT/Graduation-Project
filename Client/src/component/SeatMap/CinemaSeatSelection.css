@@ -248,13 +248,14 @@ color: #727575;
 
 
 .seat-row-label {
+  position: relative;
   width: 40px; /* Chiều rộng cố định của nhãn */
   text-align: center;
   color: white;
   background-color: #727575;
   border: 1px solid black;
   padding: 5px 0;
-  margin-right: 190px; /* Khoảng cách giữa nhãn và hàng ghế */
+  
 }
 
 .seat-row-seats {
@@ -278,6 +279,7 @@ color: #727575;
 }
 
 .seat-row-seats {
+  
   display: flex;
   flex-wrap: nowrap; /* Giữ các ghế trên cùng một dòng */
   margin-right: 140px;
@@ -592,4 +594,23 @@ color: #727575;
 }
 .seat.selected {
   background-color: #76c7c0; /* Màu xanh để chỉ ghế đã chọn */
+}
+.seat.vip {
+  background-color: gold; /* Màu nền cho ghế VIP */
+}
+
+.seat.couple-seat {
+  background-color: pink; /* Màu nền cho ghế đôi */
+}
+
+.seat.normal {
+  background-color: lightgray; /* Màu nền cho ghế thường */
+}
+
+.seat.reserved {
+  background-color: darkgray; /* Màu nền cho ghế đã được đặt */
+}
+
+.seat.selected {
+  background-color: green; /* Màu nền cho ghế đã chọn */
 }

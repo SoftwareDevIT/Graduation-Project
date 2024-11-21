@@ -1,5 +1,5 @@
 export interface Seat {
-    type: string | null; // hoặc loại ghế khác mà bạn cần
+  type: "Normal" | "Couple" | "VIP";
     row: string;
     seat_name: string;
     seat_row: number;

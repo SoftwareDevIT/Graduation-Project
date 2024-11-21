@@ -15,8 +15,7 @@ const NewsAndReview = () => {
     setShowAll(!showAll);
   };
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  
 
   return (
     <div className="new-container">

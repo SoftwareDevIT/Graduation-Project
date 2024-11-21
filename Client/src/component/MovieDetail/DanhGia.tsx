@@ -37,10 +37,7 @@ const DanhGia: React.FC = () => {
         }
     }, [id]);
 
-    if (loading) {
-        return <div>Đang tải đánh giá...</div>;
-    }
-
+    
 
     return (
         <>

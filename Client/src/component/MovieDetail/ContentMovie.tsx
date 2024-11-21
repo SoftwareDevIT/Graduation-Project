@@ -97,9 +97,7 @@ export const ContentMovie = (props: Props) => {
         setSelectedLocation(e.target.value); // Update selected location
     };
 
-    if (!movie) {
-        return <div>Đang tải thông tin phim...</div>; // Show loading message if movie data is not yet available
-    }
+   
 
     return (
         <div>
@@ -121,7 +119,7 @@ export const ContentMovie = (props: Props) => {
                     {/* Select location and view schedule */}
                     <div className="schedule-section">
                         <h3>Lịch chiếu</h3>
-                        <p>Chọn khu vực bạn muốn xem lịch chiếu cho phim <strong>{movie.movie_name}</strong>.</p>
+                        <p>Chọn khu vực bạn muốn xem lịch chiếu cho phim <strong>{movie?.movie_name}</strong>.</p>
 
                         <div className="schedule-actions">
                             <select
