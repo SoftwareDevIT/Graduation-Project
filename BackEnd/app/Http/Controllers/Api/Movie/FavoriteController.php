@@ -23,19 +23,17 @@ class FavoriteController extends Controller
         $this->favoriteService = $favoriteService;
     }
 
-    public function index()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      */
-    public function store($id)
+    public function store(Request $request)
     {
         try {
-            $this->favoriteService->store($id);
-            return $this->success(null, 'Thêm thành công phim yêu thích');
+            $input = $request->query('movie');
+            $movieId = is_numeric($input) ? $input : $this->favoriteService->getMovieIdBySlug($input);
+
+            $this->favoriteService->store($movieId);
+            return $this->success([], 'Yêu thích phim thành công', 200);
         } catch (HttpException $e) {
             if ($e->getStatusCode() == 409) {
                 return $this->error('Lỗi: ' . $e->getMessage(), 409);
@@ -45,29 +43,13 @@ class FavoriteController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
         try {
             $this->favoriteService->delete($id);
-            return $this->success(null,'Xóa thành công');
+            return $this->success(null, 'Xóa thành công');
         } catch (Exception $e) {
             return $this->error('Lỗi: ' . $e->getMessage(), 500);
         }

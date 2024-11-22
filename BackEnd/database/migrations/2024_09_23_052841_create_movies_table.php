@@ -24,7 +24,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->date('release_date')->nullable();
             $table->float('rating')->nullable();
-            $table->integer('views')->nullable();
+            $table->integer('views')->default(0)->nullable();
             $table->integer('like')->nullable();
             $table->boolean('status')->default(true);
             $table->timestamps();
