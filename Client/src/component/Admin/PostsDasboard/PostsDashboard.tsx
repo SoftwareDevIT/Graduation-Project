@@ -76,7 +76,7 @@ const PostsDashboard: React.FC = () => {
                   </Link>
                   <div className="card-text text-muted truncated-text">
                     <ReactQuill 
-                      value={truncateContent(post.content, 100)}  // Truncate content to 100 characters
+                      value={truncateContent(post.content, 200)}  // Truncate content to 100 characters
                       readOnly={true} 
                       theme="snow" 
                       modules={{ toolbar: false }}
