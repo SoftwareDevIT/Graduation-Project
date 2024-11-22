@@ -6,7 +6,7 @@ import './NewsAndReview.css';
 import { useNews } from '../../Context/NewsContext';
 
 const NewsAndReview = () => {
-  const { newsData, isLoading, error } = useNews();
+  const { newsData, reviewsData, isLoading, error } = useNews()
   const [visibleItems, setVisibleItems] = useState(5);
   const [showAll, setShowAll] = useState(false);
 
@@ -46,38 +46,16 @@ const NewsAndReview = () => {
         )}
       </div>
       <div className="review-section">
-        <h2>Review</h2>
-        <div className="review-item">
-          <h3>Review Borderlands: Trở Lại Pandora – Chuyến phiêu lưu ngắn hà quái đản</h3>
-          <span className="time">6 ngày trước</span> - <span className="reviewer">Ivy_Trat</span>
-        </div>
-        
-        <div className="review-item">
-          <h3>Review Emily In Paris Mùa 4 Phần 1 – Đoản khúc vui nhộn trong thế giới phù hoa</h3>
-          <span className="time">9 ngày trước</span> - <span className="reviewer">linhhuynh0257</span>
-        </div>
-        
-        <div className="review-item">
-          <h3>Ma Da – Một câu chuyện ma đáng tiếc nhiều hơn đáng sợ</h3>
-          <span className="time">10 ngày trước</span> - <span className="reviewer">Ivy_Trat</span>
-        </div>
-        {/* Các mục review khác */}
-        <div className="review-item">
-          <h3>Ma Da – Một câu chuyện ma đáng tiếc nhiều hơn đáng sợ</h3>
-          <span className="time">10 ngày trước</span> - <span className="reviewer">Ivy_Trat</span>
-        </div>
-        <div className="review-item">
-          <h3>Ma Da – Một câu chuyện ma đáng tiếc nhiều hơn đáng sợ</h3>
-          <span className="time">10 ngày trước</span> - <span className="reviewer">Ivy_Trat</span>
-        </div>
-        <div className="review-item">
-          <h3>Ma Da – Một câu chuyện ma đáng tiếc nhiều hơn đáng sợ</h3>
-          <span className="time">10 ngày trước</span> - <span className="reviewer">Ivy_Trat</span>
-        </div>
-        <div className="review-item">
-          <h3>Ma Da – Một câu chuyện ma đáng tiếc nhiều hơn đáng sợ</h3>
-          <span className="time">10 ngày trước</span> - <span className="reviewer">Ivy_Trat</span>
-        </div>
+      <h2>Review</h2>
+        {reviewsData.slice(-5).map((review, index) => ( // Lấy 5 mục cuối
+          <div className="review-item" key={index}>
+             <Link to={`/postdetail/${review.id}`}>
+                <h3>{review.title}</h3>
+              </Link>
+            <span className="time">{review.user.fullname}</span> 
+            
+          </div>
+        ))}
       </div>
     </div>
  

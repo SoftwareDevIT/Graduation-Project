@@ -11,8 +11,8 @@ import { stripHtml } from '../../assets/Font/quillConfig';
 interface Props {}
 
 export const ContentMovie = (props: Props) => {
-    const { id } = useParams(); // Get the movieId from the route parameter
-    const movieId = id ? parseInt(id) : null; // Parse the id to an integer
+    const { slug } = useParams(); // Get the movieId from the route parameter
+    const movieId = slug ? parseInt(slug) : null; // Parse the id to an integer
     const [ratings, setRatings] = useState<any[]>([]);  // State để lưu danh sách đánh giá
     const [movie, setMovie] = useState<Movie | null>(null); // Initialize state for the movie
     const { state, fetchCountries } = useCountryContext();
@@ -38,9 +38,9 @@ export const ContentMovie = (props: Props) => {
     };
     useEffect(() => {
         const fetchMovieDetails = async () => {
-            if (movieId) {
+            if (slug) {
                 try {
-                    const response = await instance.get(`/movies/${movieId}`); // Fetch movie details
+                    const response = await instance.get(`/movies/${slug}`); // Fetch movie details
                     setMovie(response.data.data.original); // Store the movie data in state
                 } catch (error) {
                     console.error("Error fetching movie details:", error);
@@ -55,10 +55,10 @@ export const ContentMovie = (props: Props) => {
         fetchCountries(); // Gọi fetchCountries khi component mount
       }, [fetchCountries]);
     useEffect(() => {
-        if (id) {
+        if (slug) {
             setLoading(true);
             instance
-                .get(`/ratings/${id}`)  // Thay đổi từ fetch thành instance.get
+                .get(`/ratings/${slug}`)  // Thay đổi từ fetch thành instance.get
                 .then((response) => {
                     if (response.data.status) {
                         setRatings(response.data.data);  // Lưu đánh giá vào state
@@ -75,7 +75,7 @@ export const ContentMovie = (props: Props) => {
             setError("ID phim không tồn tại.");
             setLoading(false);
         }
-    }, [id]);
+    }, [slug]);
     useEffect(() => {
         const fetchRelatedPosts = async () => {
             if (movieId) {

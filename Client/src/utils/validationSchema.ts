@@ -3,7 +3,7 @@ import { z } from "zod";
 
 export const loginSchema = z.object({
   email: z.string().email("Email không hợp lệ").nonempty("Email là bắt buộc"),
-  password: z.string().nonempty("Mật khẩu là bắt buộc"),
+  password: z.string().nonempty("Mật khẩu là bắt buộc").min(8,"Mật khẩu phải có ít nhất 8 ký tự"),
 });
 
 export type LoginSchema = z.infer<typeof loginSchema>;

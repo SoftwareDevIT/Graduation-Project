@@ -85,11 +85,11 @@ function App() {
         <Route path="/orders" element={<OrderPage />} />
         <Route path="/pay" element={<OrderCheckout />} />
         <Route path="/seat" element={<CinemaSeatSelection />} />
-        <Route path="/movie-detail/:id" element={<ContentMovie />} />
-        <Route path="/schedule/:id" element={<LichChieu />} />
-        <Route path="/reviews/:id" element={<DanhGia />} />
-        <Route path="/news/:id" element={<TinTuc />} />
-        <Route path="/buy-now/:id" element={<MuaVe />} />
+        <Route path="/movie-detail/:slug" element={<ContentMovie />} />
+        <Route path="/schedule/:slug" element={<LichChieu />} />
+        <Route path="/reviews/:slug" element={<DanhGia />} />
+        <Route path="/news/:slug" element={<TinTuc />} />
+        <Route path="/buy-now/:slug" element={<MuaVe />} />
         <Route path="/headerticket" element={<Headerticket />} />
         <Route path="/confirm" element={<EmailConfirm />} />
         <Route path="/payment-callback" element={<PaymentCallback />} />

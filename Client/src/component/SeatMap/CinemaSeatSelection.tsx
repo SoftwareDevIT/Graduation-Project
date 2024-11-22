@@ -79,45 +79,72 @@ console.log("VIP Seats:", roomData.quantity_vip_seats);
   const rowLabels = Array.from({ length: totalRows }, (_, index) =>
     String.fromCharCode(65 + index)
   );
-  const seatRows: Array<{ row: string; seats: (string | null)[] }> = rowLabels.map(
-    (rowLabel, rowIndex) => {
-      const isLastRow = rowIndex === rowLabels.length - 1; // Kiểm tra hàng cuối cùng
-      const startSeatNumber = rowIndex * seatsPerRow;
-      const endSeatNumber = Math.min(startSeatNumber + seatsPerRow, totalSeats);
-      const seats: (string | null)[] = Array.from(
-        { length: endSeatNumber - startSeatNumber },
-        () => null // Tạo mảng ghế trống
-      );
-  
-      if (isLastRow) {
-        // Dòng cuối cùng: Chỉ chứa ghế đôi
-        let coupleSeatsToAssign = Math.min(
-          roomData.quantity_double_seats,
-          seats.length
-        );
-        for (let i = 0; i < coupleSeatsToAssign; i++) {
-          seats[i] = "COUPLE";
-        }
-  
-        roomData.quantity_double_seats -= coupleSeatsToAssign;
-      } else {
-        // Các dòng khác: Gán ghế VIP và NORMAL
-        let vipSeatsToAssign = Math.min(roomData.quantity_vip_seats, seats.length);
-        for (let i = 0; i < vipSeatsToAssign; i++) {
-          seats[i] = "VIP";
-        }
-  
-        let normalSeatsToAssign = seats.length - vipSeatsToAssign;
-        for (let i = vipSeatsToAssign; i < vipSeatsToAssign + normalSeatsToAssign; i++) {
-          seats[i] = "NORMAL";
-        }
-  
-        roomData.quantity_vip_seats -= vipSeatsToAssign;
+  let totalAssignedVipSeats = 0; // Tổng số ghế VIP đã phân bổ
+let totalAssignedBasicSeats = 0; // Tổng số ghế BASIC đã phân bổ
+
+  const seatRows: Array<{ row: string; seats: string[] }> = rowLabels.map((rowLabel, rowIndex) => {
+    const startSeatNumber = rowIndex * seatsPerRow;
+    const endSeatNumber = Math.min(startSeatNumber + seatsPerRow, totalSeats);
+    
+    // Khởi tạo tất cả ghế là "AVAILABLE"
+    const seats: string[] = Array.from({ length: endSeatNumber - startSeatNumber }, () => "AVAILABLE");
+    
+
+    
+    if (rowIndex === rowLabels.length - 1) {
+      // Xử lý hàng ghế đôi (Couple Seats)
+      const coupleSeats = roomData.quantity_double_seats;
+      const coupleSeatsToAssign = Math.min(coupleSeats, seats.length);
+      for (let i = 0; i < coupleSeatsToAssign; i++) {
+        seats[i] = "COUPLE";
       }
+      
+    } else {
+      // Điều chỉnh số ghế VIP và BASIC sao cho không vượt quá số ghế có sẵn
+      const remainingVipSeats = Math.max(0, roomData.quantity_vip_seats - totalAssignedVipSeats);  // Số ghế VIP còn lại
+      const vipSeats = Math.min(remainingVipSeats, seats.length);  // Phân bổ ghế VIP tối đa có sẵn
   
-      return { row: rowLabel, seats };
+      const remainingBasicSeats = Math.max(0, roomData.quantity_basic_seats - totalAssignedBasicSeats);  // Số ghế BASIC còn lại
+      const basicSeats = Math.min(remainingBasicSeats, seats.length);  // Phân bổ ghế BASIC tối đa có sẵn
+  
+      let assignedVipSeats = 0;
+      let assignedBasicSeats = 0;
+  
+      // Bước 1: Phân bổ ghế VIP
+      for (let i = 0; i < seats.length; i++) {
+        if (seats[i] === "AVAILABLE" && assignedVipSeats < vipSeats) {
+          seats[i] = "VIP";
+          assignedVipSeats++;
+        }
+      }
+      totalAssignedVipSeats += assignedVipSeats;
+      console.log(`VIP Seats Assigned: ${assignedVipSeats}`);
+  
+      // Bước 2: Phân bổ ghế BASIC
+      for (let i = 0; i < seats.length; i++) {
+        if (seats[i] === "AVAILABLE" && assignedBasicSeats < basicSeats) {
+          seats[i] = "BASIC";
+          assignedBasicSeats++;
+        }
+      }
+      totalAssignedBasicSeats += assignedBasicSeats;
+
+  
+      // Bước 3: Phân bổ ghế NORMAL
+      for (let i = 0; i < seats.length; i++) {
+        if (seats[i] === "AVAILABLE") {
+          seats[i] = "NORMAL"; // Phân bổ ghế NORMAL cho những ghế còn lại
+        }
+      }
+
     }
-  );
+    
+    // In ra toàn bộ trạng thái ghế của hàng này
+
+    
+    return { row: rowLabel, seats };
+  });
+  
   
   const handleSeatClick = (row: string, seatIndex: number) => {
     const seatId = `${row}${seatIndex + 1}`;
@@ -323,6 +350,8 @@ const SeatRow: React.FC<SeatRowProps> = ({
     </div>
   );
 };
+
+
 const Seat: React.FC<SeatProps> = ({
   type,
   index,
@@ -337,16 +366,10 @@ const Seat: React.FC<SeatProps> = ({
     }
   };
 
-  // Xác định loại ghế dựa trên các điều kiện
-  const seatClassName = isReserved
-    ? "seat reserved"
-    : isSelected
-    ? "seat selected"
-    : type === "VIP"
-    ? "seat vip"
-    : type === "COUPLE"
-    ? "seat couple-seat"
-    : "seat normal";
+  // Xác định loại ghế và lớp CSS dựa trên các điều kiện
+  const seatClassName = `seat ${isReserved ? "reserved" : ""} ${
+    isSelected ? "selected" : ""
+  } ${type === "VIP" ? "vip" : type === "COUPLE" ? "couple-seat" : "normal"}`;
 
   return (
     <span className={seatClassName} onClick={handleClick}>
@@ -354,9 +377,5 @@ const Seat: React.FC<SeatProps> = ({
     </span>
   );
 };
-
-
-
-
 
 export default CinemaSeatSelection;
