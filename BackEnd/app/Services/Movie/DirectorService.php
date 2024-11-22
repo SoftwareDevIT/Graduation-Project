@@ -59,4 +59,14 @@ class DirectorService
 
         return $Director;
     }
+
+    public function slugExists($slug)
+    {
+        return Director::where('slug', $slug)->exists();
+    }
+
+    public function findBySlug($slug)
+    {
+        return Director::where('slug', $slug)->first();
+    }
 }

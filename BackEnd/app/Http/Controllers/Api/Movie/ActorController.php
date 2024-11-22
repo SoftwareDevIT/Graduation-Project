@@ -10,6 +10,7 @@ use App\Models\News;
 use App\Services\Movie\ActorService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Str;
 
 use function PHPUnit\Framework\isNull;
 
@@ -41,6 +42,18 @@ class ActorController extends Controller
             $file = $request->file('photo');
 
             $actor['photo'] = $file ? $this->uploadImage($file) : null;
+
+            if (isset($actor['actor_name'])) {
+                $slug = Str::slug($actor['actor_name'], '-');
+                $originalSlug = $slug;
+                $count = 1;
+
+                while ($this->actorService->slugExists($slug)) {
+                    $slug = $originalSlug . '-' . $count;
+                    $count++;
+                }
+                $actor['slug'] = $slug;
+            }
 
             $actor = $this->actorService->store($actor);
 
@@ -79,9 +92,22 @@ class ActorController extends Controller
 
             $imageLink = $file ? $this->uploadImage($file) : $oldImgageActor->photo;
 
-            // Lấy dữ liệu đã được xác thực từ request
+         
+
             $actor = $request->validated();
             $actor['photo'] = $imageLink;
+
+            if (isset($actor['actor_name'])) {
+                $slug = Str::slug($actor['actor_name']);
+                $existingMovie = $this->actorService->findBySlug($slug); 
+        
+                if ($existingMovie && $existingMovie->id !== $id) {
+                
+                    $slug .= '-' . uniqid();
+                }
+        
+                $actor['slug'] = $slug; 
+            }
 
             $actor = $this->actorService->update($id, $actor);
 

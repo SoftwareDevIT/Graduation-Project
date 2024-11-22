@@ -11,6 +11,8 @@ use App\Services\Movie\DirectorService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+
 
 class DirectorController extends Controller
 {
@@ -40,6 +42,18 @@ class DirectorController extends Controller
 
             $direct = $request->validated();
             $direct['photo'] = $imageLink;
+
+            if (isset($direct['director_name'])) {
+                $slug = Str::slug($direct['director_name'], '-');
+                $originalSlug = $slug;
+                $count = 1;
+
+                while ($this->directorService->slugExists($slug)) {
+                    $slug = $originalSlug . '-' . $count;
+                    $count++;
+                }
+                $direct['slug'] = $slug;
+            }
 
             $direct = $this->directorService->store($direct);
             return $this->success($direct, 'Thêm thành công đạo diễn');
@@ -78,6 +92,18 @@ class DirectorController extends Controller
 
             $direct = $request->validated();
             $direct['photo'] = $file ? $this->uploadImage($file) : $oldImagedirector->photo;
+
+            if (isset($direct['director_name'])) {
+                $slug = Str::slug($direct['director_name']);
+                $existingMovie = $this->directorService->findBySlug($slug);
+
+                if ($existingMovie && $existingMovie->id !== $id) {
+
+                    $slug .= '-' . uniqid();
+                }
+
+                $direct['slug'] = $slug;
+            }
 
             $direct = $this->directorService->update($id, $direct);
             return $this->success($direct, 'Cập nhập thành công');

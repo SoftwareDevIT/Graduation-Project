@@ -16,7 +16,7 @@ class MovieService
     public function index()
     {
 
-        $movies = Movie::with(['actor', 'director', 'movie_category', 'movieInCinemas'])->orderBy('created_at','desc')->get();
+        $movies = Movie::with(['actor', 'director', 'movie_category', 'movieInCinemas'])->orderBy('created_at', 'desc')->get();
 
         $formattedMovies = $movies->map(function ($movie) {
             return array_merge(
@@ -54,7 +54,7 @@ class MovieService
 
     public function delete(int $id)
     {
-     
+
         $movie = Movie::query()->findOrFail($id);
 
         // $movieCategory->showtimes($id)->delete();    // Xóa suất chiếu phim
@@ -100,5 +100,15 @@ class MovieService
             throw new ModelNotFoundException('Movie not found');
         }
         return $movie;
+    }
+
+    public function slugExists($slug)
+    {
+        return Movie::where('slug', $slug)->exists();
+    }
+
+    public function findBySlug($slug)
+    {
+        return Movie::where('slug', $slug)->first();
     }
 }
