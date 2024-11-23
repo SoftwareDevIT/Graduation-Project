@@ -11,21 +11,43 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 // Zod schema validation
 const roomSchema = z.object({
-  room_name: z.string().min(1, 'Tên phòng không được bỏ trống'), // Validation message if the field is empty
+  room_name: z.string().min(1, 'Tên phòng không được bỏ trống'),
+  
   volume: z
     .number()
-    .min(1, 'Sức chứa phải lớn hơn 0')
-    .int('Sức chứa phải là số nguyên'), // Ensure volume is a positive integer
+    .min(50, 'Sức chứa phải từ 50 đến 300')
+    .max(300, 'Sức chứa phải từ 50 đến 300')
+    .int('Sức chứa phải là số nguyên'),
+  
   cinema_id: z.number().min(1, 'Vui lòng chọn rạp'),
+  
   quantity_double_seats: z
     .number()
     .min(0, 'Số ghế đôi không thể nhỏ hơn 0')
-    .int('Số ghế đôi phải là số nguyên'), // Ensure it's an integer
+    .max(10, 'Số ghế đôi không thể lớn hơn 10') // Không vượt quá 10 ghế đôi
+    .int('Số ghế đôi phải là số nguyên')
+    .refine((value) => value <= 10, {
+      message: 'Số ghế đôi không thể lớn hơn 10',
+    }),
+
   quantity_vip_seats: z
     .number()
     .min(0, 'Số ghế VIP không thể nhỏ hơn 0')
-    .int('Số ghế VIP phải là số nguyên'), // Ensure it's an integer
+    .int('Số ghế VIP phải là số nguyên')
+    .refine((value) => value <= 10, {
+      message: 'Số ghế VIP không thể lớn hơn 10',
+    }),
+
+}).refine((data) => data.quantity_double_seats <= data.volume, {
+  message: 'Số ghế đôi không thể lớn hơn sức chứa',
+  path: ['quantity_double_seats'],
+})
+.refine((data) => data.quantity_vip_seats <= data.volume, {
+  message: 'Số ghế VIP không thể lớn hơn sức chứa',
+  path: ['quantity_vip_seats'],
 });
+
+
 
 const RoomsForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();

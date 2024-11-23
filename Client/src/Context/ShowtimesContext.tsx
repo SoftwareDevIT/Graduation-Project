@@ -100,8 +100,8 @@ export const ShowtimeProvider: React.FC<{ children: ReactNode }> = ({ children }
 
     const fetchShowtimes = async () => {
         try {
-            const response = await instance.get<{ data: Showtime[] }>('/showtimes');
-            dispatch({ type: 'SET_SHOWTIMES', payload: response.data.data });
+            const response = await instance.get('/showtimes');
+            dispatch({ type: 'SET_SHOWTIMES', payload: response.data.data.data });
         } catch (error) {
             console.error('Error fetching showtimes:', error);
         }

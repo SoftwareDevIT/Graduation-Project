@@ -98,7 +98,7 @@ const RoomDashboard: React.FC = () => {
 
   return (
     <div className="container mt-5">
-      <h2 className="text-center text-primary mb-4">Tất Cả Các Phòng</h2>
+
       <div className="d-flex justify-content-between align-items-center mb-4">
         <Link to={'/admin/rooms/add'} className="btn btn-outline-primary">
          + Thêm Phòng

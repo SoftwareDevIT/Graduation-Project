@@ -44,14 +44,40 @@ const PostsDashboard: React.FC = () => {
     return `${content.slice(0, length)}...`;
   };
 
+  // Paginate logic with limited page links and ellipses
+  const renderPagination = () => {
+    const pageNumbers = [];
+    const maxPagesToShow = 5;
+    let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
+    let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
+
+    if (endPage - startPage < maxPagesToShow - 1) {
+      startPage = Math.max(1, endPage - maxPagesToShow + 1);
+    }
+
+    if (startPage > 1) {
+      pageNumbers.push(1);
+      if (startPage > 2) pageNumbers.push('...');
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(i);
+    }
+
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) pageNumbers.push('...');
+      pageNumbers.push(totalPages);
+    }
+
+    return pageNumbers;
+  };
+
   return (
     <div className="container mt-5">
-      <h2 className="text-center mb-4 display-3 text-dark font-weight-bold">Quản lý Bài viết</h2>
-      
       <div className="d-flex justify-content-between align-items-center mb-4">
-      <Link to={'/admin/posts/add'} className="btn btn-outline-primary">
-                   + Quản lý bài viết
-                </Link>
+        <Link to={'/admin/posts/add'} className="btn btn-outline-primary">
+          + Thêm bài viết
+        </Link>
         <input
           type="text"
           placeholder="Tìm kiếm theo tên..."
@@ -75,12 +101,12 @@ const PostsDashboard: React.FC = () => {
                     <h5 className="card-title text-dark font-weight-bold">{post.title}</h5>
                   </Link>
                   <div className="card-text text-muted truncated-text">
-                    <ReactQuill 
-                      value={truncateContent(post.content, 100)}  // Truncate content to 100 characters
-                      readOnly={true} 
-                      theme="snow" 
+                    <ReactQuill
+                      value={truncateContent(post.content,200)}  // Truncate content to 100 characters
+                      readOnly={true}
+                      theme="snow"
                       modules={{ toolbar: false }}
-                      formats={['bold', 'underline', 'link','image']}
+                      formats={['bold', 'underline', 'link', 'image']}
                     />
                     {post.content.length > 100 && (
                       <Link to={`/admin/posts/${post.id}`} className="text-primary mt-2">Xem thêm</Link>
@@ -113,9 +139,15 @@ const PostsDashboard: React.FC = () => {
           <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
             <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>Trước</button>
           </li>
-          {Array.from({ length: totalPages }, (_, index) => (
-            <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
-              <button className="page-link" onClick={() => handlePageChange(index + 1)}>{index + 1}</button>
+          {renderPagination().map((page, index) => (
+            <li key={index} className={`page-item ${currentPage === page ? 'active' : ''}`}>
+              <button
+                className="page-link"
+                onClick={() => typeof page === 'number' && handlePageChange(page)}
+                disabled={typeof page !== 'number'}
+              >
+                {page}
+              </button>
             </li>
           ))}
           <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>

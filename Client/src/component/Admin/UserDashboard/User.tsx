@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import instance from '../../../server';
 import { User } from '../../../interface/User';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
 
 const UserDashboard: React.FC = () => {
     const [users, setUsers] = useState<User[]>([]);
@@ -38,9 +38,26 @@ const UserDashboard: React.FC = () => {
 
     const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
+    // Total number of pages
+    const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
+
+    // Calculate the range of pages to display
+    const pageNumbers = [];
+    let start = Math.max(1, currentPage - 2); // start from 2 pages before the current page
+    let end = Math.min(totalPages, currentPage + 2); // end at 2 pages after the current page
+
+    if (start > 1) pageNumbers.push(1); // Always show the first page if it's not in the range
+    if (start > 2) pageNumbers.push('...'); // Show "..." if there are skipped pages
+
+    for (let i = start; i <= end; i++) {
+        pageNumbers.push(i);
+    }
+
+    if (end < totalPages - 1) pageNumbers.push('...'); // Show "..." if there are skipped pages
+    if (end < totalPages) pageNumbers.push(totalPages); // Always show the last page if it's not in the range
+
     return (
         <div className="container mt-5">
-            <h2 className="text-center text-primary mb-4">Quản Lý Người Dùng</h2>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Link to={'/admin/user/roles'} className="btn btn-outline-primary">
                     Quản lý vai trò
@@ -50,7 +67,7 @@ const UserDashboard: React.FC = () => {
                     placeholder="Tìm kiếm theo tên"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="form-control w-25"  
+                    className="form-control w-25"
                 />
             </div>
             <div className="table-responsive">
@@ -92,11 +109,15 @@ const UserDashboard: React.FC = () => {
                             Trước
                         </button>
                     </li>
-                    {Array.from({ length: Math.ceil(filteredUsers.length / usersPerPage) }, (_, index) => (
-                        <li key={index + 1} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
-                            <button className="page-link" onClick={() => paginate(index + 1)}>
-                                {index + 1}
-                            </button>
+                    {pageNumbers.map((page, index) => (
+                        <li key={index} className={`page-item ${currentPage === page ? 'active' : ''}`}>
+                            {page === '...' ? (
+                                <span className="page-link">...</span>
+                            ) : (
+                                <button className="page-link" onClick={() => paginate(page as number)}>
+                                    {page}
+                                </button>
+                            )}
                         </li>
                     ))}
                     <li className={`page-item ${indexOfLastUser >= filteredUsers.length ? 'disabled' : ''}`}>

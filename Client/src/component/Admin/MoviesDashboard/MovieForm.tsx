@@ -18,16 +18,24 @@ const movieSchema = z.object({
   director_id: z.array(z.number()).min(1, 'Chọn ít nhất một đạo diễn'),
   release_date: z
     .string()
-    .refine((date) => moment(date, 'YYYY-MM-DD', true).isValid(), 'Ngày phát hành không hợp lệ'),
+    .refine((date) => moment(date, 'YYYY-MM-DD', true).isValid(), 'Ngày phát hành không hợp lệ')
+    .refine((date) => moment(date).isSameOrAfter(moment(), 'day'), 'Ngày phát hành không được bé hơn ngày hiện tại'),
   age_limit: z
     .number()
     .int()
-    .min(0, 'Giới hạn độ tuổi phải là số nguyên không âm')
-    .max(100, 'Giới hạn độ tuổi không hợp lệ'),
+    .min(5, 'Giới hạn độ tuổi tối thiểu là 5')
+    .max(18, 'Giới hạn độ tuổi tối đa là 18'),
   description: z.string().min(10, 'Mô tả phải có ít nhất 10 ký tự'),
-  duration: z.string().min(1, 'Thời lượng là bắt buộc'),
+  duration: z
+    .string()
+    .min(1, 'Thời lượng là bắt buộc')
+    .refine((duration) => {
+      const durationInMinutes = parseInt(duration, 10);
+      return !isNaN(durationInMinutes) && durationInMinutes <= 180;
+    }, 'Thời lượng phim không được quá 180 phút'),
   posterFile: z.any().optional(),
 });
+
 
 type MovieFormValues = z.infer<typeof movieSchema>;
 

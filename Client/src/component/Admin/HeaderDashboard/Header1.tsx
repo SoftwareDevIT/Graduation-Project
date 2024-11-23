@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import './Header1.css';
 import { FaBell, FaCog, FaUserCircle } from 'react-icons/fa';
 import { User } from '../../../interface/User';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const Header = () => {
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [user, setUser] = useState<User | null>(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
 
     // Fetch user data from localStorage when the component mounts
     useEffect(() => {
@@ -17,20 +18,58 @@ const Header = () => {
             setUser(JSON.parse(storedUser));
         }
     }, []);
+
     const handleLogout = () => {
         localStorage.removeItem("token");
-        localStorage.removeItem("user_id"); // Xóa userId khỏi localStorage
-        localStorage.removeItem("user_profile"); // Xóa userId khỏi localStorage
-        setIsLoggedIn(false); // Cập nhật trạng thái đăng nhập
-        navigate('/')
-      };
+        localStorage.removeItem("user_id");
+        localStorage.removeItem("user_profile");
+        setIsLoggedIn(false);
+        navigate('/');
+    };
+
     const toggleProfile = () => {
         setIsProfileOpen(!isProfileOpen);
     };
 
+    // Extract the current page name from the path
+    const getPageName = () => {
+        const path = location.pathname;
+        const pageName = path.split('/').pop();
+        switch(pageName) {
+            case 'dashboard':
+                return 'Dashboard';
+            case 'user':
+                return 'Quản Lí Người Dùng';
+            case 'showtimes':
+                return 'Quản Lí Suất Chiếu';
+            case 'orders':
+                return 'Quản Lí Đơn Hàng';
+            case 'posts':
+                return 'Quản Lí Bài Viết';
+            case 'categories':
+                return 'Quản Lí Thể Loại';
+            case 'countries':
+                return 'Quản Lí Khu Vực';
+            case 'combo':
+                return 'Quản Lí Combo Nước';
+            case 'cinemas':
+                return 'Quản Lí Rạp Chiếu Phim';
+            case 'movies':
+                return 'Quản Lí Phim';
+            case 'rooms':
+                return 'Quản Lí Phòng Rạp';
+            case 'RevenueByCinema':
+                return 'Doanh Thu Theo Rạp';
+            case 'RevenueByMovie':
+                return 'Doanh Thu Theo Phim';
+            default:
+                return 'Welcome';
+        }
+    };
+
     return (
         <div className="header1">
-            <h1>WELCOME!</h1>
+            <h1>{getPageName()}</h1>
             <div className="header-actions">
                 <div className="icons-container">
                     <div className="icon">

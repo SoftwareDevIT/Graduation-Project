@@ -153,7 +153,7 @@ const CinemasDashboard: React.FC = () => {
 
     return (
         <div className="container mt-5">
-            <h2 className="text-center text-primary mb-4">Quản Lí Rạp Chiếu Phim</h2>
+        
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Link to={'/admin/cinemas/add'} className="btn btn-outline-primary">+ Thêm Rạp</Link>
                 <input

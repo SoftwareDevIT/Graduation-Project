@@ -6,13 +6,12 @@ import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { notification } from 'antd'; // Import the notification component
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-
 const CategoriesDashboard = () => {
     const { state, deleteCategory } = useCategoryContext();
     const { categories } = state;
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [searchTerm, setSearchTerm] = useState<string>('');
-    const categoriesPerPage = 3;
+    const categoriesPerPage = 7;
 
     const filteredCategories = categories.filter(category => 
         category.category_name && 
@@ -41,9 +40,30 @@ const CategoriesDashboard = () => {
 
     const handlePageChange = (page: number) => setCurrentPage(page);
 
+    const getPageNumbers = () => {
+        const pageNumbers = [];
+        if (totalPages <= 5) {
+            // If there are 5 or fewer pages, show them all
+            for (let i = 1; i <= totalPages; i++) {
+                pageNumbers.push(i);
+            }
+        } else {
+            // If there are more than 5 pages, display the first 2, last 2, and the current page with ellipses in between
+            pageNumbers.push(1);
+            if (currentPage > 3) pageNumbers.push('...');
+            const start = Math.max(currentPage - 1, 2);
+            const end = Math.min(currentPage + 1, totalPages - 1);
+            for (let i = start; i <= end; i++) {
+                pageNumbers.push(i);
+            }
+            if (currentPage < totalPages - 2) pageNumbers.push('...');
+            pageNumbers.push(totalPages);
+        }
+        return pageNumbers;
+    };
+
     return (
         <div className="container mt-5">
-            <h2 className="text-center text-primary mb-4">Tất Cả Thể Loại Phim</h2>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Link to={'/admin/categories/add'} className="btn btn-outline-primary">
                    + Thêm Thể Loại Phim
@@ -102,11 +122,15 @@ const CategoriesDashboard = () => {
                             Trước
                         </button>
                     </li>
-                    {Array.from({ length: totalPages }, (_, index) => (
-                        <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
-                            <button className="page-link" onClick={() => handlePageChange(index + 1)}>
-                                {index + 1}
-                            </button>
+                    {getPageNumbers().map((page, index) => (
+                        <li key={index} className={`page-item ${page === currentPage ? 'active' : ''}`}>
+                            {page === '...' ? (
+                                <span className="page-link">...</span>
+                            ) : (
+                                <button className="page-link" onClick={() => handlePageChange(Number(page))}>
+                                    {page}
+                                </button>
+                            )}
                         </li>
                     ))}
                     <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>

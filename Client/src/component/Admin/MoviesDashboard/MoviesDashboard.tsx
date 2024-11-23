@@ -74,7 +74,7 @@ const MoviesDashboard: React.FC = () => {
 
     return (
         <div className="container mt-5">
-            <h2 className="text-center text-primary mb-4">Bảng điều khiển Phim</h2>
+        
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Link to={`/admin/movies/add`} className="btn btn-outline-primary">+ Thêm Phim Mới</Link>
                 <input
