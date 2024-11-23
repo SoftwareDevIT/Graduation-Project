@@ -3,7 +3,7 @@ import './MovieDetail.css';
 import './ContentMovie.css';
 import MovieDetail from './MovieDetail';
 import Footer from '../Footer/Footer';
-import { useParams } from 'react-router-dom';  // Import useParams
+import { useNavigate, useParams } from 'react-router-dom';  // Import useParams
 import instance from '../../server'; // Ensure you import the API instance correctly
 import { Movie } from '../../interface/Movie'; // Import Movie interface
 import { useCountryContext } from '../../Context/CountriesContext';
@@ -21,6 +21,21 @@ export const ContentMovie = (props: Props) => {
     const [relatedPosts, setRelatedPosts] = useState<any[]>([]); // Initialize state for related posts
     const [loading, setLoading] = useState<boolean>(true);  // Trạng thái tải
     const [error, setError] = useState<string | null>(null);  // Trạng thái lỗi
+    const navigate = useNavigate();
+
+    const handleViewSchedule = () => {
+        if (selectedLocation) {
+            // Điều hướng sang trang lịch chiếu và truyền thông tin
+            navigate("/schedule", {
+                state: {
+                    location: selectedLocation,
+                    movieId: movie?.id, // Thêm ID phim nếu cần
+                },
+            });
+        } else {
+            alert("Vui lòng chọn khu vực trước khi xem lịch chiếu.");
+        }
+    };
     useEffect(() => {
         const fetchMovieDetails = async () => {
             if (movieId) {

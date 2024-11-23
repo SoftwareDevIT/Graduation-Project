@@ -39,7 +39,7 @@ class ActorController extends Controller
         try {
             $actor = $request->validated();
             $file = $request->file('photo');
-        
+
             $actor['photo'] = $file ? $this->uploadImage($file) : null;
 
             $actor = $this->actorService->store($actor);
@@ -53,7 +53,7 @@ class ActorController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int $id)
+    public function show($id)
     {
         try {
             $actor = $this->actorService->get($id);

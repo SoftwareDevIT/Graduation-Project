@@ -72,6 +72,8 @@ const MovieBanner = () => {
                         ? new Date(movie.release_date).toLocaleDateString("vi-VN")
                         : "N/A"}
                     </span>
+                    
+                  
                   </div>
                 </div>
               </div>

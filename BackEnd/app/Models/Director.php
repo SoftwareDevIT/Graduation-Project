@@ -10,18 +10,19 @@ class Director extends Model
     use HasFactory;
     protected $table = 'director';
     protected $fillable = [
-        'id',
         'director_name',
-        'descripcion',
+        'slug',
         'photo',
+        'descripcion',
         'country',
+        'status',
         'link_wiki',
     ];
 
     public function movies()
     {
         return $this->belongsToMany(Movie::class, 'director_in_movie', 'director_id', 'movie_id')
-           
+
             ->withTimestamps();
     }
 

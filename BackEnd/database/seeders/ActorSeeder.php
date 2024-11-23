@@ -22,14 +22,14 @@ class ActorSeeder extends Seeder
         foreach ($data as $item) {
             DB::table('actor')->insert([
                 'actor_name' => $item['name'],
-                'photo' => $item['photo'],
+                'photo' => 'https://rapchieuphim.com' . $item['photo'],
+                'slug' => $item['slug'],
                 'descripcion' => $item['description'],
                 'country' => $item['country'],
-                'link_wiki' => '',
+                'link_wiki' => 'https://vi.wikipedia.org/wiki/' . $item['name'],
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
         }
-
     }
 }

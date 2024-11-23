@@ -33,12 +33,10 @@ class User extends Authenticatable
         'phone',
         'address',
         'fullname',
-        'coin',
-        // 'role_id',
-        'status',
         'rating',
         'google_id',
         'email_verified_at',
+        'status',
     ];
 
     /**

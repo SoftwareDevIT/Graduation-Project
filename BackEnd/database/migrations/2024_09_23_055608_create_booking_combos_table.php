@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('booking_combos', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('booking_id'); // Đảm bảo cột khóa ngoại là unsignedBigInteger
             $table->integer('quantity');
             $table->foreignId('combo_id')->constrained('combos')->onDelete('cascade');
-            $table->unsignedBigInteger('booking_id'); // Đảm bảo cột khóa ngoại là unsignedBigInteger
             $table->foreign('booking_id')->references('id')->on('booking')->onDelete('cascade');
             $table->timestamps();
         });

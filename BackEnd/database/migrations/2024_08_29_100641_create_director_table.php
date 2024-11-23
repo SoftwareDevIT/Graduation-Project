@@ -14,10 +14,12 @@ return new class extends Migration
         Schema::create('director', function (Blueprint $table) {
             $table->id('id');
             $table->string('director_name');
-            $table->string('descripcion')->nullable();
+            $table->string('slug');
             $table->string('photo')->nullable();
             $table->string('country')->nullable();
             $table->string('link_wiki')->nullable();
+            $table->string('descripcion')->nullable();
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }
