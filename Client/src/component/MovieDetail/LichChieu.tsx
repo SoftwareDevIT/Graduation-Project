@@ -13,9 +13,9 @@ import { Showtime } from "../../interface/Showtimes";
 import MovieDetail from "./MovieDetail";
 
 const LichChieuUpdated: React.FC = () => {
-  const { id } = useParams<{ id: string }>(); // Lấy ID phim từ URL
+  const { slug } = useParams();
   const { state: countryState, fetchCountries } = useCountryContext();
-  const { state: movieState } = useMovieContext(); // Lấy phim từ MovieContext
+  const { state, fetchMovies } = useMovieContext(); // Lấy phim từ MovieContext
   const navigate = useNavigate();
 
   const [cinemas, setCinemas] = useState<Cinema[]>([]);
@@ -27,7 +27,10 @@ const LichChieuUpdated: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   // Lấy phim theo ID
-  const movie = movieState.movies.find((movie) => movie.id === Number(id));
+  const movie = state.movies.find((movie) => movie.slug === slug);
+  useEffect(() => {
+    fetchMovies(); // Gọi lại fetchMovies khi slug thay đổi
+  }, [slug]);
 
   useEffect(() => {
     fetchCountries(); // Lấy danh sách khu vực
@@ -47,7 +50,7 @@ const LichChieuUpdated: React.FC = () => {
           params: {
             location_id: selectedLocation,
             showtime_date: selectedDate,
-            movie_id: id,
+            movie_id: movie?.id,
           },
         });
 
@@ -64,7 +67,7 @@ const LichChieuUpdated: React.FC = () => {
       }
     };
     if (selectedLocation) fetchCinemasAndShowtimes();
-  }, [selectedLocation, selectedDate, id]);
+  }, [selectedLocation, selectedDate, movie?.id]);
 
   const toggleCinemas = (index: number) => {
     setExpandedIndex(expandedIndex === index ? null : index);
@@ -90,115 +93,115 @@ const LichChieuUpdated: React.FC = () => {
   return (
     <>
 
-      <MovieDetail />
-      <div className="lich-chieu-container">
-        <div className="calendar-container">
-          <div className="row-custom">
-            <select
-              className="city-select-custom"
-              value={selectedLocation}
-              onChange={(e) => setSelectedLocation(e.target.value)}
-            >
-              {countryState.countries.map((location) => (
-                <option key={location.id} value={location.id.toString()}>
-                  {location.location_name}
-                </option>
-              ))}
-            </select>
-            <select className="format-select-custom">
-              <option>Định dạng</option>
-              <option>2D</option>
-              <option>3D</option>
-              <option>IMAX</option>
-            </select>
-          </div>
-          <div className="calendar-custom">
-            {generateWeekDays().map((day, index) => (
-              <div
-                key={index}
-                className={`date-custom ${selectedDate === day.date ? "active" : ""}`}
-                onClick={() => setSelectedDate(day.date)}
-              >
-                <span>{day.day}</span>
-                <small>{day.weekDay}</small>
-              </div>
+    <MovieDetail />
+    <div className="lich-chieu-container">
+      <div className="calendar-container">
+        <div className="row-custom">
+          <select
+            className="city-select-custom"
+            value={selectedLocation}
+            onChange={(e) => setSelectedLocation(e.target.value)}
+          >
+            {countryState.countries.map((location) => (
+              <option key={location.id} value={location.id.toString()}>
+                {location.location_name}
+              </option>
             ))}
-          </div>
-          <div className="cinema-list">
-            {error ? (
-              <p>{error}</p>
-            ) : (
-              cinemas.map((cinema, index) => (
-                <React.Fragment key={index}>
-                  <div
-                    className={`cinema-item ${expandedIndex === index ? "active" : ""}`}
-                    onClick={() => toggleCinemas(index)}
-                  >
-                    <div className="cinema-logo">
-                      <img
-                        src="https://cdn.moveek.com/storage/media/cache/square/5fffb2fcaf3c1018282624.png"
-                        alt={cinema.cinema_name}
-                      />
-                    </div>
-                    <div className="cinema-info">
-                      <p className="cinema-name">{cinema.cinema_name}</p>
-                      <p className="cinema-branches">{cinema.showtimes.length} suất chiếu</p>
+          </select>
+          <select className="format-select-custom">
+            <option>Định dạng</option>
+            <option>2D</option>
+            <option>3D</option>
+            <option>IMAX</option>
+          </select>
+        </div>
+        <div className="calendar-custom">
+          {generateWeekDays().map((day, index) => (
+            <div
+              key={index}
+              className={`date-custom ${selectedDate === day.date ? "active" : ""}`}
+              onClick={() => setSelectedDate(day.date)}
+            >
+              <span>{day.day}</span>
+              <small>{day.weekDay}</small>
+            </div>
+          ))}
+        </div>
+        <div className="cinema-list">
+          {error ? (
+            <p>{error}</p>
+          ) : (
+            cinemas.map((cinema, index) => (
+              <React.Fragment key={index}>
+                <div
+                  className={`cinema-item ${expandedIndex === index ? "active" : ""}`}
+                  onClick={() => toggleCinemas(index)}
+                >
+                  <div className="cinema-logo">
+                    <img
+                      src="https://cdn.moveek.com/storage/media/cache/square/5fffb2fcaf3c1018282624.png"
+                      alt={cinema.cinema_name}
+                    />
+                  </div>
+                  <div className="cinema-info">
+                    <p className="cinema-name">{cinema.cinema_name}</p>
+                    <p className="cinema-branches">{cinema.showtimes.length} suất chiếu</p>
+                  </div>
+                </div>
+                {expandedIndex === index && (
+                  <div className="sub-cinema-list">
+                    <p>{cinema.cinema_address}</p>
+                    <div className="cinema-showtimes">
+                      {cinema.showtimes.length > 0 ? (
+                        cinema.showtimes.map((showtime: Showtime) => {
+                          const showtimeDateTime = new Date(
+                            `${selectedDate}T${showtime.showtime_start}`
+                          );
+                          const isPastShowtime = showtimeDateTime < new Date();
+
+                          return (
+                            <span
+                              key={showtime.id}
+                              onClick={() => {
+                                if (!isPastShowtime) {
+                                  navigate("/seat", {
+                                    state: {
+                                      movieName: movie?.movie_name,
+                                      cinemaName: cinema.cinema_name,
+                                      showtime: showtime.showtime_start,
+                                      showtimeId: showtime.id,
+                                      cinemaId: cinema.id,
+                                      roomId: showtime.room_id,
+                                      price: showtime.price 
+                                    },
+                                  });
+                                }
+                              }}
+                              style={{
+                                cursor: isPastShowtime ? "not-allowed" : "pointer",
+                                color: isPastShowtime ? "gray" : "black",
+                              }}
+                            >
+                               {showtime.showtime_start.slice(0, 5)}
+                               {/* <p> {`${showtime.price / 1000}k`}</p> */}
+
+                            </span>
+                          );
+                        })
+                      ) : (
+                        <p>Không có suất chiếu</p>
+                      )}
                     </div>
                   </div>
-                  {expandedIndex === index && (
-                    <div className="sub-cinema-list">
-                      <p>{cinema.cinema_address}</p>
-                      <div className="cinema-showtimes">
-                        {cinema.showtimes.length > 0 ? (
-                          cinema.showtimes.map((showtime: Showtime) => {
-                            const showtimeDateTime = new Date(
-                              `${selectedDate}T${showtime.showtime_start}`
-                            );
-                            const isPastShowtime = showtimeDateTime < new Date();
-
-                            return (
-                              <span
-                                key={showtime.id}
-                                onClick={() => {
-                                  if (!isPastShowtime) {
-                                    navigate("/seat", {
-                                      state: {
-                                        movieName: movie?.movie_name,
-                                        cinemaName: cinema.cinema_name,
-                                        showtime: showtime.showtime_start,
-                                        showtimeId: showtime.id,
-                                        cinemaId: cinema.id,
-                                        roomId: showtime.room_id,
-                                        price: showtime.price 
-                                      },
-                                    });
-                                  }
-                                }}
-                                style={{
-                                  cursor: isPastShowtime ? "not-allowed" : "pointer",
-                                  color: isPastShowtime ? "gray" : "black",
-                                }}
-                              >
-                                 {showtime.showtime_start.slice(0, 5)}
-                                 {/* <p> {`${showtime.price / 1000}k`}</p> */}
-
-                              </span>
-                            );
-                          })
-                        ) : (
-                          <p>Không có suất chiếu</p>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                </React.Fragment>
-              ))
-            )}
-          </div>
+                )}
+              </React.Fragment>
+            ))
+          )}
         </div>
       </div>
-      <Footer />
-    </>
+    </div>
+    <Footer />
+  </>
   );
 };
 
