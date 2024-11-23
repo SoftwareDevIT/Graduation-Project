@@ -12,16 +12,11 @@ import { Movie } from "../../interface/Movie";
 import { Modal } from "antd";
 import { stripHtml } from '../../assets/Font/quillConfig';
 import { useNews } from "../../Context/NewsContext";
-const fetchMovies = async (): Promise<Movie[]> => {
-    const response = await instance.get("/movies");
-    return response.data.data.original.slice(0, 15); // Giới hạn 15 bộ phim đầu tiên
-};
+import { useMovieContext } from "../../Context/MoviesContext";
+
 
 function Video() {
-    const { data: movies, isLoading, isError } = useQuery<Movie[], Error>({
-        queryKey: ["movies"], // Đây là queryKey cần thiết
-        queryFn: fetchMovies, // Hàm fetch dữ liệu
-    });
+    const { state: { movies } } = useMovieContext();
 
     const [news, setNews] = useState<NewsItem[]>([]);
     const [isTrailerVisible, setIsTrailerVisible] = useState(false);
@@ -38,11 +33,27 @@ function Video() {
         swipe: true,
         swipeToSlide: true,
         responsive: [
-            { breakpoint: 992, settings: { slidesToShow: 5 } },
-            { breakpoint: 768, settings: { slidesToShow: 3 } },
-            { breakpoint: 480, settings: { slidesToShow: 3 } },
+          {
+            breakpoint: 992,
+            settings: {
+              slidesToShow: 5,
+            },
+          },
+          {
+            breakpoint: 768,
+            settings: {
+              slidesToShow: 3,
+            },
+          },
+          {
+            breakpoint: 480,
+            settings: {
+              slidesToShow: 3,
+            },
+          },
         ],
-    };
+      };
+    
 
     const { newsData, error } = useNews();  // Lấy dữ liệu từ context
 

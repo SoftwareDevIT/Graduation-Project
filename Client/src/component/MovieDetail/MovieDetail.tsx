@@ -64,24 +64,37 @@ const MovieDetail: React.FC = () => {
     fetchUserData();
   }, [movie?.id]);
   
+ 
   const handleFavoriteToggle = async () => {
-    if (!userStatus.isLoggedIn) {
+    const token = localStorage.getItem("token");
+    if (!userStatus.isLoggedIn || !token) {
       notification.warning({
         message: "Yêu cầu đăng nhập",
         description: "Vui lòng đăng nhập để thêm phim vào danh sách yêu thích!",
       });
       return;
     }
-
     try {
       if (userStatus.isFavorite) {
-        await instance.delete(`/favorites/${movie?.id}`);
+        await instance.delete(`/favorites/${movie?.id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         notification.success({
           message: "Thành công",
           description: "Phim đã được xóa khỏi danh sách yêu thích!",
         });
       } else {
-        await instance.post(`/favorites/${movie?.id}`);
+        await instance.post(
+          `/favorites/${movie?.id}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         notification.success({
           message: "Thành công",
           description: "Phim đã được thêm vào danh sách yêu thích!",
