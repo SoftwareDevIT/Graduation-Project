@@ -130,7 +130,7 @@ class TicketBookingService
             $urlPayment = $this->processPaymentStep->vnpay($request);  // Gọi phương thức VNPAY
             return response()->json(['url' => $urlPayment]);
         } elseif ($request->pay_method_id == 2) {
-            $urlPayment = $this->processPaymentStep->momo($request);  // Gọi phương thức MOMO
+            $urlPayment = $this->processPaymentStep->momoPayment($request);  // Gọi phương thức MOMO
             return response()->json(['url' => $urlPayment]);
         } else {
             // Xóa booking nếu phương thức thanh toán không hợp lệ

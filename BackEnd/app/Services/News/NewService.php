@@ -51,7 +51,7 @@ class NewService
     public function show($identifier)
     {
 
-        $news = News::with(['newsCategory', 'user'])
+        $news = News::with(['newsCategory',,'movie', 'user'])
             ->when(is_numeric($identifier), function ($query) use ($identifier) {
                 return $query->where('id', $identifier);
             }, function ($query) use ($identifier) {
