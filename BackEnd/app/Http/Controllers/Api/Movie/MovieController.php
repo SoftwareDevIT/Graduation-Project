@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use League\Flysystem\WhitespacePathNormalizer;
+use Illuminate\Support\Str;
 use Throwable;
 
 class MovieController extends Controller
@@ -46,7 +47,19 @@ class MovieController extends Controller
             $thumbnailFile = $request->file('thumbnail'); // Nhận tệp thumbnail
             $movie = $request->validated();
             $movie['poster'] = $file ? $this->uploadImage($file) : null;
-            $movie['thumbnail'] = $thumbnailFile ? $this->uploadImage($thumbnailFile) : null; // Tải lên thumbnail
+            $movie['thumbnail'] = $thumbnailFile ? $this->uploadImage($thumbnailFile) : null; 
+
+            if (isset($movie['title'])) {
+                $slug = Str::slug($movie['title'], '-');
+                $originalSlug = $slug;
+                $count = 1;
+
+                while ($this->movieService->slugExists($slug)) {
+                    $slug = $originalSlug . '-' . $count;
+                    $count++;
+                }
+                $movie['slug'] = $slug;
+            }
 
             DB::transaction(function () use ($movie, $request) {
                 $movie = $this->movieService->store($movie);
@@ -56,6 +69,7 @@ class MovieController extends Controller
                 $movie->actor()->sync($request->actor_id);
                 $movie->director()->sync($request->director_id);
             });
+
             return $this->success($movie, 'Thêm thành công Movie');
         } catch (Exception $e) {
             return $this->error('Lỗi: ' . $e->getMessage(), 500);
@@ -89,16 +103,24 @@ class MovieController extends Controller
             $thumbnailFile = $request->file('thumbnail'); // Nhận tệp thumbnail
             $oldImage = $this->movieService->get($id);
 
-            // Xử lý hình ảnh poster
             $imageLink = $posterFile ? $this->uploadImage($posterFile) : $oldImage->poster;
+            $thumbnailLink = $thumbnailFile ? $this->uploadImage($thumbnailFile) : $oldImage->thumbnail;
 
-            // Xử lý hình ảnh thumbnail
-            $thumbnailLink = $thumbnailFile ? $this->uploadImage($thumbnailFile) : $oldImage->thumbnail; // Giả sử có trường thumbnail trong $oldImageActor
-
-            // Lấy dữ liệu đã được xác thực từ request
             $movie = $request->validated();
             $movie['poster'] = $imageLink;
-            $movie['thumbnail'] = $thumbnailLink; // Thêm trường thumbnail vào dữ liệu movie
+            $movie['thumbnail'] = $thumbnailLink;
+
+            if (isset($movie['movie_name'])) {
+                $slug = Str::slug($movie['movie_name']);
+                $existingMovie = $this->movieService->findBySlug($slug); 
+        
+                if ($existingMovie && $existingMovie->id !== $id) {
+                
+                    $slug .= '-' . uniqid();
+                }
+        
+                $movie['slug'] = $slug; 
+            }
 
             $movie = $this->movieService->update($id, $movie);
 
@@ -106,7 +128,7 @@ class MovieController extends Controller
             $movie->actor()->sync($request->actor_id);
             $movie->director()->sync($request->director_id);
 
-            return $this->success($movie, 'Cập nhập thành công');
+            return $this->success($movie, 'Cập nhật thành công');
         } catch (Exception $e) {
             return $this->error('Lỗi: ' . $e->getMessage(), 500);
         }
