@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Booking\BookingController;
+use App\Http\Controllers\Api\Google\GoongMapController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\News\NewController;
@@ -43,6 +44,7 @@ Route::post('login', [AuthController::class, 'login']);
 // Google Sign In
 Route::post('/get-google-sign-in-url', [GoogleController::class, 'getGoogleSignInUrl']); // lấy url login google
 Route::get('/callback', [GoogleController::class, 'loginCallback']);  // login google
+Route::get('/autocomplete', [GoongMapController::class, 'autocomplete']);
 Route::post('logout', [AuthController::class, 'logout']);
 Route::post('register', [AuthController::class, 'register']); // Đăng ký người dùng
 Route::middleware(['api', 'session'])->group(function () {
