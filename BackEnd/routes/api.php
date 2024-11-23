@@ -83,8 +83,8 @@ Route::get('/cinema/{id}/room', [RoomController::class, 'getRoomByCinema']);  //
 
 // Các tuyến có thể truy cập được cho người dùng được xác thực
 Route::middleware(['auth:sanctum', 'web'])->group(function () {
-    Route::apiResource('favorites', FavoriteController::class)->only(['store', 'destroy']);               // Thêm phim yêu thích
-    // Route::delete('favorites', [FavoriteController::class, 'destroy']);             // Xóa phim yêu thích
+    Route::post('favorites/{movie}', [FavoriteController::class, 'store']);            // Thêm phim yêu thích
+    Route::delete('favorites/{movie}', [FavoriteController::class, 'destroy']);             // Xóa phim yêu thích
     Route::post('ratings', [RatingController::class, 'store']);                                // Đánh giá phim
     Route::apiResource('user', AuthController::class);
     Route::get('/user', function (Request $request) {
