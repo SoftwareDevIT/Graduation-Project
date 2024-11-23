@@ -26,11 +26,11 @@ class FavoriteController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(string $movie)
     {
         try {
-            $input = $request->query('movie');
-            $movieId = is_numeric($input) ? $input : $this->favoriteService->getMovieIdBySlug($input);
+         
+            $movieId = is_numeric($movie) ? $movie : $this->favoriteService->getMovieIdBySlug($movie);
 
             $this->favoriteService->store($movieId);
             return $this->success([], 'Yêu thích phim thành công', 200);
