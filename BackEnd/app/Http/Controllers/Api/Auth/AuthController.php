@@ -22,7 +22,7 @@ class AuthController extends Controller
     protected $userRegistrationService;
     protected $loginService;
 
-    public function __construct(UserRegistrationService $userRegistrationService, LoginService $loginService, )
+    public function __construct(UserRegistrationService $userRegistrationService, LoginService $loginService,)
     {
         $this->userRegistrationService = $userRegistrationService;
         $this->loginService = $loginService;
@@ -55,10 +55,11 @@ class AuthController extends Controller
         return $this->success($data);
     }
 
-public function allUser(){
-    $user=$this->loginService->allUser();
-    return $user;
-}
+    public function allUser()
+    {
+        $user = $this->loginService->allUser();
+        return $user;
+    }
 
     public function update(UpdateUserRequest $request, $id)
     {
@@ -118,7 +119,6 @@ public function allUser(){
             // return $this->success($token, 200);
             $user = $this->loginService->index();
             return $this->success(['token' => $token, 'profile' => $user], 200);
-
         } catch (Exception $e) {
             return $e->getMessage();
         }
@@ -138,11 +138,4 @@ public function allUser(){
             return $this->error($e->getMessage());
         }
     }
-
-
-
-
-
-
-
 }
