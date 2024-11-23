@@ -222,7 +222,7 @@ const Header = () => {
                   </span>
                 </a>
                 <div className="dropdown-content">
-                  <Link to={"/movieshowing"}>Đang chiếu</Link>
+                  <Link to={"/movieshowing"}>Phim theo thể loại</Link>
                   <a href="#">Sắp chiếu</a>
                   <Link to={"/earlymovie"}>Chiếu sớm</Link>
 

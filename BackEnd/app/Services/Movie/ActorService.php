@@ -55,4 +55,13 @@ class ActorService
         return $actor;
     }
 
+    public function slugExists($slug)
+    {
+        return Actor::where('slug', $slug)->exists();
+    }
+
+    public function findBySlug($slug)
+    {
+        return Actor::where('slug', $slug)->first();
+    }
 }
