@@ -6,8 +6,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useCategoryContext } from '../../../Context/CategoriesContext';
 import { MovieCategory } from '../../../interface/MovieCategory';
 import instance from '../../../server';
+import { notification } from 'antd'; // Import notification from Ant Design
 
-// Định nghĩa schema để xác thực form bằng Zod
+// Define schema to validate the form using Zod
 const categorySchema = z.object({
   category_name: z.string().min(1, 'Tên thể loại là bắt buộc.'),
 });
@@ -50,16 +51,25 @@ const CategoriesForm = () => {
     try {
       if (isEditMode) {
         await updateCategory(Number(id), data);
-        alert('Cập nhật thể loại thành công!');
+        notification.success({
+          message: 'Cập nhật thể loại thành công!',
+          description:"Đã cập nhật thể loại mới vào danh sách"
+        });
       } else {
         await addCategory(data);
-        alert('Thêm thể loại thành công!');
+        notification.success({
+          message: 'Thêm thể loại thành công!',
+          description:"Đã thêm thể loại mới vào danh sách"
+        });
       }
       nav('/admin/categories');
       reset();
     } catch (error) {
       console.error('Gửi form thất bại:', error);
-      alert('Gửi form thất bại');
+      notification.error({
+        message: 'Gửi form thất bại',
+        description: 'Có lỗi xảy ra khi gửi form. Vui lòng thử lại.',
+      });
     }
   };
 

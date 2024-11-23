@@ -56,7 +56,7 @@ const Otp = () => {
                         placeholder="Nhập OTP"
                         value={otp}
                         onChange={(e) => setOtp(e.target.value)}
-                        required
+                      
                     />
                     <button type="submit">Xác minh OTP</button>
                 </form>

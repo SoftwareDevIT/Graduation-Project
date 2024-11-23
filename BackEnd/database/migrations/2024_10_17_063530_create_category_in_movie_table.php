@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('movie_id');
             $table->unsignedBigInteger('movie_category_id');
             $table->foreign('movie_id')->references('id')->on('movies');
-            $table->foreign('movie_category_id')->references('id')->on('movie_category');
+            $table->foreign('movie_category_id')->references('id')->on('movie_category')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\Slugable;
+use Illuminate\Support\Str;
 
 class Cinema extends Model
 {
-    use HasFactory;
+    use HasFactory, Slugable;
     protected $table = 'cinema';
     protected $primaryKey = 'id';
     protected $fillable = [
@@ -21,7 +23,8 @@ class Cinema extends Model
         'cinema_address',
         'status',
     ];
-    public function location(){
+    public function location()
+    {
         return $this->belongsTo(Location::class);
     }
     public function movies()
@@ -34,7 +37,22 @@ class Cinema extends Model
     //     return $this->hasMany(Showtime::class);
     // }
 
-    public function movieincinemas(){
+    public function movieincinemas()
+    {
         return $this->hasMany(MovieInCinema::class);
+    }
+
+    protected static function booted()
+    {
+        static::creating(function ($movie) {
+            $movie->slug = self::createSlug($movie->cinema_name);
+        });
+    }
+
+
+
+    public static function createSlug($title)
+    {
+        return str::slug($title);
     }
 }

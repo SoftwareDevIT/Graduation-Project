@@ -5,8 +5,8 @@ import Footer from '../Footer/Footer';
 import Header from '../Header/Hearder';
 import { NewsItem } from '../../interface/NewsItem';
 import instance from '../../server';
-import { stripHtml } from '../../assets/Font/quillConfig';
-import dayjs from 'dayjs'; // Import dayjs
+import { extractLinks, stripHtml } from '../../assets/Font/quillConfig';
+import dayjs from 'dayjs'; 
 
 const PostDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -38,7 +38,7 @@ const PostDetail: React.FC = () => {
 
     // Định dạng ngày tháng
     const formattedDate = dayjs(article.created_at).format('DD/MM/YYYY HH:mm');
-
+   
     return (
         <>
             <Header />
@@ -59,6 +59,7 @@ const PostDetail: React.FC = () => {
                     </div>
 
                     <p className="article-description">{stripHtml(article.content)}</p>
+              
                     {/* Nếu bạn muốn giữ lại nội dung ban đầu, bạn có thể thêm phần nội dung ở đây */}
                 </div>
 

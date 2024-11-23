@@ -7,24 +7,28 @@ use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Traits\AuthorizesInService;
 
 /**
  * Class MovieService.
  */
 class DirectorService
 {
+    use AuthorizesInService;
     public function index(): Collection
     {
-        return Director::all();
+        return Director::orderByDesc('created_at')->get();
     }
 
     public function store(array $data): Director
     {
+
         return Director::create($data);
     }
 
     public function update(int $id, array $data): Director
     {
+
         $director = Director::query()->findOrFail($id);
         $director->update($data);
 
@@ -33,6 +37,7 @@ class DirectorService
 
     public function delete(int $id): ?bool
     {
+
         $director = Director::query()->findOrFail($id);
         return $director->delete();
     }
@@ -53,5 +58,15 @@ class DirectorService
             ->firstOrFail();
 
         return $Director;
+    }
+
+    public function slugExists($slug)
+    {
+        return Director::where('slug', $slug)->exists();
+    }
+
+    public function findBySlug($slug)
+    {
+        return Director::where('slug', $slug)->first();
     }
 }

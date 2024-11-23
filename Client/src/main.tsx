@@ -30,7 +30,7 @@ import { NewsProvider } from './Context/NewsContext.tsx'
 
 createRoot(document.getElementById('root')!).render(
   
-  // <StrictMode>
+
     <BrowserRouter>
     <CinemaProvider>
       <ComboProvider>

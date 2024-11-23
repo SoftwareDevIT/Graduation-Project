@@ -17,9 +17,10 @@ return new class extends Migration {
             $table->integer('volume')->nullable();
             $table->integer('quantity_double_seats')->nullable();
             $table->integer('quantity_vip_seats')->nullable();
+            $table->integer('quantity_basic_seats')->nullable();
             $table->boolean('status')->default(true);
             $table->timestamps();
-            $table->foreign('cinema_id')->references('id')->on('cinema');
+            $table->foreign('cinema_id')->references('id')->on('cinema')->onDelete('cascade');
         });
     }
 

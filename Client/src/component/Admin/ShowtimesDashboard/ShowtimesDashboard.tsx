@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useShowtimeContext } from '../../../Context/ShowtimesContext';
 import instance from '../../../server';
 import { Movie } from '../../../interface/Movie';
+import { notification } from 'antd';  // Import Ant Design notification
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const ShowtimesDashboard: React.FC = () => {
@@ -61,14 +62,24 @@ const ShowtimesDashboard: React.FC = () => {
             try {
                 await instance.delete(`/showtimes/${id}`);
                 dispatch({ type: 'DELETE_SHOWTIME', payload: id });
-                alert('Showtime đã được xóa thành công!');
+                
+                // Use Ant Design notification for success
+                notification.success({
+                    message: 'Xóa Thành Công',
+                    description: 'Showtime đã được xóa thành công!',
+                });
+
                 const updatedTotalShowtimes = totalShowtimes - 1;
                 const updatedTotalPages = Math.ceil(updatedTotalShowtimes / showtimesPerPage);
                 if (currentPage > updatedTotalPages && updatedTotalPages > 0) {
                     setCurrentPage(updatedTotalPages);
                 }
             } catch (err) {
-                alert('Không thể xóa showtime. Vui lòng thử lại sau.');
+                // Use Ant Design notification for error
+                notification.error({
+                    message: 'Lỗi Xóa Showtime',
+                    description: 'Không thể xóa showtime. Vui lòng thử lại sau.',
+                });
             }
         }
     };
@@ -123,7 +134,7 @@ const ShowtimesDashboard: React.FC = () => {
         <div className="container mt-5">
             <h2 className="text-center text-primary mb-4">Quản Lý Suất Chiếu</h2>
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <Link to="/admin/showtimes/add" className="btn btn-outline-primary">Thêm Suất Chiếu</Link>
+                <Link to="/admin/showtimes/add" className="btn btn-outline-primary">+ Thêm Suất Chiếu</Link>
                 <input
                     type="text"
                     placeholder="Tìm kiếm theo tên phim"

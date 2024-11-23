@@ -7,29 +7,33 @@ use App\Models\MovieInCinema;
 use App\Models\Showtime;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Traits\AuthorizesInService;
+
 
 /**
  * Class LocationService.
  */
 class ShowtimeService
 {
-
-    public function index(): Collection
+    use AuthorizesInService;
+    public function index()
     {
-        // return Showtime::with('movieInCinema.movie') 
-        return Showtime::with([ 'movieInCinema.movie', 'room']) 
-            ->get();
+
+        return Showtime::with(['movieInCinema.movie', 'room'])->orderByDesc('created_at')->paginate(5);
+
     }
 
 
 
     public function store(array $data): Showtime
     {
+
         return Showtime::create($data);
     }
 
     public function update(int $id, array $data): Showtime
     {
+
         $showtime = Showtime::findOrFail($id);
         $showtime->update($data);
 
@@ -39,6 +43,7 @@ class ShowtimeService
 
     public function delete(int $id): ?bool
     {
+
         $showtime = Showtime::findOrFail($id);
         return $showtime->delete();
     }

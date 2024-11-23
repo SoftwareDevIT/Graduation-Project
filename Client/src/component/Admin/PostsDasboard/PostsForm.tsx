@@ -6,6 +6,7 @@ import instance from '../../../server'; // Adjust path if necessary
 import { NewsCategory } from '../../../interface/NewsCategory';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { notification } from 'antd'; // Import Ant Design notification
 
 // Define the Zod schema for validation
 const postSchema = z.object({
@@ -62,7 +63,14 @@ const PostsForm: React.FC = () => {
       },
       id
     );
-    alert(id ? 'Cập nhật bài viết thành công!' : 'Thêm bài viết thành công!');
+
+    // Replace alert with Ant Design notification
+    notification.success({
+      message: id ? 'Cập nhật bài viết thành công!' : 'Thêm bài viết thành công!',
+      description: 'Bài viết của bạn đã được lưu thành công.',
+      placement: 'topRight',
+    });
+
     nav('/admin/posts');
   };
 

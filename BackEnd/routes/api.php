@@ -91,7 +91,9 @@ Route::middleware(['auth:sanctum','web'])->group(function () {
     Route::post('selectSeats', [BookingController::class, 'selectSeats']);
     Route::post('/book-ticket', [BookingController::class, 'bookTicket']);
     // Route::get('/vnpay-return', [BookingController::class, 'vnPayReturn']);
-    Route::post('ratings', [RatingController::class, 'store']);                                // Đánh giá phim
+Route::middleware(['auth:sanctum', 'web'])->group(function () {
+    Route::post('favorites/{movie}', [FavoriteController::class, 'store']);            // Thêm phim yêu thích
+    Route::delete('favorites/{movie}', [FavoriteController::class, 'destroy']);             // Xóa phim yêu thích
     Route::apiResource('user', AuthController::class);
     Route::get('/user', function (Request $request) {
         $user = $request->user()->load('favoriteMovies');

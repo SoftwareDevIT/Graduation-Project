@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id('id');
             $table->unsignedBigInteger('location_id')->nullable();
             $table->string('cinema_name');
-            $table->string('slug')->nullable();
+            $table->string('slug')->nullable()->unique();
             $table->string('phone')->nullable();
             $table->string('city')->nullable();
             $table->string('cinema_address')->nullable();
@@ -22,7 +22,7 @@ return new class extends Migration {
             $table->string('image')->nullable();
             $table->boolean('status')->default(true);
             $table->timestamps();
-            $table->foreign('location_id')->references('id')->on('location');
+            $table->foreign('location_id')->references('id')->on('location')->onDelete('cascade');
         });
     }
 

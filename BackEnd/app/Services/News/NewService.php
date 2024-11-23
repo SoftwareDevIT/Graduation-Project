@@ -6,16 +6,17 @@ use App\Models\News;
 use App\Models\NewsCategory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Storage;
+use App\Traits\AuthorizesInService;
 
 /**
  * Class LocationService.
  */
 class NewService
 {
-
+    use AuthorizesInService;
     public function index():Collection
     {
-        return News::with('user','newsCategory')->get();
+        return News::with('user','newsCategory')->orderByDesc('created_at')->get();
     }
 
 
@@ -28,6 +29,7 @@ class NewService
 
     public function update(int $id, array $data)
     {
+
         $news = News::findOrFail($id);
         $news->update($data);
         return $news;
@@ -36,6 +38,7 @@ class NewService
 
     public function delete(int $id)
     {
+
         $news = News::findOrFail($id);
         return $news->delete();
     }

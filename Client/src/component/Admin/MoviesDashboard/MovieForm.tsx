@@ -1,27 +1,60 @@
 import React, { useState, useEffect } from 'react';
-import { Controller } from 'react-hook-form';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate, useParams } from 'react-router-dom';
+import * as z from 'zod';
 import moment from 'moment';
-import {
-  Box,
-  TextField,
-  Button,
-  Select,
-  MenuItem,
-  InputLabel,
-  FormControl,
-  Typography,
-} from '@mui/material';
 import { Actor } from '../../../interface/Actor';
 import { Director } from '../../../interface/Director';
 import { useMovieContext } from '../../../Context/MoviesContext';
 import instance from '../../../server';
 import { MovieCategory } from '../../../interface/MovieCategory';
 
+// Zod schema for form validation
+const movieSchema = z.object({
+  movie_name: z.string().min(1, 'Tên phim là bắt buộc'),
+  movie_category_id: z.array(z.number()).min(1, 'Chọn ít nhất một danh mục phim'),
+  actor_id: z.array(z.number()).min(1, 'Chọn ít nhất một diễn viên'),
+  director_id: z.array(z.number()).min(1, 'Chọn ít nhất một đạo diễn'),
+  release_date: z
+    .string()
+    .refine((date) => moment(date, 'YYYY-MM-DD', true).isValid(), 'Ngày phát hành không hợp lệ'),
+  age_limit: z
+    .number()
+    .int()
+    .min(0, 'Giới hạn độ tuổi phải là số nguyên không âm')
+    .max(100, 'Giới hạn độ tuổi không hợp lệ'),
+  description: z.string().min(10, 'Mô tả phải có ít nhất 10 ký tự'),
+  duration: z.string().min(1, 'Thời lượng là bắt buộc'),
+  posterFile: z.any().optional(),
+});
+
+type MovieFormValues = z.infer<typeof movieSchema>;
+
 const MovieForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { register, handleSubmit, reset, control } = useForm();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    control,
+    setValue,
+    formState: { errors },
+  } = useForm<MovieFormValues>({
+    resolver: zodResolver(movieSchema),
+    defaultValues: {
+      movie_name: '',
+      movie_category_id: [],
+      actor_id: [],
+      director_id: [],
+      release_date: '',
+      age_limit: 0,
+      description: '',
+      duration: '',
+      posterFile: null,
+    },
+  });
+
   const [actors, setActors] = useState<Actor[]>([]);
   const [directors, setDirectors] = useState<Director[]>([]);
   const [categories, setCategories] = useState<MovieCategory[]>([]);
@@ -35,26 +68,24 @@ const MovieForm: React.FC = () => {
         const actorResponse = await instance.get('/actor');
         const directorResponse = await instance.get('/director');
         const categoryResponse = await instance.get('/movie-category');
-  
-        setActors(Array.isArray(actorResponse.data.data) ? actorResponse.data.data : []);
-        setDirectors(Array.isArray(directorResponse.data.data) ? directorResponse.data.data : []);
-        setCategories(Array.isArray(categoryResponse.data.data) ? categoryResponse.data.data : []);
-  
+
+        setActors(actorResponse.data.data || []);
+        setDirectors(directorResponse.data.data || []);
+        setCategories(categoryResponse.data.data || []);
+
         if (id) {
           const movieResponse = await instance.get(`/movies/${id}`);
           const movieData = movieResponse.data.data.original;
-          console.log(movieData);
 
-          // Reset form after data is fetched and available
           reset({
             movie_name: movieData.movie_name || '',
-            movie_category_id: movieData.movie_category.map((category: any) => category.id) || [],
-            actor_id: movieData.actor.map((actor: any) => actor.id) || [],
-            director_id: movieData.director.map((director: any) => director.id) || [],
             release_date: moment(movieData.release_date).format('YYYY-MM-DD'),
-            age_limit: movieData.age_limit || '',
+            age_limit: movieData.age_limit || 0,
             description: movieData.description || '',
             duration: movieData.duration || '',
+            movie_category_id: movieData.movie_category.map((cat: any) => cat.id) || [],
+            actor_id: movieData.actor.map((act: any) => act.id) || [],
+            director_id: movieData.director.map((dir: any) => dir.id) || [],
           });
         }
       } catch (error) {
@@ -65,13 +96,9 @@ const MovieForm: React.FC = () => {
     fetchData();
   }, [id, reset]);
 
-  const onSubmit = async (data: any) => {
-    console.log(data);
+  const onSubmit = async (data: MovieFormValues) => {
     const updatedData = {
       ...data,
-      actor_id: data.actor_id || [],
-      director_id: data.director_id || [],
-      movie_category_id: data.movie_category_id || [],
       posterFile,
     };
 
@@ -80,170 +107,181 @@ const MovieForm: React.FC = () => {
   };
 
   return (
-    <Box
-      sx={{
-        maxWidth: '800px',
-        margin: 'auto',
-        padding: '40px',
-        backgroundColor: '#f9f9f9',
-        borderRadius: '10px',
-        boxShadow: '0px 10px 30px rgba(0, 0, 0, 0.1)',
-      }}
-    >
-      <Typography variant="h4" align="center" gutterBottom>
-        {id ? 'Chỉnh sửa phim' : 'Thêm phim'}
-      </Typography>
+    <div className="container mt-5">
+      <h2 className="text-center mb-4">{id ? 'Chỉnh sửa phim' : 'Thêm phim'}</h2>
+      <form onSubmit={handleSubmit(onSubmit)} className="needs-validation">
+        {/* Movie Name */}
+        <div className="mb-3">
+          <label className="form-label">Tên phim</label>
+          <input
+            type="text"
+            className="form-control"
+            {...register('movie_name')}
+          />
+          {errors.movie_name && <p className="text-danger">{errors.movie_name.message}</p>}
+        </div>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <TextField
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          {...register('movie_name')}
-          required
-        />
-
-        <FormControl fullWidth margin="normal">
-          <InputLabel>Danh mục phim</InputLabel>
+        {/* Movie Categories */}
+        <div className="mb-3">
+          <label className="form-label">Danh mục phim</label>
           <Controller
             name="movie_category_id"
             control={control}
-            defaultValue={[]}
             render={({ field }) => (
-              <Select
-                {...field}
-                label="Danh mục phim"
-                multiple
-                required
-              >
+              <div>
                 {categories.map((category) => (
-                  <MenuItem key={category.id} value={category.id}>
-                    {category.category_name}
-                  </MenuItem>
+                  <div key={category.id} className="form-check">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      value={category.id}
+                      checked={field.value.includes(category.id)}
+                      onChange={(e) => {
+                        const value = Number(e.target.value);
+                        const newValue = e.target.checked
+                          ? [...field.value, value]
+                          : field.value.filter((id) => id !== value);
+                        field.onChange(newValue);
+                      }}
+                    />
+                    <label className="form-check-label">
+                      {category.category_name}
+                    </label>
+                  </div>
                 ))}
-              </Select>
+              </div>
             )}
           />
-        </FormControl>
+          {errors.movie_category_id && <p className="text-danger">{errors.movie_category_id.message}</p>}
+        </div>
 
-        <FormControl fullWidth margin="normal">
-          <InputLabel>Diễn viên</InputLabel>
+        {/* Actors */}
+        <div className="mb-3">
+          <label className="form-label">Diễn viên</label>
           <Controller
             name="actor_id"
             control={control}
-            defaultValue={[]}
             render={({ field }) => (
-              <Select
-                {...field}
-                label="Diễn viên"
-                multiple
-                required
-              >
+              <div>
                 {actors.map((actor) => (
-                  <MenuItem key={actor.id} value={actor.id}>
-                    {actor.actor_name}
-                  </MenuItem>
+                  <div key={actor.id} className="form-check">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      value={actor.id}
+                      checked={field.value.includes(actor.id)}
+                      onChange={(e) => {
+                        const value = Number(e.target.value);
+                        const newValue = e.target.checked
+                          ? [...field.value, value]
+                          : field.value.filter((id) => id !== value);
+                        field.onChange(newValue);
+                      }}
+                    />
+                    <label className="form-check-label">
+                      {actor.actor_name}
+                    </label>
+                  </div>
                 ))}
-              </Select>
+              </div>
             )}
           />
-        </FormControl>
+          {errors.actor_id && <p className="text-danger">{errors.actor_id.message}</p>}
+        </div>
 
-        <FormControl fullWidth margin="normal">
-          <InputLabel>Đạo diễn</InputLabel>
+        {/* Directors */}
+        <div className="mb-3">
+          <label className="form-label">Đạo diễn</label>
           <Controller
             name="director_id"
             control={control}
-            defaultValue={[]}
             render={({ field }) => (
-              <Select
-                {...field}
-                label="Đạo diễn"
-                multiple
-                required
-              >
+              <div>
                 {directors.map((director) => (
-                  <MenuItem key={director.id} value={director.id}>
-                    {director.director_name}
-                  </MenuItem>
+                  <div key={director.id} className="form-check">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      value={director.id}
+                      checked={field.value.includes(director.id)}
+                      onChange={(e) => {
+                        const value = Number(e.target.value);
+                        const newValue = e.target.checked
+                          ? [...field.value, value]
+                          : field.value.filter((id) => id !== value);
+                        field.onChange(newValue);
+                      }}
+                    />
+                    <label className="form-check-label">
+                      {director.director_name}
+                    </label>
+                  </div>
                 ))}
-              </Select>
+              </div>
             )}
           />
-        </FormControl>
+          {errors.director_id && <p className="text-danger">{errors.director_id.message}</p>}
+        </div>
 
-        <TextField
-          type="date"
-          InputLabelProps={{ shrink: true }}
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          {...register('release_date')}
-          required
-        />
+        {/* Release Date */}
+        <div className="mb-3">
+          <label className="form-label">Ngày phát hành</label>
+          <input
+            type="date"
+            className="form-control"
+            {...register('release_date')}
+          />
+          {errors.release_date && <p className="text-danger">{errors.release_date.message}</p>}
+        </div>
 
-        <TextField
-          type="number"
-          variant="outlined"
-          fullWidth
-          label="Giới hạn độ tuổi"
-          margin="normal"
-          {...register('age_limit')}
-          required
-          
-        />
+        {/* Age Limit */}
+        <div className="mb-3">
+          <label className="form-label">Giới hạn độ tuổi</label>
+          <input
+            type="number"
+            className="form-control"
+            {...register('age_limit', { valueAsNumber: true })}
+          />
+          {errors.age_limit && <p className="text-danger">{errors.age_limit.message}</p>}
+        </div>
 
-        <TextField
-          multiline
-          rows={4}
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          {...register('description')}
-          required
-          label="Mô tả"
-        />
+        {/* Description */}
+        <div className="mb-3">
+          <label className="form-label">Mô tả</label>
+          <textarea
+            className="form-control"
+            rows={4}
+            {...register('description')}
+          />
+          {errors.description && <p className="text-danger">{errors.description.message}</p>}
+        </div>
 
-        <TextField
-          type="text"
-          variant="outlined"
-          fullWidth
-          label="Thời lượng"
-          margin="normal"
-          {...register('duration')}
-          required
-          
-        />
+        {/* Duration */}
+        <div className="mb-3">
+          <label className="form-label">Thời lượng</label>
+          <input
+            type="text"
+            className="form-control"
+            {...register('duration')}
+          />
+          {errors.duration && <p className="text-danger">{errors.duration.message}</p>}
+        </div>
 
-        <Button
-          variant="contained"
-          component="label"
-          sx={{ display: 'block', marginBottom: '20px' }}
-        >
-          Tải lên Poster
+        {/* Poster File */}
+        <div className="mb-3">
+          <label className="form-label">Poster</label>
           <input
             type="file"
-            hidden
-            onChange={(e) => {
-              if (e.target.files) {
-                setPosterFile(e.target.files[0]);
-              }
-            }}
+            className="form-control"
+            onChange={(e) => setPosterFile(e.target.files?.[0] || null)}
           />
-        </Button>
+        </div>
 
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          size="large"
-          fullWidth
-          sx={{ padding: '15px', fontSize: '1rem' }}
-        >
+        <button type="submit" className="btn btn-primary btn-lg w-100">
           {id ? 'Cập nhật phim' : 'Thêm phim'}
-        </Button>
+        </button>
       </form>
-    </Box>
+    </div>
   );
 };
 
