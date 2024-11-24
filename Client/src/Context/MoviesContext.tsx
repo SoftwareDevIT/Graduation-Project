@@ -61,7 +61,7 @@ export const MovieProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       const response = await instance.get("/movies");
       if (response.data && response.data.data) {
         dispatch({ type: "SET_MOVIES", payload: response.data.data.original });
-        console.log("du lieu phim:", response.data.data.original );
+        // console.log("du lieu phim:", response.data.data.original );
         
       } else {
         console.error("Định dạng phản hồi API không hợp lệ");

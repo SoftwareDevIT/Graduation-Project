@@ -25,10 +25,9 @@ const SearchMovies = () => {
       })
       .catch((error) => {
         console.error("Có lỗi xảy ra khi tìm kiếm phim:", error);
-        setError("Không thể tìm kiếm phim. Vui lòng thử lại sau."); // Lưu lỗi
-        setLoading(false); // Tắt loading
+       
       });
-  }, [movie_name]); // Chạy lại khi movie_name thay đổi
+  }, [movie_name]); 
 
   return (
     <>
@@ -42,10 +41,7 @@ const SearchMovies = () => {
             </div>
           </div>
           <div className="container">
-          {/* Hiển thị khi đang tải */}
-          {loading && <div className="loader">Đang tìm kiếm...</div>}
-
-          {/* Hiển thị lỗi nếu có */}
+         
           {error && <div className="error-message">{error}</div>}
 
           {/* Hiển thị kết quả tìm kiếm */}
@@ -56,7 +52,7 @@ const SearchMovies = () => {
   {movies.length > 0 ? (
     movies.map((movie) => (
       <div key={movie.id} className="col-lg-2 move-itemone-1">
-         <Link state={{ movieId: movie.id }} to={`/movie-detail/${movie.id}`}> <img src={movie.poster || undefined} alt={movie.name} /></Link>
+         <Link state={{ movieId: movie.id }} to={`/movie-detail/${movie.slug}`}> <img src={movie.poster || undefined} alt={movie.name} /></Link>
        
         <h4>{movie.movie_name}</h4>
         <p>{movie.release_date}</p>

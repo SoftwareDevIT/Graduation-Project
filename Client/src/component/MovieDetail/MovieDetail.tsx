@@ -63,7 +63,7 @@ const MovieDetail: React.FC = () => {
   
     fetchUserData();
   }, [movie?.id]);
-  
+  console.log("Movie ID to be deleted:", movie?.id);
  
   const handleFavoriteToggle = async () => {
     const token = localStorage.getItem("token");
@@ -85,10 +85,11 @@ const MovieDetail: React.FC = () => {
           message: "Thành công",
           description: "Phim đã được xóa khỏi danh sách yêu thích!",
         });
+        console.log("Movie ID to be deleted:", movie?.id);
       } else {
         await instance.post(
-          `/favorites/${movie?.id}`,
-          {},
+          `/favorites`,
+          
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -99,7 +100,12 @@ const MovieDetail: React.FC = () => {
           message: "Thành công",
           description: "Phim đã được thêm vào danh sách yêu thích!",
         });
+        notification.success({
+          message: "Thành công",
+          description: "Phim đã được thêm vào danh sách yêu thích!",
+        });
       }
+      
       setUserStatus((prev) => ({
         ...prev,
         isFavorite: !prev.isFavorite,

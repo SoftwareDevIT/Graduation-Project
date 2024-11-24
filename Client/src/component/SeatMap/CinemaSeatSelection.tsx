@@ -57,6 +57,20 @@ console.log("VIP Seats:", roomData.quantity_vip_seats);
             normalSeats,
           });
         }
+        const seatResponse = await instance.get(`/seat/${showtimeId}`);
+      const seatData = seatResponse.data;
+
+      const reservedSeatSet = new Set<string>();
+
+      if (seatData && Array.isArray(seatData.data)) {
+        seatData.data.forEach((seat: { seat_name: string; status: string }) => {
+          // Nếu trạng thái là "Reserved Until" hoặc "Booked", đánh dấu ghế là đã đặt
+          if (seat.status === "Reserved Until" || seat.status === "Booked") {
+            reservedSeatSet.add(seat.seat_name);
+          }
+        });
+      }
+      setReservedSeats(reservedSeatSet); // Cập nhật ghế đã đặt
       } catch (error) {
         console.error("Error fetching room or seat data", error);
       }
@@ -265,6 +279,9 @@ let totalAssignedBasicSeats = 0; // Tổng số ghế BASIC đã phân bổ
               <div className="legend">
                 <div>
                   <span className="seat selected"></span> Ghế bạn chọn
+                </div>
+                <div>
+                  <span className="seat vip"></span> Ghế vip
                 </div>
                 <div>
                   <span className="seat couple-seat"></span> Ghế đôi

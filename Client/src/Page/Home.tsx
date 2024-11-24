@@ -16,11 +16,7 @@ interface Props {}
 const Home = (props: Props) => {
   return (
     <>
-     <Helmet>
-                <meta charSet="utf-8" />
-                <title>Home</title>
-                <link rel="canonical" href="http://mysite.com/example" />
-            </Helmet>
+  
         <Header />
         <MovieBanner />
         <NewsContent />

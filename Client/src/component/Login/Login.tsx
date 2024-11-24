@@ -62,7 +62,7 @@ const Login = () => {
           {/* Email Input */}
           <div className="form-group">
             <label>Email</label>
-            <input type="email" {...register("email")} />
+            <input type="text" {...register("email")} />
             {errors.email && (
               <p className="error-message">{errors.email.message}</p>
             )}
