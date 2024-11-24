@@ -31,11 +31,11 @@ class AuthServiceProvider extends ServiceProvider
     /**
      * Đăng ký bất kỳ dịch vụ xác thực / ủy quyền.
      */
-    public function boot(): void
-    {
-        $this->registerPolicies();
+    // public function boot(): void
+    // {
+    //     $this->registerPolicies();
 
-        // Đặt policy mặc định cho tất cả các model
-        Gate::policy('*', GeneralPolicy::class);
-    }
+    //     // Đặt policy mặc định cho tất cả các model
+    //     Gate::policy('*', GeneralPolicy::class);
+    // }
 }

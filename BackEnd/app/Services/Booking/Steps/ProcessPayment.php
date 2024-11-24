@@ -87,8 +87,93 @@ class ProcessPayment
     }
 
 
-    public function momo(Request $req): ?String
+    public  function execPostRequest($url, $data)
     {
-        return null;
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt(
+            $ch,
+            CURLOPT_HTTPHEADER,
+            array(
+                'Content-Type: application/json',
+                'Content-Length: ' . strlen($data)
+            )
+        );
+        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+        //execute post
+        $result = curl_exec($ch);
+        //close connection
+        curl_close($ch);
+        return $result;
+    }
+
+
+    public function momoPayment(Request $request)
+    {
+        $bookingId = session('booking'); // Booking ID từ bước trước
+        Log::info('Booking ID: ' . $bookingId);
+        if (!$bookingId) {
+            return null; // Trả về null nếu không có Booking ID
+        }
+        $endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
+
+        $partnerCode = 'MOMOBKUN20180529';
+        $accessKey = 'klm05TvNBzhg7h7j';
+        $secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
+        $orderInfo = "Thanh toán qua MoMo";
+        $amount = $request->input('amount') ;
+        $orderId = $bookingId;
+        $redirectUrl = "http://localhost:8000/";
+        $ipnUrl = "http://localhost:8000/";
+        $extraData = "";
+
+        // if (isset($_POST['momo'])) { // Sử dụng 'momo' để kiểm tra
+        $requestId = time() . "";
+        $requestType = "payWithATM";
+
+        // Trước khi ký HMAC SHA256 signature
+        $rawHash = "accessKey=" . $accessKey . "&amount=" . $amount . "&extraData=" . $extraData . "&ipnUrl=" . $ipnUrl . "&orderId=" . $orderId . "&orderInfo=" . $orderInfo . "&partnerCode=" . $partnerCode . "&redirectUrl=" . $redirectUrl . "&requestId=" . $requestId . "&requestType=" . $requestType;
+        $signature = hash_hmac("sha256", $rawHash, $secretKey);
+
+        $data = array(
+            'partnerCode' => $partnerCode,
+            'partnerName' => "Test",
+            "storeId" => "MomoTestStore",
+            'requestId' => $requestId,
+            'amount' => $amount,
+            'orderId' => $orderId,
+            'orderInfo' => $orderInfo,
+            'redirectUrl' => $redirectUrl,
+            'ipnUrl' => $ipnUrl,
+            'lang' => 'vi',
+            'extraData' => $extraData,
+            'requestType' => $requestType,
+            'signature' => $signature
+        );
+
+        $result = $this->execPostRequest($endpoint, json_encode($data));
+        $jsonResult = json_decode($result, true); // Giải mã json
+        // Kiểm tra và chuyển hướng đến payUrl
+        // if (isset($jsonResult['payUrl'])) {
+        //     header('Location: ' . $jsonResult['payUrl']);
+        //     exit(); // Dừng ngay sau khi thực hiện chuyển hướng
+        // } else {
+        //     // Xử lý lỗi nếu không có payUrl
+        //     echo "Lỗi: Không nhận được payUrl từ MoMo.";
+        //     exit();
+        // }
+        Log::info(  $jsonResult);
+        Log::info($jsonResult);
+
+        // Kiểm tra xem phản hồi có chứa 'payUrl' hay không
+        if (isset($jsonResult['payUrl'])) {
+            return response()->json(['payUrl' => $jsonResult['payUrl']]);
+        } else {
+            return response()->json(['error' => 'Không nhận được payUrl từ MoMo'], 500);
+        }
+        // }
     }
 }
