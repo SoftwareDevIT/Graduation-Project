@@ -3,6 +3,7 @@ import { useCountryContext } from '../../../Context/CountriesContext';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { notification } from 'antd';  // Import the notification component
 import './CountriesDashboard.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -33,6 +34,12 @@ const CountriesDashboard: React.FC = () => {
         const confirmDelete = window.confirm("Bạn có chắc chắn muốn xóa quốc gia này?");
         if (confirmDelete) {
             await deleteCountry(id);
+            // Show success notification after deletion
+            notification.success({
+                message: 'Xóa thành công',
+                description: 'Quốc gia đã được xóa thành công.',
+                placement: 'topRight',
+            });
         }
     };
 
@@ -41,10 +48,10 @@ const CountriesDashboard: React.FC = () => {
 
     return (
         <div className="container mt-5">
-            <h2 className="text-center text-primary mb-4">Tất Cả Quốc Gia</h2>
+            <h2 className="text-center text-primary mb-4">Quản Lý Khu Vực</h2>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Link to={'/admin/countries/add'} className="btn btn-outline-primary">
-                    Thêm Quốc Gia
+                    + Thêm Khu Vực
                 </Link>
                 <input
                     type="text"
@@ -58,8 +65,8 @@ const CountriesDashboard: React.FC = () => {
                 <table className="table table-bordered table-hover shadow-sm">
                     <thead className="thead-light">
                         <tr>
-                            <th>ID Quốc Gia</th>
-                            <th>Tên Quốc Gia</th>
+                            <th>ID</th>
+                            <th>Tên Khu Vực</th>
                             <th>Thao Tác</th>
                         </tr>
                     </thead>
@@ -81,7 +88,7 @@ const CountriesDashboard: React.FC = () => {
                         {currentCountries.length === 0 && (
                             <tr>
                                 <td colSpan={3} className="text-center">
-                                    Không có quốc gia nào.
+                                    Không có khu vực nào.
                                 </td>
                             </tr>
                         )}

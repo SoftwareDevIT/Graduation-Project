@@ -23,7 +23,7 @@ class StoreCinemaRequest extends FormRequest
     {
         return [
             'cinema_name' => 'required|string|max:255',
-            'slug' => 'nullable|string|unique:cinema,slug|max:255',
+            'slug' => 'nullable|unique:cinema,slug|max:255',
             'phone' => 'nullable|numeric|digits_between:10,15',
             'city' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',

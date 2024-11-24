@@ -8,6 +8,7 @@ import { Cinema } from "../../../interface/Cinema";
 import { Location } from "../../../interface/Location";
 import { Movie } from "../../../interface/Movie";
 import { useCinemaContext } from "../../../Context/CinemasContext";
+import { notification } from "antd";  // Import Ant Design's notification
 
 const cinemaSchema = z.object({
   cinema_name: z.string().min(1, "Tên Rạp là bắt buộc."),
@@ -80,16 +81,24 @@ const CinemaForm = () => {
     try {
       if (isEditMode) {
         await updateCinema(Number(id), data);
-        alert("Cập nhật rạp thành công!");
+        notification.success({
+          message: "Cập nhật rạp thành công!",
+          description:"Đã cập nhật rạp mới"
+        });
       } else {
         await addCinema(data);
-        alert("Thêm rạp mới thành công!");
+        notification.success({
+          message: "Thêm rạp mới thành công!",
+          description:"Đã thêm rạp mới vào danh sách"
+        });
       }
       nav('/admin/cinemas');
       reset();
     } catch (error) {
       console.error("Lỗi khi gửi form:", error);
-      alert("Gửi form thất bại");
+      notification.error({
+        message: "Gửi form thất bại",
+      });
     }
   };
 
@@ -97,11 +106,16 @@ const CinemaForm = () => {
     try {
       const moviePayload = selectedMovies.map(movieId => ({ movie_id: movieId }));
       await instance.post(`/add-movie-in-cinema/${id}`, { movie_in_cinema: moviePayload });
-      alert("Thêm phim vào rạp thành công!");
+      notification.success({
+        message: "Thêm phim vào rạp thành công!",
+        description:"Đã thêm phim mới vào rạp"
+      });
       nav('/admin/cinemas');
     } catch (error) {
       console.error("Lỗi khi thêm phim vào rạp:", error);
-      alert("Thêm phim vào rạp thất bại");
+      notification.error({
+        message: "Thêm phim vào rạp thất bại",
+      });
     }
   };
 
@@ -165,24 +179,28 @@ const CinemaForm = () => {
         </div>
 
         {/* Select Movies */}
-        <div className="mb-4">
-          <label htmlFor="movies" className="form-label fw-bold">Chọn Phim</label>
-          <select
-            multiple
-            className="form-select"
-            value={selectedMovies}
-            onChange={(e) => {
-              const selected = Array.from(e.target.selectedOptions, option => option.value);
-              setSelectedMovies(selected);
-            }}
-          >
-            {movies.map((movie) => (
-              <option key={movie.id} value={movie.id.toString()}>
-                {movie.movie_name}
-              </option>
-            ))}
-          </select>
-        </div>
+        {/* Select Movies */}
+{isEditMode && (
+  <div className="mb-4">
+    <label htmlFor="movies" className="form-label fw-bold">Chọn Phim</label>
+    <select
+      multiple
+      className="form-select"
+      value={selectedMovies}
+      onChange={(e) => {
+        const selected = Array.from(e.target.selectedOptions, option => option.value);
+        setSelectedMovies(selected);
+      }}
+    >
+      {movies.map((movie) => (
+        <option key={movie.id} value={movie.id.toString()}>
+          {movie.movie_name}
+        </option>
+      ))}
+    </select>
+  </div>
+)}
+
 
         {/* Submit and Add Movies Button */}
         <div className="d-flex justify-content-between">

@@ -56,7 +56,7 @@ const ForgetPass = () => {
                         placeholder="Nhập email của bạn"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        required
+                       
                     />
                     <button type="submit">Quên mật khẩu</button>
                 </form>

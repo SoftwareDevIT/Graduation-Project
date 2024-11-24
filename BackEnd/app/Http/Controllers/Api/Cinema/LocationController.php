@@ -38,6 +38,8 @@ class LocationController extends Controller
         try {
             $location = $this->locationService->update($id, $request->validated());
             return $this->success($location);
+        } catch (ModelNotFoundException $e) {
+            return $this->notFound("Không có id {$id} trong cơ sở dữ liệu");
         } catch (Exception $e) {
             return $e->getMessage();
         }
@@ -47,6 +49,8 @@ class LocationController extends Controller
     {
         try {
             return $this->success($this->locationService->delete($id));
+        } catch (ModelNotFoundException $e) {
+            return $this->notFound("Không có id {$id} trong cơ sở dữ liệu");
         } catch (Exception $e) {
             return $e->getMessage();
         }

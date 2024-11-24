@@ -4,6 +4,7 @@ import { useComboContext } from '../../../Context/ComboContext';
 import instance from '../../../server';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { notification } from 'antd'; // Import notification from Ant Design
 
 const ComboDashboard: React.FC = () => {
     const { state, deleteCombo } = useComboContext();
@@ -29,9 +30,16 @@ const ComboDashboard: React.FC = () => {
         if (window.confirm('Bạn có chắc muốn xóa combo này?')) {
             try {
                 await deleteCombo(id);
-                alert('Combo đã được xóa thành công!');
+                notification.success({
+                    message: 'Thành Công',
+                    description: 'Combo đã được xóa thành công!',
+                });
             } catch (err) {
                 setError('Không thể xóa combo');
+                notification.error({
+                    message: 'Lỗi',
+                    description: 'Không thể xóa combo',
+                });
             }
         }
     };
@@ -63,7 +71,7 @@ const ComboDashboard: React.FC = () => {
             <h2 className="text-center text-primary mb-4">Tất Cả Các Combo</h2>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Link to={'/admin/combo/add'} className="btn btn-outline-primary">
-                    Thêm Combo
+                     + Thêm Combo
                 </Link>
                 <input 
                     type="text" 

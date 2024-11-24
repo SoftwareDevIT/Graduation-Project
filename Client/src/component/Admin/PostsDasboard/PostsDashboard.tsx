@@ -49,7 +49,9 @@ const PostsDashboard: React.FC = () => {
       <h2 className="text-center mb-4 display-3 text-dark font-weight-bold">Quản lý Bài viết</h2>
       
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <Link to="/admin/posts/add" className="btn btn-primary rounded-pill px-4">Thêm Bài viết Mới</Link>
+      <Link to={'/admin/posts/add'} className="btn btn-outline-primary">
+                   + Quản lý bài viết
+                </Link>
         <input
           type="text"
           placeholder="Tìm kiếm theo tên..."
@@ -74,7 +76,7 @@ const PostsDashboard: React.FC = () => {
                   </Link>
                   <div className="card-text text-muted truncated-text">
                     <ReactQuill 
-                      value={truncateContent(post.content, 100)}  // Truncate content to 100 characters
+                      value={truncateContent(post.content, 200)}  // Truncate content to 100 characters
                       readOnly={true} 
                       theme="snow" 
                       modules={{ toolbar: false }}

@@ -26,7 +26,7 @@ class StoreShowtimeRequest extends FormRequest
             'room_id' => 'required|integer',
             'showtime_date'      => 'required|date|after_or_equal:today',
             'showtime_start'     => 'required|date_format:H:i:s',
-            'showtime_end'       => 'required|date_format:H:i:s|after:showtime_start',
+            'showtime_end'       => 'date_format:H:i:s|after:showtime_start',
             'price'              => 'required|numeric|min:0',
         ];
     }

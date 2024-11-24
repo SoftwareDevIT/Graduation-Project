@@ -21,8 +21,9 @@ class LoginService
         $user = User::findOrFail($id);
         return $user;
     }
-    public function allUser()  {
-        return User::all();
+    public function allUser()
+    {
+        return User::orderByDesc('created_at')->paginate(10);
     }
 
     public function update(int $id, array $data): User
@@ -48,9 +49,4 @@ class LoginService
 
         return $user->createToken('authToken')->plainTextToken;
     }
-
-
-
-
-
 }

@@ -8,7 +8,7 @@ import Footer from "../component/Footer/Footer";
 import NewsContent from "../component/NewContent/NewsContent";
 
 
-
+import {Helmet} from "react-helmet";
 
 
 interface Props {}
@@ -16,6 +16,11 @@ interface Props {}
 const Home = (props: Props) => {
   return (
     <>
+     <Helmet>
+                <meta charSet="utf-8" />
+                <title>Home</title>
+                <link rel="canonical" href="http://mysite.com/example" />
+            </Helmet>
         <Header />
         <MovieBanner />
         <NewsContent />

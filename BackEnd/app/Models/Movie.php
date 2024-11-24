@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Movie extends Model
 {
@@ -91,5 +92,19 @@ class Movie extends Model
     public function news()
     {
         return $this->hasMany(News::class);
+    }
+
+    protected static function booted()
+    {
+        static::creating(function ($movie) {
+            $movie->slug = self::createSlug($movie->movie_name);
+        });
+    }
+
+
+
+    public static function createSlug($title)
+    {
+        return Str::slug($title);
     }
 }
