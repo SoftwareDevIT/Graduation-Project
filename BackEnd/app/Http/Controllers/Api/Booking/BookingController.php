@@ -9,6 +9,7 @@ use App\Http\Requests\Booking\TicketBookingRequest;
 use App\Jobs\ResetSeats;
 use App\Mail\InvoiceMail;
 use App\Models\Booking;
+use App\Models\Combo;
 use App\Models\Seats;
 use App\Models\TemporaryBooking;
 use App\Services\Booking\TicketBookingService;
@@ -85,6 +86,7 @@ class BookingController extends Controller
         $data = $request->only(['vnp_TxnRef', 'vnp_ResponseCode']);
         if ($data['vnp_ResponseCode'] == "00") {
             $booking = Booking::where('id', $data['vnp_TxnRef'])->first();
+
             $booking->status = 'Pain';
             $booking->save();
             Mail::to($booking->user->email)->queue(new InvoiceMail($booking));
