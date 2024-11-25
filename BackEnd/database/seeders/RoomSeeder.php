@@ -21,7 +21,7 @@ class RoomSeeder extends Seeder
             for ($i = 1; $i <= 5; $i++) {
                 // Số ghế đôi cố định là 5 ghế đôi (tương đương 10 ghế đơn)
                 $quantityDoubleSeats = 5;
-                $totalSeats = $quantityDoubleSeats * 2; // Tổng số ghế ban đầu là 10 ghế đơn từ ghế đôi
+                $totalSeats = $quantityDoubleSeats; // Tổng số ghế ban đầu là 10 ghế đơn từ ghế đôi
 
                 // Số ghế đơn còn lại sẽ là tổng số ghế - số ghế đôi
                 $remainingSeats = rand(50, 120); // Tổng số ghế mà chúng ta muốn phòng chiếu có, giả sử là 100 ghế (bao gồm ghế đôi + ghế VIP + ghế đơn)
