@@ -4,7 +4,7 @@ import './Profile.css';
 import Footer from '../Footer/Footer';
 import Header from '../Header/Hearder';
 import './ChangePassword.css';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import instance from '../../server';
 
 const ChangePassword: React.FC = () => {
@@ -90,61 +90,21 @@ const ChangePassword: React.FC = () => {
                 </div>
 
                 <div className="account-nav">
-      <div className="account-nav-item">
-        <NavLink 
-          to="/profile" 
-          className={({ isActive }) => `account-nav-title ${isActive || location.pathname === '/changepassword' ? 'active' : ''}`}
-        >
-          Tài khoản
-        </NavLink>
-        <ul className="account-submenu">
-          <li className="account-submenu-item">
-            <NavLink to="/profile" className={({ isActive }) => (isActive ? 'active' : '')}>Quản lí tài khoản</NavLink>
-          </li>
-          <li className="account-submenu-item">
-            <NavLink to="/changepassword" className={({ isActive }) => (isActive ? 'active' : '')}>Đổi mật khẩu</NavLink>
-          </li>
-        </ul>
-      </div>
-
-      <div className="account-nav-item">
-        <NavLink 
-          to="/movie-library" 
-          className={({ isActive }) => `account-nav-title ${isActive ? 'active' : ''}`}
-        >
-          Tủ phim
-        </NavLink>
-      </div>
-
-      <div className="account-nav-item">
-        <NavLink 
-          to="/tickets" 
-          className={({ isActive }) => `account-nav-title ${isActive ? 'active' : ''}`}
-        >
-          Vé
-        </NavLink>
-      </div>
-
-      <div className="account-nav-item">
-        <NavLink 
-          to="/credits" 
-          className={({ isActive }) => `account-nav-title ${['/credits', '/deponsit', '/transaction'].includes(location.pathname) ? 'active' : ''}`}
-        >
-          Nạp tiền
-        </NavLink>
-        <ul className="account-submenu">
-          <li className="account-submenu-item">
-            <NavLink to="/credits" className={({ isActive }) => (isActive ? 'active' : '')}>Nạp tiền</NavLink>
-          </li>
-          <li className="account-submenu-item">
-            <NavLink to="/deponsit" className={({ isActive }) => (isActive ? 'active' : '')}>Lịch sử nạp tiền</NavLink>
-          </li>
-          <li className="account-submenu-item">
-            <NavLink to="/transaction" className={({ isActive }) => (isActive ? 'active' : '')}>Lịch sử giao dịch</NavLink>
-          </li>
-        </ul>
-      </div>
-    </div>
+                  <div className="account-nav-item">
+                    <span className="account-nav-title"> <Link to={"/profile"}>Tài khoản</Link></span>
+                    
+                  </div>
+                  <div className="account-nav-item">
+                    <span className="account-nav-title">Tủ phim</span>
+                  </div>
+                  <div className="account-nav-item">
+                    <span className="account-nav-title"><Link to={"/movieticket"}>Vé</Link></span>
+                  </div>
+                  <div className="account-nav-item">
+                    <span className="account-nav-title"><Link to={"/changepassword"}>Đổi mật khẩu</Link></span>
+                    
+                  </div>
+                </div>
               </div>
             </div>
           </div>

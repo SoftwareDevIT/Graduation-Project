@@ -17,25 +17,12 @@ export const ContentMovie = (props: Props) => {
     const [movie, setMovie] = useState<Movie | null>(null); // Initialize state for the movie
     const { state, fetchCountries } = useCountryContext();
 
-    const [selectedLocation, setSelectedLocation] = useState<string>(''); // Initialize state for the selected location
+    // const [selectedLocation, setSelectedLocation] = useState<string>(''); // Initialize state for the selected location
     const [relatedPosts, setRelatedPosts] = useState<any[]>([]); // Initialize state for related posts
     const [loading, setLoading] = useState<boolean>(true);  // Trạng thái tải
     const [error, setError] = useState<string | null>(null);  // Trạng thái lỗi
     const navigate = useNavigate();
 
-    const handleViewSchedule = () => {
-        if (selectedLocation) {
-            // Điều hướng sang trang lịch chiếu và truyền thông tin
-            navigate("/schedule", {
-                state: {
-                    location: selectedLocation,
-                    movieId: movie?.id, // Thêm ID phim nếu cần
-                },
-            });
-        } else {
-            alert("Vui lòng chọn khu vực trước khi xem lịch chiếu.");
-        }
-    };
     useEffect(() => {
         const fetchMovieDetails = async () => {
             if (slug) {
@@ -55,10 +42,10 @@ export const ContentMovie = (props: Props) => {
         fetchCountries(); // Gọi fetchCountries khi component mount
       }, [fetchCountries]);
     useEffect(() => {
-        if (slug) {
+        if (movie?.id) {
             setLoading(true);
             instance
-                .get(`/ratings/${slug}`)  // Thay đổi từ fetch thành instance.get
+                .get(`/ratings/${movie?.id}`)  // Thay đổi từ fetch thành instance.get
                 .then((response) => {
                     if (response.data.status) {
                         setRatings(response.data.data);  // Lưu đánh giá vào state
@@ -78,9 +65,9 @@ export const ContentMovie = (props: Props) => {
     }, [slug]);
     useEffect(() => {
         const fetchRelatedPosts = async () => {
-            if (movieId) {
+            if (movie?.id) {
                 try {
-                    const response = await instance.get(`/filterNewByMovie/${movieId}`); 
+                    const response = await instance.get(`/filterNewByMovie/${movie?.id}`); 
                     if (response.data?.status) {    
                         setRelatedPosts(response.data.data);
                     }
@@ -91,13 +78,23 @@ export const ContentMovie = (props: Props) => {
         };
 
         fetchRelatedPosts(); // Fetch related posts when movieId is available
-    }, [movieId]);
+    }, [movie?.id]);
 
-    const handleLocationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectedLocation(e.target.value); // Update selected location
-    };
+    // const handleLocationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    //     setSelectedLocation(e.target.value); // Update selected location
+    // };
 
    
+
+  
+  
+    // const handleViewSchedule = () => {
+    //   if (selectedLocation) {
+    //     navigate(`/schedule/${movie?.slug}`, { state: { selectedLocation } });
+    //   } else {
+    //     alert("Vui lòng chọn khu vực trước khi xem lịch chiếu!");
+    //   }
+    // };
 
     return (
         <div>
@@ -117,7 +114,7 @@ export const ContentMovie = (props: Props) => {
                     </div>
 
                     {/* Select location and view schedule */}
-                    <div className="schedule-section">
+                    {/* <div className="schedule-section">
                         <h3>Lịch chiếu</h3>
                         <p>Chọn khu vực bạn muốn xem lịch chiếu cho phim <strong>{movie?.movie_name}</strong>.</p>
 
@@ -133,9 +130,9 @@ export const ContentMovie = (props: Props) => {
                                     </option>
                                 ))}
                             </select>
-                            <button className="button xem-lich-chieu">Xem lịch chiếu</button>
+                            <button className="button xem-lich-chieu" onClick={handleViewSchedule}>Xem lịch chiếu</button>
                         </div>
-                    </div>
+                    </div> */}
 
                     {/* Related posts section */}
                     <div className="title-2">

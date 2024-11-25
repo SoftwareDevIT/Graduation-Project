@@ -57,6 +57,20 @@ console.log("VIP Seats:", roomData.quantity_vip_seats);
             normalSeats,
           });
         }
+        const seatResponse = await instance.get(`/seat/${showtimeId}`);
+      const seatData = seatResponse.data;
+
+      const reservedSeatSet = new Set<string>();
+
+      if (seatData && Array.isArray(seatData.data)) {
+        seatData.data.forEach((seat: { seat_name: string; status: string }) => {
+          // Nếu trạng thái là "Reserved Until" hoặc "Booked", đánh dấu ghế là đã đặt
+          if (seat.status === "Reserved Until" || seat.status === "Booked") {
+            reservedSeatSet.add(seat.seat_name);
+          }
+        });
+      }
+      setReservedSeats(reservedSeatSet); // Cập nhật ghế đã đặt
       } catch (error) {
         console.error("Error fetching room or seat data", error);
       }
@@ -175,14 +189,28 @@ let totalAssignedBasicSeats = 0; // Tổng số ghế BASIC đã phân bổ
     (acc, selectedSeatsInRow) => acc + selectedSeatsInRow.length,
     0
   );
+const calculatePrice = () => {
+  let totalPrice = 0;
 
-  const hours = showtime.split(":")[0];
+  selectedSeats.forEach((indices, row) => {
+    indices.forEach((index) => {
+      const seatType = seatRows.find((r) => r.row === row)?.seats[index];
+      if (seatType === "VIP") {
+        totalPrice += price * 1.5; // Giá vé VIP
+      } else if (seatType === "COUPLE") {
+        totalPrice += price * 2; // Giá vé đôi
+      } else {
+        totalPrice += price; // Giá vé thường
+      }
+    });
+  });
 
-  let price_ticket = 0;
+  return totalPrice;
+};
 
-  price_ticket = price;
+const totalPrice = calculatePrice();
 
-  const totalPrice = totalSelectedSeats * price_ticket;
+ 
 
   // Hàm submit xử lý việc đẩy dữ liệu
   // Hàm submit xử lý việc đẩy dữ liệu
@@ -265,6 +293,9 @@ let totalAssignedBasicSeats = 0; // Tổng số ghế BASIC đã phân bổ
               <div className="legend">
                 <div>
                   <span className="seat selected"></span> Ghế bạn chọn
+                </div>
+                <div>
+                  <span className="seat vip"></span> Ghế vip
                 </div>
                 <div>
                   <span className="seat couple-seat"></span> Ghế đôi

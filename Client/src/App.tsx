@@ -73,6 +73,7 @@ import ActorManager from "./Page/Admin/Actor/ActorManager";
 import ActorForm from "./Page/Admin/Actor/ActorForm";
 import DirectorManager from "./Page/Admin/Director/DirectorManager";
 import DirectorFormManager from "./Page/Admin/Director/DirectorForm";
+import UpcomingMovies from "./component/Movies/UpcomingMovies";
 
 
 
@@ -124,6 +125,7 @@ function App() {
       
     
        
+        <Route path="/upcoming-movies" element={<UpcomingMovies />} />
         <Route path="/movieshowing" element={<MovieShowing />} />
         <Route path="/movieticket" element={<MovieTicket />} />
 

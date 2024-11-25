@@ -39,7 +39,7 @@ const Profile: React.FC = () => {
             setUserProfile(userProfileData);
             setAvatar(
               userProfileData.avatar ||
-              "https://cdn.moveek.com/bundles/ornweb/img/no-avatar.png"
+                "https://cdn.moveek.com/bundles/ornweb/img/no-avatar.png"
             );
           }
         } catch (error) {
@@ -71,20 +71,23 @@ const Profile: React.FC = () => {
     formData.append("_method", "PUT");
     formData.append("user_name", userProfile.user_name);
     formData.append("phone", userProfile.phone);
- 
-    
+
     // Kiểm tra xem avatarFile có tồn tại không trước khi thêm vào formData
     if (avatarFile) {
       formData.append("avatar", avatarFile);
     }
-  
+
     try {
-      const response = await instance.post(`/user/${userProfile.id}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-  
+      const response = await instance.post(
+        `/user/${userProfile.id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
       if (response.data.status) {
         notification.success({ message: "Cập nhật thông tin thành công" });
       }
@@ -106,88 +109,89 @@ const Profile: React.FC = () => {
     }
   };
 
-
-
   return (
     <>
-      <Header/>
+      <Header />
       <div className="banner">
-          <img src="https://cdn.moveek.com/bundles/ornweb/img/tix-banner.png" alt="Banner" className="banner-img" />
-        </div>
+        <img
+          src="https://cdn.moveek.com/bundles/ornweb/img/tix-banner.png"
+          alt="Banner"
+          className="banner-img"
+        />
+      </div>
       <div className="content-acount">
-      <div className="container boxcha">
-      <div className="profile-fullscreen">
-  <div className="account-settings-container">
-    <div className="account-avatar">
-      <div className="account-info">
-        <Avatar size={128} src={avatar} alt="avatar" className="avatar" />
-        <div className="account-details">
-        <h2 className="account-name">
+        <div className="container boxcha">
+          <div className="profile-fullscreen">
+            <div className="account-settings-container">
+              <div className="account-avatar">
+                <div className="account-info">
+                  <Avatar
+                    size={128}
+                    src={avatar}
+                    alt="avatar"
+                    className="avatar"
+                  />
+                  <div className="account-details">
+                    <h2 className="account-name">
                       {userProfile?.user_name || "No name"}
                     </h2>
-        </div>
-      </div>
+                  </div>
+                </div>
 
-      {/* Menu điều hướng bên dưới avatar */}
-      <div className="account-nav">
-        <div className="account-nav-item">
-          <span className="account-nav-title">Tài khoản</span>
-          <ul className="account-submenu">
-            <li className="account-submenu-item"><Link to={'/profile'}>Quản lí tài khoản</Link></li>
-            <li className="account-submenu-item"><Link to={'/changepassword'}>Đổi mật khẩu</Link></li>
-          </ul>
-        </div>
-        <div className="account-nav-item">
-          <span className="account-nav-title">Tủ phim</span>
-        </div>
-        <div className="account-nav-item">
-          <span className="account-nav-title">Vé</span>
-        </div>
-        <div className="account-nav-item">
-          <span className="account-nav-title">Nạp tiền</span>
-          <ul className="account-submenu">
-            <li className="account-submenu-item"><Link to={'/credits'}>Nạp tiền</Link></li>
-            <li className="account-submenu-item"><Link to={'/deponsit'}>Lịch sử nạp tiền</Link></li>
-            <li className="account-submenu-item"><Link to={'/transaction'}>Lịch sử giao dịch</Link></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+                {/* Menu điều hướng bên dưới avatar */}
+                <div className="account-nav">
+                  <div className="account-nav-item">
+                    <span className="account-nav-title">Tài khoản</span>
+                    
+                  </div>
+                  <div className="account-nav-item">
+                    <span className="account-nav-title">Tủ phim</span>
+                  </div>
+                  <div className="account-nav-item">
+                    <span className="account-nav-title"><Link to={"/movieticket"}>Vé</Link></span>
+                  </div>
+                  <div className="account-nav-item">
+                    <span className="account-nav-title"><Link to={"/changepassword"}>Đổi mật khẩu</Link></span>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-<div className="divider"></div>
-      <div className="profile-container">
+          <div className="divider"></div>
+          <div className="profile-container">
             <form className="profile-form" onSubmit={handleUpdateProfile}>
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Tên tài khoản</label>
+              <div className="row g-3">
+                <div className="col">
+                  <label className="label-form1">Tên tài khoản</label>
                   <input
                     type="text"
+                    className="form-control"
                     id="username"
                     value={userProfile?.user_name || "giang1234"}
                     readOnly
                     disabled
                   />
                 </div>
-                <div className="form-group">
-                  <label>Email</label>
+                <div className="col">
+                <label className="label-form1">Email</label>
                   <input
-                    type="email"
+                    type="text"
+                    className="form-control"
                     id="email"
-                    value={
-                      userProfile?.email || ""
-                    }
+                    value={userProfile?.email || ""}
                     readOnly
                     disabled
                   />
                 </div>
               </div>
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Họ và tên</label>
+              <div className="row g-3">
+                <div className="col">
+                <label className="label-form">Họ và tên</label>
                   <input
                     type="text"
+                    className="form-control"
                     id="fullname"
                     value={userProfile?.fullname || ""}
                     onChange={(e) =>
@@ -198,13 +202,11 @@ const Profile: React.FC = () => {
                     }
                   />
                 </div>
-                
-              </div>
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Số điện thoại</label>
+                <div className="col">
+                <label className="label-form" >Số điện thoại</label>
                   <input
                     type="text"
+                    className="form-control"
                     id="phone"
                     value={userProfile?.phone || ""}
                     onChange={(e) =>
@@ -215,29 +217,29 @@ const Profile: React.FC = () => {
                     }
                   />
                 </div>
-                
               </div>
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Ảnh đại diện</label>
-                  <input
-                    type="file"
+              <label className="label-form">Ảnh đại diện</label>
+             <div className="input-group mb-3">
+          
+  <input type="file" className="form-control" 
                     id="avatar"
-                    onChange={handleAvatarChange}
-                  />
-                </div>
-              </div>
+                    onChange={handleAvatarChange}/>
+
+</div>
+
+             
+              
               <button type="submit" className="update-btn">
                 Cập nhật
               </button>
             </form>
           </div>
-      </div>
+        </div>
       </div>
 
       <Footer />
     </>
   );
-};  
+};
 
 export default Profile;
