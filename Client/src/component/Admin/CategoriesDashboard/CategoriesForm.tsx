@@ -10,7 +10,7 @@ import { notification } from 'antd'; // Import notification from Ant Design
 
 // Define schema to validate the form using Zod
 const categorySchema = z.object({
-  category_name: z.string().min(1, 'Tên thể loại là bắt buộc.'),
+  category_name: z.string().min(1, 'Tên thể loại là bắt buộc.').max(30,'Tên thể loại tối đa 30 ký tự'),
 });
 
 const CategoriesForm = () => {

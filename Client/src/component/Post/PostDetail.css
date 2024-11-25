@@ -210,7 +210,7 @@
 }
 
 .card-body-1 {
- 
+  display: flex !important;
   align-items: center;
   gap: 15px;
   background-color: white;
@@ -425,9 +425,9 @@
 }
 
 .card-body-1 {
-
+  display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 5px;
   background-color: white;
 }
 
@@ -444,7 +444,12 @@
   font-weight: bold;
   color: #333;
 }
+.col-auto img{
+height: 50px ;
 
+width: 100px;
+margin-top: 15px;
+}
 .related-meta {
   font-size: 12px;
   color: #f75175;

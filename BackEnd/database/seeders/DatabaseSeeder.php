@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
     {
 
         $this->call([
-            // RoleSeeder::class,
+
             LocationSeeder::class,
             CinemaSeeder::class,
             PayMethodSeeder::class,
@@ -38,6 +38,7 @@ class DatabaseSeeder extends Seeder
             CategorySeatSeeder::class,
             RatingSeeder::class,
             FavoriteSeeder::class,
+            BookingSeeder::class,
 
         ]);
         // Tạo các quyền

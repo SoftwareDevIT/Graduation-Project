@@ -26,6 +26,7 @@ use App\Http\Controllers\Api\Filter\FilterMovieByNewController;
 use App\Http\Controllers\Api\Google\GoogleController;
 use App\Http\Controllers\Api\Movie\RatingController;
 use App\Http\Controllers\Api\Order\OrderController;
+use App\Http\Controllers\Api\Revenue\RevenueController;
 use App\Http\Controllers\Api\Role\RoleController;
 use App\Http\Controllers\Api\Seat\SeatController;
 
@@ -72,6 +73,7 @@ Route::apiResource('seat', SeatController::class)->only(['index', 'show']);;
 Route::apiResource('method', PayMethodController::class)->only(['index', 'show']);                        // List news
 Route::apiResource('room', RoomController::class)->only(['index', 'show']);
 Route::apiResource('showtimes', ShowtimeController::class)->only(['index', 'show']);
+Route::apiResource('news_category', NewCategoryController::class)->only(['index', 'show']);
 Route::get('/cinema/{id}/room', [RoomController::class, 'getRoomByCinema']);  // get room by cinema
 
 
@@ -112,13 +114,8 @@ Route::middleware(['auth:sanctum', 'role:admin|manager'])->group(function () {
     Route::post('add-movie-in-cinema/{cinema_id}', [CinemaController::class, 'synCinemaHasMovie']);
     Route::get('show-movie-in-cinema/{cinema_id}', [CinemaController::class, 'showCinemaHasMovie']);
     Route::delete('cinema/{cinema_id}/movie/{movie_id}', [CinemaController::class, 'destroyCinemaHasMovie']);
-
-
     Route::apiResource('news_category', NewCategoryController::class)->except(['index', 'show']);
     Route::apiResource('news', NewController::class)->except(['index', 'show']);
-
-
-
     Route::get('/all-user', [AuthController::class, 'allUser']);
 
 
@@ -129,11 +126,11 @@ Route::middleware(['auth:sanctum', 'role:admin|manager'])->group(function () {
     Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy'); // delete role
     Route::delete('/delete-user/{id}', [RoleController::class, 'destroy'])->name('roles.destroyUser'); // delete role
 
-
-    // User management routes
-    // Route::get('/users', [UserController::class, 'index'])->name('users.index');
-    // Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
-
+    // Thống kê doanh thu theo rạp vào ngày
+    Route::get('total-revenue/{status}', [RevenueController::class, 'totalRevenue']);
+    Route::get('total-revenue-cinema/{cinema_id}', [RevenueController::class, 'totalRevenueByCinema']);
+    Route::get('total-revenue-by-date/{start_date}/{end_date}', [RevenueController::class, 'totalRevenueBetweenDates']);
+    Route::get('total-revenue-cinema-by-date/{cinema_id}/{start_date}/{end_date}', [RevenueController::class, 'totalRevenueByCinemaBetweenDates']);
 });
 
 
@@ -154,7 +151,8 @@ Route::get('filterMovie/{id}', [CinemaController::class, 'filterMovie']);       
 Route::get('/movie/{category}', [MovieController::class, 'movieByCategory']);                       // Lọc Phim theo thể loại
 Route::get('/new/{category}', [NewController::class, 'newByCategory']);                             // Lọc chuyên đề theo thể loại
 
-Route::get('/fillMovies/upcoming', [MovieController::class, 'getUpcomingMovies']);                       // Lọc Phim sắp chiếu
+Route::get('/fillMovies/upcoming', [MovieController::class, 'getUpcomingMovies']);                  // Lọc Phim sắp chiếu
+Route::get('/fillMovies/comingSoon', [MovieController::class, 'getComingSoonMovie']);                  // Lọc Phim chiếu sớm
 Route::get('/filterByDateByMovie', [FilterByDateController::class, 'filterByDateByMovie']);         // lọc rạp theo phim và ngày và khu vực
 Route::get('cinema-by-location/{id}', [CinemaController::class, 'showCinemaByLocation']);
 Route::get('filterMovieByNew', [FilterMovieByNewController::class, 'filterMovieByNew']);

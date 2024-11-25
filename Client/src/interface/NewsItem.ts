@@ -10,6 +10,7 @@ export interface NewsItem {
     news_category: NewsCategory
     news_category_id: number;
     user:User;
+    views: number;
     thumnail: string;
     banner:string;
     content: string;

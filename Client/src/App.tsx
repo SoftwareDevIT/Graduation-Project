@@ -69,6 +69,10 @@ import RoomsFormManager from "./Page/Admin/Rooms/RoomsForm";
 import Video from "./component/News/Video";
 import FilmNews from "./component/News/FilmNews";
 import MovieTicket from "./component/PersonalPage/MovieTicket";
+import ActorManager from "./Page/Admin/Actor/ActorManager";
+import ActorForm from "./Page/Admin/Actor/ActorForm";
+import DirectorManager from "./Page/Admin/Director/DirectorManager";
+import DirectorFormManager from "./Page/Admin/Director/DirectorForm";
 import UpcomingMovies from "./component/Movies/UpcomingMovies";
 
 
@@ -143,6 +147,12 @@ function App() {
         <Route path="/admin/dashboard" element={<PrivateRoute allowedRoles={['admin','manager','staff']}><Dashboard /></PrivateRoute>} />
         <Route path="/admin/user" element={<PrivateRoute allowedRoles={['admin']}><User /></PrivateRoute>} />
         <Route path="/admin/user/roles" element={<PrivateRoute allowedRoles={['admin']}><UserAddManager /></PrivateRoute>} />
+        <Route path="/admin/actor" element={<PrivateRoute allowedRoles={['admin']}><ActorManager/></PrivateRoute>} />
+        <Route path="/admin/actor/add" element={<PrivateRoute allowedRoles={['admin']}><ActorForm/></PrivateRoute>} />
+        <Route path="/admin/actor/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><ActorForm/></PrivateRoute>} />
+        <Route path="/admin/director" element={<PrivateRoute allowedRoles={['admin']}><DirectorManager/></PrivateRoute>} />
+        <Route path="/admin/director/add" element={<PrivateRoute allowedRoles={['admin']}><DirectorFormManager/></PrivateRoute>} />
+        <Route path="/admin/director/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><DirectorFormManager/></PrivateRoute>} />
         <Route path="/admin/showtimes" element={<PrivateRoute allowedRoles={['admin']}><ShowtimesManager /></PrivateRoute>} />
         <Route path="/admin/showtimes/add" element={<PrivateRoute allowedRoles={['admin']}><ShowtimesFormManager /></PrivateRoute>} />
         <Route path="/admin/showtimes/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><ShowtimesFormManager /></PrivateRoute>} />

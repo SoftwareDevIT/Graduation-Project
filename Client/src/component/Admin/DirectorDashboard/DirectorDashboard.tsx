@@ -1,40 +1,68 @@
-import React, { useState } from 'react';
-import { useCategoryContext } from '../../../Context/CategoriesContext';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { notification } from 'antd'; // Import the notification component
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Director } from '../../../interface/Director';
+import instance from '../../../server';
 
-const CategoriesDashboard = () => {
-    const { state, deleteCategory } = useCategoryContext();
-    const { categories } = state;
+const DirectorDashboard = () => {
+    const [directors, setDirectors] = useState<Director[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [searchTerm, setSearchTerm] = useState<string>('');
-    const categoriesPerPage = 7;
+    const directorsPerPage = 7;
 
-    const filteredCategories = categories.filter(category => 
-        category.category_name && 
-        category.category_name.toLowerCase().includes(searchTerm.toLowerCase())
+    useEffect(() => {
+        // Gọi API để lấy danh sách đạo diễn
+        const fetchDirectors = async () => {
+            try {
+                const response = await instance.get('/director');
+                setDirectors(response.data.data);
+            } catch (error) {
+                console.error('Lỗi khi lấy dữ liệu đạo diễn:', error);
+                notification.error({
+                    message: 'Lỗi',
+                    description: 'Không thể tải danh sách đạo diễn!',
+                    placement: 'topRight',
+                });
+            }
+        };
+        fetchDirectors();
+    }, []);
+
+    const filteredDirectors = directors.filter(director =>
+        director.director_name.toLowerCase().includes(searchTerm.toLowerCase())
     );
-    
-    const totalCategories = filteredCategories.length;
-    const totalPages = Math.ceil(totalCategories / categoriesPerPage);
-    const currentCategories = filteredCategories.slice(
-        (currentPage - 1) * categoriesPerPage,
-        currentPage * categoriesPerPage
+
+    const totalDirectors = filteredDirectors.length;
+    const totalPages = Math.ceil(totalDirectors / directorsPerPage);
+    const currentDirectors = filteredDirectors.slice(
+        (currentPage - 1) * directorsPerPage,
+        currentPage * directorsPerPage
     );
-    
-    const handleDelete = (id: number) => {
-        const confirmDelete = window.confirm('Bạn có chắc chắn muốn xóa thể loại này?');
+
+    const handleDelete = async (id: number) => {
+        const confirmDelete = window.confirm('Bạn có chắc chắn muốn xóa đạo diễn này?');
         if (confirmDelete) {
-            deleteCategory(id);
-            // Show success notification after deleting
-            notification.success({
-                message: 'Thành Công',
-                description: 'Thể loại đã được xóa thành công!',
-                placement: 'topRight',
-            });
+            try {
+                // Gọi API xóa đạo diễn
+                await instance.delete(`/director/${id}`);
+                // Cập nhật lại danh sách đạo diễn sau khi xóa
+                setDirectors((prevDirectors) => prevDirectors.filter((director) => director.id !== id));
+                notification.success({
+                    message: 'Thành Công',
+                    description: 'Đạo diễn đã được xóa thành công!',
+                    placement: 'topRight',
+                });
+            } catch (error) {
+                console.error('Lỗi khi xóa đạo diễn:', error);
+                notification.error({
+                    message: 'Lỗi',
+                    description: 'Không thể xóa đạo diễn!',
+                    placement: 'topRight',
+                });
+            }
         }
     };
 
@@ -43,12 +71,10 @@ const CategoriesDashboard = () => {
     const getPageNumbers = () => {
         const pageNumbers = [];
         if (totalPages <= 5) {
-            // If there are 5 or fewer pages, show them all
             for (let i = 1; i <= totalPages; i++) {
                 pageNumbers.push(i);
             }
         } else {
-            // If there are more than 5 pages, display the first 2, last 2, and the current page with ellipses in between
             pageNumbers.push(1);
             if (currentPage > 3) pageNumbers.push('...');
             const start = Math.max(currentPage - 1, 2);
@@ -65,8 +91,8 @@ const CategoriesDashboard = () => {
     return (
         <div className="container mt-5">
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <Link to={'/admin/categories/add'} className="btn btn-outline-primary">
-                <FontAwesomeIcon icon={faPlus} /> Thêm Thể Loại Phim
+                <Link to={'/admin/director/add'} className="btn btn-outline-primary">
+                <FontAwesomeIcon icon={faPlus} /> Thêm Đạo Diễn
                 </Link>
                 <input
                     type="text"
@@ -81,22 +107,32 @@ const CategoriesDashboard = () => {
                     <thead className="thead-light">
                         <tr>
                             <th>ID</th>
-                            <th>Tên Thể Loại</th>
+                            <th>Ảnh</th>
+                            <th>Tên Đạo Diễn</th>
+                            <th>Quốc Gia</th>
                             <th>Hành Động</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {currentCategories.map((category) => (
-                            <tr key={category.id}>
-                                <td>{category.id}</td>
-                                <td>{category.category_name}</td>
+                        {currentDirectors.map((director) => (
+                            <tr key={director.id}>
+                                <td>{director.id}</td>
+                                <td>
+                                    <img
+                                        src={director.photo ?? undefined}
+                                        style={{ width: "80px", height: "120px", objectFit: 'cover' }}
+                                        alt="Ảnh Đạo Diễn"
+                                    />
+                                </td>
+                                <td>{director.director_name}</td>
+                                <td>{director.country}</td>
                                 <td>
                                     <div className="d-flex justify-content-around">
-                                        <Link to={`/admin/categories/edit/${category.id}`} className="btn btn-warning btn-sm">
+                                        <Link to={`/admin/director/edit/${director.id}`} className="btn btn-warning btn-sm">
                                             <FontAwesomeIcon icon={faEdit} />
                                         </Link>
                                         <button
-                                               onClick={() => handleDelete(category.id)}
+                                            onClick={() => handleDelete(director.id)}
                                             className="btn btn-danger btn-sm"
                                         >
                                             <FontAwesomeIcon icon={faTrashAlt} />
@@ -105,10 +141,10 @@ const CategoriesDashboard = () => {
                                 </td>
                             </tr>
                         ))}
-                        {currentCategories.length === 0 && (
+                        {currentDirectors.length === 0 && (
                             <tr>
-                                <td colSpan={3} className="text-center">
-                                    Không có thể loại nào.
+                                <td colSpan={5} className="text-center">
+                                    Không có đạo diễn nào.
                                 </td>
                             </tr>
                         )}
@@ -144,4 +180,4 @@ const CategoriesDashboard = () => {
     );
 };
 
-export default CategoriesDashboard;
+export default DirectorDashboard;

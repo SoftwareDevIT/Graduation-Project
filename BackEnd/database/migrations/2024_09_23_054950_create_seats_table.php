@@ -23,8 +23,6 @@ return new class extends Migration {
             $table->timestamps();
             $table->foreign('showtime_id')->references('id')->on('showtimes')->onDelete('cascade');
             $table->foreign('room_id')->references('id')->on('room')->onDelete('cascade');
-
-
         });
     }
 
