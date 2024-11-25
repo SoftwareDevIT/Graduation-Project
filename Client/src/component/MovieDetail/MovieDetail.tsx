@@ -201,7 +201,6 @@ const MovieDetail: React.FC = () => {
       </div>
 
       {/* Modal Đánh Giá */}
-      <div className="dgp">
       <Modal title="Đánh giá phim" visible={ratingData.isModalVisible} onOk={handleRatingSubmit} onCancel={() => setRatingData({ ...ratingData, isModalVisible: false })}>
         <div className="danhgiaphim">
           <div className="imgphim">
@@ -218,7 +217,6 @@ const MovieDetail: React.FC = () => {
           </div>
         </div>
       </Modal>
-      </div>
 
 
     
