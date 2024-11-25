@@ -9,7 +9,7 @@ use App\Traits\Slugable;
 
 class Showtime extends Model
 {
-    use HasFactory,Slugable;
+    use HasFactory, Slugable;
 
     protected $table = 'showtimes';
     // protected $primaryKey = 'id';
@@ -67,6 +67,10 @@ class Showtime extends Model
                 $showtime->showtime_end = self::calculateShowtimesEnd($showtime->showtime_start, $duration);
             }
         });
+    }
+    public function cinema()
+    {
+        return $this->belongsTo(Cinema::class);
     }
 
 
