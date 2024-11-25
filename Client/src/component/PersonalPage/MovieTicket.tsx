@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../Header/Hearder';
-import { Avatar, QRCode } from 'antd';
+import { Avatar } from 'antd';
 import instance from '../../server';
 import Footer from '../Footer/Footer';
 import './MovieTicket.css';
 import Ticket from '../../interface/Ticket';
-
-
-// Define the Seat interface
-
+import { Link } from 'react-router-dom';
+import { AwesomeQR } from "awesome-qr"; // Import AwesomeQR
 
 const MovieTicket = () => {
-  const [tickets, setTickets] = useState<Ticket[]>([]); // Use the Ticket type here
+  const [tickets, setTickets] = useState<Ticket[]>([]); 
   const [avatar, setAvatar] = useState('https://cdn.moveek.com/bundles/ornweb/img/no-avatar.png');
   const [userProfile, setUserProfile] = useState<any>(null);
+  const [qrCodes, setQrCodes] = useState<string[]>([]); // Store QR code as base64
 
   useEffect(() => {
     const profileData = localStorage.getItem('user_profile');
@@ -39,8 +38,7 @@ const MovieTicket = () => {
           if (response.data.status) {
             const ticketData = response.data.data;
             setTickets(ticketData);
-            console.log(response.data.data);
-
+            console.log(ticketData); // Log ticket data for debugging
           }
         } catch (error) {
           console.error('Error fetching tickets:', error);
@@ -51,6 +49,38 @@ const MovieTicket = () => {
       fetchTickets();
     }
   }, []);
+
+  useEffect(() => {
+    // Generate QR codes when tickets are fetched
+    const generateQRCodes = async () => {
+      const qrCodesTemp = await Promise.all(
+        tickets.map(async (ticket) => {
+          // Create a more compact version of the ticket data
+          const qrData = {
+            id: ticket.id,
+            showtime: ticket.showtime?.showtime_date + ' ' + ticket.showtime?.showtime_start,
+            seats: ticket.seats?.map(seat => seat.seat_name).join(', '),
+            amount: ticket.amount,
+          };
+
+          const qrCode = await new AwesomeQR({
+            text: JSON.stringify(qrData),  // Only use essential data for QR code
+            size: 300,
+            margin: 10,
+            logoScale: 0.2,
+          }).draw();
+
+          return qrCode; // Base64 encoded image
+        })
+      );
+      console.log(qrCodesTemp); // Log the QR codes for debugging
+      setQrCodes(qrCodesTemp);
+    };
+  
+    if (tickets.length > 0) {
+      generateQRCodes(); // Only generate QR codes when tickets are present
+    }
+  }, [tickets]);  // Runs when tickets are updated
 
   return (
     <>
@@ -70,42 +100,59 @@ const MovieTicket = () => {
                       <h2 className="account-name">{userProfile?.user_name || 'No name'}</h2>
                     </div>
                   </div>
+                  <div className="account-nav">
+                    <div className="account-nav-item">
+                      <span className="account-nav-title">Tài khoản</span>
+                    </div>
+                    <div className="account-nav-item">
+                      <span className="account-nav-title">Tủ phim</span>
+                    </div>
+                    <div className="account-nav-item">
+                      <span className="account-nav-title">Vé</span>
+                    </div>
+                    <div className="account-nav-item">
+                      <span className="account-nav-title"><Link to={"/changepassword"}>Đổi mật khẩu</Link></span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
             <div className="divider"></div>
             <div className="ticket-tong">
               {tickets.length === 0 ? (
-                <p className="no-tickets-message">Bạn chưa có vé nào được đặt.</p>
+               <form className="no-tickets-form">
+               <div className="no-tickets-message">
+                 Bạn chưa có vé nào được đặt.
+               </div>
+             </form>
+             
               ) : (
                 tickets.map((ticket, index) => (
                   <div className="ticket-container" key={index}>
                     <p className="ticket-code">Mã đặt vé - {ticket.id}</p>
-                    {/* <h2 className="ticket-cinema">{ticket.showtime?.room?.cinema_name || 'N/A'}</h2> */}
                     <p className="ticket-date">{ticket.showtime?.showtime_date}</p>
                     <div className="ticket-info">
                       <span className="ticket-time">{ticket.showtime?.showtime_start}</span>
                       <span className="ticket-room">{ticket.showtime?.room?.room_name}</span>
                       <span className="ticket-seat">
-                        {ticket.seats?.map((seat, index) => (
-                          <span key={index}>{seat.seat_name}</span>
+                        {ticket.seats?.map((seat) => (
+                          <span key={seat.seat_name}>{seat.seat_name}</span>
                         ))}
                       </span>
                     </div>
                     <div className="ticket-details">
                       <div className="ticket-item">
-                        <span className="item-name">Số vé</span>
-
+                        <span className="item-name">Số lượng</span>
                         <span className="item-quantity">{ticket.seats?.length || 0}</span>
                         <span className="item-price">{ticket.amount?.toLocaleString()} VND</span>
                       </div>
                       <div className="ticket-item">
                         <span className="item-name">Combo:</span>
-
-                        <span className="item-quantity"> {ticket.combos?.map((combos, index) => (
-                          <span key={index}>{combos.combo_name}</span>
-                        ))}</span>
-                        <span className="item-price"></span>
+                        <span className="item-quantity"> 
+                          {ticket.combos?.map((combo, index) => (
+                            <span key={index}>{combo.combo_name}</span>
+                          ))}
+                        </span>
                       </div>
                       <div className="ticket-item total">
                         <span className="item-name">TỔNG</span>
@@ -113,8 +160,16 @@ const MovieTicket = () => {
                       </div>
                     </div>
                     <div className="ticket-qr">
-                      <QRCode value={JSON.stringify(ticket)} size={128} />
-                    </div>
+  <div className="qr-wrapper">
+    {qrCodes[index] ? (
+      <img src={qrCodes[index]} alt={`QR Code ${index}`} className="qr-image" />
+    ) : (
+      <p className="qr-placeholder">Đang tạo mã QR...</p>
+    )}
+    <p className="qr-note">Quét mã QR để xác nhận vé</p>
+  </div>
+</div>
+
                   </div>
                 ))
               )}

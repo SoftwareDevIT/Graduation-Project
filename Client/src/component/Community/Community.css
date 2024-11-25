@@ -1,0 +1,101 @@
+/* Tổng thể */
+.app {
+  display: flex;
+  flex-direction: column;
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+/* Header */
+.header {
+  margin-bottom: 30px;
+}
+
+.header h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.movie-list {
+  display: flex;
+  overflow-x: auto;
+  gap: 10px;
+}
+
+.movie-card {
+  flex: 0 0 auto;
+  text-align: center;
+  width: 120px;
+}
+
+.movie-card img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.movie-card p {
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+/* Hoạt động */
+.activity-section {
+  margin-bottom: 30px;
+}
+
+.activity-section h3 {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+.activity-item {
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.activity-item p {
+  margin: 0;
+}
+
+.comment {
+  margin-top: 5px;
+  font-style: italic;
+}
+
+.time {
+  display: block;
+  margin-top: 10px;
+  color: gray;
+  font-size: 12px;
+}
+
+/* Sidebar */
+.sidebar {
+  border-top: 2px solid #ddd;
+  padding-top: 20px;
+}
+
+.sidebar h3 {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  margin-bottom: 10px;
+}
+
+.critic-name {
+  font-weight: bold;
+}
+
+.critic-description {
+  color: gray;
+  font-size: 14px;
+}
