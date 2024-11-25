@@ -127,9 +127,9 @@ Route::middleware(['auth:sanctum', 'role:admin|manager'])->group(function () {
     Route::delete('/delete-user/{id}', [RoleController::class, 'destroy'])->name('roles.destroyUser'); // delete role
 
     // Thống kê doanh thu theo rạp vào ngày
-    Route::get('total-revenue-by-date/{start_date}/{end_date}', [RevenueController::class, 'totalRevenueBetweenDates']);
     Route::get('total-revenue/{status}', [RevenueController::class, 'totalRevenue']);
     Route::get('total-revenue-cinema/{cinema_id}', [RevenueController::class, 'totalRevenueByCinema']);
+    Route::get('total-revenue-by-date/{start_date}/{end_date}', [RevenueController::class, 'totalRevenueBetweenDates']);
     Route::get('total-revenue-cinema-by-date/{cinema_id}/{start_date}/{end_date}', [RevenueController::class, 'totalRevenueByCinemaBetweenDates']);
 });
 
@@ -151,7 +151,7 @@ Route::get('filterMovie/{id}', [CinemaController::class, 'filterMovie']);       
 Route::get('/movie/{category}', [MovieController::class, 'movieByCategory']);                       // Lọc Phim theo thể loại
 Route::get('/new/{category}', [NewController::class, 'newByCategory']);                             // Lọc chuyên đề theo thể loại
 
-Route::get('/fillMovies/upcoming', [MovieController::class, 'getUpcomingMovies']);                  // Lọc Phim sắp chiếu                
+Route::get('/fillMovies/upcoming', [MovieController::class, 'getUpcomingMovies']);                  // Lọc Phim sắp chiếu
 Route::get('/fillMovies/comingSoon', [MovieController::class, 'getComingSoonMovie']);                  // Lọc Phim chiếu sớm
 Route::get('/filterByDateByMovie', [FilterByDateController::class, 'filterByDateByMovie']);         // lọc rạp theo phim và ngày và khu vực
 Route::get('cinema-by-location/{id}', [CinemaController::class, 'showCinemaByLocation']);
