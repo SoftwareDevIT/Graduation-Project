@@ -34,7 +34,6 @@ class UpdateMovieRequest extends FormRequest
             'release_date' => 'date',
             'rating' => 'numeric|between:1,10',
             'views' => 'nullable|integer',
-            'like' => 'nullable|integer',
             'actor_id' => 'array',
             'actor_id.*' => 'integer|exists:actor,id',
             'director_id' => 'array',

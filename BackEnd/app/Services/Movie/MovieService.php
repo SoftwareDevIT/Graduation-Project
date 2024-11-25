@@ -65,7 +65,7 @@ class MovieService
     public function show($identifier)
     {
         // Xác định xem identifier là ID hay slug
-        $movie = Movie::with(['actor', 'director', 'movie_category', 'movieInCinemas'])
+        $movie = Movie::with(['actor', 'director', 'movie_category', 'movieInCinemas'])->withCount('favorites')
             ->when(is_numeric($identifier), function ($query) use ($identifier) {
                 return $query->where('id', $identifier);
             }, function ($query) use ($identifier) {
@@ -75,6 +75,7 @@ class MovieService
 
         // Chuyển đổi thành mảng và định dạng lại dữ liệu
         $formattedMovie = $movie->toArray();
+        $formattedMovie['likes'] = $movie->favorites_count;
         $formattedMovie['actor'] = $movie->actor->map(fn($actor) => $actor->only(['id', 'actor_name']));
         $formattedMovie['director'] = $movie->director->map(fn($director) => $director->only(['id', 'director_name']));
         $formattedMovie['movie_category'] = $movie->movie_category->map(fn($category) => $category->only(['id', 'category_name']));
@@ -82,7 +83,7 @@ class MovieService
             'id' => $cinema->id,
             'cinema_name' => $cinema->cinema->cinema_name,
         ]);
-
+        $movie->increment('views');
         return response()->json($formattedMovie);
     }
 
