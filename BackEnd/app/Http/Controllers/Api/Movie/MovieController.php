@@ -47,7 +47,7 @@ class MovieController extends Controller
             $thumbnailFile = $request->file('thumbnail'); // Nhận tệp thumbnail
             $movie = $request->validated();
             $movie['poster'] = $file ? $this->uploadImage($file) : null;
-            $movie['thumbnail'] = $thumbnailFile ? $this->uploadImage($thumbnailFile) : null; 
+            $movie['thumbnail'] = $thumbnailFile ? $this->uploadImage($thumbnailFile) : null;
 
             if (isset($movie['title'])) {
                 $slug = Str::slug($movie['title'], '-');
@@ -79,7 +79,7 @@ class MovieController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
         try {
             $movie = $this->movieService->show($id);
@@ -112,14 +112,14 @@ class MovieController extends Controller
 
             if (isset($movie['movie_name'])) {
                 $slug = Str::slug($movie['movie_name']);
-                $existingMovie = $this->movieService->findBySlug($slug); 
-        
+                $existingMovie = $this->movieService->findBySlug($slug);
+
                 if ($existingMovie && $existingMovie->id !== $id) {
-                
+
                     $slug .= '-' . uniqid();
                 }
-        
-                $movie['slug'] = $slug; 
+
+                $movie['slug'] = $slug;
             }
 
             $movie = $this->movieService->update($id, $movie);
