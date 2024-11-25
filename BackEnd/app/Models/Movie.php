@@ -24,7 +24,6 @@ class Movie extends Model
         'description',
         'rating',
         'views',
-        'like',
         'status',
     ];
 
