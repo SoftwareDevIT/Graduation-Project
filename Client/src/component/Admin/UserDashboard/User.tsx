@@ -16,7 +16,7 @@ const UserDashboard: React.FC = () => {
         const fetchUsers = async () => {
             try {
                 const response = await instance.get('/all-user');
-                setUsers(response.data);
+                setUsers(response.data.data);
             } catch (err) {
                 setError('Lỗi khi tải người dùng');
             }

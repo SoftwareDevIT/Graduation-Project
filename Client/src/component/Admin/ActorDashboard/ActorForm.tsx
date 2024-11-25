@@ -8,13 +8,18 @@ import { notification } from "antd"; // Import Ant Design's notification compone
 import { Actor } from "../../../interface/Actor";
 
 // Định nghĩa schema cho việc xác thực form sử dụng Zod
+
 const actorSchema = z.object({
   actor_name: z.string().min(1, "Tên diễn viên là bắt buộc."),
   country: z.string().min(1, "Quốc gia là bắt buộc."),
-  photo: z.any().optional(), 
+  photo: z.any().optional(),
   link_wiki: z.string().url("Link Wiki phải là URL hợp lệ."),
-  descripcion: z.string().optional(),
+  descripcion: z
+    .string()
+    .min(1, "Mô tả là bắt buộc.")
+    .max(500, "Mô tả không được vượt quá 500 ký tự."),
 });
+
 
 const ActorForm = () => {
   const { id } = useParams<{ id: string }>();

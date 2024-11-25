@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { notification } from 'antd'; // Import notification from Ant Design
 import instance from '../../../server';
@@ -101,7 +101,7 @@ const RoomDashboard: React.FC = () => {
 
       <div className="d-flex justify-content-between align-items-center mb-4">
         <Link to={'/admin/rooms/add'} className="btn btn-outline-primary">
-         + Thêm Phòng
+        <FontAwesomeIcon icon={faPlus} /> Thêm Phòng
         </Link>
         <input
           type="text"

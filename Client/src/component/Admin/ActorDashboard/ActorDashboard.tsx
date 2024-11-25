@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { notification } from 'antd'; // Import the notification component
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Actor } from '../../../interface/Actor';
@@ -96,14 +96,15 @@ const ActorDashboard = () => {
         <div className="container mt-5">
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Link to={'/admin/actor/add'} className="btn btn-outline-primary">
-                    + Thêm Diễn Viên
+                <FontAwesomeIcon icon={faPlus} /> Thêm Diễn Viên
                 </Link>
                 <input
                     type="text"
                     placeholder="Tìm kiếm theo tên"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="form-control w-25"
+                    className="form-control w-25 "
+                    
                 />
             </div>
             <div className="table-responsive">
@@ -151,7 +152,7 @@ const ActorDashboard = () => {
                     </tbody>
                 </table>
             </div>
-            <nav className="d-flex justify-content-end mt-4">
+            <nav className="d-flex justify-content-center mt-4">
     <ul className="pagination">
         <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
             <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>
@@ -176,6 +177,7 @@ const ActorDashboard = () => {
         </li>
     </ul>
 </nav>
+
 
         </div>
     );

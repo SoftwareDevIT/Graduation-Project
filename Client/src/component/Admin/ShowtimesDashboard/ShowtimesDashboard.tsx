@@ -5,6 +5,8 @@ import instance from '../../../server';
 import { Movie } from '../../../interface/Movie';
 import { notification } from 'antd'; // Import Ant Design notification
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 const ShowtimesDashboard: React.FC = () => {
     const { state, dispatch } = useShowtimeContext();
@@ -90,7 +92,7 @@ const ShowtimesDashboard: React.FC = () => {
         <div className="container mt-5">
            
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <Link to="/admin/showtimes/add" className="btn btn-outline-primary">+ Thêm Suất Chiếu</Link>
+                <Link to="/admin/showtimes/add" className="btn btn-outline-primary"><FontAwesomeIcon icon={faPlus} /> Thêm Suất Chiếu</Link>
                 <input
                     type="text"
                     placeholder="Tìm kiếm theo tên phim"

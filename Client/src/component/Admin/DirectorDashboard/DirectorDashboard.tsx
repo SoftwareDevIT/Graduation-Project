@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { notification } from 'antd'; // Import the notification component
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Director } from '../../../interface/Director';
@@ -92,7 +92,7 @@ const DirectorDashboard = () => {
         <div className="container mt-5">
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Link to={'/admin/director/add'} className="btn btn-outline-primary">
-                    + Thêm Đạo Diễn
+                <FontAwesomeIcon icon={faPlus} /> Thêm Đạo Diễn
                 </Link>
                 <input
                     type="text"

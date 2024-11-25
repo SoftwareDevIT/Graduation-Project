@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useCountryContext } from '../../../Context/CountriesContext';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { notification } from 'antd';  // Import the notification component
 import './CountriesDashboard.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -84,7 +84,7 @@ const CountriesDashboard: React.FC = () => {
         <div className="container mt-5">
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Link to={'/admin/countries/add'} className="btn btn-outline-primary">
-                    + Thêm Khu Vực
+                <FontAwesomeIcon icon={faPlus} /> Thêm Khu Vực
                 </Link>
                 <input
                     type="text"

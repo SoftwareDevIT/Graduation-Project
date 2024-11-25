@@ -9,12 +9,16 @@ import { Director } from "../../../interface/Director";
 
 // Định nghĩa schema cho việc xác thực form sử dụng Zod
 const directorSchema = z.object({
-  director_name: z.string().min(1, "Tên đạo diễn là bắt buộc."), // Đảm bảo trường director_name không rỗng
-  country: z.string().min(1, "Quốc gia là bắt buộc."), 
-  photo: z.any().optional(), 
+  director_name: z.string().min(1, "Tên đạo diễn là bắt buộc."),
+  country: z.string().min(1, "Quốc gia là bắt buộc."),
+  photo: z.any().optional(),
   link_wiki: z.string().url("Link Wiki phải là URL hợp lệ."),
-  descripcion: z.string().optional(),
+  descripcion: z
+    .string()
+    .min(1, "Mô tả là bắt buộc.")
+    .max(500, "Mô tả không được vượt quá 500 ký tự."), // Giới hạn tối đa 500 ký tự
 });
+
 
 const DirectorForm = () => {
   const { id } = useParams<{ id: string }>();

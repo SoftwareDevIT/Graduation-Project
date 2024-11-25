@@ -34,8 +34,10 @@ const movieSchema = z.object({
       return !isNaN(durationInMinutes) && durationInMinutes <= 180;
     }, 'Thời lượng phim không được quá 180 phút'),
   posterFile: z.any().optional(),
+  thumbnailFile: z.any().optional(), // Optional thumbnail
+  country: z.string().min(1,'Tên quốc gia là bắt buộc'),
+  trailer: z.string().optional(), // Trailer URL validation (optional)
 });
-
 
 type MovieFormValues = z.infer<typeof movieSchema>;
 
@@ -60,6 +62,9 @@ const MovieForm: React.FC = () => {
       description: '',
       duration: '',
       posterFile: null,
+      thumbnailFile: null,
+      country: '', // default value for country
+      trailer: '', // default value for trailer
     },
   });
 
@@ -67,6 +72,9 @@ const MovieForm: React.FC = () => {
   const [directors, setDirectors] = useState<Director[]>([]);
   const [categories, setCategories] = useState<MovieCategory[]>([]);
   const [posterFile, setPosterFile] = useState<File | null>(null);
+  const [thumbnailFile, setThumbnailFile] = useState<File | null>(null); // State for thumbnail
+  const [country, setCountry] = useState<string>(''); // State for country
+  const [trailer, setTrailer] = useState<string>(''); // State for trailer URL
   const nav = useNavigate();
   const { addOrUpdateMovie } = useMovieContext();
 
@@ -94,7 +102,11 @@ const MovieForm: React.FC = () => {
             movie_category_id: movieData.movie_category.map((cat: any) => cat.id) || [],
             actor_id: movieData.actor.map((act: any) => act.id) || [],
             director_id: movieData.director.map((dir: any) => dir.id) || [],
+            country: movieData.country || '', // Fetch and set country
+            trailer: movieData.trailer || '', // Fetch and set trailer
           });
+          setCountry(movieData.country || '');  // Set country state correctly
+          setTrailer(movieData.trailer || '');  // Set trailer state correctly
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -108,6 +120,9 @@ const MovieForm: React.FC = () => {
     const updatedData = {
       ...data,
       posterFile,
+      thumbnailFile,
+      country,
+      trailer,
     };
 
     await addOrUpdateMovie(updatedData, id);
@@ -275,6 +290,29 @@ const MovieForm: React.FC = () => {
           {errors.duration && <p className="text-danger">{errors.duration.message}</p>}
         </div>
 
+        {/* Country */}
+        <div className="mb-3">
+          <label className="form-label">Quốc gia</label>
+          <input
+            type="text"
+            className="form-control"
+            {...register('country')}
+          />
+          {errors.country && <p className="text-danger">{errors.country.message}</p>}
+        </div>
+
+        {/* Trailer */}
+        <div className="mb-3">
+          <label className="form-label">Trailer (URL)</label>
+          <input
+            type="text"
+            className="form-control"
+            value={trailer}
+            onChange={(e) => setTrailer(e.target.value)}
+          />
+          {errors.trailer && <p className="text-danger">{errors.trailer.message}</p>}
+        </div>
+
         {/* Poster File */}
         <div className="mb-3">
           <label className="form-label">Poster</label>
@@ -282,6 +320,15 @@ const MovieForm: React.FC = () => {
             type="file"
             className="form-control"
             onChange={(e) => setPosterFile(e.target.files?.[0] || null)}
+          />
+        </div>
+          {/* Thumbnail */}
+          <div className="mb-3">
+          <label className="form-label">Thumbnail</label>
+          <input
+            type="file"
+            className="form-control"
+            onChange={(e) => setThumbnailFile(e.target.files?.[0] || null)}
           />
         </div>
 

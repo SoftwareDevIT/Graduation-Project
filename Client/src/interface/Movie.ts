@@ -14,7 +14,10 @@ export interface Movie {
     age_limit: number | null;
     description: string | null;
     trailer: string | null;
+    country: string | null;
     rating: string | null;
+    views: number | null;
+    like: number | null;
     status: number; // Số nguyên từ API trả về (1: Show, 0: Hidden)
     actor: Actor[];
     movie_category: MovieCategory[]; // Mảng các đối tượng danh mục phim chứa category_name

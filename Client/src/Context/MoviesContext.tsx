@@ -94,6 +94,8 @@ export const MovieProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     formData.append("age_limit", data.age_limit);
     formData.append("description", data.description);
     formData.append("duration", data.duration);
+    formData.append("trailer", data.trailer);
+    formData.append("country", data.country);
 
     if (id) {
       formData.append("_method", "put");
@@ -101,6 +103,9 @@ export const MovieProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
     if (data.posterFile) {
       formData.append("poster", data.posterFile);
+    }
+    if (data.thumbnailFile) {
+      formData.append("thumbnail", data.thumbnailFile);
     }
 
     try {

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useCategoryContext } from '../../../Context/CategoriesContext';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { notification } from 'antd'; // Import the notification component
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -66,7 +66,7 @@ const CategoriesDashboard = () => {
         <div className="container mt-5">
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Link to={'/admin/categories/add'} className="btn btn-outline-primary">
-                   + Thêm Thể Loại Phim
+                <FontAwesomeIcon icon={faPlus} /> Thêm Thể Loại Phim
                 </Link>
                 <input
                     type="text"

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useComboContext } from '../../../Context/ComboContext';
 import instance from '../../../server';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { notification } from 'antd'; // Import notification from Ant Design
 
 const ComboDashboard: React.FC = () => {
@@ -80,7 +80,7 @@ const ComboDashboard: React.FC = () => {
         <div className="container mt-5">
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Link to={'/admin/combo/add'} className="btn btn-outline-primary">
-                    + Thêm Combo
+                <FontAwesomeIcon icon={faPlus} /> Thêm Combo
                 </Link>
                 <input 
                     type="text" 
