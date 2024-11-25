@@ -86,26 +86,86 @@ const UserDashboard: React.FC = () => {
                 </table>
             </div>
             <nav className="d-flex justify-content-center mt-4">
-                <ul className="pagination">
-                    <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                        <button className="page-link" onClick={() => setCurrentPage(currentPage - 1)}>
-                            Trước
+    <ul className="pagination">
+        {/* Nút Trước */}
+        <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+            <button className="page-link" onClick={() => setCurrentPage(currentPage - 1)}>
+                Trước
+            </button>
+        </li>
+
+        {/* Hiển thị các trang */}
+        {(() => {
+            const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
+            const maxPagesToShow = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
+            let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
+
+            if (endPage - startPage + 1 < maxPagesToShow) {
+                startPage = Math.max(1, endPage - maxPagesToShow + 1);
+            }
+
+            const pages = [];
+            if (startPage > 1) {
+                pages.push(
+                    <li key={1} className="page-item">
+                        <button className="page-link" onClick={() => paginate(1)}>
+                            1
                         </button>
                     </li>
-                    {Array.from({ length: Math.ceil(filteredUsers.length / usersPerPage) }, (_, index) => (
-                        <li key={index + 1} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
-                            <button className="page-link" onClick={() => paginate(index + 1)}>
-                                {index + 1}
-                            </button>
+                );
+                if (startPage > 2) {
+                    pages.push(
+                        <li key="start-ellipsis" className="page-item disabled">
+                            <span className="page-link">...</span>
                         </li>
-                    ))}
-                    <li className={`page-item ${indexOfLastUser >= filteredUsers.length ? 'disabled' : ''}`}>
-                        <button className="page-link" onClick={() => setCurrentPage(currentPage + 1)}>
-                            Tiếp
+                    );
+                }
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                pages.push(
+                    <li key={i} className={`page-item ${currentPage === i ? 'active' : ''}`}>
+                        <button className="page-link" onClick={() => paginate(i)}>
+                            {i}
                         </button>
                     </li>
-                </ul>
-            </nav>
+                );
+            }
+
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    pages.push(
+                        <li key="end-ellipsis" className="page-item disabled">
+                            <span className="page-link">...</span>
+                        </li>
+                    );
+                }
+                pages.push(
+                    <li key={totalPages} className="page-item">
+                        <button className="page-link" onClick={() => paginate(totalPages)}>
+                            {totalPages}
+                        </button>
+                    </li>
+                );
+            }
+
+            return pages;
+        })()}
+
+        {/* Nút Tiếp */}
+        <li
+            className={`page-item ${
+                indexOfLastUser >= filteredUsers.length ? 'disabled' : ''
+            }`}
+        >
+            <button className="page-link" onClick={() => setCurrentPage(currentPage + 1)}>
+                Tiếp
+            </button>
+        </li>
+    </ul>
+</nav>
+
         </div>
     );
 };
