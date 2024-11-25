@@ -53,7 +53,6 @@ class MovieSeeder extends Seeder
                 'description' => $item['description'],
                 'trailer' => $item['trailer'],
                 'views' => rand(20, 50),
-                'like' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

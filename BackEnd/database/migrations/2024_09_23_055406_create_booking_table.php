@@ -16,8 +16,6 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('showtime_id');
             $table->unsignedBigInteger('pay_method_id');
-            $table->double('price_ticket')->nullable();
-            $table->double('price_combo')->nullable();
             $table->double('amount');
             $table->enum('status', ['Pending', 'Confirmed', 'Pain'])->default('Pending');
             $table->timestamps();
