@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import instance from '../../../server';
 import { Movie } from '../../../interface/Movie';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';  // Import các style
 import { notification } from 'antd';  // Import Ant Design notification
@@ -13,11 +13,12 @@ const MoviesDashboard: React.FC = () => {
     const { state, dispatch } = useMovieContext();
     const { movies } = state;
 
-    // Trạng thái error
     const [error, setError] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [moviesPerPage] = useState<number>(5);
+    const [showDescription, setShowDescription] = useState<boolean>(false);
+    const [showLikesViews, setShowLikesViews] = useState<boolean>(false); // State to control likes and views columns visibility
 
     useEffect(() => {
         const fetchMovies = async () => {
@@ -57,7 +58,6 @@ const MoviesDashboard: React.FC = () => {
     const indexOfLastMovie = currentPage * moviesPerPage;
     const indexOfFirstMovie = indexOfLastMovie - moviesPerPage;
 
-    // Lọc phim theo từ khóa tìm kiếm
     const filteredMovies = Array.isArray(movies) 
         ? movies.filter(movie => 
             movie.movie_name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -72,11 +72,16 @@ const MoviesDashboard: React.FC = () => {
 
     const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
+    // Handle click on image to toggle visibility of description, likes, and views
+    const handleImageClick = () => {
+        setShowDescription(prevState => !prevState);
+        setShowLikesViews(prevState => !prevState); // Toggle the likes/views columns
+    };
+
     return (
         <div className="container mt-5">
-            <h2 className="text-center text-primary mb-4">Bảng điều khiển Phim</h2>
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <Link to={`/admin/movies/add`} className="btn btn-outline-primary">+ Thêm Phim Mới</Link>
+                <Link to={`/admin/movies/add`} className="btn btn-outline-primary"><FontAwesomeIcon icon={faPlus} /> Thêm Phim Mới</Link>
                 <input
                     type="text"
                     placeholder="Tìm kiếm theo tên phim"
@@ -96,7 +101,9 @@ const MoviesDashboard: React.FC = () => {
                             <th>Diễn Viên</th>
                             <th>Đạo Diễn</th>
                             <th>Thời Lượng</th>
-                            <th>Mô Tả</th>
+                            <th style={{ display: showLikesViews ? 'table-cell' : 'none' }}>Lượt Thích</th> {/* Show Likes column */}
+                            <th style={{ display: showLikesViews ? 'table-cell' : 'none' }}>Lượt Xem</th> {/* Show Views column */}
+                            <th style={{ display: showDescription ? 'table-cell' : 'none' }}>Mô Tả</th>
                             <th>Hành Động</th>
                         </tr>
                     </thead>
@@ -105,23 +112,29 @@ const MoviesDashboard: React.FC = () => {
                             currentMovies.map((movie: Movie) => (
                                 <tr key={movie.id}>
                                     <td>{movie.id}</td>
-                                    <td  className="truncate-text"style={{ maxWidth: '150px' }} >{movie.movie_name}</td>
+                                    <td className="truncate-text" style={{ maxWidth: '150px' }}>{movie.movie_name}</td>
                                     <td>
-                                        <img src={movie.poster ?? undefined} style={{ width: "80px", height: "120px", objectFit: 'cover' }} alt={`${movie.movie_name} poster`} />
+                                        <img 
+                                            src={movie.poster ?? undefined} 
+                                            style={{ width: "120px", height: "180px", objectFit: 'cover' }} 
+                                            alt={`${movie.movie_name} poster`} 
+                                            onClick={handleImageClick} 
+                                        />
                                     </td>
                                     <td>{movie.movie_category.map(movie_category => movie_category.category_name).join(', ')}</td>
                                     <td>{movie.actor.map(actor => actor.actor_name).join(', ')}</td>
                                     <td>{movie.director.map(director => director.director_name).join(', ')}</td>
                                     <td>{movie.duration}</td>
-                                    <td >
-                                        {/* Sử dụng ReactQuill để hiển thị mô tả */}
-                                            <ReactQuill 
-                                                value={movie.description ?? ''}
-                                                readOnly={true} 
-                                                theme="snow" 
-                                                modules={{ toolbar: false }}
-                                                formats={['bold', 'underline', 'link']}
-                                            />
+                                    <td style={{ display: showLikesViews ? 'table-cell' : 'none' }}>{movie.like}</td> {/* Show Likes */}
+                                    <td style={{ display: showLikesViews ? 'table-cell' : 'none' }}>{movie.views}</td> {/* Show Views */}
+                                    <td style={{ display: showDescription ? 'table-cell' : 'none' }}>
+                                        <ReactQuill 
+                                            value={movie.description ?? ''} 
+                                            readOnly={true} 
+                                            theme="snow" 
+                                            modules={{ toolbar: false }} 
+                                            formats={['bold', 'underline', 'link']}
+                                        />
                                     </td>
                                     <td>
                                         <div className="d-flex justify-content-around">
@@ -146,7 +159,6 @@ const MoviesDashboard: React.FC = () => {
                     </tbody>
                 </table>
             </div>
-            {/* Phần phân trang */}
             <nav className="d-flex justify-content-center mt-4">
                 <ul className="pagination">
                     <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>

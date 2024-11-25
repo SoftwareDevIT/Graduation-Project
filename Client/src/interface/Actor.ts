@@ -1,5 +1,9 @@
 export interface Actor {
     id: number;
     actor_name: string;
-    // các trường khác nếu cần
+    slug: string;
+    country: string;
+    photo: string | null;
+    link_wiki: string;
+    descripcion: string | null;
   }

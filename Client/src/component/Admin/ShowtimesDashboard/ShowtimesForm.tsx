@@ -6,7 +6,7 @@ import { useShowtimeContext } from '../../../Context/ShowtimesContext';
 import instance from '../../../server';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Cinema } from '../../../interface/Cinema';
-import { CinemaRoom } from '../../../interface/Room';
+import { Room } from '../../../interface/Room';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { notification } from 'antd';
@@ -16,20 +16,30 @@ const showtimeSchema = z.object({
       .min(1, 'Vui lòng chọn phim'),
     room_id: z
       .string()
-      .min(1, 'Vui lòng chọn phòng')
-      ,
-    showtime_date: z.string().min(1, 'Vui lòng chọn ngày chiếu'),
-    showtime_start: z.string().min(1, 'Vui lòng chọn giờ bắt đầu'),
+      .min(1, 'Vui lòng chọn phòng'),
+    showtime_date: z.string().min(1, 'Vui lòng chọn ngày chiếu')
+      .refine((val) => {
+        const selectedDate = new Date(val);
+        const currentDate = new Date();
+        return selectedDate >= currentDate;
+      }, 'Ngày chiếu không được nhỏ hơn ngày hiện tại'),
+    showtime_start: z.string().min(1, 'Vui lòng chọn giờ bắt đầu')
+      .refine((val) => {
+        const selectedTime = new Date(`${new Date().toLocaleDateString()} ${val}`);
+        const currentTime = new Date();
+        return selectedTime >= currentTime;
+      }, 'Giờ bắt đầu không được nhỏ hơn giờ hiện tại'),
     showtime_end: z.string().min(1, 'Vui lòng chọn giờ kết thúc'),
     price: z
       .number()
       .min(0, 'Giá phải lớn hơn hoặc bằng 0')
+      .max(500000, 'Giá không được lớn hơn 500k')
       .optional(),
-      cinema_id: z
-    .string()
-    .min(1, 'Vui lòng chọn rạp')
-    
+    cinema_id: z
+      .string()
+      .min(1, 'Vui lòng chọn rạp')
   });
+  
   
 const ShowtimesForm: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -42,7 +52,7 @@ const ShowtimesForm: React.FC = () => {
     // State variables
     const [cinemasList, setCinemasList] = useState<Cinema[]>([]);
     const [movieInCinemas, setMovieInCinemas] = useState<any[]>([]);
-    const [roomsList, setRoomsList] = useState<CinemaRoom[]>([]);
+    const [roomsList, setRoomsList] = useState<Room[]>([]);
     const [cinemaId, setCinemaId] = useState<number | null>(null);
     const [showtimesList, setShowtimesList] = useState<Showtime[]>([]);
 

@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { notification } from 'antd'; // Import notification from Ant Design
 import instance from '../../../server';
-import { CinemaRoom } from '../../../interface/Room';
+import { Room } from '../../../interface/Room';
 
 const RoomDashboard: React.FC = () => {
-  const [rooms, setRooms] = useState<CinemaRoom[]>([]);
+  const [rooms, setRooms] = useState<Room[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filteredRooms, setFilteredRooms] = useState<CinemaRoom[]>([]);
+  const [filteredRooms, setFilteredRooms] = useState<Room[]>([]);
   const roomsPerPage = 11; // Số lượng phòng hiển thị mỗi trang
 
   useEffect(() => {
@@ -98,10 +98,10 @@ const RoomDashboard: React.FC = () => {
 
   return (
     <div className="container mt-5">
-      <h2 className="text-center text-primary mb-4">Tất Cả Các Phòng</h2>
+
       <div className="d-flex justify-content-between align-items-center mb-4">
         <Link to={'/admin/rooms/add'} className="btn btn-outline-primary">
-         + Thêm Phòng
+        <FontAwesomeIcon icon={faPlus} /> Thêm Phòng
         </Link>
         <input
           type="text"

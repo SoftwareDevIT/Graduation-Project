@@ -2,13 +2,13 @@ import React, { createContext, useReducer, useContext, ReactNode } from 'react';
 import instance from '../server';
 import { Showtime } from '../interface/Showtimes';
 import { Cinema } from '../interface/Cinema';
-import { CinemaRoom } from '../interface/Room';
+import { Room } from '../interface/Room';
 
 interface ShowtimeState {
     showtimes: Showtime[];
     cinemas: Cinema[];
     movieInCinemas: any[];
-    rooms: CinemaRoom[];
+    rooms: Room[];
 }
 
 interface ShowtimeAction {
@@ -100,8 +100,8 @@ export const ShowtimeProvider: React.FC<{ children: ReactNode }> = ({ children }
 
     const fetchShowtimes = async () => {
         try {
-            const response = await instance.get<{ data: Showtime[] }>('/showtimes');
-            dispatch({ type: 'SET_SHOWTIMES', payload: response.data.data });
+            const response = await instance.get('/showtimes');
+            dispatch({ type: 'SET_SHOWTIMES', payload: response.data.data.data });
         } catch (error) {
             console.error('Error fetching showtimes:', error);
         }
