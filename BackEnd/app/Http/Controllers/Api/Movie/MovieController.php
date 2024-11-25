@@ -15,6 +15,7 @@ use App\Services\Movie\MovieService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use League\Flysystem\WhitespacePathNormalizer;
@@ -195,7 +196,7 @@ class MovieController extends Controller
                 $startOfWeek = $today->copy()->addDays($i * 7);
                 $endOfWeek = $startOfWeek->copy()->addDays(6);
 
-                $movies = Movie::whereBetween('release_date', [$startOfWeek, $endOfWeek])->get();
+                $movies = Movie::whereBetween('release_date', [$startOfWeek, $endOfWeek])->paginate(5);
 
                 // Tuần nào có phim sẽ hiển thị
                 if ($movies->isNotEmpty()) {
@@ -245,6 +246,38 @@ class MovieController extends Controller
 
             return $this->success($movies, 'Danh sách phim phổ biến: ', 200);
             // return $this->success($moviesByWeek, 'Danh sách phim sắp chiếu: ', 200);
+        } catch (Exception $e) {
+            return $this->error('Lỗi: ' . $e->getMessage(), 500);
+        }
+    }
+
+    public function getComingSoonMovie()
+    {
+        try {
+            $movies = Movie::whereHas('movieInCinemas.showtimes', function ($query) {
+                $query->whereColumn('showtimes.showtime_date', '<', 'movies.release_date');
+            })->with(['movieInCinemas.showtimes' => function ($query) {
+                $query->orderBy('showtime_date', 'asc');
+            }])
+                ->paginate(5);
+
+            $moviesWithMinShowtime = $movies->map(function ($movie) {
+                $minShowtime = $movie->movieInCinemas->flatMap->showtimes->min('showtime_date');
+                return [
+                    'movie' => $movie,
+                    'min_showtime_date' => $minShowtime,
+                ];
+            });
+
+            $paginatedResult = new LengthAwarePaginator(
+                $moviesWithMinShowtime,
+                $movies->total(),
+                $movies->perPage(),
+                $movies->currentPage(),
+                ['path' => request()->url(), 'query' => request()->query()]
+            );
+
+            return $this->success($paginatedResult, 'Danh sách phim chiếu sớm: ', 200);
         } catch (Exception $e) {
             return $this->error('Lỗi: ' . $e->getMessage(), 500);
         }
