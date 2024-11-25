@@ -5,7 +5,7 @@ import { useCinemaContext } from '../../../Context/CinemasContext';
 import { Movie } from '../../../interface/Movie';
 import { MovieInCinema } from '../../../interface/MovieInCinema'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; 
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'; 
+import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'; 
 import { notification } from 'antd';  // Import notification from Ant Design
 
 const CinemasDashboard: React.FC = () => {
@@ -153,9 +153,9 @@ const CinemasDashboard: React.FC = () => {
 
     return (
         <div className="container mt-5">
-            <h2 className="text-center text-primary mb-4">Quản Lí Rạp Chiếu Phim</h2>
+        
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <Link to={'/admin/cinemas/add'} className="btn btn-outline-primary">+ Thêm Rạp</Link>
+                <Link to={'/admin/cinemas/add'} className="btn btn-outline-primary"><FontAwesomeIcon icon={faPlus} /> Thêm Rạp</Link>
                 <input
                     type="text"
                     placeholder="Tìm kiếm theo tên"

@@ -15,6 +15,7 @@ const cinemaSchema = z.object({
   phone: z
     .string()
     .min(10, "Số điện thoại phải có ít nhất 10 chữ số.")
+    .max(10, "Số điện thoại tối đã 10 chữ số.")
     .regex(/^[0-9]+$/, "Số điện thoại phải là số."),
   cinema_address: z.string().min(1, "Địa chỉ rạp là bắt buộc."),
   location_id: z.string().nonempty("ID vị trí là bắt buộc."),

@@ -10,7 +10,7 @@ import { notification } from 'antd'; // Import Ant Design notification
 
 // Define the Zod schema for validation
 const postSchema = z.object({
-  title: z.string().min(1, 'Tiêu đề là bắt buộc'), // Title is required
+  title: z.string().min(1, 'Tiêu đề là bắt buộc').max(100,'Tiêu đề tối đa 100 ký tự'), // Title is required
   news_category_id: z.string().min(1, 'Chọn một danh mục'), // Category is required
   content: z.string().min(1, 'Nội dung là bắt buộc'), // Content is required
 });
