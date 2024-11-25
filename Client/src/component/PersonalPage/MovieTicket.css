@@ -1,6 +1,6 @@
 .ticket-tong{
     display: grid; /* Thay đổi từ flex sang grid */
-    grid-template-columns: repeat(2, 1fr); /* Chia thành 3 cột */
+    grid-template-columns: repeat(3, 1fr); /* Chia thành 3 cột */
     justify-content: center; /* Căn giữa các phần tử nếu cần */
     margin: 0 auto; /* Giữ các vé cân đối trong container */
 }
@@ -15,22 +15,7 @@
     margin: 60px;
     transition: all 0.3s ease-in-out;
 }
-.no-tickets-form {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 200px; /* Tùy chỉnh chiều cao */
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-  }
-  
-  .no-tickets-message {
-    font-size: 16px;
-    color: #555;
-    text-align: center;
-  }
-  
+
 /* Header vé */
 .ticket-header {
     display: flex;
@@ -125,60 +110,21 @@
     margin-top: 10px;
     text-align: center;
 }
-.ticket-seat {
-    white-space: nowrap; /* Ngăn xuống dòng */
-    overflow: hidden; /* Ẩn phần nội dung tràn */
-    text-overflow: ellipsis; /* Hiển thị dấu "..." nếu nội dung quá dài */
-    max-width: 100%; /* Giới hạn chiều rộng theo vé */
-  }
-  
-  
+
 /* QR Code */
-/* QR Code Container */
 .ticket-qr {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
-    margin-top: 20px;
+    margin-top: 30px;
 }
 
-.qr-wrapper {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 15px;
-    background: #fff; /* Nền trắng */
-    border: 3px solid #f39c12; /* Viền vàng nổi bật */
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Bóng đổ nhẹ */
+.ticket-qr .ant-qr {
+    border: 4px solid #ff8c00; /* Viền cam sáng cho QR */
+    border-radius: 12px;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Bóng đổ nhẹ cho QR */
 }
-
-.qr-image {
-    width: 180px; /* Kích thước QR */
-    height: 180px;
-    object-fit: contain;
-    border-radius: 8px; /* Bo góc QR */
-}
-
-.qr-note {
-    margin-top: 10px;
-    font-size: 14px;
-    color: #555; /* Màu chữ nhẹ */
-    text-align: center;
-    font-style: italic;
-}
-
-.qr-placeholder {
-    font-size: 14px;
-    color: #999; /* Màu chữ mờ */
-    text-align: center;
-    font-style: italic;
-}
-
-
-
 
 /* Định dạng tổng tiền */
 .grand-total {
@@ -229,16 +175,5 @@
         max-height: 200px; /* Giảm chiều cao banner */
     }
 
-    .qr-wrapper {
-        padding: 10px;
-    }
-
-    .qr-image {
-        width: 140px;
-        height: 140px;
-    }
-
-    .qr-note {
-        font-size: 12px;
-    }
+  
 }
