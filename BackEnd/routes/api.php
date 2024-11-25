@@ -146,6 +146,7 @@ Route::get('/movie/{category}', [MovieController::class, 'movieByCategory']);   
 Route::get('/new/{category}', [NewController::class, 'newByCategory']);                             // Lọc chuyên đề theo thể loại
 
 Route::get('/fillMovies/upcoming', [MovieController::class, 'getUpcomingMovies']);                  // Lọc Phim sắp chiếu
+Route::get('/fillMovies/comingSoon', [MovieController::class, 'getComingSoonMovie']);                  // Lọc Phim chiếu sớm
 Route::get('/filterByDateByMovie', [FilterByDateController::class, 'filterByDateByMovie']);         // lọc rạp theo phim và ngày và khu vực
 Route::get('cinema-by-location/{id}', [CinemaController::class, 'showCinemaByLocation']);
 Route::get('filterMovieByNew', [FilterMovieByNewController::class, 'filterMovieByNew']);
