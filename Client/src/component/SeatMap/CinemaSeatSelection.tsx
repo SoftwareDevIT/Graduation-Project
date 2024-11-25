@@ -189,14 +189,28 @@ let totalAssignedBasicSeats = 0; // Tổng số ghế BASIC đã phân bổ
     (acc, selectedSeatsInRow) => acc + selectedSeatsInRow.length,
     0
   );
+const calculatePrice = () => {
+  let totalPrice = 0;
 
-  const hours = showtime.split(":")[0];
+  selectedSeats.forEach((indices, row) => {
+    indices.forEach((index) => {
+      const seatType = seatRows.find((r) => r.row === row)?.seats[index];
+      if (seatType === "VIP") {
+        totalPrice += price * 1.5; // Giá vé VIP
+      } else if (seatType === "COUPLE") {
+        totalPrice += price * 2; // Giá vé đôi
+      } else {
+        totalPrice += price; // Giá vé thường
+      }
+    });
+  });
 
-  let price_ticket = 0;
+  return totalPrice;
+};
 
-  price_ticket = price;
+const totalPrice = calculatePrice();
 
-  const totalPrice = totalSelectedSeats * price_ticket;
+ 
 
   // Hàm submit xử lý việc đẩy dữ liệu
   // Hàm submit xử lý việc đẩy dữ liệu

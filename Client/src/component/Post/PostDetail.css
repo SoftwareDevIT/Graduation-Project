@@ -85,7 +85,10 @@
   margin-right: 50px;
   margin-top: 25px;
 }
-
+.article-button a{
+  text-decoration: none;
+  color: #fff;
+}
 .article-paragraph {
   font-size: 16px;
   line-height: 1.6;
@@ -206,8 +209,8 @@
   font-weight: 400;
 }
 
-.card-body {
-  display: flex !important;
+.card-body-1 {
+ 
   align-items: center;
   gap: 15px;
   background-color: white;
@@ -220,7 +223,7 @@
   object-fit: cover;
 }
 
-.card-body p {
+.card-body-1 p {
   margin: 0;
   font-size: 14px;
   font-weight: bold;
@@ -421,8 +424,8 @@
   color: #12263f;
 }
 
-.card-body {
-  display: flex;
+.card-body-1 {
+
   align-items: center;
   gap: 15px;
   background-color: white;
@@ -435,7 +438,7 @@
   object-fit: cover;
 }
 
-.card-body p {
+.card-body-1 p {
   margin: 0;
   font-size: 14px;
   font-weight: bold;

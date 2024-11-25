@@ -69,6 +69,7 @@ import RoomsFormManager from "./Page/Admin/Rooms/RoomsForm";
 import Video from "./component/News/Video";
 import FilmNews from "./component/News/FilmNews";
 import MovieTicket from "./component/PersonalPage/MovieTicket";
+import UpcomingMovies from "./component/Movies/UpcomingMovies";
 
 
 
@@ -120,6 +121,7 @@ function App() {
       
     
        
+        <Route path="/upcoming-movies" element={<UpcomingMovies />} />
         <Route path="/movieshowing" element={<MovieShowing />} />
         <Route path="/movieticket" element={<MovieTicket />} />
 

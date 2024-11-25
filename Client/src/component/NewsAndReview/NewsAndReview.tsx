@@ -52,7 +52,7 @@ const NewsAndReview = () => {
              <Link to={`/postdetail/${review.id}`}>
                 <h3>{review.title}</h3>
               </Link>
-            <span className="time">{review.user.fullname}</span> 
+            <span className="time">{review.user.fullname}• {new Date(review.created_at).toLocaleDateString()}</span>  
             
           </div>
         ))}

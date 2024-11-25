@@ -88,7 +88,7 @@ const MovieDetail: React.FC = () => {
         console.log("Movie ID to be deleted:", movie?.id);
       } else {
         await instance.post(
-          `/favorites`,
+          `/favorites/${movie?.id}`,
           
           {
             headers: {
@@ -172,7 +172,7 @@ const MovieDetail: React.FC = () => {
                   </div>
                   <div className="button rate" onClick={() => setRatingData((prev) => ({ ...prev, isModalVisible: true }))}>
                     <FontAwesomeIcon icon={faStar} color={userStatus.isRated ? "#FFD700" : "#ccc"} />
-                    <span>Đánh giá</span>
+                    <span >Đánh giá</span>
                   </div>
                   <div className="button trailer" onClick={() => setIsTrailerVisible(true)}>Trailer</div>
                   <div className="button buy">

@@ -1,90 +1,117 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import './PostDetail.css';
-import Footer from '../Footer/Footer';
-import Header from '../Header/Hearder';
-import { NewsItem } from '../../interface/NewsItem';
-import instance from '../../server';
-import { extractLinks, stripHtml } from '../../assets/Font/quillConfig';
-import dayjs from 'dayjs'; 
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import "./PostDetail.css";
+import Footer from "../Footer/Footer";
+import Header from "../Header/Hearder";
+import { NewsItem } from "../../interface/NewsItem";
+import instance from "../../server";
+import { extractLinks, stripHtml } from "../../assets/Font/quillConfig";
+import dayjs from "dayjs";
 
 const PostDetail: React.FC = () => {
-    const { id } = useParams<{ id: string }>();
-    const [article, setArticle] = useState<NewsItem | null>(null);
-    const [loading, setLoading] = useState(true);
+  const { id } = useParams<{ id: string }>();
+  const [article, setArticle] = useState<NewsItem | null>(null);
 
-    useEffect(() => {
-        const fetchArticle = async () => {
-            try {
-                const response = await instance.get(`/news/${id}`);
-                setArticle(response.data.data);
-            } catch (error) {
-                console.error("Error fetching article:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
+  const [relatedPosts, setRelatedPosts] = useState<any[]>([]);
 
-        fetchArticle();
-    }, [id]);
+  useEffect(() => {
+    const fetchArticle = async () => {
+      try {
+        const response = await instance.get(`/news/${id}`);
+        setArticle(response.data.data);
 
-    if (loading) {
-        return <p>Loading...</p>;
-    }
+        // Fetch related posts
+        const relatedResponse = await instance.get(
+          `/filterNewByMovie/${response.data.data.movie.id}`
+        );
+        if (relatedResponse.data.status) {
+          setRelatedPosts(relatedResponse.data.data);
+        }
+        console.log(relatedResponse);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+      }
+    };
 
-    if (!article) {
-        return <p>Không tìm thấy bài viết</p>;
-    }
+    fetchArticle();
+  }, [id]);
 
-    // Định dạng ngày tháng
-    const formattedDate = dayjs(article.created_at).format('DD/MM/YYYY HH:mm');
-   
-    return (
-        <>
-            <Header />
-            <div className="article-container">
-                <div className="main-content">
-                    <h1 className="article-title">{article.title}</h1>
-                    <p className="article-meta">
-                        {article.news_category.news_category_name} · {formattedDate}
-                    </p>
+  if (!article) {
+    return <p>Không tìm thấy bài viết</p>;
+  }
 
-                    <div className="article-content-container">
-                        <img src={article.thumnail} alt="Poster" className="article-poster" />
-                        <div className="article-movie-info">
-                            <h2>{stripHtml(article.title)}</h2>
-                            {/* Bạn có thể thêm các thông tin khác nếu cần */}
-                        </div>
-                        <button className="article-button">Mua vé ngay</button>
-                    </div>
+  // Định dạng ngày tháng
+  const formattedDate = dayjs(article.created_at).format("DD/MM/YYYY ");
 
-                    <p className="article-description">{stripHtml(article.content)}</p>
-              
-                    {/* Nếu bạn muốn giữ lại nội dung ban đầu, bạn có thể thêm phần nội dung ở đây */}
-                </div>
+  return (
+    <>
+      <Header />
+      <div className="article-container">
+        <div className="main-content">
+          <h1 className="article-title">{article.title}</h1>
+          <p className="article-meta">
+            {article.news_category.news_category_name} · {formattedDate}
+          </p>
 
-                <div className="card card-article">
-                    <div className="card-header ">
-                        <div className='card-header-title'><p>Bài viết liên quan</p></div>
-                    </div>
-                    <div className="card-body">
-                        <div className='row'>
-                            <div className='col-auto'>
-                                <img src="https://cdn.moveek.com/storage/media/cache/medium/66fbd1877a77f600683533.png" alt="Related" className="related-image" />
-                            </div>
-                        </div>
-                        <div>
-                            <p>Ra rạp xem gì tháng 10? – Mùa phim hành động, kinh dị hoành tráng</p>
-                            <p className="related-meta">miduynph · 25 ngày trước</p>
-                        </div>
-                    </div>
-                    
-                </div>
-                
+          <div className="article-content-container">
+            <img
+              src={article.movie.poster || undefined}
+              alt="Poster"
+              className="article-poster"
+            />
+            <div className="article-movie-info">
+              <h2>{stripHtml(article.movie.movie_name)}</h2>
+
+              <span>khởi chiếu:{article.movie.release_date}</span>
+              {/* Bạn có thể thêm các thông tin khác nếu cần */}
             </div>
-            <Footer />
-        </>
-    );
+            <button className="article-button">
+              <Link to={`/movie-detail/${article.movie.slug}`}>
+                Mua vé ngay
+              </Link>
+            </button>
+          </div>
+
+          <p className="article-description">{stripHtml(article.content)}</p>
+
+          {/* Nếu bạn muốn giữ lại nội dung ban đầu, bạn có thể thêm phần nội dung ở đây */}
+        </div>
+
+        <div className="card card-article">
+          <div className="card-header ">
+            <div className="card-header-title">
+              <p>Bài viết liên quan</p>
+            </div>
+          </div>
+          {relatedPosts.map((post) => (
+            <div className="card-body-1">
+              <div className="row">
+                <div className="col-auto">
+                  <img
+                    src={post.thumnail}
+                    alt={post.title}
+                    className="post-image"
+                  />
+                </div>
+              </div>
+              <div>
+              
+                <p className="post-meta-2">
+                  {stripHtml(post.content.slice(0, 150))}...
+                </p>
+                {/* <p className="post-meta">
+                  Đánh giá phim • {post.user_name} •{" "}
+                  {dayjs(post.created_at).format("DD/MM/YYYY")}
+                </p> */}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <Footer />
+    </>
+  );
 };
 
 export default PostDetail;

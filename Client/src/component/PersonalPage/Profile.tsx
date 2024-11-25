@@ -148,7 +148,7 @@ const Profile: React.FC = () => {
                     <span className="account-nav-title">Tủ phim</span>
                   </div>
                   <div className="account-nav-item">
-                    <span className="account-nav-title">Vé</span>
+                    <span className="account-nav-title"><Link to={"/movieticket"}>Vé</Link></span>
                   </div>
                   <div className="account-nav-item">
                     <span className="account-nav-title"><Link to={"/changepassword"}>Đổi mật khẩu</Link></span>
