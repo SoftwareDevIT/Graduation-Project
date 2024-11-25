@@ -2,13 +2,13 @@ import React, { createContext, useReducer, useContext, ReactNode } from 'react';
 import instance from '../server';
 import { Showtime } from '../interface/Showtimes';
 import { Cinema } from '../interface/Cinema';
-import { CinemaRoom } from '../interface/Room';
+import { Room } from '../interface/Room';
 
 interface ShowtimeState {
     showtimes: Showtime[];
     cinemas: Cinema[];
     movieInCinemas: any[];
-    rooms: CinemaRoom[];
+    rooms: Room[];
 }
 
 interface ShowtimeAction {

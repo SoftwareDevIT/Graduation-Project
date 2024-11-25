@@ -18,6 +18,7 @@ const MoviesDashboard: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [moviesPerPage] = useState<number>(5);
+    const [showDescription, setShowDescription] = useState<boolean>(false); // Trạng thái hiển thị mô tả
 
     useEffect(() => {
         const fetchMovies = async () => {
@@ -72,6 +73,11 @@ const MoviesDashboard: React.FC = () => {
 
     const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
+    // Hàm toggle ẩn/hiện mô tả
+    const handleImageClick = () => {
+        setShowDescription(prevState => !prevState);
+    };
+
     return (
         <div className="container mt-5">
         
@@ -96,7 +102,8 @@ const MoviesDashboard: React.FC = () => {
                             <th>Diễn Viên</th>
                             <th>Đạo Diễn</th>
                             <th>Thời Lượng</th>
-                            <th>Mô Tả</th>
+                            {/* Ẩn cột mô tả nếu `showDescription` là false */}
+                            <th style={{ display: showDescription ? 'table-cell' : 'none' }}>Mô Tả</th>
                             <th>Hành Động</th>
                         </tr>
                     </thead>
@@ -105,23 +112,27 @@ const MoviesDashboard: React.FC = () => {
                             currentMovies.map((movie: Movie) => (
                                 <tr key={movie.id}>
                                     <td>{movie.id}</td>
-                                    <td  className="truncate-text"style={{ maxWidth: '150px' }} >{movie.movie_name}</td>
+                                    <td className="truncate-text" style={{ maxWidth: '150px' }} >{movie.movie_name}</td>
                                     <td>
-                                        <img src={movie.poster ?? undefined} style={{ width: "80px", height: "120px", objectFit: 'cover' }} alt={`${movie.movie_name} poster`} />
+                                        <img 
+                                            src={movie.poster ?? undefined} 
+                                            style={{ width: "120px", height: "180px", objectFit: 'cover' }} 
+                                            alt={`${movie.movie_name} poster`} 
+                                            onClick={handleImageClick}  // Thêm sự kiện click vào ảnh
+                                        />
                                     </td>
                                     <td>{movie.movie_category.map(movie_category => movie_category.category_name).join(', ')}</td>
                                     <td>{movie.actor.map(actor => actor.actor_name).join(', ')}</td>
                                     <td>{movie.director.map(director => director.director_name).join(', ')}</td>
                                     <td>{movie.duration}</td>
-                                    <td >
-                                        {/* Sử dụng ReactQuill để hiển thị mô tả */}
-                                            <ReactQuill 
-                                                value={movie.description ?? ''}
-                                                readOnly={true} 
-                                                theme="snow" 
-                                                modules={{ toolbar: false }}
-                                                formats={['bold', 'underline', 'link']}
-                                            />
+                                    <td style={{ display: showDescription ? 'table-cell' : 'none' }}>
+                                        <ReactQuill 
+                                            value={movie.description ?? ''} 
+                                            readOnly={true} 
+                                            theme="snow" 
+                                            modules={{ toolbar: false }} 
+                                            formats={['bold', 'underline', 'link']}
+                                        />
                                     </td>
                                     <td>
                                         <div className="d-flex justify-content-around">

@@ -5,13 +5,13 @@ import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { notification } from 'antd'; // Import notification from Ant Design
 import instance from '../../../server';
-import { CinemaRoom } from '../../../interface/Room';
+import { Room } from '../../../interface/Room';
 
 const RoomDashboard: React.FC = () => {
-  const [rooms, setRooms] = useState<CinemaRoom[]>([]);
+  const [rooms, setRooms] = useState<Room[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filteredRooms, setFilteredRooms] = useState<CinemaRoom[]>([]);
+  const [filteredRooms, setFilteredRooms] = useState<Room[]>([]);
   const roomsPerPage = 11; // Số lượng phòng hiển thị mỗi trang
 
   useEffect(() => {

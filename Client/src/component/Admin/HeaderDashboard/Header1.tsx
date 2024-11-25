@@ -62,6 +62,8 @@ const Header = () => {
                 return 'Doanh Thu Theo Rạp';
             case 'RevenueByMovie':
                 return 'Doanh Thu Theo Phim';
+            case 'actor':
+                return 'Quản Lí Diễn Viên'
             default:
                 return 'Welcome';
         }

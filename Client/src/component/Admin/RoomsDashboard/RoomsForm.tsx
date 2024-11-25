@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
-import { CinemaRoom } from '../../../interface/Room';
+import { Room } from '../../../interface/Room';
 import { Cinema } from '../../../interface/Cinema';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod'; // For integrating Zod with React Hook Form
@@ -51,7 +51,7 @@ const roomSchema = z.object({
 
 const RoomsForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<CinemaRoom>({
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<Room>({
     resolver: zodResolver(roomSchema), // Use Zod resolver for validation
   });
   const nav = useNavigate();
@@ -84,7 +84,7 @@ const RoomsForm: React.FC = () => {
     fetchRoom();
   }, [id, reset]);
 
-  const onSubmit: SubmitHandler<CinemaRoom> = async (data) => {
+  const onSubmit: SubmitHandler<Room> = async (data) => {
     console.log('Submitted Data:', data); // Debug log
     if (!data.room_name || !data.volume || !data.cinema_id) {
       notification.error({

@@ -8,6 +8,7 @@ export interface Movie {
     id: number;
     movie_name: string;
     poster: string | null;
+    thumbnail: string | null;
     duration: string | null;
     release_date: string | null;
     age_limit: number | null;

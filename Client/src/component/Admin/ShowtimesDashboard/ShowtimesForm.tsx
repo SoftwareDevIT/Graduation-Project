@@ -6,7 +6,7 @@ import { useShowtimeContext } from '../../../Context/ShowtimesContext';
 import instance from '../../../server';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Cinema } from '../../../interface/Cinema';
-import { CinemaRoom } from '../../../interface/Room';
+import { Room } from '../../../interface/Room';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { notification } from 'antd';
@@ -42,7 +42,7 @@ const ShowtimesForm: React.FC = () => {
     // State variables
     const [cinemasList, setCinemasList] = useState<Cinema[]>([]);
     const [movieInCinemas, setMovieInCinemas] = useState<any[]>([]);
-    const [roomsList, setRoomsList] = useState<CinemaRoom[]>([]);
+    const [roomsList, setRoomsList] = useState<Room[]>([]);
     const [cinemaId, setCinemaId] = useState<number | null>(null);
     const [showtimesList, setShowtimesList] = useState<Showtime[]>([]);
 

@@ -8,7 +8,7 @@ import './FilmNews.css';
 import { useNews } from '../../Context/NewsContext';
 
 function FilmNews() {
-  const { newsData, isLoading, error } = useNews();  // Lấy dữ liệu từ context
+  const { newsData,  error } = useNews();  // Lấy dữ liệu từ context
 
   if (error) {
     return <div className="error">Error: {error}</div>;  // Xử lý lỗi nếu có
@@ -16,15 +16,7 @@ function FilmNews() {
 
   return (
     <>
-      {/* Hiển thị loading khi dữ liệu đang tải */}
-      {isLoading && (
-        <div className="overlay-loading">
-          <ClipLoader color={"#333"} loading={isLoading} size={150} />
-        </div>
-      )}
-
-      {/* Nội dung trang chỉ hiển thị khi dữ liệu đã tải xong */}
-      {!isLoading && (
+  
         <>
           <Header />
           <div className="Contentseach">
@@ -71,7 +63,7 @@ function FilmNews() {
           </div>
           <Footer />
         </>
-      )}
+     
     </>
   );
 }
