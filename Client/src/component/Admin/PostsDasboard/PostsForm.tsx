@@ -25,6 +25,8 @@ const PostsForm: React.FC = () => {
   const [categories, setCategories] = useState<NewsCategory[]>([]);
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   const [bannerFile, setBannerFile] = useState<File | null>(null);
+  const [oldThumbnail, setOldThumbnail] = useState<string | null>(null); // Store old thumbnail URL
+  const [oldBanner, setOldBanner] = useState<string | null>(null); // Store old banner URL
   const { addOrUpdatePost } = usePostsContext();
   const nav = useNavigate();
 
@@ -38,6 +40,10 @@ const PostsForm: React.FC = () => {
           const postResponse = await instance.get(`/news/${id}`);
           const postData = postResponse.data.data;
           console.log(postData);
+
+          // Set old images if available
+          setOldThumbnail(postData.thumnail);
+          setOldBanner(postData.banner);
 
           reset({
             title: postData.title,
@@ -99,8 +105,16 @@ const PostsForm: React.FC = () => {
           </select>
           {errors.news_category_id && <span className="text-danger">{errors.news_category_id.message}</span>}
         </div>
+
+        {/* Show old thumbnail if available */}
+        {oldThumbnail && (
+          <div className="mb-3">
+            <label className="form-label">Ảnh thu nhỏ hiện tại:</label>
+            <img src={oldThumbnail} alt="Thumbnail cũ"   style={{ maxWidth: '200px', maxHeight: '200px', objectFit: 'contain' }} />
+          </div>
+        )}
         <div className="mb-3">
-          <label className="form-label">Ảnh thu nhỏ:</label>
+          <label className="form-label">Ảnh thu nhỏ mới:</label>
           <input
             type="file"
             className="form-control d-block"
@@ -111,8 +125,16 @@ const PostsForm: React.FC = () => {
             }}
           />
         </div>
+
+        {/* Show old banner if available */}
+        {oldBanner && (
+          <div className="mb-3">
+            <label className="form-label">Ảnh bìa hiện tại:</label>
+            <img src={oldBanner} alt="Banner cũ"   style={{ maxWidth: '200px', maxHeight: '200px', objectFit: 'contain' }} />
+          </div>
+        )}
         <div className="mb-3">
-          <label className="form-label">Ảnh bìa:</label>
+          <label className="form-label">Ảnh bìa mới:</label>
           <input
             type="file"
             className="form-control d-block"
@@ -123,6 +145,7 @@ const PostsForm: React.FC = () => {
             }}
           />
         </div>
+
         <div className="mb-3">
           <label className="form-label">Nội dung:</label>
           <textarea

@@ -73,6 +73,7 @@ import ActorManager from "./Page/Admin/Actor/ActorManager";
 import ActorForm from "./Page/Admin/Actor/ActorForm";
 import DirectorManager from "./Page/Admin/Director/DirectorManager";
 import DirectorFormManager from "./Page/Admin/Director/DirectorForm";
+import PageTitleUpdater from "./component/PageTitleUpdater/PageTitleUpdater";
 
 
 
@@ -83,6 +84,7 @@ function App() {
   return (
     <>
       <QueryClientProvider client={queryClient}>
+        <PageTitleUpdater/>
       <Routes>
         <Route index element={<Home />} />
         <Route path="/buy-ticket" element={<Bookcinematickets />} />

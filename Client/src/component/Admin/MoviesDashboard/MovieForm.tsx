@@ -107,6 +107,8 @@ const MovieForm: React.FC = () => {
           });
           setCountry(movieData.country || '');  // Set country state correctly
           setTrailer(movieData.trailer || '');  // Set trailer state correctly
+          setPosterFile(movieData.poster); // URL ảnh poster cũ
+          setThumbnailFile(movieData.thumbnail); // URL ảnh thumbnail cũ
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -119,8 +121,8 @@ const MovieForm: React.FC = () => {
   const onSubmit = async (data: MovieFormValues) => {
     const updatedData = {
       ...data,
-      posterFile,
-      thumbnailFile,
+      posterFile: posterFile instanceof File ? posterFile : undefined,
+    thumbnailFile: thumbnailFile instanceof File ? thumbnailFile : undefined,
       country,
       trailer,
     };
@@ -312,25 +314,44 @@ const MovieForm: React.FC = () => {
           />
           {errors.trailer && <p className="text-danger">{errors.trailer.message}</p>}
         </div>
+ {/* Thumbnail */}
+<div className="mb-3">
+  <label className="form-label">Thumbnail</label>
+  {thumbnailFile && (
+    <div className="mb-2">
+      <img
+        src={typeof thumbnailFile === 'string' ? thumbnailFile : URL.createObjectURL(thumbnailFile)}
+        alt="Thumbnail cũ"
+        style={{ width: '150px', height: 'auto' }}
+      />
+    </div>
+  )}
+  <input
+    type="file"
+    className="form-control"
+    onChange={(e) => setThumbnailFile(e.target.files?.[0] || null)}
+  />
+</div>
 
-        {/* Poster File */}
-        <div className="mb-3">
-          <label className="form-label">Poster</label>
-          <input
-            type="file"
-            className="form-control"
-            onChange={(e) => setPosterFile(e.target.files?.[0] || null)}
-          />
-        </div>
-          {/* Thumbnail */}
-          <div className="mb-3">
-          <label className="form-label">Thumbnail</label>
-          <input
-            type="file"
-            className="form-control"
-            onChange={(e) => setThumbnailFile(e.target.files?.[0] || null)}
-          />
-        </div>
+       {/* Poster File */}
+<div className="mb-3">
+  <label className="form-label">Poster</label>
+  {posterFile && (
+    <div className="mb-2">
+      <img
+        src={typeof posterFile === 'string' ? posterFile : URL.createObjectURL(posterFile)}
+        alt="Poster cũ"
+        style={{ width: '150px', height: 'auto' }}
+      />
+    </div>
+  )}
+  <input
+    type="file"
+    className="form-control"
+    onChange={(e) => setPosterFile(e.target.files?.[0] || null)}
+  />
+</div>
+
 
         <button type="submit" className="btn btn-primary btn-lg w-100">
           {id ? 'Cập nhật phim' : 'Thêm phim'}
