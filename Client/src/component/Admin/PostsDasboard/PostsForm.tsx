@@ -12,7 +12,7 @@ import { notification } from 'antd'; // Import Ant Design notification
 const postSchema = z.object({
   title: z.string().min(1, 'Tiêu đề là bắt buộc').max(100,'Tiêu đề tối đa 100 ký tự'), // Title is required
   news_category_id: z.string().min(1, 'Chọn một danh mục'), // Category is required
-  content: z.string().min(1, 'Nội dung là bắt buộc'), // Content is required
+  content: z.string().min(1, 'Nội dung là bắt buộc').max(1000,'Nội dung tối đa 1000 ký tự'), // Content is required
 });
 
 type FormData = z.infer<typeof postSchema>;
@@ -60,7 +60,25 @@ const PostsForm: React.FC = () => {
   }, [id, reset]);
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
-    console.log('ID danh mục đã chọn:', data.news_category_id);
+    // Kiểm tra nếu chưa có thumbnail hoặc banner
+    if (!thumbnailFile) {
+      notification.error({
+        message: 'Lỗi xác thực',
+        description: 'Ảnh thu nhỏ là bắt buộc!',
+        placement: 'topRight',
+      });
+      return;
+    }
+    if (!bannerFile) {
+      notification.error({
+        message: 'Lỗi xác thực',
+        description: 'Ảnh bìa là bắt buộc!',
+        placement: 'topRight',
+      });
+      return;
+    }
+  
+    // Nếu đã hợp lệ, tiếp tục gửi dữ liệu
     await addOrUpdatePost(
       {
         ...data,
@@ -69,16 +87,16 @@ const PostsForm: React.FC = () => {
       },
       id
     );
-
-    // Replace alert with Ant Design notification
+  
     notification.success({
       message: id ? 'Cập nhật bài viết thành công!' : 'Thêm bài viết thành công!',
       description: 'Bài viết của bạn đã được lưu thành công.',
       placement: 'topRight',
     });
-
+  
     nav('/admin/posts');
   };
+  
 
   return (
     <div className="container mt-5">
@@ -124,6 +142,9 @@ const PostsForm: React.FC = () => {
               }
             }}
           />
+          {!thumbnailFile && (
+    <span className="text-danger">Ảnh thu nhỏ là bắt buộc</span>
+  )}
         </div>
 
         {/* Show old banner if available */}
@@ -144,6 +165,9 @@ const PostsForm: React.FC = () => {
               }
             }}
           />
+           {!bannerFile && (
+    <span className="text-danger">Ảnh bìa là bắt buộc</span>
+  )}
         </div>
 
         <div className="mb-3">

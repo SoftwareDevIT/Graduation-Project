@@ -117,11 +117,15 @@ const MovieShowing: React.FC = () => {
               {movies.length > 0 ? (
                 movies.map((movie) => (
                   <div key={movie.id} className="phim-card">
-                    <Link to={`/movie-detail/${movie.id}`}>
+                    <Link to={`/movie-detail/${movie.slug}`}>
                       <img src={movie.poster || "placeholder.jpg"} alt={movie.movie_name} className="phim-hinh" />
                     </Link>
                     <div className="phim-thong-tin">
-                      <h3>{movie.movie_name}</h3>
+                    <h3>
+    {movie.movie_name.length > 10 
+        ? `${movie.movie_name.slice(0, 20)}...` 
+        : movie.movie_name}
+</h3>
                       <p>Khởi chiếu: {movie.release_date ? new Date(movie.release_date).toLocaleDateString("vi-VN") : "N/A"}</p>
                     </div>
                     {movie.release_date === '2024-10-25' && (

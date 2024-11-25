@@ -14,9 +14,9 @@ use App\Traits\AuthorizesInService;
 class NewService
 {
     use AuthorizesInService;
-    public function index():Collection
+    public function index(): Collection
     {
-        return News::with('user','newsCategory')->orderByDesc('created_at')->get();
+        return News::with('user', 'newsCategory')->orderByDesc('created_at')->get();
     }
 
 
@@ -51,14 +51,14 @@ class NewService
     public function show($identifier)
     {
 
-        $news = News::with(['newsCategory','movie', 'user'])
+        $news = News::with(['newsCategory', 'movie', 'user'])
             ->when(is_numeric($identifier), function ($query) use ($identifier) {
                 return $query->where('id', $identifier);
             }, function ($query) use ($identifier) {
                 return $query->where('slug', $identifier);
             })
             ->firstOrFail();
-
+        $news->increment('views');
         return $news;
     }
 }

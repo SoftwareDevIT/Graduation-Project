@@ -52,6 +52,14 @@ const DirectorForm = () => {
   }, [id, reset]);
 
   const handleFormSubmit = async (data: Director) => {
+    if (!selectedFile) {
+      notification.error({
+        message: 'Lỗi xác thực',
+        description: 'Ảnh đại diện là bắt buộc!',
+        placement: 'topRight',
+      });
+      return;
+    }
     const formData = new FormData();
     formData.append("director_name", data.director_name);
     formData.append("country", data.country);

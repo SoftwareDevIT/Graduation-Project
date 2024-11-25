@@ -82,3 +82,14 @@ select {
 .boxcha{
   height: auto !important;
 }
+.label-form{
+  margin-top: 15px;
+  margin-bottom: 20px;
+}
+.label-form1{
+  margin-bottom: 20px;
+}
+.account-nav-title a{
+  text-decoration: none;
+  color: #333;
+}

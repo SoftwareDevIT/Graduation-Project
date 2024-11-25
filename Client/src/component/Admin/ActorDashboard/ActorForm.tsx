@@ -52,6 +52,15 @@ const ActorForm = () => {
   }, [id, reset]);
 
   const handleFormSubmit = async (data: Actor) => {
+    if (!selectedFile) {
+      notification.error({
+        message: 'Lỗi xác thực',
+        description: 'Ảnh đại diện là bắt buộc!',
+        placement: 'topRight',
+      });
+      return;
+    }
+  
     const formData = new FormData();
     formData.append("actor_name", data.actor_name);
     formData.append("country", data.country);

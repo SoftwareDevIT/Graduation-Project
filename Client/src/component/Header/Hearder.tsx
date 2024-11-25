@@ -14,7 +14,7 @@ const Header = () => {
   const [isProfileMenuVisible, setProfileMenuVisibles] = useState(false);
 
   const [cinemas, setCinemas] = useState<Cinema[]>([]);
-  const [selectedLocation, setSelectedLocation] = useState<number | null>(null);
+  const [selectedLocation, setSelectedLocation] = useState("1")
   const { state } = useCountryContext();
   const locations = state.countries;
   const navigate = useNavigate();
@@ -76,11 +76,10 @@ const Header = () => {
       navigate(`/movie/search/${encodeURIComponent(searchTerm)}`);
     }
   };
-
   const handleLocationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedLocation(Number(e.target.value));
-  };
-
+    const locationId = e.target.value;
+    setSelectedLocation(locationId);
+  }  
 
   return (
     <header className="header">
@@ -171,6 +170,7 @@ const Header = () => {
         <select
           name="location"
           id="location-select"
+          value={selectedLocation}
           onChange={handleLocationChange}
           style={{
             width: '100%',
@@ -223,7 +223,7 @@ const Header = () => {
                 </a>
                 <div className="dropdown-content">
                   <Link to={"/movieshowing"}>Phim theo thể loại</Link>
-                  <a href="#">Sắp chiếu</a>
+                  <Link to={"/upcoming-movies"}>Sắp chiếu</Link>
                   <Link to={"/earlymovie"}>Chiếu sớm</Link>
 
                 </div>

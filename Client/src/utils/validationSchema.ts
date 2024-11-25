@@ -16,3 +16,14 @@ export const registerSchema = z.object({
 
 });
 export type RegisterSchema = z.infer<typeof registerSchema>;
+
+export const resetPasswordSchema = z.object({
+    password: z
+        .string().nonempty('Mật khẩu không được để trống.').min(8, 'Mật khẩu phải có ít nhất 8 ký tự.'),
+    passwordConfirmation: z
+        .string()
+        .nonempty('Xác nhận mật khẩu không được để trống.'),
+}).refine((data) => data.password === data.passwordConfirmation, {
+    message: 'Mật khẩu và xác nhận mật khẩu không trùng khớp.',
+    path: ['passwordConfirmation'], // Chỉ định lỗi xảy ra ở trường nào
+});

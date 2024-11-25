@@ -24,14 +24,18 @@ const showtimeSchema = z.object({
         today.setHours(0, 0, 0, 0); // Reset giờ phút giây để chỉ so sánh ngày
         return selectedDate >= today;
       }, 'Ngày chiếu không được nhỏ hơn ngày hiện tại'),
-    showtime_start: z
+      showtime_start: z
       .string()
       .min(1, 'Vui lòng chọn giờ bắt đầu')
       .refine((value) => {
-        const currentDate = new Date();
-        const currentTime = `${currentDate.getHours()}:${currentDate.getMinutes()}`;
-        return value >= currentTime;
+        const selectedTime = value.split(':'); // Tách giờ và phút từ giá trị nhập
+        const now = new Date(); // Lấy thời gian hiện tại
+        const today = new Date();
+        today.setHours(Number(selectedTime[0]), Number(selectedTime[1]), 0, 0); // Gán giờ và phút từ giá trị nhập
+    
+        return today >= now; // So sánh giờ bắt đầu với thời gian hiện tại
       }, 'Giờ bắt đầu không được nhỏ hơn thời gian hiện tại'),
+    
     price: z
       .number()
       .min(0, 'Giá phải lớn hơn hoặc bằng 0')

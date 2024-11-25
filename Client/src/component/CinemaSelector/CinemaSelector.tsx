@@ -213,6 +213,7 @@ const CinemaSelector: React.FC = () => {
           <div className="cinemas">
             <h3 className="khuvuc">Rạp</h3>
             <ul className="list-tp">
+            <div className="list">
               {filteredCinemas.map((cinema) => (
                 <li
                   key={cinema.id}
@@ -225,6 +226,19 @@ const CinemaSelector: React.FC = () => {
                   {cinema.cinema_name}
                 </li>
               ))}
+              </div>
+               <select
+                className="city-selects"
+                value={selectedCity ?? ""}
+                onChange={(e) => setSelectedCinema(Number(e.target.value))}
+              >
+                <option className="city-selects-option" value="">Chọn Rạp</option>
+                {filteredCinemas.map((cinema) => (
+                  <option key={cinema.id} value={cinema.id}>
+                    {cinema.cinema_name}
+                  </option>
+                ))}
+              </select>
             </ul>
           </div>
 
