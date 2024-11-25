@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { useComboContext } from '../../../Context/ComboContext';
 import instance from '../../../server';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { notification } from 'antd'; // Import notification from Ant Design
 
 const ComboDashboard: React.FC = () => {
     const { state, deleteCombo } = useComboContext();
@@ -29,9 +30,16 @@ const ComboDashboard: React.FC = () => {
         if (window.confirm('Bạn có chắc muốn xóa combo này?')) {
             try {
                 await deleteCombo(id);
-                alert('Combo đã được xóa thành công!');
+                notification.success({
+                    message: 'Thành Công',
+                    description: 'Combo đã được xóa thành công!',
+                });
             } catch (err) {
                 setError('Không thể xóa combo');
+                notification.error({
+                    message: 'Lỗi',
+                    description: 'Không thể xóa combo',
+                });
             }
         }
     };
@@ -58,12 +66,21 @@ const ComboDashboard: React.FC = () => {
         }).format(price);
     };
 
+    const totalPages = Math.ceil(filteredCombos.length / combosPerPage);
+    
+    // Logic to display only 5 pages and '...'
+    const pageNumbers: (number | string)[] = [];
+    if (totalPages <= 5) {
+        pageNumbers.push(...Array.from({ length: totalPages }, (_, index) => index + 1));
+    } else {
+        pageNumbers.push(1, 2, 3, '...', totalPages);
+    }
+
     return (
         <div className="container mt-5">
-            <h2 className="text-center text-primary mb-4">Tất Cả Các Combo</h2>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Link to={'/admin/combo/add'} className="btn btn-outline-primary">
-                    Thêm Combo
+                <FontAwesomeIcon icon={faPlus} /> Thêm Combo
                 </Link>
                 <input 
                     type="text" 
@@ -120,13 +137,19 @@ const ComboDashboard: React.FC = () => {
                             Trước
                         </button>
                     </li>
-                    {Array.from({ length: Math.ceil(filteredCombos.length / combosPerPage) }, (_, index) => (
-                        <li key={index + 1} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
-                            <button className="page-link" onClick={() => paginate(index + 1)}>
-                                {index + 1}
-                            </button>
-                        </li>
-                    ))}
+                    {pageNumbers.map((page, index) =>
+                        page === '...' ? (
+                            <li key={index} className="page-item disabled">
+                                <span className="page-link">...</span>
+                            </li>
+                        ) : (
+                            <li key={page as number} className={`page-item ${currentPage === page ? 'active' : ''}`}>
+                                <button className="page-link" onClick={() => paginate(page as number)}>
+                                    {page}
+                                </button>
+                            </li>
+                        )
+                    )}
                     <li className={`page-item ${indexOfLastCombo >= filteredCombos.length ? 'disabled' : ''}`}>
                         <button className="page-link" onClick={() => setCurrentPage(currentPage + 1)}>
                             Tiếp Theo
@@ -137,5 +160,7 @@ const ComboDashboard: React.FC = () => {
         </div>
     );
 };
+
+
 
 export default ComboDashboard;

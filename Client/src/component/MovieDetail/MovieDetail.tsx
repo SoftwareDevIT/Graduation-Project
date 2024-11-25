@@ -10,9 +10,9 @@ import { useMovieContext } from "../../Context/MoviesContext";
 import instance from "../../server";
 
 const MovieDetail: React.FC = () => {
-  const { id } = useParams();
+  const { slug } = useParams(); // Sử dụng slug
   const location = useLocation();
-  const { state, fetchMovies } = useMovieContext(); // Get state and functions from context
+  const { state, fetchMovies } = useMovieContext();
   const [userStatus, setUserStatus] = useState({
     isLoggedIn: false,
     isFavorite: false,
@@ -26,32 +26,29 @@ const MovieDetail: React.FC = () => {
   });
   const [isTrailerVisible, setIsTrailerVisible] = useState(false);
 
-  // Fetch movie details from the context's movie state
-  const movie = state.movies.find((movie) => movie.id === Number(id));
-
+  // Tìm phim dựa trên slug thay vì id
+  const movie = state.movies.find((movie) => movie.slug === slug);
 
   useEffect(() => {
-    fetchMovies(); // Chỉ gọi lại dữ liệu khi `id` thay đổi
-  }, [id]);
-
-  // Fetch additional user data (favorite movies, ratings) after login check
+    fetchMovies(); // Gọi lại fetchMovies khi slug thay đổi
+  }, [slug]);
   useEffect(() => {
     const fetchUserData = async () => {
       const token = localStorage.getItem("token");
       const userId = localStorage.getItem("user_id");
-
+  
       if (token && userId) {
         try {
           const userResponse = await instance.get(`/user/${userId}`);
           const { favorite_movies = [], ratings = [] } = userResponse.data.data;
-
+  
           const isMovieFavorite = favorite_movies.some(
-            (favMovie: any) => favMovie.id === parseInt(id as string, 10)
+            (favMovie: any) => favMovie.movie?.id === movie?.id
           );
           const hasRated = ratings.some(
-            (rating: any) => rating.movie_id === parseInt(id as string, 10)
+            (rating: any) => rating.movie_id === movie?.id
           );
-
+  
           setUserStatus({
             isLoggedIn: true,
             isFavorite: isMovieFavorite,
@@ -59,14 +56,14 @@ const MovieDetail: React.FC = () => {
             favoriteMovies: favorite_movies,
           });
         } catch (error) {
-          // console.error("Error fetching user data:", error);
+          console.error("Error fetching user data:", error);
         }
       }
     };
-
+  
     fetchUserData();
-  }, [id]);
-
+  }, [movie?.id]);
+  
   const handleFavoriteToggle = async () => {
     if (!userStatus.isLoggedIn) {
       notification.warning({
@@ -78,13 +75,13 @@ const MovieDetail: React.FC = () => {
 
     try {
       if (userStatus.isFavorite) {
-        await instance.delete(`/favorites/${id}`);
+        await instance.delete(`/favorites/${movie?.id}`);
         notification.success({
           message: "Thành công",
           description: "Phim đã được xóa khỏi danh sách yêu thích!",
         });
       } else {
-        await instance.post(`/favorites/${id}`);
+        await instance.post(`/favorites/${movie?.id}`);
         notification.success({
           message: "Thành công",
           description: "Phim đã được thêm vào danh sách yêu thích!",
@@ -113,7 +110,7 @@ const MovieDetail: React.FC = () => {
 
     try {
       await instance.post("/ratings", {
-        movie_id: id,
+        movie_id: movie?.id,
         rating: ratingData.rating,
         review: ratingData.review,
       });
@@ -130,7 +127,6 @@ const MovieDetail: React.FC = () => {
       });
     }
   };
-
 
   return (
     <>
@@ -161,7 +157,7 @@ const MovieDetail: React.FC = () => {
                   </div>
                   <div className="button trailer" onClick={() => setIsTrailerVisible(true)}>Trailer</div>
                   <div className="button buy">
-                    <Link to={`/buy-now/${id}`}>Mua vé</Link>
+                    <Link to={`/buy-now/${slug}`}>Mua vé</Link>
                   </div>
                 </div>
 
@@ -170,7 +166,7 @@ const MovieDetail: React.FC = () => {
                 <div className="movie-details">
                   <div>📅 Khởi chiếu: {movie?.release_date || "Chưa có ngày phát hành"}</div>
                   <div>⏰ Thời lượng: {movie?.duration || "Chưa có thời lượng"}</div>
-                  <div>🔞 Giới hạn tuổi: {movie?.age_limit ? `T${movie.age_limit}` : "Không có giới hạn tuổi"}</div>
+                  <div>🔞 Giới hạn tuổi: {movie?.age_limit ? `${movie.age_limit}` : "Không có giới hạn tuổi"}</div>
                 </div>
               </div>
 
@@ -186,19 +182,19 @@ const MovieDetail: React.FC = () => {
         </div>
 
         <div className="tabs">
-            <Link to={`/movie-detail/${id}`} className={`tab ${location.pathname === `/movie-detail/${id}` ? "active" : ""}`}>
+            <Link to={`/movie-detail/${slug}`} className={`tab ${location.pathname === `/movie-detail/${slug}` ? "active" : ""}`}>
               Thông tin phim
             </Link>
-            <Link to={`/schedule/${id}`} className={`tab ${location.pathname === `/schedule/${id}` ? "active" : ""}`}>
+            <Link to={`/schedule/${slug}`} className={`tab ${location.pathname === `/schedule/${slug}` ? "active" : ""}`}>
               Lịch chiếu
             </Link>
-            <Link to={`/reviews/${id}`} className={`tab ${location.pathname === `/reviews/${id}` ? "active" : ""}`}>
+            <Link to={`/reviews/${slug}`} className={`tab ${location.pathname === `/reviews/${slug}` ? "active" : ""}`}>
               Đánh giá
             </Link>
-            <Link to={`/news/${id}`} className={`tab ${location.pathname === `/news/${id}` ? "active" : ""}`}>
+            <Link to={`/news/${slug}`} className={`tab ${location.pathname === `/news/${slug}` ? "active" : ""}`}>
               Tin tức
             </Link>
-            <Link to={`/buy-now/${id}`} className={`tab ${location.pathname === `/buy-now/${id}` ? "active" : ""}`}>
+            <Link to={`/buy-now/${slug}`} className={`tab ${location.pathname === `/buy-now/${slug}` ? "active" : ""}`}>
               Mua vé
             </Link>
           </div>
@@ -237,7 +233,7 @@ const MovieDetail: React.FC = () => {
   {movie?.trailer ? (
     <iframe
       width="100%"
-      height="100%"
+      height="390px"
       src={movie.trailer}
       title="Trailer"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

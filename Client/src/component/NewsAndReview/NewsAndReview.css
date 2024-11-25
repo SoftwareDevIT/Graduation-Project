@@ -44,6 +44,9 @@
 .news-content a{
 text-decoration: none;
 }
+.review-section a{
+  text-decoration: none;
+}
 .news-content p {
   font-size: 14px;
   color: #666;

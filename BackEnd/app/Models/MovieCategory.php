@@ -10,7 +10,6 @@ class MovieCategory extends Model
     use HasFactory;
     protected $table = 'movie_category';
     protected $fillable = [
-        'id',
         'category_name',
         'descripcion',
         'status',
@@ -19,7 +18,7 @@ class MovieCategory extends Model
     public function movies()
     {
         return $this->belongsToMany(Movie::class, 'category_in_movie', 'movie_category_id', 'movie_id')
-         
+
             ->withTimestamps();
     }
 

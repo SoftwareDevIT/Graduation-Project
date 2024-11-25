@@ -6,14 +6,22 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useComboContext } from "../../../Context/ComboContext"; // Import the Combo context
 import { Combo } from "../../../interface/Combo";
 import instance from "../../../server";
+import { notification } from 'antd'; // Import Ant Design's notification component
 
 // Định nghĩa schema cho việc xác thực form sử dụng Zod
 const comboSchema = z.object({
   combo_name: z.string().min(1, "Tên combo là bắt buộc."),
-  descripton: z.string().min(1, "Mô tả là bắt buộc."), // sửa lỗi tên trường thành "description"
-  price: z.number().min(1, "Giá phải là một số dương."),
-  volume: z.number().min(1, "Số lượng phải là một số dương."),
+  descripton: z.string().min(1, "Mô tả là bắt buộc."),
+  price: z
+    .number()
+    .min(0, "Giá phải lớn hơn hoặc bằng 0.")
+    .max(10000000, "Giá không được vượt quá 10 triệu."),
+  volume: z
+    .number()
+    .min(0, "Số lượng phải lớn hơn hoặc bằng 0.")
+    .max(1000, "Số lượng không được vượt quá 1000."),
 });
+
 
 const ComboForm = () => {
   const { addCombo, updateCombo } = useComboContext(); // Sử dụng Combo context
@@ -48,15 +56,21 @@ const ComboForm = () => {
     try {
       if (id) {
         await updateCombo(Number(id), data); // Cập nhật combo với yêu cầu PUT
-        alert("Cập nhật combo thành công!");
+        notification.success({
+          message: 'Cập nhật combo thành công!',
+        });
       } else {
         await addCombo(data); // Thêm combo với yêu cầu POST
-        alert("Thêm combo thành công!");
+        notification.success({
+          message: 'Thêm combo thành công!',
+        });
       }
       nav('/admin/combo'); // Chuyển hướng tới trang danh sách combo hoặc trang cần thiết
     } catch (error) {
       console.error("Lỗi khi gửi dữ liệu combo:", error);
-      alert("Lỗi khi gửi dữ liệu combo");
+      notification.error({
+        message: 'Lỗi khi gửi dữ liệu combo',
+      });
     }
   };
 

@@ -36,6 +36,8 @@ class CinemaController extends Controller
             }
 
             return $this->success($cinema);
+        } catch (ModelNotFoundException $e) {
+            return $this->notFound("Không có id {$id} trong cơ sở dữ liệu");
         } catch (Exception $e) {
             return $e->getMessage();
         }
@@ -114,12 +116,12 @@ class CinemaController extends Controller
     public function destroyCinemaHasMovie($cinema_id, $movie_id)
     {
         try {
-          // Tìm bộ phim trong rạp chiếu phim của Cinema_id và Movie_id
+            // Tìm bộ phim trong rạp chiếu phim của Cinema_id và Movie_id
             $movieInCinema = MovieInCinema::where('cinema_id', $cinema_id)
                 ->where('movie_id', $movie_id)
                 ->first();
 
-       // Nếu không tìm thấy mục nhập, hãy trả lại lỗi 404
+            // Nếu không tìm thấy mục nhập, hãy trả lại lỗi 404
             if (!$movieInCinema) {
                 return response()->json([
                     'status' => false,
@@ -150,6 +152,8 @@ class CinemaController extends Controller
         try {
             $cinema = $this->cinemaService->update($id, $request->validated());
             return $this->success($cinema);
+        } catch (ModelNotFoundException $e) {
+            return $this->notFound("Không có id {$id} trong cơ sở dữ liệu");
         } catch (Exception $e) {
             return $e->getMessage();
         }
@@ -159,6 +163,8 @@ class CinemaController extends Controller
     {
         try {
             return $this->success($this->cinemaService->delete($id));
+        } catch (ModelNotFoundException $e) {
+            return $this->notFound("Không có id {$id} trong cơ sở dữ liệu");
         } catch (Exception $e) {
             return $e->getMessage();
         }

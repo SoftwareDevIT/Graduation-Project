@@ -3,7 +3,7 @@ import './MovieDetail.css';
 import './ContentMovie.css';
 import MovieDetail from './MovieDetail';
 import Footer from '../Footer/Footer';
-import { useParams } from 'react-router-dom';  // Import useParams
+import { useNavigate, useParams } from 'react-router-dom';  // Import useParams
 import instance from '../../server'; // Ensure you import the API instance correctly
 import { Movie } from '../../interface/Movie'; // Import Movie interface
 import { useCountryContext } from '../../Context/CountriesContext';
@@ -11,8 +11,8 @@ import { stripHtml } from '../../assets/Font/quillConfig';
 interface Props {}
 
 export const ContentMovie = (props: Props) => {
-    const { id } = useParams(); // Get the movieId from the route parameter
-    const movieId = id ? parseInt(id) : null; // Parse the id to an integer
+    const { slug } = useParams(); // Get the movieId from the route parameter
+    const movieId = slug ? parseInt(slug) : null; // Parse the id to an integer
     const [ratings, setRatings] = useState<any[]>([]);  // State để lưu danh sách đánh giá
     const [movie, setMovie] = useState<Movie | null>(null); // Initialize state for the movie
     const { state, fetchCountries } = useCountryContext();
@@ -21,11 +21,26 @@ export const ContentMovie = (props: Props) => {
     const [relatedPosts, setRelatedPosts] = useState<any[]>([]); // Initialize state for related posts
     const [loading, setLoading] = useState<boolean>(true);  // Trạng thái tải
     const [error, setError] = useState<string | null>(null);  // Trạng thái lỗi
+    const navigate = useNavigate();
+
+    const handleViewSchedule = () => {
+        if (selectedLocation) {
+            // Điều hướng sang trang lịch chiếu và truyền thông tin
+            navigate("/schedule", {
+                state: {
+                    location: selectedLocation,
+                    movieId: movie?.id, // Thêm ID phim nếu cần
+                },
+            });
+        } else {
+            alert("Vui lòng chọn khu vực trước khi xem lịch chiếu.");
+        }
+    };
     useEffect(() => {
         const fetchMovieDetails = async () => {
-            if (movieId) {
+            if (slug) {
                 try {
-                    const response = await instance.get(`/movies/${movieId}`); // Fetch movie details
+                    const response = await instance.get(`/movies/${slug}`); // Fetch movie details
                     setMovie(response.data.data.original); // Store the movie data in state
                 } catch (error) {
                     console.error("Error fetching movie details:", error);
@@ -40,10 +55,10 @@ export const ContentMovie = (props: Props) => {
         fetchCountries(); // Gọi fetchCountries khi component mount
       }, [fetchCountries]);
     useEffect(() => {
-        if (id) {
+        if (slug) {
             setLoading(true);
             instance
-                .get(`/ratings/${id}`)  // Thay đổi từ fetch thành instance.get
+                .get(`/ratings/${slug}`)  // Thay đổi từ fetch thành instance.get
                 .then((response) => {
                     if (response.data.status) {
                         setRatings(response.data.data);  // Lưu đánh giá vào state
@@ -60,7 +75,7 @@ export const ContentMovie = (props: Props) => {
             setError("ID phim không tồn tại.");
             setLoading(false);
         }
-    }, [id]);
+    }, [slug]);
     useEffect(() => {
         const fetchRelatedPosts = async () => {
             if (movieId) {
@@ -82,9 +97,7 @@ export const ContentMovie = (props: Props) => {
         setSelectedLocation(e.target.value); // Update selected location
     };
 
-    if (!movie) {
-        return <div>Đang tải thông tin phim...</div>; // Show loading message if movie data is not yet available
-    }
+   
 
     return (
         <div>
@@ -106,7 +119,7 @@ export const ContentMovie = (props: Props) => {
                     {/* Select location and view schedule */}
                     <div className="schedule-section">
                         <h3>Lịch chiếu</h3>
-                        <p>Chọn khu vực bạn muốn xem lịch chiếu cho phim <strong>{movie.movie_name}</strong>.</p>
+                        <p>Chọn khu vực bạn muốn xem lịch chiếu cho phim <strong>{movie?.movie_name}</strong>.</p>
 
                         <div className="schedule-actions">
                             <select

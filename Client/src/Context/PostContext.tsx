@@ -103,7 +103,7 @@ const fetchPosts = async () => {
 // Call fetchPosts when the provider mounts
 React.useEffect(() => {
   fetchPosts();
-}, []);
+}, [state.posts]);
 
   const deletePost = async (id: number) => {
     try {

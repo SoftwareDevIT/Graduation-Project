@@ -69,7 +69,14 @@ import RoomsFormManager from "./Page/Admin/Rooms/RoomsForm";
 import Video from "./component/News/Video";
 import FilmNews from "./component/News/FilmNews";
 import MovieTicket from "./component/PersonalPage/MovieTicket";
+
 import PageTitleUpdater from "./component/PageTitleUpdater/PageTitleUpdater";
+
+
+import ActorManager from "./Page/Admin/Actor/ActorManager";
+import ActorForm from "./Page/Admin/Actor/ActorForm";
+import DirectorManager from "./Page/Admin/Director/DirectorManager";
+import DirectorFormManager from "./Page/Admin/Director/DirectorForm";
 
 
 
@@ -88,11 +95,11 @@ function App() {
         <Route path="/orders" element={<OrderPage />} />
         <Route path="/pay" element={<OrderCheckout />} />
         <Route path="/seat" element={<CinemaSeatSelection />} />
-        <Route path="/movie-detail/:id" element={<ContentMovie />} />
-        <Route path="/schedule/:id" element={<LichChieu />} />
-        <Route path="/reviews/:id" element={<DanhGia />} />
-        <Route path="/news/:id" element={<TinTuc />} />
-        <Route path="/buy-now/:id" element={<MuaVe />} />
+        <Route path="/movie-detail/:slug" element={<ContentMovie />} />
+        <Route path="/schedule/:slug" element={<LichChieu />} />
+        <Route path="/reviews/:slug" element={<DanhGia />} />
+        <Route path="/news/:slug" element={<TinTuc />} />
+        <Route path="/buy-now/:slug" element={<MuaVe />} />
         <Route path="/headerticket" element={<Headerticket />} />
         <Route path="/confirm" element={<EmailConfirm />} />
         <Route path="/payment-callback" element={<PaymentCallback />} />
@@ -145,6 +152,12 @@ function App() {
         <Route path="/admin/dashboard" element={<PrivateRoute allowedRoles={['admin','manager','staff']}><Dashboard /></PrivateRoute>} />
         <Route path="/admin/user" element={<PrivateRoute allowedRoles={['admin']}><User /></PrivateRoute>} />
         <Route path="/admin/user/roles" element={<PrivateRoute allowedRoles={['admin']}><UserAddManager /></PrivateRoute>} />
+        <Route path="/admin/actor" element={<PrivateRoute allowedRoles={['admin']}><ActorManager/></PrivateRoute>} />
+        <Route path="/admin/actor/add" element={<PrivateRoute allowedRoles={['admin']}><ActorForm/></PrivateRoute>} />
+        <Route path="/admin/actor/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><ActorForm/></PrivateRoute>} />
+        <Route path="/admin/director" element={<PrivateRoute allowedRoles={['admin']}><DirectorManager/></PrivateRoute>} />
+        <Route path="/admin/director/add" element={<PrivateRoute allowedRoles={['admin']}><DirectorFormManager/></PrivateRoute>} />
+        <Route path="/admin/director/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><DirectorFormManager/></PrivateRoute>} />
         <Route path="/admin/showtimes" element={<PrivateRoute allowedRoles={['admin']}><ShowtimesManager /></PrivateRoute>} />
         <Route path="/admin/showtimes/add" element={<PrivateRoute allowedRoles={['admin']}><ShowtimesFormManager /></PrivateRoute>} />
         <Route path="/admin/showtimes/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><ShowtimesFormManager /></PrivateRoute>} />

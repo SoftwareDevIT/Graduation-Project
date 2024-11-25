@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('movie_id');
             $table->unsignedBigInteger('director_id');
-            $table->foreign('movie_id')->references('id')->on('movies');
-            $table->foreign('director_id')->references('id')->on('director');
+            $table->foreign('movie_id')->references('id')->on('movies')->onDelete('cascade');
+            $table->foreign('director_id')->references('id')->on('director')->onDelete('cascade');
             $table->timestamps();
         });
     }

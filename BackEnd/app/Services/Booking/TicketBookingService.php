@@ -4,6 +4,7 @@ namespace App\Services\Booking;
 
 use App\Http\Requests\Booking\TicketBookingRequest;
 use App\Models\Booking;
+use App\Models\Combo;
 use App\Models\Seats;
 use App\Services\Booking\Steps\SelectMovie;
 use App\Services\Booking\Steps\SelectSeats;
@@ -96,12 +97,21 @@ class TicketBookingService
         // Kiểm tra xem session có chứa combos không
         if (session()->has('combos') && session('combos')) {
             foreach (session('combos') as $combo) {
+                // Liên kết combo với booking
                 $booking->combos()->attach($combo->id, ['quantity' => $combo->quantity ?? 1]);
+
+                // Trừ số lượng combo trong kho
+                $comboModel = Combo::find($combo->id); // Lấy đối tượng combo từ cơ sở dữ liệu
+                if ($comboModel) {
+                    $comboModel->volume -= $combo->quantity ?? 1; // Trừ số lượng
+                    $comboModel->save(); // Lưu lại thay đổi
+                } else {
+                    Log::error("Combo with ID {$combo->id} not found in the database.");
+                }
             }
         } else {
             Log::warning('No combos found in session.');
         }
-
 
         // Kiểm tra xem session có chứa seats không
         if (session()->has('seats') && session('seats')) {
@@ -130,7 +140,7 @@ class TicketBookingService
             $urlPayment = $this->processPaymentStep->vnpay($request);  // Gọi phương thức VNPAY
             return response()->json(['url' => $urlPayment]);
         } elseif ($request->pay_method_id == 2) {
-            $urlPayment = $this->processPaymentStep->momo($request);  // Gọi phương thức MOMO
+            $urlPayment = $this->processPaymentStep->momoPayment($request);  // Gọi phương thức MOMO
             return response()->json(['url' => $urlPayment]);
         } else {
             // Xóa booking nếu phương thức thanh toán không hợp lệ

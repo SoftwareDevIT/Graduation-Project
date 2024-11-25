@@ -83,12 +83,12 @@ const MovieShowing: React.FC = () => {
         <div className="container">
           <div className="titleg">
             <div className="filters">
-              <select value={selectedPopular} onChange={handlePopularChange} className="filter-select">
+              {/* <select value={selectedPopular} onChange={handlePopularChange} className="filter-select">
                 <option value="">Phổ biến</option>
                 <option value="most-popular">Phổ biến nhất</option>
                 <option value="newest">Mới nhất</option>
                 <option value="top-rated">Xếp hạng cao</option>
-              </select>
+              </select> */}
 
               <select value={selectedGenre} onChange={handleGenreChange} className="filter-select">
                 <option value="">Thể loại</option>
@@ -105,12 +105,12 @@ const MovieShowing: React.FC = () => {
                 <option value="english">Tiếng Anh</option>
                 <option value="japanese">Tiếng Nhật</option>
               </select>
-              <select value={selectedLanguage} onChange={handleLanguageChange} className="filter-select">
+              {/* <select value={selectedLanguage} onChange={handleLanguageChange} className="filter-select">
                 <option value="">Phim sắp chiếu</option>
                 <option value="vietnamese">....</option>
                 <option value="english">......</option>
                 <option value="japanese">.....</option>
-              </select>
+              </select> */}
             </div>
 
             <div className="danh-sach-phim">
