@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Traits\RandomDateTrait;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use GuzzleHttp\Client;
@@ -12,6 +13,7 @@ class MovieSeeder extends Seeder
     /**
      * Run the database seeds.
      */
+    use RandomDateTrait;
     public function run(): void
     {
         $client = new Client();
@@ -48,11 +50,12 @@ class MovieSeeder extends Seeder
                 'country' => $item['country'],
                 'poster' => $poster,
                 'duration' => (int)str_replace(' phút', '', $item['duration']),
-                'release_date' => now(),
+                'release_date' => $this->randomDate('2024-10-01', now()),
                 'age_limit' => $item['age_restricted'],
                 'description' => $item['description'],
                 'trailer' => $item['trailer'],
                 'views' => rand(20, 50),
+                'rating' => rand(7, 10),
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

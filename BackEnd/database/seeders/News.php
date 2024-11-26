@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Traits\RandomDateTrait;
 use GuzzleHttp\Client;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -9,9 +10,8 @@ use Illuminate\Support\Facades\Log;
 
 class News extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
+    use RandomDateTrait;
+
     public function run(): void
     {
         $client = new Client();
@@ -24,7 +24,6 @@ class News extends Seeder
         $news_category = DB::table('news_category')->pluck('id');
 
         foreach ($data as $item) {
-
             $thumbnail = $item['thumbnail'];
 
             // Kiểm tra nếu thumbnail là đường dẫn tương đối
@@ -36,24 +35,40 @@ class News extends Seeder
             try {
                 $response = $client->head($thumbnail);
                 if ($response->getStatusCode() !== 200) {
-                    Log::warning("Poster not found for movie: {$item['name']}, skipping.");
+                    Log::warning("Poster not found for news: {$item['name']}, skipping.");
                     continue;
                 }
             } catch (\Exception $e) {
-                Log::warning("Error checking poster for movie: {$item['name']}, skipping. Error: {$e->getMessage()}");
+                Log::warning("Error checking poster for news: {$item['name']}, skipping. Error: {$e->getMessage()}");
                 continue;
             }
+
+            // Xử lý content để thêm tiền tố vào các đường dẫn ảnh tương đối
+            $content = $item['content'];
+            $content = preg_replace_callback(
+                '/<img\s+[^>]*src="([^"]+)"/i',
+                function ($matches) {
+                    $src = $matches[1];
+                    if (strpos($src, 'http') === false && strpos($src, '/') === 0) {
+                        // Thêm tiền tố nếu src là đường dẫn tương đối
+                        $src = 'https://rapchieuphim.com' . $src;
+                    }
+                    return str_replace($matches[1], $src, $matches[0]);
+                },
+                $content
+            );
+
             DB::table('news')->insert([
-                'user_id' => '1',
-                'movie_id' => $movieIds->random(), // Chọn ngẫu nhiên 1 movie_id từ danh sách
+                'user_id' => rand(1, 100),
+                'movie_id' => $movieIds->random(),
                 'title' => $item['name'],
                 'slug' => $item['slug'],
-                'content' => $item['content'],
-                'banner' =>   $thumbnail,
-                'thumnail' =>   $thumbnail,
-                'views' =>   rand(20, 50),
+                'content' => $content, // Nội dung đã được xử lý
+                'banner' => $thumbnail,
+                'thumnail' => $thumbnail,
+                'views' => rand(20, 50),
                 'news_category_id' => $news_category->random(),
-                'created_at' => now(),
+                'created_at' => $this->randomDate('2024-01-01', now()),
                 'updated_at' => now(),
             ]);
         }
