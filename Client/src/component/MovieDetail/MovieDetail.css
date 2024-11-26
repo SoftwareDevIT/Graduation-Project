@@ -455,107 +455,7 @@ left: 10px;
 }
 .ngoisao{
     margin-top:6px;
-}
-  /* Cho màn hình máy tính bảng */
-@media (max-width: 1024px) {
-    .movie-detail-container {
-        padding: 20px;
-    }
-
-    .info-section {
-        overflow-x: hidden;
-        width: 100%;
-        gap: 20px;
-        padding: 20px;
-    }
-
-    .movie-details-wrapper {
-        flex-direction: column;
-        gap: 20px;
-    }
-
-    .poster {
-        width: 180px;
-    }
-
-    .additional-info {
-        width: 100%;
-        padding-top: 20px;
-    }
-    .actions {
-        display: flex;
-        flex-direction: row !important; /* Ghi đè bất kỳ nơi nào có 'flex-direction: column' */
-        justify-content: space-between;
-      }
-    .tabs {
-   
-        gap: 10px;
-        padding-left: 206px;
-        margin-left: 0;
-    }
-
-    .schedule-section, .related-posts, .title-2, .community-section {
-        width: 100%;
-        margin-left: 0;
-    }
-
-    .video-section {
-        width: 100%;
-    }
-}
-
-/* Cho màn hình điện thoại */
-@media (max-width: 768px) {
-  
-    .info-section {
-        flex-direction: column;
-        width: 100%;
-        gap: 15px;
-        padding: 15px;
-    }
-.info-section img{
-    display: none;
-}
-    .movie-details-wrapper {
-        flex-direction: column;
-        width: 100%;
-        gap: 15px;
-    }
-
-    .poster {
-        width: 150px;
-    }
-
-    .additional-info {
-        width: 100%;
-        padding-top: 10px;
-    }
-
-    .tabs {
-        flex-direction: column;
-        padding-left: 0;
-        margin-left: 0;
-    }
-
-    .actions {
-        display: flex;
-        flex-direction: row !important; /* Ghi đè bất kỳ nơi nào có 'flex-direction: column' */
-        justify-content: space-between;
-      }
-    .movie-details {
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .schedule-section, .related-posts, .title-2, .community-section {
-        width: 100%;
-        margin-left: 0;
-    }
-
-    .video-section {
-        width: 100%;
-    }
-}
+} 
 .city-select{
     display: block;
 }
@@ -669,3 +569,132 @@ width: 60px;
     outline: none;
   }
   
+  /* Cho màn hình máy tính bảng */
+@media (min-width: 767px) and (max-width: 1024px) {
+    .movie-detail-container {
+        padding: 20px;
+    }
+
+    .info-section {
+        overflow-x: hidden;
+        width: 100%;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .movie-details-wrapper {
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .poster {
+        width: 180px;
+    }
+
+    .additional-info {
+        width: 100%;
+        padding-top: 20px;
+    }
+   
+    .tabs {
+   
+        gap: 10px;
+        padding-left: 100px;
+        margin-left: 0;
+    }
+
+    .schedule-section, .related-posts, .title-2, .community-section {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .video-section {
+        width: 100%;
+    }
+  
+}
+
+
+
+
+  @media screen and (max-width: 767px) {
+    .info-section {
+        flex-direction: column;
+        width: 100%;
+        gap: 15px;
+        padding: 15px;
+    }
+.info-section img{
+    display: none;
+}
+    .movie-details-wrapper {
+        flex-direction: column;
+        width: 100%;
+        gap: 15px;
+    }
+
+    .poster {
+        width: 150px;
+    }
+
+    .additional-info {
+        width: 100%;
+        padding-top: 10px;
+    }
+
+    .tabs {
+        flex-direction: column;
+        padding-left: 0;
+        margin-left: 0;
+    }
+
+    .actions {
+        display: flex;
+        flex-direction: row !important; /* Ghi đè bất kỳ nơi nào có 'flex-direction: column' */
+        justify-content: space-between;
+      }
+    .movie-details {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .schedule-section, .related-posts, .title-2, .community-section {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .video-section {
+        width: 100%;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap; /* Cho phép các nút xuống dòng khi cần thiết */
+      gap: 10px; /* Khoảng cách giữa các nút */
+    }
+  
+    .actions button {
+      flex: 1 1 45%; /* Mỗi nút chiếm khoảng 45% chiều rộng của container, giúp 2 nút ở mỗi dòng */
+      padding: 12px; /* Đảm bảo nút có kích thước vừa đủ */
+      font-size: 14px; /* Kích thước chữ */
+      text-align: center; /* Căn giữa chữ trong nút */
+    }
+  
+    .actions .buy-ticket {
+      background-color: #ff4d4f; /* Màu đỏ cho nút "Mua vé" */
+      color: white;
+    }
+    .button.buy{
+    width: 130px !important;
+    }
+    .button.like {
+     width: 130px !important;
+     padding-left: 40px;
+    }
+    .button.rate{
+        width:130px !important;
+      padding-bottom: 8px;
+    }
+    .button.trailer{
+        width: 130px !important;
+    }
+  }

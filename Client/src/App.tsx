@@ -69,6 +69,11 @@ import RoomsFormManager from "./Page/Admin/Rooms/RoomsForm";
 import Video from "./component/News/Video";
 import FilmNews from "./component/News/FilmNews";
 import MovieTicket from "./component/PersonalPage/MovieTicket";
+
+import PageTitleUpdater from "./component/PageTitleUpdater/PageTitleUpdater";
+import Community from "./component/Community/Community";
+
+
 import ActorManager from "./Page/Admin/Actor/ActorManager";
 import ActorForm from "./Page/Admin/Actor/ActorForm";
 import DirectorManager from "./Page/Admin/Director/DirectorManager";
@@ -79,11 +84,13 @@ import UpcomingMovies from "./component/Movies/UpcomingMovies";
 
 
 
+
 function App() {
 
   return (
     <>
       <QueryClientProvider client={queryClient}>
+       <PageTitleUpdater/>
       <Routes>
         <Route index element={<Home />} />
         <Route path="/buy-ticket" element={<Bookcinematickets />} />
@@ -131,6 +138,7 @@ function App() {
 
         <Route path="/deponsit" element={<Deponsit />} />
         <Route path="/forgetpass" element={<ForgetPass />} />
+        <Route path="/community" element={<Community />} />
 
 
         <Route path="/otp" element={<Otp />} />
