@@ -8,13 +8,7 @@ export const loginSchema = z.object({
 
 export type LoginSchema = z.infer<typeof loginSchema>;
 
-export const registerSchema = z.object({
-  email: z.string().nonempty("Vui lòng nhập email.").email("Email không hợp lệ."),
-  user_name: z.string().nonempty("Tên đăng nhập là bắt buộc."),
-  password: z.string().nonempty("Mật khẩu là bắt buộc.").min(8, "Mật khẩu phải có ít nhất 8 ký tự."),
-  confirmPassword: z.string(),
 
-});
 export type RegisterSchema = z.infer<typeof registerSchema>;
 
 export const resetPasswordSchema = z.object({
@@ -26,4 +20,19 @@ export const resetPasswordSchema = z.object({
 }).refine((data) => data.password === data.passwordConfirmation, {
     message: 'Mật khẩu và xác nhận mật khẩu không trùng khớp.',
     path: ['passwordConfirmation'], // Chỉ định lỗi xảy ra ở trường nào
+});
+export const registerSchema = z.object({
+  email: z
+    .string()
+    .nonempty("Email là bắt buộc")
+    .email("Email không đúng định dạng"),
+  user_name: z.string().nonempty("Tên đăng nhập là bắt buộc"),
+  password: z
+    .string()
+    .nonempty("Mật khẩu là bắt buộc")
+    .min(8, "Mật khẩu phải có ít nhất 8 ký tự"),
+  confirmPassword: z.string().nonempty("Xác minh mật khẩu là bắt buộc"),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Mật khẩu và xác nhận mật khẩu không khớp",
+  path: ["confirmPassword"], // Gắn lỗi vào trường confirmPassword
 });

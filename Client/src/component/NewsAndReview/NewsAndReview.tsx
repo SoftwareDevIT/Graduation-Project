@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { stripHtml } from '../../assets/Font/quillConfig';
-
+import { formatDistanceToNow } from 'date-fns';
+import { vi } from 'date-fns/locale';  // Import tiếng Việt từ date-fns
 import './NewsAndReview.css';
 import { useNews } from '../../Context/NewsContext';
 
@@ -15,7 +16,9 @@ const NewsAndReview = () => {
     setShowAll(!showAll);
   };
 
-  
+  function formatTimeAgo(date: string) {
+    return formatDistanceToNow(new Date(date), { addSuffix: true, locale: vi });  // Cấu hình ngôn ngữ tiếng Việt
+  }
 
   return (
     <div className="new-container">
@@ -31,11 +34,11 @@ const NewsAndReview = () => {
               alt={news.title}
             />
             <div className="news-content">
-              <Link to={`/postdetail/${news.id}`}>
+              <Link to={`/postdetail/${news.slug}`}>
                 <h3>{news.title}</h3>
               </Link>
-              <span>{news.user.fullname}</span>
-              <p>{stripHtml(news.content.substring(0, 100))}...</p>
+              <span>  <span className='user-style'>{news.news_category.news_category_name}</span> - {news.user.fullname} - {formatTimeAgo(news.created_at)}</span>
+              <p>{stripHtml(news.content.substring(0, 400))}...</p>
             </div>
           </div>
         ))}
@@ -46,13 +49,15 @@ const NewsAndReview = () => {
         )}
       </div>
       <div className="review-section">
-      <h2>Review</h2>
+     <div className="reviewss">
+     <h2>Review</h2>
+     </div>
         {reviewsData.slice(-5).map((review, index) => ( // Lấy 5 mục cuối
           <div className="review-item" key={index}>
              <Link to={`/postdetail/${review.id}`}>
                 <h3>{review.title}</h3>
               </Link>
-            <span className="time">{review.user.fullname}• {new Date(review.created_at).toLocaleDateString()}</span>  
+            <span className="time">{review.user.fullname}•  {formatTimeAgo(review.created_at)}</span>  
             
           </div>
         ))}

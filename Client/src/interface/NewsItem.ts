@@ -13,7 +13,7 @@ export interface NewsItem {
     views: number;
     thumnail: string;
     banner:string;
-    content: string;
+    content: string ;
     status: 'Show' | 'Hidden';
     user_id: number;
     created_at: string;
