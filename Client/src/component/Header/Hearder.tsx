@@ -193,7 +193,7 @@ const Header = () => {
 
       <div className="cinemas-list">
         {cinemas.map((cinema) => (
-          <a key={cinema.id} href="#">
+          <a key={cinema.id} href="#" onClick={() => navigate(`/buy-ticket`)} >
             {cinema.cinema_name}
           </a>
         ))}
@@ -256,7 +256,7 @@ const Header = () => {
                   {/* <a href="#">TV Series</a> */}
                 </div>
               </div>
-              <a href="#">Cộng đồng</a>
+              <Link to={'/community'}>Cộng Đồng</Link>
             </div>
           </div>
 

@@ -102,16 +102,16 @@ const MovieTicket = () => {
                   </div>
                   <div className="account-nav">
                     <div className="account-nav-item">
-                      <span className="account-nav-title">Tài khoản</span>
+                    <span className="account-nav-title"><Link to={"/profile"}>Quản lí tài khoản</Link></span>
                     </div>
                     <div className="account-nav-item">
-                      <span className="account-nav-title">Tủ phim</span>
+                    <span className="account-nav-title"><Link to={"/changepassword"}>Đổi mật khẩu</Link></span>
                     </div>
                     <div className="account-nav-item">
-                      <span className="account-nav-title">Vé</span>
+                    <span className="account-nav-title"><Link to={"/moviticket"}>Vé</Link></span>
                     </div>
                     <div className="account-nav-item">
-                      <span className="account-nav-title"><Link to={"/changepassword"}>Đổi mật khẩu</Link></span>
+                      <span className="account-nav-title"><Link to={"/desponsit"}>Nạp Tiền</Link></span>
                     </div>
                   </div>
                 </div>

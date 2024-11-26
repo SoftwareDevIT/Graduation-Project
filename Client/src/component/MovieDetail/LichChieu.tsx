@@ -147,6 +147,7 @@ const LichChieuUpdated: React.FC = () => {
                               `${selectedDate}T${showtime.showtime_start}`
                             );
                             const isPastShowtime = showtimeDateTime < new Date();
+                            
                             return (
                               <span
                                 key={showtime.id}
@@ -170,7 +171,8 @@ const LichChieuUpdated: React.FC = () => {
                                   color: isPastShowtime ? "gray" : "black",
                                 }}
                               >
-                                {showtime.showtime_start.slice(0, 5)}
+                                {showtime.showtime_start.slice(0, 5)} <br></br>
+                                {`${showtime.price / 1000}k`}
                               </span>
                             );
                           })
