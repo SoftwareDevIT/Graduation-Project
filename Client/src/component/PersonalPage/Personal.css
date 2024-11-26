@@ -25,7 +25,7 @@ display: flex;
 
   padding-left: 20px;
   padding-top: 30px;
- 
+
 }
 .nameacount h3{
   font-size: 30px;
@@ -66,11 +66,61 @@ font-weight: 500;
   width: 126px;
   height: 190px;
 }
-.phimyeuthich{
-    display: flex;
-    margin-left: 250px;
-   
+
+.phimyeuthich-container {
+  width: 900px; /* Điều chỉnh để phù hợp với banner */
+  margin: 0 auto;
+  padding: 20px;
 }
+
+.phimyeuthich {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  
+}
+
+.item-phim {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 28px 28px 0 0;
+  overflow: hidden;
+  margin: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.item-phim:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+.item-phim .img {
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+}
+
+.item-phim .img img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  transition: transform 0.2s ease;
+}
+
+
+
+.movie-title {
+  padding: 10px;
+  font-size: 14px; /* Làm nhỏ hơn để cân đối */
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+  font-family: "Cerebri Sans, sans-serif";
+}
+
 .moveslike{
   margin-top: 16px;
 }
@@ -135,6 +185,15 @@ font-weight: 500;
   border-radius: 8px;
   cursor: pointer;
 } 
+.movie-title {
+  margin-top: 10px;
+
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+  font-family: "Cerebri Sans, sans-serif";
+}
+
 
 
 /* Các quy tắc CSS hiện tại của bạn ở đây */
@@ -214,7 +273,7 @@ font-weight: 500;
   }
 
   .acounntone {
-     
+    
   }
 
   .avatas {
@@ -312,4 +371,11 @@ font-weight: 500;
   .main-content{
     width: 390px !important;
   }
+}
+.img img{
+  border-radius: 10px 10px 0 0;
+}
+
+.img img:hover{
+  border-radius: 10px 10px 0 0;
 }

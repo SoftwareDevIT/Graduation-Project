@@ -34,6 +34,7 @@
     "axios": "^1.7.7",
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.4",
+    "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",
     "du-an": "file:",
     "feather-icons": "^4.29.2",

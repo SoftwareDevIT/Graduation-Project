@@ -104,7 +104,7 @@ function App() {
         <Route path="/filmnews" element={<FilmNews/>} />
         <Route path="/video" element={<Video />} />
         <Route path="/sp" element={<SupportCenter />} />
-        <Route path="/postdetail/:id" element={<PostDetail />} />
+        <Route path="/postdetail/:slug" element={<PostDetail />} />
 
 
 

@@ -587,13 +587,23 @@ width: 60px;
     
     }
     .actions  {
-         gap :15px
+         gap :5px;
+        font-size: 15px;
+         
     }
+    .muave {
+       font-size: 10px;
 
+    }
+.danhgia{
+    display: flex !important;
+    width: 60px;
+}
      .rate .like-1{
         padding-left: 10px;
         font-size: 12px !important;
      }
+    
 }
 .danhgiaphim {
     display: flex;

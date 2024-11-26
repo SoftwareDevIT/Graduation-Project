@@ -54,7 +54,7 @@ const SearchMovies = () => {
       <div key={movie.id} className="col-lg-2 move-itemone-1">
          <Link state={{ movieId: movie.id }} to={`/movie-detail/${movie.slug}`}> <img src={movie.poster || undefined} alt={movie.name} /></Link>
        
-        <h4>{movie.movie_name}</h4>
+         <h4>{movie.movie_name.length > 20 ? `${movie.movie_name.slice(0, 10)}...` : movie.movie_name}</h4>
         <p>{movie.release_date}</p>
       </div>
     ))
