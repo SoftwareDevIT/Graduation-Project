@@ -13,8 +13,8 @@ import { notification } from 'antd';
 
 // Schema validation
 const showtimeSchema = z.object({
-    movie_in_cinema_id: z.string().min(1, 'Vui lòng chọn phim'),
-    room_id: z.string().min(1, 'Vui lòng chọn phòng'),
+    movie_in_cinema_id: z.number().min(1, 'Vui lòng chọn phim'),
+    room_id: z.number().min(1, 'Vui lòng chọn phòng'),
     showtime_date: z
       .string()
       .min(1, 'Vui lòng chọn ngày chiếu')
@@ -41,7 +41,7 @@ const showtimeSchema = z.object({
       .min(0, 'Giá phải lớn hơn hoặc bằng 0')
       .max(500000, 'Giá không được vượt quá 500,000 VNĐ')
       .optional(),
-    cinema_id: z.string().min(1, 'Vui lòng chọn rạp'),
+    cinema_id: z.number().min(1, 'Vui lòng chọn rạp'),
   });
   
 
@@ -58,8 +58,11 @@ const ShowtimesForm: React.FC = () => {
   const [movieInCinemas, setMovieInCinemas] = useState<any[]>([]);
   const [roomsList, setRoomsList] = useState<Room[]>([]);
   const [cinemaId, setCinemaId] = useState<number | null>(null);
-  const [showtimesList, setShowtimesList] = useState<Showtime[]>([]);
-
+  const [showtimesList, setShowtimesList] = useState<Showtime[]>(() => {
+    // Try to get the showtimes from localStorage when the page is reloaded
+    const savedShowtimes = localStorage.getItem('showtimesList');
+    return savedShowtimes ? JSON.parse(savedShowtimes) : [];
+  });
   // Fetch initial data
   useEffect(() => {
     const fetchCinemas = async () => {
@@ -92,6 +95,12 @@ const ShowtimesForm: React.FC = () => {
     fetchCinemas();
     fetchShowtime();
   }, [id, reset]);
+  useEffect(() => {
+    localStorage.setItem('showtimesList', JSON.stringify(showtimesList));
+  }, [showtimesList]);
+  
+  
+  
 
   // Fetch movies by cinema
   const fetchMovieInCinema = async (cinemaId: number) => {
@@ -133,14 +142,34 @@ const ShowtimesForm: React.FC = () => {
 
     reset();
   };
+  const handleDelete = (index: number) => {
+    const newShowtimesList = [...showtimesList];
+    newShowtimesList.splice(index, 1); // Xóa phần tử tại vị trí index
+    setShowtimesList(newShowtimesList);
+    localStorage.setItem('showtimesList', JSON.stringify(newShowtimesList)); // Lưu lại vào localStorage
+    notification.success({
+      message: 'Xóa Suất Chiếu Thành Công!',
+      description: 'Suất chiếu đã được xóa khỏi danh sách.',
+    });
+  };
 
   // Submit all showtimes in bulk
   const handleSubmitAll = async () => {
+     // Kiểm tra nếu danh sách showtimes rỗng hoặc chưa có thông tin đầy đủ
+  if (showtimesList.length === 0 || showtimesList.some(item => !item.movie_in_cinema_id || !item.room_id || !item.showtime_date || !item.showtime_start)) {
+    notification.error({
+      message: 'Lỗi khi gửi tất cả Showtime',
+      description: 'Vui lòng điền đầy đủ thông tin cho tất cả các suất chiếu.',
+    });
+    return;
+  }
+  localStorage.setItem('showtimesList', JSON.stringify([]));
     await addOrUpdateShowtime(showtimesList);
     notification.success({
       message: 'Gửi Tất Cả Suất Chiếu Thành Công!',
       description: 'Suất chiếu mới đã được thêm vào danh sách.',
     });
+    
     navigate('/admin/showtimes');
   };
 
@@ -151,7 +180,7 @@ const ShowtimesForm: React.FC = () => {
         <div className="mb-3">
           <label className="form-label">Chọn Rạp</label>
           <select
-            {...register('cinema_id')}
+            {...register('cinema_id',{valueAsNumber:true})}
             value={cinemaId || ''}
             onChange={handleCinemaChange}
             className="form-select"
@@ -168,7 +197,7 @@ const ShowtimesForm: React.FC = () => {
 
         <div className="mb-3">
           <label className="form-label">Chọn Phim</label>
-          <select {...register('movie_in_cinema_id')} className="form-select">
+          <select {...register('movie_in_cinema_id',{valueAsNumber:true})} className="form-select">
             <option value="">Chọn Phim</option>
             {movieInCinemas.map((movie) => (
               <option key={movie.id} value={movie.id}>
@@ -181,7 +210,7 @@ const ShowtimesForm: React.FC = () => {
 
         <div className="mb-3">
           <label className="form-label">Chọn Phòng</label>
-          <select {...register('room_id')} className="form-select">
+          <select {...register('room_id',{valueAsNumber:true})} className="form-select">
             <option value="">Chọn Phòng</option>
             {roomsList.map((room) => (
               <option key={room.id} value={room.id}>
@@ -254,6 +283,9 @@ const ShowtimesForm: React.FC = () => {
                   <td>{item.showtime_date}</td>
                   <td>{item.showtime_start}</td>
                   <td>{item.price}</td>
+                  <td>
+                    <button type="button" onClick={() => handleDelete(index)} className="btn btn-danger">Xóa</button>
+                  </td>
                 </tr>
               ))}
             </tbody>

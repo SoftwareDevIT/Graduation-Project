@@ -14,7 +14,7 @@ const PostDetailManager: React.FC = () => {
   const post = posts.find((p) => p.id === Number(postId));
 
   if (!post) {
-    return <div className="text-center">Không tìm thấy bài viết.</div>;
+    return <div className="text-center"></div>;
   }
 
   return (

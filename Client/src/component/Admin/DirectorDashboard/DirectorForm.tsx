@@ -9,7 +9,7 @@ import { Director } from "../../../interface/Director";
 
 // Define schema for form validation using Zod
 const directorSchema = z.object({
-  director_name: z.string().min(1, "Tên đạo diễn là bắt buộc."),
+  director_name: z.string().min(1, "Tên đạo diễn là bắt buộc.").regex(/^[^\d]*$/, "Tên diễn viên không được chứa số."),
   country: z.string().min(1, "Quốc gia là bắt buộc."),
   photo: z.any().optional(),
   link_wiki: z.string().url("Link Wiki phải là URL hợp lệ."),
@@ -73,11 +73,11 @@ const DirectorForm = () => {
   }, [id, reset]);
 
   const handleFormSubmit = async (data: Director) => {
-    if (!selectedFile) {
+    if (!selectedFile && !existingPhoto) {
       notification.error({
-        message: "Lỗi xác thực",
-        description: "Ảnh đại diện là bắt buộc!",
-        placement: "topRight",
+        message: 'Lỗi xác thực',
+        description: 'Ảnh đại diện là bắt buộc!',
+        placement: 'topRight',
       });
       return;
     }

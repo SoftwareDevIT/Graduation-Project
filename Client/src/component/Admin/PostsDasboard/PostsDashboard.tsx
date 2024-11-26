@@ -8,6 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './PostDashboard.css';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { notification } from 'antd';
 
 const PostsDashboard: React.FC = () => {
   const { state, deletePost } = usePostsContext();
@@ -29,7 +30,11 @@ const PostsDashboard: React.FC = () => {
   const handleDeletePost = async (postId: number) => {
     if (window.confirm("Bạn có chắc chắn muốn xóa bài viết này?")) {
       await deletePost(postId);
-      alert("Xóa bài viết thành công!");
+      notification.success({
+        message: 'Xóa bài viết thành công!',
+        description: 'Bài viết đã được xóa thành công.',
+        placement: 'topRight', // Vị trí của thông báo
+      });
       setCurrentPage(1);
     }
   };

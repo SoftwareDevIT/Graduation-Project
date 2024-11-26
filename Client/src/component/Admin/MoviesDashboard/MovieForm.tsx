@@ -28,12 +28,12 @@ const movieSchema = z.object({
     .max(18, 'Giới hạn độ tuổi tối đa là 18'),
   description: z.string().min(10, 'Mô tả phải có ít nhất 10 ký tự').max(500,'Mô tả tối đa 500 ký tự'),
   duration: z
-    .string()
-    .min(1, 'Thời lượng là bắt buộc')
-    .refine((duration) => {
-      const durationInMinutes = parseInt(duration, 10);
-      return !isNaN(durationInMinutes) && durationInMinutes <= 180;
-    }, 'Thời lượng phim không được quá 180 phút'),
+  .string()
+  .min(1, 'Thời lượng là bắt buộc')
+  .refine((duration) => {
+    const durationInMinutes = parseInt(duration, 10);
+    return !isNaN(durationInMinutes) && durationInMinutes > 0 && durationInMinutes <= 180;
+  }, 'Thời lượng phim phải là số dương và không quá 180 phút'),
   posterFile: z.any().optional(),
   thumbnailFile: z.any().optional(), // Optional thumbnail
   country: z.string().min(1,'Tên quốc gia là bắt buộc'),
@@ -125,7 +125,7 @@ const MovieForm: React.FC = () => {
   }, [id, reset]);
 
   const onSubmit = async (data: MovieFormValues) => {
-    if (!thumbnailFile) {
+    if (!thumbnailFile && !data.thumbnailFile) {
       notification.error({
         message: 'Lỗi xác thực',
         description: 'Ảnh thu nhỏ là bắt buộc!',
@@ -133,7 +133,7 @@ const MovieForm: React.FC = () => {
       });
       return;
     }
-    if (!posterFile) {
+    if (!posterFile && !data.posterFile) {
       notification.error({
         message: 'Lỗi xác thực',
         description: 'Ảnh bìa là bắt buộc!',
@@ -141,18 +141,19 @@ const MovieForm: React.FC = () => {
       });
       return;
     }
+  
     const updatedData = {
       ...data,
-      posterFile: posterFile instanceof File ? posterFile : undefined,
-    thumbnailFile: thumbnailFile instanceof File ? thumbnailFile : undefined,
+      posterFile: posterFile instanceof File ? posterFile : undefined,  // Only include the file if it's new
+      thumbnailFile: thumbnailFile instanceof File ? thumbnailFile : undefined,  // Only include the file if it's new
       country,
       trailer,
     };
-
+  
     await addOrUpdateMovie(updatedData, id);
     nav('/admin/movies');
   };
-
+  
   return (
     <div className="container mt-5">
       <h2 className="text-center mb-4">{id ? 'Chỉnh sửa phim' : 'Thêm phim'}</h2>

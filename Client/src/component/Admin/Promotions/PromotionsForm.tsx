@@ -9,26 +9,28 @@ import { zodResolver } from "@hookform/resolvers/zod"; // Import zodResolver
 
 // Define Zod schema
 const promotionSchema = z.object({
-  code: z.string().min(1, "Mã khuyến mãi là bắt buộc"),
-  discount_percentage: z
-    .number()
-    .min(0, "Giảm giá phải lớn hơn hoặc bằng 0")
-    .max(100, "Giảm giá không thể vượt quá 100%"),
-  max_discount: z.number().min(0, "Giảm giá tối đa phải lớn hơn hoặc bằng 0"),
-  min_purchase: z.number().min(0, "Giá trị mua tối thiểu phải lớn hơn hoặc bằng 0"),
-  valid_from: z
-    .string()
-    .refine((val) => !!Date.parse(val), "Ngày bắt đầu không hợp lệ"), // Custom date validation
-  valid_to: z
-    .string()
-    .refine((val) => !!Date.parse(val), "Ngày kết thúc không hợp lệ"), // Custom date validation
+    code: z.string().min(1, "Mã khuyến mãi là bắt buộc"),
+    discount_percentage: z
+      .number()
+      .min(0, "Giảm giá phải lớn hơn hoặc bằng 0")
+      .max(100, "Giảm giá không thể vượt quá 100%"),
+    max_discount: z.number().min(0, "Giảm giá tối đa phải lớn hơn hoặc bằng 0"),
+    min_purchase: z.number().min(0, "Giá trị mua tối thiểu phải lớn hơn hoặc bằng 0"),
+    valid_from: z
+      .string()
+      .refine((val) => !!Date.parse(val), "Ngày bắt đầu không hợp lệ")
+      .refine((val) => new Date(val) >= new Date(), "Ngày bắt đầu không được bé hơn ngày hiện tại"),
+    valid_to: z
+      .string()
+      .refine((val) => !!Date.parse(val), "Ngày kết thúc không hợp lệ")
+      .refine((val) => new Date(val) >= new Date(), "Ngày kết thúc không được bé hơn ngày hiện tại"),
     is_active: z
-    .union([z.literal("1"), z.literal("0"), z.number().int()])
-    .transform((val) => {
-      if (val === "1" || val === 1) return true;
-      return false;
-    }),
-});
+      .union([z.literal("1"), z.literal("0"), z.number().int()])
+      .transform((val) => {
+        if (val === "1" || val === 1) return true;
+        return false;
+      }),
+  });
 
 type PromotionFormData = z.infer<typeof promotionSchema>;
 
@@ -42,9 +44,20 @@ const PromotionForm = () => {
     register,
     formState: { errors },
     reset,
+    setValue, // Add setValue to set field values manually
   } = useForm<PromotionFormData>({
     resolver: zodResolver(promotionSchema), // Use zodResolver here
   });
+
+  // Create a function to generate a random promotion code
+  const generatePromotionCode = () => {
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let code = "";
+    for (let i = 0; i < 6; i++) {
+      code += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return code;
+  };
 
   useEffect(() => {
     const fetchPromotion = async () => {
@@ -70,6 +83,14 @@ const PromotionForm = () => {
     fetchPromotion(); // Fetch promotion data if there is an ID
   }, [id, reset]);
 
+  useEffect(() => {
+    // If no ID and the code is not provided, generate a promotion code
+    if (!id) {
+      const generatedCode = generatePromotionCode();
+      setValue("code", generatedCode); // Automatically set the generated code
+    }
+  }, [id, setValue]);
+
   const handleFormSubmit = async (data: PromotionFormData) => {
     try {
       if (id) {
@@ -90,6 +111,7 @@ const PromotionForm = () => {
       console.error("Error submitting promotion data:", error);
       notification.error({
         message: "Lỗi khi gửi dữ liệu khuyến mãi",
+        description:"Tên khuyến mãi đã tồn tại!!"
       });
     }
   };
@@ -197,9 +219,16 @@ const PromotionForm = () => {
           {errors.is_active && <div className="invalid-feedback">{errors.is_active.message}</div>}
         </div>
 
-        <div className="mb-3">
-          <button className="btn btn-primary w-100">
-            {id ? "Cập nhật Khuyến mãi" : "Thêm Khuyến mãi"}
+        <div className="d-flex justify-content-between">
+          <button type="submit" className="btn btn-primary">
+            {id ? "Cập nhật" : "Thêm"}
+          </button>
+          <button
+            type="button"
+            className="btn btn-danger"
+            onClick={() => nav("/admin/promotions")}
+          >
+            Hủy
           </button>
         </div>
       </form>

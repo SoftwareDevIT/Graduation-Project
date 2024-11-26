@@ -38,14 +38,11 @@ const roomSchema = z.object({
       message: 'Số ghế VIP không thể lớn hơn 10',
     }),
 
-}).refine((data) => data.quantity_double_seats <= data.volume, {
-  message: 'Số ghế đôi không thể lớn hơn sức chứa',
-  path: ['quantity_double_seats'],
-})
-.refine((data) => data.quantity_vip_seats <= data.volume, {
-  message: 'Số ghế VIP không thể lớn hơn sức chứa',
-  path: ['quantity_vip_seats'],
+}).refine((data) => data.quantity_double_seats + data.quantity_vip_seats <= data.volume, {
+  message: 'Tổng số ghế đôi và ghế VIP không thể lớn hơn sức chứa',
+  path: ['quantity_double_seats'], // Đảm bảo lỗi này được hiển thị ở ghế đôi
 });
+
 
 
 

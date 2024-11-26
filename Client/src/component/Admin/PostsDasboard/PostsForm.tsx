@@ -21,7 +21,7 @@ type FormData = z.infer<typeof postSchema>;
 
 const PostsForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { register, handleSubmit, reset, formState: { errors } ,getValues} = useForm<FormData>({
+  const { register, handleSubmit, reset, formState: { errors } ,getValues,setValue} = useForm<FormData>({
     resolver: zodResolver(postSchema), // Using Zod schema for validation
   });
   const [categories, setCategories] = useState<NewsCategory[]>([]);
@@ -62,8 +62,11 @@ const PostsForm: React.FC = () => {
   }, [id, reset]);
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
-    // Kiểm tra nếu chưa có thumbnail hoặc banner
-    if (!thumbnailFile) {
+    const finalThumbnail = thumbnailFile || oldThumbnail;
+    const finalBanner = bannerFile || oldBanner;
+  
+    // Check if both thumbnail and banner are available (for new post creation)
+    if (!finalThumbnail) {
       notification.error({
         message: 'Lỗi xác thực',
         description: 'Ảnh thu nhỏ là bắt buộc!',
@@ -71,7 +74,7 @@ const PostsForm: React.FC = () => {
       });
       return;
     }
-    if (!bannerFile) {
+    if (!finalBanner) {
       notification.error({
         message: 'Lỗi xác thực',
         description: 'Ảnh bìa là bắt buộc!',
@@ -80,12 +83,12 @@ const PostsForm: React.FC = () => {
       return;
     }
   
-    // Nếu đã hợp lệ, tiếp tục gửi dữ liệu
+    // Proceed with data submission
     await addOrUpdatePost(
       {
         ...data,
-        thumnail: thumbnailFile,
-        banner: bannerFile,
+        thumnail: finalThumbnail,
+        banner: finalBanner,
       },
       id
     );
@@ -175,11 +178,10 @@ const PostsForm: React.FC = () => {
           <label className="form-label">Nội dung:</label>
           <CKEditor
             editor={ClassicEditor}
-            data={oldBanner || ''} // If editing, load previous content
+            data={getValues('content') || ''} // If editing, load previous content
             onChange={(event, editor) => {
               const data = editor.getData();
-              // Set content value to the form state
-              reset({ ...getValues(), content: data });
+              setValue('content', data); // Use setValue to update content
             }}
           />
           {errors.content && <span className="text-danger">{errors.content.message}</span>}
