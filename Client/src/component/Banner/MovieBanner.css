@@ -102,14 +102,15 @@
   white-space: nowrap;  /* Không cho xuống dòng */
   overflow: hidden;     /* Ẩn phần nội dung tràn ra */
   text-overflow: ellipsis; /* Hiển thị dấu ba chấm (...) */
+ 
 }
 
 /* Movie rating styling */
-.movie-info .rating {
+.movie-info .rating-1 {
   color: #28a745;
   font-weight: bold;
   text-align: right;
-  margin-left: 127px;
+margin-left: 20px;
 }
 .slick-dots {
   display: flex;

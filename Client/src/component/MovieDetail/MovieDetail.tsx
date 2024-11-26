@@ -8,7 +8,7 @@ import "./MovieDetail.css";
 import Header from "../Header/Hearder";
 import { useMovieContext } from "../../Context/MoviesContext";
 import instance from "../../server";
-
+import { format } from 'date-fns';
 const MovieDetail: React.FC = () => {
   const { slug } = useParams(); // Sử dụng slug
   const location = useLocation();
@@ -67,7 +67,7 @@ const MovieDetail: React.FC = () => {
  
   const handleFavoriteToggle = async () => {
     const token = localStorage.getItem("token");
-    if (!userStatus.isLoggedIn || !token) {
+    if ( !token) {
       notification.warning({
         message: "Yêu cầu đăng nhập",
         description: "Vui lòng đăng nhập để thêm phim vào danh sách yêu thích!",
@@ -170,12 +170,12 @@ const MovieDetail: React.FC = () => {
                   <div className="button like" onClick={handleFavoriteToggle}>
                     {userStatus.isFavorite ? "❤️" : "🤍"} <span>Thích</span>
                   </div>
-                  <div className="button rate" onClick={() => setRatingData((prev) => ({ ...prev, isModalVisible: true }))}>
+                  <div className="button rate danhgia" onClick={() => setRatingData((prev) => ({ ...prev, isModalVisible: true }))}>
                     <FontAwesomeIcon icon={faStar} color={userStatus.isRated ? "#FFD700" : "#ccc"} />
-                    <span >Đánh giá</span>
+                    <span className="danhgia">Đánh giá</span>
                   </div>
                   <div className="button trailer" onClick={() => setIsTrailerVisible(true)}>Trailer</div>
-                  <div className="button buy">
+                  <div className="button buy muave">
                     <Link to={`/buy-now/${slug}`}>Mua vé</Link>
                   </div>
                 </div>
@@ -183,8 +183,8 @@ const MovieDetail: React.FC = () => {
                 <p className="description">{stripHtml(movie?.description || "Không có mô tả")}</p>
 
                 <div className="movie-details">
-                  <div>📅 Khởi chiếu: {movie?.release_date || "Chưa có ngày phát hành"}</div>
-                  <div>⏰ Thời lượng: {movie?.duration || "Chưa có thời lượng"}</div>
+                  <div>📅 Khởi chiếu: {movie?.release_date ? format(new Date(movie.release_date), 'dd/MM/yyyy') : 'Chưa có ngày phát hành'}</div>
+                  <div>⏰ Thời lượng: {movie?.duration || "Chưa có thời lượng"} phút</div>
                   <div>🔞 Giới hạn tuổi: {movie?.age_limit ? `${movie.age_limit}` : "Không có giới hạn tuổi"}</div>
                 </div>
               </div>

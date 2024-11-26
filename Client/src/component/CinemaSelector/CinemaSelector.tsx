@@ -229,10 +229,10 @@ const CinemaSelector: React.FC = () => {
               </div>
                <select
                 className="city-selects"
-                value={selectedCity ?? ""}
+                value={selectedCinema ?? ""}
                 onChange={(e) => setSelectedCinema(Number(e.target.value))}
               >
-                <option className="city-selects-option" value="">Chọn Rạp</option>
+                <option className="city-selects-option" value=""></option>
                 {filteredCinemas.map((cinema) => (
                   <option key={cinema.id} value={cinema.id}>
                     {cinema.cinema_name}

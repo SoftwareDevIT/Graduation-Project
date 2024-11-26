@@ -463,7 +463,48 @@ left: 10px;
 margin-right: 0;
 
 }
+@media (max-width:480px) {
+    .actions {
+        
+        display: flex;
+        flex-direction: row !important; /* Ghi đè bất kỳ nơi nào có 'flex-direction: column' */
+        justify-content: space-between;
+      }
+      .actions .button .like-1 {
+        position: relative;
+        left: -6px;
+    }
+    .actions .rate .like2{
+width: 60px;
+  
+    }
+    .movie-info h2 {
+        margin-right: 190px;
+    }
+      
+      .movie-info span {
+        margin-right: 12px;
+    
+    }
+    .actions  {
+         gap :5px;
+        font-size: 15px;
+         
+    }
+    .muave {
+       font-size: 10px;
 
+    }
+.danhgia{
+    display: flex !important;
+    width: 60px;
+}
+     .rate .like-1{
+        padding-left: 10px;
+        font-size: 12px !important;
+     }
+    
+}
 .danhgiaphim {
     display: flex;
     gap: 20px;

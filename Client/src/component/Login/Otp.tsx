@@ -10,7 +10,7 @@ const Otp = () => {
     const [message, setMessage] = useState('');
     const [messageType, setMessageType] = useState<'success' | 'error' | 'info' | 'warning' | undefined>(undefined);
     const nav = useNavigate();
-
+    const [showAlert, setShowAlert] = useState(false);
     useEffect(() => {
         const storedEmail = localStorage.getItem('reset_email');
         if (storedEmail) {
@@ -37,7 +37,8 @@ const Otp = () => {
 
             setMessage('OTP hợp lệ! Bạn có thể tiếp tục.');
             setMessageType('success');
-            nav('/resetPassword'); // Navigate to reset password page
+            setShowAlert(true); // Hiển thị thông báo
+            setTimeout(() => nav('/resetPassword'), 2000);
         } catch (error) {
             setMessage('OTP không hợp lệ. Vui lòng thử lại.');
             setMessageType('error');

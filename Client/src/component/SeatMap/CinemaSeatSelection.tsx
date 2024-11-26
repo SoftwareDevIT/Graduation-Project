@@ -6,7 +6,7 @@ import Headerticket from "../Headerticket/Headerticket";
 import "./CinemaSeatSelection.css";
 import instance from "../../server";
 import { Room } from "../../interface/Room";
-
+import { message } from 'antd';
 
 interface SeatRowProps {
   row: string | { row: string; seats: (string | null)[] };
@@ -77,7 +77,7 @@ console.log("VIP Seats:", roomData.quantity_vip_seats);
     };
     fetchRoomAndSeats();
   }, [showtimeId]);
-  
+ 
   
   if (error) {
     return <div>{error}</div>;
@@ -236,7 +236,7 @@ const totalPrice = calculatePrice();
       const response = await instance.post("/selectSeats", payload);
       console.log(payload);
       if (response.status === 200) {
-        // Navigate to 'orders' with all required data, including seats as an array
+     
         navigate("/orders", {
           state: {
             movieName,
@@ -247,17 +247,26 @@ const totalPrice = calculatePrice();
             roomId: roomData?.id,
             seats: selectedSeatsArray, // Pass selectedSeatsArray as seats
             totalPrice,
-          },
+          }
 
         });
         console.log(selectedSeatsArray);
 
-      } else {
+      } else if (response.data.message === "Some seats already exist.") {
+        // Hiển thị thông báo lỗi và chuyển về trang chủ
+        message.error("Một số ghế đã được đặt trước. Chuyển về trang chủ sau 3 giây!", 3);
+        setTimeout(() => {
+            navigate('/');
+        }, 3000);
+      }else {
         console.error("Error: API call successful but status is not 200");
       }
     } catch (error) {
-      console.error("Error submitting movie and seats selection", error);
-      setError("Có lỗi xảy ra khi gửi thông tin, vui lòng thử lại.");
+      console.error("Error submitting movie and seats selection:", error);
+        message.error("Ghế của bạn đã được đặt vui lòng thử lại", 3); // Hiển thị thông báo lỗi trong 3 giây
+        setTimeout(() => {
+            navigate('/'); // Chuyển hướng về trang chủ
+        }, 3000);
     }
   };
 
@@ -273,6 +282,7 @@ const totalPrice = calculatePrice();
     <>
       <Header />
       <Headerticket />
+      
       <div className="box-map">
         <div className="container container-map">
           <div className="seat-info-box">

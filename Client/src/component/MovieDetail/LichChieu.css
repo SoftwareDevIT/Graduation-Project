@@ -32,15 +32,15 @@
 
 .city-select-custom,
 .format-select-custom {
-  margin-top: 10px;
-
+  margin-top: 5px;
+margin-bottom: 10px;
   font-size: 16px;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   background-color: #fff;
   color: #333;
   appearance: none; /* Bỏ mũi tên mặc định của select */
-  width: 335px;
+  width: 700px;
 padding: 0 !important;
 padding-left: 15px !important;
 }
@@ -259,14 +259,15 @@ select{
 }
 .cinema-showtimes span {
  
-  padding: 4px 1px;
+
   border-radius: 5px;
   margin: 5px;
+  margin-bottom: 15px;
   margin-left: 12px;
   font-size: 13px;
   color: #12263f;
   font-weight: 500;
-padding-top: 10px;
+
   cursor: pointer;
   border: 1px solid #ccc;
   text-align: center;

@@ -12,7 +12,7 @@ const ResetPassword = () => {
     const [message, setMessage] = useState('');
     const [messageType, setMessageType] = useState<'success' | 'error' | 'info' | 'warning' | undefined>(undefined);
     const navigate = useNavigate();
-
+    const [showAlert, setShowAlert] = useState(false);
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -43,8 +43,13 @@ const ResetPassword = () => {
 
             setMessage('Mật khẩu đã được đặt lại thành công!');
             setMessageType('success');
-            localStorage.removeItem('reset_email');
-            navigate('/login');
+            setShowAlert(true); // Hiển thị thông báo
+
+            // Chuyển đến trang đăng nhập sau 2 giây
+            setTimeout(() => {
+                localStorage.removeItem('reset_email');
+                navigate('/login');
+            }, 2000);
         } catch (error) {
             setMessage('Đã xảy ra lỗi. Vui lòng thử lại.');
             setMessageType('error');
@@ -86,6 +91,7 @@ const ResetPassword = () => {
                         type={messageType}
                         showIcon
                         style={{ marginTop: '15px' }}
+                        afterClose={() => setShowAlert(false)}
                     />
                 )}
             </div>

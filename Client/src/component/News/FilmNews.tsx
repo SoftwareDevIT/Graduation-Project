@@ -37,7 +37,7 @@ function FilmNews() {
                         <img src={item.thumnail} alt={item.title} />
                       </div>
                       <div className="content-new">
-                        <Link to={`/postdetail/${item.id}`}><h3>{item.title}</h3></Link>
+                        <Link to={`/postdetail/${item.slug}`}><h3>{item.title}</h3></Link>
                         <p>{stripHtml(item.content)}</p>
                       </div>
                     </div>
