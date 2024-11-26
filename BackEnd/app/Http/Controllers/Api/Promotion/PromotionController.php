@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Api\Promotion;
 
 use App\Http\Controllers\Controller;
+use App\Models\Booking;
 use Illuminate\Http\Request;
 use App\Models\Promotion;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class PromotionController extends Controller
 {
@@ -109,6 +112,33 @@ class PromotionController extends Controller
             'message' => 'Áp dụng mã khuyến mãi thành công.',
             'discount' => $discount,
             'final_price' => $validated['total_price'] - $discount,
+        ]);
+    }
+    public function getUserVouchers(Request $request)
+    {
+        // Lấy user_id từ request hoặc auth (tùy vào cách quản lý đăng nhập)
+        $userId = $request->user()->id;
+
+        // Tính tổng amount của người dùng trong bảng bookings
+        $totalAmount = Booking::where('user_id', $userId)
+            ->sum('amount');
+
+        // Kiểm tra nếu tổng amount lớn hơn 2 triệu
+        if ($totalAmount < 2000000) {
+            return response()->json([
+                'message' => 'Bạn cần chi tiêu hơn 2 triệu để nhận voucher.'
+            ], 400);
+        }
+
+        // Lấy danh sách voucher phù hợp
+        $vouchers = Promotion::whereBetween('discount_percentage', [5, 20])
+            ->where('is_active', true)
+            ->whereDate('valid_to', '>=', now())
+            ->get();
+
+        return response()->json([
+            'message' => 'Danh sách voucher dành cho bạn.',
+            'vouchers' => $vouchers
         ]);
     }
 }
