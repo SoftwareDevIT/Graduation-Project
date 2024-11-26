@@ -19,21 +19,21 @@ class RevenueController extends Controller
     public function totalRevenue($status)
     {
         $totalRevenue = $this->revenueService->totalRevenue($status);
-        return response()->json($totalRevenue);
+         return $this->success($totalRevenue);
     }
     public function totalRevenueByCinema($cinema_id)
     {
         $totalRevenue = $this->revenueService->totalRevenueByCinema($cinema_id);
-        return response()->json($totalRevenue);
+         return $this->success($totalRevenue);
     }
     public function totalRevenueByCinemaBetweenDates($cinema_id, $startDate, $endDate)
     {
         $totalRevenue = $this->revenueService->totalRevenueByCinemaBetweenDates($cinema_id, $startDate, $endDate);
-        return response()->json($totalRevenue);
+         return $this->success($totalRevenue);
     }
     public function totalRevenueBetweenDates($startDate, $endDate)
     {
         $totalRevenue = $this->revenueService->totalRevenueBetweenDates($startDate, $endDate);
-        return response()->json($totalRevenue);
+        return $this->success($totalRevenue);
     }
 }
