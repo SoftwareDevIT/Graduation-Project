@@ -37,6 +37,9 @@ const PageTitleUpdater = () => {
     else if (path === "/personal") {
         title = "Personal";
     }
+    else if (path ==="/movieticket") {
+        title = "MovieTicket";
+    }
     document.title = title; // Cập nhật title
   }, [location]);
 

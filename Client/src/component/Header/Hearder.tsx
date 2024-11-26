@@ -229,7 +229,7 @@ const Header = () => {
                   {/* <a href="#">TV Series</a> */}
                 </div>
               </div>
-              <a href="#">Cộng đồng</a>
+              <Link to={'/community'}>Cộng Đồng</Link>
             </div>
           </div>
 

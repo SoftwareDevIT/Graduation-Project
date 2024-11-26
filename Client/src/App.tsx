@@ -70,6 +70,7 @@ import Video from "./component/News/Video";
 import FilmNews from "./component/News/FilmNews";
 import MovieTicket from "./component/PersonalPage/MovieTicket";
 import PageTitleUpdater from "./component/PageTitleUpdater/PageTitleUpdater";
+import Community from "./component/Community/Community";
 
 
 
@@ -128,6 +129,7 @@ function App() {
 
         <Route path="/deponsit" element={<Deponsit />} />
         <Route path="/forgetpass" element={<ForgetPass />} />
+        <Route path="/community" element={<Community />} />
 
 
         <Route path="/otp" element={<Otp />} />

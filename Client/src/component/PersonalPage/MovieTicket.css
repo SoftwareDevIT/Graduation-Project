@@ -8,12 +8,14 @@
     border: 1px solid #dcdcdc;
     border-radius: 20px; /* Bo góc mềm mại */
     padding: 30px;
-    width: 340px;
+    max-width: 340px;
+    width: 100%;
     background: linear-gradient(145deg, #1e5799, #4bc3b0); /* Gradient từ xanh dương đậm và xanh ngọc */
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1); /* Bóng đổ nhẹ để tạo chiều sâu */
     font-family: 'Arial', sans-serif;
     margin: 60px;
     transition: all 0.3s ease-in-out;
+    box-sizing: border-box;
 }
 .no-tickets-form {
     display: flex;
@@ -192,15 +194,19 @@
 
 /* Mobile (dưới 768px) */
 /* Điện thoại (dưới 768px) */
-@media (max-width: 768px) {
+@media  (min-width: 767px) and (max-width: 1024px) {
     .ticket-tong {
-        grid-template-columns: 1fr; /* Chỉ hiển thị 1 cột */
-       margin-right: 100px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* Mỗi cột chiếm 1 phần bằng nhau */
+        gap: 20px; /* Khoảng cách đều giữa các vé */
+        justify-content: center; /* Căn giữa */
+        align-items: stretch; 
     }
 
     .ticket-container {
-        width: 90%; /* Chiếm 90% chiều rộng màn hình */
-        padding: 10px; /* Giảm khoảng cách padding bên trong */
+        width: 80%; /* Kích thước vé chiếm 40% chiều rộng màn hình */
+        padding: 20px; /* Giảm padding để phù hợp với kích thước vé */
+        margin: 20px auto; /* Thêm margin auto để cân đối khoảng cách giữa các vé */
         font-size: 14px; /* Thu nhỏ chữ */
     }
 
@@ -240,5 +246,93 @@
 
     .qr-note {
         font-size: 12px;
+    }
+}
+
+/* Mobile (dưới 768px) */
+@media (max-width: 765px) {
+    .ticket-tong {
+        display: grid;
+        grid-template-columns: 1fr; /* Chỉ 1 vé trên mỗi dòng */
+        gap: 16px; /* Khoảng cách giữa các vé nhỏ hơn */
+        padding: 10px; /* Thêm khoảng đệm chung */
+        justify-content: center;
+    }
+
+    .ticket-container {
+        width: 90%; /* Kích thước vé chiếm phần lớn màn hình */
+        padding: 16px; /* Giảm padding để vé gọn hơn */
+        margin: 10px auto; /* Thêm khoảng cách nhỏ giữa các vé */
+        font-size: 13px; /* Thu nhỏ font chữ */
+        box-shadow: none; /* Loại bỏ bóng nếu cần tối giản */
+    }
+
+    .ticket-header {
+        flex-direction: column; /* Chuyển header vé thành hàng dọc */
+        align-items: center;
+        gap: 6px;
+    }
+
+    .ticket-info {
+        flex-direction: column; /* Chuyển thông tin thành hàng dọc */
+        gap: 6px; /* Giảm khoảng cách giữa các mục */
+        align-items: center; /* Căn giữa thông tin */
+    }
+
+    .ticket-info span {
+        font-size: 12px; /* Chữ nhỏ hơn */
+        padding: 4px 10px; /* Giảm padding */
+    }
+
+    .ticket-code {
+        font-size: 16px; /* Thu nhỏ mã vé */
+        margin-bottom: 6px;
+    }
+
+    .ticket-cinema {
+        font-size: 18px; /* Thu nhỏ tên rạp */
+    }
+
+    .ticket-date {
+        font-size: 12px; /* Chữ nhỏ hơn */
+        margin-bottom: 8px;
+    }
+
+    .ticket-qr {
+        margin-top: 10px;
+        align-items: center; /* Căn giữa QR code */
+    }
+
+    .qr-wrapper {
+        padding: 8px; /* Giảm padding cho QR */
+    }
+
+    .qr-image {
+        width: 120px; /* Kích thước QR nhỏ hơn */
+        height: 120px;
+    }
+
+    .qr-note {
+        font-size: 11px; /* Font nhỏ hơn cho ghi chú QR */
+        color: #777; /* Màu chữ tối hơn một chút */
+    }
+
+    .ticket-details {
+        margin-top: 15px; /* Giảm khoảng cách */
+    }
+
+    .item-name {
+        font-size: 13px; /* Giảm font chữ */
+    }
+
+    .total,
+    .grand-total {
+        font-size: 16px; /* Thu nhỏ chữ tổng tiền */
+    }
+
+    .banner-img {
+        width: 100%; /* Banner chiếm toàn bộ chiều ngang */
+        height: auto;
+        max-height: 180px; /* Giới hạn chiều cao banner */
     }
 }

@@ -141,7 +141,7 @@ const Profile: React.FC = () => {
           <span className="account-nav-title">Tủ phim</span>
         </div>
         <div className="account-nav-item">
-          <span className="account-nav-title">Vé</span>
+        <li className="account-submenu-item"><Link to={'/movieticket'}>Vé</Link></li>
         </div>
         <div className="account-nav-item">
           <span className="account-nav-title">Nạp tiền</span>
