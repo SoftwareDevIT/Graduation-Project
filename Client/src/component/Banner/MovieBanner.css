@@ -97,6 +97,7 @@
 }
 
 .name_movie {
+  padding-left: 8px;
        /* Chiều rộng tối đa cho tên phim */
   white-space: nowrap;  /* Không cho xuống dòng */
   overflow: hidden;     /* Ẩn phần nội dung tràn ra */
