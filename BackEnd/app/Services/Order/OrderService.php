@@ -38,7 +38,7 @@ class OrderService
 
     public function order()
     {
-        $order = Booking::where('user_id', Auth::user()->id)->with('showtime.movie', 'showtime.room', 'user', 'payMethod', 'seats', 'combos')->get();
+        $order = Booking::where('user_id', Auth::user()->id)->with('showtime.movie', 'showtime.room', 'user', 'payMethod', 'seats', 'combos')->where('status', 'Confirmed')->orderByDesc('created_at')->get();
         return $order;
     }
 }
