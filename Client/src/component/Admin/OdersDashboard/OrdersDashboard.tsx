@@ -28,7 +28,7 @@ const OrdersDashboard: React.FC = () => {
     <div className="container mt-5">
     
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <button className="btn btn-outline-primary"><FontAwesomeIcon icon={faPlus} /> Thêm Đơn Hàng</button>
+ 
       </div>
       <div className="table-responsive">
         <table className="table table-bordered table-hover shadow-sm">
@@ -43,7 +43,7 @@ const OrdersDashboard: React.FC = () => {
               <th>Giá Combo</th> */}
               <th>Số Lượng</th>
               <th>Trạng Thái</th>
-              <th>Thao Tác</th>
+             
             </tr>
           </thead>
           <tbody>
@@ -59,14 +59,7 @@ const OrdersDashboard: React.FC = () => {
         <td>${booking.price_combo?.toFixed(2) || "0.00"}</td> */}
         <td>{booking.amount}</td>
         <td>{booking.status}</td>
-        <td className="action-buttons2">
-          <button className="btn btn-warning btn-sm mx-1" title="Sửa">
-            <FontAwesomeIcon icon={faEdit} />
-          </button>
-          <button className="btn btn-danger btn-sm" title="Xóa">
-            <FontAwesomeIcon icon={faTrash} />
-          </button>
-        </td>
+        
       </tr>
     ))
   ) : (
