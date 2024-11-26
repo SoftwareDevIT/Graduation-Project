@@ -23,9 +23,17 @@ class Showtime extends Model
         'status',
     ];
 
+    public function moviecinema()
+    {
+        return $this->belongsTo(MovieInCinema::class, 'movie_in_cinema_id');
+    }
+
+    /**
+     * Quan hệ: Movie từ MovieInCinema
+     */
     public function movie()
     {
-        return $this->belongsTo(Movie::class);
+        return $this->moviecinema()->with('movie');
     }
 
     public function room()

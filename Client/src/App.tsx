@@ -75,6 +75,8 @@ import DirectorManager from "./Page/Admin/Director/DirectorManager";
 import DirectorFormManager from "./Page/Admin/Director/DirectorForm";
 import UpcomingMovies from "./component/Movies/UpcomingMovies";
 import PageTitleUpdater from "./component/PageTitleUpdater/PageTitleUpdater";
+import MethodManager from "./Page/Admin/Method/MethodManager";
+import MethodFormManager from "./Page/Admin/Method/MethodForm";
 
 
 
@@ -151,6 +153,9 @@ function App() {
         <Route path="/admin/user/roles" element={<PrivateRoute allowedRoles={['admin']}><UserAddManager /></PrivateRoute>} />
         <Route path="/admin/actor" element={<PrivateRoute allowedRoles={['admin']}><ActorManager/></PrivateRoute>} />
         <Route path="/admin/actor/add" element={<PrivateRoute allowedRoles={['admin']}><ActorForm/></PrivateRoute>} />
+        <Route path="/admin/method" element={<PrivateRoute allowedRoles={['admin']}><MethodManager/></PrivateRoute>} />
+        <Route path="/admin/method/add" element={<PrivateRoute allowedRoles={['admin']}><MethodFormManager/></PrivateRoute>} />
+        <Route path="/admin/method/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><MethodFormManager/></PrivateRoute>} />
         <Route path="/admin/actor/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><ActorForm/></PrivateRoute>} />
         <Route path="/admin/director" element={<PrivateRoute allowedRoles={['admin']}><DirectorManager/></PrivateRoute>} />
         <Route path="/admin/director/add" element={<PrivateRoute allowedRoles={['admin']}><DirectorFormManager/></PrivateRoute>} />

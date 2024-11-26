@@ -82,7 +82,9 @@ const PageTitleUpdater = () => {
     else if (path === "/admin/RevenueByMovie"){
         title = "Doanh Thu Theo Phim"
     }
-    
+    else if(path === "/admin/method"){
+      title = "Phương Thức Thanh Toán"
+    }
     
     document.title = title; // Cập nhật title
   }, [location]);

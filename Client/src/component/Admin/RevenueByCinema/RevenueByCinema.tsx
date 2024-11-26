@@ -1,20 +1,54 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './RevenueByCinema.css';
 import { Line, Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, LineElement, PointElement, Tooltip, Legend, ArcElement } from 'chart.js';
+import axios from 'axios';
+interface RevenueResponse {
+    status: boolean;
+    message: string;
+    data: number;
+}
+
+interface CinemaRevenue {
+    cinema: string;
+    revenue: number;
+}
 
 // Đăng ký các thành phần cần thiết cho ChartJS
 ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Tooltip, Legend, ArcElement);
 
 const RevenueByCinema = () => {
-    const revenueData = [
-        { cinema: 'Rạp 1', revenue: 10000 },
-        { cinema: 'Rạp 2', revenue: 15000 },
-        { cinema: 'Rạp 3', revenue: 8000 },
-    ];
+    const [revenueData, setRevenueData] =  useState<CinemaRevenue[]>([]);
+    const [totalRevenue, setTotalRevenue] = useState(0);
 
-    const totalRevenue = revenueData.reduce((acc, item) => acc + item.revenue, 0);
+    // Lấy dữ liệu doanh thu từ API
+    useEffect(() => {
+        const fetchRevenueData = async () => {
+            try {
+                // Lấy danh sách các rạp (ví dụ 3 rạp)
+                const cinemas = [1, 2, 3]; // giả sử bạn có ID của các rạp
+                const revenuePromises = cinemas.map(cinemaId =>
+                    axios.get(`/api/total-revenue-cinema/${cinemaId}`).then(response => ({
+                        cinema: `Rạp ${cinemaId}`,
+                        revenue: response.data.data,
+                    }))
+                );
 
+                // Chờ tất cả các yêu cầu API hoàn thành
+                const revenues = await Promise.all(revenuePromises);
+
+                // Cập nhật state với dữ liệu doanh thu
+                setRevenueData(revenues);
+                setTotalRevenue(revenues.reduce((acc, item) => acc + item.revenue, 0));
+            } catch (error) {
+                console.error("Lỗi khi lấy dữ liệu doanh thu:", error);
+            }
+        };
+
+        fetchRevenueData();
+    }, []);
+
+    // Cấu trúc dữ liệu cho biểu đồ vùng
     const areaData = {
         labels: revenueData.map(item => item.cinema),
         datasets: [{
@@ -27,6 +61,7 @@ const RevenueByCinema = () => {
         }],
     };
 
+    // Cấu trúc dữ liệu cho biểu đồ tròn
     const pieData = {
         labels: revenueData.map(item => item.cinema),
         datasets: [{

@@ -75,7 +75,7 @@ const PostsDashboard: React.FC = () => {
     <div className="container mt-5">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <Link to={'/admin/posts/add'} className="btn btn-outline-primary">
-        <FontAwesomeIcon icon={faPlus} /> Thêm bài viết
+          <FontAwesomeIcon icon={faPlus} /> Thêm bài viết
         </Link>
         <input
           type="text"
@@ -98,19 +98,6 @@ const PostsDashboard: React.FC = () => {
                   <Link to={`/admin/posts/${post.id}`} className="card-title-link">
                     <h5 className="card-title text-dark font-weight-bold">{post.title}</h5>
                   </Link>
-                  <div className="card-text text-muted truncated-text">
-                    <CKEditor
-                      editor={ClassicEditor}
-                      data={truncateContent(post.content, 200)} // Truncate content to 200 characters
-                      disabled={true} // Make it read-only
-                      config={{
-                        toolbar: [],
-                      }}
-                    />
-                    {post.content.length > 100 && (
-                      <Link to={`/admin/posts/${post.id}`} className="text-primary mt-2">Xem thêm</Link>
-                    )}
-                  </div>
                   <p className="text-muted small mt-auto mb-2">Thể loại: {post.news_category.news_category_name}</p>
                   <p className="text-muted small mt-auto mb-2">Lượt Xem: {post.views}</p>
                   <p className="text-muted small mb-3">Ngày xuất bản: {new Date(post.created_at).toLocaleDateString()}</p>
@@ -134,7 +121,7 @@ const PostsDashboard: React.FC = () => {
       </div>
 
       <nav className="d-flex justify-content-center mt-4">
-        <ul className="pagination pagination-lg">
+        <ul className="pagination">
           <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
             <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>Trước</button>
           </li>
