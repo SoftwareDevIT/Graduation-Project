@@ -112,20 +112,6 @@
     pointer-events: none;
     cursor: pointer;
   }
-  .custom-modal .ant-modal-body {
-    padding: 0; /* Loại bỏ padding để iframe chiếm toàn bộ không gian */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.custom-modal iframe {
-    
-    width: 800px; /* Giới hạn chiều rộng tối đa */
-    height: 450px; /* Giới hạn chiều cao tối đa */
-    border-radius: 10px;
-    border: none;
-}
   @media (max-width:1200px) {
     .movie-item .video-icon{
       display: block !important;

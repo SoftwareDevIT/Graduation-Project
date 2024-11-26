@@ -4,9 +4,11 @@ import './ForgetPass.css';
 import { useNavigate } from 'react-router-dom';
 import { Alert } from 'antd';
 
+import { z } from 'zod';
+import { resetPasswordSchema } from '../../utils/validationSchema';
+
 const ResetPassword = () => {
-    const [password, setPassword] = useState('');
-    const [passwordConfirmation, setPasswordConfirmation] = useState('');
+    const [formData, setFormData] = useState({ password: '', passwordConfirmation: '' });
     const [message, setMessage] = useState('');
     const [messageType, setMessageType] = useState<'success' | 'error' | 'info' | 'warning' | undefined>(undefined);
     const navigate = useNavigate();
@@ -14,10 +16,14 @@ const ResetPassword = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        // Check if password and confirmation match
-        if (password !== passwordConfirmation) {
-            setMessage('Mật khẩu và xác nhận mật khẩu không trùng khớp.');
-            setMessageType('error');
+        // Validate form data
+        try {
+            resetPasswordSchema.parse(formData);
+        } catch (validationError) {
+            if (validationError instanceof z.ZodError) {
+                setMessage(validationError.errors[0]?.message || 'Dữ liệu không hợp lệ.');
+                setMessageType('error');
+            }
             return;
         }
 
@@ -31,8 +37,8 @@ const ResetPassword = () => {
         try {
             await axios.post('http://127.0.0.1:8000/api/password/reset', {
                 email,
-                password,
-                password_confirmation: passwordConfirmation,
+                password: formData.password,
+                password_confirmation: formData.passwordConfirmation,
             });
 
             setMessage('Mật khẩu đã được đặt lại thành công!');
@@ -45,6 +51,11 @@ const ResetPassword = () => {
         }
     };
 
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { id, value } = e.target;
+        setFormData((prev) => ({ ...prev, [id]: value }));
+    };
+
     return (
         <div className="forgot-password-container">
             <div className="form-section">
@@ -55,18 +66,16 @@ const ResetPassword = () => {
                         type="password"
                         id="password"
                         placeholder="Nhập mật khẩu mới"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)} // Only updates `password`
-                        required
+                        value={formData.password}
+                        onChange={handleChange}
                     />
-                    <label htmlFor="confirm-password">Xác nhận mật khẩu</label>
+                    <label htmlFor="passwordConfirmation">Xác nhận mật khẩu</label>
                     <input
                         type="password"
-                        id="confirm-password"
+                        id="passwordConfirmation"
                         placeholder="Xác nhận mật khẩu"
-                        value={passwordConfirmation}
-                        onChange={(e) => setPasswordConfirmation(e.target.value)} // Only updates `passwordConfirmation`
-                        required
+                        value={formData.passwordConfirmation}
+                        onChange={handleChange}
                     />
                     <button type="submit">Đổi Mật Khẩu</button>
                 </form>
@@ -74,7 +83,7 @@ const ResetPassword = () => {
                 {message && (
                     <Alert
                         message={message}
-                        type={messageType} // Use messageType for success or error
+                        type={messageType}
                         showIcon
                         style={{ marginTop: '15px' }}
                     />

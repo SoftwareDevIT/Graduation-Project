@@ -120,12 +120,7 @@ const MovieTicket = () => {
             <div className="divider"></div>
             <div className="ticket-tong">
               {tickets.length === 0 ? (
-               <form className="no-tickets-form">
-               <div className="no-tickets-message">
-                 Bạn chưa có vé nào được đặt.
-               </div>
-             </form>
-             
+                <p className="no-tickets-message">Bạn chưa có vé nào được đặt.</p>
               ) : (
                 tickets.map((ticket, index) => (
                   <div className="ticket-container" key={index}>
@@ -160,16 +155,8 @@ const MovieTicket = () => {
                       </div>
                     </div>
                     <div className="ticket-qr">
-  <div className="qr-wrapper">
-    {qrCodes[index] ? (
-      <img src={qrCodes[index]} alt={`QR Code ${index}`} className="qr-image" />
-    ) : (
-      <p className="qr-placeholder">Đang tạo mã QR...</p>
-    )}
-    <p className="qr-note">Quét mã QR để xác nhận vé</p>
-  </div>
-</div>
-
+                      {qrCodes[index] && <img src={qrCodes[index]} alt={`QR Code ${index}`} />}
+                    </div>
                   </div>
                 ))
               )}

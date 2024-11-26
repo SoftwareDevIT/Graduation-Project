@@ -4,12 +4,16 @@ import Footer from "../Footer/Footer";
 import MovieDetail from "./MovieDetail";
 import instance from "../../server";
 import { stripHtml } from '../../assets/Font/quillConfig';
+import { useMovieContext } from "../../Context/MoviesContext";
+import { useParams } from "react-router-dom";
 const TinTuc: React.FC = () => {
+    const { slug } = useParams(); // Sử dụng slug
     const [relatedPosts, setRelatedPosts] = useState<any[]>([]);
-
+    const { state } = useMovieContext(); // Lấy dữ liệu từ MovieContext
+    const movie = state.movies.find((movie) => movie.slug === slug);
     useEffect(() => {
         // Fetch data from the API
-        instance.get("/filterNewByMovie/1")
+        instance.get(`/filterNewByMovie/${movie?.id}`)
             .then(response => {
                 if (response.data.status) {
                     setRelatedPosts(response.data.data);

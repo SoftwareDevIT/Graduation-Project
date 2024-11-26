@@ -45,4 +45,4 @@ const PageTitleUpdater = () => {
 
   return null;
 };
-export default PageTitleUpdater;
+export default PageTitleUpdater

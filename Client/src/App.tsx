@@ -78,6 +78,7 @@ import ActorManager from "./Page/Admin/Actor/ActorManager";
 import ActorForm from "./Page/Admin/Actor/ActorForm";
 import DirectorManager from "./Page/Admin/Director/DirectorManager";
 import DirectorFormManager from "./Page/Admin/Director/DirectorForm";
+import UpcomingMovies from "./component/Movies/UpcomingMovies";
 
 
 
@@ -88,8 +89,8 @@ function App() {
 
   return (
     <>
-       <QueryClientProvider client={queryClient}>
-       <PageTitleUpdater />
+      <QueryClientProvider client={queryClient}>
+       <PageTitleUpdater/>
       <Routes>
         <Route index element={<Home />} />
         <Route path="/buy-ticket" element={<Bookcinematickets />} />
@@ -116,7 +117,7 @@ function App() {
 
         <Route path="/movie/search/:movie_name" element={<SerachMovies />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/personal" element={<Personal />} />
+        <Route path="/Personal" element={<Personal />} />
         <Route path="/credits" element={<Credits />} />
         <Route path="/ChangePassword" element={<ChangePassword />} />
    
@@ -131,6 +132,7 @@ function App() {
       
     
        
+        <Route path="/upcoming-movies" element={<UpcomingMovies />} />
         <Route path="/movieshowing" element={<MovieShowing />} />
         <Route path="/movieticket" element={<MovieTicket />} />
 
@@ -143,7 +145,6 @@ function App() {
         <Route path="/resetPassword" element={<ResetPassword />} />
         <Route path="/earlymovie" element={<EarlyMovie />} />
         <Route path="/resetpass" element={<ResetPasswod />} />
-
 
 
 
