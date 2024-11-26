@@ -16,7 +16,7 @@ class MovieService
     public function index()
     {
 
-        $movies = Movie::with(['actor', 'director', 'movie_category', 'movieInCinemas'])->orderBy('created_at', 'desc')->get();
+        $movies = Movie::with(['actor', 'director', 'movie_category', 'movieInCinemas'])->withCount('favorites')->orderBy('created_at', 'desc')->get();
 
         $formattedMovies = $movies->map(function ($movie) {
             return array_merge(
