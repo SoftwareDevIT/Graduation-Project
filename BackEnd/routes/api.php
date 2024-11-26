@@ -117,7 +117,7 @@ Route::middleware(['auth:sanctum', 'role:admin|manager'])->group(function () {
     Route::apiResource('news_category', NewCategoryController::class)->except(['index', 'show']);
     Route::apiResource('news', NewController::class)->except(['index', 'show']);
     Route::get('/all-user', [AuthController::class, 'allUser']);
-
+Route::apiResource('order', OrderController::class);
 
     // phan quyen
     Route::resource('roles', RoleController::class); // add roles and show
@@ -172,7 +172,7 @@ Route::get('ratings/{movie}', [RatingController::class, 'show']);               
 Route::get('rating', [RatingController::class, 'index']);                                           // Xem all dánh giá
 Route::get('filterMoviePopular', [MovieController::class, 'moviePopular']);                // Lọc bài viết liên quan tới phim
 
-Route::apiResource('order', OrderController::class);
+
 // Route::group(['middleware' => ['auth:sanctum']], function () {
 //     Route::post('/slectMovieAndSeats', [BookingController::class, 'slectMovieAndSeats']);
 //     Route::post('/selectCombo', [BookingController::class, 'selectCombos']);
