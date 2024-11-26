@@ -71,7 +71,7 @@ const PostDetail: React.FC = () => {
             </button>
           </div>
 
-          <p className="article-description">{stripHtml(article?.content  ?? "Nội dung không khả dụng")}</p>
+          <p className="article-description">{stripHtml(article?.content  ?? "Nội không khả dụng")}</p>
 
           {/* Nếu bạn muốn giữ lại nội dung ban đầu, bạn có thể thêm phần nội dung ở đây */}
         </div>

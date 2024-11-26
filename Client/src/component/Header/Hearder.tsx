@@ -12,7 +12,7 @@ const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [isProfileMenuVisible, setProfileMenuVisibles] = useState(false);
-
+  const [isNotificationVisible, setIsNotificationVisible] = useState(false);
   const [cinemas, setCinemas] = useState<Cinema[]>([]);
   const [selectedLocation, setSelectedLocation] = useState("1")
   const { state } = useCountryContext();
@@ -61,13 +61,15 @@ const Header = () => {
     localStorage.removeItem("user_id"); // Xóa userId khỏi localStorage
     localStorage.removeItem("user_profile"); // Xóa userId khỏi localStorage
     setIsLoggedIn(false); // Cập nhật trạng thái đăng nhập
-    navigate('/')
+    navigate('/login')
   };
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value); // Cập nhật giá trị tìm kiếm vào state
   };
 
-
+  const handleNotificationClick = () => {
+    setIsNotificationVisible((prev) => !prev); // Toggle trạng thái hiển thị thông báo
+  };
   // Hàm khi nhấn nút tìm kiếm
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -340,7 +342,17 @@ const Header = () => {
               </>
             )}
 
-            <span className="thongbao">&#128276;</span>
+<span className="thongbao" onClick={handleNotificationClick}>
+  &#128276;
+  {isNotificationVisible && (
+  <div className="notification-dropdown">
+    <p>Thông báo 1</p>
+    <p>Thông báo 2</p>
+    <p>Thông báo 3</p>
+  </div>
+)}
+</span>
+
           </div>
         </div>
       </div>

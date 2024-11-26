@@ -7,6 +7,7 @@ import { loginSchema, LoginSchema } from "../../utils/validationSchema";
 import "./Login.css";
 import { notification } from "antd";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { FaGoogle } from "react-icons/fa";
 
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginSchema>({
@@ -30,6 +31,7 @@ const Login = () => {
         localStorage.setItem("user_id", profile.id);
         localStorage.setItem("user_profile", JSON.stringify(profile));
 
+        // Thiết lập token cho các yêu cầu API tiếp theo
         instance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
         openNotificationWithIcon("success", "Đăng nhập thành công", "Bạn đã đăng nhập thành công.");
@@ -54,45 +56,68 @@ const Login = () => {
     }
   };
 
+  const handleGoogleSignIn = async () => {
+    try {
+      const response = await instance.post("/get-google-sign-in-url");
+      if (response.status === 200 && response.data.url) {
+        window.location.href = response.data.url;
+      } else {
+        openNotificationWithIcon("error", "Lỗi", "Không lấy được đường dẫn đăng nhập bằng Google.");
+      }
+    } catch (error: any) {
+      openNotificationWithIcon("error", "Lỗi", "Đã xảy ra lỗi khi yêu cầu đăng nhập bằng Google.");
+    }
+  };
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get("token");
+    const profile = urlParams.get("profile");
+
+    if (token && profile) {
+      localStorage.setItem("token", token);
+      localStorage.setItem("user_profile", profile);
+      instance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+      openNotificationWithIcon("success", "Đăng nhập thành công", "Bạn đã đăng nhập thành công bằng Google.");
+      navigate("/");
+    }
+  }, [navigate]);
+
+  useEffect(() => {
+    if (errors.email) {
+      openNotificationWithIcon("error", "Lỗi xác thực", errors.email.message ?? "Có lỗi xảy ra.");
+    }
+    if (errors.password) {
+      openNotificationWithIcon("error", "Lỗi xác thực", errors.password.message ?? "Có lỗi xảy ra.");
+    }
+  }, [errors]);
+
   return (
     <div className="login-container">
       <div className="login-form">
         <h2>Đăng nhập</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
-          {/* Email Input */}
           <div className="form-group">
             <label>Email</label>
-            <input type="text" {...register("email")} />
-            {errors.email && (
-              <p className="error-message">{errors.email.message}</p>
-            )}
+            <input type="email" {...register("email")} />
           </div>
-
-          {/* Password Input */}
           <div className="form-group">
             <label>Mật khẩu</label>
             <input type="password" {...register("password")} />
-            {errors.password && (
-              <p className="error-message">{errors.password.message}</p>
-            )}
           </div>
-
           <button type="submit" className="login-button">
             Đăng nhập
           </button>
         </form>
 
-        <button
-          className="google-login-button login-button"
-          onClick={() => {}}
-        >
-          Đăng nhập bằng Google
+        <button className="google-login-button login-button" onClick={handleGoogleSignIn} >
+        <FaGoogle style={{ marginRight: "10px" }}/>Đăng nhập bằng Google
         </button>
 
         <div className="form-footer">
-          <Link className="forgot-password" to="/forgetpass">
-            Quên mật khẩu?
-          </Link>
+      
+         <Link   className="forgot-password" to={'/forgetpass'}>   Quên mật khẩu?</Link>
           <p className="register-link">
             Chưa có tài khoản? <Link to="/register">Đăng ký ngay!</Link>
           </p>
