@@ -25,6 +25,7 @@ const ActorForm = () => {
   const nav = useNavigate();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [existingPhoto, setExistingPhoto] = useState<string | null>(null); // State để lưu ảnh cũ
+  const [countries, setCountries] = useState<string[]>([]); // State to store countries data
 
   const {
     handleSubmit,
@@ -48,7 +49,18 @@ const ActorForm = () => {
       }
     };
 
+    const fetchCountries = async () => {
+      try {
+        const response = await fetch("https://restcountries.com/v3.1/all?fields=name");
+        const data = await response.json();
+        setCountries(data.map((country: { name: { common: string } }) => country.name.common)); // Extract country names
+      } catch (error) {
+        console.error("Lỗi khi lấy dữ liệu quốc gia:", error);
+      }
+    };
+
     fetchActor(); // Lấy dữ liệu diễn viên nếu có ID
+    fetchCountries(); // Lấy danh sách quốc gia
   }, [id, reset]);
 
   const handleFormSubmit = async (data: Actor) => {
@@ -124,9 +136,7 @@ const ActorForm = () => {
           </label>
           <input
             type="text"
-            className={`form-control ${
-              errors.actor_name ? "is-invalid" : ""
-            }`}
+            className={`form-control ${errors.actor_name ? "is-invalid" : ""}`}
             {...register("actor_name")}
           />
           {errors.actor_name && (
@@ -139,11 +149,17 @@ const ActorForm = () => {
           <label htmlFor="country" className="form-label">
             Quốc gia
           </label>
-          <input
-            type="text"
+          <select
             className={`form-control ${errors.country ? "is-invalid" : ""}`}
             {...register("country")}
-          />
+          >
+            <option value="">Chọn Quốc gia</option>
+            {countries.map((country, index) => (
+              <option key={index} value={country}>
+                {country}
+              </option>
+            ))}
+          </select>
           {errors.country && (
             <span className="text-danger">{errors.country.message}</span>
           )}
@@ -181,9 +197,7 @@ const ActorForm = () => {
           </label>
           <input
             type="text"
-            className={`form-control ${
-              errors.link_wiki ? "is-invalid" : ""
-            }`}
+            className={`form-control ${errors.link_wiki ? "is-invalid" : ""}`}
             {...register("link_wiki")}
           />
           {errors.link_wiki && (
@@ -197,9 +211,7 @@ const ActorForm = () => {
             Mô tả
           </label>
           <textarea
-            className={`form-control ${
-              errors.descripcion ? "is-invalid" : ""
-            }`}
+            className={`form-control ${errors.descripcion ? "is-invalid" : ""}`}
             {...register("descripcion")}
           ></textarea>
           {errors.descripcion && (

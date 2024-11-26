@@ -85,6 +85,9 @@ const PageTitleUpdater = () => {
     else if(path === "/admin/method"){
       title = "Phương Thức Thanh Toán"
     }
+    else if(path === "/admin/promotions"){
+      title = "Mã Giảm Giá"
+    }
     
     document.title = title; // Cập nhật title
   }, [location]);

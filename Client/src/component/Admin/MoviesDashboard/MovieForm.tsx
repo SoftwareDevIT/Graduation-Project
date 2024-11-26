@@ -37,7 +37,7 @@ const movieSchema = z.object({
   posterFile: z.any().optional(),
   thumbnailFile: z.any().optional(), // Optional thumbnail
   country: z.string().min(1,'Tên quốc gia là bắt buộc'),
-  trailer: z.string().url("Link Trailer phải là URL hợp lệ."), // Trailer URL validation (optional)
+  trailer: z.string().url("Link Trailer phải là URL hợp lệ.").optional(),
 });
 
 type MovieFormValues = z.infer<typeof movieSchema>;
@@ -75,6 +75,7 @@ const MovieForm: React.FC = () => {
   const [posterFile, setPosterFile] = useState<File | null>(null);
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null); // State for thumbnail
   const [country, setCountry] = useState<string>(''); // State for country
+  const [countries, setCountries] = useState<any[]>([]); // State for country options
   const [trailer, setTrailer] = useState<string>(''); // State for trailer URL
   const nav = useNavigate();
   const { addOrUpdateMovie } = useMovieContext();
@@ -85,10 +86,14 @@ const MovieForm: React.FC = () => {
         const actorResponse = await instance.get('/actor');
         const directorResponse = await instance.get('/director');
         const categoryResponse = await instance.get('/movie-category');
+        const countriesResponse = await fetch('https://restcountries.com/v3.1/all?fields=name');
+        const countriesData = await countriesResponse.json();
 
         setActors(actorResponse.data.data || []);
         setDirectors(directorResponse.data.data || []);
         setCategories(categoryResponse.data.data || []);
+        setCountries(countriesData.map((country: any) => country.name.common)); // Only use country name
+
 
         if (id) {
           const movieResponse = await instance.get(`/movies/${id}`);
@@ -309,17 +314,22 @@ const MovieForm: React.FC = () => {
           {errors.duration && <p className="text-danger">{errors.duration.message}</p>}
         </div>
 
-        {/* Country */}
-        <div className="mb-3">
+       {/* Country */}
+       <div className="mb-3">
           <label className="form-label">Quốc gia</label>
-          <input
-  type="text"
-  className="form-control"
-  {...register('country')}
-  value={country}
-  onChange={(e) => setCountry(e.target.value)}
-/>
-
+          <select
+            className="form-control"
+            {...register('country')}
+            onChange={(e) => setCountry(e.target.value)}
+            value={country}
+          >
+            <option value="">Chọn quốc gia</option>
+            {countries.map((countryName) => (
+              <option key={countryName} value={countryName}>
+                {countryName}
+              </option>
+            ))}
+          </select>
           {errors.country && <p className="text-danger">{errors.country.message}</p>}
         </div>
 
@@ -329,6 +339,7 @@ const MovieForm: React.FC = () => {
           <input
             type="text"
             className="form-control"
+            {...register('trailer')}
             value={trailer}
             onChange={(e) => setTrailer(e.target.value)}
           />
