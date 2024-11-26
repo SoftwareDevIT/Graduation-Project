@@ -87,7 +87,7 @@ class BookingController extends Controller
         if ($data['vnp_ResponseCode'] == "00") {
             $booking = Booking::where('id', $data['vnp_TxnRef'])->first();
 
-            $booking->status = 'Pain';
+            $booking->status = 'Confirmed';
             $booking->save();
             Mail::to($booking->user->email)->queue(new InvoiceMail($booking));
             // event(new InvoiceSendMail($booking));

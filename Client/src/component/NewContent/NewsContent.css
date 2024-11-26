@@ -42,7 +42,7 @@
 }
 .main-news-content .PhimHot{
   color: rgb(234, 41, 41);
-  font-family:Arial, Helvetica, sans-serif
+  
 }
 .related-news {
   width: 22.5%;
@@ -70,7 +70,7 @@
 .related-news-item .title{
   color: #12263f;
   font-size: 15px;
-  font-family: "Cerebri Sans, sans-serif";
+ 
   font-weight :600
 }
 .related-news-item a{
@@ -106,7 +106,7 @@
   text-decoration: none;
   color: #12263f;
   font-size: 15px;
-  font-family: "Cerebri Sans, sans-serif";
+
   font-weight: 400
 }
 

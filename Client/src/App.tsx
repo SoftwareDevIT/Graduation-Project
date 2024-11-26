@@ -29,7 +29,7 @@ import CinemasFormManager from "./Page/Admin/Cinemas/CinemasForm";
 import ComboFormManager from "./Page/Admin/Combo/ComboForm";
 import ShowtimesFormManager from "./Page/Admin/Showtimes/ShowtimesForm";
 import MoviesManagerForm from "./Page/Admin/Movies/MoviesForm";
-import PaymentCallback from "./component/Pay/PaymentCallback";
+
 import PostsFormManager from "./Page/Admin/Posts/PostForm";
 import LichChieu from "./component/MovieDetail/LichChieu";
 import DanhGia from "./component/MovieDetail/DanhGia";
@@ -105,7 +105,7 @@ function App() {
         <Route path="/buy-now/:slug" element={<MuaVe />} />
         <Route path="/headerticket" element={<Headerticket />} />
         <Route path="/confirm" element={<EmailConfirm />} />
-        <Route path="/payment-callback" element={<PaymentCallback />} />
+     
         <Route path="/*" element={<NotFound />} />
 
 

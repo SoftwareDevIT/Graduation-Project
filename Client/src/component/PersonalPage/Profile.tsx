@@ -15,7 +15,7 @@ import Header from "../Header/Hearder";
 import "./Profile.css";
 import { Link } from "react-router-dom";
 import instance from "../../server";
-
+import { NavLink } from 'react-router-dom';
 const Profile: React.FC = () => {
   const [avatar, setAvatar] = useState<string>(
     "https://cdn.moveek.com/bundles/ornweb/img/no-avatar.png"
@@ -139,22 +139,47 @@ const Profile: React.FC = () => {
                 </div>
 
                 {/* Menu điều hướng bên dưới avatar */}
+              
+
                 <div className="account-nav">
-                  <div className="account-nav-item">
-                    <span className="account-nav-title">Tài khoản</span>
-                    
-                  </div>
-                  <div className="account-nav-item">
-                    <span className="account-nav-title">Tủ phim</span>
-                  </div>
-                  <div className="account-nav-item">
-                    <span className="account-nav-title"><Link to={"/movieticket"}>Vé</Link></span>
-                  </div>
-                  <div className="account-nav-item">
-                    <span className="account-nav-title"><Link to={"/changepassword"}>Đổi mật khẩu</Link></span>
-                    
-                  </div>
-                </div>
+  <div className="account-nav-item">
+    <span className="account-nav-title">
+      <NavLink 
+        to="/profile" 
+        className={({ isActive }) => isActive ? 'active-link' : ''}>
+        Tài khoản
+      </NavLink>
+    </span>
+  </div>
+  <div className="account-nav-item">
+    <span className="account-nav-title">
+      <NavLink 
+        to="/movies" 
+        className={({ isActive }) => isActive ? 'active-link' : ''}>
+        Tủ phim
+      </NavLink>
+    </span>
+  </div>
+  <div className="account-nav-item">
+    <span className="account-nav-title">
+      <NavLink 
+        to="/movieticket" 
+        className={({ isActive }) => isActive ? 'active-link' : ''}>
+        Vé
+      </NavLink>
+    </span>
+  </div>
+  <div className="account-nav-item">
+    <span className="account-nav-title">
+      <NavLink 
+        to="/changepassword" 
+        className={({ isActive }) => isActive ? 'active-link' : ''}>
+        Đổi mật khẩu
+      </NavLink>
+    </span>
+  </div>
+</div>
+
               </div>
             </div>
           </div>

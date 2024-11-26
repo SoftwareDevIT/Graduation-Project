@@ -7,7 +7,8 @@ import { NewsItem } from "../../interface/NewsItem";
 import instance from "../../server";
 import { extractLinks, stripHtml } from "../../assets/Font/quillConfig";
 import dayjs from "dayjs";
-
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 const PostDetail: React.FC = () => {
   const { slug} = useParams<{ slug: string }>();
   const [article, setArticle] = useState<NewsItem | null>(null);
@@ -61,7 +62,9 @@ const PostDetail: React.FC = () => {
             <div className="article-movie-info">
               <h2>{stripHtml(article?.movie.movie_name  ?? "Tên phim không khả dụng")}</h2>
 
-              <span>khởi chiếu:{article?.movie.release_date}</span>
+              <span>khởi chiếu:{article?.movie.release_date  ? new Date(article?.movie.release_date).toLocaleDateString("vi-VN")
+                        : "N/A"}</span>  <br />
+                        <span className="theloaibaiviet">{article?.movie.country}</span>
               {/* Bạn có thể thêm các thông tin khác nếu cần */}
             </div>
             <button className="article-button">
@@ -71,7 +74,14 @@ const PostDetail: React.FC = () => {
             </button>
           </div>
 
-          <p className="article-description">{stripHtml(article?.content  ?? "Nội không khả dụng")}</p>
+          <p className="article-description"><CKEditor
+          editor={ClassicEditor}
+          data={article?.content}
+          config={{
+            toolbar: []
+          }}
+          disabled={true}
+        /></p>
 
           {/* Nếu bạn muốn giữ lại nội dung ban đầu, bạn có thể thêm phần nội dung ở đây */}
         </div>

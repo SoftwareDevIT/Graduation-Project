@@ -6,11 +6,13 @@ import { Location } from "../../interface/Location";
 import instance from "../../server";
 import { useCountryContext } from "../../Context/CountriesContext";
 import { Modal } from "antd"; 
+import { Voucher } from "../../interface/Vouchers";
 
 const Header = () => {
   const [isHeaderLeftVisible, setHeaderLeftVisible] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [vouchers, setVouchers] = useState<Voucher[]>([]);
   const [isProfileMenuVisible, setProfileMenuVisibles] = useState(false);
   const [isNotificationVisible, setIsNotificationVisible] = useState(false);
   const [cinemas, setCinemas] = useState<Cinema[]>([]);
@@ -50,6 +52,18 @@ const Header = () => {
       });
     }
   }, [selectedLocation]);
+  useEffect(() => {
+    // Gọi API khi component mount
+    instance.get('/vouchers')
+        .then(response => {
+            // Set dữ liệu voucher vào state
+            setVouchers(response.data.vouchers);
+            
+        })
+        .catch(error => {
+            
+        });
+}, []);
   const toggleHeaderLeft = () => {
     setHeaderLeftVisible((prev) => !prev);
   };
@@ -345,12 +359,16 @@ const Header = () => {
 <span className="thongbao" onClick={handleNotificationClick}>
   &#128276;
   {isNotificationVisible && (
-  <div className="notification-dropdown">
-    <p>Thông báo 1</p>
-    <p>Thông báo 2</p>
-    <p>Thông báo 3</p>
-  </div>
-)}
+    <div className="notification-dropdown">
+      {vouchers && vouchers.length > 0 ? (
+        vouchers.map((voucher, index) => (
+          <p key={index}>• {voucher.code}</p> 
+        ))
+      ) : (
+        <p>Không có thông báo mới</p>
+      )}
+    </div>
+  )}
 </span>
 
           </div>

@@ -90,21 +90,44 @@ const ChangePassword: React.FC = () => {
                 </div>
 
                 <div className="account-nav">
-                  <div className="account-nav-item">
-                    <span className="account-nav-title"> <Link to={"/profile"}>Tài khoản</Link></span>
-                    
-                  </div>
-                  <div className="account-nav-item">
-                    <span className="account-nav-title">Tủ phim</span>
-                  </div>
-                  <div className="account-nav-item">
-                    <span className="account-nav-title"><Link to={"/movieticket"}>Vé</Link></span>
-                  </div>
-                  <div className="account-nav-item">
-                    <span className="account-nav-title"><Link to={"/changepassword"}>Đổi mật khẩu</Link></span>
-                    
-                  </div>
-                </div>
+  <div className="account-nav-item">
+    <span className="account-nav-title">
+      <NavLink 
+        to="/profile" 
+        className={({ isActive }) => isActive ? 'active-link' : ''}>
+        Tài khoản
+      </NavLink>
+    </span>
+  </div>
+  <div className="account-nav-item">
+    <span className="account-nav-title">
+      <NavLink 
+        to="/movies" 
+        className={({ isActive }) => isActive ? 'active-link' : ''}>
+        Tủ phim
+      </NavLink>
+    </span>
+  </div>
+  <div className="account-nav-item">
+    <span className="account-nav-title">
+      <NavLink 
+        to="/movieticket" 
+        className={({ isActive }) => isActive ? 'active-link' : ''}>
+        Vé
+      </NavLink>
+    </span>
+  </div>
+  <div className="account-nav-item">
+    <span className="account-nav-title">
+      <NavLink 
+        to="/changepassword" 
+        className={({ isActive }) => isActive ? 'active-link' : ''}>
+        Đổi mật khẩu
+      </NavLink>
+    </span>
+  </div>
+</div>
+
               </div>
             </div>
           </div>
