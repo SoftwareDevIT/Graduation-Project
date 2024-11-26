@@ -3,7 +3,7 @@ import instance from "../../../server";
 
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faEdit, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const OrdersDashboard: React.FC = () => {
@@ -26,9 +26,9 @@ const OrdersDashboard: React.FC = () => {
 
   return (
     <div className="container mt-5">
-      <h2 className="text-center text-primary mb-4">Quản lý Đơn Hàng</h2>
+    
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <button className="btn btn-outline-primary">Thêm Đơn Hàng</button>
+        <button className="btn btn-outline-primary"><FontAwesomeIcon icon={faPlus} /> Thêm Đơn Hàng</button>
       </div>
       <div className="table-responsive">
         <table className="table table-bordered table-hover shadow-sm">

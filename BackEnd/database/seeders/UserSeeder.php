@@ -26,13 +26,23 @@ class UserSeeder extends Seeder
                 'address' => 'Ha Noi',
                 'fullname' => 'Admin',
                 'email_verified_at' => now(),
+            ],
+            [
+                'user_name' => 'Trần Minh Anh',
+                'sex' => 'Male',
+                'password' => Hash::make('password'),
+                'email' => 'minhanh24hihi@gmail.com',
+                'phone' => '0979620125',
+                'address' => 'Ha Noi',
+                'fullname' => 'Trần Minh Anh',
+                'email_verified_at' => now(),
             ]
         ]);
 
         $client = new Client();
         $response = $client->get('https://rapchieuphim.com/api/v1/users');
         $data = json_decode($response->getBody()->getContents(), true);
-        $data = array_slice($data, 0, 200);
+        $data = array_slice($data, 1, 200);
 
         foreach ($data as $item) {
             $randomEmail = strtolower(Str::random(10)) . '@example.com';
@@ -40,6 +50,7 @@ class UserSeeder extends Seeder
             DB::table('users')->insert([
                 'user_name' => $item['name'],
                 'avatar' => $item['avatar'],
+                'description' => $item['about'],
                 'sex' => $item['sex'],
                 'password' => Hash::make('password'),
                 'email' => $randomEmail,

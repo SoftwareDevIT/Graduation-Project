@@ -1,10 +1,16 @@
 import React, { createContext, useReducer, useContext, ReactNode } from 'react';
 import instance from '../server';
 import { Showtime } from '../interface/Showtimes';
+import { Cinema } from '../interface/Cinema';
+import { Room } from '../interface/Room';
 
 interface ShowtimeState {
     showtimes: Showtime[];
+    cinemas: Cinema[];
+    movieInCinemas: any[];
+    rooms: Room[];
 }
+
 interface ShowtimeAction {
     type: string;
     payload?: any;
@@ -12,6 +18,9 @@ interface ShowtimeAction {
 
 const initialState: ShowtimeState = {
     showtimes: [],
+    cinemas: [],
+    movieInCinemas: [],
+    rooms: [],
 };
 
 const ShowtimeContext = createContext<{
@@ -20,12 +29,21 @@ const ShowtimeContext = createContext<{
     addOrUpdateShowtime: (data: Showtime | Showtime[], id?: string) => Promise<void>;
     deleteShowtime: (id: number) => Promise<void>;
     fetchShowtimes: () => Promise<void>;
+    fetchCinemas: () => Promise<void>;
+    fetchMovieInCinema: (cinemaId: number) => Promise<void>;
+    fetchRoomsByCinema: (cinemaId: number) => Promise<void>;
 } | undefined>(undefined);
 
 const showtimeReducer = (state: ShowtimeState, action: ShowtimeAction): ShowtimeState => {
     switch (action.type) {
         case 'SET_SHOWTIMES':
             return { ...state, showtimes: action.payload };
+        case 'SET_CINEMAS':
+            return { ...state, cinemas: action.payload };
+        case 'SET_MOVIE_IN_CINEMAS':
+            return { ...state, movieInCinemas: action.payload };
+        case 'SET_ROOMS':
+            return { ...state, rooms: action.payload };
         case 'DELETE_SHOWTIME':
             return { ...state, showtimes: state.showtimes.filter(showtime => showtime.id !== action.payload) };
         case 'ADD_SHOWTIME':
@@ -82,15 +100,53 @@ export const ShowtimeProvider: React.FC<{ children: ReactNode }> = ({ children }
 
     const fetchShowtimes = async () => {
         try {
-            const response = await instance.get<{ data: Showtime[] }>('/showtimes');
-            dispatch({ type: 'SET_SHOWTIMES', payload: response.data.data });
+            const response = await instance.get('/showtimes');
+            dispatch({ type: 'SET_SHOWTIMES', payload: response.data.data.data });
         } catch (error) {
             console.error('Error fetching showtimes:', error);
         }
     };
 
+    const fetchCinemas = async () => {
+        try {
+            const response = await instance.get('/cinema');
+            dispatch({ type: 'SET_CINEMAS', payload: response.data.data });
+        } catch (error) {
+            console.error('Error fetching cinemas:', error);
+        }
+    };
+
+    const fetchMovieInCinema = async (cinemaId: number) => {
+        try {
+            const response = await instance.get(`/show-movie-in-cinema/${cinemaId}`);
+            dispatch({ type: 'SET_MOVIE_IN_CINEMAS', payload: response.data.data });
+        } catch (error) {
+            console.error('Error fetching movies in cinema:', error);
+        }
+    };
+
+    const fetchRoomsByCinema = async (cinemaId: number) => {
+        try {
+            const response = await instance.get(`/cinema/${cinemaId}/room`);
+            dispatch({ type: 'SET_ROOMS', payload: response.data.data });
+        } catch (error) {
+            console.error('Error fetching rooms:', error);
+        }
+    };
+
     return (
-        <ShowtimeContext.Provider value={{ state, dispatch, addOrUpdateShowtime, deleteShowtime, fetchShowtimes }}>
+        <ShowtimeContext.Provider
+            value={{
+                state,
+                dispatch,
+                addOrUpdateShowtime,
+                deleteShowtime,
+                fetchShowtimes,
+                fetchCinemas,
+                fetchMovieInCinema,
+                fetchRoomsByCinema,
+            }}
+        >
             {children}
         </ShowtimeContext.Provider>
     );

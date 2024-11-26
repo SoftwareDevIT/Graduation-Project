@@ -56,7 +56,7 @@ const MovieBanner = () => {
             {movies.map((movie) => (
               <div key={movie.id}>
                 <div className="movie-item">
-                  <Link to={`/movie-detail/${movie.id}`}>
+                  <Link to={`/movie-detail/${movie.slug}`}>
                     <img
                       src={movie.poster || "placeholder.jpg"}
                       alt={movie.movie_name}
@@ -64,7 +64,7 @@ const MovieBanner = () => {
                   </Link>
                   <div className="movie-info">
                     <button className="buy-ticket">
-                      <Link to={`/buy-now/${movie.id}`}>Mua vé</Link>
+                      <Link to={`/buy-now/${movie.slug}`}>Mua vé</Link>
                     </button>
                     <p className="name_movie">{movie.movie_name}</p>
                     <span>
@@ -72,6 +72,8 @@ const MovieBanner = () => {
                         ? new Date(movie.release_date).toLocaleDateString("vi-VN")
                         : "N/A"}
                     </span>
+                    
+                  
                   </div>
                 </div>
               </div>

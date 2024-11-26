@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class News extends Model
 {
@@ -11,13 +12,15 @@ class News extends Model
     protected $table = 'news';
     protected $fillable = [
         'title',
-        'news_category_id',
+        'slug',
         'thumnail',
         'banner',
         'content',
-        'status',
+        'news_category_id',
         'user_id',
         'movie_id',
+        'views',
+        'status',
     ];
 
     public function newsCategory()
@@ -32,5 +35,19 @@ class News extends Model
     public function movie()
     {
         return $this->belongsTo(Movie::class, 'movie_id');
+    }
+
+    protected static function booted()
+    {
+        static::creating(function ($movie) {
+            $movie->slug = self::createSlug($movie->title);
+        });
+    }
+
+
+
+    public static function createSlug($title)
+    {
+        return Str::slug($title);
     }
 }

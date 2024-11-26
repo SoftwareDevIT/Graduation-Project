@@ -109,6 +109,12 @@
   width: 250px;
   height: auto;
 }
+.error-message {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
 
 /* Mobile responsiveness */
 @media (max-width: 768px) {

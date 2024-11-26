@@ -1,4 +1,5 @@
 import React, { createContext, useReducer, useContext, ReactNode, useEffect, useCallback } from "react";
+import { notification } from "antd"; // Import Ant Design's notification
 import instance from "../server"; // Đảm bảo đường dẫn đúng
 import { Movie } from "../interface/Movie"; // Đảm bảo đường dẫn đúng
 
@@ -20,7 +21,7 @@ const MovieContext = createContext<
       state: MovieState;
       dispatch: React.Dispatch<MovieAction>;
       addOrUpdateMovie: (data: any, id?: string) => Promise<void>;
-      fetchMovies: () => Promise<void>; // Thêm function để fetch movies
+      fetchMovies: () => Promise<void>;
     }
   | undefined
 >(undefined);
@@ -48,25 +49,27 @@ const movieReducer = (state: MovieState, action: MovieAction): MovieState => {
     default:
       return state;
   }
+  
 };
 
 export const MovieProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(movieReducer, initialState);
 
-  // Hàm gọi API để lấy danh sách phim
+  // Hàm lấy danh sách phim
   const fetchMovies = useCallback(async () => {
     try {
-      
-      const response = await instance.get("/movies"); // API GET để lấy phim
+      const response = await instance.get("/movies");
       if (response.data && response.data.data) {
-        dispatch({ type: "SET_MOVIES", payload: response.data.data.original }); // Lưu danh sách phim vào state
+        dispatch({ type: "SET_MOVIES", payload: response.data.data.original });
+        console.log("du lieu phim:", response.data.data.original );
+        
       } else {
-        console.error("Invalid API response format");
+        console.error("Định dạng phản hồi API không hợp lệ");
       }
     } catch (error) {
-      console.error("Error fetching movies:", error);
+      console.error("Lỗi khi lấy danh sách phim:", error);
     }
-  }, []); // useCallback để đảm bảo hàm không bị tạo lại mỗi lần render
+  }, []);
 
   // Hàm thêm hoặc cập nhật phim
   const addOrUpdateMovie = async (data: any, id?: string) => {
@@ -91,6 +94,8 @@ export const MovieProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     formData.append("age_limit", data.age_limit);
     formData.append("description", data.description);
     formData.append("duration", data.duration);
+    formData.append("trailer", data.trailer);
+    formData.append("country", data.country);
 
     if (id) {
       formData.append("_method", "put");
@@ -98,6 +103,9 @@ export const MovieProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
     if (data.posterFile) {
       formData.append("poster", data.posterFile);
+    }
+    if (data.thumbnailFile) {
+      formData.append("thumbnail", data.thumbnailFile);
     }
 
     try {
@@ -111,19 +119,29 @@ export const MovieProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
       if (id) {
         dispatch({ type: "UPDATE_MOVIE", payload: response.data.data });
-        console.log("Movie updated successfully");
+        notification.success({
+          message: "Cập nhật thành công",
+          description: "Phim đã được cập nhật thành công.",
+        });
       } else {
         dispatch({ type: "ADD_MOVIE", payload: response.data.data });
-        alert("Movie added successfully");
+        notification.success({
+          message: "Thêm thành công",
+          description: "Phim đã được thêm thành công.",
+        });
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.error("Lỗi khi gửi form:", error);
+      notification.error({
+        message: "Lỗi",
+        description: "Có lỗi xảy ra khi xử lý yêu cầu của bạn.",
+      });
     }
   };
 
   useEffect(() => {
     fetchMovies(); // Gọi fetchMovies khi MovieProvider được mount
-  }, [fetchMovies]); // Thêm fetchMovies vào dependencies của useEffect để đảm bảo nó không bị gọi lại liên tục
+  }, [fetchMovies]);
 
   return (
     <MovieContext.Provider value={{ state, dispatch, addOrUpdateMovie, fetchMovies }}>
@@ -135,7 +153,7 @@ export const MovieProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 export const useMovieContext = () => {
   const context = useContext(MovieContext);
   if (context === undefined) {
-    throw new Error("useMovieContext must be used within a MovieProvider");
+    throw new Error("useMovieContext phải được sử dụng trong MovieProvider");
   }
   return context;
 };

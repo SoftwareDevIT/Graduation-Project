@@ -21,10 +21,10 @@ class RoomSeeder extends Seeder
             for ($i = 1; $i <= 5; $i++) {
                 // Số ghế đôi cố định là 5 ghế đôi (tương đương 10 ghế đơn)
                 $quantityDoubleSeats = 5;
-                $totalSeats = $quantityDoubleSeats * 2; // Tổng số ghế ban đầu là 10 ghế đơn từ ghế đôi
+                $totalSeats = $quantityDoubleSeats; // Tổng số ghế ban đầu là 10 ghế đơn từ ghế đôi
 
                 // Số ghế đơn còn lại sẽ là tổng số ghế - số ghế đôi
-                $remainingSeats = 120; // Tổng số ghế mà chúng ta muốn phòng chiếu có, giả sử là 100 ghế (bao gồm ghế đôi + ghế VIP + ghế đơn)
+                $remainingSeats = rand(50, 120); // Tổng số ghế mà chúng ta muốn phòng chiếu có, giả sử là 100 ghế (bao gồm ghế đôi + ghế VIP + ghế đơn)
                 $totalSeats = $remainingSeats - $totalSeats; // Trừ đi số ghế đôi đã có từ tổng số ghế
 
                 // Tính số ghế VIP chiếm từ 50% đến 60% tổng số ghế đơn còn lại (sau khi trừ ghế đôi)
@@ -37,10 +37,11 @@ class RoomSeeder extends Seeder
                 // Insert room data
                 DB::table('room')->insert([
                     'room_name' => 'P' . $i, // P1, P2, P3, ...
-                    'volume' => rand(50, 120), // Random room volume
+                    'volume' => $remainingSeats, // Random room volume
                     'cinema_id' => $cinemaId,
                     'quantity_double_seats' => $quantityDoubleSeats, // 5 ghế đôi
                     'quantity_vip_seats' => $quantityVipSeats, // Số ghế VIP tính theo tỷ lệ
+                    'quantity_basic_seats' => $quantitySingleSeats,
                     'status' => '1', // Active status
                 ]);
             }

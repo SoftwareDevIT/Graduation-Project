@@ -5,7 +5,8 @@ import { useCinemaContext } from '../../../Context/CinemasContext';
 import { Movie } from '../../../interface/Movie';
 import { MovieInCinema } from '../../../interface/MovieInCinema'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; 
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'; 
+import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'; 
+import { notification } from 'antd';  // Import notification from Ant Design
 
 const CinemasDashboard: React.FC = () => {
     const { state, dispatch } = useCinemaContext();
@@ -17,7 +18,7 @@ const CinemasDashboard: React.FC = () => {
     const totalPages = Math.ceil(totalCinemas / cinemasPerPage);
     
     const [expandedCinemaId, setExpandedCinemaId] = useState<number | null>(null);
-    const [selectedCinemaMovies, setSelectedCinemaMovies] = useState<MovieInCinema[]>([]);
+    const [selectedCinemaMovies, setSelectedCinemaMovies] = useState<MovieInCinema[]>([]); 
     const [allMovies, setAllMovies] = useState<Movie[]>([]); 
     const [searchTerm, setSearchTerm] = useState<string>(''); // State cho tìm kiếm
 
@@ -28,7 +29,10 @@ const CinemasDashboard: React.FC = () => {
                 setAllMovies(response.data.data.original); 
             } catch (error) {
                 console.error("Lỗi khi lấy danh sách phim:", error);
-                alert("Lỗi khi lấy danh sách phim.");
+                notification.error({
+                    message: 'Lỗi',
+                    description: 'Lỗi khi lấy danh sách phim.',
+                });
             }
         };
 
@@ -47,10 +51,16 @@ const CinemasDashboard: React.FC = () => {
             try {
                 await instance.delete(`/cinema/${id}`);
                 dispatch({ type: 'DELETE_CINEMA', payload: id });
-                alert("Xóa rạp thành công!");
+                notification.success({
+                    message: 'Thành công',
+                    description: 'Xóa rạp thành công!',
+                });
             } catch (err) {
                 console.error("Lỗi khi xóa rạp:", err);
-                alert("Lỗi khi xóa rạp.");
+                notification.error({
+                    message: 'Lỗi',
+                    description: 'Lỗi khi xóa rạp.',
+                });
             }
         }
     };
@@ -69,7 +79,10 @@ const CinemasDashboard: React.FC = () => {
             setSelectedCinemaMovies(moviesWithNames);
         } catch (error) {
             console.error("Lỗi khi lấy phim của rạp:", error);
-            alert("Lỗi khi lấy phim của rạp này.");
+            notification.error({
+                message: 'Lỗi',
+                description: 'Lỗi khi lấy phim của rạp này.',
+            });
         }
     };
     
@@ -89,10 +102,16 @@ const CinemasDashboard: React.FC = () => {
                 await instance.delete(`/cinema/${cinemaId}/movie/${movieId}`);
                 const updatedMovies = selectedCinemaMovies.filter(movie => movie.movie_id !== movieId);
                 setSelectedCinemaMovies(updatedMovies);
-                alert("Xóa phim khỏi rạp thành công!");
+                notification.success({
+                    message: 'Thành công',
+                    description: 'Xóa phim khỏi rạp thành công!',
+                });
             } catch (error) {
                 console.error("Lỗi khi xóa phim khỏi rạp:", error);
-                alert("Lỗi khi xóa phim khỏi rạp.");   
+                notification.error({
+                    message: 'Lỗi',
+                    description: 'Lỗi khi xóa phim khỏi rạp.',
+                });
             }
         }
     };
@@ -134,9 +153,9 @@ const CinemasDashboard: React.FC = () => {
 
     return (
         <div className="container mt-5">
-            <h2 className="text-center text-primary mb-4">Quản Lí Rạp Chiếu Phim</h2>
+        
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <Link to={'/admin/cinemas/add'} className="btn btn-outline-primary">Thêm Rạp</Link>
+                <Link to={'/admin/cinemas/add'} className="btn btn-outline-primary"><FontAwesomeIcon icon={faPlus} /> Thêm Rạp</Link>
                 <input
                     type="text"
                     placeholder="Tìm kiếm theo tên"
@@ -195,7 +214,7 @@ const CinemasDashboard: React.FC = () => {
                                                                 onClick={() => handleDeleteMovie(cinema.id!, movie.movie_id)}
                                                                 className="btn btn-danger btn-sm"
                                                             >
-                                                                <FontAwesomeIcon icon={faTrash} />
+                                                                Xóa
                                                             </button>
                                                         </li>
                                                     ))}
@@ -206,33 +225,11 @@ const CinemasDashboard: React.FC = () => {
                                 )}
                             </React.Fragment>
                         ))}
-                        {currentCinemas.length === 0 && (
-                            <tr>
-                                <td colSpan={6} className="text-center">
-                                    Không có rạp nào.
-                                </td>
-                            </tr>
-                        )}
                     </tbody>
                 </table>
             </div>
-
-            <div className="pagination d-flex justify-content-center mt-4">
-                <button
-                    className="btn btn-outline-secondary mx-2"
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                >
-                    Trước
-                </button>
+            <div className="pagination-wrapper text-center">
                 {renderPagination()}
-                <button
-                    className="btn btn-outline-secondary mx-2"
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                >
-                    Sau
-                </button>
             </div>
         </div>
     );

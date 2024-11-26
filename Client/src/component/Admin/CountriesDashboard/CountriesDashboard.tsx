@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useCountryContext } from '../../../Context/CountriesContext';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { notification } from 'antd';  // Import the notification component
 import './CountriesDashboard.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -12,9 +13,9 @@ const CountriesDashboard: React.FC = () => {
 
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState('');
-    const countriesPerPage = 11; // Số quốc gia mỗi trang
+    const countriesPerPage = 7; // Number of countries per page
 
-    // Lọc quốc gia theo từ khóa tìm kiếm
+    // Filter countries based on the search term
     const filteredCountries = countries.filter(country =>
         country.location_name &&
         country.location_name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -23,7 +24,7 @@ const CountriesDashboard: React.FC = () => {
     const totalCountries = filteredCountries.length;
     const totalPages = Math.ceil(totalCountries / countriesPerPage);
 
-    // Lấy quốc gia cho trang hiện tại
+    // Get the countries for the current page
     const currentCountries = filteredCountries.slice(
         (currentPage - 1) * countriesPerPage,
         currentPage * countriesPerPage
@@ -33,18 +34,57 @@ const CountriesDashboard: React.FC = () => {
         const confirmDelete = window.confirm("Bạn có chắc chắn muốn xóa quốc gia này?");
         if (confirmDelete) {
             await deleteCountry(id);
+            // Show success notification after deletion
+            notification.success({
+                message: 'Xóa thành công',
+                description: 'Quốc gia đã được xóa thành công.',
+                placement: 'topRight',
+            });
         }
     };
 
-    // Xử lý thay đổi trang
-    const handlePageChange = (page: number) => setCurrentPage(page);
+    // Handle page change
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+    };
+
+    // Determine the page range to display
+    const pageNumbers = () => {
+        const pages = [];
+        const maxVisiblePages = 5;
+
+        if (totalPages <= maxVisiblePages) {
+            for (let i = 1; i <= totalPages; i++) {
+                pages.push(i);
+            }
+        } else {
+            if (currentPage <= 3) {
+                for (let i = 1; i <= maxVisiblePages; i++) {
+                    pages.push(i);
+                }
+                pages.push('...');
+            } else if (currentPage >= totalPages - 2) {
+                pages.unshift('...');
+                for (let i = totalPages - maxVisiblePages + 1; i <= totalPages; i++) {
+                    pages.push(i);
+                }
+            } else {
+                pages.unshift('...');
+                for (let i = currentPage - 2; i <= currentPage + 2; i++) {
+                    pages.push(i);
+                }
+                pages.push('...');
+            }
+        }
+
+        return pages;
+    };
 
     return (
         <div className="container mt-5">
-            <h2 className="text-center text-primary mb-4">Tất Cả Quốc Gia</h2>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Link to={'/admin/countries/add'} className="btn btn-outline-primary">
-                    Thêm Quốc Gia
+                <FontAwesomeIcon icon={faPlus} /> Thêm Khu Vực
                 </Link>
                 <input
                     type="text"
@@ -58,8 +98,8 @@ const CountriesDashboard: React.FC = () => {
                 <table className="table table-bordered table-hover shadow-sm">
                     <thead className="thead-light">
                         <tr>
-                            <th>ID Quốc Gia</th>
-                            <th>Tên Quốc Gia</th>
+                            <th>ID</th>
+                            <th>Tên Khu Vực</th>
                             <th>Thao Tác</th>
                         </tr>
                     </thead>
@@ -81,14 +121,14 @@ const CountriesDashboard: React.FC = () => {
                         {currentCountries.length === 0 && (
                             <tr>
                                 <td colSpan={3} className="text-center">
-                                    Không có quốc gia nào.
+                                    Không có khu vực nào.
                                 </td>
                             </tr>
                         )}
                     </tbody>
                 </table>
             </div>
-            {/* Phân trang */}
+            {/* Pagination */}
             <nav className="d-flex justify-content-center mt-4">
                 <ul className="pagination">
                     <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
@@ -96,11 +136,15 @@ const CountriesDashboard: React.FC = () => {
                             Trước
                         </button>
                     </li>
-                    {Array.from({ length: totalPages }, (_, index) => (
-                        <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
-                            <button className="page-link" onClick={() => handlePageChange(index + 1)}>
-                                {index + 1}
-                            </button>
+                    {pageNumbers().map((number, index) => (
+                        <li key={index} className={`page-item ${typeof number === 'number' && currentPage === number ? 'active' : ''} ${number === '...' ? 'disabled' : ''}`}>
+                            {number === '...' ? (
+                                <span className="page-link">...</span>
+                            ) : (
+                                <button className="page-link" onClick={() => handlePageChange(number as number)}>
+                                    {number}
+                                </button>
+                            )}
                         </li>
                     ))}
                     <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>

@@ -10,6 +10,7 @@ use App\Models\News;
 use App\Services\Movie\ActorService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Str;
 
 use function PHPUnit\Framework\isNull;
 
@@ -39,8 +40,20 @@ class ActorController extends Controller
         try {
             $actor = $request->validated();
             $file = $request->file('photo');
-        
+
             $actor['photo'] = $file ? $this->uploadImage($file) : null;
+
+            if (isset($actor['actor_name'])) {
+                $slug = Str::slug($actor['actor_name'], '-');
+                $originalSlug = $slug;
+                $count = 1;
+
+                while ($this->actorService->slugExists($slug)) {
+                    $slug = $originalSlug . '-' . $count;
+                    $count++;
+                }
+                $actor['slug'] = $slug;
+            }
 
             $actor = $this->actorService->store($actor);
 
@@ -53,7 +66,7 @@ class ActorController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int $id)
+    public function show($id)
     {
         try {
             $actor = $this->actorService->get($id);
@@ -75,13 +88,26 @@ class ActorController extends Controller
     {
         try {
             $file = $request->file('photo');
-            $oldImgageActor  = $this->actorService->get($id);
+            $oldImgageActor = $this->actorService->get($id);
 
-            $imageLink =  $file ? $this->uploadImage($file) :  $oldImgageActor->photo;
+            $imageLink = $file ? $this->uploadImage($file) : $oldImgageActor->photo;
 
-            // Lấy dữ liệu đã được xác thực từ request
+         
+
             $actor = $request->validated();
             $actor['photo'] = $imageLink;
+
+            if (isset($actor['actor_name'])) {
+                $slug = Str::slug($actor['actor_name']);
+                $existingMovie = $this->actorService->findBySlug($slug); 
+        
+                if ($existingMovie && $existingMovie->id !== $id) {
+                
+                    $slug .= '-' . uniqid();
+                }
+        
+                $actor['slug'] = $slug; 
+            }
 
             $actor = $this->actorService->update($id, $actor);
 
@@ -99,6 +125,8 @@ class ActorController extends Controller
         try {
             $this->actorService->delete($id);
             return $this->success(null, 'Xóa thành công diễn viên');
+        } catch (ModelNotFoundException $e) {
+            return $this->notFound("Không có id {$id} trong cơ sở dữ liệu");
         } catch (Exception $e) {
             return $this->error('Lỗi: ' . $e->getMessage(), 500);
         }
@@ -111,8 +139,8 @@ class ActorController extends Controller
 
             $new = News::WhereIn('movie_id', $movie)->get();
 
-            if($new->isEmpty()){
-                return $this->notFound('Không tìm thấy bài viết liên quan đến diễn viên',404);
+            if ($new->isEmpty()) {
+                return $this->notFound('Không tìm thấy bài viết liên quan đến diễn viên', 404);
             }
 
             return $this->success($new, 'Bài viết liên quan đến diễn viên', 200);

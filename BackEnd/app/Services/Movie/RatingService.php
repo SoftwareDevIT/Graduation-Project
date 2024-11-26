@@ -7,16 +7,19 @@ use App\Models\Rating;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
+use App\Traits\AuthorizesInService;
 
 /**
  * Class MovieService.
  */
 class RatingService
 {
-    public function index() {
-       return Rating::all();
+    use AuthorizesInService;
+    public function index()
+    {
+        return Rating::orderByDesc('created_at')->get();
     }
-       
+
     public function store(array $data)
     {
         $existingRating = Rating::where('user_id',  Auth::id())
@@ -24,14 +27,12 @@ class RatingService
             ->first();
 
         if ($existingRating) {
-            // Nếu đánh giá đã tồn tại, ta sẽ chỉ cập nhật mà không tạo mới
             $existingRating->rating = $data['rating'];
             $existingRating->review = $data['review'];
             $existingRating->save();
 
             $message = 'Rating updated successfully';
         } else {
-            // Nếu đánh giá chưa tồn tại, ta sẽ tạo mới
             $existingRating = Rating::create([
                 'user_id'    => Auth::id(),
                 'movie_id'   => $data['movie_id'],
@@ -63,11 +64,10 @@ class RatingService
         return $favorite->delete();
     }
 
-    public function show(int $id) {
+    public function show(int $id)
+    {
         $movie = Rating::where('movie_id', $id)->get();
 
         return $movie;
     }
-
-    
 }

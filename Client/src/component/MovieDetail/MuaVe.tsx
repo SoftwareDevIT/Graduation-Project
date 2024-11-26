@@ -1,91 +1,94 @@
 import React, { useState, useEffect } from "react";
-import "./MuaVe.css";
+import "./LichChieu.css";
 import Header from "../Header/Hearder";
 import Footer from "../Footer/Footer";
-import MovieDetail from "./MovieDetail";
+import { useNavigate, useParams } from "react-router-dom";
+import { useCountryContext } from "../../Context/CountriesContext";
+
 import instance from "../../server"; // API instance
-import { useNavigate, useParams } from "react-router-dom"; // Navigation hook
-import { Location } from "../../interface/Location";
 import { Cinema } from "../../interface/Cinema";
 
-import { useCountryContext } from "../../Context/CountriesContext";
 import { useMovieContext } from "../../Context/MoviesContext";
 import { Showtime } from "../../interface/Showtimes";
+import MovieDetail from "./MovieDetail";
 
 const MuaVe: React.FC = () => {
-    const { id } = useParams<{ id: string }>(); // Lấy ID phim từ URL
-    const { state: countryState, fetchCountries } = useCountryContext();
-    const { state: movieState } = useMovieContext(); // Lấy phim từ MovieContext
-    const navigate = useNavigate();
+  const { slug } = useParams();
+  const { state: countryState, fetchCountries } = useCountryContext();
+  const { state, fetchMovies } = useMovieContext(); // Lấy phim từ MovieContext
+  const navigate = useNavigate();
 
-    const [cinemas, setCinemas] = useState<Cinema[]>([]);
-    const [selectedLocation, setSelectedLocation] = useState<string>("");
-    const [selectedDate, setSelectedDate] = useState<string>(
-        new Date().toISOString().split("T")[0]
-    ); // Ngày hiện tại
-    const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
-    const [error, setError] = useState<string | null>(null);
+  const [cinemas, setCinemas] = useState<Cinema[]>([]);
+  const [selectedLocation, setSelectedLocation] = useState<string>("");
+  const [selectedDate, setSelectedDate] = useState<string>(
+    new Date().toISOString().split("T")[0]
+  ); // Ngày hiện tại
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-    // Lấy phim theo ID
-    const movie = movieState.movies.find((movie) => movie.id === Number(id));
+  // Lấy phim theo ID
+  const movie = state.movies.find((movie) => movie.slug === slug);
+  useEffect(() => {
+    fetchMovies(); // Gọi lại fetchMovies khi slug thay đổi
+  }, [slug]);
 
-    useEffect(() => {
-        fetchCountries(); // Lấy danh sách khu vực
-    }, [fetchCountries]);
+  useEffect(() => {
+    fetchCountries(); // Lấy danh sách khu vực
+  }, [fetchCountries]);
 
-    useEffect(() => {
-        if (countryState.countries.length > 0 && !selectedLocation) {
-            setSelectedLocation(countryState.countries[0].id.toString()); // Mặc định chọn khu vực đầu tiên
-        }
-    }, [countryState, selectedLocation]);
+  useEffect(() => {
+    if (countryState.countries.length > 0 && !selectedLocation) {
+      setSelectedLocation(countryState.countries[0].id.toString()); // Mặc định chọn khu vực đầu tiên
+    }
+  }, [countryState, selectedLocation]);
 
-    // Lấy danh sách rạp chiếu
-    useEffect(() => {
-        const fetchCinemasAndShowtimes = async () => {
-            try {
-                const response = await instance.get(`/filterByDateByMovie`, {
-                    params: {
-                        location_id: selectedLocation,
-                        showtime_date: selectedDate,
-                        movie_id: id,
-                    },
-                });
+  // Lấy danh sách rạp chiếu
+  useEffect(() => {
+    const fetchCinemasAndShowtimes = async () => {
+      try {
+        const response = await instance.get(`/filterByDateByMovie`, {
+          params: {
+            location_id: selectedLocation,
+            showtime_date: selectedDate,
+            movie_id: movie?.id,
+          },
+        });
 
-                const cinemaData = response.data?.data || [];
-                setCinemas(
-                    cinemaData.map((item: any) => ({
-                        ...item.cinema,
-                        showtimes: item.showtimes,
-                    }))
-                );
-            } catch (error) {
-                console.error("Error fetching cinemas and showtimes:", error);
-                setError("Không thể tải lịch chiếu cho phim này.");
-            }
-        };
-        if (selectedLocation) fetchCinemasAndShowtimes();
-    }, [selectedLocation, selectedDate, id]);
-
-    const toggleCinemas = (index: number) => {
-        setExpandedIndex(expandedIndex === index ? null : index);
+        const cinemaData = response.data?.data || [];
+        setCinemas(
+          cinemaData.map((item: any) => ({
+            ...item.cinema,
+            showtimes: item.showtimes,
+          }))
+        );
+      } catch (error) {
+        console.error("Error fetching cinemas and showtimes:", error);
+        setError("Không thể tải lịch chiếu cho phim này.");
+      }
     };
+    if (selectedLocation) fetchCinemasAndShowtimes();
+  }, [selectedLocation, selectedDate, movie?.id]);
 
-    // Tạo danh sách ngày trong tuần
-    const generateWeekDays = () => {
-        const days = [];
-        const currentDate = new Date();
+  const toggleCinemas = (index: number) => {
+    setExpandedIndex(expandedIndex === index ? null : index);
+  };
 
-        for (let i = 0; i < 7; i++) {
-            const date = new Date(currentDate);
-            date.setDate(currentDate.getDate() + i);
-            days.push({
-                date: date.toISOString().split("T")[0],
-                day: date.toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit" }),
-                weekDay: date.toLocaleDateString("vi-VN", { weekday: "short" }),
-            });
-        }
-        return days;
-    };
+  // Tạo danh sách ngày trong tuần
+  const generateWeekDays = () => {
+    const days = [];
+    const currentDate = new Date();
+
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(currentDate);
+      date.setDate(currentDate.getDate() + i);
+      days.push({
+        date: date.toISOString().split("T")[0],
+        day: date.toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit" }),
+        weekDay: date.toLocaleDateString("vi-VN", { weekday: "short" }),
+      });
+    }
+    return days;
+  };
     return (
         <>
             <MovieDetail />

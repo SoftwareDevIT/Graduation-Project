@@ -14,26 +14,26 @@ class MovieCategorySeeder extends Seeder
     public function run(): void
     {
         $categories = [
-            'Action',
-            'Adventure',
-            'Animation',
-            'Biography',
-            'Comedy',
-            'Crime',
-            'Documentary',
-            'Drama',
-            'Family',
-            'Fantasy',
-            'History',
-            'Horror',
-            'Musical',
-            'Mystery',
-            'Romance',
+            'Hành động',
+            'Phiêu lưu',
+            'Hoạt hình',
+            'Tiểu sử',
+            'Hài kịch',
+            'Tội phạm',
+            'Phim tài liệu',
+            'Kịch',
+            'Gia đình',
+            'Tưởng tượng',
+            'Lịch sử',
+            'Kinh dị',
+            'Nhạc kịch',
+            'Bí ẩn',
+            'Lãng mạn',
             'Sci-Fi',
-            'Sport',
-            'Thriller',
-            'War',
-            'Western'
+            'Thể thao',
+            'Drama',
+            'Chiến tranh',
+            'Phương Tây'
         ];
 
         $categoryData = [];
