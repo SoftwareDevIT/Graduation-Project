@@ -218,11 +218,21 @@ class MovieController extends Controller
     public function filterNewByMovie($id)
     {
         try {
-            $new = News::Where('movie_id', $id)->get();
+            $new = News::with(['user:id,user_name', 'newsCategory:id,news_category_name'])
+                ->where('movie_id', $id)
+                ->get();
 
             if ($new->isEmpty()) {
                 return $this->notFound('Không tìm thấy bài viết liên quan đến phim', 404);
             }
+
+            $result = $new->map(function ($item) {
+                return [
+                    'news' => $item, 
+                    'user_name' => $item->user->user_name ?? null, 
+                    'category_name' => $item->newsCategory->news_category_name ?? null, 
+                ];
+            });
 
             return $this->success($new, 'Bài viết liên quan đến phim: ', 200);
         } catch (Exception $e) {

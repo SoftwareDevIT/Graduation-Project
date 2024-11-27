@@ -19,7 +19,8 @@ class OrderController extends Controller
         $this->orderService = $orderService;
     }
 
-    public function index(){
+    public function index()
+    {
         //author
         $order = $this->orderService->index();
         return $this->success($order, 'success');
@@ -63,9 +64,9 @@ class OrderController extends Controller
      */
     public function update(UpdateOrderRequest $request, string $id)
     {
-        $order = $request->validated();
-        $order = $this->orderService->update($order, $id);
-        return $this->success($order, 'success');
+        $request->validated(); 
+        $updatedOrder = $this->orderService->update($request->status, $id);
+        return $this->success($updatedOrder, 'Trạng thái đã được cập nhật thành công.');
     }
 
     /**
@@ -78,7 +79,8 @@ class OrderController extends Controller
     }
 
 
-    public function order(){
+    public function order()
+    {
         $order = $this->orderService->order();
         return $this->success($order, 'success');
     }
