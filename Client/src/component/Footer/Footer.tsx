@@ -7,10 +7,10 @@ const Footer = () => {
         <div className="footer-left">
             <img src="https://cdn.moveek.com/bundles/ornweb/img/favicon-large.png" alt="Company Logo" className="company-logo-ct" />
             <div className="company-info">
-            <p><strong>CÔNG TY TNHH MONET</strong></p>
-                <p>Số ĐKKD: 0315367026 · Nơi cấp: Sở kế hoạch và đầu tư Tp. Hồ Chí Minh</p>
+            <p><strong>CÔNG TY TNHH FLICKHIVE</strong></p>
+                <p>Số ĐKKD: 0315367026 · Nơi cấp: Sở kế hoạch và đầu tư Tp. Hà Nội</p>
                 <p>Đăng ký lần đầu ngày 01/11/2018</p>
-                <p>Địa chỉ: 33 Nguyễn Trung Trực, P.5, Q. Bình Thạnh, Tp. Hồ Chí Minh</p>
+                <p>Địa chỉ: Trịnh Văn Bô - Bắc Từ Liêm - Hà Nội</p>
                 <div className="footer-links">
                     <a href="#">Về chúng tôi</a> · 
                     <a href="#">Chính sách bảo mật</a> · 

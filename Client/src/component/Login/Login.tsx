@@ -7,6 +7,7 @@ import { loginSchema, LoginSchema } from "../../utils/validationSchema";
 import "./Login.css";
 import { notification } from "antd";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { FaGoogle } from "react-icons/fa";
 
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginSchema>({
@@ -86,7 +87,7 @@ const Login = () => {
           className="google-login-button login-button"
           onClick={() => {}}
         >
-          Đăng nhập bằng Google
+          <FaGoogle style={{ marginRight: "10px" }}/>Đăng nhập bằng Google
         </button>
 
         <div className="form-footer">

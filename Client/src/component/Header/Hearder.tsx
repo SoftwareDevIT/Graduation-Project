@@ -6,13 +6,15 @@ import { Location } from "../../interface/Location";
 import instance from "../../server";
 import { useCountryContext } from "../../Context/CountriesContext";
 import { Modal } from "antd"; 
+import { Voucher } from "../../interface/Vouchers";
 
 const Header = () => {
   const [isHeaderLeftVisible, setHeaderLeftVisible] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [vouchers, setVouchers] = useState<Voucher[]>([]);
   const [isProfileMenuVisible, setProfileMenuVisibles] = useState(false);
-
+  const [isNotificationVisible, setIsNotificationVisible] = useState(false);
   const [cinemas, setCinemas] = useState<Cinema[]>([]);
   const [selectedLocation, setSelectedLocation] = useState("1")
   const { state } = useCountryContext();
@@ -50,6 +52,18 @@ const Header = () => {
       });
     }
   }, [selectedLocation]);
+  useEffect(() => {
+    // Gọi API khi component mount
+    instance.get('/vouchers')
+        .then(response => {
+            // Set dữ liệu voucher vào state
+            setVouchers(response.data.vouchers);
+            
+        })
+        .catch(error => {
+            
+        });
+}, []);
   const toggleHeaderLeft = () => {
     setHeaderLeftVisible((prev) => !prev);
   };
@@ -61,13 +75,15 @@ const Header = () => {
     localStorage.removeItem("user_id"); // Xóa userId khỏi localStorage
     localStorage.removeItem("user_profile"); // Xóa userId khỏi localStorage
     setIsLoggedIn(false); // Cập nhật trạng thái đăng nhập
-    navigate('/')
+    navigate('/login')
   };
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value); // Cập nhật giá trị tìm kiếm vào state
   };
 
-
+  const handleNotificationClick = () => {
+    setIsNotificationVisible((prev) => !prev); // Toggle trạng thái hiển thị thông báo
+  };
   // Hàm khi nhấn nút tìm kiếm
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -340,7 +356,21 @@ const Header = () => {
               </>
             )}
 
-            <span className="thongbao">&#128276;</span>
+<span className="thongbao" onClick={handleNotificationClick}>
+  &#128276;
+  {isNotificationVisible && (
+    <div className="notification-dropdown">
+      {vouchers && vouchers.length > 0 ? (
+        vouchers.map((voucher, index) => (
+          <p key={index}>• {voucher.code}</p> 
+        ))
+      ) : (
+        <p>Không có thông báo mới</p>
+      )}
+    </div>
+  )}
+</span>
+
           </div>
         </div>
       </div>

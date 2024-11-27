@@ -17,6 +17,7 @@ const TinTuc: React.FC = () => {
             .then(response => {
                 if (response.data.status) {
                     setRelatedPosts(response.data.data);
+                    console.log('du lieu',response.data.data)
                 }
             })
             .catch(error => {

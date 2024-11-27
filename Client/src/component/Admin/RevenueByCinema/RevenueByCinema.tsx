@@ -17,7 +17,7 @@ const RevenueByCinema = () => {
     const [pendingRevenue, setPendingRevenue] = useState(0);
     const [confirmedRevenue, setConfirmedRevenue] = useState(0);
     const [cinemaRevenue, setCinemaRevenue] = useState<{ cinema_id: number; cinema_name: string; revenue: number }[]>([]);
-    const cinemaIds = [1, 2, 3, 4, 5];
+    const cinemaIds = [1, 2, 3, 4];
 
     const areaData = {
         labels: cinemaRevenue.map(item => item.cinema_name),

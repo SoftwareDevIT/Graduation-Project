@@ -87,7 +87,7 @@ const LichChieuUpdated: React.FC = () => {
 
   return (
     <>
-      <Header />
+    
       <MovieDetail />
       <div className="lich-chieu-container">
         <div className="calendar-container">
@@ -141,44 +141,49 @@ const LichChieuUpdated: React.FC = () => {
                     <div className="sub-cinema-list">
                       <p>{cinema.cinema_address}</p>
                       <div className="cinema-showtimes">
-                        {cinema.showtimes.length > 0 ? (
-                          cinema.showtimes.map((showtime: Showtime) => {
-                            const showtimeDateTime = new Date(
-                              `${selectedDate}T${showtime.showtime_start}`
-                            );
-                            const isPastShowtime = showtimeDateTime < new Date();
-                            
-                            return (
-                              <span
-                                key={showtime.id}
-                                onClick={() => {
-                                  if (!isPastShowtime) {
-                                    navigate("/seat", {
-                                      state: {
-                                        movieName: movie?.movie_name,
-                                        cinemaName: cinema.cinema_name,
-                                        showtime: showtime.showtime_start,
-                                        showtimeId: showtime.id,
-                                        cinemaId: cinema.id,
-                                        roomId: showtime.room_id,
-                                        price: showtime.price,
-                                      },
-                                    });
-                                  }
-                                }}
-                                style={{
-                                  cursor: isPastShowtime ? "not-allowed" : "pointer",
-                                  color: isPastShowtime ? "gray" : "black",
-                                }}
-                              >
-                                {showtime.showtime_start.slice(0, 5)} <br></br>
-                                {`${showtime.price / 1000}k`}
-                              </span>
-                            );
-                          })
-                        ) : (
-                          <p>Không có suất chiếu</p>
-                        )}
+                      {cinema.showtimes.length > 0 ? (
+  cinema.showtimes
+    .sort((a: Showtime, b: Showtime) => {
+      // Sorting showtimes by start time (ascending order)
+      const timeA = new Date(`${selectedDate}T${a.showtime_start}`).getTime();
+      const timeB = new Date(`${selectedDate}T${b.showtime_start}`).getTime();
+      return timeA - timeB;
+    })
+    .map((showtime: Showtime) => {
+      const showtimeDateTime = new Date(`${selectedDate}T${showtime.showtime_start}`);
+      const isPastShowtime = showtimeDateTime < new Date();
+      
+      return (
+        <span
+          key={showtime.id}
+          onClick={() => {
+            if (!isPastShowtime) {
+              navigate("/seat", {
+                state: {
+                  movieName: movie?.movie_name,
+                  cinemaName: cinema.cinema_name,
+                  showtime: showtime.showtime_start,
+                  showtimeId: showtime.id,
+                  cinemaId: cinema.id,
+                  roomId: showtime.room_id,
+                  price: showtime.price,
+                },
+              });
+            }
+          }}
+          style={{
+            cursor: isPastShowtime ? "not-allowed" : "pointer",
+            color: isPastShowtime ? "gray" : "black",
+          }}
+        >
+          {showtime.showtime_start.slice(0, 5)} <br />
+          {`${showtime.price / 1000}k`}
+        </span>
+      );
+    })
+) : (
+  <p>Không có suất chiếu</p>
+)}
                       </div>
                     </div>
                   )}

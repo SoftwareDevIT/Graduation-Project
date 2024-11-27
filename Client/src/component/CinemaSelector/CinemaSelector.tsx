@@ -8,6 +8,7 @@ import { Location } from "../../interface/Location";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import { ClipLoader } from "react-spinners";
+import { useCountryContext } from "../../Context/CountriesContext";
 
 const CinemaSelector: React.FC = () => {
   const [locations, setLocations] = useState<Location[]>([]);
@@ -18,7 +19,6 @@ const CinemaSelector: React.FC = () => {
   const [selectedCinema, setSelectedCinema] = useState<number | null>(null);
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [filteredCinemas, setFilteredCinemas] = useState<Cinema[]>([]);
-
   const navigate = useNavigate();
 
   // Lấy ngày hiện tại theo định dạng YYYY-MM-DD
@@ -81,12 +81,8 @@ const CinemaSelector: React.FC = () => {
   // Mặc định chọn Hà Nội
   useEffect(() => {
     if (locations.length > 0) {
-      const haNoi = locations.find(
-        (location) => location.location_name === "Hà Nội"
-      );
-      if (haNoi) {
-        setSelectedCity(haNoi.id); // Mặc định chọn Hà Nội
-      }
+      // Đặt khu vực mặc định là khu vực đầu tiên trong danh sách
+      setSelectedCity(locations[0].id);
     }
   }, [locations]);
 
@@ -128,10 +124,16 @@ const CinemaSelector: React.FC = () => {
         (cinema) => cinema.location_id === selectedCity
       );
       setFilteredCinemas(filtered);
+      
+      // Đặt rạp mặc định là rạp đầu tiên trong danh sách đã lọc
+      if (filtered.length > 0) {
+        setSelectedCinema(filtered[0].id ?? null);
+      }
     } else {
       setFilteredCinemas(cinemas);
     }
   }, [selectedCity, cinemas]);
+  
 
   useEffect(() => {
     const fetchMoviesForSelectedCinemaAndDate = async () => {

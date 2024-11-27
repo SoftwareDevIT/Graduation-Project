@@ -68,10 +68,14 @@ const MovieBanner = () => {
                     </button>
                     <p className="name_movie">{movie.movie_name}</p>
                     <span>
-                      {movie.release_date
-                        ? new Date(movie.release_date).toLocaleDateString("vi-VN")
-                        : "N/A"}
-                    </span>
+    {movie.release_date
+        ? new Date(movie.release_date).toLocaleDateString("vi-VN", {
+            day: "2-digit",
+            month: "2-digit"
+        }).replace('-', '/')
+        : "N/A"}
+</span>
+
                     <span className="rating-1">
   {typeof movie.rating === 'number' ? (movie.rating * 10).toFixed(0) :0}%
 </span>

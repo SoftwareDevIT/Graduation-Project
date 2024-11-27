@@ -37,7 +37,7 @@ const Header = () => {
         const pageName = path.split('/').pop();
         switch(pageName) {
             case 'dashboard':
-                return 'Dashboard';
+                return 'Bảng Điều Khiển Admin';
             case 'user':
                 return 'Quản Lí Người Dùng';
             case 'showtimes':
