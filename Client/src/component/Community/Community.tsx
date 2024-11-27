@@ -1,4 +1,9 @@
 import React from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+import { Pagination, Navigation } from "swiper/modules";
 import styles from "./Community.module.css";
 import Header from "../Header/Hearder";
 import Footer from "../Footer/Footer";
@@ -23,23 +28,31 @@ const Community: React.FC = () => {
 
   return (
     <>
-    <Header/>
-    <div className={styles.communityContainer}>
-      <h2 className={styles.heading}>Thịnh hành</h2>
-      <p className={styles.subheading}>Các phim được yêu thích trong tuần</p>
-      <div className={styles.moviesGrid}>
-        {movies.map((movie) => (
-          <div key={movie.id} className={styles.movieCard}>
-            <img src={movie.imageUrl} alt={movie.title} className={styles.movieImage} />
-            <div className={styles.overlay}>
-              <i className={`${styles.heartIcon} fas fa-heart`}></i>
-            </div>
-            <p className={styles.movieTitle}>{movie.title}</p>
-          </div>
-        ))}
+      <Header />
+      <div className={styles.communityContainer}>
+        <h2 className={styles.heading}>Thịnh hành</h2>
+        <p className={styles.subheading}>Các phim được yêu thích trong tuần</p>
+        <Swiper
+        slidesPerView={3}
+        spaceBetween={30}
+        pagination={{
+          clickable: true,
+        }}
+        modules={[Pagination]}
+        className="mySwiper"
+      >
+          {movies.map((movie) => (
+            <SwiperSlide key={movie.id} >
+              <img src={movie.imageUrl} alt={movie.title} className={styles.movieImage} />
+              <div className={styles.overlay}>
+                <i className={`${styles.heartIcon} fas fa-heart`}></i>
+              </div>
+              <p>{movie.title}</p>
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </div>
-    </div>
-    <Footer/>
+      <Footer />
     </>
   );
 };
