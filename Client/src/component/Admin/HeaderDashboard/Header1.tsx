@@ -37,7 +37,7 @@ const Header = () => {
         const pageName = path.split('/').pop();
         switch(pageName) {
             case 'dashboard':
-                return 'Dashboard';
+                return 'Bảng Điều Khiển Admin';
             case 'user':
                 return 'Quản Lí Người Dùng';
             case 'showtimes':
@@ -66,6 +66,10 @@ const Header = () => {
                 return 'Quản Lí Diễn Viên'
             case 'director':
                 return 'Quản Lí Đạo Diễn'
+            case 'method':
+                return 'Phương Thức Thanh Toán'
+            case 'promotions':
+                return 'Mã Giảm Giá'
             default:
                 return 'Welcome';
         }

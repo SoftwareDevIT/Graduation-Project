@@ -10,51 +10,40 @@ const UserDashboard: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const [usersPerPage] = useState<number>(3);
+    const [totalPages, setTotalPages] = useState<number>(0);
+    const [nextPageUrl, setNextPageUrl] = useState<string | null>(null);
+    const [prevPageUrl, setPrevPageUrl] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await instance.get('/all-user');
+                const response = await instance.get(`/all-user?page=${currentPage}`);
                 setUsers(response.data.data);
+                setTotalPages(response.data.last_page);
+                setNextPageUrl(response.data.next_page_url);
+                setPrevPageUrl(response.data.prev_page_url);
             } catch (err) {
                 setError('Lỗi khi tải người dùng');
             }
         };
 
         fetchUsers();
-    }, []);
+    }, [currentPage]);
 
-    const indexOfLastUser = currentPage * usersPerPage;
-    const indexOfFirstUser = indexOfLastUser - usersPerPage;
+    // Filter users based on search term
     const filteredUsers = users.filter(user =>
         user.user_name.toLowerCase().includes(searchTerm.toLowerCase())
     );
-    const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
 
     if (error) {
         return <p>{error}</p>;
     }
 
-    const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-
-    // Total number of pages
-    const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
-
-    // Calculate the range of pages to display
-    const pageNumbers = [];
-    let start = Math.max(1, currentPage - 2); // start from 2 pages before the current page
-    let end = Math.min(totalPages, currentPage + 2); // end at 2 pages after the current page
-
-    if (start > 1) pageNumbers.push(1); // Always show the first page if it's not in the range
-    if (start > 2) pageNumbers.push('...'); // Show "..." if there are skipped pages
-
-    for (let i = start; i <= end; i++) {
-        pageNumbers.push(i);
-    }
-
-    if (end < totalPages - 1) pageNumbers.push('...'); // Show "..." if there are skipped pages
-    if (end < totalPages) pageNumbers.push(totalPages); // Always show the last page if it's not in the range
+    const handlePageChange = (pageNumber: number) => {
+        if (pageNumber >= 1 && pageNumber <= totalPages) {
+            setCurrentPage(pageNumber);
+        }
+    };
 
     return (
         <div className="container mt-5">
@@ -83,14 +72,14 @@ const UserDashboard: React.FC = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {currentUsers.map((user: User) => (
+                        {filteredUsers.map((user: User) => (
                             <tr key={user.id}>
                                 <td>{user.id}</td>
                                 <td>{user.user_name}</td>
                                 <td>{user.fullname}</td>
                                 <td>{user.email || 'Chưa có'}</td>
                                 <td>{new Date(user.created_at!).toLocaleDateString()}</td>
-                                <td>    
+                                <td>
                                     <div className="d-flex justify-content-around">
                                         <Link to={`/admin/user/edit/${user.id}`} className="btn btn-warning btn-sm mr-2">
                                             <FontAwesomeIcon icon={faEdit} />
@@ -103,30 +92,77 @@ const UserDashboard: React.FC = () => {
                 </table>
             </div>
             <nav className="d-flex justify-content-center mt-4">
-                <ul className="pagination">
-                    <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                        <button className="page-link" onClick={() => setCurrentPage(currentPage - 1)}>
-                            Trước
+    <ul className="pagination">
+        {/* Previous Page Button */}
+        <li className={`page-item ${!prevPageUrl ? 'disabled' : ''}`}>
+            <button
+                className="page-link"
+                onClick={() => prevPageUrl && setCurrentPage(currentPage - 1)}
+                disabled={!prevPageUrl}
+            >
+                Trước
+            </button>
+        </li>
+
+        {/* Page Numbers */}
+        {totalPages > 5 && currentPage > 3 && (
+            <li className="page-item">
+                <button className="page-link" onClick={() => handlePageChange(1)}>
+                    1
+                </button>
+            </li>
+        )}
+        
+        {totalPages > 5 && currentPage > 4 && (
+            <li className="page-item disabled">
+                <span className="page-link">...</span>
+            </li>
+        )}
+
+        {[...Array(5)].map((_, index) => {
+            const pageNumber = currentPage - 2 + index;
+            if (pageNumber >= 1 && pageNumber <= totalPages) {
+                return (
+                    <li
+                        key={pageNumber}
+                        className={`page-item ${currentPage === pageNumber ? 'active' : ''}`}
+                    >
+                        <button className="page-link" onClick={() => handlePageChange(pageNumber)}>
+                            {pageNumber}
                         </button>
                     </li>
-                    {pageNumbers.map((page, index) => (
-                        <li key={index} className={`page-item ${currentPage === page ? 'active' : ''}`}>
-                            {page === '...' ? (
-                                <span className="page-link">...</span>
-                            ) : (
-                                <button className="page-link" onClick={() => paginate(page as number)}>
-                                    {page}
-                                </button>
-                            )}
-                        </li>
-                    ))}
-                    <li className={`page-item ${indexOfLastUser >= filteredUsers.length ? 'disabled' : ''}`}>
-                        <button className="page-link" onClick={() => setCurrentPage(currentPage + 1)}>
-                            Tiếp
-                        </button>
-                    </li>
-                </ul>
-            </nav>
+                );
+            }
+            return null;
+        })}
+
+        {totalPages > 5 && currentPage < totalPages - 3 && (
+            <li className="page-item disabled">
+                <span className="page-link">...</span>
+            </li>
+        )}
+
+        {totalPages > 5 && currentPage < totalPages - 2 && (
+            <li className="page-item">
+                <button className="page-link" onClick={() => handlePageChange(totalPages)}>
+                    {totalPages}
+                </button>
+            </li>
+        )}
+
+        {/* Next Page Button */}
+        <li className={`page-item ${!nextPageUrl ? 'disabled' : ''}`}>
+            <button
+                className="page-link"
+                onClick={() => nextPageUrl && setCurrentPage(currentPage + 1)}
+                disabled={!nextPageUrl}
+            >
+                Tiếp
+            </button>
+        </li>
+    </ul>
+</nav>
+
         </div>
     );
 };

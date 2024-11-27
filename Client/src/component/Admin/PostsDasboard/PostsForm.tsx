@@ -7,19 +7,21 @@ import { NewsCategory } from '../../../interface/NewsCategory';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { notification } from 'antd'; // Import Ant Design notification
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 // Define the Zod schema for validation
 const postSchema = z.object({
   title: z.string().min(1, 'Tiêu đề là bắt buộc').max(100,'Tiêu đề tối đa 100 ký tự'), // Title is required
   news_category_id: z.string().min(1, 'Chọn một danh mục'), // Category is required
-  content: z.string().min(1, 'Nội dung là bắt buộc').max(1000,'Nội dung tối đa 1000 ký tự'), // Content is required
+  content: z.string().min(1, 'Nội dung là bắt buộc').max(10000,'Nội dung tối đa 10000 ký tự'), // Content is required
 });
 
 type FormData = z.infer<typeof postSchema>;
 
 const PostsForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
+  const { register, handleSubmit, reset, formState: { errors } ,getValues,setValue} = useForm<FormData>({
     resolver: zodResolver(postSchema), // Using Zod schema for validation
   });
   const [categories, setCategories] = useState<NewsCategory[]>([]);
@@ -60,8 +62,11 @@ const PostsForm: React.FC = () => {
   }, [id, reset]);
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
-    // Kiểm tra nếu chưa có thumbnail hoặc banner
-    if (!thumbnailFile) {
+    const finalThumbnail = thumbnailFile || oldThumbnail;
+    const finalBanner = bannerFile || oldBanner;
+  
+    // Check if both thumbnail and banner are available (for new post creation)
+    if (!finalThumbnail) {
       notification.error({
         message: 'Lỗi xác thực',
         description: 'Ảnh thu nhỏ là bắt buộc!',
@@ -69,7 +74,7 @@ const PostsForm: React.FC = () => {
       });
       return;
     }
-    if (!bannerFile) {
+    if (!finalBanner) {
       notification.error({
         message: 'Lỗi xác thực',
         description: 'Ảnh bìa là bắt buộc!',
@@ -78,12 +83,12 @@ const PostsForm: React.FC = () => {
       return;
     }
   
-    // Nếu đã hợp lệ, tiếp tục gửi dữ liệu
+    // Proceed with data submission
     await addOrUpdatePost(
       {
         ...data,
-        thumnail: thumbnailFile,
-        banner: bannerFile,
+        thumnail: finalThumbnail,
+        banner: finalBanner,
       },
       id
     );
@@ -96,7 +101,6 @@ const PostsForm: React.FC = () => {
   
     nav('/admin/posts');
   };
-  
 
   return (
     <div className="container mt-5">
@@ -128,7 +132,7 @@ const PostsForm: React.FC = () => {
         {oldThumbnail && (
           <div className="mb-3">
             <label className="form-label">Ảnh thu nhỏ hiện tại:</label>
-            <img src={oldThumbnail} alt="Thumbnail cũ"   style={{ maxWidth: '200px', maxHeight: '200px', objectFit: 'contain' }} />
+            <img src={oldThumbnail} alt="Thumbnail cũ" style={{ maxWidth: '200px', maxHeight: '200px', objectFit: 'contain' }} />
           </div>
         )}
         <div className="mb-3">
@@ -143,15 +147,15 @@ const PostsForm: React.FC = () => {
             }}
           />
           {!thumbnailFile && (
-    <span className="text-danger">Ảnh thu nhỏ là bắt buộc</span>
-  )}
+            <span className="text-danger">Ảnh thu nhỏ là bắt buộc</span>
+          )}
         </div>
 
         {/* Show old banner if available */}
         {oldBanner && (
           <div className="mb-3">
             <label className="form-label">Ảnh bìa hiện tại:</label>
-            <img src={oldBanner} alt="Banner cũ"   style={{ maxWidth: '200px', maxHeight: '200px', objectFit: 'contain' }} />
+            <img src={oldBanner} alt="Banner cũ" style={{ maxWidth: '200px', maxHeight: '200px', objectFit: 'contain' }} />
           </div>
         )}
         <div className="mb-3">
@@ -165,17 +169,21 @@ const PostsForm: React.FC = () => {
               }
             }}
           />
-           {!bannerFile && (
-    <span className="text-danger">Ảnh bìa là bắt buộc</span>
-  )}
+          {!bannerFile && (
+            <span className="text-danger">Ảnh bìa là bắt buộc</span>
+          )}
         </div>
 
         <div className="mb-3">
           <label className="form-label">Nội dung:</label>
-          <textarea
-            className="form-control"
-            {...register('content')}
-          ></textarea>
+          <CKEditor
+            editor={ClassicEditor}
+            data={getValues('content') || ''} // If editing, load previous content
+            onChange={(event, editor) => {
+              const data = editor.getData();
+              setValue('content', data); // Use setValue to update content
+            }}
+          />
           {errors.content && <span className="text-danger">{errors.content.message}</span>}
         </div>
 

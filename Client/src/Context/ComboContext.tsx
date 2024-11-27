@@ -75,6 +75,7 @@ const fetchCombos = async () => {
     try {
       const { data } = await instance.post('/combo', combo);
       dispatch({ type: 'ADD_COMBO', payload: data.data });
+      fetchCombos()
     } catch (error) {
       console.error('Failed to add combo:', error);
     }
