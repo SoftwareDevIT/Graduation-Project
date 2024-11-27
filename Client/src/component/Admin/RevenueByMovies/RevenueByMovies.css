@@ -2,7 +2,7 @@
 .revenue-by-movie {
     padding: 30px;
     background: rgb(229, 240, 242); /* Nền xanh nhạt giống DashboardAdmin */
-    min-height: 170vh;
+    min-height: 190vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -38,7 +38,7 @@
     font-weight: 600;
 }
 
-.total-revenue {
+.total-revenue1 {
     font-size: 2.5rem;
     color: #f56565; /* Màu đỏ giống trong biểu đồ */
     font-weight: bold;

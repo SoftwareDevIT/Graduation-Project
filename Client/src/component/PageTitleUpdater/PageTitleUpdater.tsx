@@ -40,6 +40,57 @@ const PageTitleUpdater = () => {
     else if (path ==="/movieticket") {
         title = "MovieTicket";
     }
+
+    else if (path === "/admin/dashboard"){
+        title = "Dashboard"
+    }
+    else if (path === "/admin/user"){
+        title = "User"
+    }
+    else if (path === "/admin/actor"){
+        title = "Quản Lí Diễn Viên"
+    }
+    else if (path === "/admin/director"){
+        title = "Quản Lí Đạo Diễn"
+    }
+    else if (path === "/admin/posts"){
+        title = "Quản Lí Bài Viết"
+    }
+    else if (path === "/admin/showtimes"){
+        title = "Quản Lí Suất Chiếu"
+    }
+    else if (path === "/admin/orders"){
+        title = "Quản Lí Đơn Hàng"
+    }
+    else if (path === "/admin/categories"){
+        title = "Quản Lí Thể Loại"
+    }
+    else if (path === "/admin/combo"){
+        title = "Quản Lí Combo"
+    }
+    else if (path === "/admin/cinema"){
+        title = "Quản Lí Rạp"
+    }
+    else if (path === "/admin/movies"){
+        title = "Quản Lí Phim"
+    }
+    else if (path === "/admin/room"){
+        title = "Quản Lí Phòng Rạp"
+    }
+    else if (path === "/admin/RevenueByCinema"){
+        title = "Doanh Thu Theo Rạp"
+    }
+    else if (path === "/admin/RevenueByMovie"){
+        title = "Doanh Thu Theo Phim"
+    }
+    else if(path === "/admin/method"){
+      title = "Phương Thức Thanh Toán"
+    }
+    else if(path === "/admin/promotions"){
+      title = "Mã Giảm Giá"
+    }
+    
+
     document.title = title; // Cập nhật title
   }, [location]);
 

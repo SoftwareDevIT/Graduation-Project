@@ -10,7 +10,9 @@ import { Actor } from "../../../interface/Actor";
 // Định nghĩa schema cho việc xác thực form sử dụng Zod
 
 const actorSchema = z.object({
-  actor_name: z.string().min(1, "Tên diễn viên là bắt buộc."),
+  actor_name: z
+    .string()
+    .min(1, "Tên diễn viên là bắt buộc.").regex(/^[^\d]*$/, "Tên diễn viên không được chứa số."),
   country: z.string().min(1, "Quốc gia là bắt buộc."),
   photo: z.any().optional(),
   link_wiki: z.string().url("Link Wiki phải là URL hợp lệ."),
@@ -20,11 +22,14 @@ const actorSchema = z.object({
     .max(500, "Mô tả không được vượt quá 500 ký tự."),
 });
 
+
 const ActorForm = () => {
   const { id } = useParams<{ id: string }>();
   const nav = useNavigate();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [existingPhoto, setExistingPhoto] = useState<string | null>(null); // State để lưu ảnh cũ
+  const [countries, setCountries] = useState<string[]>([]); // State to store countries data
+  const [loadingCountries, setLoadingCountries] = useState<boolean>(true); // Loading state for countries
 
   const {
     handleSubmit,
@@ -35,6 +40,25 @@ const ActorForm = () => {
     resolver: zodResolver(actorSchema),
   });
 
+  useEffect(() => {
+    const fetchCountries = async () => {
+      try {
+        const response = await fetch("https://restcountries.com/v3.1/all?fields=name");
+        const data = await response.json();
+        setCountries(data.map((country: { name: { common: string } }) => country.name.common));
+      } catch (error) {
+        console.error("Error fetching countries:", error);
+        notification.error({
+          message: "Lỗi khi tải danh sách quốc gia",
+          description: "Không thể tải danh sách quốc gia từ API.",
+        });
+      } finally {
+        setLoadingCountries(false);
+      }
+    };
+
+    fetchCountries();
+  }, []);
   useEffect(() => {
     const fetchActor = async () => {
       if (id) {
@@ -48,11 +72,12 @@ const ActorForm = () => {
       }
     };
 
+    
     fetchActor(); // Lấy dữ liệu diễn viên nếu có ID
   }, [id, reset]);
 
   const handleFormSubmit = async (data: Actor) => {
-    if (!selectedFile) {
+    if (!selectedFile && !existingPhoto) {
       notification.error({
         message: 'Lỗi xác thực',
         description: 'Ảnh đại diện là bắt buộc!',
@@ -124,9 +149,7 @@ const ActorForm = () => {
           </label>
           <input
             type="text"
-            className={`form-control ${
-              errors.actor_name ? "is-invalid" : ""
-            }`}
+            className={`form-control ${errors.actor_name ? "is-invalid" : ""}`}
             {...register("actor_name")}
           />
           {errors.actor_name && (
@@ -139,11 +162,17 @@ const ActorForm = () => {
           <label htmlFor="country" className="form-label">
             Quốc gia
           </label>
-          <input
-            type="text"
+          <select
             className={`form-control ${errors.country ? "is-invalid" : ""}`}
             {...register("country")}
-          />
+          >
+            <option value="">Chọn Quốc gia</option>
+            {countries.map((country, index) => (
+              <option key={index} value={country}>
+                {country}
+              </option>
+            ))}
+          </select>
           {errors.country && (
             <span className="text-danger">{errors.country.message}</span>
           )}
@@ -181,9 +210,7 @@ const ActorForm = () => {
           </label>
           <input
             type="text"
-            className={`form-control ${
-              errors.link_wiki ? "is-invalid" : ""
-            }`}
+            className={`form-control ${errors.link_wiki ? "is-invalid" : ""}`}
             {...register("link_wiki")}
           />
           {errors.link_wiki && (
@@ -197,9 +224,7 @@ const ActorForm = () => {
             Mô tả
           </label>
           <textarea
-            className={`form-control ${
-              errors.descripcion ? "is-invalid" : ""
-            }`}
+            className={`form-control ${errors.descripcion ? "is-invalid" : ""}`}
             {...register("descripcion")}
           ></textarea>
           {errors.descripcion && (
