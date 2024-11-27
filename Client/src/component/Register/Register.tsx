@@ -1,34 +1,52 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { notification } from "antd";
-import instance from "../../server";
-
-import "./Register.css";
-import { RegisterFormData } from "../../interface/RegisterFormData";
 import ReCAPTCHA from "react-google-recaptcha";
+import instance from "../../server";
+import "./Register.css";
+import { registerSchema } from "../../utils/validationSchema";
+
+// Schema validation bằng Zod
+
+
+type RegisterFormData = z.infer<typeof registerSchema>;
 
 const Register = () => {
   const navigate = useNavigate();
-  const { register, handleSubmit, formState: { errors } } = useForm<RegisterFormData>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterFormData>({
+    resolver: zodResolver(registerSchema), // Áp dụng Zod resolver
+  });
+
   const [captchaValue, setCaptchaValue] = useState<string | null>(null);
-  const captchaRef = useRef<ReCAPTCHA | null>(null); // Dùng ref để giữ CAPTCHA
-//  thư viên Ant Degsin
-  const openNotificationWithIcon = (type: "success" | "error", message: string, description: string) => {
+  const captchaRef = useRef<ReCAPTCHA | null>(null);
+
+  // Hiển thị thông báo với Ant Design
+  const openNotificationWithIcon = (
+    type: "success" | "error",
+    message: string,
+    description: string
+  ) => {
     notification[type]({
-      message: message ?? "Thông báo", 
+      message: message ?? "Thông báo",
       description,
     });
   };
 
   const onSubmit: SubmitHandler<RegisterFormData> = async (data) => {
-    if (data.password !== data.confirmPassword) {
-      openNotificationWithIcon("error", "Lỗi xác thực", "Mật khẩu và xác nhận mật khẩu không khớp.");
-      return;
-    }
     if (!captchaValue) {
-      openNotificationWithIcon("error", "Lỗi xác thực", "Vui lòng xác minh CAPTCHA.");
+      openNotificationWithIcon(
+        "error",
+        "Lỗi xác thực",
+        "Vui lòng xác minh CAPTCHA."
+      );
       return;
     }
 
@@ -38,11 +56,15 @@ const Register = () => {
         user_name: data.user_name,
         password: data.password,
         password_confirmation: data.confirmPassword,
-        'g-recaptcha-response': captchaValue,
+        "g-recaptcha-response": captchaValue,
       });
 
       if (response.status === 200) {
-        openNotificationWithIcon("success", "Đăng ký thành công", "Tài khoản của bạn đã được tạo thành công!");
+        openNotificationWithIcon(
+          "success",
+          "Đăng ký thành công",
+          "Tài khoản của bạn đã được tạo thành công!"
+        );
         navigate("/login");
       }
     } catch (err: unknown) {
@@ -53,18 +75,33 @@ const Register = () => {
         };
 
         if (err.response?.status === 422) {
-          openNotificationWithIcon("error", "Đăng ký thất bại", "Tài khoản đã tồn tại! Vui lòng nhập tài khoản khác.");
+          openNotificationWithIcon(
+            "error",
+            "Đăng ký thất bại",
+            "Tài khoản đã tồn tại! Vui lòng nhập tài khoản khác."
+          );
         } else if (err.response?.status === 500) {
-          openNotificationWithIcon("error", "Lỗi server", "Có lỗi xảy ra từ phía server. Xin thử lại sau.");
+          openNotificationWithIcon(
+            "error",
+            "Lỗi server",
+            "Có lỗi xảy ra từ phía server. Xin thử lại sau."
+          );
         } else if (errorResponse?.errors) {
-          const errorMessages = Object.values(errorResponse.errors).flat().join(", ");
+          const errorMessages = Object.values(errorResponse.errors)
+            .flat()
+            .join(", ");
           openNotificationWithIcon("error", "Đăng ký thất bại", errorMessages);
         } else {
-          const errorMessage = errorResponse?.message ?? "Đã xảy ra lỗi.";
+          const errorMessage =
+            errorResponse?.message ?? "Đã xảy ra lỗi.";
           openNotificationWithIcon("error", "Đăng ký thất bại", errorMessage);
         }
       } else {
-        openNotificationWithIcon("error", "Lỗi không xác định", "Đã xảy ra lỗi không xác định. Xin thử lại sau.");
+        openNotificationWithIcon(
+          "error",
+          "Lỗi không xác định",
+          "Đã xảy ra lỗi không xác định. Xin thử lại sau."
+        );
       }
     }
   };
@@ -79,21 +116,6 @@ const Register = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (errors.password) {
-      openNotificationWithIcon("error", "Lỗi xác thực", errors.password.message ?? "Có lỗi xảy ra.");
-    }
-    if (errors.confirmPassword) {
-      openNotificationWithIcon("error", "Lỗi xác thực", errors.confirmPassword.message ?? "Có lỗi xảy ra.");
-    }
-    if (errors.email) {
-      openNotificationWithIcon("error", "Lỗi xác thực", errors.email.message ?? "Có lỗi xảy ra.");
-    }
-    if (errors.user_name) {
-      openNotificationWithIcon("error", "Lỗi xác thực", errors.user_name.message ?? "Có lỗi xảy ra.");
-    }
-  }, [errors]);
-
   return (
     <div className="custom-register-container">
       <div className="custom-register-form">
@@ -105,22 +127,18 @@ const Register = () => {
               <input
                 type="text"
                 id="email"
-                {...register("email", { 
-                  required: "Email là bắt buộc", 
-                  pattern: {
-                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                    message: "Email không đúng định dạng"
-                  }
-                })}
+                {...register("email")}
               />
+              {errors.email && <p className="error-message">{errors.email.message}</p>}
             </div>
             <div className="custom-form-field">
               <label htmlFor="user_name">Tên đăng nhập:</label>
               <input
                 type="text"
                 id="user_name"
-                {...register("user_name", { required: "Tên đăng nhập là bắt buộc" })}
+                {...register("user_name")}
               />
+              {errors.user_name && <p className="error-message">{errors.user_name.message}</p>}
             </div>
           </div>
           <div className="custom-form-group">
@@ -129,29 +147,23 @@ const Register = () => {
               <input
                 type="password"
                 id="password"
-                {...register("password", { 
-                  required: "Mật khẩu là bắt buộc", 
-                  minLength: {
-                    value: 8,
-                    message: "Mật khẩu phải có ít nhất 8 ký tự"
-                  }
-                })}
+                {...register("password")}
               />
+              {errors.password && <p className="error-message">{errors.password.message}</p>}
             </div>
             <div className="custom-form-field">
               <label htmlFor="confirmPassword">Xác minh mật khẩu:</label>
               <input
                 type="password"
                 id="confirmPassword"
-                {...register("confirmPassword", { 
-                  required: "Xác minh mật khẩu là bắt buộc" 
-                })}
+                {...register("confirmPassword")}
               />
+              {errors.confirmPassword && <p className="error-message">{errors.confirmPassword.message}</p>}
             </div>
           </div>
           <div className="custom-form-group">
             <ReCAPTCHA
-              sitekey="6LdahEAqAAAAAKeWH4oPIbVjTx0zFMO2_nb8B7MM" // Thay thế bằng site key của bạn
+              sitekey="6LdahEAqAAAAAKeWH4oPIbVjTx0zFMO2_nb8B7MM"
               onChange={onCaptchaChange}
               ref={captchaRef}
             />
@@ -165,7 +177,10 @@ const Register = () => {
         </p>
       </div>
       <div className="custom-image-container">
-        <img src="https://cdn.moveek.com/bundles/ornweb/img/mascot.png" alt="Mascot" />
+        <img
+          src="https://cdn.moveek.com/bundles/ornweb/img/mascot.png"
+          alt="Mascot"
+        />
       </div>
     </div>
   );

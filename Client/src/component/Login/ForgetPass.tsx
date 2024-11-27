@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './ForgetPass.css';
-
 import { Alert } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,7 +13,7 @@ const ForgetPass = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        // Validate if email is not empty
+        // Kiểm tra email trống
         if (!email.trim()) {
             setMessage('Vui lòng nhập email.');
             setMessageType('error');
@@ -23,12 +22,16 @@ const ForgetPass = () => {
 
         try {
             await axios.post('http://127.0.0.1:8000/api/password/send-otp', { email });
-            
-            // Store email in localStorage
+
+            // Lưu email vào localStorage
             localStorage.setItem('reset_email', email);
             setMessage('Mã OTP đã được gửi đến email của bạn.');
             setMessageType('success');
-            navigate('/otp');
+
+            // Điều hướng đến trang OTP
+            setTimeout(() => {
+                navigate('/otp');
+            }, 2000); // Chờ 2 giây để người dùng nhìn thấy thông báo
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
                 const serverMessage = error.response.data?.message;
@@ -47,7 +50,7 @@ const ForgetPass = () => {
     return (
         <div className="forgot-password-container">
             <div className="form-section">
-                <h2>Phục hồi mật khẩu</h2>
+                <h2>Khôi Phục mật khẩu</h2>
                 <form onSubmit={handleSubmit}>
                     <label htmlFor="username">Tài khoản</label>
                     <input
@@ -56,13 +59,13 @@ const ForgetPass = () => {
                         placeholder="Nhập email của bạn"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                       
                     />
                     <button type="submit">Quên mật khẩu</button>
                 </form>
-                
+
                 {message && (
                     <Alert
+                        className="quenmatkhau"
                         message={message}
                         type={messageType}
                         showIcon

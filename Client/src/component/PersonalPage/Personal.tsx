@@ -4,7 +4,7 @@ import Footer from '../Footer/Footer';
 import Header from '../Header/Hearder';
 import instance from '../../server';
 import { Movie } from '../../interface/Movie';
-
+import { formatDistanceToNow } from 'date-fns'; // Thêm thư viện date-fns
 
 const Personal: React.FC = () => {
   const [avatar, setAvatar] = useState(
@@ -12,6 +12,9 @@ const Personal: React.FC = () => {
   );
   const [userProfile, setUserProfile] = useState<any>(null);
   const [favoriteMovies, setFavoriteMovies] = useState<Movie[]>([]);
+  const [activities, setActivities] = useState<string[]>([]); // Lưu trữ hoạt động gần đây
+  const [visibleActivities, setVisibleActivities] = useState<string[]>([]); // Hoạt động hiển thị
+  const [showAllActivities, setShowAllActivities] = useState(false); // Trạng thái xem tất cả hoạt động
 
   useEffect(() => {
     const profileData = localStorage.getItem("user_profile");
@@ -23,17 +26,23 @@ const Personal: React.FC = () => {
       const fetchUserProfile = async () => {
         try {
           const response = await instance.get(`/user/${userId}`);
-          console.log(response.data); // In ra phản hồi từ API
           if (response.data.status) {
             const userProfileData = response.data.data;
-
             setUserProfile(userProfileData);
             setAvatar(
               userProfileData.avatar ||
               "https://cdn.moveek.com/bundles/ornweb/img/no-avatar.png"
             );
-            setFavoriteMovies(userProfileData.favorite_movies || []);
-            console.log(userProfileData.favorite_movies);
+            const movies = userProfileData.favorite_movies || [];
+            setFavoriteMovies(movies);
+
+            // Thêm hoạt động yêu thích phim vào danh sách hoạt động
+            const newActivities = movies.map((movie: Movie) => {
+              const timeAgo = formatDistanceToNow(new Date(movie.created_at), { addSuffix: true });
+              return `${userProfileData.user_name} đã yêu thích phim: ${movie.movie_name} - ${timeAgo}`;
+            });
+            setActivities(newActivities);
+            setVisibleActivities(newActivities.slice(0, 3)); // Hiển thị 3 hoạt động đầu tiên
           }
         } catch (error) {
           console.error("Lỗi khi lấy thông tin người dùng:", error);
@@ -41,10 +50,13 @@ const Personal: React.FC = () => {
       };
 
       fetchUserProfile();
-    } else {
-      console.log("Không có dữ liệu trong localStorage cho 'user_profile'.");
     }
   }, []);
+
+  const handleSeeMore = () => {
+    setShowAllActivities(true);
+    setVisibleActivities(activities); // Hiển thị tất cả hoạt động
+  };
 
   return (
     <>
@@ -65,31 +77,49 @@ const Personal: React.FC = () => {
             </div>
           </div>
 
+          {/* <div className="moveslike">
+            <h3>Phim tui thích</h3>
+            <div className="phimyeuthich-container">
+  <div className="phimyeuthich">
+    {favoriteMovies.length > 0 ? (
+      favoriteMovies.map((movie) => (
+        <div className="item-phim" key={movie.id}>
+          <div className="img">
+            <img src={movie.poster || undefined} alt={movie.movie_name} />
+          </div>
+          <div className="movie-title">
+            <h5>{movie.movie_name}</h5>
+          </div>
+        </div>
+      ))
+    ) : (
+      <div className="col-12 text-center">Chưa có phim yêu thích nào.</div>
+    )}
+  </div>
+</div> */}
+
+
+          </div>
           <div className="moveslike">
             <h3>Phim tui thích</h3>
-            <div className='phimyeuthich'>
-              <div className="row ">
+            <div className='phimyeuthich-container'>
+              <div className="phimyeuthich ">
                 {favoriteMovies.length > 0 ? (
-  favoriteMovies.map((movie) => {
-    // Kiểm tra nếu movie.rating là số, nếu không thì sử dụng giá trị mặc định
-    const ratingNumber = typeof movie.rating === 'number' ? movie.rating : 0;
-    return (
-      <div className="item-phim col-lg-3" key={movie.id}>
-        <div className="img">
-          <img src={movie.poster || undefined} alt={movie.movie_name} />
-        </div>
-        {/* <div className="nutlike">
-          <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#00d97e"><path d="M720-144H264v-480l288-288 32 22q17 12 26 30.5t5 38.5l-1 5-38 192h264q30 0 51 21t21 51v57q0 8-1.5 14.5T906-467L786.93-187.8Q778-168 760-156t-40 12Zm-384-72h384l120-279v-57H488l49-243-201 201v378Zm0-378v378-378Zm-72-30v72H120v336h144v72H48v-480h216Z"/></svg>
-          <span className='nobackground'>
-            {ratingNumber ? `${(ratingNumber * 10).toFixed(0)}%` : 'Chưa có đánh giá'}
-          </span>
-        </div> */}
-      </div>
-    );
-  })
-) : (
-  <div className="col-12 text-center">Chưa có phim yêu thích nào.</div>
-)}
+                  favoriteMovies.map((movie) => {
+                    return (
+                      <div className="item-phim " key={movie.id}>
+                       <div className="img">
+            <img src={movie.poster || undefined} alt={movie.movie_name} />
+          </div>
+                        <div className="movie-title">
+            <h5>{movie.movie_name}</h5>
+          </div>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div className="col-12 text-center">Chưa có phim yêu thích nào.</div>
+                )}
               </div>
             </div>
           </div>
@@ -97,38 +127,30 @@ const Personal: React.FC = () => {
           <div className='activities'>
             <h4 className='text-center'>Hoạt động gần đây</h4>
             <div className="activity-list">
-              <div className="activity-item">
-                <div className="activity-info">
-                  <span className="activity-dot">•</span>
-                  <span className="activity-text">
-                    <strong>{userProfile?.user_name}</strong> đã thích <strong>Transformers Một</strong>
-                  </span>
+              {visibleActivities.length > 0 ? (
+                visibleActivities.map((activity, index) => (
+                  <div className="activity-item" key={index}>
+                    <div className="activity-info">
+                      <span className="activity-dot">•</span>
+                      <span className="activity-text">
+                        {activity}
+                      </span>
+                    </div>
+                    {/* <span className="activity-time">{activity}</span> */}
+                  </div>
+                ))
+              ) : (
+                <div className="col-12 text-center">Chưa có hoạt động nào.</div>
+              )}
+              {!showAllActivities && activities.length > 3 && (
+                <div className="see-more" onClick={handleSeeMore}>
+                  Xem thêm
                 </div>
-                <span className="activity-time">42 phút trước</span>
-              </div>
-              <div className="activity-item">
-                <div className="activity-info">
-                  <span className="activity-dot">•</span>
-                  <span className="activity-text">
-                    <strong>{userProfile?.user_name}</strong> đã thích <strong>CẤM</strong>
-                  </span>
-                </div>
-                <span className="activity-time">43 phút trước</span>
-              </div>
-              <div className="activity-item">
-                <div className="activity-info">
-                  <span className="activity-dot">•</span>
-                  <span className="activity-text">
-                    <strong>{userProfile?.user_name}</strong> đã thích <strong>Joker 2: Điên Có Đôi</strong>
-                  </span>
-                </div>
-                <span className="activity-time">43 phút trước</span>
-              </div>
-              <div className="see-more">Xem thêm</div>
+              )}
             </div>
           </div>
         </div>
-      </div>
+      
       <Footer />
     </>
   );

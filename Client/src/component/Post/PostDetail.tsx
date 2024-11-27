@@ -9,7 +9,7 @@ import { extractLinks, stripHtml } from "../../assets/Font/quillConfig";
 import dayjs from "dayjs";
 
 const PostDetail: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const { slug} = useParams<{ slug: string }>();
   const [article, setArticle] = useState<NewsItem | null>(null);
 
   const [relatedPosts, setRelatedPosts] = useState<any[]>([]);
@@ -17,7 +17,7 @@ const PostDetail: React.FC = () => {
   useEffect(() => {
     const fetchArticle = async () => {
       try {
-        const response = await instance.get(`/news/${id}`);
+        const response = await instance.get(`/news/${slug}`);
         setArticle(response.data.data);
 
         // Fetch related posts
@@ -35,45 +35,43 @@ const PostDetail: React.FC = () => {
     };
 
     fetchArticle();
-  }, [id]);
+  }, [slug]);
 
-  if (!article) {
-    return <p>Không tìm thấy bài viết</p>;
-  }
+ 
 
   // Định dạng ngày tháng
-  const formattedDate = dayjs(article.created_at).format("DD/MM/YYYY ");
+  const formattedDate = dayjs(article?.created_at).format("DD/MM/YYYY ");
 
   return (
     <>
       <Header />
       <div className="article-container">
         <div className="main-content">
-          <h1 className="article-title">{article.title}</h1>
+          <h1 className="article-title">{article?.title}</h1>
           <p className="article-meta">
-            {article.news_category.news_category_name} · {formattedDate}
+            {article?.news_category.news_category_name} · {formattedDate}
           </p>
 
           <div className="article-content-container">
             <img
-              src={article.movie.poster || undefined}
+              src={article?.movie.poster || undefined}
               alt="Poster"
               className="article-poster"
             />
             <div className="article-movie-info">
-              <h2>{stripHtml(article.movie.movie_name)}</h2>
+              <h2>{stripHtml(article?.movie.movie_name  ?? "Tên phim không khả dụng")}</h2>
 
-              <span>khởi chiếu:{article.movie.release_date}</span>
+              <span>khởi chiếu:{article?.movie.release_date}</span>
               {/* Bạn có thể thêm các thông tin khác nếu cần */}
             </div>
             <button className="article-button">
-              <Link to={`/movie-detail/${article.movie.slug}`}>
+              <Link to={`/movie-detail/${article?.movie.slug}`}>
                 Mua vé ngay
               </Link>
             </button>
           </div>
 
-          <p className="article-description">{stripHtml(article.content)}</p>
+          <p className="article-description">{stripHtml(article?.content  ?? "Nội dung không khả dụng")}</p>
 
           {/* Nếu bạn muốn giữ lại nội dung ban đầu, bạn có thể thêm phần nội dung ở đây */}
         </div>
@@ -98,7 +96,7 @@ const PostDetail: React.FC = () => {
               <div>
               
                 <p className="post-meta-2">
-                  {stripHtml(post.content.slice(0, 150))}...
+                <Link to={`/postdetail/${post.slug}`}>  {stripHtml(post.content.slice(0, 150))}...</Link>
                 </p>
                 {/* <p className="post-meta">
                   Đánh giá phim • {post.user_name} •{" "}

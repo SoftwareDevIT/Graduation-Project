@@ -3,7 +3,7 @@ import './MovieDetail.css';
 import './ContentMovie.css';
 import MovieDetail from './MovieDetail';
 import Footer from '../Footer/Footer';
-import { useNavigate, useParams } from 'react-router-dom';  // Import useParams
+import { Link, useNavigate, useParams } from 'react-router-dom';  // Import useParams
 import instance from '../../server'; // Ensure you import the API instance correctly
 import { Movie } from '../../interface/Movie'; // Import Movie interface
 import { useCountryContext } from '../../Context/CountriesContext';
@@ -148,7 +148,7 @@ export const ContentMovie = (props: Props) => {
                                         className="post-image"
                                     />
                                     <div className="post-info">
-                                        <a href="#" className="post-title">{post.title}</a>
+                                        <a href="#" className="post-title"><Link to={`/postdetail/${post.slug}`}>{post.title}</Link></a>
                                         <p className="post-meta">Đánh giá phim • miduynph • 6 ngày trước</p>
                                         <p className="post-meta-2">{stripHtml(post.content.slice(0, 150))}...</p> {/* Display a truncated version of the content */}
                                     </div>
@@ -157,31 +157,7 @@ export const ContentMovie = (props: Props) => {
                         </div>
                     </div>
 
-                    <div className="community-section">
-                            <h3>Cộng đồng</h3>
-
-                            {/* Lặp qua danh sách đánh giá và hiển thị */}
-                            {ratings.length > 0 ? (
-                                ratings.map((rating) => (
-                                    <div className="comment" key={rating.id}>
-                                        <p className="comment-user">
-                                            <i className="fas fa-user-circle avatar-icon"></i>
-                                            <strong>{rating.user_name}</strong>
-                                            <span className="comment-rating">⭐ {rating.rating}</span> • {new Date(rating.created_at).toLocaleDateString()}
-                                        </p>
-                                        <p className="comment-text">
-                                            {rating.review || "Không có nội dung đánh giá."}
-                                        </p>
-                                        <div className="comment-actions">
-                                            <button className="like-btn">👍</button>
-                                            <button className="dislike-btn">👎</button>
-                                        </div>
-                                    </div>
-                                ))
-                            ) : (
-                                <p>Chưa có đánh giá nào cho phim này.</p>
-                            )}
-                        </div>
+                    
                 </div>
             </div>
             <Footer />
