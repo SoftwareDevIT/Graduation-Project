@@ -40,9 +40,10 @@
   }
   
   /* Reponsive cho thiết bị có màn hình nhỏ hơn 768px (mobile) */
-  @media (max-width: 768px) {
+  @media (min-width: 767px) and (max-width: 1024px)  {
     .video-section iframe, .schedule-section,.title-2,.related-posts,.community-section{
         width: 650px;
+        margin-left: 170px;
     }
     .container.content-1 {
       padding: 0 10px;
@@ -67,9 +68,10 @@
   }
   
   /* Reponsive cho thiết bị có màn hình nhỏ hơn 480px (điện thoại nhỏ) */
-  @media (max-width: 480px) {
+  @media (max-width: 768px) {
     .video-section iframe, .schedule-section,.title-2,.related-posts,.community-section{
-        width: 420px;
+        width: 390px;
+       margin-left: 10px;
     }
     .video-section iframe {
       height: 200px;

@@ -199,6 +199,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/historyOrder', [OrderController::class, 'order']);
     Route::post('/historyOrder/{id}', [OrderController::class, 'orderDetail']);
     Route::get('session', [BookingController::class, 'getSession']);
+    Route::get('vouchers', [PromotionController::class, 'getUserVouchers']);
 });
 Route::apiResource('promotions', PromotionController::class);
 Route::post('apply-promotion', [PromotionController::class, 'applyPromotion']);
+

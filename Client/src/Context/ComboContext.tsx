@@ -55,7 +55,7 @@ const fetchCombos = async () => {
   try {
     const token = localStorage.getItem('token'); // Lấy token từ localStorage hoặc nơi lưu trữ token khác
     if (!token) {
-      console.error('Token not found');
+    
       return;
     }
 

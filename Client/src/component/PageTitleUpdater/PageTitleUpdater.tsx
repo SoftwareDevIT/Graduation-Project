@@ -37,9 +37,10 @@ const PageTitleUpdater = () => {
     else if (path === "/personal") {
         title = "Personal";
     }
-    else if (path === "/admin"){
-        title = "Admin"
+    else if (path ==="/movieticket") {
+        title = "MovieTicket";
     }
+
     else if (path === "/admin/dashboard"){
         title = "Dashboard"
     }
@@ -89,6 +90,7 @@ const PageTitleUpdater = () => {
       title = "Mã Giảm Giá"
     }
     
+
     document.title = title; // Cập nhật title
   }, [location]);
 

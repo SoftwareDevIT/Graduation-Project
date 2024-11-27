@@ -2,6 +2,8 @@ import React from 'react';
 import Slider from 'react-slick';
 import { Link } from 'react-router-dom';
 import { stripHtml } from '../../assets/Font/quillConfig';
+import { formatDistanceToNow } from 'date-fns';
+import { vi } from 'date-fns/locale';  // Import tiếng Việt từ date-fns
 
 import './NewsContent.css';
 import { useNews } from '../../Context/NewsContext';
@@ -19,7 +21,10 @@ const NewsContent = () => {
     arrows: true,
   };
 
- 
+  
+  function formatTimeAgo(date: string) {
+    return formatDistanceToNow(new Date(date), { addSuffix: true, locale: vi });  // Cấu hình ngôn ngữ tiếng Việt
+  }
 
   return (
     <div className="news-container">
@@ -42,11 +47,11 @@ const NewsContent = () => {
       <div className="related-news">
         {newsData.slice(1, 6).map((news, index) => (
           <div className="related-news-item" key={index}>
-            <Link to={`/postdetail/${news.id}`} className="title">
+            <Link to={`/postdetail/${news.slug}`} className="title">
               {stripHtml(news.title)}
             </Link>
             <span className="author">
-              {news.user.fullname} • {new Date(news.created_at).toLocaleDateString()}
+              <span className='user-style'>{news.user.fullname}</span> • {news.news_category.news_category_name} • {formatTimeAgo(news.created_at)}
             </span>
           </div>
         ))}

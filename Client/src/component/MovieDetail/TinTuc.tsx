@@ -5,7 +5,7 @@ import MovieDetail from "./MovieDetail";
 import instance from "../../server";
 import { stripHtml } from '../../assets/Font/quillConfig';
 import { useMovieContext } from "../../Context/MoviesContext";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 const TinTuc: React.FC = () => {
     const { slug } = useParams(); // Sử dụng slug
     const [relatedPosts, setRelatedPosts] = useState<any[]>([]);
@@ -43,7 +43,7 @@ const TinTuc: React.FC = () => {
                                             className="post-image"
                                         />
                                         <div className="post-info">
-                                            <a href="#" className="post-title">{post.title}</a>
+                                            <a href="#" className="post-title"><Link to={`/postdetail/${post.slug}`}>{post.title}</Link></a>
                                             <p className="post-meta">Đánh giá phim • {post.user_id} • {new Date(post.created_at).toLocaleDateString()}</p>
                                             <p className="post-meta-2">{stripHtml(post.content.slice(0, 150))}...</p>
                                         </div>
