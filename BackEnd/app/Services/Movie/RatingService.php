@@ -66,7 +66,7 @@ class RatingService
 
     public function show(int $id)
     {
-        $movie = Rating::where('movie_id', $id)->get();
+        $movie = Rating::with('user')->where('movie_id', $id)->get();
 
         return $movie;
     }
