@@ -29,10 +29,11 @@ class OrderService
         return $order;
     }
 
-    public function update(array $data, int $id)
+    public function update(string $status, int $id)
     {
-        $order = Booking::findOrFail($id);
-        $order->update($data);
+        $order = Booking::findOrFail($id); 
+        $order->status = $status; 
+        $order->save(); 
         return $order;
     }
 

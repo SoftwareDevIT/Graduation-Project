@@ -22,22 +22,13 @@ class UpdateOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'showtime_id' => 'required',
-            'pay_method_id' => 'required',
-            'amount' => 'required|numeric|min:1',
-            'price_ticket' => 'required|numeric|min:0',
-            'price_combo' => 'nullable|numeric|min:0',
-            'seat_status' => 'required|string',
+            'status' => 'required',
         ];
     }
     public function messages(): array
     {
         return [
-            'showtime_id.required' => 'The showtime field is required.',
-            'pay_method_id.required' => 'The pay method field is required.',
-            'amount.required' => 'The amount field is required.',
-            'price_ticket.required' => 'The price ticket field is required.',
-            'seat_status.required' => 'The seat status field is required.',
+            'status.required' => 'The status field is required.',
         ];
     }
 }
