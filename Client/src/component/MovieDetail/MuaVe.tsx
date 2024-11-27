@@ -130,8 +130,8 @@ const MuaVe: React.FC = () => {
                                         onClick={() => toggleCinemas(index)}
                                     >
                                         <div className="cinema-logo">
-                                            <img src="https://cdn.moveek.com/storage/media/cache/square/5fffb2fcaf3c1018282624.png" alt={cinema.cinema_name} />
-                                        </div>
+                    <span className="logo-first-letter-1">F</span>lickHive
+                    </div>
                                         <div className="cinema-info">
                                             <p className="cinema-name">{cinema.cinema_name}</p>
                                             <p className="cinema-branches">{cinema.showtimes.length} suất chiếu</p>

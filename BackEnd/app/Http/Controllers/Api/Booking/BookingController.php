@@ -294,7 +294,7 @@ class BookingController extends Controller
                         'data' => [
                             'missing_seat' => $row . ($currentColumn + 1) // Ghế bị bỏ trống giữa các ghế đã chọn
                         ]
-                    ], 400);
+                    ], 402);
                 }
             }
         }
