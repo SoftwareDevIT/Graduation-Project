@@ -64,11 +64,11 @@ const DanhGia: React.FC = () => {
             {ratings.slice(0, showAllRatings ? ratings.length : 3).map((rating) => (
               <div className="comment" key={rating.id}>
                 <p className="comment-user">
-                  <img
+                  {/* <img
                     className="avatar-icon"
-                    src={rating.avatar_url || "/default-avatar.png"} // Thêm ảnh mặc định nếu không có avatar
+                    src={rating.user.avatar || "https://rapchieuphim.com/photos/36/poster/wall-phim-ong-trum.jpg"} // Thêm ảnh mặc định nếu không có avatar
                     alt={rating.user_name}
-                  />
+                  /> */}
                   <strong>{rating.user_name}</strong>
                   <span className="comment-rating">
                     ⭐ {rating.rating}

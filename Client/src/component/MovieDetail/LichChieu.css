@@ -68,7 +68,14 @@ padding-left: 15px !important;
   gap: 0;
   overflow: hidden; /* Đảm bảo phần tử con không tràn ra ngoài */
 }
-
+.cinema-logo {
+  font-size: 16px; /* Kích thước lớn hơn cho chữ "F" */
+ font-weight: bold;
+  color: #e50914;
+}
+.logo-first-letter-1{
+  font-size: 16px;
+}
 .date-custom {
   display: flex;
   flex-direction: column;

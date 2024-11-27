@@ -77,6 +77,7 @@ const MovieBanner = () => {
 </span>
 
                     <span className="rating-1">
+                      
   {typeof movie.rating === 'number' ? (movie.rating * 10).toFixed(0) :0}%
 </span>
 

@@ -7,22 +7,9 @@ import "./CinemaSeatSelection.css";
 import instance from "../../server";
 import { Room } from "../../interface/Room";
 import { message } from 'antd';
-
-interface SeatRowProps {
-  row: string | { row: string; seats: (string | null)[] };
-  onSeatClick: (row: string, seatIndex: number) => void;
-  selectedSeats: Map<string, number[]>;
-  reservedSeats: Set<string>;
-}
-
-interface SeatProps {
-  type: string | null;
-  index: number;
-  row: string;
-  onSeatClick: (row: string, seatIndex: number) => void;
-  isSelected: boolean;
-  isReserved: boolean;
-}
+import { Modal } from 'antd';
+import { SeatRowProps } from "../../interface/SeatRowProps";
+import { SeatProps } from "../../interface/SeatProps";
 
 const CinemaSeatSelection: React.FC = () => {
   const location = useLocation();
@@ -225,18 +212,17 @@ const totalPrice = calculatePrice();
           seat_column: index + 1,
         }))
     );
-
+  
     const payload = {
       cinemaId,
       showtimeId,
       seats: selectedSeatsArray,
     };
-
+  
     try {
       const response = await instance.post("/selectSeats", payload);
-      console.log(payload);
+  
       if (response.status === 200) {
-     
         navigate("/orders", {
           state: {
             movieName,
@@ -245,31 +231,44 @@ const totalPrice = calculatePrice();
             showtimeId,
             cinemaId,
             roomId: roomData?.id,
-            seats: selectedSeatsArray, // Pass selectedSeatsArray as seats
+            seats: selectedSeatsArray,
             totalPrice,
-          }
-
+          },
         });
-        console.log(selectedSeatsArray);
-
       } else if (response.data.message === "Some seats already exist.") {
-        // Hiển thị thông báo lỗi và chuyển về trang chủ
         message.error("Một số ghế đã được đặt trước. Chuyển về trang chủ sau 3 giây!", 3);
         setTimeout(() => {
-            navigate('/');
+          navigate("/");
         }, 3000);
-      }else {
+      } else {
         console.error("Error: API call successful but status is not 200");
       }
-    } catch (error) {
-      console.error("Error submitting movie and seats selection:", error);
-        message.error("Ghế của bạn đã được đặt vui lòng thử lại", 3); // Hiển thị thông báo lỗi trong 3 giây
-        setTimeout(() => {
-            navigate('/'); // Chuyển hướng về trang chủ
-        }, 3000);
+    } catch (error: any) {
+      if (error.response) {
+        // Kiểm tra mã lỗi
+        if (error.response.status === 401) {
+          message.warning("Vui lòng đăng nhập để tiếp tục.");
+          navigate("/login"); // Chuyển đến trang đăng nhập
+        } else if (error.response.status === 402) {
+          Modal.error({
+            title: "Lỗi ghế trống",
+            content: "Vui lòng không để trống ghế ở giữa!",
+          });
+        } else {
+          Modal.error({
+            title: "Lỗi không xác định",
+            content: "Đã xảy ra lỗi, vui lòng thử lại.",
+          });
+        }
+      } else {
+        Modal.error({
+          title: "Lỗi kết nối",
+          content: "Không thể kết nối tới máy chủ, vui lòng kiểm tra lại kết nối.",
+        });
+      }
     }
   };
-
+  
 
 
   // Hiển thị thông báo lỗi nếu có lỗi trong việc chọn ghế hoặc submit API
