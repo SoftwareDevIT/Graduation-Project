@@ -18,7 +18,7 @@ const cinemaSchema = z.object({
     .max(10, "Số điện thoại tối đã 10 chữ số.")
     .regex(/^[0-9]+$/, "Số điện thoại phải là số."),
   cinema_address: z.string().min(1, "Địa chỉ rạp là bắt buộc."),
-  location_id: z.string().nonempty("ID vị trí là bắt buộc."),
+  location_id: z.number().min(1,"ID vị trí là bắt buộc."),
 });
 
 const CinemaForm = () => {
@@ -165,7 +165,7 @@ const CinemaForm = () => {
         <div className="mb-4">
           <label htmlFor="location_id" className="form-label fw-bold">Vị trí</label>
           <select
-            {...register("location_id")}
+            {...register("location_id",{valueAsNumber: true})}
             className={`form-select ${errors.location_id ? "is-invalid" : ""}`}
             defaultValue={cinema?.location_id || ""}
           >

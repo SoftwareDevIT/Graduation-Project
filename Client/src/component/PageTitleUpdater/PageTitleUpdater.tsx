@@ -37,9 +37,10 @@ const PageTitleUpdater = () => {
     else if (path === "/personal") {
         title = "Personal";
     }
-    else if (path === "/admin"){
-        title = "Admin"
+    else if (path ==="/movieticket") {
+        title = "MovieTicket";
     }
+
     else if (path === "/admin/dashboard"){
         title = "Dashboard"
     }
@@ -82,8 +83,14 @@ const PageTitleUpdater = () => {
     else if (path === "/admin/RevenueByMovie"){
         title = "Doanh Thu Theo Phim"
     }
+    else if(path === "/admin/method"){
+      title = "Phương Thức Thanh Toán"
+    }
+    else if(path === "/admin/promotions"){
+      title = "Mã Giảm Giá"
+    }
     
-    
+
     document.title = title; // Cập nhật title
   }, [location]);
 

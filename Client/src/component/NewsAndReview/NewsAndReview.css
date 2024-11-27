@@ -18,10 +18,35 @@
 }
 
 .news-section h2 {
-  font-size: 24px;
+  font-size: 20px;
   margin-bottom: 15px;
+  font-family: "Cerebri Sans", sans-serif;
+ color: #12263f;
+
 }
 
+.Capnhat{
+  background-color: #edf2f9;
+  height: 65px;
+  position: relative;
+  bottom: 20px;
+  width: 863px;
+  right: 20px;
+  border-radius: 5px 5px 0 0;
+  padding-left: 10px;
+  padding-top: 13px;
+}
+.reviewss{
+  background-color: #edf2f9;
+  height: 65px;
+  position: relative;
+  bottom: 20px;
+  width: 325px;
+  right: 20px;
+  border-radius: 5px 5px 0 0;
+  padding-left: 10px;
+  padding-top: 13px;
+}
 .news-item {
   display: flex;
   margin-bottom: 15px;
@@ -155,13 +180,19 @@ text-decoration: none;
 
   .review-item h3 {
     font-size: 14px;
+    font-family: "Cerebri Sans",sans-serif;
   }
 
   .review-item .time,
   .review-item .reviewer {
     font-size: 12px;
   }
-  
+  .Capnhat{
+    width: 730px;
+  }
+  .reviewss{
+    width: 730px;
+  }
   .load-more-btn {
     padding: 12px;
     font-size: 14px;
@@ -172,4 +203,18 @@ text-decoration: none;
   font-size: 16px;
   font-weight: bold;
   font-family: "Cerebri Sans,sans-serif";
+}
+.reviewss h2{
+  font-size: 20px;
+  margin-bottom: 15px;
+  font-family: "Cerebri Sans", sans-serif;
+ color: #12263f;
+}
+@media (max-width:480px) {
+  .Capnhat{
+    width: 390px;
+  }
+  .reviewss{
+    width: 390px;
+  }
 }

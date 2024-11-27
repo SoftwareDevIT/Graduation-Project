@@ -12,13 +12,13 @@ class OrderService
 {
     public function index()
     {
-        $order = Booking::with('showtime.movie','showtime.room','user','payMethod','seats','combos')->get();
+        $order = Booking::with('showtime.movieInCinema.movie','showtime.room','user','payMethod','seats','combos')->orderByDesc('created_at')->paginate(10);
         return $order;
     }
 
     public function show($id)
     {
-        $order = Booking::with('showtime.movie','showtime.room','user','payMethod','seats','combos')->findOrFail($id);
+        $order = Booking::with('showtime.movie', 'showtime.room', 'user', 'payMethod', 'seats', 'combos')->findOrFail($id);
         return $order;
     }
 
@@ -29,15 +29,17 @@ class OrderService
         return $order;
     }
 
-    public function update(array $data,int $id)
+    public function update(string $status, int $id)
     {
-        $order = Booking::findOrFail($id);
-        $order->update($data);
+        $order = Booking::findOrFail($id); 
+        $order->status = $status; 
+        $order->save(); 
         return $order;
     }
 
-    public function order(){
-        $order = Booking::where('user_id',Auth::user()->id)->with('showtime.movie','showtime.room','user','payMethod','seats','combos')->get();
+    public function order()
+    {
+        $order = Booking::where('user_id', Auth::user()->id)->with('showtime.movie', 'showtime.room', 'user', 'payMethod', 'seats', 'combos')->where('status', 'Confirmed')->orderByDesc('created_at')->get();
         return $order;
     }
 }

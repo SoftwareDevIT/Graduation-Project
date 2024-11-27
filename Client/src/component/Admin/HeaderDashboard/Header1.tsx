@@ -66,6 +66,10 @@ const Header = () => {
                 return 'Quản Lí Diễn Viên'
             case 'director':
                 return 'Quản Lí Đạo Diễn'
+            case 'method':
+                return 'Phương Thức Thanh Toán'
+            case 'promotions':
+                return 'Mã Giảm Giá'
             default:
                 return 'Welcome';
         }

@@ -69,12 +69,23 @@ import RoomsFormManager from "./Page/Admin/Rooms/RoomsForm";
 import Video from "./component/News/Video";
 import FilmNews from "./component/News/FilmNews";
 import MovieTicket from "./component/PersonalPage/MovieTicket";
+
+import PageTitleUpdater from "./component/PageTitleUpdater/PageTitleUpdater";
+import Community from "./component/Community/Community";
+
+
 import ActorManager from "./Page/Admin/Actor/ActorManager";
 import ActorForm from "./Page/Admin/Actor/ActorForm";
 import DirectorManager from "./Page/Admin/Director/DirectorManager";
 import DirectorFormManager from "./Page/Admin/Director/DirectorForm";
 import UpcomingMovies from "./component/Movies/UpcomingMovies";
+
 import PageTitleUpdater from "./component/PageTitleUpdater/PageTitleUpdater";
+import MethodManager from "./Page/Admin/Method/MethodManager";
+import MethodFormManager from "./Page/Admin/Method/MethodForm";
+import PromotionsManager from "./Page/Admin/Promotions/PromotionsManager";
+import PromotionsFormManager from "./Page/Admin/Promotions/PromotionsForm";
+
 
 
 
@@ -106,7 +117,7 @@ function App() {
         <Route path="/filmnews" element={<FilmNews/>} />
         <Route path="/video" element={<Video />} />
         <Route path="/sp" element={<SupportCenter />} />
-        <Route path="/postdetail/:id" element={<PostDetail />} />
+        <Route path="/postdetail/:slug" element={<PostDetail />} />
 
 
 
@@ -133,6 +144,7 @@ function App() {
 
         <Route path="/deponsit" element={<Deponsit />} />
         <Route path="/forgetpass" element={<ForgetPass />} />
+        <Route path="/community" element={<Community />} />
 
 
         <Route path="/otp" element={<Otp />} />
@@ -151,7 +163,13 @@ function App() {
         <Route path="/admin/user/roles" element={<PrivateRoute allowedRoles={['admin']}><UserAddManager /></PrivateRoute>} />
         <Route path="/admin/actor" element={<PrivateRoute allowedRoles={['admin']}><ActorManager/></PrivateRoute>} />
         <Route path="/admin/actor/add" element={<PrivateRoute allowedRoles={['admin']}><ActorForm/></PrivateRoute>} />
+        <Route path="/admin/method" element={<PrivateRoute allowedRoles={['admin']}><MethodManager/></PrivateRoute>} />
+        <Route path="/admin/method/add" element={<PrivateRoute allowedRoles={['admin']}><MethodFormManager/></PrivateRoute>} />
+        <Route path="/admin/method/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><MethodFormManager/></PrivateRoute>} />
         <Route path="/admin/actor/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><ActorForm/></PrivateRoute>} />
+        <Route path="/admin/promotions" element={<PrivateRoute allowedRoles={['admin']}><PromotionsManager/></PrivateRoute>} />
+        <Route path="/admin/promotions/add" element={<PrivateRoute allowedRoles={['admin']}><PromotionsFormManager/></PrivateRoute>} />
+        <Route path="/admin/promotions/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><PromotionsFormManager/></PrivateRoute>} />
         <Route path="/admin/director" element={<PrivateRoute allowedRoles={['admin']}><DirectorManager/></PrivateRoute>} />
         <Route path="/admin/director/add" element={<PrivateRoute allowedRoles={['admin']}><DirectorFormManager/></PrivateRoute>} />
         <Route path="/admin/director/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><DirectorFormManager/></PrivateRoute>} />
