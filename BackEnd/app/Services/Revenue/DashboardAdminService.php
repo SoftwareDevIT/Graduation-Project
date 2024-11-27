@@ -39,8 +39,7 @@ class DashboardAdminService
                 // Thêm thông tin vào mảng kết quả
                 $result[$status][] = [
                     'amount' => $booking->amount,
-                    'price_combo' => $booking->price_combo,
-                    'price_ticket' => $booking->price_ticket,
+                 
                     'quantity_ticket' => $quantity_ticket // Số lượng booking cho trạng thái hiện tại
                 ];
             }
