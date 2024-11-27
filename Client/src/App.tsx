@@ -96,7 +96,7 @@ function App() {
   return (
     <>
       <QueryClientProvider client={queryClient}>
-       <PageTitleUpdater/>
+       {/* <PageTitleUpdater/> */}
       <Routes>
         <Route index element={<Home />} />
         <Route path="/buy-ticket" element={<Bookcinematickets />} />
