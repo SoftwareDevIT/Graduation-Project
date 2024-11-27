@@ -18,7 +18,7 @@ const CountryContext = createContext<{
   addCountry: (country: Location) => Promise<void>;
   updateCountry: (id: number, country: Location) => Promise<void>;
   deleteCountry: (id: number) => Promise<void>;
-  fetchCountries: () => void; // Cập nhật kiểu return
+  fetchCountries: () => void; // Thêm hàm fetchCountries vào đây
 } | undefined>(undefined);
 
 const countryReducer = (state: CountryState, action: Action): CountryState => {
@@ -52,7 +52,7 @@ export const CountryProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const fetchCountries = async () => {
       try {
         const response = await instance.get('/location');
-        dispatch({ type: 'SET_COUNTRIES', payload: response.data.data });
+        dispatch({ type: 'SET_COUNTRIES', payload: response.data.data || [] });
       } catch (error) {
         console.error('Failed to fetch countries:', error);
       }
@@ -65,7 +65,6 @@ export const CountryProvider: React.FC<{ children: React.ReactNode }> = ({ child
     try {
       const response = await instance.post('/location', country);
       dispatch({ type: 'ADD_COUNTRY', payload: response.data });
-      // Không cần gọi lại fetchCountries ở đây vì bạn đã gọi rồi trong useEffect
     } catch (error) {
       console.error('Failed to add country:', error);
     }
@@ -89,6 +88,11 @@ export const CountryProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }
   };
 
+  const fetchCountries = () => {
+    // Dù `fetchCountries` đã được gọi trong useEffect, bạn vẫn có thể thêm vào đây
+    console.log("fetchCountries was called from context");
+  };
+
   return (
     <CountryContext.Provider value={{
       state,
@@ -96,7 +100,7 @@ export const CountryProvider: React.FC<{ children: React.ReactNode }> = ({ child
       addCountry,
       updateCountry,
       deleteCountry,
-      fetchCountries: () => {}, // Không cần phải gọi lại API
+      fetchCountries, // Thêm fetchCountries vào value của context
     }}>
       {children}
     </CountryContext.Provider>

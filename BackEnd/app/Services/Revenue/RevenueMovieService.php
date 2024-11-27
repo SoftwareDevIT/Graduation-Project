@@ -41,16 +41,19 @@ class RevenueMovieService
         }
 
         // Tính tổng doanh thu
-        return $query->with('showtime.movieInCinema.movie') // Đảm bảo tải các mối quan hệ cần thiết
-        ->get()
-        ->map(function ($booking) {
-            return [
-                'movie_name' => $booking->showtime->movieInCinema->movie->movie_name, 
-                'amount' => $booking->amount,
-                'price_ticket' => $booking->showtime->ticket_price, 
-                'price_combo' => $booking->combo_price
-            ];
-        });;
+        // return $query->with('showtime.movieInCinema.movie') // Đảm bảo tải các mối quan hệ cần thiết
+        // ->get()
+        // ->map(function ($booking) {
+        //     return [
+        //         'movie_name' => $booking->showtime->movieInCinema->movie->movie_name, 
+        //         'amount' => $booking->amount,
+                
+        //         // 'price_ticket' => $booking->showtime->ticket_price, 
+        //         // 'price_combo' => $booking->combo_price
+        //     ];
+        // });;
+
+        return $query->sum('amount');
     }
 
 
@@ -63,6 +66,7 @@ class RevenueMovieService
     public function totalRevenueByMovie(int $idMovie)
     {
         return $this->calculateRevenue('Confirmed', $idMovie, null, null);
+       
     }
 
 

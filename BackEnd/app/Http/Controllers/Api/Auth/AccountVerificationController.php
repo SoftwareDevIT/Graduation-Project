@@ -33,7 +33,7 @@ class AccountVerificationController extends Controller
         $isVerified = $this->verificationService->verifyAccount($userId);
 
         if ($isVerified) {
-            return redirect()->to('http://localhost:8000/api/login')->with('success', 'Account verified successfully.');
+            return redirect()->to('http://localhost:5173/login')->with('success', 'Account verified successfully.');
         }
         return $this->error('Invalid verification link.');
 
