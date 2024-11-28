@@ -38,7 +38,8 @@ class DatabaseSeeder extends Seeder
             CategorySeatSeeder::class,
             RatingSeeder::class,
             FavoriteSeeder::class,
-            BookingSeeder::class,
+            // BookingSeeder::class,
+            VorcherSeeder::class,
 
         ]);
         // Tạo các quyền

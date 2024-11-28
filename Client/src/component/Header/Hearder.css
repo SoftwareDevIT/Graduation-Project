@@ -176,7 +176,25 @@ bottom: 10px;
   font-size: 17px; /* Kích thước cho biểu tượng tích xanh */
   
 }
+.notification-dropdown {
+  position: absolute;
+  top: 50px; /* Điều chỉnh vị trí phù hợp */
+  right: 30px;
+  background-color: white;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 200px;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 15px;
+}
 
+.notification-dropdown p {
+  margin: 5px 0;
+}
+.thongbao:hover{
+  cursor: pointer;
+}
 .dropdown-content a {
   color: #6e84a3;
   padding: 10px 20px;

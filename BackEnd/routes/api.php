@@ -204,3 +204,4 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 Route::apiResource('promotions', PromotionController::class);
 Route::post('apply-promotion', [PromotionController::class, 'applyPromotion']);
 
+

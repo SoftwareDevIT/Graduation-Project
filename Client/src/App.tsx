@@ -1,7 +1,7 @@
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 
-import OrderPage from "./component/Oders/OrderPage";
+
 import OrderCheckout from "./component/Pay/OderCheckOut";
 import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
 import Headerticket from "./component/Headerticket/Headerticket";
@@ -29,7 +29,7 @@ import CinemasFormManager from "./Page/Admin/Cinemas/CinemasForm";
 import ComboFormManager from "./Page/Admin/Combo/ComboForm";
 import ShowtimesFormManager from "./Page/Admin/Showtimes/ShowtimesForm";
 import MoviesManagerForm from "./Page/Admin/Movies/MoviesForm";
-import PaymentCallback from "./component/Pay/PaymentCallback";
+
 import PostsFormManager from "./Page/Admin/Posts/PostForm";
 import LichChieu from "./component/MovieDetail/LichChieu";
 import DanhGia from "./component/MovieDetail/DanhGia";
@@ -79,8 +79,8 @@ import ActorForm from "./Page/Admin/Actor/ActorForm";
 import DirectorManager from "./Page/Admin/Director/DirectorManager";
 import DirectorFormManager from "./Page/Admin/Director/DirectorForm";
 import UpcomingMovies from "./component/Movies/UpcomingMovies";
+import OrderPage from "./component/Oders/OrderPage";
 
-import PageTitleUpdater from "./component/PageTitleUpdater/PageTitleUpdater";
 import MethodManager from "./Page/Admin/Method/MethodManager";
 import MethodFormManager from "./Page/Admin/Method/MethodForm";
 import PromotionsManager from "./Page/Admin/Promotions/PromotionsManager";
@@ -96,7 +96,7 @@ function App() {
   return (
     <>
       <QueryClientProvider client={queryClient}>
-       <PageTitleUpdater/>
+       {/* <PageTitleUpdater/> */}
       <Routes>
         <Route index element={<Home />} />
         <Route path="/buy-ticket" element={<Bookcinematickets />} />
@@ -110,7 +110,7 @@ function App() {
         <Route path="/buy-now/:slug" element={<MuaVe />} />
         <Route path="/headerticket" element={<Headerticket />} />
         <Route path="/confirm" element={<EmailConfirm />} />
-        <Route path="/payment-callback" element={<PaymentCallback />} />
+     
         <Route path="/*" element={<NotFound />} />
 
 

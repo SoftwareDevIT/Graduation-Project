@@ -66,7 +66,7 @@
 }
 .item-quantity, .item-price {
   font-weight: 600;
-  color: #34495e;
+  color: #34495e !important;
 }
 
 /* Combo tóm tắt */
@@ -79,7 +79,40 @@
 .combo-summary .order-item {
   color: #5d6d7e;
 }
+.voucher-section {
+  margin-bottom: 20px;
+}
 
+.voucher-input {
+  width: 80%;
+  padding: 8px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.apply-voucher-btn {
+  padding: 8px 16px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.apply-voucher-btn-1 {
+  padding: 8px 16px;
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+
+.apply-voucher-btn:hover {
+  background-color: #45a049;
+}
 /* Tổng giá */
 .order-total {
   display: flex;

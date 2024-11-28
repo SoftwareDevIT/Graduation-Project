@@ -8,6 +8,8 @@ import instance from '../../server'; // Ensure you import the API instance corre
 import { Movie } from '../../interface/Movie'; // Import Movie interface
 import { useCountryContext } from '../../Context/CountriesContext';
 import { stripHtml } from '../../assets/Font/quillConfig';
+import { formatDistanceToNow } from 'date-fns';
+import { vi } from 'date-fns/locale';  // Import tiếng Việt từ date-fns
 interface Props {}
 
 export const ContentMovie = (props: Props) => {
@@ -22,7 +24,9 @@ export const ContentMovie = (props: Props) => {
     const [loading, setLoading] = useState<boolean>(true);  // Trạng thái tải
     const [error, setError] = useState<string | null>(null);  // Trạng thái lỗi
     const navigate = useNavigate();
-
+    function formatTimeAgo(date: string) {
+        return formatDistanceToNow(new Date(date), { addSuffix: true, locale: vi });  // Cấu hình ngôn ngữ tiếng Việt
+      }
     useEffect(() => {
         const fetchMovieDetails = async () => {
             if (slug) {
@@ -147,9 +151,10 @@ export const ContentMovie = (props: Props) => {
                                         alt={post.title}
                                         className="post-image"
                                     />
+                                    {/* {post.user_id} • */}
                                     <div className="post-info">
                                         <a href="#" className="post-title"><Link to={`/postdetail/${post.slug}`}>{post.title}</Link></a>
-                                        <p className="post-meta">Đánh giá phim • miduynph • 6 ngày trước</p>
+                                        <p className="post-meta"><span className="post-meta-span">Đánh giá phim</span>    {formatTimeAgo(post.created_at)}</p>
                                         <p className="post-meta-2">{stripHtml(post.content.slice(0, 150))}...</p> {/* Display a truncated version of the content */}
                                     </div>
                                 </div>
