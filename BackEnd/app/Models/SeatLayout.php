@@ -8,8 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class SeatLayout extends Model
 {
     use HasFactory;
+
     protected $table = 'seat_layouts';
-    protected $primaryKey = 'id';
+
     protected $fillable = [
         'name',
         'rows',
@@ -17,6 +18,7 @@ class SeatLayout extends Model
         'status',
     ];
 
+    // Relation to SeatMap (seat locations in the layout)
     public function seatMap()
     {
         return $this->hasMany(SeatMap::class);

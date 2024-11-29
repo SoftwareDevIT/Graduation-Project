@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Room extends Model
 {
     use HasFactory;
+
     protected $table = 'room';
+
     protected $fillable = [
         'room_name',
         'cinema_id',
@@ -16,17 +18,21 @@ class Room extends Model
         'status',
     ];
 
-    public function seats()
+    // Define relation to SeatLayout
+    public function seatLayout()
     {
-        return $this->hasMany(Seats::class);
+        return $this->belongsTo(SeatLayout::class);
     }
 
+    // Define relation to Showtimes
     public function showtimes()
     {
         return $this->hasMany(Showtime::class);
     }
-    public function layout()
+
+    // Relation to Cinema
+    public function cinema()
     {
-        return $this->belongsTo(SeatLayout::class);
+        return $this->belongsTo(Cinema::class);
     }
 }

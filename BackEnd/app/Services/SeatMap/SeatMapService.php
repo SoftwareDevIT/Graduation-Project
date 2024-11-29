@@ -41,9 +41,9 @@ class SeatMapService
         $combo = SeatMap::findOrFail($id);
         return $combo->delete();
     }
-    public function get(int $id): SeatMap
+    public function get(int $id): Collection
     {
-        $combo = SeatMap::findOrFail($id);
+        $combo = SeatMap::where('seat_layout_id', $id)->get();
         return $combo;
     }
 }

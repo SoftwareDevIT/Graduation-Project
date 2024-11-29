@@ -47,13 +47,23 @@ class ShowtimeService
         return $showtime->delete();
     }
 
-    public function get(int $id): Showtime
+    public function get(int $id)
     {
-        $showtime = Showtime::with('movieInCinema.movie')
+        $showtime = Showtime::with(['movie', 'room.cinema', 'room.seatLayout.seatMap']) // Include SeatMap to show seat data
             ->findOrFail($id);
 
-        return $showtime;
+        // If needed, format the seats
+        $seats = $showtime->room->seatLayout->seatMap->groupBy('row');
+
+        // Append formatted seats to the showtime data for easier rendering
+        $showtimeData = $showtime->toArray();
+        $showtimeData['seats'] = $seats;
+
+        return $showtimeData;
     }
+
+
+
 
 
     public function getShowtimesByMovieName(string $movie_name)
