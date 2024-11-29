@@ -8,7 +8,7 @@ use App\Models\Showtime;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Traits\AuthorizesInService;
-
+use Carbon\Carbon;
 
 /**
  * Class LocationService.
@@ -20,7 +20,6 @@ class ShowtimeService
     {
 
         return Showtime::with(['movieInCinema.movie', 'room'])->orderByDesc('created_at')->paginate(5);
-
     }
 
 
@@ -68,4 +67,29 @@ class ShowtimeService
         return $movie->showtimes;
     }
 
+    public function generateShowtimes(array $data): array
+    {
+        $openingTime = Carbon::createFromFormat('H:i', $data['opening_time']);
+        $closingTime = Carbon::createFromFormat('H:i', $data['closing_time']);
+        $duration = $data['duration'];
+        $price = $data['price'];
+
+        $showtimes = [];
+        while ($openingTime->addMinutes($duration)->lte($closingTime)) {
+            $startTime = $openingTime->copy()->subMinutes($duration)->format('H:i:s');
+            $endTime = $openingTime->format('H:i:s');
+
+            $showtimes[] = Showtime::create([
+                'room_id' => $data['room_id'],
+                'movie_id' => $data['movie_id'],
+                'showtime_date' => $data['date'],
+                'showtime_start' => $startTime,
+                'showtime_end' => $endTime,
+                'price' => $price,
+                'status' => '1',
+            ]);
+        }
+
+        return $showtimes;
+    }
 }
