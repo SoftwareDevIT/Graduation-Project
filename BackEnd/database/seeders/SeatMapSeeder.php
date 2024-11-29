@@ -17,8 +17,7 @@ class SeatMapSeeder extends Seeder
 
         foreach ($seatLayouts as $layout) {
             for ($row = 1; $row <= $layout->rows; $row++) {
-                // Convert numeric row to alphabetical (e.g., 1 -> 'A', 2 -> 'B')
-                $rowLetter = chr(64 + $row);
+                $rowLetter = chr(64 + $row); // Convert numeric row to alphabetical (e.g., 1 -> 'A', 2 -> 'B')
 
                 // Logic phân loại loại ghế
                 $seatType = '';
@@ -32,15 +31,44 @@ class SeatMapSeeder extends Seeder
                     $seatType = 'Couple';
                 }
 
+                // Tạo ghế đôi chiếm 2 ô
                 for ($column = 1; $column <= $layout->columns; $column++) {
-                    $seatMaps[] = [
-                        'seat_layout_id' => $layout->id,
-                        'row' => $rowLetter,
-                        'column' => $column,
-                        'type' => $seatType, // Thêm loại ghế vào
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ];
+                    // Nếu là ghế đôi, tạo 2 cột liên tiếp
+                    if ($seatType == 'Couple' && $column % 2 == 1 && $column + 1 <= $layout->columns) {
+                        $seatMaps[] = [
+                            'seat_layout_id' => $layout->id,
+                            'row' => $rowLetter,
+                            'column' => $column,
+                            'seat_type' => $seatType,
+                            'is_double' => true,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ];
+
+                        // Tạo cột kế tiếp cho ghế đôi
+                        $seatMaps[] = [
+                            'seat_layout_id' => $layout->id,
+                            'row' => $rowLetter,
+                            'column' => $column + 1,
+                            'type' => $seatType,
+                            'is_double' => true,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ];
+
+                        // Bỏ qua cột tiếp theo để tránh trùng
+                        $column++;
+                    } else {
+                        $seatMaps[] = [
+                            'seat_layout_id' => $layout->id,
+                            'row' => $rowLetter,
+                            'column' => $column,
+                            'type' => $seatType,
+                            'is_double' => false,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ];
+                    }
                 }
             }
         }
