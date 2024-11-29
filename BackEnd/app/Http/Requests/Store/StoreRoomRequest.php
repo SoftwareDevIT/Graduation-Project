@@ -23,11 +23,9 @@ class StoreRoomRequest extends FormRequest
     {
         return [
             "room_name" => "string",
-            "volume" => "integer",
+            "seat_layout_id" => "integer",
             "cinema_id" => "integer",
-            "quantity_double_seats" => "integer",
-            "quantity_vip_seats" => "integer",
-            "quantity_basic_seats" => "integer",
+
 
         ];
     }

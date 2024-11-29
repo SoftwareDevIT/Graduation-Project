@@ -21,6 +21,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
+use Milon\Barcode\Facades\DNS1D;
+use Milon\Barcode\Facades\DNS1DFacade;
+use Picqer\Barcode\BarcodeGeneratorPNG;
+use Picqer\Barcode\BarcodeGenerator;
+
 
 class BookingController extends Controller
 {
@@ -86,21 +92,46 @@ class BookingController extends Controller
     public function vnpayReturn(Request $request)
     {
         $data = $request->only(['vnp_TxnRef', 'vnp_ResponseCode']);
+
         if ($data['vnp_ResponseCode'] == "00") {
+            // Tìm booking theo ID
             $booking = Booking::where('id', $data['vnp_TxnRef'])->first();
 
+            // Cập nhật trạng thái đặt vé
             $booking->status = 'Confirmed';
+
+            // Tạo mã vạch dưới dạng PNG
+            $generator = new BarcodeGeneratorPNG();
+            $barcode = $generator->getBarcode($booking->id, BarcodeGenerator::TYPE_CODE_128);
+
+            // Tạo tên file duy nhất cho mã vạch (dựa vào booking ID)
+            $fileName = 'barcode_' . $booking->id . '.png';
+
+            // Lưu mã vạch vào thư mục 'public/barcodes'
+            Storage::put('public/barcodes/' . $fileName, $barcode);
+
+            // Đưa đường dẫn đến mã vạch vào phương thức uploadImage
+            $filePath = storage_path('app/public/barcodes/' . $fileName);
+            $imageUrl = $this->uploadImage($filePath); // Gửi ảnh lên ImgBB
+
+            // Lưu đường dẫn của ảnh mã vạch vào cơ sở dữ liệu (URL từ ImgBB)
+            $booking->barcode = $imageUrl;
             $booking->save();
+
+            // Gửi email với hóa đơn và mã vạch
             Mail::to($booking->user->email)->queue(new InvoiceMail($booking));
-            // event(new InvoiceSendMail($booking));
+
+            // Xoá session
             session()->flush();
-            // return redirect('http://localhost:5173/')->with('success', 'Đặt vé thành công');
 
+            // Chuyển hướng về trang yêu cầu
             return redirect('http://localhost:5173/movieticket');
-            // return $this->success($booking, 'success');
-
         }
+
+        // Xử lý khi mã phản hồi không phải '00'
+        return redirect('http://localhost:5173/movieticket')->with('error', 'Payment failed');
     }
+
 
     // public function selectSeats(Request $request)
     // {

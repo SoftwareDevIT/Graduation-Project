@@ -14,8 +14,9 @@ class Showtime extends Model
     protected $table = 'showtimes';
     // protected $primaryKey = 'id';
     protected $fillable = [
-        'movie_in_cinema_id',
+        // 'movie_in_cinema_id',
         'room_id',
+        'movie_id',
         'showtime_date',
         'showtime_start',
         'showtime_end',

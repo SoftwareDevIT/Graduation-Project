@@ -42,7 +42,7 @@ class UserSeeder extends Seeder
         $client = new Client();
         $response = $client->get('https://rapchieuphim.com/api/v1/users');
         $data = json_decode($response->getBody()->getContents(), true);
-        $data = array_slice($data, 1, 200);
+        $data = array_slice($data, 1,10);
 
         foreach ($data as $item) {
             $randomEmail = strtolower(Str::random(10)) . '@example.com';
