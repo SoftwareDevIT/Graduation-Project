@@ -18,27 +18,30 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
 
+            UserSeeder::class,
+            ComboSeeder::class,
+            PayMethodSeeder::class,
             LocationSeeder::class,
             CinemaSeeder::class,
-            PayMethodSeeder::class,
-            UserSeeder::class,
             MovieCategorySeeder::class,
             NewsCategorySeeder::class,
             ActorSeeder::class,
-            ComboSeeder::class,
             DirectorSeeder::class,
             MovieSeeder::class,
             News::class,
+            SeatLayoutSeeder::class,
+            SeatMapSeeder::class,
             RoomSeeder::class,
-            MovieInCinema::class,
+            // MovieInCinema::class,
             ActorInMovie::class,
             DirectorInMovie::class,
             CategoryInMovieSeeder::class,
             ShowtimeSeeder::class,
-            CategorySeatSeeder::class,
+            // CategorySeatSeeder::class,
             RatingSeeder::class,
             FavoriteSeeder::class,
-            BookingSeeder::class,
+            // BookingSeeder::class,
+            // VorcherSeeder::class,
 
         ]);
         // Tạo các quyền

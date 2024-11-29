@@ -127,4 +127,30 @@ class ShowtimeController extends Controller
             return $e->getMessage();
         }
     }
+
+    public function storeWithTimeRange(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'room_id' => 'required|integer|exists:room,id',
+        'movie_id' => 'required|integer|exists:movies,id',
+        'date' => 'required|date',
+        'opening_time' => 'required|date_format:H:i',
+        'closing_time' => 'required|date_format:H:i|after:opening_time',
+        'duration' => 'required|integer|min:30', // Duration in minutes
+        'price' => 'required|numeric|min:0',
+    ]);
+
+    if ($validator->fails()) {
+        return $this->error($validator->errors()->first());
+    }
+
+    try {
+        $data = $validator->validated();
+        $createdShowtimes = $this->showtimeService->generateShowtimes($data);
+        return $this->success($createdShowtimes, 'Showtimes created successfully.');
+    } catch (Exception $e) {
+        return $this->error($e->getMessage());
+    }
+}
+
 }

@@ -19,7 +19,7 @@ class DirectorSeeder extends Seeder
         $client = new Client();
         $response = $client->get('https://rapchieuphim.com/api/v1/directors');
         $data = json_decode($response->getBody()->getContents(), true);
-        $data = array_slice($data, 0, 100);
+        $data = array_slice($data, 0, 10);
         foreach ($data as $item) {
             if (!empty($item['photo'])) {
                 $photo = $item['photo'];

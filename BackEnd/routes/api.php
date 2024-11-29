@@ -22,6 +22,7 @@ use App\Http\Controllers\Api\Movie\MovieCategoryController;
 use App\Http\Controllers\Api\PayMethod\PayMethodController;
 use App\Http\Controllers\Api\Auth\AccountVerificationController;
 use App\Http\Controllers\Api\Auth\ResetPasswordController;
+use App\Http\Controllers\Api\Filter\DashBoard\FilterOfDashBoarchController;
 use App\Http\Controllers\Api\Filter\FilterMovieByNewController;
 use App\Http\Controllers\Api\Google\GoogleController;
 use App\Http\Controllers\Api\Movie\RatingController;
@@ -32,6 +33,11 @@ use App\Http\Controllers\Api\Revenue\RevenueMovieController;
 use App\Http\Controllers\Api\Role\RoleController;
 use App\Http\Controllers\Api\Seat\SeatController;
 use App\Http\Controllers\Api\Promotion\PromotionController;
+use App\Http\Controllers\Api\SeatMap\SeatMapController;
+use App\Http\Controllers\Api\SeatMap\MatrixController;
+
+
+// use App\Http\Controllers\Api\SeatMap\SeatMapController;
 
 /*
 |--------------------------------------------------------------------------
@@ -87,7 +93,6 @@ Route::middleware(['auth:sanctum', 'web'])->group(function () {
     Route::post('ratings', [RatingController::class, 'store']);                                // Phim đánh giá
     Route::post('selectSeats', [BookingController::class, 'selectSeats']);
     Route::post('/book-ticket', [BookingController::class, 'bookTicket']);
-    // Route::get('/vnpay-return', [BookingController::class, 'vnPayReturn']);
     Route::middleware(['auth:sanctum', 'web'])->group(function () {
         Route::post('favorites/{movie}', [FavoriteController::class, 'store']);            // Thêm phim yêu thích
         Route::delete('favorites/{movie}', [FavoriteController::class, 'destroy']);             // Xóa phim yêu thích
@@ -102,7 +107,7 @@ Route::get('/vnpay-return', [BookingController::class, 'vnPayReturn']);
 
 
 // Các route quản trị và quản lý
-Route::middleware(['auth:sanctum', 'role:admin|manager'])->group(function () {
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::apiResource('location', LocationController::class)->except(['index', 'show']);
     Route::apiResource('cinema', CinemaController::class)->except(['index', 'show']);
     Route::apiResource('room', RoomController::class)->except(['index', 'show']);
@@ -141,16 +146,18 @@ Route::middleware(['auth:sanctum', 'role:admin|manager'])->group(function () {
     Route::get('total-revenue-by-date/{start_date}/{end_date}', [RevenueMovieController::class, 'totalRevenueByMovieBetweenDates']);
     Route::get('total-revenue-movie-by-date/{movie_id}/{start_date}/{end_date}', [RevenueMovieController::class, 'totalRevenueMovieBetweenDates']);
 
+    // bộ lọc thông kê doanh thu
+    Route::get('filter-DashBoarch', [FilterOfDashBoarchController::class, 'filterOfDashBoarch']);
+
     //Trang dashboard
     Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
 });
 
 
-// });
+
 
 Route::post('/resetPassword', [ResetPasswordController::class, 'resetPassword'])->middleware('auth:sanctum');
 
-// });
 
 
 
@@ -171,12 +178,6 @@ Route::get('filterMovieByNew', [FilterMovieByNewController::class, 'filterMovieB
 
 
 
-// Route::group(['middleware' => ['auth:sanctum']], function () {
-//     // Route::post('/slectMovieAndSeats', [BookingController::class, 'slectMovieAndSeats']);
-//     // Route::post('/selectCombo', [BookingController::class, 'selectCombos']);
-//     Route::post('selectSeats', [BookingController::class, 'selectSeats']);
-//     Route::post('/book-ticket', [BookingController::class, 'bookTicket']);
-// });
 Route::get('filterNewByActor/{actor}', [ActorController::class, 'filterNewByActor']);                // Lọc bài viết liên quan tới diễn viễn
 Route::get('filterNewByDictor/{director}', [DirectorController::class, 'filterNewByDictor']);        // Lọc bài viết liên quan tới đạo diễn
 Route::get('filterNewByMovie/{movie}', [MovieController::class, 'filterNewByMovie']);                // Lọc bài viết liên quan tới phim
@@ -185,12 +186,7 @@ Route::get('rating', [RatingController::class, 'index']);                       
 Route::get('filterMoviePopular', [MovieController::class, 'moviePopular']);                // Lọc bài viết liên quan tới phim
 
 Route::apiResource('order', OrderController::class);
-// Route::group(['middleware' => ['auth:sanctum']], function () {
-//     Route::post('/slectMovieAndSeats', [BookingController::class, 'slectMovieAndSeats']);
-//     Route::post('/selectCombo', [BookingController::class, 'selectCombos']);
-//     Route::post('selectSeats', [BookingController::class, 'selectSeats']);
-//     // Route::post('/book-ticket', [BookingController::class, 'bookTicket']);
-// });
+
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/slectMovieAndSeats', [BookingController::class, 'slectMovieAndSeats']);
     Route::post('/selectCombo', [BookingController::class, 'selectCombos']);
@@ -203,4 +199,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 });
 Route::apiResource('promotions', PromotionController::class);
 Route::post('apply-promotion', [PromotionController::class, 'applyPromotion']);
+Route::apiResource('matrix', MatrixController::class);
+Route::apiResource('seat-map', SeatMapController::class);
 
+// Route riêng cho chức năng publish
+Route::patch('/seat-map/{id}/publish', [SeatMapController::class, 'publish'])->name('seat-map.publish');
+
+// Route::apiResource('room', RoomController::class);
+Route::post('showtimePayload', [ShowtimeController::class,'storeWithTimeRange']);
+Route::apiResource('room', RoomController::class);
+Route::apiResource('showtimes', ShowtimeController::class);

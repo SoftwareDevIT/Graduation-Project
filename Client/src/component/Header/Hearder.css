@@ -406,12 +406,10 @@ color: #6e84a3;
   cursor: pointer;
 }
 @media (max-width:480px) {
-  .profile-dropdown{
-  position: absolute;
-left: 20px;
-width: 90px;
-top:60px;
-font-size: 10px;
+  .profile-dropdown {
+    left: 0; /* Canh sát mép màn hình */
+    right: 0;
+    width: 100%; /* Chiếm toàn bộ chiều rộng màn hình */
   }
   .profile-dropdown a{
     padding: 1px 0px;

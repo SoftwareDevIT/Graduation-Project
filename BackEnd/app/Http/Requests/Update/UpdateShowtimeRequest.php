@@ -22,12 +22,12 @@ class UpdateShowtimeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'movie_in_cinema_id' => 'required|integer',
+            'room_id' => 'required|integer',
+            'movie_id' => 'required|integer',
             'showtime_date'      => 'required|date|after_or_equal:today',
             'showtime_start'     => 'required|date_format:H:i:s',
             'price'              => 'required|numeric|min:0',
             "status" => "integer",
-            "room_id" => "integer",
         ];
     }
 }
