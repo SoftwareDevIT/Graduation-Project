@@ -21,6 +21,7 @@ class FilterByDateService
         })
             ->get();
         return $query;
+
     }
 
     public function filterByDateOrMovie(string $date, $movieid, $locationId)
