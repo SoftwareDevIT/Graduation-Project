@@ -110,7 +110,7 @@
   color: #28a745;
   font-weight: bold;
   text-align: right;
-margin-left: 20px;
+
 }
 .slick-dots {
   display: flex;
@@ -123,32 +123,21 @@ margin-left: 20px;
   flex-shrink: 0;
 }
 
-.slick-dots li:nth-child(n+5) {
-  display: none; /* Ẩn các dấu chấm từ thứ 5 trở đi */
-}
+
 
 /* Responsive styles for mobile phones */
 @media (max-width: 768px) {
-  .slider-container {
-    width:  87%; /* Slightly wider for tablet */
-  }
-
   .movie-item {
-    height: 250px;
-    margin: 8px;
+    height: 400px;
+    margin: 15px;
   }
-
-  .movie-info p {
-    font-size: 0.9em;
-  }
-
-  .buy-ticket {
-    font-size: 0.8em;
-    padding: 6px;
-  }
-
+  .slider-container {
+    margin: 0 auto;
+    width: 107%;
+    margin-left: -32px;
 }
 
+}
 /* Responsive styles for smaller mobile screens */
 @media (max-width: 480px) {
   .slider-container {
@@ -157,10 +146,14 @@ margin-left: 20px;
   ;
   right: 50px;
   }
+  .slider-container {
+  
+    margin-left: 10px;
+}
 
   .movie-item {
-    height: 220px;
-    margin: 11px;
+    height: 260px;
+    margin: 7px;
   }
 
   .movie-info p {

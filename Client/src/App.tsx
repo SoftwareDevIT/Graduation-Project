@@ -79,13 +79,14 @@ import ActorForm from "./Page/Admin/Actor/ActorForm";
 import DirectorManager from "./Page/Admin/Director/DirectorManager";
 import DirectorFormManager from "./Page/Admin/Director/DirectorForm";
 import UpcomingMovies from "./component/Movies/UpcomingMovies";
-import OrderPage from "./component/Oders/OrderPage";
+
 
 import PageTitleUpdater from "./component/PageTitleUpdater/PageTitleUpdater";
 import MethodManager from "./Page/Admin/Method/MethodManager";
 import MethodFormManager from "./Page/Admin/Method/MethodForm";
 import PromotionsManager from "./Page/Admin/Promotions/PromotionsManager";
 import PromotionsFormManager from "./Page/Admin/Promotions/PromotionsForm";
+import OrderPage from "./component/Oders/OrderPage";
 
 
 
@@ -136,6 +137,7 @@ function App() {
         <Route path="/forgetpass" element={<ForgetPass/>} />
         <Route path="/otp" element={<Otp/>} />
         <Route path="/resetPassword" element={<ResetPasswod/>} />
+        <Route path="/test" element={<ResetPasswod/>} />
       
     
        

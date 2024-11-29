@@ -127,7 +127,10 @@ const LichChieuUpdated: React.FC = () => {
                     onClick={() => toggleCinemas(index)}
                   >
                     <div className="cinema-logo">
-                    <span className="logo-first-letter-1">F</span>lickHive
+                      <img
+                        src="../../../public/logo.jpg"
+                        alt={cinema.cinema_name}
+                      />
                     </div>
                     <div className="cinema-info">
                       <p className="cinema-name">{cinema.cinema_name}</p>

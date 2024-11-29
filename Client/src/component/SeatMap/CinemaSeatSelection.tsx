@@ -251,14 +251,18 @@ const totalPrice = calculatePrice();
           navigate("/login"); // Chuyển đến trang đăng nhập
         } else if (error.response.status === 402) {
           Modal.error({
-            title: "Lỗi ghế trống",
             content: "Vui lòng không để trống ghế ở giữa!",
+            icon: null,
+            className: "custom-error-modal",
           });
-        } else {
+        } if(error.response.status === 400){
           Modal.error({
-            title: "Lỗi không xác định",
-            content: "Đã xảy ra lỗi, vui lòng thử lại.",
+            title: "Ghế đã được đặt",
+            content: "Ghế của bạn đã được đặt vui lòng đặt lại ghế khác",
+            icon: null,
+            className: "custom-error-modal",
           });
+          
         }
       } else {
         Modal.error({

@@ -129,8 +129,11 @@ const MuaVe: React.FC = () => {
                                         className={`cinema-item ${expandedIndex === index ? "active" : ""}`}
                                         onClick={() => toggleCinemas(index)}
                                     >
-                                        <div className="cinema-logo">
-                    <span className="logo-first-letter-1">F</span>lickHive
+                                       <div className="cinema-logo">
+                      <img
+                        src="../../../public/logo.jpg"
+                        alt={cinema.cinema_name}
+                      />
                     </div>
                                         <div className="cinema-info">
                                             <p className="cinema-name">{cinema.cinema_name}</p>
