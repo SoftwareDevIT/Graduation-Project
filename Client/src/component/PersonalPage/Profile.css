@@ -94,3 +94,7 @@ select {
   text-decoration: none;
   color: #333;
 }
+.active-link {
+  font-weight: bold;
+  color: #4322ff; /* Example color */
+}

@@ -28,9 +28,11 @@ class RatingController extends Controller
 
         $formattedRatings = $rating->map(function ($rating) {
             $ratingdata = $rating->toArray();
+            $user = $rating->user;
 
             $ratingdata['movie_name'] = $rating->movies ? $rating->movies->movie_name : 'Không có tên phim';
             $ratingdata['user_name'] = $rating->user->user_name;
+            $ratingdata['user'] = $user->toArray();
             return $ratingdata;
         });
 

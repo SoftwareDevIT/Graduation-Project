@@ -5,7 +5,7 @@ import instance from '../../../server';
 import { Movie } from '../../../interface/Movie';
 import { MovieInCinema } from '../../../interface/MovieInCinema';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faPlus, faTrash, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { notification } from 'antd';  // Import notification from Ant Design
 
 const CinemasDashboard: React.FC = () => {
@@ -194,7 +194,8 @@ const CinemasDashboard: React.FC = () => {
                                     <td className="px-4 py-3 text-center">{cinema.location.location_name}</td>
                                     <td className="px-4 py-3 text-center">{cinema.location.location_name}</td>
                                     <td className="px-4 py-3 text-center">
-                                        <Link to={`/admin/cinemas/${cinema.id}/edit`} className="text-yellow-600 mx-2">
+                                    <div className="flex justify-center space-x-3">
+                                        <Link to={`/admin/cinemas/${cinema.id}/edit`}  className="w-8 h-8 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center hover:bg-yellow-200 transition">
                                         <svg
                                                 xmlns="http://www.w3.org/2000/svg"
                                                 fill="none"
@@ -212,10 +213,11 @@ const CinemasDashboard: React.FC = () => {
                                         </Link>
                                         <button
                                             onClick={() => handleDeleteCinema(cinema.id!)}
-                                            className="text-red-600"
+                                           className="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center hover:bg-red-200 transition"
                                         >
                                             <FontAwesomeIcon icon={faTrash} />
                                         </button>
+                                        </div>
                                     </td>
                                 </tr>
                                 {expandedCinemaId === cinema.id && (
@@ -239,7 +241,7 @@ const CinemasDashboard: React.FC = () => {
                                                                         onClick={() => handleDeleteMovie(cinema.id!, movie.movie_id)}
                                                                         className="text-red-600"
                                                                     >
-                                                                        <FontAwesomeIcon icon={faTrash} />
+                                                                        <FontAwesomeIcon icon={faTrashAlt} />
                                                                     </button>
                                                                 </td>
                                                             </tr>

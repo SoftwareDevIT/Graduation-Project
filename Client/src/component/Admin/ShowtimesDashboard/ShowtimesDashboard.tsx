@@ -111,6 +111,7 @@ const ShowtimesDashboard: React.FC = () => {
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 w-1/4"
                 />
+                
             </div>
 
             <div className="overflow-x-auto shadow-md rounded-lg">

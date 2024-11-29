@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import instance from '../../../server';
 import { Movie } from '../../../interface/Movie';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faEdit, faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';  // Import các style
 import { notification } from 'antd';  // Import Ant Design notification
@@ -164,7 +164,7 @@ const MoviesDashboard: React.FC = () => {
                                                 onClick={() => deleteMovie(movie.id)}
                                                 className="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center hover:bg-red-200 transition"
                                             >
-                                                <FontAwesomeIcon icon={faTrash} />
+                                               <FontAwesomeIcon icon={faTrashAlt} />
                                             </button>
                                         </div>
                                     </td>

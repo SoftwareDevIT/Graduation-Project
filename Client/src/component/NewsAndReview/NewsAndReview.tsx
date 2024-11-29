@@ -57,7 +57,7 @@ const NewsAndReview = () => {
              <Link to={`/postdetail/${review.id}`}>
                 <h3>{review.title}</h3>
               </Link>
-            <span className="time">{review.user.fullname}•  {formatTimeAgo(review.created_at)}</span>  
+            <span ><span className="time">{review.user.fullname}</span> •  {formatTimeAgo(review.created_at)}</span>  
             
           </div>
         ))}

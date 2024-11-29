@@ -23,6 +23,10 @@ export interface LocationState {
   }
 const OrderCheckout = () => {
     const location = useLocation();
+    const [voucherCode, setVoucherCode] = useState<string>(""); // Lưu mã voucher
+    const [discount, setDiscount] = useState<number | null>(null); // Lưu giá trị giảm giá
+    const [finalPrice, setFinalPrice] = useState<number | null>(null); // Lưu giá trị giá sau giảm giá
+    const [voucherApplied, setVoucherApplied] = useState<boolean>(false); // Trạng thái kiểm tra voucher đã áp dụng hay chưa
     
     const navigate = useNavigate();
     const {
@@ -40,10 +44,40 @@ const OrderCheckout = () => {
     // Log selectedSeats to verify data
     console.log(seats);
     console.log(selectedCombos); // Check if combos are passed correctly
-
+    const handleApplyVoucher = async () => {
+        if (!voucherCode) {
+            message.warning("Vui lòng nhập mã voucher.");
+            return;
+        }
+    
+        try {
+            const response = await instance.post("/apply-promotion", {
+                code: voucherCode,
+                total_price: totalPrice,
+            });
+    
+            if (response.data) {
+                const { message: successMessage, discount, final_price } = response.data;
+                message.success(successMessage);
+                setDiscount(discount);
+                setFinalPrice(final_price);
+                setVoucherApplied(true); // Đánh dấu là voucher đã được áp dụng
+            }
+        } catch (error) {
+            message.error("Không thể áp dụng mã khuyến mãi. Vui lòng kiểm tra lại.");
+            console.error("Error applying voucher:", error);
+        }
+    };
+    
+    const handleRemoveVoucher = () => {
+        setVoucherCode(""); // Xóa mã voucher
+        setDiscount(null); // Đặt lại giảm giá về null
+        setFinalPrice(totalPrice); // Quay lại giá trị ban đầu
+        setVoucherApplied(false); // Đánh dấu voucher chưa được áp dụng
+    };
     // State for payment method
     const [pay_method_id, setPaymentMethod] = useState<number | null>(null); // Khởi tạo pay_method_id với null
-    const [timeLeft, setTimeLeft] = useState(50);
+    const [timeLeft, setTimeLeft] = useState(300);
     useEffect(() => {
         const timer = setInterval(() => {
             setTimeLeft((prevTime) => {
@@ -57,7 +91,7 @@ const OrderCheckout = () => {
                 }
                 return prevTime - 1;
             });
-        }, 3000);
+        }, 1000);
 
         return () => clearInterval(timer); // Dọn dẹp timer khi component unmount
     }, [navigate]);
@@ -108,7 +142,7 @@ const OrderCheckout = () => {
             showtime_id: showtimeId, // Ensure this matches the name from OrderPage
             userId,
             seats: seatsData,
-            amount: totalPrice,
+            amount: finalPrice || totalPrice,
             pay_method_id, // Gửi pay_method_id là số nguyên
             comboId: selectedCombos,
         };
@@ -177,10 +211,41 @@ const OrderCheckout = () => {
                                 ))} 
                             </div>
                         )}
-                        <div className="order-total">
-                            <span className="total-title">Tổng</span>
-                            <span className="total-price">{totalPrice?.toLocaleString('vi-VN')} đ</span>
-                        </div>
+                         <div className="voucher-section">
+            <h4>Nhập mã voucher</h4>
+            <input
+    type="text"
+    placeholder="Nhập mã voucher"
+    value={voucherCode}
+    onChange={(e) => setVoucherCode(e.target.value)}
+    className="voucher-input"
+/>
+<button className="apply-voucher-btn" onClick={handleApplyVoucher}>
+        Áp dụng
+    </button>
+    {voucherApplied && (
+        <button className="apply-voucher-btn-1" onClick={handleRemoveVoucher}>
+            Xóa voucher
+        </button>
+    )}
+        </div>
+        <div className="order-total">
+    <span className="total-title">Tổng trước giảm</span>
+    <span className="total-price">{totalPrice?.toLocaleString('vi-VN')} đ</span>
+</div>
+{discount && (
+    <div className="order-discount">
+        <span className="total-title">Giảm giá:</span>
+        <span className="total-title"> -{discount.toLocaleString('vi-VN')} đ</span>
+    </div>
+)}
+<div className="order-final">
+    <span className="total-title">Tổng sau giảm:</span>
+    <span className="total-title">
+        {(finalPrice || totalPrice)?.toLocaleString('vi-VN')} đ
+    </span>
+</div>
+
                     </div>
 
 
@@ -249,7 +314,7 @@ const OrderCheckout = () => {
                     <div className="checkout-details">
                         <div className="order-info">
                             <span className="total-title">Tổng đơn hàng</span>
-                            <h2 className="total-price">{totalPrice?.toLocaleString('vi-VN')} đ</h2>
+                            <h2 className="total-price"> {(finalPrice || totalPrice)?.toLocaleString('vi-VN')} đ</h2>
                         </div>
                         <div className="time-info">
                             <span className="time-title">Thời gian giữ ghế</span>

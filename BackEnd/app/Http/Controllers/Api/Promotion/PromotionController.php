@@ -114,6 +114,7 @@ class PromotionController extends Controller
             'final_price' => $validated['total_price'] - $discount,
         ]);
     }
+
     public function getUserVouchers(Request $request)
     {
         // Lấy user_id từ request hoặc auth (tùy vào cách quản lý đăng nhập)
