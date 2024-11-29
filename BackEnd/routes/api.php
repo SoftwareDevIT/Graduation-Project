@@ -199,5 +199,5 @@ Route::apiResource('seat-map', SeatMapController::class);
 // Route riêng cho chức năng publish
 Route::patch('/seat-map/{id}/publish', [SeatMapController::class, 'publish'])->name('seat-map.publish');
 
-Route::apiResource('room', RoomController::class);
-Route::apiResource('showtimes', ShowtimeController::class);
+// Route::apiResource('room', RoomController::class);
+// Route::apiResource('showtimes', ShowtimeController::class);

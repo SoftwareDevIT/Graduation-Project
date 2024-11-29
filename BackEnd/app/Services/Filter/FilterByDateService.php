@@ -26,7 +26,7 @@ class FilterByDateService
 
         foreach ($movies as $movie) {
             $this->hidePivot($movie->movie->actor);
-            $this->hidePivot([$movie->movie->director]); 
+            $this->hidePivot([$movie->movie->director]);
             $this->hidePivot($movie->movie->movie_category);
         }
         return $movies;
