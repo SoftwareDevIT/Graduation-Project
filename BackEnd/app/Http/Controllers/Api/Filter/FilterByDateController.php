@@ -41,7 +41,7 @@ class FilterByDateController extends Controller
     {
         $locationId = $request->input('location_id');
         $date = $request->input('showtime_date');
-        $movieid = $request->input('movie_id'); 
+        $movieid = $request->input('movie_id');
         if (empty($date) || $date == '0') {
             $date = Carbon::today()->toDateString();
         }

@@ -17,12 +17,15 @@ class RoomSeeder extends Seeder
 
         // Iterate through each cinema and create rooms for them
         foreach ($cinemaIds as $cinemaId) {
-            DB::table('room')->insert([
-                'room_name' => 'P1',
-                'cinema_id' => $cinemaId,
-                'seat_layout_id' => 1,
-                'status' => '1', // Active status
-            ]);
+            // Create 10 rooms for each cinema
+            for ($i = 1; $i <= 10; $i++) {
+                DB::table('room')->insert([
+                    'room_name' => 'P' . $i,
+                    'cinema_id' => $cinemaId,
+                    'seat_layout_id' => rand(1, 4),
+                    'status' => '1', // Active status
+                ]);
+            }
         }
     }
 }
