@@ -19,7 +19,7 @@ class ShowtimeService
     public function index()
     {
 
-        return Showtime::with(['movieInCinema.movie', 'room'])->orderByDesc('created_at')->paginate(5);
+        return Showtime::with(['movie', 'room.cinema'])->orderByDesc('created_at')->paginate(5);
     }
 
 

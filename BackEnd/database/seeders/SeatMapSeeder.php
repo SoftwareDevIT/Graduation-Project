@@ -20,11 +20,24 @@ class SeatMapSeeder extends Seeder
                 // Convert numeric row to alphabetical (e.g., 1 -> 'A', 2 -> 'B')
                 $rowLetter = chr(64 + $row);
 
+                // Logic phân loại loại ghế
+                $seatType = '';
+
+                // Ghế thường ở đầu, ghế VIP ở giữa, ghế đôi ở cuối
+                if ($row <= $layout->row_regular_seat) {
+                    $seatType = 'Regular';
+                } elseif ($row <= $layout->row_regular_seat + $layout->row_vip_seat) {
+                    $seatType = 'VIP';
+                } else {
+                    $seatType = 'Couple';
+                }
+
                 for ($column = 1; $column <= $layout->columns; $column++) {
                     $seatMaps[] = [
                         'seat_layout_id' => $layout->id,
                         'row' => $rowLetter,
                         'column' => $column,
+                        'type' => $seatType, // Thêm loại ghế vào
                         'created_at' => now(),
                         'updated_at' => now(),
                     ];

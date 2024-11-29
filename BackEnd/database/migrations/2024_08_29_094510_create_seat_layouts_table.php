@@ -16,10 +16,12 @@ return new class extends Migration
             $table->string('name');
             $table->integer('rows');
             $table->integer('columns');
+            $table->integer('row_regular_seat');
+            $table->integer('row_vip_seat');
+            $table->integer('row_couple_seat');
             $table->enum('status', ['Bản nháp', 'Xuất bản'])->default('Bản nháp');
             $table->timestamps();
         });
-
     }
 
     /**

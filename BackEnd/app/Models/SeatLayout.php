@@ -15,6 +15,9 @@ class SeatLayout extends Model
         'name',
         'rows',
         'columns',
+        'row_regular_seat',
+        'row_vip_seat',
+        'row_couple_seat',
         'status',
     ];
 
