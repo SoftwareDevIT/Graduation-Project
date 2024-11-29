@@ -7,7 +7,7 @@ import { notification } from 'antd';
 import './CountriesDashboard.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const CountriesDashboard: React.FC = () => {
+const CountriesDashboard: React.FC = () => {    
     const { state, deleteCountry } = useCountryContext();
     const { countries } = state;
 
@@ -76,6 +76,7 @@ const CountriesDashboard: React.FC = () => {
     };
 
     return (
+        
         <div className="container mx-auto p-4">
             <div className="flex justify-between items-center mb-6">
                 <Link to={'/admin/countries/add'} className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">

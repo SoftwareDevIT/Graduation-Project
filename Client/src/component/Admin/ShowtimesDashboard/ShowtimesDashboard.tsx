@@ -3,9 +3,10 @@ import { Link } from 'react-router-dom';
 import { useShowtimeContext } from '../../../Context/ShowtimesContext';
 import instance from '../../../server';
 import { Movie } from '../../../interface/Movie';
-import { notification } from 'antd';
+import { notification, Table, Button, Input, Space, Pagination } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import {DeleteOutlined, EditOutlined, PlusOutlined} from '@ant-design/icons'
 
 const ShowtimesDashboard: React.FC = () => {
     const { state, dispatch } = useShowtimeContext();
@@ -78,21 +79,66 @@ const ShowtimesDashboard: React.FC = () => {
         }).format(amount);
     };
 
-    // Pagination calculations
-    const totalPages = Math.ceil(totalShowtimes / showtimesPerPage);
-
     // Pagination handler
-    const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+    };
 
-    // Determine the range of pages to show
-    const pageNumbers = [];
-    const pageLimit = 5; // Maximum number of pages to display
-    const startPage = Math.max(1, currentPage - Math.floor(pageLimit / 2));
-    const endPage = Math.min(totalPages, startPage + pageLimit - 1);
-
-    for (let i = startPage; i <= endPage; i++) {
-        pageNumbers.push(i);
-    }
+    const columns = [
+        {
+            title: 'Phim',
+            dataIndex: 'movieName',
+            key: 'movieName',
+            render: (text: string, record: any) => <span>{record.movie_in_cinema?.movie?.movie_name}</span>,
+        },
+        {
+            title: 'Phòng',
+            dataIndex: 'room',
+            key: 'room',
+            render: (text: string, record: any) => <span>{record.room?.room_name}</span>,
+        },
+        {
+            title: 'Ngày',
+            dataIndex: 'date',
+            key: 'date',
+            render: (text: string, record: any) => <span>{new Date(record.showtime_date).toLocaleDateString()}</span>,
+        },
+        {
+            title: 'Giờ bắt đầu',
+            dataIndex: 'start',
+            key: 'start',
+            render: (text: string, record: any) => <span>{record.showtime_start}</span>,
+        },
+        {
+            title: 'Giờ kết thúc',
+            dataIndex: 'end',
+            key: 'end',
+            render: (text: string, record: any) => <span>{record.showtime_end}</span>,
+        },
+        {
+            title: 'Giá',
+            dataIndex: 'price',
+            key: 'price',
+            render: (text: number) => <span>{formatCurrency(text)}</span>,
+        },
+        {
+            title: 'Hành Động',
+            key: 'action',
+            render: (text: string, record: any) => (
+                <Space size="middle">
+                    <Link to={`/admin/showtimes/edit/${record.id}`}>
+                    <Button type="primary" icon={<EditOutlined />} />
+                    </Link>
+                    <Button
+                     icon={<DeleteOutlined />}
+        
+                        danger
+                        onClick={() => deleteShowtime(record.id)}
+                    />
+                </Space>
+            ),
+        },
+    ];
 
     if (error) {
         return <p>{error}</p>;
@@ -100,112 +146,40 @@ const ShowtimesDashboard: React.FC = () => {
 
     return (
         <div className="container mx-auto p-4">
-            <div className="flex justify-between items-center mb-6">
-                <Link to="/admin/showtimes/add" className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
-                    <FontAwesomeIcon icon={faPlus} /> Thêm Suất Chiếu
+            <div className="d-flex justify-content-between align-items-center mb-4">
+                <Link to="/admin/showtimes/add">
+                    <Button icon={<PlusOutlined />} type="primary" size="large">
+                        Thêm Suất Chiếu
+                    </Button>
                 </Link>
-                <input
-                    type="text"
+                <Input
                     placeholder="Tìm kiếm theo tên phim"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 w-1/4"
+                    style={{ width: 300 }}
+                    allowClear
                 />
-                
             </div>
 
-            <div className="overflow-x-auto shadow-md rounded-lg">
-                <table className="w-full border-collapse bg-white text-left text-sm text-gray-600">
-                    <thead className="bg-gray-100">
-                        <tr>
-                            <th className="px-4 py-2 text-center">Phim</th>
-                            <th className="px-4 py-2 text-center">Phòng</th>
-                            <th className="px-4 py-2 text-center">Ngày</th>
-                            <th className="px-4 py-2 text-center">Giờ bắt đầu</th>
-                            <th className="px-4 py-2 text-center">Giờ kết thúc</th>
-                            <th className="px-4 py-2 text-center">Giá</th>
-                            <th className="px-4 py-2 text-center">Hành Động</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredShowtimes.slice(0, showtimesPerPage).map((showtime) => (
-                            <tr key={showtime.id} className="hover:bg-gray-50">
-                                <td className="px-4 py-3 text-center">{showtime.movie_in_cinema?.movie?.movie_name}</td>
-                                <td className="px-4 py-3 text-center">{showtime.room?.room_name}</td>
-                                <td className="px-4 py-3 text-center">{new Date(showtime.showtime_date).toLocaleDateString()}</td>
-                                <td className="px-4 py-3 text-center">{showtime.showtime_start}</td>
-                                <td className="px-4 py-3 text-center">{showtime.showtime_end}</td>
-                                <td className="px-4 py-3 text-center">{formatCurrency(showtime.price)}</td>
-                                <td className="px-4 py-3 text-center">
-                                    <div className="flex justify-center space-x-3">
-                                        <Link
-                                            to={`/admin/showtimes/edit/${showtime.id}`}
-                                            className="w-8 h-8 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center hover:bg-yellow-200 transition"
-                                        >
-                                           <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                strokeWidth="2"
-                                                stroke="currentColor"
-                                                className="w-5 h-5"
-                                            >
-                                                <path
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                    d="M16.862 3.487a2.25 2.25 0 113.182 3.182L7.439 19.274a4.5 4.5 0 01-1.691 1.074l-3.003 1.001 1.001-3.003a4.5 4.5 0 011.074-1.691L16.862 3.487z"
-                                                />
-                                            </svg>
-                                        </Link>
-                                        <button
-                                            onClick={() => deleteShowtime(showtime.id)}
-                                            className="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center hover:bg-red-200 transition"
-                                        >
-                                            <FontAwesomeIcon icon={faTrashAlt} />
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+            <Table
+                columns={columns}
+                dataSource={filteredShowtimes}
+                rowKey="id"
+                pagination={false}  // Disable default pagination as we will use custom pagination
+            />
 
-            <div className="flex justify-center items-center mt-6">
-                <nav className="flex space-x-2">
-                    {/* Previous Button */}
-                    <button
-                        onClick={() => paginate(currentPage - 1)}
-                        disabled={currentPage === 1}
-                        className="px-4 py-2 rounded-lg border bg-gray-200 hover:bg-gray-300"
-                    >
-                        Trước
-                    </button>
-
-                    {/* Page Numbers */}
-                    {pageNumbers.map((pageNumber) => (
-                        <button
-                            key={pageNumber}
-                            onClick={() => paginate(pageNumber)}
-                            className={`px-4 py-2 rounded-lg border ${currentPage === pageNumber ? 'bg-blue-600 text-white' : 'bg-gray-200 hover:bg-gray-300'}`}
-                        >
-                            {pageNumber}
-                        </button>
-                    ))}
-
-                    {/* Next Button */}
-                    <button
-                        onClick={() => paginate(currentPage + 1)}
-                        disabled={currentPage === totalPages}
-                        className="px-4 py-2 rounded-lg border bg-gray-200 hover:bg-gray-300"
-                    >
-                        Tiếp
-                    </button>
-                </nav>
+<div className="d-flex justify-content-center mt-4"> 
+                <Pagination
+                    current={currentPage}
+                    pageSize={showtimesPerPage}
+                    total={totalShowtimes}
+                    onChange={handlePageChange}
+                    showSizeChanger={false}
+                    showQuickJumper
+                />
             </div>
         </div>
     );
 };
-
 
 export default ShowtimesDashboard;

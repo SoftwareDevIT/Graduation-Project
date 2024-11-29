@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import instance from '../../../server'; 
 import { useCinemaContext } from '../../../Context/CinemasContext';
-import instance from '../../../server';
 import { Movie } from '../../../interface/Movie';
-import { MovieInCinema } from '../../../interface/MovieInCinema';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faPlus, faTrash, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { MovieInCinema } from '../../../interface/MovieInCinema'; 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; 
+import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'; 
 import { notification } from 'antd';  // Import notification from Ant Design
 
 const CinemasDashboard: React.FC = () => {
@@ -142,7 +142,7 @@ const CinemasDashboard: React.FC = () => {
         return pageNumbers.map((page, index) => (
             <button
                 key={index}
-                className={`btn ${currentPage === page ? 'bg-blue-600 text-white' : 'bg-gray-100 text-blue-600'} mx-1 px-4 py-2 rounded-md`}
+                className={`btn ${currentPage === page ? 'btn-primary' : 'btn-outline-primary'} mx-1`}
                 onClick={() => typeof page === 'number' && handlePageChange(page)}
                 disabled={page === '...'}
             >
@@ -152,37 +152,36 @@ const CinemasDashboard: React.FC = () => {
     };
 
     return (
-        <div className="container mx-auto p-4">
-            <div className="flex justify-between items-center mb-6">
-                <Link to={'/admin/cinemas/add'} className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
-                <FontAwesomeIcon icon={faPlus} />  Thêm Rạp
-                </Link>
+        <div className="container mt-5">
+        
+            <div className="d-flex justify-content-between align-items-center mb-4">
+                <Link to={'/admin/cinemas/add'} className="btn btn-outline-primary"><FontAwesomeIcon icon={faPlus} /> Thêm Rạp</Link>
                 <input
                     type="text"
                     placeholder="Tìm kiếm theo tên"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 w-1/4"
+                    className="form-control w-25"  
                 />
             </div>
-            <div className="overflow-x-auto shadow-md rounded-lg">
-                <table className="w-full border-collapse bg-white text-left text-sm text-gray-600">
-                    <thead className="bg-gray-100">
+            <div className="table-responsive">
+                <table className="table table-bordered table-hover shadow-sm">
+                    <thead className="thead-light">
                         <tr>
-                            <th className="px-4 py-2 text-center">ID</th>
-                            <th className="px-4 py-2 text-center">Tên Rạp</th>
-                            <th className="px-4 py-2 text-center">Điện Thoại</th>
-                            <th className="px-4 py-2 text-center">Vị Trí</th>
-                            <th className="px-4 py-2 text-center">Địa Chỉ</th>
-                            <th className="px-4 py-2 text-center">Hành Động</th>
+                            <th>ID</th>
+                            <th>Tên Rạp</th>
+                            <th>Điện Thoại</th>
+                            <th>Vị Trí</th>
+                            <th>Địa Chỉ</th>
+                            <th>Hành Động</th>
                         </tr>
                     </thead>
                     <tbody>
                         {currentCinemas.map((cinema) => (
                             <React.Fragment key={cinema.id}>
-                                <tr className="hover:bg-gray-50">
-                                    <td className="px-4 py-3 text-center">{cinema.id}</td>
-                                    <td className="px-4 py-3 text-center">
+                                <tr>
+                                    <td>{cinema.id}</td>
+                                    <td>
                                         <span 
                                             onClick={() => handleCinemaClick(cinema.id!)} 
                                             style={{ color: 'rgba(var(--bs-primary-rgb)', cursor: 'pointer' }}
@@ -190,64 +189,36 @@ const CinemasDashboard: React.FC = () => {
                                             {cinema.cinema_name}
                                         </span>
                                     </td>
-                                    <td className="px-4 py-3 text-center">{cinema.phone}</td>
-                                    <td className="px-4 py-3 text-center">{cinema.location.location_name}</td>
-                                    <td className="px-4 py-3 text-center">{cinema.location.location_name}</td>
-                                    <td className="px-4 py-3 text-center">
-                                    <div className="flex justify-center space-x-3">
-                                        <Link to={`/admin/cinemas/${cinema.id}/edit`}  className="w-8 h-8 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center hover:bg-yellow-200 transition">
-                                        <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                strokeWidth="2"
-                                                stroke="currentColor"
-                                                className="w-5 h-5"
-                                            >
-                                                <path
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                    d="M16.862 3.487a2.25 2.25 0 113.182 3.182L7.439 19.274a4.5 4.5 0 01-1.691 1.074l-3.003 1.001 1.001-3.003a4.5 4.5 0 011.074-1.691L16.862 3.487z"
-                                                />
-                                            </svg>
+                                    <td>{cinema.phone}</td>
+                                    <td>{cinema.location.location_name}</td>
+                                    <td>{cinema.cinema_address}</td>
+                                    <td className="action-buttons1 d-flex justify-content-center align-items-center">
+                                        <Link to={`/admin/cinemas/edit/${cinema.id}`} className="btn btn-warning btn-sm mx-1">
+                                            <FontAwesomeIcon icon={faEdit} />
                                         </Link>
-                                        <button
-                                            onClick={() => handleDeleteCinema(cinema.id!)}
-                                           className="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center hover:bg-red-200 transition"
-                                        >
+                                        <button onClick={() => handleDeleteCinema(cinema.id!)} className="btn btn-danger btn-sm">
                                             <FontAwesomeIcon icon={faTrash} />
                                         </button>
-                                        </div>
                                     </td>
                                 </tr>
-                                {expandedCinemaId === cinema.id && (
+                                {expandedCinemaId === cinema.id && selectedCinemaMovies.length > 0 && (
                                     <tr>
                                         <td colSpan={6}>
-                                            <div className="bg-gray-100 p-4">
-                                                <h4 className="text-lg font-semibold mb-4">Các Phim Trong Rạp</h4>
-                                                <table className="w-full table-auto text-sm">
-                                                    <thead>
-                                                        <tr>
-                                                            <th className="px-4 py-2">Tên Phim</th>
-                                                            <th className="px-4 py-2 text-center">Hành Động</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {selectedCinemaMovies.map((movie) => (
-                                                            <tr key={movie.movie_id}>
-                                                                <td className="px-4 py-2">{movie.movie.movie_name}</td>
-                                                                <td className="px-4 py-2 text-center">
-                                                                    <button
-                                                                        onClick={() => handleDeleteMovie(cinema.id!, movie.movie_id)}
-                                                                        className="text-red-600"
-                                                                    >
-                                                                        <FontAwesomeIcon icon={faTrashAlt} />
-                                                                    </button>
-                                                                </td>
-                                                            </tr>
-                                                        ))}
-                                                    </tbody>
-                                                </table>
+                                            <div className="movies-list">
+                                                <h4>Phim trong Rạp {cinema.cinema_name}</h4>
+                                                <ul className="list-unstyled">
+                                                    {selectedCinemaMovies.map(movie => (
+                                                        <li key={movie.movie.id} className="d-flex justify-content-between align-items-center">
+                                                            <span>{movie.movie.movie_name}</span>
+                                                            <button 
+                                                                onClick={() => handleDeleteMovie(cinema.id!, movie.movie_id)}
+                                                                className="btn btn-danger btn-sm"
+                                                            >
+                                                                Xóa
+                                                            </button>
+                                                        </li>
+                                                    ))}
+                                                </ul>
                                             </div>
                                         </td>
                                     </tr>
@@ -257,8 +228,7 @@ const CinemasDashboard: React.FC = () => {
                     </tbody>
                 </table>
             </div>
-
-            <div className="flex justify-center mt-4">
+            <div className="pagination-wrapper text-center">
                 {renderPagination()}
             </div>
         </div>
