@@ -11,11 +11,8 @@ class Room extends Model
     protected $table = 'room';
     protected $fillable = [
         'room_name',
-        'volume',
         'cinema_id',
-        'quantity_double_seats',
-        'quantity_vip_seats',
-        'quantity_basic_seats',
+        'seat_layout_id',
         'status',
     ];
 
@@ -27,5 +24,9 @@ class Room extends Model
     public function showtimes()
     {
         return $this->hasMany(Showtime::class);
+    }
+    public function layout()
+    {
+        return $this->belongsTo(SeatLayout::class);
     }
 }

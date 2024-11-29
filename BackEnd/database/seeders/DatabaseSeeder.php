@@ -29,16 +29,18 @@ class DatabaseSeeder extends Seeder
             DirectorSeeder::class,
             MovieSeeder::class,
             News::class,
+            SeatLayoutSeeder::class,
             RoomSeeder::class,
-            MovieInCinema::class,
+            // MovieInCinema::class,
             ActorInMovie::class,
             DirectorInMovie::class,
             CategoryInMovieSeeder::class,
-            ShowtimeSeeder::class,
-            CategorySeatSeeder::class,
+            // ShowtimeSeeder::class,
+            // CategorySeatSeeder::class,
             RatingSeeder::class,
             FavoriteSeeder::class,
-            BookingSeeder::class,
+            // BookingSeeder::class,
+            // VorcherSeeder::class,
 
         ]);
         // Tạo các quyền

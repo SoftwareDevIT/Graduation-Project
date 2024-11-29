@@ -24,14 +24,14 @@ trait UploadImageTrait
     }
     public function uploadImage($filePath)
     {
-        $this->initializeClient();
-        $imagePath = $filePath->getPathname();
-        $imageName = $filePath->getClientOriginalName();
+        $this->initializeClient();  // Khởi tạo client với API của ImgBB
+        $imagePath = $filePath;     // Đây là đường dẫn của file ảnh trong storage
+        $imageName = basename($filePath);  // Lấy tên file từ đường dẫn
 
         try {
             $response = $this->client->request('POST', 'https://api.imgbb.com/1/upload', [
                 'query' => [
-                    'key' => $this->apiKey,
+                    'key' => $this->apiKey,  // API key của ImgBB
                 ],
                 'multipart' => [
                     [
@@ -45,7 +45,7 @@ trait UploadImageTrait
             $data = json_decode($response->getBody()->getContents(), true);
 
             if (isset($data['success']) && $data['success']) {
-                return $data['data']['display_url'];
+                return $data['data']['display_url'];  // Trả về URL của ảnh đã upload
             } else {
                 throw new Exception('Upload ảnh thất bại');
             }

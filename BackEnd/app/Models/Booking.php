@@ -17,6 +17,7 @@ class Booking extends Model
         'status',
         'price_ticket',
         'price_combo',
+        'barcode',
         'created_at',
         'updated_at',
     ];
