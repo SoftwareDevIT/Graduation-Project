@@ -7,9 +7,9 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
-class FilterOfDateService
+class FilterOfDashBoarchService
 {
-    public function filtercalculateRevenue(?string $status, ?int $idCinema, ?string $startDate, ?string $endDate, ?string $month, ?string $year, ?string $day)
+    public function filterofbooking(?string $status, ?int $idCinema, ?string $startDate, ?string $endDate, ?string $month, ?string $year, ?string $day)
     {
         $query = Booking::query()->with('showtime');
 
@@ -55,11 +55,11 @@ class FilterOfDateService
                 'user_name' => $item->user->user_name,
                 'payMethod' => $item->payMethod->pay_method_name,
                 'amount' => $item->amount,
-                'movie_name' => $item->showtime->moviecinema->movie->movie_name,
+                // 'movie_name' => $item->showtime->moviecinema->movie->movie_name,
                 'status' => $item->status,
                 'showtime_date' => $item->showtime->showtime_date,
                 'room_name' => $item->showtime->room->room_name,
-                'cinema_name' => $item->showtime->moviecinema->cinema->cinema_name,
+                // 'cinema_name' => $item->showtime->moviecinema->cinema->cinema_name,
                 'created_at' => $item->created_at
             ];
         });
@@ -69,12 +69,12 @@ class FilterOfDateService
 
     public function totaldashboard($data)
     {
-    $totalAmount = $data->sum('amount');
-    $bookingCount = $data->count();
+        $totalAmount = $data->sum('amount');
+        $bookingCount = $data->count();
 
-    return [
-        'total_amount' => $totalAmount,
-        'booking_count' => $bookingCount
-    ];
+        return [
+            'total_amount' => $totalAmount,
+            'booking_count' => $bookingCount
+        ];
     }
 }

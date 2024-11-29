@@ -2,54 +2,57 @@
 
 namespace App\Services\Filter;
 
+use App\Models\Cinema;
+use App\Models\Movie;
 use App\Models\MovieInCinema;
-
+use App\Models\Showtime;
 
 class FilterByDateService
 {
     public function filterByDate(string $date, $cinemaId = null)
     {
-        $query = MovieInCinema::where('cinema_id', $cinemaId)
-            ->whereHas('showtimes', function ($query) use ($date) {
-                $query->where('showtime_date', $date);
-            })->with(['showtimes' => function ($query) use ($date) {
-                $query->where('showtime_date', $date);
-            }])->with(['movie.actor' => function ($query) {
-                $query->select('actor.id', 'actor.actor_name');
-            }])->with(['movie.director' => function ($query) {
-                $query->select('director.id', 'director.director_name');
-            }])->with(['movie.movie_category' => function ($query) {
-                $query->select('movie_category.id', 'movie_category.category_name');
-            }]);
-
-        $movies = $query->get();
-
-        foreach ($movies as $movie) {
-            $this->hidePivot($movie->movie->actor);
-            $this->hidePivot([$movie->movie->director]); 
-            $this->hidePivot($movie->movie->movie_category);
-        }
-        return $movies;
+        $query = Movie::whereHas('showtimes', function ($query) use ($date, $cinemaId) {
+            $query->where('showtime_date', $date)
+                ->whereHas('room', function ($query) use ($cinemaId) {
+                    $query->where('cinema_id', $cinemaId);
+                });
+        })->with('showtimes', function ($query) use ($date) {
+            $query->where('showtime_date', $date);
+        })
+            ->get();
+        return $query;
     }
 
     public function filterByDateOrMovie(string $date, $movieid, $locationId)
     {
-        $query = MovieInCinema::where('movie_id', $movieid)
-            ->whereHas('cinema', function ($query) use ($locationId) {
-                $query->where('location_id', $locationId);
-            })->whereHas('showtimes', function ($query) use ($date) {
-                $query->where('showtime_date', $date);
+        $query = Cinema::where('location_id', $locationId)
+            ->whereHas('rooms.showtimes.movie', function ($query) use ($date, $movieid) {
+                $query->where('showtime_date', $date)
+                    ->where('movies.id', $movieid);
             })
-            ->with(['showtimes' => function ($query) use ($date) {
+            ->with(['rooms.showtimes' => function ($query) use ($date) {
                 $query->where('showtime_date', $date);
-            }])->with('cinema');
-        return $query->get();
-    }
+            }])
+            ->get();
+            $filteredResults = $query->map(function ($cinema) {
+                return [
+                    'cinema_name' => $cinema->cinema_name,
+                    'cinema_address' => $cinema->cinema_address,
+                    'image' => $cinema->image,
+                    'showtimes' => $cinema->rooms->flatMap(function ($room) {
+                        return $room->showtimes->map(function ($showtime) {
+                            return [
+                                'showtime_id' => $showtime->id,
+                                'showtime_date' => $showtime->showtime_date,
+                                'showtime_start' => $showtime->showtime_start,
+                                'showtime_end' => $showtime->showtime_end,
+                                'price' => $showtime->price,
+                            ];
+                        });
+                    })
+                ];
+            });
 
-    function hidePivot($items)
-    {
-        foreach ($items as $item) {
-            $item->makeHidden(['pivot']);
-        }
+        return $filteredResults;
     }
 }

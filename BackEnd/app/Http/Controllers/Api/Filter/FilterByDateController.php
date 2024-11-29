@@ -29,7 +29,6 @@ class FilterByDateController extends Controller
 
         $movies = $this->filterByDateService->filterByDate($date, $cinemaId);
 
-
         if ($movies->isEmpty()) {
             return $this->error('Không có phim của ngày hôm nay');
         }

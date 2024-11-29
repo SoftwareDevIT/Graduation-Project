@@ -29,4 +29,9 @@ class Room extends Model
     {
         return $this->belongsTo(SeatLayout::class);
     }
+
+    public function cinema()
+    {
+        return $this->belongsTo(Cinema::class);
+    }
 }

@@ -22,7 +22,7 @@ use App\Http\Controllers\Api\Movie\MovieCategoryController;
 use App\Http\Controllers\Api\PayMethod\PayMethodController;
 use App\Http\Controllers\Api\Auth\AccountVerificationController;
 use App\Http\Controllers\Api\Auth\ResetPasswordController;
-use App\Http\Controllers\Api\Filter\DashBoard\FilterOfDateController;
+use App\Http\Controllers\Api\Filter\DashBoard\FilterOfDashBoarchController;
 use App\Http\Controllers\Api\Filter\FilterMovieByNewController;
 use App\Http\Controllers\Api\Google\GoogleController;
 use App\Http\Controllers\Api\Movie\RatingController;
@@ -35,6 +35,8 @@ use App\Http\Controllers\Api\Seat\SeatController;
 use App\Http\Controllers\Api\Promotion\PromotionController;
 use App\Http\Controllers\Api\SeatMap\SeatMapController;
 use App\Http\Controllers\Api\SeatMap\MatrixController;
+
+
 // use App\Http\Controllers\Api\SeatMap\SeatMapController;
 
 /*
@@ -144,14 +146,8 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get('total-revenue-by-date/{start_date}/{end_date}', [RevenueMovieController::class, 'totalRevenueByMovieBetweenDates']);
     Route::get('total-revenue-movie-by-date/{movie_id}/{start_date}/{end_date}', [RevenueMovieController::class, 'totalRevenueMovieBetweenDates']);
 
-    // Route::get('filter-revenue/?{status}', [FilterOfDateController::class, 'filterRevenue']);
-    // Route::get('filter-revenue-cinema/{cinema_id}', [FilterOfDateController::class, 'filterRevenueByCinema']);
-    // Route::get('filter-revenue-by-date/{start_date}/{end_date}', [FilterOfDateController::class, 'filterRevenueBetweenDates']);
-    // Route::get('filter-revenue-by-day/{day}', [FilterOfDateController::class, 'filterRevenueday']);
-    // Route::get('filter-revenue-cinema-by-date/{cinema_id}/{start_date}/{end_date}', [FilterOfDateController::class, 'filterRevenueByCinemaBetweenDates']);
-    // Route::get('filter-revenueofmonth/{month}', [FilterOfDateController::class, 'filterRevenuemonth']);
-    // Route::get('filter-revenueofyear/{year}', [FilterOfDateController::class, 'filterRevenueyear']);
-    Route::get('filter-revenue', [FilterOfDateController::class, 'filterRevenue']);
+    // bộ lọc thông kê doanh thu
+    Route::get('filter-DashBoarch', [FilterOfDashBoarchController::class, 'filterOfDashBoarch']);
 
     //Trang dashboard
     Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
