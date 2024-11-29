@@ -13,7 +13,8 @@ return new class extends Migration {
         Schema::create('showtimes', function (Blueprint $table) {
             $table->id('id');
             $table->unsignedBigInteger('room_id');
-            $table->unsignedBigInteger('movie_in_cinema_id');
+            $table->unsignedBigInteger('movie_id');
+            // $table->unsignedBigInteger('movie_in_cinema_id');
             $table->date('showtime_date');
             $table->time('showtime_start');
             $table->time('showtime_end')->nullable();
@@ -21,7 +22,8 @@ return new class extends Migration {
             $table->boolean('status')->default(true);
             $table->timestamps();
             $table->foreign('room_id')->references('id')->on('room')->onDelete('cascade');
-            $table->foreign('movie_in_cinema_id')->references('id')->on('movie_in_cinemas')->onDelete('cascade');
+            // $table->foreign('movie_in_cinema_id')->references('id')->on('movie_in_cinemas')->onDelete('cascade');
+            $table->foreign('movie_id')->references('id')->on('movies')->onDelete('cascade');
 
         });
     }

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Update;
+namespace App\Http\Requests\Store;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateShowtimeRequest extends FormRequest
+class StoreMatrixRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,12 +22,9 @@ class UpdateShowtimeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'room_id' => 'required|integer',
-            'movie_id' => 'required|integer',
-            'showtime_date'      => 'required|date|after_or_equal:today',
-            'showtime_start'     => 'required|date_format:H:i:s',
-            'price'              => 'required|numeric|min:0',
-            "status" => "integer",
+            "name" => "string",
+            "rows" => "required|string",
+            "columns" => "integer",
         ];
     }
 }
