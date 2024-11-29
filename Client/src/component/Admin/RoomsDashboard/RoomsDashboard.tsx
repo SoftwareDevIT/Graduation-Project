@@ -12,7 +12,7 @@ const RoomDashboard: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredRooms, setFilteredRooms] = useState<Room[]>([]);
-  const roomsPerPage = 11; // Số lượng phòng hiển thị mỗi trang
+  const roomsPerPage = 7; // Số lượng phòng hiển thị mỗi trang
 
   useEffect(() => {
     // Lấy danh sách phòng từ API
@@ -97,51 +97,68 @@ const RoomDashboard: React.FC = () => {
   };
 
   return (
-    <div className="container mt-5">
-
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <Link to={'/admin/rooms/add'} className="btn btn-outline-primary">
-        <FontAwesomeIcon icon={faPlus} /> Thêm Phòng
+    <div className="container mx-auto p-4">
+      <div className="flex justify-between items-center mb-6">
+        <Link to={'/admin/rooms/add'} className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
+          <FontAwesomeIcon icon={faPlus} /> Thêm Phòng
         </Link>
         <input
           type="text"
           placeholder="Tìm kiếm theo tên phòng"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="form-control w-25"
+          className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 w-1/4"
         />
       </div>
-      <div className="table-responsive">
-        <table className="table table-bordered table-hover shadow-sm">
-          <thead className="thead-light">
+      <div className="overflow-x-auto shadow-md rounded-lg">
+        <table className="w-full border-collapse bg-white text-left text-sm text-gray-600">
+          <thead className="bg-gray-100">
             <tr>
-              <th>ID</th>
-              <th>Tên Phòng</th>
-              <th>Tổng số ghế</th>
-              <th>Số Ghế Đôi</th>
-              <th>Số Ghế VIP</th>
-              <th>Thao Tác</th>
+              <th className="px-4 py-2 text-center">ID</th>
+              <th className="px-4 py-2 text-center">Tên Phòng</th>
+              <th className="px-4 py-2 text-center">Tổng số ghế</th>
+              <th className="px-4 py-2 text-center">Số Ghế Đôi</th>
+              <th className="px-4 py-2 text-center">Số Ghế VIP</th>
+              <th className="px-4 py-2 text-center">Hành Động</th>
             </tr>
           </thead>
           <tbody>
             {currentRooms.length > 0 ? (
               currentRooms.map((room) => (
-                <tr key={room.id}>
-                  <td>{room.id}</td>
-                  <td>{room.room_name}</td>
-                  <td>{room.volume}</td>
-                  <td>{room.quantity_double_seats}</td>
-                  <td>{room.quantity_vip_seats}</td>
-                  <td>
-                    <Link to={`/admin/rooms/edit/${room.id}`} className="btn btn-warning btn-sm mx-1">
-                      <FontAwesomeIcon icon={faEdit} />
-                    </Link>
-                    <button
-                      onClick={() => handleDelete(room.id)}
-                      className="btn btn-danger btn-sm"
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-                    </button>
+                <tr key={room.id} className="hover:bg-gray-50">
+                  <td className="px-4 py-3 text-center">{room.id}</td>
+                  <td className="px-4 py-3 text-center">{room.room_name}</td>
+                  <td className="px-4 py-3 text-center">{room.volume}</td>
+                  <td className="px-4 py-3 text-center">{room.quantity_double_seats}</td>
+                  <td className="px-4 py-3 text-center">{room.quantity_vip_seats}</td>
+                  <td className="px-4 py-3 text-center">
+                    <div className="flex justify-center space-x-3">
+                      <Link
+                        to={`/admin/rooms/edit/${room.id}`}
+                        className="w-8 h-8 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center hover:bg-yellow-200 transition"
+                      >
+                       <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                strokeWidth="2"
+                                                stroke="currentColor"
+                                                className="w-5 h-5"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    d="M16.862 3.487a2.25 2.25 0 113.182 3.182L7.439 19.274a4.5 4.5 0 01-1.691 1.074l-3.003 1.001 1.001-3.003a4.5 4.5 0 011.074-1.691L16.862 3.487z"
+                                                />
+                                            </svg>
+                      </Link>
+                      <button
+                        onClick={() => handleDelete(room.id)}
+                        className="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center hover:bg-red-200 transition"
+                      >
+                        <FontAwesomeIcon icon={faTrash} />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))
@@ -155,32 +172,35 @@ const RoomDashboard: React.FC = () => {
           </tbody>
         </table>
       </div>
+
       {/* Phân trang */}
-      <nav className="d-flex justify-content-center mt-4">
-        <ul className="pagination">
-          <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-            <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>
-              Trước
-            </button>
-          </li>
+      <div className="flex justify-center items-center mt-6">
+        <nav className="flex space-x-2">
+          <button
+            onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="px-4 py-2 rounded-lg border bg-gray-200 hover:bg-gray-300"
+          >
+            Trước
+          </button>
           {paginationRange().map((page, index) => (
-            <li key={index} className={`page-item ${currentPage === page ? 'active' : ''}`}>
-              {page === '...' ? (
-                <span className="page-link">...</span>
-              ) : (
-                <button className="page-link" onClick={() => handlePageChange(page as number)}>
-                  {page}
-                </button>
-              )}
-            </li>
-          ))}
-          <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-            <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
-              Tiếp
+            <button
+              key={index}
+              onClick={() => handlePageChange(page as number)}
+              className={`px-4 py-2 rounded-lg border ${currentPage === page ? 'bg-blue-600 text-white' : 'bg-gray-200 hover:bg-gray-300'}`}
+            >
+              {page}
             </button>
-          </li>
-        </ul>
-      </nav>
+          ))}
+          <button
+            onClick={() => currentPage < totalPages && setCurrentPage(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="px-4 py-2 rounded-lg border bg-gray-200 hover:bg-gray-300"
+          >
+            Tiếp
+          </button>
+        </nav>
+      </div>
     </div>
   );
 };

@@ -13,7 +13,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 // Define the Zod schema for validation
 const postSchema = z.object({
   title: z.string().min(1, 'Tiêu đề là bắt buộc').max(100,'Tiêu đề tối đa 100 ký tự'), // Title is required
-  news_category_id: z.string().min(1, 'Chọn một danh mục'), // Category is required
+  news_category_id: z.number().min(1, 'Chọn một danh mục'), // Category is required
   content: z.string().min(1, 'Nội dung là bắt buộc').max(10000,'Nội dung tối đa 10000 ký tự'), // Content is required
 });
 
@@ -87,8 +87,8 @@ const PostsForm: React.FC = () => {
     await addOrUpdatePost(
       {
         ...data,
-        thumnail: finalThumbnail,
-        banner: finalBanner,
+        thumbnailFile: finalThumbnail instanceof File ? finalThumbnail : undefined,  // Only include the file if it's new
+        bannerFile: finalBanner instanceof File ? finalBanner : undefined,
       },
       id
     );
@@ -117,7 +117,7 @@ const PostsForm: React.FC = () => {
         </div>
         <div className="mb-3">
           <label className="form-label">Danh mục tin tức:</label>
-          <select {...register('news_category_id')} className="form-select">
+          <select {...register('news_category_id',{valueAsNumber:true})} className="form-select">
             <option value="">Chọn danh mục</option>
             {categories.map((category) => (
               <option key={category.id} value={category.id}>
@@ -146,9 +146,7 @@ const PostsForm: React.FC = () => {
               }
             }}
           />
-          {!thumbnailFile && (
-            <span className="text-danger">Ảnh thu nhỏ là bắt buộc</span>
-          )}
+          
         </div>
 
         {/* Show old banner if available */}
@@ -169,9 +167,7 @@ const PostsForm: React.FC = () => {
               }
             }}
           />
-          {!bannerFile && (
-            <span className="text-danger">Ảnh bìa là bắt buộc</span>
-          )}
+         
         </div>
 
         <div className="mb-3">

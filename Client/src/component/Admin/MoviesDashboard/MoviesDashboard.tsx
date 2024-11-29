@@ -14,8 +14,8 @@ const MoviesDashboard: React.FC = () => {
     const { movies } = state;
 
     const [error, setError] = useState<string | null>(null);
-    const [searchTerm, setSearchTerm] = useState<string>('');
-    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [searchTerm, setSearchTerm] = useState<string>(''); 
+    const [currentPage, setCurrentPage] = useState<number>(1); 
     const [moviesPerPage] = useState<number>(5);
     const [showDescription, setShowDescription] = useState<boolean>(false);
     const [showLikesViews, setShowLikesViews] = useState<boolean>(false); // State to control likes and views columns visibility
@@ -79,55 +79,58 @@ const MoviesDashboard: React.FC = () => {
     };
 
     return (
-        <div className="container mt-5">
-            <div className="d-flex justify-content-between align-items-center mb-4">
-                <Link to={`/admin/movies/add`} className="btn btn-outline-primary"><FontAwesomeIcon icon={faPlus} /> Thêm Phim Mới</Link>
+        <div className="container mx-auto p-4">
+            <div className="flex justify-between items-center mb-6">
+                <Link to={`/admin/movies/add`} className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
+                <FontAwesomeIcon icon={faPlus} /> Thêm Phim Mới
+                </Link>
                 <input
                     type="text"
                     placeholder="Tìm kiếm theo tên phim"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="form-control w-25"
+                    className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 w-1/4"
                 />
             </div>
-            <div className="table-responsive">
-                <table className="table table-bordered table-hover shadow-sm">
-                    <thead className="thead-light">
+
+            <div className="overflow-x-auto shadow-md rounded-lg">
+                <table className="w-full border-collapse bg-white text-left text-sm text-gray-600">
+                    <thead className="bg-gray-100">
                         <tr>
-                            <th>ID</th>
-                            <th>Tiêu Đề</th>
-                            <th>Ảnh</th>
-                            <th>Thể Loại</th>
-                            <th>Diễn Viên</th>
-                            <th>Đạo Diễn</th>
-                            <th>Thời Lượng</th>
-                            <th style={{ display: showLikesViews ? 'table-cell' : 'none' }}>Lượt Thích</th> {/* Show Likes column */}
-                            <th style={{ display: showLikesViews ? 'table-cell' : 'none' }}>Lượt Xem</th> {/* Show Views column */}
-                            <th style={{ display: showDescription ? 'table-cell' : 'none' }}>Mô Tả</th>
-                            <th>Hành Động</th>
+                            <th className="px-4 py-2 text-center">ID</th>
+                            <th className="px-4 py-2 text-center">Tiêu Đề</th>
+                            <th className="px-4 py-2 text-center">Ảnh</th>
+                            <th className="px-4 py-2 text-center">Thể Loại</th>
+                            <th className="px-4 py-2 text-center">Diễn Viên</th>
+                            <th className="px-4 py-2 text-center">Đạo Diễn</th>
+                            <th className="px-4 py-2 text-center">Thời Lượng</th>
+                            <th className="px-4 py-2 text-center" style={{ display: showLikesViews ? 'table-cell' : 'none' }}>Lượt Thích</th>
+                            <th className="px-4 py-2 text-center" style={{ display: showLikesViews ? 'table-cell' : 'none' }}>Lượt Xem</th>
+                            <th className="px-4 py-2 text-center" style={{ display: showDescription ? 'table-cell' : 'none' }}>Mô Tả</th>
+                            <th className="px-4 py-2 text-center">Hành Động</th>
                         </tr>
                     </thead>
                     <tbody>
                         {currentMovies.length > 0 ? (
                             currentMovies.map((movie: Movie) => (
-                                <tr key={movie.id}>
-                                    <td>{movie.id}</td>
-                                    <td className="truncate-text" style={{ maxWidth: '150px' }}>{movie.movie_name}</td>
-                                    <td>
+                                <tr key={movie.id} className="hover:bg-gray-50">
+                                    <td className="px-4 py-3 text-center">{movie.id}</td>
+                                    <td className="px-4 py-3 text-center truncate-text" style={{ maxWidth: '150px' }}>{movie.movie_name}</td>
+                                    <td className="px-4 py-3 text-center">
                                         <img 
                                             src={movie.poster ?? undefined} 
-                                            style={{ width: "120px", height: "180px", objectFit: 'cover' }} 
+                                            style={{ width: "200px", height: "180px", objectFit: 'cover' }} 
                                             alt={`${movie.movie_name} poster`} 
                                             onClick={handleImageClick} 
                                         />
                                     </td>
-                                    <td>{movie.movie_category.map(movie_category => movie_category.category_name).join(', ')}</td>
-                                    <td>{movie.actor.map(actor => actor.actor_name).join(', ')}</td>
-                                    <td>{movie.director.map(director => director.director_name).join(', ')}</td>
-                                    <td>{movie.duration}</td>
-                                    <td style={{ display: showLikesViews ? 'table-cell' : 'none' }}>{movie.like}</td> {/* Show Likes */}
-                                    <td style={{ display: showLikesViews ? 'table-cell' : 'none' }}>{movie.views}</td> {/* Show Views */}
-                                    <td style={{ display: showDescription ? 'table-cell' : 'none' }}>
+                                    <td className="px-4 py-3 text-center">{movie.movie_category.map(movie_category => movie_category.category_name).join(', ')}</td>
+                                    <td className="px-4 py-3 text-center">{movie.actor.map(actor => actor.actor_name).join(', ')}</td>
+                                    <td className="px-4 py-3 text-center">{movie.director.map(director => director.director_name).join(', ')}</td>
+                                    <td className="px-4 py-3 text-center">{movie.duration} phút</td>
+                                    <td className="px-4 py-3 text-center" style={{ display: showLikesViews ? 'table-cell' : 'none' }}>{movie.like}</td>
+                                    <td className="px-4 py-3 text-center" style={{ display: showLikesViews ? 'table-cell' : 'none' }}>{movie.views}</td>
+                                    <td className="px-4 py-3 text-center" style={{ display: showDescription ? 'table-cell' : 'none' }}>
                                         <ReactQuill 
                                             value={movie.description ?? ''} 
                                             readOnly={true} 
@@ -136,14 +139,30 @@ const MoviesDashboard: React.FC = () => {
                                             formats={['bold', 'underline', 'link']}
                                         />
                                     </td>
-                                    <td>
-                                        <div className="d-flex justify-content-around">
-                                            <Link to={`/admin/movies/edit/${movie.id}`} className="btn btn-warning btn-sm mr-2">
-                                                <FontAwesomeIcon icon={faEdit} />
+                                    <td className="px-4 py-3 text-center">
+                                        <div className="flex justify-center space-x-3">
+                                            <Link
+                                                to={`/admin/movies/edit/${movie.id}`}
+                                                className="w-8 h-8 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center hover:bg-yellow-200 transition"
+                                            >
+                                              <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                strokeWidth="2"
+                                                stroke="currentColor"
+                                                className="w-5 h-5"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    d="M16.862 3.487a2.25 2.25 0 113.182 3.182L7.439 19.274a4.5 4.5 0 01-1.691 1.074l-3.003 1.001 1.001-3.003a4.5 4.5 0 011.074-1.691L16.862 3.487z"
+                                                />
+                                            </svg>
                                             </Link>
-                                            <button 
-                                                className="btn btn-danger btn-sm" 
+                                            <button
                                                 onClick={() => deleteMovie(movie.id)}
+                                                className="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center hover:bg-red-200 transition"
                                             >
                                                 <FontAwesomeIcon icon={faTrash} />
                                             </button>
@@ -153,33 +172,38 @@ const MoviesDashboard: React.FC = () => {
                             ))
                         ) : (
                             <tr>
-                                <td colSpan={9}>Không có phim nào</td>
+                                <td colSpan={9} className="text-center py-4">Không có phim nào</td>
                             </tr>
                         )}
                     </tbody>
                 </table>
             </div>
-            <nav className="d-flex justify-content-center mt-4">
-                <ul className="pagination">
-                    <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                        <button className="page-link" onClick={() => setCurrentPage(currentPage - 1)}>
-                            Trước
+
+            <div className="flex justify-center items-center mt-6">
+                <nav className="flex space-x-2">
+                    <button
+                        onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
+                        className="px-4 py-2 border rounded-md hover:bg-gray-200"
+                    >
+                        Previous
+                    </button>
+                    {[...Array(Math.ceil(filteredMovies.length / moviesPerPage))].map((_, index) => (
+                        <button
+                            key={index}
+                            onClick={() => paginate(index + 1)}
+                            className={`px-4 py-2 border rounded-md ${currentPage === index + 1 ? 'bg-blue-600 text-white' : 'hover:bg-gray-200'}`}
+                        >
+                            {index + 1}
                         </button>
-                    </li>
-                    {Array.from({ length: Math.ceil(filteredMovies.length / moviesPerPage) }, (_, index) => (
-                        <li key={index + 1} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
-                            <button className="page-link" onClick={() => paginate(index + 1)}>
-                                {index + 1}
-                            </button>
-                        </li>
                     ))}
-                    <li className={`page-item ${indexOfLastMovie >= filteredMovies.length ? 'disabled' : ''}`}>
-                        <button className="page-link" onClick={() => setCurrentPage(currentPage + 1)}>
-                            Tiếp
-                        </button>
-                    </li>
-                </ul>
-            </nav>
+                    <button
+                        onClick={() => currentPage < Math.ceil(filteredMovies.length / moviesPerPage) && setCurrentPage(currentPage + 1)}
+                        className="px-4 py-2 border rounded-md hover:bg-gray-200"
+                    >
+                        Next
+                    </button>
+                </nav>
+            </div>
         </div>
     );
 };

@@ -58,71 +58,71 @@ const DashboardAdmin = () => {
         setCurrentPage(pageNumber);
     }
 };
-  // const doughnutData = {
-  //   labels: ['Search Engines', 'Direct Click', 'Bookmarks Click'],
-  //   datasets: [
-  //     {
-  //       data: [30, 30, 40],
-  //       backgroundColor: ['#36a2eb', '#4bc0c0', '#ff6384'],
-  //       hoverBackgroundColor: ['#36a2eb', '#4bc0c0', '#ff6384'],
-  //     },
-  //   ],
-  // };
+  const doughnutData = {
+    labels: ['Search Engines', 'Direct Click', 'Bookmarks Click'],
+    datasets: [
+      {
+        data: [30, 30, 40],
+        backgroundColor: ['#36a2eb', '#4bc0c0', '#ff6384'],
+        hoverBackgroundColor: ['#36a2eb', '#4bc0c0', '#ff6384'],
+      },
+    ],
+  };
   
-  // const doughnutOptions = {
-  //   maintainAspectRatio: false,
-  //   cutout: '70%', // Tạo khoảng trống ở giữa
-  //   plugins: {
-  //     legend: {
-  //       position: 'right',
-  //       labels: {
-  //         boxWidth: 20,
-  //       },
-  //     },
-  //   },
-  // };
+  const doughnutOptions = {
+    maintainAspectRatio: false,
+    cutout: '70%', // Tạo khoảng trống ở giữa
+    plugins: {
+      legend: {
+        position: 'right',
+        labels: {
+          boxWidth: 20,
+        },
+      },
+    },
+  };
 
-  // const barData = {
-  //   labels: ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG"],
-  //   datasets: [
-  //     {
-  //       label: 'CHN',
-  //       data: [30, 25, 20, 25, 30, 35, 40, 35],
-  //       backgroundColor: '#a27efc',
-  //     },
-  //     {
-  //       label: 'USA',
-  //       data: [20, 30, 25, 35, 25, 20, 30, 25],
-  //       backgroundColor: '#ff7e7e',
-  //     },
-  //     {
-  //       label: 'UK',
-  //       data: [40, 35, 30, 40, 35, 30, 50, 45],
-  //       backgroundColor: '#5ac7fd',
-  //     },
-  //   ],
-  // };
+  const barData = {
+    labels: ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG"],
+    datasets: [
+      {
+        label: 'CHN',
+        data: [30, 25, 20, 25, 30, 35, 40, 35],
+        backgroundColor: '#a27efc',
+      },
+      {
+        label: 'USA',
+        data: [20, 30, 25, 35, 25, 20, 30, 25],
+        backgroundColor: '#ff7e7e',
+      },
+      {
+        label: 'UK',
+        data: [40, 35, 30, 40, 35, 30, 50, 45],
+        backgroundColor: '#5ac7fd',
+      },
+    ],
+  };
   
-  // const barOptions = {
-  //   maintainAspectRatio: false,
-  //   scales: {
-  //     x: {
-  //       beginAtZero: true,
-  //     },
-  //     y: {
-  //       beginAtZero: true,
-  //     },
-  //   },
-  // };
+  const barOptions = {
+    maintainAspectRatio: false,
+    scales: {
+      x: {
+        beginAtZero: true,
+      },
+      y: {
+        beginAtZero: true,
+      },
+    },
+  };
 
   return (
     <div className="dashboard">
-      {/* <h2 className="dashboard-title">Bảng điều khiển Admin</h2> */}
+      <h2 className="dashboard-title">Bảng điều khiển Admin</h2>
       <div className="dashboard-content">
       <div className="summary">
         
   {/* Box 1: Weekly Sales */}
-  {/* <div className="summary-card" style={{ background: 'linear-gradient(to right, #ffafbd, #ffc3a0)' }}>
+  <div className="summary-card" style={{ background: 'linear-gradient(to right, #ffafbd, #ffc3a0)' }}>
     <div className="summary-card-header">
       <i className="fas fa-chart-line summary-icon"></i>
       <h3>Tổng đơn hàng</h3>
@@ -133,10 +133,10 @@ const DashboardAdmin = () => {
         
       </span>
     </div>
-  </div> */}
+  </div>
 
   {/* Box 2: Weekly Orders */}
-  {/* <div className="summary-card" style={{ background: 'linear-gradient(to right, #36d1dc, #5b86e5)' }}>
+  <div className="summary-card" style={{ background: 'linear-gradient(to right, #36d1dc, #5b86e5)' }}>
     <div className="summary-card-header">
       <i className="fas fa-bookmark summary-icon"></i>
       <h3>Phân tích</h3>
@@ -147,10 +147,10 @@ const DashboardAdmin = () => {
         
       </span>
     </div>
-  </div> */}
+  </div>
 
   {/* Box 3: Visitors Online */}
-  {/* <div className="summary-card" style={{ background: 'linear-gradient(to right, #96fbc4, #96fbc4)' }}>
+  <div className="summary-card" style={{ background: 'linear-gradient(to right, #96fbc4, #96fbc4)' }}>
     <div className="summary-card-header">
       <i className="fas fa-map-marker-alt summary-icon"></i>
       <h3>Tổng sản phẩm</h3>
@@ -160,11 +160,11 @@ const DashboardAdmin = () => {
       <span className="summary-change positive">
       </span>
     </div>
-  </div> */}
-  <RevenueByCinema/>
+  </div>
+
   
 </div>
-        {/* <div className="charts-container">
+        <div className="charts-container">
           <div className="quarterly-revenue">
             <h3>Hiệu suất</h3>
             <div className="area-chart">
@@ -178,7 +178,7 @@ const DashboardAdmin = () => {
             </div>
             <p className="revenue-amount">$120,000</p>
           </div>
-        </div> */}
+        </div>
         {/* Thêm bảng vào dưới biểu đồ */}
         <div className="recent-orders">
           <h3>Đơn hàng gần đây</h3>

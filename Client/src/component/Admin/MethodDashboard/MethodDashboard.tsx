@@ -2,22 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import { notification } from 'antd'; // Import the notification component
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { PayMethod } from '../../../interface/PayMethod';
+import { notification } from 'antd';
 import instance from '../../../server';
+import { PayMethod } from '../../../interface/PayMethod';
 
 const PayMethodDashboard = () => {
     const [payMethods, setPayMethods] = useState<PayMethod[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const [searchTerm, setSearchTerm] = useState<string>(''); 
+    const [searchTerm, setSearchTerm] = useState<string>('');
     const payMethodsPerPage = 7;
 
     useEffect(() => {
-        // Fetch API to get the list of payment methods
         const fetchPayMethods = async () => {
             try {
-                const response = await instance.get('/method'); // Update the endpoint
+                const response = await instance.get('/method');
                 setPayMethods(response.data.data);
             } catch (error) {
                 console.error('Error fetching payment methods:', error);
@@ -32,13 +30,12 @@ const PayMethodDashboard = () => {
     }, []);
 
     const handleDelete = async (id: string) => {
-        // Confirm the delete action
         const isConfirmed = window.confirm('Bạn có chắc chắn muốn xóa phương thức thanh toán này?');
         if (!isConfirmed) return;
 
         try {
-            await instance.delete(`/method/${id}`); // Gọi API xóa phương thức thanh toán
-            setPayMethods((prevMethods) => prevMethods.filter((method) => method.id !== id)); // Cập nhật lại danh sách
+            await instance.delete(`/method/${id}`);
+            setPayMethods((prevMethods) => prevMethods.filter((method) => method.id !== id));
             notification.success({
                 message: 'Thành công',
                 description: 'Phương thức thanh toán đã được xóa!',
@@ -88,41 +85,57 @@ const PayMethodDashboard = () => {
     };
 
     return (
-        <div className="container mt-5">
-            <div className="d-flex justify-content-between align-items-center mb-4">
-                <Link to={'/admin/method/add'} className="btn btn-outline-primary">
-                    <FontAwesomeIcon icon={faPlus} /> Thêm Phương Thức Thanh Toán
+        <div className="container mx-auto p-4">
+            <div className="flex justify-between items-center mb-6">
+                <Link to={'/admin/method/add'} className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
+                <FontAwesomeIcon icon={faPlus} /> Thêm Phương Thức Thanh Toán
                 </Link>
                 <input
                     type="text"
                     placeholder="Tìm kiếm theo tên phương thức"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="form-control w-25"
+                    className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 w-1/4"
                 />
             </div>
-            <div className="table-responsive">
-                <table className="table table-bordered table-hover shadow-sm">
-                    <thead className="thead-light">
+            <div className="overflow-x-auto shadow-md rounded-lg">
+                <table className="w-full border-collapse bg-white text-left text-sm text-gray-600">
+                    <thead className="bg-gray-100">
                         <tr>
-                            <th>ID</th>
-                            <th>Tên Phương Thức Thanh Toán</th>
-                            <th>Hành Động</th>
+                            <th className="px-4 py-2 text-center">ID</th>
+                            <th className="px-4 py-2 text-center">Tên Phương Thức Thanh Toán</th>
+                            <th className="px-4 py-2 text-center">Hành Động</th>
                         </tr>
                     </thead>
                     <tbody>
                         {currentPayMethods.map((payMethod) => (
-                            <tr key={payMethod.id}>
-                                <td>{payMethod.id}</td>
-                                <td>{payMethod.pay_method_name}</td>
-                                <td>
-                                    <div className="d-flex justify-content-around">
-                                        <Link to={`/admin/method/edit/${payMethod.id}`} className="btn btn-warning btn-sm">
-                                            <FontAwesomeIcon icon={faEdit} />
+                            <tr key={payMethod.id} className="hover:bg-gray-50">
+                                <td className="px-4 py-3 text-center">{payMethod.id}</td>
+                                <td className="px-4 py-3 text-center">{payMethod.pay_method_name}</td>
+                                <td className="px-4 py-3 text-center">
+                                    <div className="flex justify-center space-x-3">
+                                        <Link
+                                            to={`/admin/method/edit/${payMethod.id}`}
+                                            className="w-8 h-8 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center hover:bg-yellow-200 transition"
+                                        >
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                strokeWidth="2"
+                                                stroke="currentColor"
+                                                className="w-5 h-5"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    d="M16.862 3.487a2.25 2.25 0 113.182 3.182L7.439 19.274a4.5 4.5 0 01-1.691 1.074l-3.003 1.001 1.001-3.003a4.5 4.5 0 011.074-1.691L16.862 3.487z"
+                                                />
+                                            </svg>
                                         </Link>
-                                        <button 
-                                            className="btn btn-danger btn-sm"
-                                            onClick={() => handleDelete(payMethod.id)} // Thêm hàm xóa vào đây
+                                        <button
+                                            onClick={() => handleDelete(payMethod.id)}
+                                            className="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center hover:bg-red-200 transition"
                                         >
                                             <FontAwesomeIcon icon={faTrashAlt} />
                                         </button>
@@ -130,41 +143,36 @@ const PayMethodDashboard = () => {
                                 </td>
                             </tr>
                         ))}
-                        {currentPayMethods.length === 0 && (
-                            <tr>
-                                <td colSpan={4} className="text-center">
-                                    Không có phương thức thanh toán nào.
-                                </td>
-                            </tr>
-                        )}
                     </tbody>
                 </table>
             </div>
-            <nav className="d-flex justify-content-center mt-4">
-                <ul className="pagination">
-                    <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                        <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>
-                            Trước
-                        </button>
-                    </li>
+            <div className="flex justify-center items-center mt-6">
+                <nav className="flex space-x-2">
+                    <button
+                        onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        className="px-4 py-2 rounded-lg border bg-gray-200 hover:bg-gray-300"
+                    >
+                        Trước
+                    </button>
                     {getPageNumbers().map((page, index) => (
-                        <li key={index} className={`page-item ${page === currentPage ? 'active' : ''}`}>
-                            {page === '...' ? (
-                                <span className="page-link">...</span>
-                            ) : (
-                                <button className="page-link" onClick={() => handlePageChange(Number(page))}>
-                                    {page}
-                                </button>
-                            )}
-                        </li>
-                    ))}
-                    <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                        <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
-                            Tiếp
+                        <button
+                            key={index}
+                            onClick={() => handlePageChange(Number(page))}
+                            className={`px-4 py-2 rounded-lg border ${currentPage === page ? 'bg-blue-600 text-white' : 'bg-gray-200 hover:bg-gray-300'}`}
+                        >
+                            {page}
                         </button>
-                    </li>
-                </ul>
-            </nav>
+                    ))}
+                    <button
+                        onClick={() => currentPage < totalPages && setCurrentPage(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        className="px-4 py-2 rounded-lg border bg-gray-200 hover:bg-gray-300"
+                    >
+                        Tiếp
+                    </button>
+                </nav>
+            </div>
         </div>
     );
 };
