@@ -52,10 +52,10 @@ class Movie extends Model
             ->withTimestamps();
     }
 
-    // public function showtimes()
-    // {
-    //     return $this->hasMany(Showtime::class);
-    // }
+    public function showtimes()
+    {
+        return $this->hasMany(Showtime::class);
+    }
 
 
     public function favorites()

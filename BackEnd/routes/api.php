@@ -22,6 +22,7 @@ use App\Http\Controllers\Api\Movie\MovieCategoryController;
 use App\Http\Controllers\Api\PayMethod\PayMethodController;
 use App\Http\Controllers\Api\Auth\AccountVerificationController;
 use App\Http\Controllers\Api\Auth\ResetPasswordController;
+use App\Http\Controllers\Api\Filter\DashBoard\FilterOfDashBoarchController;
 use App\Http\Controllers\Api\Filter\FilterMovieByNewController;
 use App\Http\Controllers\Api\Google\GoogleController;
 use App\Http\Controllers\Api\Movie\RatingController;
@@ -34,6 +35,8 @@ use App\Http\Controllers\Api\Seat\SeatController;
 use App\Http\Controllers\Api\Promotion\PromotionController;
 use App\Http\Controllers\Api\SeatMap\SeatMapController;
 use App\Http\Controllers\Api\SeatMap\MatrixController;
+
+
 // use App\Http\Controllers\Api\SeatMap\SeatMapController;
 
 /*
@@ -142,6 +145,9 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get('total-revenue-by-movie/{movie_id}', [RevenueMovieController::class, 'totalRevenueByMovie']);
     Route::get('total-revenue-by-date/{start_date}/{end_date}', [RevenueMovieController::class, 'totalRevenueByMovieBetweenDates']);
     Route::get('total-revenue-movie-by-date/{movie_id}/{start_date}/{end_date}', [RevenueMovieController::class, 'totalRevenueMovieBetweenDates']);
+
+    // bộ lọc thông kê doanh thu
+    Route::get('filter-DashBoarch', [FilterOfDashBoarchController::class, 'filterOfDashBoarch']);
 
     //Trang dashboard
     Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
