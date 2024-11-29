@@ -206,4 +206,6 @@ Route::apiResource('seat-map', SeatMapController::class);
 Route::patch('/seat-map/{id}/publish', [SeatMapController::class, 'publish'])->name('seat-map.publish');
 
 // Route::apiResource('room', RoomController::class);
-// Route::apiResource('showtimes', ShowtimeController::class);
+Route::post('showtimePayload', [ShowtimeController::class,'storeWithTimeRange']);
+Route::apiResource('room', RoomController::class);
+Route::apiResource('showtimes', ShowtimeController::class);

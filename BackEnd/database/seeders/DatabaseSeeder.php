@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             MovieSeeder::class,
             News::class,
             SeatLayoutSeeder::class,
+            SeatMapSeeder::class,
             RoomSeeder::class,
             // MovieInCinema::class,
             ActorInMovie::class,

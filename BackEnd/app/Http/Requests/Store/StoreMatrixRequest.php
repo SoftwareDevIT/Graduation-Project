@@ -25,6 +25,10 @@ class StoreMatrixRequest extends FormRequest
             "name" => "string",
             "rows" => "required|string",
             "columns" => "integer",
+            "row_regular_seat" => "integer",
+            "row_vip_seat" => "integer",
+            "row_couple_seat" => "integer",
+      
         ];
     }
 }

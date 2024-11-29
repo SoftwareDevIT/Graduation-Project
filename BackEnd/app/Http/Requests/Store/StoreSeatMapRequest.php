@@ -24,7 +24,7 @@ class StoreSeatMapRequest extends FormRequest
         return [
             "seat_layout_id" => "string",
             "row" => "required|string",
-            "columns" => "integer",
+            "column" => "integer",
         ];
     }
 }
