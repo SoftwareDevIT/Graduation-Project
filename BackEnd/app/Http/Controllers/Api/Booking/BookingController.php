@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Booking;
 
 use App\Events\InvoiceCreated;
 use App\Events\InvoiceSendMail;
+use App\Events\SeatSelected;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Booking\TicketBookingRequest;
 use App\Jobs\ResetSeats;
@@ -319,7 +320,6 @@ class BookingController extends Controller
             for ($i = 0; $i < count($columns) - 1; $i++) {
                 $currentColumn = $columns[$i];
                 $nextColumn = $columns[$i + 1];
-
                 // Kiểm tra sự chênh lệch giữa các cột
                 if ($nextColumn - $currentColumn == 2) {
                     return response()->json([
@@ -331,6 +331,30 @@ class BookingController extends Controller
                     ], 402);
                 }
             }
+
+            $firstColumn = $columns[0];
+            $lastColumn = end($columns);
+            // var_dump($firstColumn, $lastColumn);
+            // die;
+            if ($firstColumn == 2) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Please select consecutive seats starting from the first seat of the row.',
+                    'data' => [
+                        'missing_seat' => $row . '1' // Ghế đầu hàng bị bỏ trống
+                    ]
+                ], 402);
+            }
+            $maxColumn = $this->getMaxColumnForRow($row); // Giả sử bạn có phương thức này để lấy số ghế tối đa trong một hàng
+            if ($maxColumn-$lastColumn == 1 ) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Please select consecutive seats up to the last seat of the row.',
+                    'data' => [
+                        'missing_seat' => $row . $maxColumn // Ghế cuối hàng bị bỏ trống
+                    ]
+                ], 402);
+            }
         }
     }
 
@@ -340,5 +364,21 @@ class BookingController extends Controller
     {
         // Dispatch một job với toàn bộ các ID ghế đã được tạo
         ResetSeats::dispatch($seatIds)->delay(now()->addMinutes(5));
+    }
+
+    public function selectedSeats(Request $request, $roomId)
+    {
+
+        $seats = $request->input('seats'); // Ghế người dùng chọn
+        // $roomId = $request->input('roomId'); // Lấy roomId từ client (dưới dạng POST)
+
+        if (is_array($seats) && count($seats) > 10) {
+            return $this->error('You can only select up to 10 seats.', 400);
+        }
+
+        // Broadcast sự kiện ghế đã chọn
+        broadcast(new SeatSelected($seats, Auth::id(), $roomId));
+
+        return $this->success($seats, 'Selected seats successfully.');
     }
 }

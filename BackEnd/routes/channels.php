@@ -19,3 +19,6 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 Broadcast::channel('seats', function ($user) {
     return true; // Hoặc điều kiện xác thực nếu cần thiết
 });
+Broadcast::channel('seats-{roomId}', function ($user, $roomId) {
+    return auth()->check();  // Hoặc có thể thay đổi logic để kiểm tra quyền của người dùng
+});
