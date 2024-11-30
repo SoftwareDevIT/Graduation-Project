@@ -117,7 +117,11 @@ const PostsForm: React.FC = () => {
         </div>
         <div className="mb-3">
           <label className="form-label">Danh mục tin tức:</label>
+
+          <select {...register('news_category_id',{valueAsNumber:true})} className="form-select">
+
           <select {...register('news_category_id',{valueAsNumber: true})} className="form-select">
+
             <option value="">Chọn danh mục</option>
             {categories.map((category) => (
               <option key={category.id} value={category.id}>
