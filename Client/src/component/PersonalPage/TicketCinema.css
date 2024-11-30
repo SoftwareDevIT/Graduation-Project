@@ -151,36 +151,105 @@
 }
 
 /* Responsive Design */
-@media screen and (max-width: 800px) {
-    .ticket {
-        flex-direction: column;
-        width: 100%;
-        height: auto;
+/* Responsive cho màn hình iPad (768px - 1024px) */
+@media (max-width: 1024px) and (min-width: 768px) {
+    .ticket-container {
+        justify-content: center; /* Căn giữa các vé */
+        gap: 20px;              /* Giảm khoảng cách giữa các vé */
+        margin-right: 0;        /* Xóa khoảng cách bên phải */
     }
 
-    .ticket-left,
+    .ticket {
+        width: 350px;           /* Giảm chiều rộng của vé */
+        height: 180px;          /* Giảm chiều cao của vé */
+    }
+
+    .ticket-left {
+        height: 170px;
+    }
+
     .ticket-right {
-        flex: 1;
-        width: 100%;
-        border-right: none;
+        height: 170px;
     }
 
     .ticket-title {
-        font-size: 20px;
+        font-size: 18px;        /* Giảm kích thước chữ tiêu đề */
     }
 
     .qr-code {
-        width: 80px;
+        width: 80px;            /* Giảm kích thước QR Code */
         height: 80px;
     }
+
+    .barcode-text {
+        font-size: 12px;        /* Giảm kích thước chữ mã vạch */
+    }
+
+    .admit-one {
+        font-size: 14px;        /* Giảm kích thước chữ "Admit One" */
+    }
 }
-@media screen and (max-width: 800px) {
+
+/* Responsive cho màn hình điện thoại (nhỏ hơn 768px) */
+@media (max-width: 767px) {
     .ticket-container {
-        flex-direction: column; /* Nếu màn hình nhỏ, sẽ xếp vé theo chiều dọc */
-        gap: 20px;
+        flex-direction: column; /* Xếp vé theo chiều dọc */
+        align-items: center;    /* Căn giữa các vé theo trục dọc */
+        gap: 20px;              /* Giảm khoảng cách giữa các vé */
+        margin-right: 0;        /* Xóa khoảng cách bên phải */
     }
 
     .ticket {
-        width: 100%; /* Mỗi vé sẽ chiếm toàn bộ chiều rộng trên màn hình nhỏ */
+        width: 90%;             /* Đặt chiều rộng vé theo tỷ lệ màn hình */
+        height: auto;           /* Tự động điều chỉnh chiều cao */
+        flex-direction: column; /* Xếp nội dung vé theo chiều dọc */
+        padding: 15px;          /* Tăng padding để tạo khoảng trống */
+    }
+
+    .ticket-left {
+        width: 100%;            /* Chiếm toàn bộ chiều ngang */
+        height: auto;           /* Tự động điều chỉnh chiều cao */
+        padding: 15px;
+        border-right: none;     /* Bỏ đường viền bên phải */
+        border-bottom: 2px solid #ffffff; /* Đường viền dưới */
+    }
+
+    .ticket-right {
+        width: 100%;            /* Chiếm toàn bộ chiều ngang */
+        height: auto;           /* Tự động điều chỉnh chiều cao */
+        padding: 10px 0;
+    }
+
+    .ticket-title {
+        padding-top: 10px;
+        font-size: 16px;        /* Giảm kích thước tiêu đề */
+        line-height: 1.2;
+        
+    }
+
+    .qr-code {
+        width: 70px;            /* Giảm kích thước QR Code */
+        height: 70px;
+    }
+
+    .barcode-text {
+        font-size: 12px;        /* Giảm kích thước chữ mã vạch */
+    }
+
+    .admit-one {
+        font-size: 14px;        /* Giảm kích thước chữ "Admit One" */
+    }
+
+    .stars-container {
+        margin-top: px;       /* Tạo khoảng cách giữa sao và nội dung */
+    }
+
+    .ticket-info p {
+        font-size: 12px;        /* Giảm kích thước chữ thông tin vé */
+    }
+
+    .timee, .seatt {
+        padding-left: 0;        /* Loại bỏ padding thừa */
+        text-align: center;     /* Căn giữa nội dung */
     }
 }
