@@ -325,8 +325,7 @@ const Header = () => {
                   <div className="profile-dropdown">
                     <Link to="/Personal">Trang cá nhân</Link>
                     <Link to="/profile">Quản lý tài khoản</Link>
-                    <Link to="/movieticket">Vé phim</Link>
-                    {/* <Link to="/credits">Moveek Credits</Link> */}
+                    <Link to="/ticketcinema">Vé phim</Link>
                     <div onClick={handleLogout}>Đăng xuất</div>
                   </div>
                 )}
