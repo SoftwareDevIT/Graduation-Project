@@ -118,7 +118,7 @@ const PostsForm: React.FC = () => {
         <div className="mb-3">
           <label className="form-label">Danh mục tin tức:</label>
 
-          <select {...register('news_category_id',{valueAsNumber:true})} className="form-select">
+        
 
           <select {...register('news_category_id',{valueAsNumber: true})} className="form-select">
 
