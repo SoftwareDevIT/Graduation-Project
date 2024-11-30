@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->string('address')->nullable();
             $table->string('fullname')->nullable();
+            $table->float('points')->default(0);
             $table->string('google_id')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->boolean('status')->default(true);

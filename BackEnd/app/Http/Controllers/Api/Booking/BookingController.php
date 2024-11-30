@@ -75,11 +75,14 @@ class BookingController extends Controller
             }
             if (session()->get('booking')) {
                 $paymentURL = $this->ticketBookingService->processPayment($request);
+
                 return response()->json([
                     'status' => true,
                     'message' => 'Đặt vé thành công',
                     'Url' => $paymentURL
                 ]);
+
+                
             }
             return $this->error('Đặt vé thất bại', 500);
         } catch (\Exception $e) {
