@@ -68,10 +68,9 @@ import RoomsManager from "./Page/Admin/Rooms/RoomsManager";
 import RoomsFormManager from "./Page/Admin/Rooms/RoomsForm";
 import Video from "./component/News/Video";
 import FilmNews from "./component/News/FilmNews";
-import MovieTicket from "./component/PersonalPage/MovieTicket";
 
 
-import Community from "./component/Community/Community";
+
 
 
 import ActorManager from "./Page/Admin/Actor/ActorManager";
@@ -81,12 +80,17 @@ import DirectorFormManager from "./Page/Admin/Director/DirectorForm";
 import UpcomingMovies from "./component/Movies/UpcomingMovies";
 
 
-import PageTitleUpdater from "./component/PageTitleUpdater/PageTitleUpdater";
 import MethodManager from "./Page/Admin/Method/MethodManager";
 import MethodFormManager from "./Page/Admin/Method/MethodForm";
 import PromotionsManager from "./Page/Admin/Promotions/PromotionsManager";
 import PromotionsFormManager from "./Page/Admin/Promotions/PromotionsForm";
 import OrderPage from "./component/Oders/OrderPage";
+
+import PageTitleUpdater from "./component/PageTitleUpdater/PageTitleUpdater";
+import TicketCinema from "./component/PersonalPage/TicketCinema";
+import SeatLayout from "./component/SeatMap/test";
+import Community from "./component/Community/Community";
+
 
 
 
@@ -126,34 +130,38 @@ function App() {
         <Route path="/movie/search/:movie_name" element={<SerachMovies />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/Personal" element={<Personal />} />
+ 
+        <Route path="/ticketcinema" element={<TicketCinema/>} />
         <Route path="/credits" element={<Credits />} />
         <Route path="/ChangePassword" element={<ChangePassword />} />
    
         <Route path="/register" element={<RegisterCinema />} />
         <Route path="/login" element={<LoginCinema />} />
         <Route path="/movieshowing" element={<MovieShowing/>} />
-        <Route path="/movieticket" element={<MovieTicket />} />
+      
         <Route path="/deponsit" element={<Deponsit/>} />
         <Route path="/forgetpass" element={<ForgetPass/>} />
         <Route path="/otp" element={<Otp/>} />
         <Route path="/resetPassword" element={<ResetPasswod/>} />
-        <Route path="/test" element={<ResetPasswod/>} />
+       
       
     
        
         <Route path="/upcoming-movies" element={<UpcomingMovies />} />
         <Route path="/movieshowing" element={<MovieShowing />} />
-        <Route path="/movieticket" element={<MovieTicket />} />
+       
 
         <Route path="/deponsit" element={<Deponsit />} />
         <Route path="/forgetpass" element={<ForgetPass />} />
         <Route path="/community" element={<Community />} />
+      
 
 
         <Route path="/otp" element={<Otp />} />
         <Route path="/resetPassword" element={<ResetPassword />} />
         <Route path="/earlymovie" element={<EarlyMovie />} />
         <Route path="/resetpass" element={<ResetPasswod />} />
+        <Route path="/test" element={<SeatLayout />} />
 
 
 

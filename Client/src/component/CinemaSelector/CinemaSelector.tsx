@@ -117,6 +117,8 @@ const CinemaSelector: React.FC = () => {
 
           const cinemaMovies = cinemaResponse.data?.data || [];
           setMovies(cinemaMovies);
+          // console.log("Du lieu phim:",cinemaMovies);
+          
         } catch (error) {
           setMovies([]);
         }
@@ -224,7 +226,9 @@ const CinemaSelector: React.FC = () => {
           {movies.length > 0 ? (
             <div className="movies">
               {movies.map((movieData) => {
-                const movie = movieData.movie;
+                const movie = movieData;
+             
+                
                 const sortedShowtimes = movieData.showtimes.sort(
                   (a: any, b: any) => {
                     const timeA = dayjs(
@@ -266,7 +270,7 @@ const CinemaSelector: React.FC = () => {
                                   showtimeId: showtime.id,
                                   cinemaId: selectedCinemaDetails?.id,
                                   price: showtime.price,
-                                  roomId: showtime.room_id,
+                                 
                                 },
                               })
                             }

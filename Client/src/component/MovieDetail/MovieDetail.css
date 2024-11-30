@@ -393,8 +393,21 @@
     display: block;
 }
 
-
-
+.btn-outline-danger,.btn-outline-warning{
+    background: #fff;
+    color: gray;
+    border: none;
+}
+.btn-outline-primary{
+    background: #333;
+    color: #fff;
+    border: none;
+}
+.btn-outline-success{
+    background: #ff4d4f;
+    color: #fff;
+    border: none;
+}
 @media (max-width:480px) {
    
      
@@ -550,7 +563,7 @@
     }
 
     .tabs {
-        flex-direction: column;
+        gap: 0px;
         padding-left: 0;
         margin-left: 0;
     }
@@ -603,5 +616,15 @@
     }
     .button.trailer{
         width: 130px !important;
+    }
+  }
+  @media (max-width:768px) {
+    .content{
+        padding-left: 145px;
+    }
+  }
+  @media (max-width:580px) {
+    .content{
+        padding-left: 0;
     }
   }

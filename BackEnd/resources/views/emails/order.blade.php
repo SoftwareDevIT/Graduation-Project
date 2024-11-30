@@ -285,6 +285,8 @@
                 <p>Keep your tickets handy</p>
                 <button class="email-confirm-button-get-tickets">Get the app</button>
             </div>
+            <img class="barcode" src="{{ $booking->barcode }}" alt="barcode">
+
         </header>
         <main class="email-confirm-event-details">
             <h2 class="email-confirm-event-title">{{ $booking->showtime->movieInCinema->movie['movie_name'] }}</h2>
@@ -298,6 +300,12 @@
                     @foreach ($booking->combos as $combo)
                         {{ $combo->combo_name }} x {{ $combo->pivot->quantity }}{{ !$loop->last ? ', ' : '' }}
                     @endforeach
+                </p>
+                <p>
+                    Ghế :
+                    {{-- @foreach ($booking->seats as $item)
+                        {{ $item['name'] }}{{ !$loop->last ? ', ' : '' }}
+                    @endforeach --}}
                 </p>
                 <p class="order-total">Order total: {{ number_format($booking->amount) }} đ</p>
             </div>

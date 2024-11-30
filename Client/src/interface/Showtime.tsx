@@ -1,3 +1,5 @@
+import { Movie } from "./Movie";
+
  export interface Showtime {
     id: number;
     movie_id: number;
@@ -6,5 +8,6 @@
     showtime_start: string;
     showtime_end: string;
     status: string;
+    movie:Movie;
   }
   

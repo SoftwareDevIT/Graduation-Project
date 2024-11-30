@@ -28,6 +28,7 @@ bottom: 4px;
     align-items: center;
     gap: 12px;
     right: 49px !important;
+    font-family: "Cerebri Sans", sans-serif; 
 }
 
 .header-left a {
@@ -61,7 +62,7 @@ bottom: 10px;
     text-transform: uppercase; /* Chuyển thành in hoa */
     letter-spacing: 2px; /* Giãn cách giữa các chữ */
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Đổ bóng */
-    font-family: 'Poppins', sans-serif; /* Chọn font chữ */
+    font-family: "Cerebri Sans", sans-serif; /* Chọn font chữ */
     
     display: inline-block;
     transition: all 0.3s ease; /* Hiệu ứng hover */
