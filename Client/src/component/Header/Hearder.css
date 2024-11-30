@@ -28,6 +28,7 @@ bottom: 4px;
     align-items: center;
     gap: 12px;
     right: 49px !important;
+    font-family: "Cerebri Sans", sans-serif; 
 }
 
 .header-left a {
@@ -61,7 +62,7 @@ bottom: 10px;
     text-transform: uppercase; /* Chuyển thành in hoa */
     letter-spacing: 2px; /* Giãn cách giữa các chữ */
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Đổ bóng */
-    font-family: 'Poppins', sans-serif; /* Chọn font chữ */
+    font-family: "Cerebri Sans", sans-serif; /* Chọn font chữ */
     
     display: inline-block;
     transition: all 0.3s ease; /* Hiệu ứng hover */
@@ -271,10 +272,6 @@ bottom: 10px;
    
   }
 
-  .menu button {
-   
-  
-  }
   .navbar-dark .navbar-toggler-icon {
     background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='black' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
   }
@@ -285,7 +282,6 @@ bottom: 10px;
   .header-left {
     position: absolute; 
     top: 60px; 
-    left: 0;
     height: 220px;
     padding-left: 80px !important;
     width: 100%;
@@ -302,7 +298,7 @@ bottom: 10px;
   }
   .header-left a{
     top:5px;
-    padding-left: 85px;
+    padding-left: 55px;
   }
   .header-right input {
     display: none; /* Ẩn input khi trong chế độ di động */
@@ -316,8 +312,9 @@ bottom: 10px;
     display: flex; /* Hiển thị menu khi class 'visible' được thêm vào */
   }
   #search-mobile{
+    top:15px; 
     display: block;
-    margin-left: 85px;
+    margin-left: 50px;
     border-radius: 15px;
     width: 300px;
   }
@@ -406,15 +403,14 @@ color: #6e84a3;
   cursor: pointer;
 }
 @media (max-width:480px) {
-  .profile-dropdown {
-    left: 0; /* Canh sát mép màn hình */
-    right: 0;
-    width: 100%; /* Chiếm toàn bộ chiều rộng màn hình */
+  .profile-dropdown{
+  position: absolute;
+left: 20px;
+width: 149px !important;
+top:60px;
+font-size: 10px;
   }
-  .profile-dropdown a{
-    padding: 1px 0px;
-    font-size: 5px;
-  }
+  
 }
 
 /* Container Modal */

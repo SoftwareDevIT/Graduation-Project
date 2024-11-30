@@ -160,25 +160,43 @@ const MovieDetail: React.FC = () => {
           <div className="info-section">
             <img src={movie?.poster || "placeholder.jpg"} alt={movie?.movie_name} className="poster" />
             <div className="movie-details-wrapper">
-              <div className="movie-info">
+              <div className="movie-info-1">
                 <h2 className="title">{movie?.movie_name}</h2>
                 <p className="genre">
                   Thể loại: {movie?.movie_category?.map((cat: any) => cat.category_name).join(", ") || "Không có thể loại"}
                 </p>
 
-                <div className="actions">
-                  <div className="button like" onClick={handleFavoriteToggle}>
-                    {userStatus.isFavorite ? "❤️" : "🤍"} <span>Thích</span>
-                  </div>
-                  <div className="button rate danhgia" onClick={() => setRatingData((prev) => ({ ...prev, isModalVisible: true }))}>
-                    <FontAwesomeIcon icon={faStar} color={userStatus.isRated ? "#FFD700" : "#ccc"} />
-                    <span className="danhgia">Đánh giá</span>
-                  </div>
-                  <div className="button trailer" onClick={() => setIsTrailerVisible(true)}>Trailer</div>
-                  <div className="button buy muave">
-                    <Link to={`/buy-now/${slug}`}>Mua vé</Link>
-                  </div>
-                </div>
+             <div className="actions-1 row row-cols-2 row-cols-md-4 g-3">
+  {/* Thích */}
+  <div className="col text-center">
+    <button className="btn btn-outline-danger w-100" onClick={handleFavoriteToggle}>
+      {userStatus.isFavorite ? "❤️" : "🤍"} <span>Thích</span>
+    </button>
+  </div>
+
+  {/* Đánh giá */}
+  <div className="col text-center">
+    <button className="btn btn-outline-warning w-100" onClick={() => setRatingData((prev) => ({ ...prev, isModalVisible: true }))}>
+      <FontAwesomeIcon icon={faStar} color={userStatus.isRated ? "#FFD700" : "#ccc"} />
+      <span className="danhgia"> Đánh giá </span>
+    </button>
+  </div>
+
+  {/* Trailer */}
+  <div className="col text-center">
+    <button className="btn btn-outline-primary w-100" onClick={() => setIsTrailerVisible(true)}>
+      Trailer
+    </button>
+  </div>
+
+  {/* Mua vé */}
+  <div className="col text-center">
+    <Link to={`/buy-now/${slug}`} className="btn btn-outline-success w-100">
+      Mua vé
+    </Link>
+  </div>
+</div>
+
 
                 <p className="description">{stripHtml(movie?.description || "Không có mô tả")}</p>
 
@@ -249,6 +267,7 @@ const MovieDetail: React.FC = () => {
 >
   {movie?.trailer ? (
     <iframe
+   
       width="100%"
       height="390px"
       src={movie.trailer}

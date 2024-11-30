@@ -7,7 +7,7 @@
     font-family: Arial, sans-serif;
     color: #4b5563;
     border-top: 1px solid #d1d5db;
-    gap: 30px; /* Thêm khoảng cách cố định giữa footer-left và footer-right */
+    gap: 30px; 
 }
 
 .footer-left {
@@ -16,6 +16,7 @@
     margin-left: 90px;
     margin-right: 100px;
 }
+
 
 .company-logo-ct {
     width: 70px;
