@@ -125,9 +125,9 @@ class PromotionController extends Controller
             ->sum('amount');
 
         // Kiểm tra nếu tổng amount lớn hơn 2 triệu
-        if ($totalAmount < 2000000) {
+        if ($totalAmount < 1000000) {
             return response()->json([
-                'message' => 'Bạn cần chi tiêu hơn 2 triệu để nhận voucher.'
+                'message' => 'Bạn cần chi tiêu hơn 1 triệu để nhận voucher.'
             ], 400);
         }
 

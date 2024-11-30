@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
-import { notification } from 'antd'; // Import the notification component
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { EditOutlined, PlusOutlined } from '@ant-design/icons'; // Ant Design icons
+import { notification, Table, Pagination, Input, Button } from 'antd'; // Import Ant Design components
+import './ActorDashboard.css';
 import { Actor } from '../../../interface/Actor';
 import instance from '../../../server';
 
@@ -14,16 +13,16 @@ const ActorDashboard = () => {
     const actorsPerPage = 7;
 
     useEffect(() => {
-        // Gọi API để lấy danh sách diễn viên
+        // Fetch the actors from the API
         const fetchActors = async () => {
             try {
                 const response = await instance.get('/actor');
                 setActors(response.data.data);
             } catch (error) {
-                console.error('Lỗi khi lấy dữ liệu diễn viên:', error);
+                console.error('Error fetching actor data:', error);
                 notification.error({
-                    message: 'Lỗi',
-                    description: 'Không thể tải danh sách diễn viên!',
+                    message: 'Error',
+                    description: 'Could not load actor list!',
                     placement: 'topRight',
                 });
             }
@@ -44,107 +43,86 @@ const ActorDashboard = () => {
 
     const handlePageChange = (page: number) => setCurrentPage(page);
 
-    const getPageNumbers = () => {
-        const pageNumbers = [];
-        if (totalPages <= 5) {
-            for (let i = 1; i <= totalPages; i++) {
-                pageNumbers.push(i);
-            }
-        } else {
-            pageNumbers.push(1);
-            if (currentPage > 3) pageNumbers.push('...');
-            const start = Math.max(currentPage - 1, 2);
-            const end = Math.min(currentPage + 1, totalPages - 1);
-            for (let i = start; i <= end; i++) {
-                pageNumbers.push(i);
-            }
-            if (currentPage < totalPages - 2) pageNumbers.push('...');
-            pageNumbers.push(totalPages);
-        }
-        return pageNumbers;
-    };
+    const columns = [
+        {
+            title: 'ID',
+            dataIndex: 'id',
+            key: 'id',
+            className: 'text-center',
+        },
+        {
+            title: 'Ảnh',
+            dataIndex: 'photo',
+            key: 'photo',
+            className: 'text-center',
+            render: (photo: string) => (
+                <img
+                    src={photo ?? undefined}
+                    alt="actor"
+                    style={{ width: '80px', height: '120px', objectFit: 'cover' }}
+                />
+            ),
+        },
+        {
+            title: 'Tên Diễn Viên',
+            dataIndex: 'actor_name',
+            key: 'actor_name',
+            className: 'text-center',
+        },
+        {
+            title: 'Quốc Gia',
+            dataIndex: 'country',
+            key: 'country',
+            className: 'text-center',
+        },
+        {
+            title: 'Hành Động',
+            key: 'action',
+            className: 'text-center',
+            render: (text: any, actor: Actor) => (
+                <Link to={`/admin/actor/edit/${actor.id}`} >
+                    <Button type="primary" icon={<EditOutlined />} />
+                </Link>
+            ),
+        },
+    ];
 
     return (
         <div className="container mt-5">
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <Link to={'/admin/actor/add'} className="btn btn-outline-primary">
-                    <FontAwesomeIcon icon={faPlus} /> Thêm Diễn Viên
+                <Link to={'/admin/actor/add'}>
+                    <Button type="primary" icon={<PlusOutlined />} size="large">
+                        Thêm Diễn Viên
+                    </Button>
                 </Link>
-                <input
-                    type="text"
+                <Input
                     placeholder="Tìm kiếm theo tên"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="form-control w-25"
+                    style={{ width: 300 }}
+                    allowClear
                 />
             </div>
-            <div className="table-responsive">
-                <table className="table table-bordered table-hover shadow-sm">
-                    <thead className="thead-light">
-                        <tr>
-                            <th>ID</th>
-                            <th>Ảnh</th>
-                            <th>Tên Diễn Viên</th>
-                            <th>Quốc Gia</th>
-                            <th>Hành Động</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {currentActors.map((actor) => (
-                            <tr key={actor.id}>
-                                <td>{actor.id}</td>
-                                <td>
-                                    <img
-                                        src={actor.photo ?? undefined}
-                                        style={{ width: "80px", height: "120px", objectFit: 'cover' }}
-                                    />
-                                </td>
-                                <td>{actor.actor_name}</td>
-                                <td>{actor.country}</td>
-                                <td>
-                                    <div className="d-flex justify-content-around">
-                                        <Link to={`/admin/actor/edit/${actor.id}`} className="btn btn-warning btn-sm">
-                                            <FontAwesomeIcon icon={faEdit} />
-                                        </Link>
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
-                        {currentActors.length === 0 && (
-                            <tr>
-                                <td colSpan={5} className="text-center">
-                                    Không có diễn viên nào.
-                                </td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
+            <Table
+                columns={columns}
+                dataSource={currentActors}
+                rowKey="id"
+                pagination={false} // Disable pagination in Table, we'll handle it ourselves
+                locale={{
+                    emptyText: 'Không có diễn viên nào.',
+                }}
+            />
+            <div className="d-flex justify-content-center mt-4">
+                <Pagination
+                    current={currentPage}
+                    total={totalActors}
+                    pageSize={actorsPerPage}
+                    onChange={handlePageChange}
+                    showSizeChanger={false} // Hide size changer as we're using a fixed size
+                    showQuickJumper
+                    showTotal={(total) => `Tổng số ${total} diễn viên`}
+                />
             </div>
-            <nav className="d-flex justify-content-center mt-4">
-                <ul className="pagination">
-                    <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                        <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>
-                            Trước
-                        </button>
-                    </li>
-                    {getPageNumbers().map((page, index) => (
-                        <li key={index} className={`page-item ${page === currentPage ? 'active' : ''}`}>
-                            {page === '...' ? (
-                                <span className="page-link">...</span>
-                            ) : (
-                                <button className="page-link" onClick={() => handlePageChange(Number(page))}>
-                                    {page}
-                                </button>
-                            )}
-                        </li>
-                    ))}
-                    <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                        <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
-                            Tiếp
-                        </button>
-                    </li>
-                </ul>
-            </nav>
         </div>
     );
 };
