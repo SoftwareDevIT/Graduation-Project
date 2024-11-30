@@ -16,46 +16,38 @@ class DashboardAdminController extends Controller
     {
         $this->dashboardAdminService = $dashboardAdminService;
     }
-    public function totalRevenue($status)
+  
+    public function dashboardAdmin(Request $request)
     {
-        $totalRevenue = $this->dashboardAdminService->totalRevenue($status);
-        return $this->success($totalRevenue);
+        $status = $request->query('status');
+        $cinema_id = $request->query('cinema_id');
+        $start_date = $request->query('start_date');
+        $end_date = $request->query('end_date');
+        $month = $request->query('month');
+        $year = $request->query('year');
+        $day = $request->query('day');
+
+        // Gọi hàm lọc từ service
+        $filterRevenue = $this->dashboardAdminService->filterofbooking(
+            $status,
+            $cinema_id,
+            $start_date,
+            $end_date,
+            $month,
+            $year,
+            $day
+        );
+        // Tính tổng doanh thu và số lượng booking
+        $total = $this->dashboardAdminService->totaldashboard($filterRevenue);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Success',
+            'chart' => $total,
+            'data' => $filterRevenue
+        ], 200);
     }
 
-    public function totalRevenueByCinema(Request $request, $cinema_id)
-    {
-        $year = $request->input('year');
-        $month = $request->input('month');
-        $day = $request->input('day');
-
-        $totalRevenue = $this->dashboardAdminService->totalRevenueByCinema($cinema_id, $year, $month, $day);
-        return $this->success($totalRevenue);
-    }
-
-    public function totalRevenueByCinemaBetweenDates(Request $request, $cinema_id)
-    {
-        $startDate = $request->input('startDate');
-        $endDate = $request->input('endDate');
-        $year = $request->input('year');
-        $month = $request->input('month');
-        $day = $request->input('day');
-
-        $totalRevenue = $this->dashboardAdminService->totalRevenueByCinemaBetweenDates($cinema_id, $startDate, $endDate, $year, $month, $day);
-        return $this->success($totalRevenue);
-    }
-
-    public function totalRevenueBetweenDates(Request $request)
-    {
-        $startDate = $request->input('startDate');
-        $endDate = $request->input('endDate');
-        $year = $request->input('year');
-        $month = $request->input('month');
-        $day = $request->input('day');
-
-        $totalRevenue = $this->dashboardAdminService->totalRevenueBetweenDates($startDate, $endDate, $year, $month, $day);
-        return $this->success($totalRevenue);
-    }
-
-    // Phương thức success để trả về phản hồi
+   
 
 }

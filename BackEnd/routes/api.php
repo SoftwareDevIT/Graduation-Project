@@ -150,24 +150,14 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get('filter-DashBoarch', [FilterOfDashBoarchController::class, 'filterOfDashBoarch']);
 
     //Trang dashboard
-    Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
+    // Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
 
    
 });
-
-
-Route::get('/revenue/total/{status}', [DashboardAdminController::class, 'totalRevenue']);
-Route::get('/revenue/cinema/{idCinema}', [DashboardAdminController::class, 'totalRevenueByCinema']);
-Route::get('/revenue/cinema/{idCinema}/between-dates', [DashboardAdminController::class, 'totalRevenueByCinemaBetweenDates']);
-Route::get('/revenue/between-dates', [DashboardAdminController::class, 'totalRevenueBetweenDates']);
-// });
-
-
-
+//Trang dashboard
+Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
 
 Route::post('/resetPassword', [ResetPasswordController::class, 'resetPassword'])->middleware('auth:sanctum');
-
-
 
 
 // Các tuyến đường dành riêng cho phim
