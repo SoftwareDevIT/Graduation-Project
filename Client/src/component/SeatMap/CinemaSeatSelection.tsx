@@ -170,7 +170,7 @@ const CinemaSeatSelection: React.FC = () => {
             showtime,
             showtimeId,
             cinemaId,
-            roomId: roomData?.id,
+            roomId: seatData.room_id, 
             seats: selectedSeatsArray,
             // totalPrice,
           },
