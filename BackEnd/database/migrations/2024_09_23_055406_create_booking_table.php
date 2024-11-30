@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('showtime_id');
             $table->unsignedBigInteger('pay_method_id');
             $table->double('amount');
+            $table->string('barcode');
             $table->enum('status', ['Pending', 'Confirmed', 'Pain'])->default('Pending');
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');

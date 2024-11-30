@@ -121,7 +121,8 @@
             <h2>Kính gửi <span class="highlight">{{ $booking->user['user_name'] }}</span>,</h2>
             <p>Chúc mừng bạn đã đặt vé thành công tại
                 <strong>{{ $booking->showtime->movie->cinema->cinema_name }}</strong>! Dưới đây là thông tin
-                chi tiết về đặt vé của bạn:</p>
+                chi tiết về đặt vé của bạn:
+            </p>
             <div class="ticket-info">
                 <h3>Thông tin vé:</h3>
                 <p><strong>Tên phim:</strong>{{ $booking->showtime->movie['movie_name'] }}</p>
@@ -151,13 +152,15 @@
             <p>Vui lòng đến trước
                 <strong>{{ \Carbon\Carbon::parse($booking->showtime['showtime_start'])->format('H:i A') }}</strong>
                 phút để nhận vé và chuẩn bị cho buổi chiếu. Khi đến rạp, bạn có thể trình mã đặt vé tại quầy để nhận vé
-                vào cửa.</p>
+                vào cửa.
+            </p>
 
             <p>Nếu bạn có bất kỳ thắc mắc nào, vui lòng liên hệ với chúng tôi qua email hoặc hotline <strong>1900
                     1088</strong>.</p>
 
             <p>Xin cảm ơn và hẹn gặp lại tại
-                <strong>{{ $booking->showtime->movie->cinema->cinema_name }}</strong>!</p>
+                <strong>{{ $booking->showtime->movie->cinema->cinema_name }}</strong>!
+            </p>
 
             <a href="[Link đặt vé]" class="btn">Xem chi tiết đặt vé</a>
         </div>

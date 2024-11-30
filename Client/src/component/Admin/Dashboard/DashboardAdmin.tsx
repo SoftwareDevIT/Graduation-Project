@@ -111,7 +111,7 @@ const exportToExcel = () => {
     Email: booking.user?.email || "Unknown User",
     Phone: booking.user?.phone || "Unknown User",
     Showtime: booking.showtime?.showtime_date || "Unknown Showtime",
-    Movie: booking.showtime?.movie_in_cinema.movie.movie_name || "Unknown Movie",
+    Movie: booking.showtime.movie.movie_name || "Unknown Movie",
     PaymentMethod: booking.pay_method?.pay_method_name || "Unknown Payment Method",
     TotalAmount: booking.amount,
     Status: booking.status,
@@ -294,7 +294,7 @@ const exportToExcel = () => {
         <td>{booking.user?.email || "Unknown User"}</td>
         <td>{booking.user?.phone || "Unknown User"}</td>
         <td>{booking.showtime?.showtime_date || "Unknown Showtime"}</td>
-        <td>{booking.showtime?.movie_in_cinema.movie.movie_name|| "Unknown Movie"}</td>
+        <td>{booking.showtime.movie.movie_name|| "Unknown Movie"}</td>
         <td>{booking.pay_method?.pay_method_name || "Unknown Payment Method"}</td>
         {/* <td>${booking.price_ticket?.toFixed(2) || "0.00"}</td>
         <td>${booking.price_combo?.toFixed(2) || "0.00"}</td> */}

@@ -11,6 +11,7 @@ const PromotionsDashboard = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const promotionsPerPage = 7;
+    const { Search } = Input;
 
     useEffect(() => {
         const fetchPromotions = async () => {
@@ -133,7 +134,7 @@ const PromotionsDashboard = () => {
                         Thêm Khuyến Mãi
                     </Button>
                 </Link>
-                <Input
+                <Search
                     placeholder="Tìm kiếm theo mã"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}

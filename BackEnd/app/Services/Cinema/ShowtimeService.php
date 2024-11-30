@@ -8,7 +8,7 @@ use App\Models\Showtime;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Traits\AuthorizesInService;
-
+use Carbon\Carbon;
 
 /**
  * Class LocationService.
@@ -19,8 +19,7 @@ class ShowtimeService
     public function index()
     {
 
-        return Showtime::with(['movieInCinema.movie', 'room'])->orderByDesc('created_at')->paginate(5);
-
+        return Showtime::with(['movie', 'room.cinema'])->orderByDesc('created_at')->paginate(5);
     }
 
 
@@ -48,13 +47,23 @@ class ShowtimeService
         return $showtime->delete();
     }
 
-    public function get(int $id): Showtime
+    public function get(int $id)
     {
-        $showtime = Showtime::with('movieInCinema.movie')
+        $showtime = Showtime::with(['movie', 'room.cinema', 'room.seatLayout.seatMap']) // Include SeatMap to show seat data
             ->findOrFail($id);
 
-        return $showtime;
+        // If needed, format the seats
+        $seats = $showtime->room->seatLayout->seatMap->groupBy('row');
+
+        // Append formatted seats to the showtime data for easier rendering
+        $showtimeData = $showtime->toArray();
+        $showtimeData['seats'] = $seats;
+
+        return $showtimeData;
     }
+
+
+
 
 
     public function getShowtimesByMovieName(string $movie_name)
@@ -68,4 +77,29 @@ class ShowtimeService
         return $movie->showtimes;
     }
 
+    public function generateShowtimes(array $data): array
+    {
+        $openingTime = Carbon::createFromFormat('H:i', $data['opening_time']);
+        $closingTime = Carbon::createFromFormat('H:i', $data['closing_time']);
+        $duration = $data['duration'];
+        $price = $data['price'];
+
+        $showtimes = [];
+        while ($openingTime->addMinutes($duration)->lte($closingTime)) {
+            $startTime = $openingTime->copy()->subMinutes($duration)->format('H:i:s');
+            $endTime = $openingTime->format('H:i:s');
+
+            $showtimes[] = Showtime::create([
+                'room_id' => $data['room_id'],
+                'movie_id' => $data['movie_id'],
+                'showtime_date' => $data['date'],
+                'showtime_start' => $startTime,
+                'showtime_end' => $endTime,
+                'price' => $price,
+                'status' => '1',
+            ]);
+        }
+
+        return $showtimes;
+    }
 }

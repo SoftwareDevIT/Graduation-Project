@@ -126,6 +126,7 @@ const ShowtimesForm: React.FC = () => {
   const onSubmit: SubmitHandler<Showtime> = async (data) => {
     const formattedData = {
       ...data,
+      movie_id: data.movie_in_cinema_id, 
       showtime_start: `${data.showtime_start}:00`,
     };
 

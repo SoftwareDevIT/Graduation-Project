@@ -19,6 +19,7 @@ const OrdersDashboard: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [statusFilter, setStatusFilter] = useState<string>("");
   const [dateRange, setDateRange] = useState<[string, string] | null>(null);
+  const { Search } = Input;
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -89,7 +90,7 @@ const OrdersDashboard: React.FC = () => {
         <p><strong>Người Dùng:</strong> ${booking.user?.user_name || "Không xác định"}</p>
         <p><strong>Email:</strong> ${booking.user?.email || "Không xác định"}</p>
         <p><strong>Suất Chiếu:</strong> ${booking.showtime?.showtime_date || "Không xác định"}</p>
-        <p><strong>Phim:</strong> ${booking.showtime?.movie_in_cinema.movie.movie_name || "Không xác định"}</p>
+        <p><strong>Phim:</strong> ${booking.showtime.movie.movie_name || "Không xác định"}</p>
         <p><strong>Tổng Tiền:</strong> ${booking.amount}</p>
         <hr />
         <p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!</p>
@@ -198,11 +199,12 @@ const OrdersDashboard: React.FC = () => {
               }
             }}
           />
-          <Input
+          <Search
             placeholder="Tìm kiếm..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             style={{ width: 300 }}
+            allowClear
           />
         </Space>
         <Table
