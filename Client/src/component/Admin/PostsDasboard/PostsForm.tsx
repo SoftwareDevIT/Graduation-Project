@@ -87,8 +87,8 @@ const PostsForm: React.FC = () => {
     await addOrUpdatePost(
       {
         ...data,
-        thumnail: finalThumbnail,
-        banner: finalBanner,
+        thumbnailFile: finalThumbnail instanceof File ? finalThumbnail : undefined,  // Only include the file if it's new
+        bannerFile: finalBanner instanceof File ? finalBanner : undefined,
       },
       id
     );
@@ -117,7 +117,11 @@ const PostsForm: React.FC = () => {
         </div>
         <div className="mb-3">
           <label className="form-label">Danh mục tin tức:</label>
+
+          <select {...register('news_category_id',{valueAsNumber:true})} className="form-select">
+
           <select {...register('news_category_id',{valueAsNumber: true})} className="form-select">
+
             <option value="">Chọn danh mục</option>
             {categories.map((category) => (
               <option key={category.id} value={category.id}>
@@ -146,9 +150,7 @@ const PostsForm: React.FC = () => {
               }
             }}
           />
-          {!thumbnailFile && (
-            <span className="text-danger">Ảnh thu nhỏ là bắt buộc</span>
-          )}
+          
         </div>
 
         {/* Show old banner if available */}
@@ -169,9 +171,7 @@ const PostsForm: React.FC = () => {
               }
             }}
           />
-          {!bannerFile && (
-            <span className="text-danger">Ảnh bìa là bắt buộc</span>
-          )}
+         
         </div>
 
         <div className="mb-3">
