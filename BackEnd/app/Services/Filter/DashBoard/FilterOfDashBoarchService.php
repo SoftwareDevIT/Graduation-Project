@@ -17,6 +17,9 @@ class FilterOfDashBoarchService
             $query->whereHas('showtime.room.cinema', function ($subQuery) use ($idCinema) {
                 $subQuery->where('id', $idCinema);
             });
+            if (!is_null($status)) {
+                $query->where('status', $status);
+            }
         }
 
         if (!is_null($status)) {
@@ -38,6 +41,9 @@ class FilterOfDashBoarchService
                     $subQuery->where('id', $idCinema);
                 });
             }
+            if (!is_null($status)) {
+                $query->where('status', $status);
+            }
         }
 
         if (!is_null($month)) {
@@ -49,6 +55,9 @@ class FilterOfDashBoarchService
                     $subQuery->where('id', $idCinema);
                 });
             }
+            if (!is_null($status)) {
+                $query->where('status', $status);
+            }
         }
 
         if (!is_null($year)) {
@@ -58,6 +67,9 @@ class FilterOfDashBoarchService
                     $subQuery->where('id', $idCinema);
                 });
             }
+            if (!is_null($status)) {
+                $query->where('status', $status);
+            }
         }
 
         if (!is_null($day)) {
@@ -66,6 +78,9 @@ class FilterOfDashBoarchService
                 $query->whereHas('showtime.room.cinema', function ($subQuery) use ($idCinema) {
                     $subQuery->where('id', $idCinema);
                 });
+            }
+            if (!is_null($status)) {
+                $query->where('status', $status);
             }
         }
 
