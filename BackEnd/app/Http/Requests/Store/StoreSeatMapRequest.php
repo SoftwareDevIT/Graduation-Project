@@ -19,12 +19,14 @@ class StoreSeatMapRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+    public function rules()
     {
         return [
-            "seat_layout_id" => "string",
-            "row" => "required|string",
-            "column" => "integer",
+            '*.seat_layout_id' => 'required|integer',
+            '*.row' => 'required|string|max:1',
+            '*.column' => 'required|integer',
+            '*.type' => 'string',
+            '*.is_double' => 'required|boolean',
         ];
     }
 }

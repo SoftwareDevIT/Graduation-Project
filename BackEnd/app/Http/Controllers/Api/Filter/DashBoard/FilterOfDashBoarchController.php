@@ -25,10 +25,6 @@ class FilterOfDashBoarchController extends Controller
         $year = $request->query('year');
         $day = $request->query('day');
 
-        if($status == null){
-            $status = 'Confirmed';
-        }
-
         $filterRevenue = $this->filterOfDashBoarchService->filterofbooking(
             $status, $cinema_id, $start_date, $end_date, $month, $year, $day
         );

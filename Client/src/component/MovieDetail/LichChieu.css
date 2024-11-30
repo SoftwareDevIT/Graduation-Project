@@ -375,7 +375,7 @@ select{
   }
 
   .cinema-info {
-    margin-top: 10px;
+    margin-top: -45px;
   }
 }
 
@@ -387,6 +387,9 @@ select{
      position: relative;
      right: 180px;
   
+    }
+    .cinema-item{
+      height: 65px;
     }
     .row-custom  select{
       width: 150px !important;
