@@ -94,7 +94,9 @@ import PageTitleUpdater from "./component/PageTitleUpdater/PageTitleUpdater";
 import TicketCinema from "./component/PersonalPage/TicketCinema";
 import SeatLayoutManager from "./Page/Admin/SeatLayout/SeatLayoutManager";
 import SeatLayoutFormManager from "./Page/Admin/SeatLayout/SeatLayoutForm";
-import SeatMap from "./component/Admin/SeatLayout/SeatMap";
+import SeatMapManager from "./Page/Admin/SeatMap/SeatMapManager";
+import SeatMapForm from "./Page/Admin/SeatMap/SeatMapForm";
+
 
 
 
@@ -195,6 +197,9 @@ function App() {
         <Route path="/admin/matrix" element={<PrivateRoute allowedRoles={['admin']}><SeatLayoutManager /></PrivateRoute>} />
         <Route path="/admin/matrix/add" element={<PrivateRoute allowedRoles={['admin']}><SeatLayoutFormManager /></PrivateRoute>} />
         <Route path="/admin/matrix/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><SeatLayoutFormManager /></PrivateRoute>} />
+        <Route path="/admin/seatmap" element={<PrivateRoute allowedRoles={['admin']}><SeatMapManager /></PrivateRoute>} />
+        <Route path="/admin/seatmap/add" element={<PrivateRoute allowedRoles={['admin']}><SeatMapForm /></PrivateRoute>} />
+        <Route path="/admin/seatmap/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><SeatMapForm /></PrivateRoute>} />
       
         <Route path="/admin/posts" element={<PrivateRoute allowedRoles={['admin']}><PostsManager /></PrivateRoute>} />
         <Route path="/admin/posts/:postId" element={<PrivateRoute allowedRoles={['admin']}><PostDetailManager /></PrivateRoute>} />

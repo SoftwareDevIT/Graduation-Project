@@ -44,6 +44,7 @@ const Sidebar = () => {
                     <li><NavLink to={'/admin/RevenueByCinema'} className={({ isActive }) => (isActive ? 'active' : '')}><FaChartLine /> Doanh thu theo rạp</NavLink></li>
                     <li><NavLink to={'/admin/RevenueByMovie'} className={({ isActive }) => (isActive ? 'active' : '')}><FaChartLine /> Doanh thu theo phim</NavLink></li>
                     <li><NavLink to={'/admin/matrix'} className={({ isActive }) => (isActive ? 'active' : '')}><FaChartLine />Mẫu Sơ Đồ Ghế</NavLink></li>
+                    <li><NavLink to={'/admin/seatmap'} className={({ isActive }) => (isActive ? 'active' : '')}><FaChartLine />Sơ Đồ Ghế</NavLink></li>
                 </ul>
             </div>
         </>
