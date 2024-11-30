@@ -22,11 +22,12 @@ class UpdateSeatMapRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // "name" => "string",
-            "seat_layout_id" => "integer",
-            "row" => "required|string",
-            "column" => "integer",
-            "is_double" => "boolean",
+            '*.seat_layout_id' => 'required|integer',
+            '*.row' => 'required|string|max:1',
+            '*.column' => 'required|integer',
+            '*.type' => 'string',
+            '*.label' => 'string',
+            '*.is_double' => 'required|boolean',
         ];
     }
 }
