@@ -157,7 +157,7 @@ function App() {
 
         <Route path="/deponsit" element={<Deponsit />} />
         <Route path="/forgetpass" element={<ForgetPass />} />
-        <Route path="/community" element={<Community />} />
+        {/* <Route path="/community" element={<Community />} /> */}
       
 
 
