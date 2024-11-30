@@ -264,9 +264,9 @@ class MovieController extends Controller
     public function getComingSoonMovie()
     {
         try {
-            $movies = Movie::whereHas('movieInCinemas.showtimes', function ($query) {
+            $movies = Movie::whereHas('showtimes', function ($query) {
                 $query->whereColumn('showtimes.showtime_date', '<', 'movies.release_date');
-            })->with(['movieInCinemas.showtimes' => function ($query) {
+            })->with(['showtimes' => function ($query) {
                 $query->orderBy('showtime_date', 'asc');
             }])
                 ->paginate(5);
