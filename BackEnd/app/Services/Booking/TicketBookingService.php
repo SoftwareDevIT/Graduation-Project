@@ -4,21 +4,26 @@ namespace App\Services\Booking;
 
 use App\Http\Requests\Booking\TicketBookingRequest;
 use App\Models\Booking;
+use App\Models\Cinema;
 use App\Models\Combo;
 use App\Models\Seats;
 use App\Services\Booking\Steps\SelectMovie;
 use App\Services\Booking\Steps\SelectSeats;
 use App\Services\Booking\Steps\SelectCombos;
 use App\Services\Booking\Steps\ProcessPayment;
+use App\Traits\UploadImageTrait;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 
 class TicketBookingService
 {
+    use UploadImageTrait;
     protected SelectMovie $selectMovieStep;
     protected SelectSeats $selectSeatsStep;
     protected SelectCombos $selectCombosStep;
@@ -147,5 +152,30 @@ class TicketBookingService
             Booking::where('id', session('booking'))->delete();
             return response()->json(['message' => 'Phương thức thanh toán chưa hoàn thiện. Vui lòng chọn lại!'], 400);
         }
+    }
+
+
+    public function generateBookingCode(Request $request)
+    {
+        $cenima = Cinema::findOrFail($request->cinemaId);
+        $sortName = strtoupper(substr($cenima->cinema_name, 0, 3));
+        $currentDate = now()->format('Ymd');
+        $bookingCount = Booking::whereDate('created_at', now()->toDateString())->count() + 1;
+        $bookingNumber = str_pad($bookingCount, 3, '0', STR_PAD_LEFT);
+        $bookingCode = '#' . $sortName . $currentDate . '-' . $bookingNumber;
+        return $bookingCode;
+    }
+
+    public function generateQrCode($booking)
+    {
+        $url = 'http://localhost:5173/booking/' . $booking->id;
+        // Tạo mã QR với URL đó dưới dạng PNG
+        $qrcode = QrCode::format('png')->generate($url);
+        // Đặt tên file và lưu vào thư mục public
+        $fileName = 'order_' . $booking->id . '.png';
+        Storage::disk('public')->put('qrcodes/' . $fileName, $qrcode);  // Lưu vào storage/app/public
+        $filePath = storage_path('app/public/qrcodes/' . $fileName);
+        $imageUrl = $this->uploadImage($filePath); // Gửi ảnh lên ImgBB
+        return $imageUrl;
     }
 }
