@@ -14,6 +14,7 @@ class SeatMap extends Model
     protected $fillable = [
         'seat_layout_id',
         'row',
+        'label',
         'column',
         'is_double',
         'type',
