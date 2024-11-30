@@ -20,7 +20,9 @@ const CinemaSelector: React.FC = () => {
   const navigate = useNavigate();
 
   // Lấy danh sách vị trí từ CountryContext
-  const { state: { countries: locations } } = useCountryContext();
+  const {
+    state: { countries: locations },
+  } = useCountryContext();
 
   // Lấy ngày hiện tại theo định dạng YYYY-MM-DD
   const getCurrentDate = (): string => {
@@ -76,12 +78,14 @@ const CinemaSelector: React.FC = () => {
   const sortedLocations = locations
     .map((location) => ({
       ...location,
-      cinemaCount: cinemas.filter((cinema) => cinema.location_id === location.id).length,
+      cinemaCount: cinemas.filter(
+        (cinema) => cinema.location_id === location.id
+      ).length,
     }))
     .sort((a, b) => b.cinemaCount - a.cinemaCount);
 
-  const filteredLocations = sortedLocations.filter(location =>
-    cinemas.some(cinema => cinema.location_id === location.id)
+  const filteredLocations = sortedLocations.filter((location) =>
+    cinemas.some((cinema) => cinema.location_id === location.id)
   );
 
   // Cập nhật rạp theo vị trí được chọn
@@ -113,6 +117,8 @@ const CinemaSelector: React.FC = () => {
 
           const cinemaMovies = cinemaResponse.data?.data || [];
           setMovies(cinemaMovies);
+          // console.log("Du lieu phim:",cinemaMovies);
+          
         } catch (error) {
           setMovies([]);
         }
@@ -137,7 +143,9 @@ const CinemaSelector: React.FC = () => {
               {filteredLocations.map((location) => (
                 <li
                   key={location.id}
-                  className={`city ${selectedCity === location.id ? "selected" : ""}`}
+                  className={`city ${
+                    selectedCity === location.id ? "selected" : ""
+                  }`}
                   onClick={() => setSelectedCity(location.id)}
                 >
                   {location.location_name}
@@ -150,7 +158,9 @@ const CinemaSelector: React.FC = () => {
               value={selectedCity ?? ""}
               onChange={(e) => setSelectedCity(Number(e.target.value))}
             >
-              <option className="city-selects-option" value="">Chọn khu vực</option>
+              <option className="city-selects-option" value="">
+                Chọn khu vực
+              </option>
               {locations.map((location) => (
                 <option key={location.id} value={location.id}>
                   {location.location_name}
@@ -167,7 +177,9 @@ const CinemaSelector: React.FC = () => {
               {filteredCinemas.map((cinema) => (
                 <li
                   key={cinema.id}
-                  className={`cinema ${selectedCinema === cinema.id ? "selected" : ""}`}
+                  className={`cinema ${
+                    selectedCinema === cinema.id ? "selected" : ""
+                  }`}
                   onClick={() => setSelectedCinema(cinema.id ?? null)}
                 >
                   {cinema.cinema_name}
@@ -179,7 +191,9 @@ const CinemaSelector: React.FC = () => {
               value={selectedCinema ?? ""}
               onChange={(e) => setSelectedCinema(Number(e.target.value))}
             >
-              <option className="city-selects-option" value="">Chọn rạp</option>
+              <option className="city-selects-option" value="">
+                Chọn rạp
+              </option>
               {filteredCinemas.map((cinema) => (
                 <option key={cinema.id} value={cinema.id}>
                   {cinema.cinema_name}
@@ -194,12 +208,16 @@ const CinemaSelector: React.FC = () => {
             {generateDateList().map((date) => (
               <div
                 key={date}
-                className={`date-custom-1 ${selectedDate === date ? "active" : ""}`}
+                className={`date-custom-1 ${
+                  selectedDate === date ? "active" : ""
+                }`}
                 onClick={() => setSelectedDate(date)}
               >
                 <span>{dayjs(date).format("DD/MM")}</span>
                 <small>
-                  {dayjs(date).day() === 0 ? "CN" : `Thứ ${dayjs(date).day() + 1}`}
+                  {dayjs(date).day() === 0
+                    ? "CN"
+                    : `Thứ ${dayjs(date).day() + 1}`}
                 </small>
               </div>
             ))}
@@ -208,16 +226,29 @@ const CinemaSelector: React.FC = () => {
           {movies.length > 0 ? (
             <div className="movies">
               {movies.map((movieData) => {
-                const movie = movieData.movie;
-                const sortedShowtimes = movieData.showtimes.sort((a: any, b: any) => {
-                  const timeA = dayjs(`${selectedDate} ${a.showtime_start}`, "YYYY-MM-DD HH:mm");
-                  const timeB = dayjs(`${selectedDate} ${b.showtime_start}`, "YYYY-MM-DD HH:mm");
-                  return timeA.isBefore(timeB) ? -1 : 1;
-                });
+                const movie = movieData;
+             
+                
+                const sortedShowtimes = movieData.showtimes.sort(
+                  (a: any, b: any) => {
+                    const timeA = dayjs(
+                      `${selectedDate} ${a.showtime_start}`,
+                      "YYYY-MM-DD HH:mm"
+                    );
+                    const timeB = dayjs(
+                      `${selectedDate} ${b.showtime_start}`,
+                      "YYYY-MM-DD HH:mm"
+                    );
+                    return timeA.isBefore(timeB) ? -1 : 1;
+                  }
+                );
 
                 return (
                   <div key={movie.id} className="movie">
-                    <img src={movie.poster ?? undefined} alt={movie.movie_name} />
+                    <img
+                      src={movie.poster ?? undefined}
+                      alt={movie.movie_name}
+                    />
                     <div className="details">
                       <h4>{movie.movie_name}</h4>
                       <p>Thời gian: {movie.duration}</p>
@@ -226,21 +257,26 @@ const CinemaSelector: React.FC = () => {
                         {sortedShowtimes.map((showtime: any) => (
                           <button
                             key={showtime.id}
-                            disabled={dayjs(`${selectedDate} ${showtime.showtime_start}`).isBefore(dayjs())}
-                            onClick={() => navigate("/seat", {
-                              state: {
-                                movieName: movie.movie_name,
-                                cinemaName: selectedCinemaDetails?.cinema_name,
-                                showtime: showtime.showtime_start,
-                                showtimeId: showtime.id,
-                                cinemaId: selectedCinemaDetails?.id,
-                                price: showtime.price,
-                                roomId: showtime.room_id
-                              },
-                            })}
+                            disabled={dayjs(
+                              `${selectedDate} ${showtime.showtime_start}`
+                            ).isBefore(dayjs())}
+                            onClick={() =>
+                              navigate("/seat", {
+                                state: {
+                                  movieName: movie.movie_name,
+                                  cinemaName:
+                                    selectedCinemaDetails?.cinema_name,
+                                  showtime: showtime.showtime_start,
+                                  showtimeId: showtime.id,
+                                  cinemaId: selectedCinemaDetails?.id,
+                                  price: showtime.price,
+                                 
+                                },
+                              })
+                            }
                           >
-                           {showtime.showtime_start.slice(0, 5)}
-                           <p> {`${showtime.price / 1000}k`}</p>
+                            {showtime.showtime_start.slice(0, 5)}
+                            <p> {`${showtime.price / 1000}k`}</p>
                           </button>
                         ))}
                       </div>

@@ -4,7 +4,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Link } from "react-router-dom";
-
+import { LikeOutlined } from '@ant-design/icons';
 import { useMovieContext } from "../../Context/MoviesContext";
 
 const MovieBanner = () => {
@@ -48,7 +48,7 @@ const MovieBanner = () => {
   return (
     <div className="movie-banner">
       <div className="banner-header">
-        <h2>Đang chiếu</h2>|<h2 style={{ color: "#95aac9" }}>Sắp chiếu</h2>
+        <h2>Đang chiếu</h2>|<h2 style={{ color: "#95aac9" }}><Link to={'/upcoming-movies'}>Sắp chiếu</Link></h2>
       </div>
       <div className="movie-slider">
         <div className="slider-container">
@@ -76,9 +76,17 @@ const MovieBanner = () => {
         : "N/A"}
 </span>
 
-                    <span className="rating-1">
-                      
-  {typeof movie.rating === 'number' ? (movie.rating * 10).toFixed(0) :0}%
+<span className="rating-1">
+<LikeOutlined 
+    style={{
+  
+      color: "#28a745",            // Màu xanh lá cho icon
+      background: "none",          // Không có nền
+      fontSize: "16px"             // Kích thước của icon
+    }} 
+  />
+  {typeof movie.rating === 'number' ? (movie.rating * 10).toFixed(0) : 0}%
+
 </span>
 
 
