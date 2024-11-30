@@ -41,7 +41,7 @@ class RevenueMovieService
         }
 
         // Tính tổng doanh thu
-        // return $query->with('showtime.movieInCinema.movie') // Đảm bảo tải các mối quan hệ cần thiết
+        // return $query->with('showtime.movieInCinema.movie') 
         // ->get()
         // ->map(function ($booking) {
         //     return [
