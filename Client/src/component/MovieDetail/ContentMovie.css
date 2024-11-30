@@ -4,6 +4,7 @@
 .post-meta-span{
   color: orangered;
 }
+
 @media (max-width: 992px) {
     .video-section iframe {
       width:700px;

@@ -5,7 +5,7 @@ const Footer = () => {
     return (
         <footer className="footer">
         <div className="footer-left">
-            <img src="https://cdn.moveek.com/bundles/ornweb/img/favicon-large.png" alt="Company Logo" className="company-logo-ct" />
+            <img src="../../../public/logo.jpg" alt="Company Logo" className="company-logo-ct" />
             <div className="company-info">
             <p><strong>CÔNG TY TNHH FLICKHIVE</strong></p>
                 <p>Số ĐKKD: 0315367026 · Nơi cấp: Sở kế hoạch và đầu tư Tp. Hà Nội</p>

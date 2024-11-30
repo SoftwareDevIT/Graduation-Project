@@ -57,7 +57,7 @@ class ShowtimeService
 
         // Append formatted seats to the showtime data for easier rendering
         $showtimeData = $showtime->toArray();
-        // $showtimeData['seats'] = $seats;
+        $showtimeData['seats'] = $seats;
 
         return $showtimeData;
     }

@@ -34,7 +34,7 @@ const roomSchema = z.object({
     .number()
     .min(0, 'Số ghế VIP không thể nhỏ hơn 0')
     .int('Số ghế VIP phải là số nguyên')
-    .refine((value) => value <= 10, {
+    .refine((value) => value <= 20, {
       message: 'Số ghế VIP không thể lớn hơn 10',
     }),
 

@@ -83,12 +83,12 @@ const Login = () => {
           </button>
         </form>
 
-        <button
+        {/* <button
           className="google-login-button login-button"
           onClick={() => {}}
         >
           <FaGoogle style={{ marginRight: "10px" }}/>Đăng nhập bằng Google
-        </button>
+        </button> */}
 
         <div className="form-footer">
           <Link className="forgot-password" to="/forgetpass">
