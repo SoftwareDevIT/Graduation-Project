@@ -40,9 +40,16 @@ class SeatMapController extends Controller
 
     public function store(StoreSeatMapRequest $request)
     {
-        $combo = $this->seatMapService->store($request->validated());
-        return $this->success($combo);
+        $seatDataArray = $request->validated(); // Dữ liệu đã được xác thực từ request
+        $storedSeats = []; // Mảng để lưu kết quả đã lưu
+
+        foreach ($seatDataArray as $seatData) {
+            $storedSeats[] = $this->seatMapService->store($seatData); // Lưu từng đối tượng và thêm vào mảng
+        }
+
+        return $this->success($storedSeats); // Trả về tất cả các dữ liệu đã lưu
     }
+
 
     public function update(UpdateSeatMapRequest $request, $id)
     {
@@ -80,5 +87,4 @@ class SeatMapController extends Controller
             return response()->json(['error' => 'Đã xảy ra lỗi: ' . $e->getMessage()], 500);
         }
     }
-
 }

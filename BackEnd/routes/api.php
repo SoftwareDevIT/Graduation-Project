@@ -33,6 +33,7 @@ use App\Http\Controllers\Api\Revenue\RevenueMovieController;
 use App\Http\Controllers\Api\Role\RoleController;
 use App\Http\Controllers\Api\Seat\SeatController;
 use App\Http\Controllers\Api\Promotion\PromotionController;
+use App\Http\Controllers\Api\Ranks\RankContrller;
 use App\Http\Controllers\Api\SeatMap\SeatMapController;
 use App\Http\Controllers\Api\SeatMap\MatrixController;
 
@@ -152,7 +153,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     //Trang dashboard
     // Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
 
-   
+
 });
 //Trang dashboard
 Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
@@ -207,6 +208,5 @@ Route::apiResource('seat-map', SeatMapController::class);
 Route::patch('/seat-map/{id}/publish', [SeatMapController::class, 'publish'])->name('seat-map.publish');
 
 // Route::apiResource('room', RoomController::class);
-Route::post('showtimePayload', [ShowtimeController::class,'storeWithTimeRange']);
-Route::apiResource('room', RoomController::class);
-Route::apiResource('showtimes', ShowtimeController::class);
+Route::post('showtimePayload', [ShowtimeController::class, 'storeWithTimeRange']);
+Route::apiResource('ranks', RankContrller::class);
