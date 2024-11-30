@@ -1,115 +1,27 @@
-/* Main container */
-.orders-management {
-    padding: 30px;
-    background: rgb(229, 240, 242); /* Nền xanh nhạt */
-    min-height: 170vh;
-    display: flex;
-    flex-direction: column;
+.status-pain {
+    background-color:#28a745; /* Màu xanh lá cây cho trạng thái đã thanh toán */
+    color: #fff; /* Màu chữ trắng */
+    padding: 5px 10px;
+    border-radius: 4px;
 }
-
-/* Title styling */
-.orders-management h2 {
-    margin-bottom: 20px;
-    font-size: 1.75rem;
-    color: #006064;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    text-align: center;
+  
+.status-confirmed {
+    background-color: #007bff; /* Màu xanh dương cho trạng thái đã xác nhận */
+    color: #fff; /* Màu chữ trắng */
+    padding: 5px 10px;
+    border-radius: 4px;
 }
-
-/* Actions container */
-.actions {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
+  
+.status-pending {
+    background-color: #ffc107; /* Màu vàng cho trạng thái đang chờ */
+    color: #212529; /* Màu chữ đen */
+    padding: 5px 10px;
+    border-radius: 4px;
 }
-
-.add-order-btn {
-    padding: 5px 20px;
-    background-color: #f39c12;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    text-transform: uppercase;
-    font-weight: bold;
+  
+.status-default {
+    background-color: #6c757d; /* Màu xám cho trạng thái mặc định */
+    color: #fff; /* Màu chữ trắng */
+    padding: 5px 10px;
+    border-radius: 4px;
 }
-
-.add-order-btn:hover {
-    background-color: #e67e22;
-}
-
-/* Table container styling */
-.table-container1 {
-    width: 100%;
-    max-width: 1300px;
-    overflow-x: auto;
-    border-radius: 8px;
-    background-color: #f4f6f7; /* Background sáng hơn */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Nhẹ hơn */
-}
-
-/* Table styling */
-.order-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-    color: #006064; /* Màu xanh đậm */
-}
-
-.order-table th {
-    background-color: #e0f7fa; /* Nền xanh nhạt */
-    color: #00796b; /* Chữ xanh đậm */
-    text-align: center;
-    font-weight: 600;
-    padding: 10px;
-    text-transform: none;
-    border-bottom: 1px solid #b2ebf2;
-}
-
-.order-table td {
-    padding: 10px;
-    background-color: #ffffff; /* Nền trắng */
-    color: #00796b; /* Chữ xanh đậm */
-    border-bottom: 1px solid #b2ebf2;
-    text-align: center;
-}
-
-.order-table tr:nth-child(even) {
-    background-color: #f1f8e9; /* Nền xanh rất nhạt */
-}
-
-.order-table tbody tr:hover {
-    background-color: #b2ebf2;
-    transition: background-color 0.3s ease;
-}
-
-/* Button styles */
-.action-buttons {
-    display: flex;
-    justify-content: space-around;
-}
-
-.action-buttons button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #00796b !important;
-    font-size: 1rem;
-    transition: color 0.3s ease;
-}
-
-.view-btn:hover {
-    color: #1abc9c;
-}
-
-.edit-btn:hover {
-    color: #f1c40f;
-}
-
-.delete-btn:hover {
-    color: #e74c3c;
-}
-

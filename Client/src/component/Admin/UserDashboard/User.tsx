@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons'; // Ant Design icons
+import { notification, Table, Pagination, Input, Button, Popconfirm } from 'antd'; // Ant Design components
 import instance from '../../../server';
 import { User } from '../../../interface/User';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit } from '@fortawesome/free-solid-svg-icons';
 
 const UserDashboard: React.FC = () => {
     const [users, setUsers] = useState<User[]>([]);
@@ -11,8 +11,6 @@ const UserDashboard: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(0);
-    const [nextPageUrl, setNextPageUrl] = useState<string | null>(null);
-    const [prevPageUrl, setPrevPageUrl] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -20,8 +18,6 @@ const UserDashboard: React.FC = () => {
                 const response = await instance.get(`/all-user?page=${currentPage}`);
                 setUsers(response.data.data);
                 setTotalPages(response.data.last_page);
-                setNextPageUrl(response.data.next_page_url);
-                setPrevPageUrl(response.data.prev_page_url);
             } catch (err) {
                 setError('Lỗi khi tải người dùng');
             }
@@ -35,134 +31,118 @@ const UserDashboard: React.FC = () => {
         user.user_name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    if (error) {
-        return <p>{error}</p>;
-    }
-
-    const handlePageChange = (pageNumber: number) => {
-        if (pageNumber >= 1 && pageNumber <= totalPages) {
-            setCurrentPage(pageNumber);
-        }
+    // Handle pagination change
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
     };
+
+    // Handle delete action
+    const handleDelete = (id: number) => {
+        // Your delete logic here (API request, etc.)
+        notification.success({
+            message: 'Thành Công',
+            description: 'Người dùng đã được xóa thành công!',
+            placement: 'topRight',
+        });
+    };
+
+    const columns = [
+        {
+            title: 'ID',
+            dataIndex: 'id',
+            key: 'id',
+            align: 'center' as const,  // Corrected here, use 'center' instead of string
+        },
+        {
+            title: 'Tên Đăng Nhập',
+            dataIndex: 'user_name',
+            key: 'user_name',
+            align: 'center' as const,  // Corrected here, use 'center' instead of string
+        },
+        {
+            title: 'Tên Đầy Đủ',
+            dataIndex: 'fullname',
+            key: 'fullname',
+            align: 'center' as const,  // Corrected here, use 'center' instead of string
+        },
+        {
+            title: 'Email',
+            dataIndex: 'email',
+            key: 'email',
+            align: 'center' as const,  // Corrected here, use 'center' instead of string
+            render: (text: string) => text || 'Chưa có',
+        },
+        {
+            title: 'Ngày Tạo',
+            dataIndex: 'created_at',
+            key: 'created_at',
+            align: 'center' as const,  // Corrected here, use 'center' instead of string
+            render: (text: string) => new Date(text).toLocaleDateString(),
+        },
+        {
+            title: 'Hành Động',
+            key: 'action',
+            render: (_: any, user: User) => (
+                <div className="d-flex justify-content-around">
+                    <Link to={`/admin/user/edit/${user.id}`}>
+                        <Button type="primary" icon={<EditOutlined />} />
+                    </Link>
+                    <Popconfirm
+                        title="Bạn có chắc chắn muốn xóa người dùng này?"
+                        onConfirm={() => handleDelete(user.id)}
+                        okText="Có"
+                        cancelText="Không"
+                    >
+                        <Button danger icon={<DeleteOutlined />} />
+                    </Popconfirm>
+                </div>
+            ),
+            align: 'center' as const,  // Corrected here, use 'center' instead of string
+        },
+    ];
+
+    if (error) {
+        return <p className="text-red-500 text-center mt-4">{error}</p>;
+    }
 
     return (
         <div className="container mt-5">
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <Link to={'/admin/user/roles'} className="btn btn-outline-primary">
-                    Quản lý vai trò
+                <Link to="/admin/user/roles">
+                    <Button type="primary" size="large">
+                        Quản lý vai trò
+                    </Button>
                 </Link>
-                <input
-                    type="text"
+                <Input
                     placeholder="Tìm kiếm theo tên"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="form-control w-25"
+                    style={{ width: 300 }}
+                    allowClear
                 />
             </div>
-            <div className="table-responsive">
-                <table className="table table-bordered table-hover shadow-sm">
-                    <thead className="thead-light">
-                        <tr>
-                            <th>ID</th>
-                            <th>Tên Đăng Nhập</th>
-                            <th>Tên Đầy Đủ</th>
-                            <th>Email</th>
-                            <th>Ngày Tạo</th>
-                            <th>Hành Động</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredUsers.map((user: User) => (
-                            <tr key={user.id}>
-                                <td>{user.id}</td>
-                                <td>{user.user_name}</td>
-                                <td>{user.fullname}</td>
-                                <td>{user.email || 'Chưa có'}</td>
-                                <td>{new Date(user.created_at!).toLocaleDateString()}</td>
-                                <td>
-                                    <div className="d-flex justify-content-around">
-                                        <Link to={`/admin/user/edit/${user.id}`} className="btn btn-warning btn-sm mr-2">
-                                            <FontAwesomeIcon icon={faEdit} />
-                                        </Link>
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+
+            <Table
+                columns={columns}
+                dataSource={filteredUsers}
+                rowKey="id"
+                pagination={false} // Disable default pagination
+                locale={{
+                    emptyText: 'Không có người dùng nào.',
+                }}
+            />
+
+            <div className="d-flex justify-content-center mt-4">
+                <Pagination
+                    current={currentPage}
+                    total={filteredUsers.length}
+                    pageSize={7} // Number of users per page
+                    onChange={handlePageChange}
+                    showSizeChanger={false}
+                    showQuickJumper
+                    showTotal={(total) => `Tổng số ${total} người dùng`}
+                />
             </div>
-            <nav className="d-flex justify-content-center mt-4">
-    <ul className="pagination">
-        {/* Previous Page Button */}
-        <li className={`page-item ${!prevPageUrl ? 'disabled' : ''}`}>
-            <button
-                className="page-link"
-                onClick={() => prevPageUrl && setCurrentPage(currentPage - 1)}
-                disabled={!prevPageUrl}
-            >
-                Trước
-            </button>
-        </li>
-
-        {/* Page Numbers */}
-        {totalPages > 5 && currentPage > 3 && (
-            <li className="page-item">
-                <button className="page-link" onClick={() => handlePageChange(1)}>
-                    1
-                </button>
-            </li>
-        )}
-        
-        {totalPages > 5 && currentPage > 4 && (
-            <li className="page-item disabled">
-                <span className="page-link">...</span>
-            </li>
-        )}
-
-        {[...Array(5)].map((_, index) => {
-            const pageNumber = currentPage - 2 + index;
-            if (pageNumber >= 1 && pageNumber <= totalPages) {
-                return (
-                    <li
-                        key={pageNumber}
-                        className={`page-item ${currentPage === pageNumber ? 'active' : ''}`}
-                    >
-                        <button className="page-link" onClick={() => handlePageChange(pageNumber)}>
-                            {pageNumber}
-                        </button>
-                    </li>
-                );
-            }
-            return null;
-        })}
-
-        {totalPages > 5 && currentPage < totalPages - 3 && (
-            <li className="page-item disabled">
-                <span className="page-link">...</span>
-            </li>
-        )}
-
-        {totalPages > 5 && currentPage < totalPages - 2 && (
-            <li className="page-item">
-                <button className="page-link" onClick={() => handlePageChange(totalPages)}>
-                    {totalPages}
-                </button>
-            </li>
-        )}
-
-        {/* Next Page Button */}
-        <li className={`page-item ${!nextPageUrl ? 'disabled' : ''}`}>
-            <button
-                className="page-link"
-                onClick={() => nextPageUrl && setCurrentPage(currentPage + 1)}
-                disabled={!nextPageUrl}
-            >
-                Tiếp
-            </button>
-        </li>
-    </ul>
-</nav>
-
         </div>
     );
 };

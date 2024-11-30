@@ -1,162 +1,227 @@
-import { Booking } from "../../../interface/Booking";
+import React, { useEffect, useState } from "react";
+import { Table, Button, Select, Input, DatePicker, Pagination, Card, Space, notification } from "antd";
+import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPrint } from "@fortawesome/free-solid-svg-icons";
 import instance from "../../../server";
+import { Booking } from "../../../interface/Booking";
+import { CheckCircleOutlined, ClockCircleOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import dayjs from "dayjs";
+import './OrdersDashboard.css'
 
-import { useEffect, useState } from "react";
-
-import 'bootstrap/dist/css/bootstrap.min.css';
+const { Option } = Select;
+const { RangePicker } = DatePicker;
 
 const OrdersDashboard: React.FC = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [nextPageUrl, setNextPageUrl] = useState<string | null>(null);
-  const [prevPageUrl, setPrevPageUrl] = useState<string | null>(null);
   const [totalPages, setTotalPages] = useState<number>(0);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [statusFilter, setStatusFilter] = useState<string>("");
+  const [dateRange, setDateRange] = useState<[string, string] | null>(null);
 
   useEffect(() => {
     const fetchBookings = async () => {
       try {
         const response = await instance.get(`/order?page=${currentPage}`);
-        console.log("API Response:", response.data);
         setBookings(response.data.data.data);
         setTotalPages(response.data.data.last_page);
-                setNextPageUrl(response.data.data.next_page_url);
-                setPrevPageUrl(response.data.data.prev_page_url);
       } catch (error) {
-        console.error("Lỗi khi lấy thông tin đặt vé:", error);
+        notification.error({
+          message: "Lỗi",
+          description: "Không thể tải thông tin đơn hàng.",
+        });
       }
     };
-  
+
     fetchBookings();
   }, [currentPage]);
-  console.log(bookings);
-  
-  const handlePageChange = (pageNumber: number) => {
-    if (pageNumber >= 1 && pageNumber <= totalPages) {
-        setCurrentPage(pageNumber);
+
+  const getStatusStyle = (status: string) => {
+    switch (status) {
+      case 'Pain':
+        return {
+          className: 'status-pain',
+          icon: <CheckCircleOutlined style={{ color: 'green', marginRight: 8 }} />,
+        };
+      case 'Confirmed':
+        return {
+          className: 'status-confirmed',
+          icon: <ExclamationCircleOutlined style={{ color: 'orange', marginRight: 8 }} />,
+        };
+      case 'Pending':
+        return {
+          className: 'status-pending',
+          icon: <CheckCircleOutlined style={{ color: 'green', marginRight: 8 }} />,
+        };
+      default:
+        return {
+          className: 'status-default',
+          icon: null,
+        };
     }
-};
+  };
+
+  const handlePrintInvoice = (booking: Booking) => {
+    const invoiceWindow = window.open("", "_blank");
+    if (!invoiceWindow) {
+      notification.error({
+        message: "Lỗi",
+        description: "Không thể mở cửa sổ in hóa đơn.",
+      });
+      return;
+    }
+    const invoiceContent = `
+      <html>
+      <head>
+        <title>Hóa đơn</title>
+        <style>
+          body { font-family: Arial, sans-serif; margin: 20px; }
+          h1 { text-align: center; color: #333; }
+          table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+          th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+          th { background-color: #f4f4f4; }
+        </style>
+      </head>
+      <body>
+        <h1>Hóa đơn</h1>
+        <p><strong>Mã Đơn Hàng:</strong> ${booking.id}</p>
+        <p><strong>Người Dùng:</strong> ${booking.user?.user_name || "Không xác định"}</p>
+        <p><strong>Email:</strong> ${booking.user?.email || "Không xác định"}</p>
+        <p><strong>Suất Chiếu:</strong> ${booking.showtime?.showtime_date || "Không xác định"}</p>
+        <p><strong>Phim:</strong> ${booking.showtime?.movie_in_cinema.movie.movie_name || "Không xác định"}</p>
+        <p><strong>Tổng Tiền:</strong> ${booking.amount}</p>
+        <hr />
+        <p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!</p>
+      </body>
+      </html>
+    `;
+    invoiceWindow.document.write(invoiceContent);
+    invoiceWindow.document.close();
+    invoiceWindow.print();
+  };
+
+  const columns = [
+    {
+      title: "ID",
+      dataIndex: "id",
+      key: "id",
+      align: "center" as const,
+    },
+    {
+      title: "Người Dùng",
+      dataIndex: ["user", "user_name"],
+      key: "user_name",
+      align: "center" as const,
+      render: (text: string) => text || "Unknown User",
+    },
+    {
+      title: "Suất Chiếu",
+      dataIndex: ["showtime", "showtime_date"],
+      key: "showtime_date",
+      align: "center" as const,
+    },
+    {
+      title: "Phim",
+      dataIndex: ["showtime", "movie_in_cinema", "movie", "movie_name"],
+      key: "movie_name",
+      align: "center" as const,
+    },
+    {
+      title: "Phương Thức Thanh Toán",
+      dataIndex: ["pay_method", "pay_method_name"],
+      key: "pay_method_name",
+      align: "center" as const,
+    },
+    {
+      title: "Tổng Tiền",
+      dataIndex: "amount",
+      key: "amount",
+      align: "center" as const,
+    },
+    {
+      title: "Trạng Thái",
+      dataIndex: "status",
+      key: "status",
+      render: (text: string) => {
+        const { className, icon } = getStatusStyle(text);
+        return (
+          <span className={className}>
+            {icon}
+            {text}
+          </span>
+        );
+      },
+    },
+    {
+      title: "Hành Động",
+      key: "actions",
+      align: "center" as const,
+      render: (_: any, record: Booking) => (
+        <Space>
+          <Link to={`/admin/orders/edit/${record.id}`}>
+            <Button type="primary" icon={<EditOutlined />} />
+          </Link>
+          <Button
+            type="default"
+            icon={<FontAwesomeIcon icon={faPrint} />}
+            onClick={() => handlePrintInvoice(record)}
+          >
+            In
+          </Button>
+        </Space>
+      ),
+    },
+  ];
 
   return (
-    <div className="container mt-5">
-    
-      <div className="d-flex justify-content-between align-items-center mb-4">
- 
-      </div>
-      <div className="table-responsive">
-        <table className="table table-bordered table-hover shadow-sm">
-          <thead className="thead-light">
-            <tr>
-              <th>ID</th>
-              <th>Người Dùng</th>
-              <th>Suất Chiếu</th>
-              <th>Phim</th>
-              <th>Phương Thức Thanh Toán</th>
-              {/* <th>Giá Vé</th>
-              <th>Giá Combo</th> */}
-              <th>Tổng Tiền</th>
-              <th>Trạng Thái</th>
-             
-            </tr>
-          </thead>
-          <tbody>
-  {bookings.length > 0 ? (
-    bookings.map((booking: Booking) => (
-      <tr key={booking.id}>
-        <td>{booking.id}</td>
-        <td>{booking.user?.user_name || "Unknown User"}</td>
-        <td>{booking.showtime?.showtime_date || "Unknown Showtime"}</td>
-        <td>{booking.showtime?.movie_in_cinema.movie.movie_name || "Unknown Movie"}</td>
-        <td>{booking.pay_method?.pay_method_name || "Unknown Payment Method"}</td>
-        {/* <td>${booking.price_ticket?.toFixed(2) || "0.00"}</td>
-        <td>${booking.price_combo?.toFixed(2) || "0.00"}</td> */}
-        <td>{booking.amount}</td>
-        <td>{booking.status}</td>
-        
-      </tr>
-    ))
-  ) : (
-    <tr>
-      <td colSpan={10} className="text-center">
-        Không có đơn hàng nào.
-      </td>
-    </tr>
-  )}
-</tbody>
-
-        </table>
-      </div>
-      <nav className="d-flex justify-content-center mt-4">
-    <ul className="pagination">
-        {/* Previous Page Button */}
-        <li className={`page-item ${!prevPageUrl ? 'disabled' : ''}`}>
-            <button
-                className="page-link"
-                onClick={() => prevPageUrl && setCurrentPage(currentPage - 1)}
-                disabled={!prevPageUrl}
-            >
-                Trước
-            </button>
-        </li>
-
-        {/* Page Numbers */}
-        {totalPages > 5 && currentPage > 3 && (
-            <li className="page-item">
-                <button className="page-link" onClick={() => handlePageChange(1)}>
-                    1
-                </button>
-            </li>
-        )}
-        
-        {totalPages > 5 && currentPage > 4 && (
-            <li className="page-item disabled">
-                <span className="page-link">...</span>
-            </li>
-        )}
-
-        {[...Array(5)].map((_, index) => {
-            const pageNumber = currentPage - 2 + index;
-            if (pageNumber >= 1 && pageNumber <= totalPages) {
-                return (
-                    <li
-                        key={pageNumber}
-                        className={`page-item ${currentPage === pageNumber ? 'active' : ''}`}
-                    >
-                        <button className="page-link" onClick={() => handlePageChange(pageNumber)}>
-                            {pageNumber}
-                        </button>
-                    </li>
-                );
-            }
-            return null;
-        })}
-
-        {totalPages > 5 && currentPage < totalPages - 3 && (
-            <li className="page-item disabled">
-                <span className="page-link">...</span>
-            </li>
-        )}
-
-        {totalPages > 5 && currentPage < totalPages - 2 && (
-            <li className="page-item">
-                <button className="page-link" onClick={() => handlePageChange(totalPages)}>
-                    {totalPages}
-                </button>
-            </li>
-        )}
-
-        {/* Next Page Button */}
-        <li className={`page-item ${!nextPageUrl ? 'disabled' : ''}`}>
-            <button
-                className="page-link"
-                onClick={() => nextPageUrl && setCurrentPage(currentPage + 1)}
-                disabled={!nextPageUrl}
-            >
-                Tiếp
-            </button>
-        </li>
-    </ul>
-</nav>
-    </div>
+    <Card title="Doanh Thu" style={{ margin: "20px" }}>
+      <Space direction="vertical" style={{ width: "100%" }}>
+        <Space style={{ display: "flex", justifyContent: "space-between" }}>
+          <Select
+            value={statusFilter}
+            onChange={(value) => setStatusFilter(value)}
+            style={{ width: 200 }}
+            placeholder="Trạng thái"
+          >
+            <Option value="">Tất cả trạng thái</Option>
+            <Option value="Pending">Pending</Option>
+            <Option value="Confirmed">Confirmed</Option>
+            <Option value="Paid">Paid</Option>
+          </Select>
+          <RangePicker
+            onChange={(dates) => {
+              if (dates) {
+                setDateRange([dayjs(dates[0]).format("YYYY-MM-DD"), dayjs(dates[1]).format("YYYY-MM-DD")]);
+              } else {
+                setDateRange(null);
+              }
+            }}
+          />
+          <Input
+            placeholder="Tìm kiếm..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={{ width: 300 }}
+          />
+        </Space>
+        <Table
+          columns={columns}
+          dataSource={bookings}
+          rowKey={(record) => record.id}
+          pagination={false}
+          bordered
+        />
+        <div className="d-flex justify-content-center mt-4">
+          <Pagination
+            current={currentPage}
+            total={totalPages * 10}
+            onChange={(page) => setCurrentPage(page)}
+            style={{ textAlign: "center" }}
+          />
+        </div>
+      </Space>
+    </Card>
   );
 };
 
