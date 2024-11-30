@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('ranks', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->float('total_order_amount');
+            $table->integer('total_order_amount');
             $table->integer('percent_discount');
             $table->timestamps();
         });

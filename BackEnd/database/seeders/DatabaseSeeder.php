@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
 
-            Rank::class,
+            RankSeeder::class,
             UserSeeder::class,
             ComboSeeder::class,
             PayMethodSeeder::class,
