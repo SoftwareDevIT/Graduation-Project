@@ -65,12 +65,12 @@
     width: 100%;
 }
 
-.movie-info {
+.movie-info-1 {
     flex: 1;
 }
-.movie-info h2{
+.movie-info-1 h2{
     color: #fff;
-    margin-right: 380px;
+   
 }
 .title {
     text-align: left !important;
@@ -90,81 +90,14 @@
     padding-top: 0px !important;
     color: #d3d3d3;
 }
-.actions{
-    margin-right: 155px;
-}
-.actions .button {
-    display: inline-block;
-  padding-left: 5px;
-  padding-top: 5px;
-    border-radius: 8px;
-    font-weight: 500;
-    margin-right: 10px;
-    text-align: center;
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+.actions-1{
+    margin-bottom: 20px;
 }
 
-.actions .button.like {
 
-    display: flex;
-    width: 80px;
-    height: 40px;
-    background-color: #f0f2f5; /* Màu nền xám nhạt */
-    color: #111; /* Màu chữ đen */
-    border: 1px solid #d9d9d9; /* Đường viền xám */
-}
 
-.actions .rate{
-  width: 120px !important;
- 
-}
-.actions .button .like-1{
-position: relative;
-left: 10px;
-}
-.actions .button .like2{
-    right: 10;
-}
-.actions .button.like:hover {
-    background-color: #e4e6eb;
-}
 
-.actions .button.rate {
-    background-color: #f0f2f5;
-    color: #111;
-    border: 1px solid #d9d9d9;
-}
 
-.actions .button.rate:hover {
-    background-color: #e4e6eb;
-}
-
-.actions .button.trailer {
-    background-color: #1c1c1e; /* Màu đen */
-    color: white;
-    border: none;
-    width: 90px;
-    height: 40px;
-    padding: 8px;
-}
-
-.actions .button.trailer:hover {
-    background-color: #444;
-}
-
-.actions .button.buy {
-    background-color: #ff4d4f; /* Màu đỏ */
-    color: white;
-    border: none;
-    width: 90px;
-    height: 40px;
-    padding: 8px;
-}
-
-.actions .button.buy:hover {
-    background-color: #ff7875;
-}
 
 
 .buy-ticket-button {
@@ -459,33 +392,29 @@ left: 10px;
 .city-select{
     display: block;
 }
-.movie-info span{
-margin-right: 0;
 
+.btn-outline-danger,.btn-outline-warning{
+    background: #fff;
+    color: gray;
+    border: none;
+}
+.btn-outline-primary{
+    background: #333;
+    color: #fff;
+    border: none;
+}
+.btn-outline-success{
+    background: #ff4d4f;
+    color: #fff;
+    border: none;
 }
 @media (max-width:480px) {
-    .actions {
-        
-        display: flex;
-        flex-direction: row !important; /* Ghi đè bất kỳ nơi nào có 'flex-direction: column' */
-        justify-content: space-between;
-      }
-      .actions .button .like-1 {
-        position: relative;
-        left: -6px;
-    }
-    .actions .rate .like2{
-width: 60px;
-  
-    }
-    .movie-info h2 {
+   
+     
+    .movie-info-1 h2 {
         margin-right: 190px;
     }
-      
-      .movie-info span {
-        margin-right: 12px;
     
-    }
     .actions  {
          gap :5px;
         font-size: 15px;
@@ -495,21 +424,12 @@ width: 60px;
        font-size: 10px;
 
     }
-.danhgia{
-    display: flex !important;
-    width: 60px;
-}
-     .rate .like-1{
-        padding-left: 10px;
-        font-size: 12px !important;
-     }
+   
+
+  
     
 }
-.danhgiaphim {
-    display: flex;
-    gap: 20px;
-    align-items: flex-start;
-  }
+
   
   .imgphim {
     flex: 0 0 120px;
@@ -518,7 +438,7 @@ width: 60px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
-  
+ 
   .imgphim img {
     width: 100%;
     height: 100%;
@@ -643,7 +563,7 @@ width: 60px;
     }
 
     .tabs {
-        flex-direction: column;
+        gap: 0px;
         padding-left: 0;
         margin-left: 0;
     }
@@ -696,5 +616,15 @@ width: 60px;
     }
     .button.trailer{
         width: 130px !important;
+    }
+  }
+  @media (max-width:768px) {
+    .content{
+        padding-left: 145px;
+    }
+  }
+  @media (max-width:580px) {
+    .content{
+        padding-left: 0;
     }
   }

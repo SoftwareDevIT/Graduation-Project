@@ -1,7 +1,7 @@
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 
-import OrderPage from "./component/Oders/OrderPage";
+
 import OrderCheckout from "./component/Pay/OderCheckOut";
 import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
 import Headerticket from "./component/Headerticket/Headerticket";
@@ -29,7 +29,7 @@ import CinemasFormManager from "./Page/Admin/Cinemas/CinemasForm";
 import ComboFormManager from "./Page/Admin/Combo/ComboForm";
 import ShowtimesFormManager from "./Page/Admin/Showtimes/ShowtimesForm";
 import MoviesManagerForm from "./Page/Admin/Movies/MoviesForm";
-import PaymentCallback from "./component/Pay/PaymentCallback";
+
 import PostsFormManager from "./Page/Admin/Posts/PostForm";
 import LichChieu from "./component/MovieDetail/LichChieu";
 import DanhGia from "./component/MovieDetail/DanhGia";
@@ -68,10 +68,9 @@ import RoomsManager from "./Page/Admin/Rooms/RoomsManager";
 import RoomsFormManager from "./Page/Admin/Rooms/RoomsForm";
 import Video from "./component/News/Video";
 import FilmNews from "./component/News/FilmNews";
-import MovieTicket from "./component/PersonalPage/MovieTicket";
 
-import PageTitleUpdater from "./component/PageTitleUpdater/PageTitleUpdater";
-import Community from "./component/Community/Community";
+
+
 
 
 import ActorManager from "./Page/Admin/Actor/ActorManager";
@@ -81,10 +80,22 @@ import DirectorFormManager from "./Page/Admin/Director/DirectorForm";
 import UpcomingMovies from "./component/Movies/UpcomingMovies";
 
 // import PageTitleUpdater from "./component/PageTitleUpdater/PageTitleUpdater";
+
 import MethodManager from "./Page/Admin/Method/MethodManager";
 import MethodFormManager from "./Page/Admin/Method/MethodForm";
 import PromotionsManager from "./Page/Admin/Promotions/PromotionsManager";
 import PromotionsFormManager from "./Page/Admin/Promotions/PromotionsForm";
+
+import OrderPage from "./component/Oders/OrderPage";
+
+import OrdersFormManager from "./Page/Admin/Orders/OrdersForm";
+
+
+import PageTitleUpdater from "./component/PageTitleUpdater/PageTitleUpdater";
+import TicketCinema from "./component/PersonalPage/TicketCinema";
+import SeatLayout from "./component/SeatMap/test";
+import Community from "./component/Community/Community";
+
 
 
 
@@ -110,7 +121,7 @@ function App() {
         <Route path="/buy-now/:slug" element={<MuaVe />} />
         <Route path="/headerticket" element={<Headerticket />} />
         <Route path="/confirm" element={<EmailConfirm />} />
-        <Route path="/payment-callback" element={<PaymentCallback />} />
+     
         <Route path="/*" element={<NotFound />} />
 
 
@@ -124,33 +135,38 @@ function App() {
         <Route path="/movie/search/:movie_name" element={<SerachMovies />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/Personal" element={<Personal />} />
+ 
+        <Route path="/ticketcinema" element={<TicketCinema/>} />
         <Route path="/credits" element={<Credits />} />
         <Route path="/ChangePassword" element={<ChangePassword />} />
    
         <Route path="/register" element={<RegisterCinema />} />
         <Route path="/login" element={<LoginCinema />} />
         <Route path="/movieshowing" element={<MovieShowing/>} />
-        <Route path="/movieticket" element={<MovieTicket />} />
+      
         <Route path="/deponsit" element={<Deponsit/>} />
         <Route path="/forgetpass" element={<ForgetPass/>} />
         <Route path="/otp" element={<Otp/>} />
         <Route path="/resetPassword" element={<ResetPasswod/>} />
+       
       
     
        
         <Route path="/upcoming-movies" element={<UpcomingMovies />} />
         <Route path="/movieshowing" element={<MovieShowing />} />
-        <Route path="/movieticket" element={<MovieTicket />} />
+       
 
         <Route path="/deponsit" element={<Deponsit />} />
         <Route path="/forgetpass" element={<ForgetPass />} />
         <Route path="/community" element={<Community />} />
+      
 
 
         <Route path="/otp" element={<Otp />} />
         <Route path="/resetPassword" element={<ResetPassword />} />
         <Route path="/earlymovie" element={<EarlyMovie />} />
         <Route path="/resetpass" element={<ResetPasswod />} />
+        <Route path="/test" element={<SeatLayout />} />
 
 
 
@@ -177,6 +193,7 @@ function App() {
         <Route path="/admin/showtimes/add" element={<PrivateRoute allowedRoles={['admin']}><ShowtimesFormManager /></PrivateRoute>} />
         <Route path="/admin/showtimes/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><ShowtimesFormManager /></PrivateRoute>} />
         <Route path="/admin/orders" element={<PrivateRoute allowedRoles={['admin']}><OrdersManager /></PrivateRoute>} />
+        <Route path="/admin/orders/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><OrdersFormManager /></PrivateRoute>} />
       
         <Route path="/admin/posts" element={<PrivateRoute allowedRoles={['admin']}><PostsManager /></PrivateRoute>} />
         <Route path="/admin/posts/:postId" element={<PrivateRoute allowedRoles={['admin']}><PostDetailManager /></PrivateRoute>} />

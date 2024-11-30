@@ -18,6 +18,40 @@
   text-align: center;
   margin-top:-40px; 
 }
+.Nodata {
+  display: inline-block; /* Cho phép áp dụng padding và margin */
+  color: #fff; /* Màu chữ trắng */
+  background: linear-gradient(45deg, #ff7e5f, #feb47b); /* Hiệu ứng màu gradient */
+  padding: 10px 20px; /* Khoảng cách bên trong */
+  font-size: 16px; /* Cỡ chữ */
+  font-weight: bold; /* Đậm chữ */
+  text-align: center; /* Căn giữa text */
+  border-radius: 25px; /* Bo tròn góc */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng */
+  transition: transform 0.2s, box-shadow 0.2s; /* Hiệu ứng khi hover */
+  cursor: pointer; /* Thay đổi con trỏ chuột */
+  margin-left: 440px;
+}
+@media (max-width:768px) {
+  .Nodata{
+    margin-left: 0;
+  }
+ 
+}
+@media (max-width:578px) {
+  .Nodata{
+    margin-left: 0;
+  }
+ 
+}
+.Nodata:hover {
+  transform: scale(1.05); /* Phóng to nhẹ khi hover */
+  box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.2); /* Đổ bóng đậm hơn khi hover */
+}
+
+.Nodata:active {
+  transform: scale(0.95); /* Thu nhỏ nhẹ khi nhấn */
+}
 
 .banner h2 {
   font-size: 26px;

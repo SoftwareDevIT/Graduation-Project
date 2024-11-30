@@ -34,7 +34,7 @@ const MovieTicket = () => {
 
       const fetchTickets = async () => {
         try {
-          const response = await instance.post(`/historyOrder`);
+          const response = await instance.post('/historyOrder'); 
           if (response.data.status) {
             const ticketData = response.data.data;
             setTickets(ticketData);
@@ -102,60 +102,69 @@ const MovieTicket = () => {
                   </div>
                   <div className="account-nav">
                     <div className="account-nav-item">
-                    <span className="account-nav-title"><Link to={"/profile"}>Quản lí tài khoản</Link></span>
+                      <span className="account-nav-title">Tài khoản</span>
                     </div>
                     <div className="account-nav-item">
-                    <span className="account-nav-title"><Link to={"/changepassword"}>Đổi mật khẩu</Link></span>
+                      <span className="account-nav-title">Tủ phim</span>
                     </div>
                     <div className="account-nav-item">
-                    <span className="account-nav-title"><Link to={"/moviticket"}>Vé</Link></span>
+                      <span className="account-nav-title">Vé</span>
                     </div>
                     <div className="account-nav-item">
-                      <span className="account-nav-title"><Link to={"/desponsit"}>Nạp Tiền</Link></span>
+                      <span className="account-nav-title"><Link to={"/changepassword"}>Đổi mật khẩu</Link></span>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
             <div className="divider"></div>
-            <div className="ticket-tong">
+            <div className="tong-ve">
               {tickets.length === 0 ? (
-                <p className="no-tickets-message">Bạn chưa có vé nào được đặt.</p>
+                <form className="khong-co-ve">
+                  <div className="thong-bao-khong-co-ve">Bạn chưa có vé nào được đặt.</div>
+                </form>
               ) : (
                 tickets.map((ticket, index) => (
-                  <div className="ticket-container" key={index}>
-                    <p className="ticket-code">Mã đặt vé - {ticket.id}</p>
-                    <p className="ticket-date">{ticket.showtime?.showtime_date}</p>
-                    <div className="ticket-info">
-                      <span className="ticket-time">{ticket.showtime?.showtime_start}</span>
-                      <span className="ticket-room">{ticket.showtime?.room?.room_name}</span>
-                      <span className="ticket-seat">
+                  <div className="ve-container" key={index}>
+                    <p className="ma-ve">Mã đặt vé - {ticket.id}</p>
+                    <p className="ngay-ve">{ticket.showtime?.showtime_date}</p>
+                    <div className="thong-tin-ve">
+                      <span className="thoi-gian-ve">{ticket.showtime?.showtime_start}</span>
+                      <span className="phong-ve">{ticket.showtime?.room?.room_name}</span>
+                      <span className="ghe-ve">
                         {ticket.seats?.map((seat) => (
                           <span key={seat.seat_name}>{seat.seat_name}</span>
                         ))}
                       </span>
                     </div>
-                    <div className="ticket-details">
-                      <div className="ticket-item">
-                        <span className="item-name">Số lượng</span>
-                        <span className="item-quantity">{ticket.seats?.length || 0}</span>
-                        <span className="item-price">{ticket.amount?.toLocaleString()} VND</span>
+                    <div className="chi-tiet-ve">
+                      <div className="muc-ve">
+                        <span className="ten-muc">Số lượng</span>
+                        <span className="so-luong">{ticket.seats?.length || 0}</span>
+                        <span className="gia-ve">{ticket.amount?.toLocaleString()} VND</span>
                       </div>
-                      <div className="ticket-item">
-                        <span className="item-name">Combo:</span>
-                        <span className="item-quantity"> 
+                      <div className="muc-ve">
+                        <span className="ten-muc">Combo:</span>
+                        <span className="so-luong">
                           {ticket.combos?.map((combo, index) => (
                             <span key={index}>{combo.combo_name}</span>
                           ))}
                         </span>
                       </div>
-                      <div className="ticket-item total">
-                        <span className="item-name">TỔNG</span>
-                        <span className="item-price">{ticket.amount?.toLocaleString()} VND</span>
+                      <div className="tong-tien">
+                        <span className="ten-muc">TỔNG</span>
+                        <span className="gia-ve">{ticket.amount?.toLocaleString()} VND</span>
                       </div>
                     </div>
-                    <div className="ticket-qr">
-                      {qrCodes[index] && <img src={qrCodes[index]} alt={`QR Code ${index}`} />}
+                    <div className="qr-ve">
+                      <div className="hop-chua-qr">
+                        {qrCodes[index] ? (
+                          <img src={qrCodes[index]} alt={`QR Code ${index}`} className="anh-qr" />
+                        ) : (
+                          <p className="cho-qr">Đang tạo mã QR...</p>
+                        )}
+                        <p className="ghi-chu-qr">Quét mã QR để xác nhận vé</p>
+                      </div>
                     </div>
                   </div>
                 ))
@@ -168,5 +177,4 @@ const MovieTicket = () => {
     </>
   );
 };
-
 export default MovieTicket;

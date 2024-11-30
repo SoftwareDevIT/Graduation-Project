@@ -1,23 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import { notification } from 'antd'; // Import the notification component
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { PayMethod } from '../../../interface/PayMethod';
+import { EditOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons'; // Ant Design icons
+import { notification, Table, Pagination, Input, Button, Popconfirm } from 'antd'; // Import Ant Design components
 import instance from '../../../server';
+import { PayMethod } from '../../../interface/PayMethod';
 
 const PayMethodDashboard = () => {
     const [payMethods, setPayMethods] = useState<PayMethod[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const [searchTerm, setSearchTerm] = useState<string>(''); 
+    const [searchTerm, setSearchTerm] = useState<string>('');
     const payMethodsPerPage = 7;
 
     useEffect(() => {
-        // Fetch API to get the list of payment methods
         const fetchPayMethods = async () => {
             try {
-                const response = await instance.get('/method'); // Update the endpoint
+                const response = await instance.get('/method');
                 setPayMethods(response.data.data);
             } catch (error) {
                 console.error('Error fetching payment methods:', error);
@@ -32,13 +29,12 @@ const PayMethodDashboard = () => {
     }, []);
 
     const handleDelete = async (id: string) => {
-        // Confirm the delete action
         const isConfirmed = window.confirm('Bạn có chắc chắn muốn xóa phương thức thanh toán này?');
         if (!isConfirmed) return;
 
         try {
-            await instance.delete(`/method/${id}`); // Gọi API xóa phương thức thanh toán
-            setPayMethods((prevMethods) => prevMethods.filter((method) => method.id !== id)); // Cập nhật lại danh sách
+            await instance.delete(`/method/${id}`);
+            setPayMethods((prevMethods) => prevMethods.filter((method) => method.id !== id));
             notification.success({
                 message: 'Thành công',
                 description: 'Phương thức thanh toán đã được xóa!',
@@ -59,7 +55,6 @@ const PayMethodDashboard = () => {
     );
 
     const totalPayMethods = filteredPayMethods.length;
-    const totalPages = Math.ceil(totalPayMethods / payMethodsPerPage);
     const currentPayMethods = filteredPayMethods.slice(
         (currentPage - 1) * payMethodsPerPage,
         currentPage * payMethodsPerPage
@@ -67,104 +62,77 @@ const PayMethodDashboard = () => {
 
     const handlePageChange = (page: number) => setCurrentPage(page);
 
-    const getPageNumbers = () => {
-        const pageNumbers = [];
-        if (totalPages <= 5) {
-            for (let i = 1; i <= totalPages; i++) {
-                pageNumbers.push(i);
-            }
-        } else {
-            pageNumbers.push(1);
-            if (currentPage > 3) pageNumbers.push('...');
-            const start = Math.max(currentPage - 1, 2);
-            const end = Math.min(currentPage + 1, totalPages - 1);
-            for (let i = start; i <= end; i++) {
-                pageNumbers.push(i);
-            }
-            if (currentPage < totalPages - 2) pageNumbers.push('...');
-            pageNumbers.push(totalPages);
-        }
-        return pageNumbers;
-    };
+    const columns = [
+        {
+            title: 'ID',
+            dataIndex: 'id',
+            key: 'id',
+            className: 'text-center',
+        },
+        {
+            title: 'Tên Phương Thức Thanh Toán',
+            dataIndex: 'pay_method_name',
+            key: 'pay_method_name',
+            className: 'text-center',
+        },
+        {
+            title: 'Hành Động',
+            key: 'action',
+            className: 'text-center',
+            render: (text: any, payMethod: PayMethod) => (
+                <div className="d-flex justify-content-around">
+                    <Link to={`/admin/method/edit/${payMethod.id}`}>
+                        <Button type="primary" icon={<EditOutlined />} />
+                    </Link>
+                    <Popconfirm
+                        title="Bạn có chắc chắn muốn xóa phương thức thanh toán này?"
+                        onConfirm={() => handleDelete(payMethod.id)}
+                        okText="Có"
+                        cancelText="Không"
+                    >
+                        <Button danger icon={<DeleteOutlined />} />
+                    </Popconfirm>
+                </div>
+            ),
+        },
+    ];
 
     return (
         <div className="container mt-5">
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <Link to={'/admin/method/add'} className="btn btn-outline-primary">
-                    <FontAwesomeIcon icon={faPlus} /> Thêm Phương Thức Thanh Toán
+                <Link to={'/admin/method/add'}>
+                    <Button type="primary" icon={<PlusOutlined />} size="large">
+                        Thêm Phương Thức Thanh Toán
+                    </Button>
                 </Link>
-                <input
-                    type="text"
+                <Input
                     placeholder="Tìm kiếm theo tên phương thức"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="form-control w-25"
+                    style={{ width: 300 }}
+                    allowClear
                 />
             </div>
-            <div className="table-responsive">
-                <table className="table table-bordered table-hover shadow-sm">
-                    <thead className="thead-light">
-                        <tr>
-                            <th>ID</th>
-                            <th>Tên Phương Thức Thanh Toán</th>
-                            <th>Hành Động</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {currentPayMethods.map((payMethod) => (
-                            <tr key={payMethod.id}>
-                                <td>{payMethod.id}</td>
-                                <td>{payMethod.pay_method_name}</td>
-                                <td>
-                                    <div className="d-flex justify-content-around">
-                                        <Link to={`/admin/method/edit/${payMethod.id}`} className="btn btn-warning btn-sm">
-                                            <FontAwesomeIcon icon={faEdit} />
-                                        </Link>
-                                        <button 
-                                            className="btn btn-danger btn-sm"
-                                            onClick={() => handleDelete(payMethod.id)} // Thêm hàm xóa vào đây
-                                        >
-                                            <FontAwesomeIcon icon={faTrashAlt} />
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
-                        {currentPayMethods.length === 0 && (
-                            <tr>
-                                <td colSpan={4} className="text-center">
-                                    Không có phương thức thanh toán nào.
-                                </td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
+            <Table
+                columns={columns}
+                dataSource={currentPayMethods}
+                rowKey="id"
+                pagination={false} // Disable built-in pagination
+                locale={{
+                    emptyText: 'Không có phương thức thanh toán nào.',
+                }}
+            />
+            <div className="d-flex justify-content-center mt-4">
+                <Pagination
+                    current={currentPage}
+                    total={totalPayMethods}
+                    pageSize={payMethodsPerPage}
+                    onChange={handlePageChange}
+                    showSizeChanger={false}
+                    showQuickJumper
+                    showTotal={(total) => `Tổng số ${total} phương thức`}
+                />
             </div>
-            <nav className="d-flex justify-content-center mt-4">
-                <ul className="pagination">
-                    <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                        <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>
-                            Trước
-                        </button>
-                    </li>
-                    {getPageNumbers().map((page, index) => (
-                        <li key={index} className={`page-item ${page === currentPage ? 'active' : ''}`}>
-                            {page === '...' ? (
-                                <span className="page-link">...</span>
-                            ) : (
-                                <button className="page-link" onClick={() => handlePageChange(Number(page))}>
-                                    {page}
-                                </button>
-                            )}
-                        </li>
-                    ))}
-                    <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                        <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
-                            Tiếp
-                        </button>
-                    </li>
-                </ul>
-            </nav>
         </div>
     );
 };

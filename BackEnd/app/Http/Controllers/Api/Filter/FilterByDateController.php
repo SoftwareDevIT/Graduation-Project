@@ -29,7 +29,6 @@ class FilterByDateController extends Controller
 
         $movies = $this->filterByDateService->filterByDate($date, $cinemaId);
 
-
         if ($movies->isEmpty()) {
             return $this->error('Không có phim của ngày hôm nay');
         }
@@ -41,7 +40,7 @@ class FilterByDateController extends Controller
     {
         $locationId = $request->input('location_id');
         $date = $request->input('showtime_date');
-        $movieid = $request->input('movie_id'); 
+        $movieid = $request->input('movie_id');
         if (empty($date) || $date == '0') {
             $date = Carbon::today()->toDateString();
         }

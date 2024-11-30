@@ -19,21 +19,21 @@ class RevenueMovieController extends Controller
     public function totalRevenueMovie($status)
     {
         $totalRevenueMovie = $this->revenueMovieService->totalRevenueMovie($status);
-        return response()->json($totalRevenueMovie);
+        return $this->success($totalRevenueMovie);
     }
     public function totalRevenueByMovie($movie_id)
     {
         $totalRevenueByMovie = $this->revenueMovieService->totalRevenueByMovie($movie_id);
-        return response()->json($totalRevenueByMovie);
+        return $this->success($totalRevenueByMovie);
     }
     public function totalRevenueByMovieBetweenDates($movie_id, $startDate, $endDate)
     {
         $totalRevenueByMovieBetweenDates = $this->revenueMovieService->totalRevenueByMovieBetweenDates($movie_id, $startDate, $endDate);
-        return response()->json($totalRevenueByMovieBetweenDates);
+        return $this->success($totalRevenueByMovieBetweenDates);
     }
     public function totalRevenueMovieBetweenDates($startDate, $endDate)
     {
         $totalRevenueMovieBetweenDates = $this->revenueMovieService->totalRevenueMovieBetweenDates($startDate, $endDate);
-        return response()->json($totalRevenueMovieBetweenDates);
+        return $this->success($totalRevenueMovieBetweenDates);
     }
 }
