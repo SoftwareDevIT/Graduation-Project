@@ -70,7 +70,7 @@ import Video from "./component/News/Video";
 import FilmNews from "./component/News/FilmNews";
 
 
-import Community from "./component/Community/Community";
+
 
 
 import ActorManager from "./Page/Admin/Actor/ActorManager";
@@ -78,15 +78,23 @@ import ActorForm from "./Page/Admin/Actor/ActorForm";
 import DirectorManager from "./Page/Admin/Director/DirectorManager";
 import DirectorFormManager from "./Page/Admin/Director/DirectorForm";
 import UpcomingMovies from "./component/Movies/UpcomingMovies";
-import OrderPage from "./component/Oders/OrderPage";
+
 
 import MethodManager from "./Page/Admin/Method/MethodManager";
 import MethodFormManager from "./Page/Admin/Method/MethodForm";
 import PromotionsManager from "./Page/Admin/Promotions/PromotionsManager";
 import PromotionsFormManager from "./Page/Admin/Promotions/PromotionsForm";
 
+import OrderPage from "./component/Oders/OrderPage";
+
+import OrdersFormManager from "./Page/Admin/Orders/OrdersForm";
+
+
 import PageTitleUpdater from "./component/PageTitleUpdater/PageTitleUpdater";
 import TicketCinema from "./component/PersonalPage/TicketCinema";
+import SeatLayout from "./component/SeatMap/test";
+import Community from "./component/Community/Community";
+
 
 
 
@@ -139,6 +147,7 @@ function App() {
         <Route path="/forgetpass" element={<ForgetPass/>} />
         <Route path="/otp" element={<Otp/>} />
         <Route path="/resetPassword" element={<ResetPasswod/>} />
+       
       
     
        
@@ -149,12 +158,14 @@ function App() {
         <Route path="/deponsit" element={<Deponsit />} />
         <Route path="/forgetpass" element={<ForgetPass />} />
         <Route path="/community" element={<Community />} />
+      
 
 
         <Route path="/otp" element={<Otp />} />
         <Route path="/resetPassword" element={<ResetPassword />} />
         <Route path="/earlymovie" element={<EarlyMovie />} />
         <Route path="/resetpass" element={<ResetPasswod />} />
+        <Route path="/test" element={<SeatLayout />} />
 
 
 
@@ -181,6 +192,7 @@ function App() {
         <Route path="/admin/showtimes/add" element={<PrivateRoute allowedRoles={['admin']}><ShowtimesFormManager /></PrivateRoute>} />
         <Route path="/admin/showtimes/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><ShowtimesFormManager /></PrivateRoute>} />
         <Route path="/admin/orders" element={<PrivateRoute allowedRoles={['admin']}><OrdersManager /></PrivateRoute>} />
+        <Route path="/admin/orders/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><OrdersFormManager /></PrivateRoute>} />
       
         <Route path="/admin/posts" element={<PrivateRoute allowedRoles={['admin']}><PostsManager /></PrivateRoute>} />
         <Route path="/admin/posts/:postId" element={<PrivateRoute allowedRoles={['admin']}><PostDetailManager /></PrivateRoute>} />

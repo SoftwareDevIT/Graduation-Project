@@ -25,6 +25,9 @@ class UpdateMatrixRequest extends FormRequest
             "name" => "string",
             "rows" => "required|integer",
             "columns" => "integer",
+            "row_regular_seat" => "integer",
+            "row_vip_seat" => "integer",
+            "row_couple_seat" => "integer",
             "status" => "string",
         ];
     }

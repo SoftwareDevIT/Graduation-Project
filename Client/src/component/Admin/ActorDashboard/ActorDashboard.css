@@ -1,0 +1,42 @@
+/* ActorDashboard.css */
+
+/* Customize pagination appearance */
+.custom-pagination .ant-pagination-item {
+    background-color: #f0f0f0; /* Light background for pagination items */
+    border-radius: 5px;
+    margin: 0 5px;
+    transition: all 0.3s ease;
+}
+
+.custom-pagination .ant-pagination-item:hover {
+    background-color: #1890ff; /* Change background color on hover */
+    color: white; /* White text on hover */
+    border-color: #1890ff; /* Border color when hovered */
+}
+
+.custom-pagination .ant-pagination-item-active {
+    background-color: #1890ff; /* Active page color */
+    border-color: #1890ff; /* Active border color */
+    color: white;
+}
+
+.custom-pagination .ant-pagination-prev,
+.custom-pagination .ant-pagination-next {
+    background-color: #1890ff;
+    color: white;
+    border-radius: 50%;
+}
+
+.custom-pagination .ant-pagination-prev:hover,
+.custom-pagination .ant-pagination-next:hover {
+    background-color: #40a9ff;
+}
+
+.custom-pagination .ant-pagination-disabled {
+    color: #d9d9d9;
+}
+
+.custom-pagination .ant-pagination-total-text {
+    font-size: 14px;
+    color: #000;
+}

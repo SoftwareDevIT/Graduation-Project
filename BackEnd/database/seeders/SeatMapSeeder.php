@@ -2,12 +2,8 @@
 
 namespace Database\Seeders;
 
-use Carbon\Carbon;
-use GuzzleHttp\Client;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class SeatMapSeeder extends Seeder
 {
@@ -16,41 +12,68 @@ class SeatMapSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('seat_map')->insert([
-            [
-                'name' => 'Layout 12x12',
-                'rows' => 12,
-                'columns' => 12,
-                'status' => 'Bản nháp',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
+        $seatLayouts = DB::table('seat_layouts')->get(); // Fetch all layouts
+        $seatMaps = [];
 
-                'name' => 'Layout 13x13',
-                'rows' => 13,
-                'columns' => 13,
-                'status' => 'Bản nháp',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
+        foreach ($seatLayouts as $layout) {
+            for ($row = 1; $row <= $layout->rows; $row++) {
+                $rowLetter = chr(64 + $row); // Convert numeric row to alphabetical (e.g., 1 -> 'A', 2 -> 'B')
 
-                'name' => 'Layout 14x14',
-                'rows' => 14,
-                'columns' => 14,
-                'status' => 'Bản nháp',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'Layout 15x15',
-                'rows' => 15,
-                'columns' => 15,
-                'status' => 'Bản nháp',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-        ]);
+                // Logic phân loại loại ghế
+                $seatType = '';
+
+                // Ghế thường ở đầu, ghế VIP ở giữa, ghế đôi ở cuối
+                if ($row <= $layout->row_regular_seat) {
+                    $seatType = 'Regular';
+                } elseif ($row <= $layout->row_regular_seat + $layout->row_vip_seat) {
+                    $seatType = 'VIP';
+                } else {
+                    $seatType = 'Couple';
+                }
+
+                // Tạo ghế đôi chiếm 2 ô
+                for ($column = 1; $column <= $layout->columns; $column++) {
+                    // Nếu là ghế đôi, tạo 2 cột liên tiếp
+                    if ($seatType == 'Couple' && $column % 2 == 1 && $column + 1 <= $layout->columns) {
+                        $seatMaps[] = [
+                            'seat_layout_id' => $layout->id,
+                            'row' => $rowLetter,
+                            'column' => $column,
+                            'seat_type' => $seatType,
+                            'is_double' => true,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ];
+
+                        // Tạo cột kế tiếp cho ghế đôi
+                        $seatMaps[] = [
+                            'seat_layout_id' => $layout->id,
+                            'row' => $rowLetter,
+                            'column' => $column + 1,
+                            'type' => $seatType,
+                            'is_double' => true,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ];
+
+                        // Bỏ qua cột tiếp theo để tránh trùng
+                        $column++;
+                    } else {
+                        $seatMaps[] = [
+                            'seat_layout_id' => $layout->id,
+                            'row' => $rowLetter,
+                            'column' => $column,
+                            'type' => $seatType,
+                            'is_double' => false,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ];
+                    }
+                }
+            }
+        }
+
+        // Batch insert for performance
+        DB::table('seat_map')->insert($seatMaps);
     }
 }

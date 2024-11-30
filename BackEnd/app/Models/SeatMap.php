@@ -8,12 +8,20 @@ use Illuminate\Database\Eloquent\Model;
 class SeatMap extends Model
 {
     use HasFactory;
+
     protected $table = 'seat_map';
-    protected $primaryKey = 'id';
+
     protected $fillable = [
         'seat_layout_id',
         'row',
-        'columns',
+        'column',
+        'is_double',
         'type',
     ];
+
+    // Link back to the SeatLayout
+    public function seatLayout()
+    {
+        return $this->belongsTo(SeatLayout::class);
+    }
 }

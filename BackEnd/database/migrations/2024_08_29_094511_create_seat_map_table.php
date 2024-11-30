@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('seat_layout_id');
             $table->string('row');
-            $table->integer('columns');
+            $table->integer('column');
             $table->enum('type', ['Regular', 'VIP', 'Couple'])->default('Regular');
+            $table->boolean('is_double')->default(false);
             $table->timestamps();
             $table->foreign('seat_layout_id')->references('id')->on('seat_layouts')->onDelete('cascade');
         });

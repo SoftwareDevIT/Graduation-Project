@@ -512,7 +512,7 @@ li.city.selected {
     font-size: 9px;
   }
   .calendar-custom-1{
-    width: 400px;
+    width: 359px;
   }
   .list-tp .list{
     display: none;
@@ -547,7 +547,7 @@ right: 15px;
 }
 @media (max-width:390px) {
   .calendar-custom-1 {
-    width: 347px !important;
+    width: 344px;
 }
 }
 }
@@ -558,8 +558,6 @@ right: 15px;
   display: flex;
 
  color: #edf2f9;
- 
- 
   gap: 0;
 
 }
@@ -623,4 +621,27 @@ right: 15px;
   justify-content: center;
   align-items: center;
   z-index: 9999; /* Đảm bảo overlay ở trên cùng */
+}
+.city-selects {
+  width: 100%;
+  max-width: 400px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: #fff;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 140"><polygon points="70,105 105,35 35,35" fill="black"/></svg>')
+    no-repeat right 10px center;
+  background-size: 10px;
+}
+
+@media (max-width: 768px) {
+  .city-selects {
+    font-size: 14px;
+    padding: 8px;
+    background-size: 11px;
+  }
 }

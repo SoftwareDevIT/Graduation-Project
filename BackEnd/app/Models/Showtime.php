@@ -28,6 +28,10 @@ class Showtime extends Model
     // {
     //     return $this->belongsTo(MovieInCinema::class, 'movie_in_cinema_id');
     // }
+    // public function moviecinema()
+    // {
+    //     return $this->belongsTo(MovieInCinema::class, 'movie_in_cinema_id');
+    // }
 
     // /**
     //  * Quan hệ: Movie từ MovieInCinema
@@ -40,6 +44,7 @@ class Showtime extends Model
     public function movie()
     {
         return $this->belongsTo(Movie::class);
+        // return $this->belongsTo(Movie::class);
     }
 
     public function room()
@@ -50,10 +55,8 @@ class Showtime extends Model
     {
         return $this->hasMany(Seats::class, 'showtime_id');
     }
-    // public function cinema()
-    // {
-    //     return $this->belongsTo(Cinema::class);
-    // }
+
+
 
     // public function movieincinemas()
     // {
