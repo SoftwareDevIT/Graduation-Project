@@ -1,200 +1,353 @@
-.dashboard {
-    padding: 30px;
-    background: rgb(229, 240, 242); /* Nền xanh nhạt */
-    min-height: 170vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+    .dashboard {
+        padding: 30px;
+        background: rgb(229, 240, 242); /* Nền xanh nhạt */
+        min-height: 170vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
-/* Tiêu đề Dashboard */
-.dashboard-title {
-    font-size: 2.5rem;
-    margin-bottom: 40px;
-    color: #004d40; /* Xanh đậm */
-    color: #004d40; /* Xanh đậm */
-    text-align: center;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-}
+    /* Tiêu đề Dashboard */
+    .dashboard-title {
+        font-size: 2.5rem;
+        margin-bottom: 40px;
+        color: #004d40; /* Xanh đậm */
+        color: #004d40; /* Xanh đậm */
+        text-align: center;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+    }
 
-/* Nội dung Dashboard */
-.dashboard-content {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-}
+    /* Nội dung Dashboard */
+    .dashboard-content {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
 
-/* Thẻ tóm tắt */
-.summary {
+    /* Thẻ tóm tắt */
+    .summary {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .summary-card {
+        background-color: #ffffff; /* Màu nền trắng */
+        background-color: #ffffff; /* Màu nền trắng */
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        color: white; /* Màu chữ trắng để nổi bật trên nền gradient */
+    }
+
+
+    .summary-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .summary-card-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .summary-card-header h3 {
+        font-size: 1.5rem;
+        color: white; /* Màu chữ trắng */
+    }
+
+    .summary-icon {
+        font-size: 2rem;
+        margin-right: 20px;
+        color: #00796b; /* Xanh biển */
+        color: #00796b; /* Xanh biển */
+    }
+
+    .summary-number {
+        font-size: 2.5rem;
+        color: white; /* Màu chữ trắng */
+        font-weight: bold;
+    }
+
+    .summary-footer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 15px;
+        font-size: 1rem;
+        color: white; /* Màu chữ trắng */
+    }
+
+    .summary-footer .summary-change i {
+        font-size: 1.2rem;
+        margin-right: 5px;
+    }
+    .positive {
+        color: #4caf50; /* Xanh lá */
+    }
+
+    .negative {
+        color: #f44336; /* Đỏ */
+    }
+
+    .summary-change i {
+        font-size: 1.2rem;
+        margin-right: 5px;
+    }
+
+    .view-more {
+        color: #00796b; /* Xanh biển nhạt */
+        color: #00796b; /* Xanh biển nhạt */
+        text-decoration: none;
+    }
+
+    .view-more:hover {
+        text-decoration: underline;
+    }
+
+    /* Phần biểu đồ */
+    /* Phần biểu đồ */
+    .charts-container {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        width: 100%;
+    }
+
+    .revenue-summary, .quarterly-revenue {
+        background: #ffffff; /* Nền trắng */
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        flex: 1; /* Cho phép cả hai biểu đồ chia đều không gian */
+        min-width: 48%; /* Đảm bảo mỗi biểu đồ chiếm 48% chiều rộng */
+    }
+
+    .revenue-summary h3, .quarterly-revenue h3 {
+        font-size: 1.8rem;
+        color: #004d40; /* Xanh đậm */
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+
+    .revenue-chart, .area-chart {
+        width: 100%;
+        height: 300px;
+        margin-bottom: 15px;
+    }
+
+
+    /* Bảng đơn hàng gần đây */
+    .recent-orders {
+        margin-top: 30px;
+        background-color: #ffffff; /* Nền trắng */
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+    }
+
+    .recent-orders h3 {
+        margin-bottom: 20px;
+        font-size: 18px;
+        color: #004d40; /* Xanh đậm */
+        font-weight: bold;
+    }
+
+    .recent-orders table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+        color: #004d40; /* Xanh đậm */
+    }
+
+    .recent-orders table th,
+    .recent-orders table td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #b2ebf2; /* Viền xanh nhạt */
+    }
+
+    .recent-orders table th {
+        background-color: #e0f7fa; /* Nền xanh nhạt cho tiêu đề */
+        color: #004d40; /* Chữ xanh đậm */
+        font-weight: 600;
+    }
+
+    .recent-orders table td {
+        color: #004d40; /* Chữ xanh đậm */
+    }
+
+    .recent-orders table tr:nth-child(even) {
+        background-color: #f1f8e9; /* Màu nền xanh rất nhạt cho hàng chẵn */
+    }
+
+    .recent-orders table tr:hover {
+        background-color: #b2ebf2; /* Màu xanh nhạt khi hover */
+    }
+    /* Form chính */
+    .filter-form {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 20px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        background-color: #fff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Nhóm trường nhập liệu */
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    label {
+        font-size: 14px;
+        font-weight: 500;
+        color: #333;
+    }
+    
+    select,
+    input {
+        width: 200px;
+        padding: 8px 12px;
+        border: 1px solid #dcdcdc;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+    
+    input[type="date"] {
+        font-family: "Arial", sans-serif;
+    }
+    
+    /* Hiệu ứng focus */
+    select:focus,
+    input:focus {
+        outline: none;
+        border-color: #ff7a00;
+        box-shadow: 0 0 4px #ff7a00;
+    }
+    
+    /* Nút lọc */
+    .btn-submit {
+        padding: 10px 20px;
+        background-color: #ff7a00;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 14px;
+        cursor: pointer;
+    }
+    
+    .btn-submit:hover {
+        background-color: #e66b00;
+    }
+    /* Form lọc */
+.filter-form {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 20px;
     margin-bottom: 30px;
-}
-.recent-orders{
-    position: relative;
-    bottom: 400px
-}
-
-.summary-card {
-    background-color: #ffffff; /* Màu nền trắng */
-    background-color: #ffffff; /* Màu nền trắng */
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    color: white; /* Màu chữ trắng để nổi bật trên nền gradient */
-}
-.export-btn{
-    display: none;
-}
-
-.summary-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-}
-
-.summary-card-header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.summary-card-header h3 {
-    font-size: 1.5rem;
-    color: white; /* Màu chữ trắng */
-}
-
-.summary-icon {
-    font-size: 2rem;
-    margin-right: 20px;
-    color: #00796b; /* Xanh biển */
-    color: #00796b; /* Xanh biển */
-}
-
-.summary-number {
-    font-size: 2.5rem;
-    color: white; /* Màu chữ trắng */
-    font-weight: bold;
-}
-
-.summary-footer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 15px;
-    font-size: 1rem;
-    color: white; /* Màu chữ trắng */
-}
-
-.summary-footer .summary-change i {
-    font-size: 1.2rem;
-    margin-right: 5px;
-}
-.positive {
-    color: #4caf50; /* Xanh lá */
-}
-
-.negative {
-    color: #f44336; /* Đỏ */
-}
-
-.summary-change i {
-    font-size: 1.2rem;
-    margin-right: 5px;
-}
-
-.view-more {
-    color: #00796b; /* Xanh biển nhạt */
-    color: #00796b; /* Xanh biển nhạt */
-    text-decoration: none;
-}
-
-.view-more:hover {
-    text-decoration: underline;
-}
-
-/* Phần biểu đồ */
-/* Phần biểu đồ */
-.charts-container {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    width: 100%;
-}
-
-.revenue-summary, .quarterly-revenue {
     background: #ffffff; /* Nền trắng */
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    flex: 1; /* Cho phép cả hai biểu đồ chia đều không gian */
-    min-width: 48%; /* Đảm bảo mỗi biểu đồ chiếm 48% chiều rộng */
-}
-
-.revenue-summary h3, .quarterly-revenue h3 {
-    font-size: 1.8rem;
-    color: #004d40; /* Xanh đậm */
-    margin-bottom: 20px;
-    font-weight: 600;
-}
-
-.revenue-chart, .area-chart {
-    width: 100%;
-    height: 300px;
-    margin-bottom: 15px;
-}
-
-
-/* Bảng đơn hàng gần đây */
-.recent-orders {
-    margin-top: 30px;
-    background-color: #ffffff; /* Nền trắng */
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.recent-orders h3 {
-    margin-bottom: 20px;
-    font-size: 18px;
+.filter-form .form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-form label {
+    font-size: 1rem;
     color: #004d40; /* Xanh đậm */
     font-weight: bold;
+    margin-bottom: 8px;
 }
 
-.recent-orders table {
+.filter-form input[type="date"],
+.filter-form select {
     width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-    color: #004d40; /* Xanh đậm */
+    padding: 12px;
+    font-size: 1rem;
+    border: 1px solid #d3d3d3;
+    border-radius: 8px;
+    background: #f9f9f9;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.recent-orders table th,
-.recent-orders table td {
-    padding: 10px;
-    text-align: left;
-    border-bottom: 1px solid #b2ebf2; /* Viền xanh nhạt */
+.filter-form input[type="date"]:focus,
+.filter-form select:focus {
+    border-color: #36a2eb;
+    box-shadow: 0 0 8px rgba(54, 162, 235, 0.5);
+    outline: none;
 }
 
-.recent-orders table th {
-    background-color: #e0f7fa; /* Nền xanh nhạt cho tiêu đề */
-    color: #004d40; /* Chữ xanh đậm */
-    font-weight: 600;
+.filter-form .btn-filter {
+    grid-column: span 2;
+    padding: 13px 20px;
+    margin-bottom: -15px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #ffffff; /* Màu chữ trắng */
+    background: linear-gradient(to right, #36d1dc, #5b86e5);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.recent-orders table td {
-    color: #004d40; /* Chữ xanh đậm */
+.filter-form .btn-filter:hover {
+    background: linear-gradient(to right, #5b86e5, #36d1dc);
+    transform: translateY(-2px);
 }
 
-.recent-orders table tr:nth-child(even) {
-    background-color: #f1f8e9; /* Màu nền xanh rất nhạt cho hàng chẵn */
+.filter-form .btn-filter:active {
+    transform: translateY(0);
+}
+select {
+    -webkit-appearance: none;  /* Safari */
+    -moz-appearance: none;     /* Firefox */
+    appearance: none;          /* Chrome, Opera, Edge */
+    padding-right: 20px;       /* Dự phòng cho khoảng cách nếu cần */
+    background: transparent;  /* Thay đổi nền nếu cần */
+  }
+/* Container cho Date Picker */
+.date-picker-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px; /* Khoảng cách trên */
+  font-size: 1rem;
 }
 
-.recent-orders table tr:hover {
-    background-color: #b2ebf2; /* Màu xanh nhạt khi hover */
+.date-picker-container label {
+  font-size: 1rem;
+  margin-right: 10px;
+  color: #00796b; /* Màu xanh biển nhạt */
 }
+
+.date-picker {
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 6px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hiệu ứng hover khi người dùng hover vào date picker */

@@ -3,27 +3,28 @@ import { Link } from 'react-router-dom';
 import { useShowtimeContext } from '../../../Context/ShowtimesContext';
 import instance from '../../../server';
 import { Movie } from '../../../interface/Movie';
-import { notification } from 'antd'; // Import Ant Design notification
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { notification, Table, Button, Input, Space, Pagination } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import {DeleteOutlined, EditOutlined, PlusOutlined} from '@ant-design/icons'
 
 const ShowtimesDashboard: React.FC = () => {
     const { state, dispatch } = useShowtimeContext();
-    const { showtimes } = state; // Truyền lại showtimes từ context
+    const { showtimes } = state;
     const [error, setError] = useState<string | null>(null);
     const [movies, setMovies] = useState<Movie[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
-    
+    const [showtimesPerPage] = useState<number>(5);
+    const [totalShowtimes, setTotalShowtimes] = useState<number>(0);  // Total showtimes to calculate total pages
 
-    // Fetch showtimes và movies từ API
     useEffect(() => {
         const fetchShowtimes = async () => {
             try {
                 const response = await instance.get(`/showtimes?page=${currentPage}`);
-                if (Array.isArray(response.data.data.data)) {
+                if (response.data.data.data && Array.isArray(response.data.data.data)) {
                     dispatch({ type: 'SET_SHOWTIMES', payload: response.data.data.data });
+                    setTotalShowtimes(response.data.data.total);  // Assuming the response contains the total count of showtimes
                 } else {
                     setError('Không thể lấy showtime: Định dạng phản hồi không mong đợi');
                 }
@@ -47,27 +48,22 @@ const ShowtimesDashboard: React.FC = () => {
 
         fetchShowtimes();
         fetchMovies();
-    }, [dispatch, currentPage]);
+    }, [dispatch, currentPage, showtimesPerPage]);
 
-    // Lọc showtimes theo tên phim
     const filteredShowtimes = showtimes.filter(showtime =>
         showtime.movie_in_cinema?.movie?.movie_name?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    // Xử lý xóa showtime
     const deleteShowtime = async (id: number) => {
         if (window.confirm('Bạn có chắc chắn muốn xóa showtime này?')) {
             try {
                 await instance.delete(`/showtimes/${id}`);
                 dispatch({ type: 'DELETE_SHOWTIME', payload: id });
-
-                // Thông báo thành công
                 notification.success({
                     message: 'Xóa Thành Công',
                     description: 'Showtime đã được xóa thành công!',
                 });
             } catch (err) {
-                // Thông báo lỗi
                 notification.error({
                     message: 'Lỗi Xóa Showtime',
                     description: 'Không thể xóa showtime. Vui lòng thử lại sau.',
@@ -76,7 +72,6 @@ const ShowtimesDashboard: React.FC = () => {
         }
     };
 
-    // Định dạng giá tiền
     const formatCurrency = (amount: number) => {
         return new Intl.NumberFormat('vi-VN', {
             style: 'currency',
@@ -84,83 +79,105 @@ const ShowtimesDashboard: React.FC = () => {
         }).format(amount);
     };
 
+    // Pagination handler
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+    };
+
+    const columns = [
+        {
+            title: 'Phim',
+            dataIndex: 'movieName',
+            key: 'movieName',
+            render: (text: string, record: any) => <span>{record.movie_in_cinema?.movie?.movie_name}</span>,
+        },
+        {
+            title: 'Phòng',
+            dataIndex: 'room',
+            key: 'room',
+            render: (text: string, record: any) => <span>{record.room?.room_name}</span>,
+        },
+        {
+            title: 'Ngày',
+            dataIndex: 'date',
+            key: 'date',
+            render: (text: string, record: any) => <span>{new Date(record.showtime_date).toLocaleDateString()}</span>,
+        },
+        {
+            title: 'Giờ bắt đầu',
+            dataIndex: 'start',
+            key: 'start',
+            render: (text: string, record: any) => <span>{record.showtime_start}</span>,
+        },
+        {
+            title: 'Giờ kết thúc',
+            dataIndex: 'end',
+            key: 'end',
+            render: (text: string, record: any) => <span>{record.showtime_end}</span>,
+        },
+        {
+            title: 'Giá',
+            dataIndex: 'price',
+            key: 'price',
+            render: (text: number) => <span>{formatCurrency(text)}</span>,
+        },
+        {
+            title: 'Hành Động',
+            key: 'action',
+            render: (text: string, record: any) => (
+                <Space size="middle">
+                    <Link to={`/admin/showtimes/edit/${record.id}`}>
+                    <Button type="primary" icon={<EditOutlined />} />
+                    </Link>
+                    <Button
+                     icon={<DeleteOutlined />}
+        
+                        danger
+                        onClick={() => deleteShowtime(record.id)}
+                    />
+                </Space>
+            ),
+        },
+    ];
+
     if (error) {
-        return <div className="alert alert-danger">{error}</div>;
+        return <p>{error}</p>;
     }
 
     return (
-        <div className="container mt-5">
-           
+        <div className="container mx-auto p-4">
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <Link to="/admin/showtimes/add" className="btn btn-outline-primary"><FontAwesomeIcon icon={faPlus} /> Thêm Suất Chiếu</Link>
-                <input
-                    type="text"
+                <Link to="/admin/showtimes/add">
+                    <Button icon={<PlusOutlined />} type="primary" size="large">
+                        Thêm Suất Chiếu
+                    </Button>
+                </Link>
+                <Input
                     placeholder="Tìm kiếm theo tên phim"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="form-control w-25"
+                    style={{ width: 300 }}
+                    allowClear
                 />
             </div>
-            <div className="table-responsive">
-                <table className="table table-bordered table-hover shadow-sm">
-                    <thead className="thead-light">
-                        <tr>
-                            <th>Phim</th>
-                            <th>Phòng</th>
-                            <th>Ngày</th>
-                            <th>Giờ bắt đầu</th>
-                            <th>Giờ kết thúc</th>
-                            <th>Giá</th>
-                            <th>Hành động</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredShowtimes.length > 0 ? (
-                            filteredShowtimes.map((showtime) => (
-                                <tr key={showtime.id}>
-                                    <td>{showtime.movie_in_cinema?.movie?.movie_name}</td>
-                                    <td>{showtime.room?.room_name}</td>
-                                    <td>{new Date(showtime.showtime_date).toLocaleDateString()}</td>
-                                    <td>{showtime.showtime_start}</td>
-                                    <td>{showtime.showtime_end}</td>
-                                    <td>{formatCurrency(showtime.price)}</td>
-                                    <td>
-                                        <div className="d-flex justify-content-around">
-                                            <Link to={`/admin/showtimes/edit/${showtime.id}`} className="btn btn-warning btn-sm mr-2">
-                                                <i className="fas fa-edit"></i>
-                                            </Link>
-                                            <button className="btn btn-danger btn-sm" onClick={() => deleteShowtime(showtime.id)}>
-                                                <i className="fas fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td colSpan={7} className="text-center">Không có showtimes nào.</td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
+
+            <Table
+                columns={columns}
+                dataSource={filteredShowtimes}
+                rowKey="id"
+                pagination={false}  // Disable default pagination as we will use custom pagination
+            />
+
+<div className="d-flex justify-content-center mt-4"> 
+                <Pagination
+                    current={currentPage}
+                    pageSize={showtimesPerPage}
+                    total={totalShowtimes}
+                    onChange={handlePageChange}
+                    showSizeChanger={false}
+                    showQuickJumper
+                />
             </div>
-            <nav className="d-flex justify-content-center mt-4">
-                <div className="pagination">
-                    <button
-                        className="btn btn-outline-primary mx-1"
-                        onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                    >
-                         Trước
-                    </button>
-                    <button className="btn btn-outline-primary mx-1">{currentPage}</button>
-                    <button
-                        className="btn btn-outline-primary mx-1"
-                        onClick={() => setCurrentPage((prev) => prev + 1)}
-                    >
-                        Sau 
-                    </button>
-                </div>
-            </nav>
         </div>
     );
 };

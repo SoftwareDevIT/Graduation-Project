@@ -25,6 +25,7 @@ class StoreSeatMapRequest extends FormRequest
             "seat_layout_id" => "string",
             "row" => "required|string",
             "column" => "integer",
+            "is_double" => "boolean",
         ];
     }
 }

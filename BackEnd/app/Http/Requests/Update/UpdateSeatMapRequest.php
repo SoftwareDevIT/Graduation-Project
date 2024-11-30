@@ -26,6 +26,7 @@ class UpdateSeatMapRequest extends FormRequest
             "seat_layout_id" => "integer",
             "row" => "required|string",
             "column" => "integer",
+            "is_double" => "boolean",
         ];
     }
 }
