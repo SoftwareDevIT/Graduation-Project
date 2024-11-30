@@ -143,9 +143,14 @@ Route::middleware(['auth:sanctum', 'role:admin|manager'])->group(function () {
 
     //Trang dashboard
     Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
+
+   
 });
 
-
+Route::get('/revenue/total/{status}', [DashboardAdminController::class, 'totalRevenue']);
+Route::get('/revenue/cinema/{idCinema}', [DashboardAdminController::class, 'totalRevenueByCinema']);
+Route::get('/revenue/cinema/{idCinema}/between-dates', [DashboardAdminController::class, 'totalRevenueByCinemaBetweenDates']);
+Route::get('/revenue/between-dates', [DashboardAdminController::class, 'totalRevenueBetweenDates']);
 // });
 
 Route::post('/resetPassword', [ResetPasswordController::class, 'resetPassword'])->middleware('auth:sanctum');
@@ -203,4 +208,3 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 });
 Route::apiResource('promotions', PromotionController::class);
 Route::post('apply-promotion', [PromotionController::class, 'applyPromotion']);
-
