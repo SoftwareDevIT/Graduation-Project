@@ -614,4 +614,40 @@ color: #727575;
 .seat.selected {
   background-color: green; /* Màu nền cho ghế đã chọn */
 }
+.custom-error-modal .ant-modal-content {
+  border-radius: 10px; /* Bo góc */
+  background-color: #fefefe; /* Màu nền */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Đổ bóng */
+}
+
+.custom-error-modal .ant-modal-header {
+  border-bottom: none; /* Loại bỏ viền dưới tiêu đề */
+}
+
+.custom-error-modal .ant-modal-title {
+  font-size: 18px; /* Tùy chỉnh kích thước chữ */
+  font-weight: bold; /* Tô đậm */
+  color: #ff4d4f; /* Màu chữ tiêu đề */
+}
+
+.custom-error-modal .ant-modal-body {
+  font-size: 16px; /* Kích thước chữ nội dung */
+  color: #333; /* Màu chữ */
+}
+
+.custom-error-modal .ant-modal-footer {
+  border-top: none; /* Loại bỏ viền trên footer */
+  text-align: center; /* Căn giữa các nút */
+}
+
+.custom-error-modal .ant-btn-primary {
+  background-color: #1890ff; /* Màu nền nút */
+  border: none; /* Loại bỏ viền nút */
+  border-radius: 5px; /* Bo góc nút */
+  padding: 6px 12px; /* Padding nút */
+}
+
+.custom-error-modal .ant-btn-primary:hover {
+  background-color: #40a9ff; /* Màu nền khi hover */
+}
 

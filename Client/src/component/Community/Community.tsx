@@ -1,14 +1,12 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react"; // Import Swiper
-import "swiper/css"; // Import các CSS cơ bản của Swiper
-import "swiper/css/pagination"; 
-import "swiper/css/navigation";
-import { Pagination, Navigation } from "swiper/modules"; // Import module Swiper
-import  "./Community..css";
+import "swiper/css"; // Import Swiper basic CSS
+import "swiper/css/pagination"; // Import pagination CSS
+import "swiper/css/navigation"; // Import navigation CSS
+import { Pagination, Navigation } from "swiper/modules";
+import './Community.css'
 import Header from "../Header/Hearder";
 import Footer from "../Footer/Footer";
-
-
 
 const movies = [
   { title: "Mèo Ma Bé Tha", image: "https://cdn.moveek.com/storage/media/cache/short/6729c0ad0d674052301821.jpg" },

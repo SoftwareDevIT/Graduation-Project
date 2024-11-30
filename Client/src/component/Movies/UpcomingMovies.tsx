@@ -71,7 +71,7 @@ const UpcomingMovies: React.FC = () => {
               ) : error ? (
                 <p>{error}</p>
               ) : (
-                <p>Không có phim sắp chiếu.</p>
+                <p className='Nodata'>Không có phim sắp chiếu.</p>
               )}
             </div>
           </div>
