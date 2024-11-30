@@ -25,10 +25,6 @@ class Room extends Model
     }
 
     // Define relation to Showtimes
-    public function showtimes()
-    {
-        return $this->hasMany(Showtime::class);
-    }
 
     // Relation to Cinema
     public function cinema()
