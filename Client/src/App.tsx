@@ -107,8 +107,8 @@ function App() {
       <Routes>
         <Route index element={<Home />} />
         <Route path="/buy-ticket" element={<Bookcinematickets />} />
-        <Route path="/orders" element={<OrderPage />} />
-        <Route path="/pay" element={<OrderCheckout />} />
+        <Route path="/orders" element={<PrivateRoute><OrderPage /></PrivateRoute>} />
+        <Route path="/pay" element={ <PrivateRoute><OrderCheckout /></PrivateRoute> } />
         <Route path="/seat" element={<CinemaSeatSelection />} />
         <Route path="/movie-detail/:slug" element={<ContentMovie />} />
         <Route path="/schedule/:slug" element={<LichChieu />} />
@@ -129,12 +129,16 @@ function App() {
 
 
         <Route path="/movie/search/:movie_name" element={<SerachMovies />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/Personal" element={<Personal />} />
+        <Route path="/profile" element={
+            <PrivateRoute>
+              <Profile /> 
+            </PrivateRoute>
+          } />
+        <Route path="/Personal" element={<PrivateRoute><Personal /></PrivateRoute>} />
  
-        <Route path="/ticketcinema" element={<TicketCinema/>} />
-        <Route path="/credits" element={<Credits />} />
-        <Route path="/ChangePassword" element={<ChangePassword />} />
+        <Route path="/ticketcinema" element={ <PrivateRoute><TicketCinema/></PrivateRoute>} />
+        <Route path="/credits" element={ <PrivateRoute><Credits /></PrivateRoute>} />
+        <Route path="/ChangePassword" element={ <PrivateRoute><Credits /><ChangePassword /></PrivateRoute>} />
    
         <Route path="/register" element={<RegisterCinema />} />
         <Route path="/login" element={<LoginCinema />} />

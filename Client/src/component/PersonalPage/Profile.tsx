@@ -8,21 +8,22 @@ import {
   Avatar,
   notification,
 } from "antd";
-
-import "./Profile.css"; // Import file CSS
+import { UploadOutlined } from "@ant-design/icons";
+import "./Profile.css"; // Import CSS
 import Footer from "../Footer/Footer";
 import Header from "../Header/Hearder";
-import "./Profile.css";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import instance from "../../server";
-import { NavLink } from 'react-router-dom';
+
+const { Option } = Select;
+
 const Profile: React.FC = () => {
   const [avatar, setAvatar] = useState<string>(
     "https://cdn.moveek.com/bundles/ornweb/img/no-avatar.png"
   );
   const [userProfile, setUserProfile] = useState<any>(null);
   const [locations, setLocations] = useState<any[]>([]);
-  const [avatarFile, setAvatarFile] = useState<File | null>(null); // Thêm state để lưu file avatar
+  const [avatarFile, setAvatarFile] = useState<File | null>(null); // Lưu file avatar
 
   useEffect(() => {
     const profileData = localStorage.getItem("user_profile");
@@ -30,7 +31,6 @@ const Profile: React.FC = () => {
       const profile = JSON.parse(profileData);
       const userId = profile.id;
 
-      // Lấy thông tin người dùng theo ID
       const fetchUserProfile = async () => {
         try {
           const response = await instance.get(`/user/${userId}`);
@@ -49,7 +49,6 @@ const Profile: React.FC = () => {
 
       fetchUserProfile();
 
-      // Lấy danh sách khu vực cho dropdown
       const fetchLocations = async () => {
         try {
           const response = await instance.get("/location");
@@ -65,14 +64,12 @@ const Profile: React.FC = () => {
     }
   }, []);
 
-  const handleUpdateProfile = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleUpdateProfile = async () => {
     const formData = new FormData();
     formData.append("_method", "PUT");
     formData.append("user_name", userProfile.user_name);
     formData.append("phone", userProfile.phone);
 
-    // Kiểm tra xem avatarFile có tồn tại không trước khi thêm vào formData
     if (avatarFile) {
       formData.append("avatar", avatarFile);
     }
@@ -97,18 +94,15 @@ const Profile: React.FC = () => {
     }
   };
 
-  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event: any) => {
-        setAvatar(event.target.result);
-      };
-      reader.readAsDataURL(file);
-      setAvatarFile(file); // Lưu file vào state để sử dụng khi cập nhật
-    }
+  const handleAvatarUpload = (file: File) => {
+    const reader = new FileReader();
+    reader.onload = (event: any) => {
+      setAvatar(event.target.result);
+    };
+    reader.readAsDataURL(file);
+    setAvatarFile(file);
+    return false; // Ngăn Ant Design tự tải lên
   };
-
   return (
     <>
       <Header />
@@ -154,7 +148,7 @@ const Profile: React.FC = () => {
   <div className="account-nav-item">
     <span className="account-nav-title">
       <NavLink 
-        to="/movies" 
+        to="/Personal" 
         className={({ isActive }) => isActive ? 'active-link' : ''}>
         Tủ phim
       </NavLink>
@@ -186,78 +180,59 @@ const Profile: React.FC = () => {
 
           <div className="divider"></div>
           <div className="profile-container">
-            <form className="profile-form" onSubmit={handleUpdateProfile}>
-              <div className="row g-3">
-                <div className="col">
-                  <label className="label-form1">Tên tài khoản</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="username"
-                    value={userProfile?.user_name || "giang1234"}
-                    readOnly
-                    disabled
-                  />
-                </div>
-                <div className="col">
-                <label className="label-form1">Email</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="email"
-                    value={userProfile?.email || ""}
-                    readOnly
-                    disabled
-                  />
-                </div>
-              </div>
-              <div className="row g-3">
-                <div className="col">
-                <label className="label-form">Họ và tên</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="fullname"
-                    value={userProfile?.fullname || ""}
-                    onChange={(e) =>
-                      setUserProfile({
-                        ...userProfile,
-                        fullname: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-                <div className="col">
-                <label className="label-form" >Số điện thoại</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="phone"
-                    value={userProfile?.phone || ""}
-                    onChange={(e) =>
-                      setUserProfile({
-                        ...userProfile,
-                        phone: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-              </div>
-              <label className="label-form">Ảnh đại diện</label>
-             <div className="input-group mb-3">
-          
-  <input type="file" className="form-control" 
-                    id="avatar"
-                    onChange={handleAvatarChange}/>
-
-</div>
-
-             
-              
-              <button type="submit" className="update-btn">
-                Cập nhật
-              </button>
-            </form>
+            <Form
+              layout="vertical"
+              onFinish={handleUpdateProfile}
+              className="profile-form"
+            >
+              <Form.Item label="Tên tài khoản">
+                <Input
+                  value={userProfile?.user_name || ""}
+                  readOnly
+                  disabled
+                />
+              </Form.Item>
+              <Form.Item label="Email">
+                <Input value={userProfile?.email || ""} readOnly disabled />
+              </Form.Item>
+              <Form.Item label="Họ và tên">
+                <Input
+                  value={userProfile?.fullname || ""}
+                  onChange={(e) =>
+                    setUserProfile({
+                      ...userProfile,
+                      fullname: e.target.value,
+                    })
+                  }
+                />
+              </Form.Item>
+              <Form.Item label="Số điện thoại">
+                <Input
+                  value={userProfile?.phone || ""}
+                  onChange={(e) =>
+                    setUserProfile({
+                      ...userProfile,
+                      phone: e.target.value,
+                    })
+                  }
+                />
+              </Form.Item>
+              <Form.Item label="Ảnh đại diện">
+                <Upload
+                  accept="image/*"
+                  showUploadList={false}
+                  beforeUpload={handleAvatarUpload}
+                >
+                  <Button icon={<UploadOutlined />}>Chọn ảnh</Button>
+                </Upload>
+               
+              </Form.Item>
+              <Form.Item>
+                <Button type="primary" htmlType="submit">
+                  Cập nhật
+                </Button>
+              </Form.Item>
+            </Form>
           </div>
         </div>
       </div>

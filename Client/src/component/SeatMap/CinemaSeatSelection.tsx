@@ -6,7 +6,7 @@ import Headerticket from "../Headerticket/Headerticket";
 import "./CinemaSeatSelection.css";
 import instance from "../../server";
 import { Room } from "../../interface/Room";
-import { message } from 'antd';
+import { message, Spin } from 'antd';
 import { Modal } from 'antd';
 import { Movie } from "../../interface/Movie";
 
@@ -64,6 +64,8 @@ const CinemaSeatSelection: React.FC = () => {
         try {
           const seatResponse = await instance.get(`/seat/${showtimeId}`);
           const seatDataseat = seatResponse.data;
+          console.log("du lieu:",seatDataseat);
+          
   
           const reservedSeatSet = new Set<string>();
           seatDataseat.data.forEach((seat: { seat_name: string; status: string }) => {
@@ -110,10 +112,22 @@ const CinemaSeatSelection: React.FC = () => {
   };
   
   
- 
   if (!seatData?.seats) {
-    return <div>Không có dữ liệu ghế.</div>;
+    return (
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh', // Chiều cao toàn màn hình hoặc thay bằng container phù hợp
+        backgroundColor: '#f9f9f9',
+      }}>
+        <Spin tip="Đang Tải Dữ Liệu Ghế..." size="large" />
+      </div>
+    );
   }
+  
+  console.log("test",seatData.seats);
+  
   const calculatePrice = () => {
     let totalPrice = 0;
   
@@ -172,7 +186,7 @@ const CinemaSeatSelection: React.FC = () => {
             cinemaId,
             roomId: roomData?.id,
             seats: selectedSeatsArray,
-            // totalPrice,
+            totalPrice,
           },
         });
       } else if (response.data.message === "Some seats already exist.") {
