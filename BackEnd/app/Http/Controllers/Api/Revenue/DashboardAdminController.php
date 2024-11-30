@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\Revenue\DashboardAdminService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 
 class DashboardAdminController extends Controller
 {
@@ -15,9 +16,38 @@ class DashboardAdminController extends Controller
     {
         $this->dashboardAdminService = $dashboardAdminService;
     }
-    public function dashboardAdmin()
+  
+    public function dashboardAdmin(Request $request)
     {
-        $dashboardAdmin = $this->dashboardAdminService->dashboardAdmin();
-        return  $this->success($dashboardAdmin, 'Danh thu', 200);
+        $status = $request->query('status');
+        $cinema_id = $request->query('cinema_id');
+        $start_date = $request->query('start_date');
+        $end_date = $request->query('end_date');
+        $month = $request->query('month');
+        $year = $request->query('year');
+        $day = $request->query('day');
+
+        // Gọi hàm lọc từ service
+        $filterRevenue = $this->dashboardAdminService->filterofbooking(
+            $status,
+            $cinema_id,
+            $start_date,
+            $end_date,
+            $month,
+            $year,
+            $day
+        );
+        // Tính tổng doanh thu và số lượng booking
+        $total = $this->dashboardAdminService->totaldashboard($filterRevenue);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Success',
+            'chart' => $total,
+            'data' => $filterRevenue
+        ], 200);
     }
+
+   
+
 }
