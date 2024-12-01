@@ -289,6 +289,12 @@ class BookingController extends Controller
 
         return response()->json(['status' => false, 'message' => 'Invalid data provided.'], 400);
     }
+    private function getMaxColumnForRow($row)
+    {
+        // Giả sử bạn có một bảng hoặc cách để lấy số cột tối đa cho một hàng cụ thể
+        // Ví dụ: nếu hàng có 10 ghế thì trả về 10
+        return 10;  // Giá trị này có thể thay đổi tùy thuộc vào cấu trúc ghế của bạn
+    }
 
 
     public function hasGapIssue($seats)
