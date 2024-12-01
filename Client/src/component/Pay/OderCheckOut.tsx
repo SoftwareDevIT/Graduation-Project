@@ -158,7 +158,7 @@ const OrderCheckout = () => {
 
             if (response.data) {
                 const redirectUrl = response.data.Url.original.url;
-                message.success("Đặt vé thành công!");
+                // message.success("Đặt vé thành công!");
                 window.location.href = redirectUrl;
             } else {
                 message.error("Có lỗi xảy ra khi đặt vé.");
