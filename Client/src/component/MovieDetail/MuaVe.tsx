@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./LichChieu.css";
-import Header from "../Header/Hearder";
+
 import Footer from "../Footer/Footer";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCountryContext } from "../../Context/CountriesContext";
