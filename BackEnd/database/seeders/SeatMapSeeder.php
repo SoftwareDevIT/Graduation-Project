@@ -37,6 +37,7 @@ class SeatMapSeeder extends Seeder
                     if ($seatType == 'Couple' && $column % 2 == 1 && $column + 1 <= $layout->columns) {
                         $seatMaps[] = [
                             'seat_layout_id' => $layout->id,
+                            'label' => $rowLetter.$column,
                             'row' => $rowLetter,
                             'column' => $column,
                             'seat_type' => $seatType,
@@ -48,6 +49,7 @@ class SeatMapSeeder extends Seeder
                         // Tạo cột kế tiếp cho ghế đôi
                         $seatMaps[] = [
                             'seat_layout_id' => $layout->id,
+                            'label' => $rowLetter.$column,
                             'row' => $rowLetter,
                             'column' => $column + 1,
                             'type' => $seatType,
@@ -61,6 +63,7 @@ class SeatMapSeeder extends Seeder
                     } else {
                         $seatMaps[] = [
                             'seat_layout_id' => $layout->id,
+                            'label' => $rowLetter.$column,
                             'row' => $rowLetter,
                             'column' => $column,
                             'type' => $seatType,

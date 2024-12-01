@@ -141,17 +141,11 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get('total-revenue-by-date/{start_date}/{end_date}', [RevenueController::class, 'totalRevenueBetweenDates']);
     Route::get('total-revenue-cinema-by-date/{cinema_id}/{start_date}/{end_date}', [RevenueController::class, 'totalRevenueByCinemaBetweenDates']);
 
-    //Thống kê doanh thu theo phim
-    Route::get('total-revenue-movie/{status}', [RevenueMovieController::class, 'totalRevenueMovie']);
-    Route::get('total-revenue-by-movie/{movie_id}', [RevenueMovieController::class, 'totalRevenueByMovie']);
-    Route::get('total-revenue-by-date/{start_date}/{end_date}', [RevenueMovieController::class, 'totalRevenueByMovieBetweenDates']);
-    Route::get('total-revenue-movie-by-date/{movie_id}/{start_date}/{end_date}', [RevenueMovieController::class, 'totalRevenueMovieBetweenDates']);
-
     // bộ lọc thông kê doanh thu
     Route::get('filter-DashBoarch', [FilterOfDashBoarchController::class, 'filterOfDashBoarch']);
 
    
-    // Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
+    Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
 
 
 });
@@ -190,8 +184,14 @@ Route::apiResource('order', OrderController::class);
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/slectMovieAndSeats', [BookingController::class, 'slectMovieAndSeats']);
     Route::post('/selectCombo', [BookingController::class, 'selectCombos']);
+
+    //Bokking=======================
     Route::post('selectSeats', [BookingController::class, 'selectSeats']);
     Route::post('/book-ticket', [BookingController::class, 'bookTicket']);
+    Route::post('/seat-selection/{roomId}', [BookingController::class, 'selectedSeats']);
+
+    //==============================
+
     Route::post('/historyOrder', [OrderController::class, 'order']);
     Route::post('/historyOrder/{id}', [OrderController::class, 'orderDetail']);
     Route::get('session', [BookingController::class, 'getSession']);

@@ -124,7 +124,7 @@ const OrdersDashboard: React.FC = () => {
     },
     {
       title: "Phim",
-      dataIndex: ["showtime", "movie_in_cinema", "movie", "movie_name"],
+      dataIndex: ["showtime","movie", "movie_name"],
       key: "movie_name",
       align: "center" as const,
     },
