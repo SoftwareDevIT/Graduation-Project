@@ -73,6 +73,8 @@
   text-align: left;
 }
 
+
+
 /* Buy ticket button */
 .buy-ticket {
   display: block;
@@ -114,7 +116,7 @@
   color: #28a745;
   font-weight: bold;
   text-align: right;
-
+    position: relative;
 }
 .slick-dots {
   display: flex;

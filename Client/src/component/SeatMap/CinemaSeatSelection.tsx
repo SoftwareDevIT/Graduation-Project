@@ -254,14 +254,14 @@ const CinemaSeatSelection: React.FC = () => {
           <div className="seat-info-box">
             <div className="seat-map-box ">
               <div className="screen">MÀN HÌNH</div>
-              <div style={{ display: "flex", alignItems: "flex-start",marginRight:"70px" }}>
+              <div className="mapseat" style={{ display: "flex", alignItems: "flex-start",marginRight:"70px" }}>
       {/* Cột tên hàng */}
       <div style={{ display: "flex", flexDirection: "column", marginRight: "10px" }}>
         {rows.map((row) => (
           <div
             key={row}
             style={{
-              width: "50px",
+              width: "30px",
               height: "30px",
               marginBottom: "10px",
               display: "flex",
@@ -338,6 +338,7 @@ const CinemaSeatSelection: React.FC = () => {
 
     return (
       <div
+      className="seat_row"
         key={`${row}-${index}`}
         onClick={(e) => {
           if (isDisabled) return;

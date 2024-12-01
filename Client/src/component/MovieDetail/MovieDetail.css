@@ -537,7 +537,7 @@
 
 
 
-  @media screen and (max-width: 767px) {
+  @media screen and (max-width: 768px) {
     .info-section {
         flex-direction: column;
         width: 100%;
@@ -622,9 +622,18 @@
     .content{
         padding-left: 145px;
     }
+    .community-section{
+        margin-left: 180px !important;
+    }
+    .row-custom select {
+        width: 540px !important;
+    }
   }
   @media (max-width:580px) {
     .content{
         padding-left: 0;
+    }
+    .community-section{
+       margin-left: 5px !important;
     }
   }
