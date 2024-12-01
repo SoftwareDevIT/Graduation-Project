@@ -9,7 +9,7 @@ import { Room } from "../../interface/Room";
 import { message, Spin } from 'antd';
 import { Modal } from 'antd';
 import { Movie } from "../../interface/Movie";
-
+import Pusher from "pusher-js";
 type Seat = {
   id: number;
   label:string;
@@ -39,7 +39,9 @@ type SeatLayoutResponse = {
 
 const CinemaSeatSelection: React.FC = () => {
   const location = useLocation();
-  const navigate = useNavigate(); // Khai báo useNavigate để điều hướng
+  const navigate = useNavigate(); // Khai báo useNavigate để điều 
+ 
+  
   const { movieName, cinemaName, showtime, showtimeId, cinemaId, price } =
     location.state || {};
 
@@ -47,10 +49,34 @@ const CinemaSeatSelection: React.FC = () => {
     new Map()
   );
   const [reservedSeats, setReservedSeats] = useState<Set<string>>(new Set());
-  const [roomData, setRoomData] = useState<Room | null>(null);
   const [seatData, setSeatData] = useState<SeatLayoutResponse | null>(null);
 
+
+  
   const [error, setError] = useState("");
+  
+
+  useEffect(() => {
+    const pusher = new Pusher(import.meta.env.VITE_PUSHER_APP_KEY, {
+      cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
+      wsHost: import.meta.env.VITE_PUSHER_HOST, // Nếu bạn có cấu hình host tùy chỉnh
+      wsPort: import.meta.env.VITE_PUSHER_PORT, // Nếu bạn có cấu hình port tùy chỉnh
+      forceTLS: true, // Đảm bảo kết nối qua HTTPS nếu sử dụng SSL
+      disableStats: true, // Tùy chọn nếu không cần thống kê của Pusher
+    });
+    const channel = pusher.subscribe('seat-channel');
+  
+    channel.bind('SeatSelected', function(data: any) {
+      setReservedSeats(new Set(data.reservedSeats)); // Dữ liệu nhận từ server về danh sách ghế đã đặt
+      console.log('Seats updated:', data.reservedSeats);
+    });
+    return () => {
+      pusher.unsubscribe('seat-channel');
+    };
+  }, []);
+  console.log(import.meta.env.VITE_PUSHER_APP_KEY);
+console.log(import.meta.env.VITE_PUSHER_APP_CLUSTER);
+
   useEffect(() => {
     const fetchRoomAndSeats = async () => {
       try {
@@ -97,12 +123,11 @@ const CinemaSeatSelection: React.FC = () => {
   const handleSeatClick = (seat: Seat) => {
     const seatLabel = seat.label;
     if (reservedSeats.has(seatLabel)) return;
-  
+
     const currentSeats = new Map(selectedSeats);
     const row = seat.row!;
     const index = seat.column - 1;
-  
-    // Cập nhật ghế đã chọn cho đúng
+
     if (currentSeats.has(row)) {
       const indices = currentSeats.get(row) || [];
       if (indices.includes(index)) {
@@ -111,13 +136,18 @@ const CinemaSeatSelection: React.FC = () => {
         currentSeats.set(row, [...indices, index]); // thêm ghế mới vào row
       }
     } else {
-      currentSeats.set(row, [index]); // Trường hợp chưa có row trong currentSeats, thêm vào mới
+      currentSeats.set(row, [index]); // Thêm row mới
     }
-  
-    // Cập nhật lại state với ghế đã chọn
-    setSelectedSeats(currentSeats); // Chỉ cần 1 đối số ở đây là currentSeats
+    setSelectedSeats(currentSeats);
   };
-  
+
+  if (!seatData?.seats) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <Spin tip="Đang Tải Dữ Liệu Ghế..." size="large" />
+      </div>
+    );
+  }
   
   
   
