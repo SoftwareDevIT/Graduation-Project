@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Store;
+namespace App\Http\Requests\Update;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreSeatMapRequest extends FormRequest
+class UpdateRanksRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -19,14 +19,12 @@ class StoreSeatMapRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            '*.seat_layout_id' => 'required|integer',
-            '*.row' => 'required|string|max:1',
-            '*.column' => 'required|integer',
-            '*.type' => 'string',
-            '*.is_double' => 'required|boolean',
+            "name" => "string",
+            "total_order_amount" => "integer",
+            "percent_discount" => "integer",
         ];
     }
 }
