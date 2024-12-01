@@ -2184,13 +2184,13 @@
             "type": "library",
             "extra": {
                 "laravel": {
-                    "providers": [
-                        "Milon\\Barcode\\BarcodeServiceProvider"
-                    ],
                     "aliases": {
                         "DNS1D": "Milon\\Barcode\\Facades\\DNS1DFacade",
                         "DNS2D": "Milon\\Barcode\\Facades\\DNS2DFacade"
-                    }
+                    },
+                    "providers": [
+                        "Milon\\Barcode\\BarcodeServiceProvider"
+                    ]
                 }
             },
             "autoload": {
