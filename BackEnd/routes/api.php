@@ -215,6 +215,4 @@ Route::patch('/seat-map/{id}/publish', [SeatMapController::class, 'publish'])->n
 
 // Route::apiResource('room', RoomController::class);
 Route::post('showtimePayload', [ShowtimeController::class, 'storeWithTimeRange']);
-Route::apiResource('room', RoomController::class);
-Route::apiResource('showtimes', ShowtimeController::class);
 Route::apiResource('ranks', RankContrller::class);
