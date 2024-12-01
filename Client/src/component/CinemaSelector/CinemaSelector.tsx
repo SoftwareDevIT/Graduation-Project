@@ -4,9 +4,10 @@ import "./CinemaSelector.css";
 import { Cinema } from "../../interface/Cinema";
 import { Actor } from "../../interface/Actor";
 import { Movie } from "../../interface/Movie";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; 
 import dayjs from "dayjs";
 import { useCountryContext } from "../../Context/CountriesContext";
+import { Spin } from 'antd';  // Import Spin từ Ant Design
 
 const CinemaSelector: React.FC = () => {
   const [cinemas, setCinemas] = useState<Cinema[]>([]);
@@ -16,9 +17,10 @@ const CinemaSelector: React.FC = () => {
   const [selectedCinema, setSelectedCinema] = useState<number | null>(null);
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [filteredCinemas, setFilteredCinemas] = useState<Cinema[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);  // Trạng thái loading riêng cho khu vực
 
   const navigate = useNavigate();
-
+  
   // Lấy danh sách vị trí từ CountryContext
   const {
     state: { countries: locations },
@@ -50,7 +52,7 @@ const CinemaSelector: React.FC = () => {
         console.error("không có dữ liệu:", error);
       }
     };
-
+  
     const fetchActors = async () => {
       try {
         const response = await instance.get("/actor");
@@ -60,19 +62,41 @@ const CinemaSelector: React.FC = () => {
         setActors([]);
       }
     };
-
+  
     fetchActors();
     fetchCinemas();
-
     setSelectedDate(getCurrentDate());
   }, []);
 
+  // Kiểm tra xem đã có dữ liệu khu vực chưa (nếu không có thì bật loading)
+  useEffect(() => {
+    if (cinemas.length > 0 && locations.length > 0) {
+      setLoading(false);  // Tắt loading khi có dữ liệu khu vực và rạp
+    } else {
+      setLoading(true);  // Hiển thị loading nếu chưa có dữ liệu khu vực hoặc rạp
+    }
+  }, [cinemas, locations]);
+
   // Mặc định chọn vị trí đầu tiên (ví dụ Hà Nội)
   useEffect(() => {
-    if (locations.length > 0) {
-      setSelectedCity(locations[0].id);
+    if (cinemas.length > 0) {
+      // Sắp xếp các khu vực theo số lượng rạp (cinemaCount) giảm dần
+      const sortedLocations = locations
+        .map((location) => ({
+          ...location,
+          cinemaCount: cinemas.filter(
+            (cinema) => cinema.location_id === location.id
+          ).length,
+        }))
+        .sort((a, b) => b.cinemaCount - a.cinemaCount);
+
+      // Chọn khu vực có số lượng rạp nhiều nhất
+      const locationWithMostCinemas = sortedLocations[0];
+
+      // Cập nhật `selectedCity` với khu vực có số lượng rạp nhiều nhất
+      setSelectedCity(locationWithMostCinemas.id);
     }
-  }, [locations]);
+  }, [cinemas, locations]);
 
   // Lọc và sắp xếp vị trí theo số lượng rạp
   const sortedLocations = locations
@@ -96,7 +120,7 @@ const CinemaSelector: React.FC = () => {
       );
       setFilteredCinemas(filtered);
       if (filtered.length > 0) {
-        setSelectedCinema(filtered[0].id ?? null);
+        setSelectedCinema(filtered[0].id ?? null);  // Chọn rạp đầu tiên trong khu vực
       }
     } else {
       setFilteredCinemas(cinemas);
@@ -117,8 +141,6 @@ const CinemaSelector: React.FC = () => {
 
           const cinemaMovies = cinemaResponse.data?.data || [];
           setMovies(cinemaMovies);
-          // console.log("Du lieu phim:",cinemaMovies);
-          
         } catch (error) {
           setMovies([]);
         }
@@ -131,6 +153,23 @@ const CinemaSelector: React.FC = () => {
   const selectedCinemaDetails = cinemas.find(
     (cinema) => cinema.id === selectedCinema
   );
+
+  // Kiểm tra xem có dữ liệu khu vực hay không, nếu chưa có thì hiển thị loading
+  if (loading) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "50vh", // Chiều cao toàn màn hình hoặc thay bằng container phù hợp
+          backgroundColor: "#f9f9f9",
+        }}
+      >
+        <Spin tip="Đang Tải Dữ Liệu Khu Vực..." size="large" />
+      </div>
+    );
+  }
 
   return (
     <div className="div-content">
@@ -286,7 +325,8 @@ const CinemaSelector: React.FC = () => {
               })}
             </div>
           ) : (
-            <p>Không có suất chiếu</p>
+            <p className="no-showtime-message">Không có suất chiếu</p>
+
           )}
         </div>
       </div>

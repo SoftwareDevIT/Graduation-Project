@@ -36,3 +36,12 @@ export const registerSchema = z.object({
   message: "Mật khẩu và xác nhận mật khẩu không khớp",
   path: ["confirmPassword"], // Gắn lỗi vào trường confirmPassword
 });
+export const passwordSchema = z.object({
+  currentPassword: z.string().min(1, "Mật khẩu hiện tại không được bỏ trống."), // Kiểm tra mật khẩu hiện tại
+  newPassword: z.string()
+    .min(8, "Mật khẩu mới phải có ít nhất 8 ký tự.") // Kiểm tra mật khẩu mới có ít nhất 8 ký tự
+    .regex(/[a-zA-Z0-9]/, "Mật khẩu mới phải có ít nhất một ký tự và một chữ số."), // Kiểm tra mật khẩu mới có ký tự và số
+  confirmPassword: z.string()
+    .min(1, "Xác nhận mật khẩu không được bỏ trống.") // Kiểm tra xác nhận mật khẩu không trống
+   
+});
