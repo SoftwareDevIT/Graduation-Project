@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('seat_map', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('seat_layout_id');
+            $table->string('label');
             $table->string('row');
             $table->integer('column');
             $table->enum('type', ['Regular', 'VIP', 'Couple'])->default('Regular');

@@ -170,9 +170,9 @@ const CinemaSeatSelection: React.FC = () => {
             showtime,
             showtimeId,
             cinemaId,
-            roomId: seatData.room_id, 
+            roomId: seatData.room_id,
             seats: selectedSeatsArray,
-            // totalPrice,
+            totalPrice,
           },
         });
       } else if (response.data.message === "Some seats already exist.") {
