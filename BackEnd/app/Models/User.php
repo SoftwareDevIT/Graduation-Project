@@ -35,6 +35,7 @@ class User extends Authenticatable
         'address',
         'fullname',
         'rating',
+        'points',
         'google_id',
         'email_verified_at',
         'status',
@@ -86,5 +87,21 @@ class User extends Authenticatable
     public function roles()
     {
         return $this->belongsToMany(Role::class);
+    }
+
+    public function addPoints($amount)
+    {
+        $this->points += $amount;
+        $this->save();
+    }
+
+    public function usePoints($amount)
+    {
+        if ($this->points >= $amount && floor($amount) == $amount) {
+            $this->points -= $amount;
+            $this->save();
+            return true;
+        }
+        return false; 
     }
 }
