@@ -92,7 +92,7 @@ class TicketBookingService
             }
             Session::put('seats', $seatData);
             $this->bookTicketSaveSession($request, $bookTicket);
-        }    
+        }
         return response()->json(['message' => 'Đặt vé thành công', 'booking' => $bookTicket]);
     }
 
