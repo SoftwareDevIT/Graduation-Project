@@ -291,6 +291,7 @@ class BookingController extends Controller
     }
 
 
+
     public function hasGapIssue($seats)
     {
         usort($seats, function ($a, $b) {
