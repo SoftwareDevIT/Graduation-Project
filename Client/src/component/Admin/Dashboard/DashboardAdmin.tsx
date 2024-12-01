@@ -16,7 +16,7 @@ import "@fortawesome/fontawesome-free/css/all.min.css"; // Import FontAwesome
 import { Booking } from "../../../interface/Booking";
 import instance from "../../../server";
 import { Cinema } from "../../../interface/Cinema";
-import * as XLSX from "xlsx"; // Import XLSX library
+// import * as XLSX from "xlsx"; // Import XLSX library
 
 
 
