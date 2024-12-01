@@ -144,8 +144,8 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     // bộ lọc thông kê doanh thu
     Route::get('filter-DashBoarch', [FilterOfDashBoarchController::class, 'filterOfDashBoarch']);
 
-    //Trang dashboard
-    // Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
+   
+    Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
 
 
 });

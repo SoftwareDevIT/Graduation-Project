@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPrint } from "@fortawesome/free-solid-svg-icons";
 import instance from "../../../server";
 import { Booking } from "../../../interface/Booking";
-import { CheckCircleOutlined, ClockCircleOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined, ExclamationCircleOutlined, EditOutlined } from '@ant-design/icons';
 import dayjs from "dayjs";
 import './OrdersDashboard.css'
 
@@ -19,12 +19,24 @@ const OrdersDashboard: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [statusFilter, setStatusFilter] = useState<string>("");
   const [dateRange, setDateRange] = useState<[string, string] | null>(null);
+  const { Search } = Input;
 
+  // Fetch bookings when filters change
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const response = await instance.get(`/order?page=${currentPage}`);
-        setBookings(response.data.data.data);
+        const params: any = {
+          page: currentPage,
+          status: statusFilter,
+          search: searchTerm,
+        };
+        if (dateRange) {
+          params.start_date = dateRange[0];
+          params.end_date = dateRange[1];
+        }
+
+        const response = await instance.get("/dashboard", { params });
+        setBookings(response.data.data);
         setTotalPages(response.data.data.last_page);
       } catch (error) {
         notification.error({
@@ -35,7 +47,7 @@ const OrdersDashboard: React.FC = () => {
     };
 
     fetchBookings();
-  }, [currentPage]);
+  }, [currentPage, statusFilter, searchTerm, dateRange]);
 
   const getStatusStyle = (status: string) => {
     switch (status) {
@@ -89,7 +101,7 @@ const OrdersDashboard: React.FC = () => {
         <p><strong>Người Dùng:</strong> ${booking.user?.user_name || "Không xác định"}</p>
         <p><strong>Email:</strong> ${booking.user?.email || "Không xác định"}</p>
         <p><strong>Suất Chiếu:</strong> ${booking.showtime?.showtime_date || "Không xác định"}</p>
-        <p><strong>Phim:</strong> ${booking.showtime?.movie_in_cinema.movie.movie_name || "Không xác định"}</p>
+        <p><strong>Phim:</strong> ${booking.showtime.movie.movie_name || "Không xác định"}</p>
         <p><strong>Tổng Tiền:</strong> ${booking.amount}</p>
         <hr />
         <p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!</p>
@@ -104,33 +116,39 @@ const OrdersDashboard: React.FC = () => {
   const columns = [
     {
       title: "ID",
-      dataIndex: "id",
-      key: "id",
+      dataIndex: "booking_id",
+      key: "booking_id",
       align: "center" as const,
     },
     {
       title: "Người Dùng",
-      dataIndex: ["user", "user_name"],
+      dataIndex: ["user_name"],
       key: "user_name",
       align: "center" as const,
       render: (text: string) => text || "Unknown User",
     },
     {
       title: "Suất Chiếu",
-      dataIndex: ["showtime", "showtime_date"],
+      dataIndex: ["showtime_date"],
       key: "showtime_date",
       align: "center" as const,
     },
     {
+      title: "Phòng",
+      dataIndex: ["room_name"],
+      key: "room_name",
+      align: "center" as const,
+    },
+    {
       title: "Phim",
-      dataIndex: ["showtime", "movie_in_cinema", "movie", "movie_name"],
+      dataIndex: ["movie_name"],
       key: "movie_name",
       align: "center" as const,
     },
     {
       title: "Phương Thức Thanh Toán",
-      dataIndex: ["pay_method", "pay_method_name"],
-      key: "pay_method_name",
+      dataIndex: ["payMethod"],
+      key: "payMethod",
       align: "center" as const,
     },
     {
@@ -139,6 +157,7 @@ const OrdersDashboard: React.FC = () => {
       key: "amount",
       align: "center" as const,
     },
+  
     {
       title: "Trạng Thái",
       dataIndex: "status",
@@ -180,14 +199,17 @@ const OrdersDashboard: React.FC = () => {
         <Space style={{ display: "flex", justifyContent: "space-between" }}>
           <Select
             value={statusFilter}
-            onChange={(value) => setStatusFilter(value)}
+            onChange={(value) => {
+              setStatusFilter(value);
+              setCurrentPage(1);  // Reset to the first page when filter changes
+            }}
             style={{ width: 200 }}
             placeholder="Trạng thái"
           >
             <Option value="">Tất cả trạng thái</Option>
             <Option value="Pending">Pending</Option>
             <Option value="Confirmed">Confirmed</Option>
-            <Option value="Paid">Paid</Option>
+            <Option value="Pain">Pain</Option>
           </Select>
           <RangePicker
             onChange={(dates) => {
@@ -196,13 +218,18 @@ const OrdersDashboard: React.FC = () => {
               } else {
                 setDateRange(null);
               }
+              setCurrentPage(1);  // Reset to the first page when filter changes
             }}
           />
-          <Input
+          <Search
             placeholder="Tìm kiếm..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setCurrentPage(1);  // Reset to the first page when search term changes
+            }}
             style={{ width: 300 }}
+            allowClear
           />
         </Space>
         <Table

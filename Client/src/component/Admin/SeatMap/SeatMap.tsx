@@ -3,62 +3,63 @@ import { Link } from 'react-router-dom';
 import { EditOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons'; // Ant Design icons
 import { notification, Table, Pagination, Input, Button, Popconfirm } from 'antd'; // Import Ant Design components
 import instance from '../../../server';
-import { PayMethod } from '../../../interface/PayMethod';
+import { SeatMap1 } from '../../../interface/SeatMap';
 
-const PayMethodDashboard = () => {
-    const [payMethods, setPayMethods] = useState<PayMethod[]>([]);
+
+const SeatMap = () => {
+    const [seatMaps, setSeatMaps] = useState<SeatMap1[]>([]); // Use SeatMap interface here
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [searchTerm, setSearchTerm] = useState<string>('');
-    const payMethodsPerPage = 7;
+    const seatMapsPerPage = 7;
     const { Search } = Input;
 
     useEffect(() => {
-        const fetchPayMethods = async () => {
+        const fetchSeatMaps = async () => {
             try {
-                const response = await instance.get('/method');
-                setPayMethods(response.data.data);
+                const response = await instance.get('/seat-map'); // API call for seat maps
+                setSeatMaps(response.data.data); // Assuming the structure is { data: [...] }
             } catch (error) {
-                console.error('Error fetching payment methods:', error);
+                console.error('Error fetching seat maps:', error);
                 notification.error({
                     message: 'Error',
-                    description: 'Unable to load payment methods!',
+                    description: 'Unable to load seat maps!',
                     placement: 'topRight',
                 });
             }
         };
-        fetchPayMethods();
+        fetchSeatMaps();
     }, []);
 
-    const handleDelete = async (id: string) => {
-        const isConfirmed = window.confirm('Bạn có chắc chắn muốn xóa phương thức thanh toán này?');
+    const handleDelete = async (id: number) => {
+        const isConfirmed = window.confirm('Bạn có chắc chắn muốn xóa layout ghế này?');
         if (!isConfirmed) return;
 
         try {
-            await instance.delete(`/method/${id}`);
-            setPayMethods((prevMethods) => prevMethods.filter((method) => method.id !== id));
+            await instance.delete(`/seat-map/${id}`); // API call for deleting seat map
+            setSeatMaps((prevMaps) => prevMaps.filter((map) => map.id !== id));
             notification.success({
                 message: 'Thành công',
-                description: 'Phương thức thanh toán đã được xóa!',
+                description: 'Layout ghế đã được xóa!',
                 placement: 'topRight',
             });
         } catch (error) {
-            console.error('Error deleting payment method:', error);
+            console.error('Error deleting seat map:', error);
             notification.error({
                 message: 'Lỗi',
-                description: 'Không thể xóa phương thức thanh toán!',
+                description: 'Không thể xóa layout ghế!',
                 placement: 'topRight',
             });
         }
     };
 
-    const filteredPayMethods = payMethods.filter(payMethod =>
-        payMethod.pay_method_name.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredSeatMaps = seatMaps.filter(map =>
+        map.row.toLowerCase().includes(searchTerm.toLowerCase()) // Assuming you want to search by row
     );
 
-    const totalPayMethods = filteredPayMethods.length;
-    const currentPayMethods = filteredPayMethods.slice(
-        (currentPage - 1) * payMethodsPerPage,
-        currentPage * payMethodsPerPage
+    const totalSeatMaps = filteredSeatMaps.length;
+    const currentSeatMaps = filteredSeatMaps.slice(
+        (currentPage - 1) * seatMapsPerPage,
+        currentPage * seatMapsPerPage
     );
 
     const handlePageChange = (page: number) => setCurrentPage(page);
@@ -71,23 +72,48 @@ const PayMethodDashboard = () => {
             className: 'text-center',
         },
         {
-            title: 'Tên Phương Thức Thanh Toán',
-            dataIndex: 'pay_method_name',
-            key: 'pay_method_name',
+            title: 'Layout ID',
+            dataIndex: 'seat_layout_id',
+            key: 'seat_layout_id',
             className: 'text-center',
+        },
+        {
+            title: 'Hàng',
+            dataIndex: 'row',
+            key: 'row',
+            className: 'text-center',
+        },
+        {
+            title: 'Cột',
+            dataIndex: 'column',
+            key: 'column',
+            className: 'text-center',
+        },
+        {
+            title: 'Loại Ghế',
+            dataIndex: 'type',
+            key: 'type',
+            className: 'text-center',
+        },
+        {
+            title: 'Ghế Cặp',
+            dataIndex: 'is_double',
+            key: 'is_double',
+            className: 'text-center',
+            render: (isDouble: number) => (isDouble ? 'Có' : 'Không'),
         },
         {
             title: 'Hành Động',
             key: 'action',
             className: 'text-center',
-            render: (text: any, payMethod: PayMethod) => (
+            render: (text: any, seatMap: SeatMap1) => (
                 <div className="d-flex justify-content-around">
-                    <Link to={`/admin/method/edit/${payMethod.id}`}>
+                    <Link to={`/admin/seatmap/edit/${seatMap.id}`}>
                         <Button type="primary" icon={<EditOutlined />} />
                     </Link>
                     <Popconfirm
-                        title="Bạn có chắc chắn muốn xóa phương thức thanh toán này?"
-                        onConfirm={() => handleDelete(payMethod.id)}
+                        title="Bạn có chắc chắn muốn xóa layout ghế này?"
+                        onConfirm={() => handleDelete(seatMap.id)}
                         okText="Có"
                         cancelText="Không"
                     >
@@ -101,13 +127,13 @@ const PayMethodDashboard = () => {
     return (
         <div className="container mt-5">
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <Link to={'/admin/method/add'}>
+                <Link to={'/admin/seatmap/add'}>
                     <Button type="primary" icon={<PlusOutlined />} size="large">
-                        Thêm Phương Thức Thanh Toán
+                        Thêm Sơ Đồ Ghế
                     </Button>
                 </Link>
                 <Search
-                    placeholder="Tìm kiếm theo tên phương thức"
+                    placeholder="Tìm kiếm theo hàng"
                     onSearch={(value) => setSearchTerm(value)}
                     style={{ width: 300 }}
                     allowClear
@@ -115,26 +141,26 @@ const PayMethodDashboard = () => {
             </div>
             <Table
                 columns={columns}
-                dataSource={currentPayMethods}
+                dataSource={currentSeatMaps}
                 rowKey="id"
                 pagination={false} // Disable built-in pagination
                 locale={{
-                    emptyText: 'Không có phương thức thanh toán nào.',
+                    emptyText: 'Không có layout ghế nào.',
                 }}
             />
             <div className="d-flex justify-content-center mt-4">
                 <Pagination
                     current={currentPage}
-                    total={totalPayMethods}
-                    pageSize={payMethodsPerPage}
+                    total={totalSeatMaps}
+                    pageSize={seatMapsPerPage}
                     onChange={handlePageChange}
                     showSizeChanger={false}
                     showQuickJumper
-                    showTotal={(total) => `Tổng số ${total} phương thức`}
+                    showTotal={(total) => `Tổng số ${total} layout ghế`}
                 />
             </div>
         </div>
     );
 };
 
-export default PayMethodDashboard;
+export default SeatMap;
