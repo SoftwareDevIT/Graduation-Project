@@ -97,12 +97,11 @@ class User extends Authenticatable
 
     public function usePoints($amount)
     {
-        // Kiểm tra xem điểm có phải là số nguyên không
         if ($this->points >= $amount && floor($amount) == $amount) {
             $this->points -= $amount;
             $this->save();
             return true;
         }
-        return false; // Không đủ điểm hoặc điểm không phải số nguyên
+        return false; 
     }
 }

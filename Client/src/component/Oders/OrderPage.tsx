@@ -31,6 +31,7 @@ const OrderPage: React.FC = () => {
     cinemaId,
   } = (location.state as LocationState) || {};
 
+ 
   const [combos, setCombos] = useState<Combo[]>([]);
   const [totalPrice, setTotalPrice] = useState<number>(initialTotalPrice || 0);
   const [comboQuantities, setComboQuantities] = useState<number[]>([]);

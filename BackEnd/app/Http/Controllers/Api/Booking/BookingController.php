@@ -82,7 +82,7 @@ class BookingController extends Controller
                     'Url' => $paymentURL
                 ]);
 
-                
+
             }
             return $this->error('Đặt vé thất bại', 500);
         } catch (\Exception $e) {
@@ -206,7 +206,7 @@ class BookingController extends Controller
         if (is_array($seats) && count($seats) > 10) {
             return response()->json(['status' => false, 'message' => 'You can only select up to 10 seats.'], 400);
         }
-
+ 
         if (!$seats) {
             return response()->json(['status' => false, 'message' => 'Please select at least one seat.'], 400);
         }
@@ -291,6 +291,7 @@ class BookingController extends Controller
     }
 
 
+
     public function hasGapIssue($seats)
     {
         usort($seats, function ($a, $b) {
@@ -356,6 +357,13 @@ class BookingController extends Controller
                 ], 402);
             }
         }
+    }
+
+    private function getMaxColumnForRow($row)
+    {
+        // Giả sử bạn có một bảng hoặc cách để lấy số cột tối đa cho một hàng cụ thể
+        // Ví dụ: nếu hàng có 10 ghế thì trả về 10
+        return 10;  // Giá trị này có thể thay đổi tùy thuộc vào cấu trúc ghế của bạn
     }
 
 

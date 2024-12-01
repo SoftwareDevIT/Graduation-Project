@@ -92,7 +92,7 @@ class TicketBookingService
             }
             Session::put('seats', $seatData);
             $this->bookTicketSaveSession($request, $bookTicket);
-        }    
+        }
         return response()->json(['message' => 'Đặt vé thành công', 'booking' => $bookTicket]);
     }
 
@@ -133,7 +133,11 @@ class TicketBookingService
 
     public function bookings(Request $request)
     {
-        $booking = Booking::create($request->validated() + ['user_id' => Auth::user()->id]);
+        $booking_code = $this->generateBookingCode($request);
+        $booking = Booking::create($request->validated() + ['user_id' => Auth::user()->id] + ['booking_code' => $booking_code]);
+        $qrcode = $this->generateQrCode($booking);
+        $booking->qrcode = $qrcode;
+        $booking->save();
         return $booking;
     }
 
