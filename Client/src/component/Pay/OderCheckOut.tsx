@@ -135,7 +135,7 @@ const OrderCheckout = () => {
             seat_column: seat.seat_column,
         }));
 
-        // console.log(seatsData);
+        console.log('Dữ liệu gửi lên serve',seatsData);
 
         const bookingData = {
             cinemaId,

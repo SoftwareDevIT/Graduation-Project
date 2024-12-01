@@ -20,6 +20,8 @@ class Booking extends Model
         'barcode',
         'created_at',
         'updated_at',
+        'qrcode',
+        'booking_code'
     ];
 
     public function seats()
