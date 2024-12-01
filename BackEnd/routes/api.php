@@ -147,7 +147,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::apiResource('order', OrderController::class)->except(['index', 'show']);
 });
 
-Route::middleware(['auth:sanctum', 'role:manage'])->group(function () {
+Route::middleware(['auth:sanctum', 'role:manager'])->group(function () {
 
 });
 
