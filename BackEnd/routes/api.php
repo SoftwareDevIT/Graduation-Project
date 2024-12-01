@@ -36,7 +36,7 @@ use App\Http\Controllers\Api\Promotion\PromotionController;
 use App\Http\Controllers\Api\Ranks\RankContrller;
 use App\Http\Controllers\Api\SeatMap\SeatMapController;
 use App\Http\Controllers\Api\SeatMap\MatrixController;
-
+use App\Http\Controllers\ConfigController;
 
 // use App\Http\Controllers\Api\SeatMap\SeatMapController;
 
@@ -154,6 +154,15 @@ Route::middleware(['auth:sanctum', 'role:manager'])->group(function () {
 
 
 
+    Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
+
+
+});
+//Trang dashboard
+Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
+
+Route::post('/resetPassword', [ResetPasswordController::class, 'resetPassword'])->middleware('auth:sanctum');
+
 
 // Các tuyến đường dành riêng cho phim
 Route::get('/movie/search/{movie_name}', [MovieController::class, 'search']);                       // Tìm kiếm phim theo tên
@@ -197,3 +206,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 Route::get('/vnpay-return', [BookingController::class, 'vnPayReturn']);
 // Route riêng cho chức năng publish
 Route::patch('/seat-map/{id}/publish', [SeatMapController::class, 'publish'])->name('seat-map.publish');
+
+// Route::apiResource('room', RoomController::class);
+Route::post('showtimePayload', [ShowtimeController::class, 'storeWithTimeRange']);
+Route::apiResource('ranks', RankContrller::class);
+
+
+
+Route::get('/env-config',[ConfigController::class,'envConfig']);

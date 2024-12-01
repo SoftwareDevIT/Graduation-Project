@@ -438,3 +438,10 @@ select{
     justify-content: space-around;
   }
 }
+@media (min-width: 580px) and (max-width: 768px)  {
+  .calendar-container{
+      width: 102vw;
+
+  }
+
+}

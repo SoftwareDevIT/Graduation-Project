@@ -11,6 +11,7 @@ const ActorDashboard = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [searchTerm, setSearchTerm] = useState<string>('');  
     const actorsPerPage = 7;
+    const { Search } = Input;
 
     useEffect(() => {
         // Fetch the actors from the API
@@ -95,10 +96,9 @@ const ActorDashboard = () => {
                         Thêm Diễn Viên
                     </Button>
                 </Link>
-                <Input
-                    placeholder="Tìm kiếm theo tên"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                <Search
+                    placeholder="Tìm kiếm theo tên diễn viên"
+                    onSearch={(value) => setSearchTerm(value)}
                     style={{ width: 300 }}
                     allowClear
                 />

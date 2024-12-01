@@ -7,6 +7,7 @@ import RoomDashboard from '../../../component/Admin/RoomsDashboard/RoomsDashboar
 
 
 
+
 function RoomsManager() {
     return (
         <div className="roomsmanager">
@@ -14,6 +15,7 @@ function RoomsManager() {
             <div className="roomsadmin">
                 <Header />
                 <RoomDashboard/>
+              
             </div>
         </div>
     );

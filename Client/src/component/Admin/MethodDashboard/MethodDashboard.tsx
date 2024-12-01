@@ -10,6 +10,7 @@ const PayMethodDashboard = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const payMethodsPerPage = 7;
+    const { Search } = Input;
 
     useEffect(() => {
         const fetchPayMethods = async () => {
@@ -105,10 +106,9 @@ const PayMethodDashboard = () => {
                         Thêm Phương Thức Thanh Toán
                     </Button>
                 </Link>
-                <Input
+                <Search
                     placeholder="Tìm kiếm theo tên phương thức"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onSearch={(value) => setSearchTerm(value)}
                     style={{ width: 300 }}
                     allowClear
                 />

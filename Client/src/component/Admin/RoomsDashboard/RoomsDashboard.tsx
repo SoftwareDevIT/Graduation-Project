@@ -10,6 +10,7 @@ const RoomDashboard: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const roomsPerPage = 7;
+  const { Search } = Input;
 
   useEffect(() => {
     const fetchRooms = async () => {
@@ -119,7 +120,7 @@ const RoomDashboard: React.FC = () => {
             Thêm Phòng
           </Button>
         </Link>
-        <Input
+        <Search
           placeholder="Tìm kiếm theo tên phòng"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
