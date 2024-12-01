@@ -82,7 +82,7 @@ class BookingController extends Controller
                     'Url' => $paymentURL
                 ]);
 
-                
+
             }
             return $this->error('Đặt vé thất bại', 500);
         } catch (\Exception $e) {
