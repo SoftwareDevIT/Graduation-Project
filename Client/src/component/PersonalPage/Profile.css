@@ -98,3 +98,22 @@ select {
   font-weight: bold;
   color: #4322ff; /* Example color */
 }
+@media (max-width:768px) {
+  .account-nav{
+    margin-left: 18px !important;
+  }
+  .account-nav-item{
+    right: -47px !important;
+  }
+}
+@media (max-width:580px) {
+ 
+  .account-nav-item{
+    right: -11px !important;
+    top: 31px;
+  }
+  .account-nav{
+    margin-left: -58px !important;
+  }
+ 
+}

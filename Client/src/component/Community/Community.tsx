@@ -1,27 +1,62 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react"; // Import Swiper
 import "swiper/css"; // Import Swiper basic CSS
 import "swiper/css/pagination"; // Import pagination CSS
 import "swiper/css/navigation"; // Import navigation CSS
-import { Pagination, Navigation } from "swiper/modules";
-import './Community.css'
+import { Pagination } from "swiper/modules";
+import './Community.css';
 import Header from "../Header/Hearder";
 import Footer from "../Footer/Footer";
-
-const movies = [
-  { title: "Mèo Ma Bé Tha", image: "https://cdn.moveek.com/storage/media/cache/short/6729c0ad0d674052301821.jpg" },
-  { title: "Cái Ác Không Tồn Tại", image: "https://cdn.moveek.com/storage/media/cache/short/6729c0ad0d674052301821.jpg" },
-  { title: "Cu Li Không Bao Giờ Khóc", image: "https://cdn.moveek.com/storage/media/cache/short/6729c0ad0d674052301821.jpg" },
-  { title: "Paddington: Gấu Peru", image: "https://cdn.moveek.com/storage/media/cache/short/6729c0ad0d674052301821.jpg" },
-  { title: "Kẻ Đóng Thế", image: "https://cdn.moveek.com/storage/media/cache/short/6729c0ad0d674052301821.jpg" },
-  { title: "Look Back: Liệu Có Quay Lại?", image: "https://cdn.moveek.com/storage/media/cache/short/6729c0ad0d674052301821.jpg" },
-  { title: "Red One: Mặt Trận", image: "https://cdn.moveek.com/storage/media/cache/short/6729c0ad0d674052301821.jpg" },
-  { title: "Đấu Trường Âm Nhạc 3", image: "https://cdn.moveek.com/storage/media/cache/short/6729c0ad0d674052301821.jpg" },
-  { title: "Đấu Trường Âm Nhạc 3", image: "https://cdn.moveek.com/storage/media/cache/short/6729c0ad0d674052301821.jpg" },
-  { title: "Đấu Trường Âm Nhạc 3", image: "https://cdn.moveek.com/storage/media/cache/short/6729c0ad0d674052301821.jpg" },
-];
+import { notification } from "antd";
+import { useMovieContext } from "../../Context/MoviesContext";
+import instance from "../../server";
 
 const Community: React.FC = () => {
+    const { state: { movies } } = useMovieContext();
+    const [favorites, setFavorites] = useState<{ [key: string]: boolean }>({});
+  
+
+    const handleFavoriteToggle = async (movieId: string | number) => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        notification.warning({
+          message: "Yêu cầu đăng nhập",
+          description: "Vui lòng đăng nhập để thêm phim vào danh sách yêu thích!",
+        });
+        return;
+      }
+    
+      try {
+        if (favorites[movieId]) { // favorites[movieId.toString()] nếu lưu trữ với khóa chuỗi
+          await instance.delete(`/favorites/${movieId}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          notification.success({
+            message: "Xóa khỏi yêu thích thành công",
+            description: "Phim đã được xóa khỏi danh sách yêu thích!",
+          });
+        } else {
+          await instance.post(`/favorites/${movieId}`, {}, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          notification.success({
+            message: "Thêm vào yêu thích thành công",
+            description: "Phim đã được thêm vào danh sách yêu thích!",
+          });
+        }
+    
+        setFavorites((prev) => ({
+          ...prev,
+          [movieId]: !prev[movieId],
+        }));
+      } catch {
+        notification.error({
+          message: "Lỗi",
+          description: "Có lỗi xảy ra khi xử lý yêu thích phim.",
+        });
+      }
+    };
+    
   const activities = [
     { user: "Lương Thành Tuấn", rating: 10, movie: "Linh Miêu: Quỷ Nhập Tràng", time: "3 giờ trước" },
     { user: "Quốc Quang", rating: 5, movie: "Quỷ Treo Đầu", time: "4 giờ trước" },
@@ -63,9 +98,12 @@ const Community: React.FC = () => {
           {movies.map((movie, index) => (
             <SwiperSlide key={index}>
               <div className="movieCard">
-                <img src={movie.image} alt={movie.title} className="movieImage" />
-                <div className="heartIcon"></div>
-                <p className="movieTitle">{movie.title}</p>
+                <img src={movie.poster||""} alt={movie.movie_name} className="movieImage" />
+                <div
+              className={`heartIcon ${favorites[movie.id] ? "active" : ""}`}
+              onClick={() => handleFavoriteToggle(movie.id)}
+            ></div>
+                <p className="movieTitle">{movie.movie_name}</p>
               </div>
             </SwiperSlide>
           ))}
