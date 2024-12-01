@@ -139,7 +139,6 @@ function App() {
         <Route path="/ticketcinema" element={ <PrivateRoute><TicketCinema/></PrivateRoute>} />
         <Route path="/credits" element={ <PrivateRoute><Credits /></PrivateRoute>} />
         <Route path="/ChangePassword" element={ <PrivateRoute><Credits /><ChangePassword /></PrivateRoute>} />
-   
         <Route path="/register" element={<RegisterCinema />} />
         <Route path="/login" element={<LoginCinema />} />
         <Route path="/movieshowing" element={<MovieShowing/>} />
