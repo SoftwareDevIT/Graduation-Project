@@ -106,22 +106,23 @@ const DashboardAdmin = () => {
     XLSX.writeFile(wb, "Bookings_Report.xlsx");
   };
   const doughnutData = {
-    labels: ['Search Engines', 'Direct Click', 'Bookmarks Click'],
+    labels: ["Search Engines", "Direct Click", "Bookmarks Click"],
     datasets: [
       {
         data: [30, 30, 40],
-        backgroundColor: ['#36a2eb', '#4bc0c0', '#ff6384'],
-        hoverBackgroundColor: ['#36a2eb', '#4bc0c0', '#ff6384'],
+        backgroundColor: ["#36a2eb", "#4bc0c0", "#ff6384"],
+        hoverBackgroundColor: ["#36a2eb", "#4bc0c0", "#ff6384"],
       },
     ],
   };
+
 
   const doughnutOptions = {
     maintainAspectRatio: false,
     cutout: '70%', 
     plugins: {
       legend: {
-        position: 'right',
+        position: "right",
         labels: {
           boxWidth: 20,
         },
@@ -146,6 +147,7 @@ const DashboardAdmin = () => {
       },
     ],
   };
+
 
   const barOptions = {
     maintainAspectRatio: false,
@@ -282,13 +284,17 @@ const DashboardAdmin = () => {
             <h3>Doanh Thu Theo Phim</h3>
             <div className="area-chart">
               <Bar data={barData} options={barOptions} />
+              
             </div>
           </div>
 
           <div className="revenue-summary">
             <h3>Doanh Thu Theo Rạp</h3>
             <div className="revenue-chart">
-              <Doughnut data={doughnutData} options={{ maintainAspectRatio: false }} />
+              <Doughnut
+                data={doughnutData}
+                options={{ maintainAspectRatio: false }}
+              />
             </div>
             <p className="revenue-amount">$120,000</p>
           </div>
@@ -308,6 +314,7 @@ const DashboardAdmin = () => {
                 <th>Tổng Tiền</th>
                 <th>Trạng Thái</th>
                 <th>Ngày Đặt</th>
+                <th>Chi Tiết</th>
               </tr>
             </thead>
             <tbody>
@@ -322,7 +329,9 @@ const DashboardAdmin = () => {
                     <td>{booking.amount}</td>
                     <td>{booking.status}</td>
                     <td>{booking.created_at}</td>
-                    
+                    <td>
+                      <button className="btn btn-primary">Chi tiết</button>
+                    </td>
                   </tr>
                 ))
               ) : (

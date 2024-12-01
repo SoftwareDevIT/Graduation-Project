@@ -2,7 +2,6 @@
 import { Movie } from "./Movie";
 import { Room } from "./Room";
 export interface Showtime {
-    movie_in_cinema_id: number;
     movie: Movie; 
     id: number;
     movie_id: number;

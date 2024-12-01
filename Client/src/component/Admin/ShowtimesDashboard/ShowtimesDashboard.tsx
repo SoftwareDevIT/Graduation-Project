@@ -48,8 +48,9 @@ const ShowtimesDashboard: React.FC = () => {
 
     // Lọc showtimes theo tên phim
     const filteredShowtimes = showtimes.filter((showtime) =>
-        showtime.movie.movie_name.toLowerCase().includes(searchTerm.toLowerCase())
+        showtime.movie && showtime.movie.movie_name && showtime.movie.movie_name.toLowerCase().includes(searchTerm.toLowerCase())
     );
+    
 
     // Xử lý xóa showtime
     const deleteShowtime = async (id: number) => {
@@ -89,7 +90,7 @@ const ShowtimesDashboard: React.FC = () => {
     const columns = [
         {
             title: 'Phim',
-            dataIndex: ['movie', 'movie_name'],
+            dataIndex: ['movie','movie_name'],
             key: 'movie_name',
         },
         {
@@ -125,7 +126,7 @@ const ShowtimesDashboard: React.FC = () => {
             render: (_ :any, record: any) => (
                 <div className="d-flex justify-content-around">
                     <Link to={`/admin/showtimes/edit/${record.id}`}>
-                        <Button icon={<EditOutlined />} type="default" />
+                        <Button icon={<EditOutlined />} type="primary" />
                     </Link>
                     <Button
                         icon={<DeleteOutlined />}

@@ -28,6 +28,7 @@ const MoviesDashboard: React.FC = () => {
 
         fetchMovies();
     }, [dispatch]);
+    
 
     const deleteMovie = async (id: number) => {
         if (window.confirm('Bạn có chắc chắn muốn xóa phim này không?')) {
