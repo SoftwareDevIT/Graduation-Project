@@ -141,12 +141,6 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get('total-revenue-by-date/{start_date}/{end_date}', [RevenueController::class, 'totalRevenueBetweenDates']);
     Route::get('total-revenue-cinema-by-date/{cinema_id}/{start_date}/{end_date}', [RevenueController::class, 'totalRevenueByCinemaBetweenDates']);
 
-    //Thống kê doanh thu theo phim
-    Route::get('total-revenue-movie/{status}', [RevenueMovieController::class, 'totalRevenueMovie']);
-    Route::get('total-revenue-by-movie/{movie_id}', [RevenueMovieController::class, 'totalRevenueByMovie']);
-    Route::get('total-revenue-by-date/{start_date}/{end_date}', [RevenueMovieController::class, 'totalRevenueByMovieBetweenDates']);
-    Route::get('total-revenue-movie-by-date/{movie_id}/{start_date}/{end_date}', [RevenueMovieController::class, 'totalRevenueMovieBetweenDates']);
-
     // bộ lọc thông kê doanh thu
     Route::get('filter-DashBoarch', [FilterOfDashBoarchController::class, 'filterOfDashBoarch']);
 
@@ -215,6 +209,4 @@ Route::patch('/seat-map/{id}/publish', [SeatMapController::class, 'publish'])->n
 
 // Route::apiResource('room', RoomController::class);
 Route::post('showtimePayload', [ShowtimeController::class, 'storeWithTimeRange']);
-Route::apiResource('room', RoomController::class);
-Route::apiResource('showtimes', ShowtimeController::class);
 Route::apiResource('ranks', RankContrller::class);
