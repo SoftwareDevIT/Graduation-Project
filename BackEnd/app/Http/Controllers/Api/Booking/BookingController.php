@@ -206,7 +206,7 @@ class BookingController extends Controller
         if (is_array($seats) && count($seats) > 10) {
             return response()->json(['status' => false, 'message' => 'You can only select up to 10 seats.'], 400);
         }
-
+ 
         if (!$seats) {
             return response()->json(['status' => false, 'message' => 'Please select at least one seat.'], 400);
         }
@@ -289,6 +289,7 @@ class BookingController extends Controller
 
         return response()->json(['status' => false, 'message' => 'Invalid data provided.'], 400);
     }
+
 
 
     public function hasGapIssue($seats)

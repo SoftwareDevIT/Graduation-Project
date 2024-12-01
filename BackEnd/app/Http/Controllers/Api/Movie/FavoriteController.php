@@ -29,18 +29,16 @@ class FavoriteController extends Controller
     public function store(string $movie)
     {
         try {
-         
             $movieId = is_numeric($movie) ? $movie : $this->favoriteService->getMovieIdBySlug($movie);
-
+    
             $this->favoriteService->store($movieId);
             return $this->success([], 'Yêu thích phim thành công', 200);
         } catch (HttpException $e) {
-            if ($e->getStatusCode() == 409) {
-                return $this->error('Lỗi: ' . $e->getMessage(), 409);
-            }
-            return $this->error('Lỗi: ' . $e->getMessage(), 500);
+            // Xử lý lỗi chung
+            return $this->error('Lỗi: ' . $e->getMessage(), $e->getStatusCode());
         }
     }
+    
 
     /**
      * Remove the specified resource from storage.
