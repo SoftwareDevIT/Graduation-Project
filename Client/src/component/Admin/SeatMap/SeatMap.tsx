@@ -108,7 +108,7 @@ const SeatMap = () => {
             className: 'text-center',
             render: (text: any, seatMap: SeatMap1) => (
                 <div className="d-flex justify-content-around">
-                    <Link to={`/admin/seat-map/edit/${seatMap.id}`}>
+                    <Link to={`/admin/seatmap/edit/${seatMap.id}`}>
                         <Button type="primary" icon={<EditOutlined />} />
                     </Link>
                     <Popconfirm

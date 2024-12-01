@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Sidebar.css';
 import { NavLink } from 'react-router-dom';
-import { FaTachometerAlt, FaUser, FaFilm, FaTicketAlt, FaTag, FaNewspaper, FaList, FaGlobe, FaCogs, FaTheaterMasks, FaCalendarAlt, FaChartLine, FaChevronRight, FaChevronLeft, FaIndustry, FaUserTie, FaVideo, FaCreditCard } from 'react-icons/fa'; // Đã thay FaUser thành FaUserTie cho diễn viên
+import { FaTachometerAlt, FaUser, FaFilm, FaTicketAlt, FaTag, FaNewspaper, FaList, FaGlobe, FaCogs, FaTheaterMasks, FaCalendarAlt, FaChartLine, FaChevronRight, FaChevronLeft, FaIndustry, FaUserTie, FaVideo, FaCreditCard, FaTh, FaChair, FaMedal } from 'react-icons/fa'; // Đã thay FaUser thành FaUserTie cho diễn viên
 
 const Sidebar = () => {
     const [isActive, setIsActive] = useState(false);
@@ -43,8 +43,10 @@ const Sidebar = () => {
                     <li><NavLink to={'/admin/method'} className={({ isActive }) => (isActive ? 'active' : '')}><FaCreditCard /> Phương thức thanh toán</NavLink></li>
                     <li><NavLink to={'/admin/RevenueByCinema'} className={({ isActive }) => (isActive ? 'active' : '')}><FaChartLine /> Doanh thu theo rạp</NavLink></li>
                     <li><NavLink to={'/admin/RevenueByMovie'} className={({ isActive }) => (isActive ? 'active' : '')}><FaChartLine /> Doanh thu theo phim</NavLink></li>
-                    <li><NavLink to={'/admin/matrix'} className={({ isActive }) => (isActive ? 'active' : '')}><FaChartLine />Mẫu Sơ Đồ Ghế</NavLink></li>
-                    <li><NavLink to={'/admin/seatmap'} className={({ isActive }) => (isActive ? 'active' : '')}><FaChartLine />Sơ Đồ Ghế</NavLink></li>
+                    <li><NavLink to={'/admin/matrix'} className={({ isActive }) => (isActive ? 'active' : '')}><FaTh />Mẫu Sơ Đồ Ghế</NavLink></li> {/* FaTh đại diện cho lưới (grid), phù hợp với sơ đồ mẫu */}
+                    <li><NavLink to={'/admin/seatmap'} className={({ isActive }) => (isActive ? 'active' : '')}><FaChair />Sơ Đồ Ghế</NavLink></li> {/* FaChair biểu thị ghế, phù hợp với sơ đồ ghế */}
+                    <li><NavLink to={'/admin/rank'} className={({ isActive }) => (isActive ? 'active' : '')}><FaMedal />Quản Lí Hạng</NavLink></li> {/* FaMedal biểu thị huy chương, phù hợp với quản lý hạng */}
+
                 </ul>
             </div>
         </>
