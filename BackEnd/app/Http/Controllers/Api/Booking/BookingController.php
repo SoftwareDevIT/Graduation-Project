@@ -291,6 +291,7 @@ class BookingController extends Controller
     }
 
 
+
     public function hasGapIssue($seats)
     {
         usort($seats, function ($a, $b) {
@@ -356,6 +357,13 @@ class BookingController extends Controller
                 ], 402);
             }
         }
+    }
+
+    private function getMaxColumnForRow($row)
+    {
+        // Giả sử bạn có một bảng hoặc cách để lấy số cột tối đa cho một hàng cụ thể
+        // Ví dụ: nếu hàng có 10 ghế thì trả về 10
+        return 10;  // Giá trị này có thể thay đổi tùy thuộc vào cấu trúc ghế của bạn
     }
 
 

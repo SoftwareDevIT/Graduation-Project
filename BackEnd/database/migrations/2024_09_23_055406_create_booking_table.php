@@ -18,6 +18,8 @@ return new class extends Migration
             $table->unsignedBigInteger('pay_method_id');
             $table->double('amount');
             $table->string('barcode')->nullable();
+            $table->string('qrcode')->nullable();
+            $table->string('booking_code')->nullable();
             $table->enum('status', ['Pending', 'Confirmed', 'Pain'])->default('Pending');
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
