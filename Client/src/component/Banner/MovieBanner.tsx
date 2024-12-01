@@ -25,7 +25,7 @@ const MovieBanner = () => {
       {
         breakpoint: 992,
         settings: {
-          slidesToShow: 5,
+          slidesToShow: 3,
         },
       },
       {
@@ -79,7 +79,8 @@ const MovieBanner = () => {
 <span className="rating-1">
 <LikeOutlined 
     style={{
-  
+    position:"relative",
+    left:"8px",
       color: "#28a745",            // Màu xanh lá cho icon
       background: "none",          // Không có nền
       fontSize: "16px"             // Kích thước của icon
