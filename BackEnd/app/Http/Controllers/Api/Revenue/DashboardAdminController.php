@@ -38,13 +38,16 @@ class DashboardAdminController extends Controller
             $day
         );
         // Tính tổng doanh thu và số lượng booking
-        $total = $this->dashboardAdminService->totaldashboard($filterRevenue);
+        $total = $this->dashboardAdminService->totaldashboard($filterRevenue['filtered_data']);
 
+        // Doanh thu theo phim
+       
         return response()->json([
             'status' => true,
             'message' => 'Success',
             'chart' => $total,
-            'data' => $filterRevenue
+            'data' => $filterRevenue['filtered_data'],
+            'movie' => $filterRevenue['data_movie']
         ], 200);
     }
 
