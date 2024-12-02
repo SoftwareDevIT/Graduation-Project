@@ -90,9 +90,11 @@ class RankService
                 'user_id' => $user->id,
                 'points_used' => $pointsToUse,
                 'points_earned' => $pointsEarned,
-                'order_amount' => $totalPrice, 
+                'order_amount' => $totalPrice,
             ]);
         });
+
+        $this->updateRank($user);
 
         return [
             'success' => true,
@@ -102,5 +104,40 @@ class RankService
             'remaining_points' => $remainingPoints + $pointsEarned,
             'points_earned' => $pointsEarned
         ];
+    }
+
+    public function updateRank($user)
+    {
+        try {
+
+
+            if (!$user) {
+                return response()->json(['error' => 'User  not found'], 404);
+            }
+
+            // Tính tổng số tiền từ bảng points_history
+            $totalAmount = $user->pointHistories()->sum('order_amount');
+
+            $rank = $this->determineRank($totalAmount);
+
+            if (!$rank) {
+                return response()->json(['error' => 'No rank found for this amount'], 404);
+            }
+
+            // Cập nhật cấp bậc cho người dùng
+            $user->rank_id = $rank->id;
+            $user->save();
+
+            return response()->json(['success' => true, 'rank' => $rank->name], 200);
+        } catch (Exception $e) {
+            return response()->json(['Lỗi' => $e->getMessage()], 500);
+        }
+    }
+
+    private function determineRank($totalAmount)
+    {
+        return Rank::where('total_order_amount', '<=', $totalAmount)
+            ->orderBy('total_order_amount', 'desc')
+            ->first();
     }
 }

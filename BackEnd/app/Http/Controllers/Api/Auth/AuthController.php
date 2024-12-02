@@ -38,17 +38,17 @@ class AuthController extends Controller
     public function show($id)
     {
         try {
-            $user = $this->loginService->get($id)->load(['favoriteMovies', 'rank','pointHistories']); // Tải rank ở đây
+            $user = $this->loginService->get($id)->load(['favoriteMovies', 'rank', 'pointHistories']); // Tải rank ở đây
 
             if (!$user) {
                 return response()->json(['error' => 'User  not found'], 404);
             }
 
             $totalAmount = $user->pointHistories()->sum('order_amount');
-            $rankName = $user->rank ? $user->rank->name : 'Không có rank'; 
+            $rankName = $user->rank ? $user->rank->name : 'Không có rank';
 
             $user->total_amount = $totalAmount;
-            $user->rank_name = $rankName; 
+            $user->rank_name = $rankName;
             unset($user->rank);
 
             return response()->json(['success' => true, 'user' => $user], 200);
@@ -145,40 +145,5 @@ class AuthController extends Controller
         } catch (Exception $e) {
             return $this->error($e->getMessage());
         }
-    }
-
-    public function updateRank($userId)
-    {
-        try {
-            $user = $this->loginService->get($userId);
-
-            if (!$user) {
-                return response()->json(['error' => 'User  not found'], 404);
-            }
-
-            // Tính tổng số tiền từ bảng points_history
-            $totalAmount = $user->pointHistories()->sum('order_amount');
-
-            $rank = $this->determineRank($totalAmount);
-
-            if (!$rank) {
-                return response()->json(['error' => 'No rank found for this amount'], 404);
-            }
-
-            // Cập nhật cấp bậc cho người dùng
-            $user->rank_id = $rank->id; 
-            $user->save();
-
-            return response()->json(['success' => true, 'rank' => $rank->name], 200);
-        } catch (Exception $e) {
-            return $this->error('Lỗi: ' . $e->getMessage());
-        }
-    }
-
-    private function determineRank($totalAmount)
-    {
-        return Rank::where('total_order_amount', '<=', $totalAmount)
-            ->orderBy('total_order_amount', 'desc')
-            ->first();
     }
 }
