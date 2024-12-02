@@ -191,7 +191,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/book-ticket', [BookingController::class, 'bookTicket']);
     Route::post('/seat-selection/{roomId}', [BookingController::class, 'selectedSeats']);
 
-    //NokingStaff==============================
+    //BookingStaff==============================
     Route::post('selectSeats-staff', [BookingStaffController::class, 'selectSeats']);
     Route::post('/book-ticket-staff', [BookingStaffController::class, 'bookTicket']);
     Route::post('/seat-selection-staff/{roomId}', [BookingStaffController::class, 'selectedSeats']);
