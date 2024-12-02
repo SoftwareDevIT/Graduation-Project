@@ -196,6 +196,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/historyOrder/{id}', [OrderController::class, 'orderDetail']);
     Route::get('session', [BookingController::class, 'getSession']);
     Route::get('vouchers', [PromotionController::class, 'getUserVouchers']);
+    Route::post('/use-points', [RankContrller::class, 'usePoints']);                        //Dùng điểm tích lũy
+    Route::put('/users/update-rank/{used_id}', [AuthController::class, 'updateRank']);      //Cập nhập lại cấp bậc
 });
 Route::apiResource('promotions', PromotionController::class);
 Route::post('apply-promotion', [PromotionController::class, 'applyPromotion']);

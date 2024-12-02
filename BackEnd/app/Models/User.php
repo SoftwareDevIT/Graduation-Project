@@ -9,19 +9,20 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Traits\HasRoles;
 
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable,HasRoles;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
-    use HasFactory,Notifiable;
+    use HasFactory, Notifiable;
     protected $table = 'users';
     protected $fillable = [
         'user_name',
@@ -37,6 +38,7 @@ class User extends Authenticatable
         'rating',
         'points',
         'google_id',
+        'rank_id',
         'email_verified_at',
         'status',
     ];
@@ -89,19 +91,18 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class);
     }
 
-    public function addPoints($amount)
+    public function bookings()
     {
-        $this->points += $amount;
-        $this->save();
+        return $this->hasMany(Booking::class);
     }
 
-    public function usePoints($amount)
+    public function rank()
     {
-        if ($this->points >= $amount && floor($amount) == $amount) {
-            $this->points -= $amount;
-            $this->save();
-            return true;
-        }
-        return false; 
+        return $this->belongsTo(Rank::class);
+    }
+
+    public function pointHistories()
+    {
+        return $this->hasMany(PointHistory::class);
     }
 }
