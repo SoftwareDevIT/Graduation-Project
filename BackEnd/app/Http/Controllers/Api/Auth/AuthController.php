@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\Store\StoreUserRequest;
 use App\Http\Requests\Update\UpdateUserRequest;
+use App\Models\Rank;
 use App\Models\User;
 use App\Services\Auth\LoginService;
 use App\Services\UserRegistrationService;
@@ -37,15 +38,22 @@ class AuthController extends Controller
     public function show($id)
     {
         try {
-            $user = $this->loginService->get($id)->load('favoriteMovies');
+            $user = $this->loginService->get($id)->load(['favoriteMovies', 'rank', 'pointHistories']); // Tải rank ở đây
 
             if (!$user) {
-                return response()->json(['error' => 'user not found'], 404);
+                return response()->json(['error' => 'User  not found'], 404);
             }
 
-            return $this->success($user);
+            $totalAmount = $user->pointHistories()->sum('order_amount');
+            $rankName = $user->rank ? $user->rank->name : 'Không có rank';
+
+            $user->total_amount = $totalAmount;
+            $user->rank_name = $rankName;
+            unset($user->rank);
+
+            return response()->json(['success' => true, 'user' => $user], 200);
         } catch (Exception $e) {
-            return $e->getMessage();
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 
