@@ -10,6 +10,9 @@ use Illuminate\Http\Request;
 
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class RankContrller extends Controller
 {
@@ -67,5 +70,21 @@ class RankContrller extends Controller
         } catch (Exception $e) {
             return $e->getMessage();
         }
+    }
+
+    public function usePoints(Request $request)
+    {
+        $request->validate([
+            'points_to_use' => 'required|integer|min:0',
+            'total_price' => 'required|numeric|min:0',
+        ]);
+
+        $user = auth()->user();
+        $pointsToUse = $request->points_to_use;
+        $totalPrice = $request->total_price;
+
+        $data = $this->rankService->usePoints($user, $pointsToUse, $totalPrice);
+
+        return response()->json($data, $data['success'] ? 200 : 400);
     }
 }

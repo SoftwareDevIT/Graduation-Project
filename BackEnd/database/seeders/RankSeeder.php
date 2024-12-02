@@ -23,7 +23,7 @@ class RankSeeder extends Seeder
             ],
             [
                 'name' => 'Bạc',
-                'total_order_amount' => 0,
+                'total_order_amount' => 200000,
                 'percent_discount' => 5,
                 'created_at' => now(),
                 'updated_at' => now(),
