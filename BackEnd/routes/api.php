@@ -192,6 +192,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('session', [BookingController::class, 'getSession']);
     Route::get('vouchers', [PromotionController::class, 'getUserVouchers']); // hiển thi ra vorcher
     Route::post('apply-promotion', [PromotionController::class, 'applyPromotion']); // áp dụng mã giảm giá
+    Route::post('/use-points', [RankContrller::class, 'usePoints']);                        //Dùng điểm tích lũy và cập nhập cấp bậc
 });
 Route::get('/vnpay-return', [BookingController::class, 'vnPayReturn']);
 // Route riêng cho chức năng publish
