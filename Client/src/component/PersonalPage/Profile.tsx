@@ -34,8 +34,11 @@ const Profile: React.FC = () => {
       const fetchUserProfile = async () => {
         try {
           const response = await instance.get(`/user/${userId}`);
-          if (response.data.status) {
-            const userProfileData = response.data.data;
+        
+          
+          if (response.data.success) {
+            const userProfileData = response.data.user;
+           
             setUserProfile(userProfileData);
             setAvatar(
               userProfileData.avatar ||
@@ -46,7 +49,7 @@ const Profile: React.FC = () => {
           console.error("Error fetching user profile:", error);
         }
       };
-
+      
       fetchUserProfile();
 
       const fetchLocations = async () => {
@@ -127,7 +130,7 @@ const Profile: React.FC = () => {
                   />
                   <div className="account-details">
                     <h2 className="account-name">
-                      {userProfile?.user_name || "No name"}
+                      {userProfile?.user_name || "Đang cập nhật thông tin"}
                     </h2>
                   </div>
                 </div>

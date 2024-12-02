@@ -26,8 +26,8 @@ const Personal: React.FC = () => {
       const fetchUserProfile = async () => {
         try {
           const response = await instance.get(`/user/${userId}`);
-          if (response.data.status) {
-            const userProfileData = response.data.data;
+          if (response.data.success) {
+            const userProfileData = response.data.user;
             setUserProfile(userProfileData);
             setAvatar(
               userProfileData.avatar ||

@@ -11,6 +11,7 @@ const UserDashboard: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(0);
+    const { Search } = Input;
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -113,7 +114,7 @@ const UserDashboard: React.FC = () => {
                         Quản lý vai trò
                     </Button>
                 </Link>
-                <Input
+                <Search
                     placeholder="Tìm kiếm theo tên"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
@@ -135,12 +136,12 @@ const UserDashboard: React.FC = () => {
             <div className="d-flex justify-content-center mt-4">
                 <Pagination
                     current={currentPage}
-                    total={filteredUsers.length}
+                    total={totalPages * 10}
                     pageSize={7} // Number of users per page
-                    onChange={handlePageChange}
+                    onChange={(page) => setCurrentPage(page)}
                     showSizeChanger={false}
                     showQuickJumper
-                    showTotal={(total) => `Tổng số ${total} người dùng`}
+                   
                 />
             </div>
         </div>

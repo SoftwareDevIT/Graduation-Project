@@ -1,0 +1,102 @@
+/* Container Layout */
+.mt-5 {
+    margin-top: 40px;
+  }
+  
+  .stat-card {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+    border-radius: 12px;
+    background-color: #ffffff;
+    text-align: center;
+    font-size: 18px;
+    border: 1px solid #e0e0e0;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+  
+  .stat-card:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    transform: translateY(-8px);
+  }
+  
+  .stat-card h4 {
+    margin-bottom: 12px;
+    color: #1890ff;
+    font-size: 24px;
+    font-weight: 600;
+  }
+  
+  .stat-card p {
+    font-size: 20px;
+    font-weight: 500;
+    color: #333;
+  }
+  
+  /* Search Bar */
+  .search-card {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    border-radius: 12px;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+  
+  .search-card:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  .search-card .ant-input {
+    font-size: 16px;
+    height: 40px;
+    border-radius: 8px;
+  }
+  
+  /* Table Style */
+  .table-card {
+    margin-top: 16px;
+    padding: 16px;
+    border-radius: 12px;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+  }
+  
+  .table-card .ant-table {
+    font-size: 16px;
+  }
+  
+  .table-card th {
+    background-color: #f7f7f7;
+    color: #555;
+  }
+  
+  .table-card td {
+    color: #333;
+  }
+  
+  .table-card .ant-table-tbody tr:hover {
+    background-color: #f5f5f5;
+    cursor: pointer;
+  }
+  
+  .table-card .ant-table-thead > tr > th {
+    font-weight: bold;
+  }
+  
+  /* Responsive Layout */
+  @media (max-width: 768px) {
+    .stat-card,
+    .search-card,
+    .table-card {
+      padding: 16px;
+    }
+  
+    .stat-card h4 {
+      font-size: 18px;
+    }
+  
+    .stat-card p {
+      font-size: 16px;
+    }
+  }
+  

@@ -14,4 +14,9 @@ class Rank extends Model
         'percent_discount',
         'total_order_amount',
     ];
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
 }

@@ -11,7 +11,11 @@
     padding: 5px 10px;
     border-radius: 4px;
 }
-  
+element.style {
+}:where(.css-dev-only-do-not-override-vryruh).ant-pagination .ant-pagination-item {
+    margin-top: 10px !important;
+    line-height: 13px;
+}
 .status-pending {
     background-color: #ffc107; /* Màu vàng cho trạng thái đang chờ */
     color: #212529; /* Màu chữ đen */
