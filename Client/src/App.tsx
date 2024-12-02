@@ -91,7 +91,7 @@ import OrdersFormManager from "./Page/Admin/Orders/OrdersForm";
 import PageTitleUpdater from "./component/PageTitleUpdater/PageTitleUpdater";
 import TicketCinema from "./component/PersonalPage/TicketCinema";
 import SeatLayout from "./component/SeatMap/test";
-import Community from "./component/Community/Community";
+
 
 
 
@@ -158,7 +158,7 @@ function App() {
 
         <Route path="/deponsit" element={<Deponsit />} />
         <Route path="/forgetpass" element={<ForgetPass />} />
-        {/* <Route path="/community" element={<Community />} /> */}
+       
       
 
 

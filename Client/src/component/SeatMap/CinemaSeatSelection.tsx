@@ -10,6 +10,7 @@ import { message, Spin } from 'antd';
 import { Modal } from 'antd';
 import { Movie } from "../../interface/Movie";
 import Pusher from "pusher-js";
+import initializeEcho from "../../server/realtime";
 type Seat = {
   id: number;
   label:string;
@@ -35,6 +36,10 @@ type SeatLayoutResponse = {
   room: Room;
   movie:Movie;
 };
+interface SeatStatusUpdatedEvent {
+  seat_name: string;
+  status: string;
+}
 
 
 const CinemaSeatSelection: React.FC = () => {
@@ -56,26 +61,7 @@ const CinemaSeatSelection: React.FC = () => {
   const [error, setError] = useState("");
   
 
-  useEffect(() => {
-    const pusher = new Pusher(import.meta.env.VITE_PUSHER_APP_KEY, {
-      cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
-      wsHost: import.meta.env.VITE_PUSHER_HOST, // Nếu bạn có cấu hình host tùy chỉnh
-      wsPort: import.meta.env.VITE_PUSHER_PORT, // Nếu bạn có cấu hình port tùy chỉnh
-      forceTLS: true, // Đảm bảo kết nối qua HTTPS nếu sử dụng SSL
-      disableStats: true, // Tùy chọn nếu không cần thống kê của Pusher
-    });
-    const channel = pusher.subscribe('seat-channel');
-  
-    channel.bind('SeatSelected', function(data: any) {
-      setReservedSeats(new Set(data.reservedSeats)); // Dữ liệu nhận từ server về danh sách ghế đã đặt
-      console.log('Seats updated:', data.reservedSeats);
-    });
-    return () => {
-      pusher.unsubscribe('seat-channel');
-    };
-  }, []);
-  console.log(import.meta.env.VITE_PUSHER_APP_KEY);
-console.log(import.meta.env.VITE_PUSHER_APP_CLUSTER);
+
 
   useEffect(() => {
     const fetchRoomAndSeats = async () => {
@@ -88,30 +74,37 @@ console.log(import.meta.env.VITE_PUSHER_APP_CLUSTER);
         setSeatData(seatLayoutData);
   
         // Fetching seat data
-        try {
-          const seatResponse = await instance.get(`/seat/${showtimeId}`);
-          const seatDataseat = seatResponse.data;
-          console.log("du lieu:",seatDataseat);
-          
+        const seatResponse = await instance.get(`/seat/${showtimeId}`);
+        const seatData = seatResponse.data;
   
-          const reservedSeatSet = new Set<string>();
-          seatDataseat.data.forEach((seat: { seat_name: string; status: string }) => {
-            if (seat.status === "Reserved Until" || seat.status === "Booked") {
-              reservedSeatSet.add(seat.seat_name);
-            }
-          });
+        const reservedSeatSet = new Set<string>();
+        seatData.data.forEach((seat: { seat_name: string; status: string }) => {
+          if (seat.status === "Reserved Until" || seat.status === "Booked") {
+            reservedSeatSet.add(seat.seat_name);
+          }
+        });
   
-          // Set reserved seats data
-          setReservedSeats(reservedSeatSet);
-        } catch (seatError) {
-          // If fetching seat data fails, just log it, but don't stop the execution
-          console.error("Error fetching seat data", seatError);
-          // Optionally set a fallback state for seat data
-          setReservedSeats(new Set<string>());
+        // Set reserved seats data
+        setReservedSeats(reservedSeatSet);
+  
+        // Initialize Laravel Echo and listen for seat changes
+        const echo = await initializeEcho(); // Fetch Echo configuration from API
+        if (echo) {
+          echo.channel(`showtime.${showtimeId}`)
+            .listen('SeatStatusUpdated', (event: SeatStatusUpdatedEvent) => {
+              const { seat_name, status } = event; // Get the seat's new status
+              setReservedSeats(prev => {
+                const updated = new Set(prev);
+                if (status === "Reserved" || status === "Booked") {
+                  updated.add(seat_name);
+                } else {
+                  updated.delete(seat_name);
+                }
+                return updated;
+              });
+            });
         }
-  
       } catch (error) {
-        // Handle errors with fetching showtime data
         console.error("Error fetching room data", error);
         setError("Không thể tải dữ liệu, vui lòng thử lại!");
       }
@@ -120,27 +113,27 @@ console.log(import.meta.env.VITE_PUSHER_APP_CLUSTER);
     fetchRoomAndSeats();
   }, [showtimeId]);
   
+  
   const handleSeatClick = (seat: Seat) => {
     const seatLabel = seat.label;
-    if (reservedSeats.has(seatLabel)) return;
-
+    if (reservedSeats.has(seatLabel)) return;  // Nếu ghế đã bị đặt, không cho phép chọn.
+  
     const currentSeats = new Map(selectedSeats);
     const row = seat.row!;
     const index = seat.column - 1;
-
+  
     if (currentSeats.has(row)) {
       const indices = currentSeats.get(row) || [];
       if (indices.includes(index)) {
-        currentSeats.set(row, indices.filter((i) => i !== index)); // xóa ghế khỏi row
+        currentSeats.set(row, indices.filter((i) => i !== index)); // Xóa ghế khỏi row
       } else {
-        currentSeats.set(row, [...indices, index]); // thêm ghế mới vào row
+        currentSeats.set(row, [...indices, index]); // Thêm ghế mới vào row
       }
     } else {
       currentSeats.set(row, [index]); // Thêm row mới
     }
     setSelectedSeats(currentSeats);
   };
-
   if (!seatData?.seats) {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -352,8 +345,8 @@ console.log(import.meta.env.VITE_PUSHER_APP_CLUSTER);
 
     // Màu nền khi ghế có giá trị
     const seatBackground = isReserved
-      ? "darkgray" // Màu cho ghế đã đặt
-      : seat
+    ? "darkgray" // Màu cho ghế đã đặt
+    : seat
       ? isSelected
         ? "green" // Màu sắc khi chọn ghế
         : seatType === "VIP"
@@ -361,7 +354,7 @@ console.log(import.meta.env.VITE_PUSHER_APP_CLUSTER);
           : seatType === "Couple"
             ? "linear-gradient(45deg, gray 50%, rgb(56, 53, 53) 50%)" // Ghế Couple
             : "lightgray" // Ghế Regular
-      : "white"; // Màu nền khi ghế không có giá trị (không thể chọn)
+      : "white";
 
     // Vô hiệu hóa các ghế có màu nền trắng (không thể chọn)
     const isDisabled = seatBackground === "white" || !isSeatAvailable || isReserved;

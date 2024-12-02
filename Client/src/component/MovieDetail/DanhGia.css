@@ -364,3 +364,8 @@
     vertical-align: middle; /* Canh giữa icon với tên người dùng */
 }
 
+@media (max-width: 768px){
+    .community-section{
+    
+    }
+}
