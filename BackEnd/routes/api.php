@@ -147,17 +147,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::apiResource('order', OrderController::class)->except(['index', 'show']);
 });
 
-Route::middleware(['auth:sanctum', 'role:manager'])->group(function () {
 
-});
-
-
-
-
-    Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
-
-
-});
 //Trang dashboard
 Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
 
