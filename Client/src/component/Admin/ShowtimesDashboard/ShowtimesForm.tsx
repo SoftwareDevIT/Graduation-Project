@@ -5,7 +5,6 @@ import { Showtime } from '../../../interface/Showtimes';
 import { useShowtimeContext } from '../../../Context/ShowtimesContext';
 import instance from '../../../server';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Cinema } from '../../../interface/Cinema';
 import { Room } from '../../../interface/Room';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -13,37 +12,33 @@ import { notification } from 'antd';
 
 // Schema validation
 const showtimeSchema = z.object({
-    movie_in_cinema_id: z.number().min(1, 'Vui lòng chọn phim'),
-    room_id: z.number().min(1, 'Vui lòng chọn phòng'),
-    showtime_date: z
-      .string()
-      .min(1, 'Vui lòng chọn ngày chiếu')
-      .refine((value) => {
-        const today = new Date();
-        const selectedDate = new Date(value);
-        today.setHours(0, 0, 0, 0); // Reset giờ phút giây để chỉ so sánh ngày
-        return selectedDate >= today;
-      }, 'Ngày chiếu không được nhỏ hơn ngày hiện tại'),
-      showtime_start: z
-      .string()
-      .min(1, 'Vui lòng chọn giờ bắt đầu')
-      .refine((value) => {
-        const selectedTime = value.split(':'); // Tách giờ và phút từ giá trị nhập
-        const now = new Date(); // Lấy thời gian hiện tại
-        const today = new Date();
-        today.setHours(Number(selectedTime[0]), Number(selectedTime[1]), 0, 0); // Gán giờ và phút từ giá trị nhập
-    
-        return today >= now; // So sánh giờ bắt đầu với thời gian hiện tại
-      }, 'Giờ bắt đầu không được nhỏ hơn thời gian hiện tại'),
-    
-    price: z
-      .number()
-      .min(0, 'Giá phải lớn hơn hoặc bằng 0')
-      .max(500000, 'Giá không được vượt quá 500,000 VNĐ')
-      .optional(),
-    cinema_id: z.number().min(1, 'Vui lòng chọn rạp'),
-  });
-  
+  movie_id: z.number().min(1, 'Vui lòng chọn phim'),
+  room_id: z.number().min(1, 'Vui lòng chọn phòng'),
+  showtime_date: z
+    .string()
+    .min(1, 'Vui lòng chọn ngày chiếu')
+    .refine((value) => {
+      const today = new Date();
+      const selectedDate = new Date(value);
+      today.setHours(0, 0, 0, 0); // Reset giờ phút giây để chỉ so sánh ngày
+      return selectedDate >= today;
+    }, 'Ngày chiếu không được nhỏ hơn ngày hiện tại'),
+  showtime_start: z
+    .string()
+    .min(1, 'Vui lòng chọn giờ bắt đầu')
+    .refine((value) => {
+      const selectedTime = value.split(':'); // Tách giờ và phút từ giá trị nhập
+      const now = new Date(); // Lấy thời gian hiện tại
+      const today = new Date();
+      today.setHours(Number(selectedTime[0]), Number(selectedTime[1]), 0, 0); // Gán giờ và phút từ giá trị nhập
+      return today >= now; // So sánh giờ bắt đầu với thời gian hiện tại
+    }, 'Giờ bắt đầu không được nhỏ hơn thời gian hiện tại'),
+  price: z
+    .number()
+    .min(0, 'Giá phải lớn hơn hoặc bằng 0')
+    .max(500000, 'Giá không được vượt quá 500,000 VNĐ')
+    .optional(),
+});
 
 const ShowtimesForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -54,20 +49,18 @@ const ShowtimesForm: React.FC = () => {
   const navigate = useNavigate();
 
   // State variables
-  const [cinemasList, setCinemasList] = useState<Cinema[]>([]);
-  const [movieInCinemas, setMovieInCinemas] = useState<any[]>([]);
+  const [moviesList, setMoviesList] = useState<any[]>([]);
   const [roomsList, setRoomsList] = useState<Room[]>([]);
-  const [cinemaId, setCinemaId] = useState<number | null>(null);
   const [showtimesList, setShowtimesList] = useState<Showtime[]>(() => {
-    // Try to get the showtimes from localStorage when the page is reloaded
     const savedShowtimes = localStorage.getItem('showtimesList');
     return savedShowtimes ? JSON.parse(savedShowtimes) : [];
   });
+
   // Fetch initial data
   useEffect(() => {
-    const fetchCinemas = async () => {
-      const response = await instance.get('/cinema');
-      setCinemasList(response.data.data);
+    const fetchMovies = async () => {
+      const response = await instance.get('/movies');
+      setMoviesList(response.data.data.original);
     };
 
     const fetchShowtime = async () => {
@@ -75,15 +68,11 @@ const ShowtimesForm: React.FC = () => {
         const response = await instance.get(`/showtimes/${id}`);
         const showtimeData = response.data.data;
 
-        // Prefetch related data based on selected cinema
-        setCinemaId(showtimeData.movie_in_cinema.cinema_id);
-        await fetchMovieInCinema(showtimeData.movie_in_cinema.cinema_id);
-        await fetchRoomsByCinema(showtimeData.movie_in_cinema.cinema_id);
+       
 
         // Populate form fields for edit mode
         reset({
-          movie_in_cinema_id: showtimeData.movie_in_cinema_id,
-          cinema_id: showtimeData.movie_in_cinema.cinema_id,
+          movie_id: showtimeData.movie_id,
           showtime_date: showtimeData.showtime_date,
           showtime_start: showtimeData.showtime_start,
           price: showtimeData.price,
@@ -91,36 +80,21 @@ const ShowtimesForm: React.FC = () => {
         });
       }
     };
-
-    fetchCinemas();
+    fetchRooms(); // Lấy danh sách phòng
+    fetchMovies();
     fetchShowtime();
   }, [id, reset]);
+
   useEffect(() => {
     localStorage.setItem('showtimesList', JSON.stringify(showtimesList));
   }, [showtimesList]);
-  
-  
-  
 
-  // Fetch movies by cinema
-  const fetchMovieInCinema = async (cinemaId: number) => {
-    const response = await instance.get(`/show-movie-in-cinema/${cinemaId}`);
-    setMovieInCinemas(response.data.data);
-  };
-
-  // Fetch rooms by cinema
-  const fetchRoomsByCinema = async (cinemaId: number) => {
-    const response = await instance.get(`/cinema/${cinemaId}/room`);
+  // Fetch rooms by movie
+  const fetchRooms = async () => {
+    const response = await instance.get('/room'); // Lấy danh sách phòng từ API
     setRoomsList(response.data.data);
   };
 
-  // Handle cinema selection change
-  const handleCinemaChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedCinemaId = Number(e.target.value);
-    setCinemaId(selectedCinemaId);
-    await fetchMovieInCinema(selectedCinemaId);
-    await fetchRoomsByCinema(selectedCinemaId);
-  };
 
   // Form submission handler
   const onSubmit: SubmitHandler<Showtime> = async (data) => {
@@ -142,11 +116,12 @@ const ShowtimesForm: React.FC = () => {
 
     reset();
   };
+
+  // Delete a showtime
   const handleDelete = (index: number) => {
     const newShowtimesList = [...showtimesList];
-    newShowtimesList.splice(index, 1); // Xóa phần tử tại vị trí index
+    newShowtimesList.splice(index, 1);
     setShowtimesList(newShowtimesList);
-    localStorage.setItem('showtimesList', JSON.stringify(newShowtimesList)); // Lưu lại vào localStorage
     notification.success({
       message: 'Xóa Suất Chiếu Thành Công!',
       description: 'Suất chiếu đã được xóa khỏi danh sách.',
@@ -155,21 +130,26 @@ const ShowtimesForm: React.FC = () => {
 
   // Submit all showtimes in bulk
   const handleSubmitAll = async () => {
-     // Kiểm tra nếu danh sách showtimes rỗng hoặc chưa có thông tin đầy đủ
-  if (showtimesList.length === 0 || showtimesList.some(item => !item.movie_in_cinema_id || !item.room_id || !item.showtime_date || !item.showtime_start)) {
-    notification.error({
-      message: 'Lỗi khi gửi tất cả Showtime',
-      description: 'Vui lòng điền đầy đủ thông tin cho tất cả các suất chiếu.',
-    });
-    return;
-  }
-  localStorage.setItem('showtimesList', JSON.stringify([]));
+    if (
+      showtimesList.length === 0 ||
+      showtimesList.some(
+        (item) =>
+          !item.movie_id || !item.room_id || !item.showtime_date || !item.showtime_start
+      )
+    ) {
+      notification.error({
+        message: 'Lỗi khi gửi tất cả Showtime',
+        description: 'Vui lòng điền đầy đủ thông tin cho tất cả các suất chiếu.',
+      });
+      return;
+    }
+    localStorage.setItem('showtimesList', JSON.stringify([]));
     await addOrUpdateShowtime(showtimesList);
     notification.success({
       message: 'Gửi Tất Cả Suất Chiếu Thành Công!',
       description: 'Suất chiếu mới đã được thêm vào danh sách.',
     });
-    
+
     navigate('/admin/showtimes');
   };
 
@@ -178,39 +158,24 @@ const ShowtimesForm: React.FC = () => {
       <h2 className="text-center mb-4">{id ? 'Cập nhật Suất Chiếu' : 'Thêm Suất Chiếu'}</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="shadow p-4 rounded bg-light">
         <div className="mb-3">
-          <label className="form-label">Chọn Rạp</label>
+          <label className="form-label">Chọn Phim</label>
           <select
-            {...register('cinema_id',{valueAsNumber:true})}
-            value={cinemaId || ''}
-            onChange={handleCinemaChange}
+            {...register('movie_id', { valueAsNumber: true })}
             className="form-select"
           >
-            <option value="">Chọn Rạp</option>
-            {cinemasList.map((cinema) => (
-              <option key={cinema.id} value={cinema.id}>
-                {cinema.cinema_name} - {cinema.location.location_name}
-              </option>
-            ))}
-          </select>
-          {errors.cinema_id && <div className="text-danger">{errors.cinema_id.message}</div>}
-        </div>
-
-        <div className="mb-3">
-          <label className="form-label">Chọn Phim</label>
-          <select {...register('movie_in_cinema_id',{valueAsNumber:true})} className="form-select">
             <option value="">Chọn Phim</option>
-            {movieInCinemas.map((movie) => (
+            {moviesList.map((movie) => (
               <option key={movie.id} value={movie.id}>
-                {movie.movie.movie_name}
+                {movie.movie_name}
               </option>
             ))}
           </select>
-          {errors.movie_in_cinema_id && <div className="text-danger">{errors.movie_in_cinema_id.message}</div>}
+          {errors.movie_id && <div className="text-danger">{errors.movie_id.message}</div>}
         </div>
 
         <div className="mb-3">
-          <label className="form-label">Chọn Phòng</label>
-          <select {...register('room_id',{valueAsNumber:true})} className="form-select">
+        <label className="form-label">Chọn Phòng</label>
+          <select {...register('room_id', { valueAsNumber: true })} className="form-select">
             <option value="">Chọn Phòng</option>
             {roomsList.map((room) => (
               <option key={room.id} value={room.id}>
@@ -268,23 +233,30 @@ const ShowtimesForm: React.FC = () => {
           <table className="table table-bordered mt-3">
             <thead>
               <tr>
-                <th>Rạp</th>
                 <th>Phim</th>
+                <th>Phòng</th>
                 <th>Ngày chiếu</th>
                 <th>Giờ bắt đầu</th>
                 <th>Giá</th>
+                <th>Hành động</th>
               </tr>
             </thead>
             <tbody>
               {showtimesList.map((item, index) => (
                 <tr key={index}>
-                  <td>{item.cinema_id}</td>
-                  <td>{item.movie_in_cinema_id}</td>
+                  <td>{item.movie_id}</td>
+                  <td>{item.room_id}</td>
                   <td>{item.showtime_date}</td>
                   <td>{item.showtime_start}</td>
                   <td>{item.price}</td>
                   <td>
-                    <button type="button" onClick={() => handleDelete(index)} className="btn btn-danger">Xóa</button>
+                    <button
+                      type="button"
+                      onClick={() => handleDelete(index)}
+                      className="btn btn-danger"
+                    >
+                      Xóa
+                    </button>
                   </td>
                 </tr>
               ))}

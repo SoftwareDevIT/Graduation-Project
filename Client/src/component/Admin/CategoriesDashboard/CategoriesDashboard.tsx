@@ -12,6 +12,7 @@ const CategoriesDashboard = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const categoriesPerPage = 7;
+    const { Search } = Input;
 
     const filteredCategories = categories.filter((category) =>
         category.category_name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -77,10 +78,9 @@ const CategoriesDashboard = () => {
                         Thêm Thể Loại Phim
                     </Button>
                 </Link>
-                <Input
-                    placeholder="Tìm kiếm theo tên"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                <Search
+                    placeholder="Tìm kiếm theo tên thể loại"
+                    onSearch={(value) => setSearchTerm(value)}
                     style={{ width: 300 }}
                     allowClear
                 />

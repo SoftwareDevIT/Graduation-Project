@@ -12,35 +12,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 // Zod schema validation
 const roomSchema = z.object({
   room_name: z.string().min(1, 'Tên phòng không được bỏ trống'),
-  
-  volume: z
-    .number()
-    .min(50, 'Sức chứa phải từ 50 đến 300')
-    .max(300, 'Sức chứa phải từ 50 đến 300')
-    .int('Sức chứa phải là số nguyên'),
-  
   cinema_id: z.number().min(1, 'Vui lòng chọn rạp'),
-  
-  quantity_double_seats: z
-    .number()
-    .min(0, 'Số ghế đôi không thể nhỏ hơn 0')
-    .max(10, 'Số ghế đôi không thể lớn hơn 10') // Không vượt quá 10 ghế đôi
-    .int('Số ghế đôi phải là số nguyên')
-    .refine((value) => value <= 10, {
-      message: 'Số ghế đôi không thể lớn hơn 10',
-    }),
-
-  quantity_vip_seats: z
-    .number()
-    .min(0, 'Số ghế VIP không thể nhỏ hơn 0')
-    .int('Số ghế VIP phải là số nguyên')
-    .refine((value) => value <= 20, {
-      message: 'Số ghế VIP không thể lớn hơn 10',
-    }),
-
-}).refine((data) => data.quantity_double_seats + data.quantity_vip_seats <= data.volume, {
-  message: 'Tổng số ghế đôi và ghế VIP không thể lớn hơn sức chứa',
-  path: ['quantity_double_seats'], // Đảm bảo lỗi này được hiển thị ở ghế đôi
 });
 
 
@@ -69,10 +41,7 @@ const RoomsForm: React.FC = () => {
         const roomData = response.data.data;
         reset({
           room_name: roomData.room_name,
-          volume: roomData.volume || '',
           cinema_id: roomData.cinema_id,
-          quantity_double_seats: roomData.quantity_double_seats,
-          quantity_vip_seats: roomData.quantity_vip_seats,
         });
       }
     };
@@ -83,7 +52,7 @@ const RoomsForm: React.FC = () => {
 
   const onSubmit: SubmitHandler<Room> = async (data) => {
     console.log('Submitted Data:', data); // Debug log
-    if (!data.room_name || !data.volume || !data.cinema_id) {
+    if (!data.room_name || !data.cinema_id) {
       notification.error({
         message: 'Thông báo',
         description: 'Vui lòng điền đầy đủ thông tin.',
@@ -101,7 +70,7 @@ const RoomsForm: React.FC = () => {
       } else {
         const mappedData = {
           ...data,
-          capacity: data.volume, // Map to the expected property name
+       
         };
         await instance.post('/room', mappedData);
         notification.success({
@@ -134,18 +103,6 @@ const RoomsForm: React.FC = () => {
           />
           {errors.room_name && <div className="invalid-feedback">{errors.room_name.message}</div>}
         </div>
-
-        {/* Sức Chứa */}
-        <div className="mb-3">
-          <label className="form-label">Sức chứa</label>
-          <input
-            type="number"
-            {...register('volume',{valueAsNumber: true})}
-            className={`form-control ${errors.volume ? 'is-invalid' : ''}`}
-          />
-          {errors.volume && <div className="invalid-feedback">{errors.volume.message}</div>}
-        </div>
-
         {/* Rạp */}
         <div className="mb-3">
           <label className="form-label">Rạp</label>
@@ -162,29 +119,6 @@ const RoomsForm: React.FC = () => {
           </select>
           {errors.cinema_id && <div className="invalid-feedback">{errors.cinema_id.message}</div>}
         </div>
-
-        {/* Số Ghế Đôi */}
-        <div className="mb-3">
-          <label className="form-label">Số Ghế Đôi</label>
-          <input
-            type="number"
-            {...register('quantity_double_seats',{valueAsNumber: true})}
-            className={`form-control ${errors.quantity_double_seats ? 'is-invalid' : ''}`}
-          />
-          {errors.quantity_double_seats && <div className="invalid-feedback">{errors.quantity_double_seats.message}</div>}
-        </div>
-
-        {/* Số Ghế VIP */}
-        <div className="mb-3">
-          <label className="form-label">Số Ghế VIP</label>
-          <input
-            type="number"
-            {...register('quantity_vip_seats',{valueAsNumber: true})}
-            className={`form-control ${errors.quantity_vip_seats ? 'is-invalid' : ''}`}
-          />
-          {errors.quantity_vip_seats && <div className="invalid-feedback">{errors.quantity_vip_seats.message}</div>}
-        </div>
-
         <button type="submit" className="btn btn-primary">
           {id ? "Cập nhật Phòng" : "Thêm Phòng"}
         </button>

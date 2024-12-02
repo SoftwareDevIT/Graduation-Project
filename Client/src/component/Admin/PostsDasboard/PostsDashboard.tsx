@@ -4,16 +4,14 @@ import { Link } from 'react-router-dom';
 import { NewsItem } from '../../../interface/NewsItem';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './PostDashboard.css';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { notification } from 'antd';
+import { Button, Input, notification } from 'antd';
 
 const PostsDashboard: React.FC = () => {
   const { state, deletePost } = usePostsContext();
   const { posts } = state;
-
+  const { Search } = Input;
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const postsPerPage = 6;
@@ -79,16 +77,18 @@ const PostsDashboard: React.FC = () => {
   return (
     <div className="container mt-5">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <Link to={'/admin/posts/add'} className="btn btn-outline-primary">
-          <FontAwesomeIcon icon={faPlus} /> Thêm bài viết
+        <Link to={'/admin/posts/add'} >
+        <Button type="primary" size="large">
+                        Thêm bài viết
+                    </Button>
         </Link>
-        <input
-          type="text"
-          placeholder="Tìm kiếm theo tên..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="form-control w-25"
-        />
+        <Search
+                    placeholder="Tìm kiếm theo tên"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    style={{ width: 300 }}
+                    allowClear
+                />
       </div>
 
       <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">

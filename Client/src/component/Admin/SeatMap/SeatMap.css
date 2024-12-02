@@ -1,0 +1,96 @@
+/* Tổng thể */
+.seat-map {
+    margin: 20px auto;
+    max-width: 100%;
+
+  }
+  
+  /* Row ghế */
+  .seat-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  .seat-row-label {
+    margin-right: 15px;
+    font-weight: bold;
+    color: #555;
+    background-color:aqua ;
+  }
+  
+  /* Hàng ghế */
+  .seats {
+    display: flex;
+    gap: 10px; /* Khoảng cách giữa các ghế */
+  }
+  
+  /* Các loại ghế */
+  .seat {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+  }
+  
+  /* Màu ghế */
+  .seat-regular {
+    background-color:  #ffc107;
+    color: #333;
+  }
+  
+  .seat-vip {
+    background-color:#e0e0e0 ;
+    color: #000;
+  }
+  
+  .seat-couple {
+    background-color: #f48fb1;
+    color: #fff;
+  }
+  
+  /* Hiệu ứng hover */
+  .seat:hover {
+    transform: scale(1.1);
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  /* Dòng chữ thông báo */
+  .seat-map p {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #666;
+    margin: 20px 0;
+  }
+
+  .seat-selected {
+    background-color: #4caf50; /* Màu xanh lá cây khi được chọn */
+    color: white;
+  }
+  
+  .seat-regular {
+    background-color: #f0f0f0; /* Màu nền cho ghế thường */
+  }
+  
+  .seat-vip {
+    background-color: #ffd700; /* Màu nền cho ghế VIP */
+  }
+  
+  .seat-couple {
+    background-color: #ff1493; /* Màu nền cho ghế đôi */
+  }
+  
+  .seat-double {
+    border: 2px solid #ff1493; /* Ghế đôi có viền đặc biệt */
+  }
+  
+  .seat-single {
+    border: 2px solid #ccc; /* Ghế đơn có viền nhẹ */
+  }
+  
