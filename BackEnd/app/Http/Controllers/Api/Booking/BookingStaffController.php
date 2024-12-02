@@ -6,7 +6,7 @@ use App\Events\InvoiceCreated;
 use App\Events\InvoiceSendMail;
 use App\Events\SeatSelected;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Booking\TicketBookingRequest;
+use App\Http\Requests\Booking\TicketBookingStaffRequest;
 use App\Jobs\ResetSeats;
 use App\Mail\InvoiceMail;
 use App\Models\Booking;
@@ -14,7 +14,8 @@ use App\Models\Combo;
 use App\Models\Room;
 use App\Models\Seats;
 use App\Models\TemporaryBooking;
-use App\Services\Booking\TicketBookingService;
+use App\Models\User;
+use App\Services\BookingStaff\TicketBookingService as BookingStaffTicketBookingService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,43 +30,16 @@ use Picqer\Barcode\BarcodeGeneratorPNG;
 use Picqer\Barcode\BarcodeGenerator;
 
 
-class BookingController extends Controller
+class BookingStaffController extends Controller
 {
-    protected TicketBookingService $ticketBookingService;
+    protected BookingStaffTicketBookingService $ticketBookingService;
 
-    public function __construct(TicketBookingService $ticketBookingService)
+    public function __construct(BookingStaffTicketBookingService $ticketBookingService)
     {
         $this->ticketBookingService = $ticketBookingService;
     }
 
-    // public function slectMovieAndSeats(Request $request)
-    // {
-    //     try {
-    //         $selectMovieAndSeat = $this->ticketBookingService->selectMovieSeats($request);
-    //         return $selectMovieAndSeat;
-    //     } catch (\Exception $e) {
-    //         return response()->json([
-    //             'status' => false,
-    //             'message' => $e->getMessage()
-    //         ]);
-    //     }
-    // }
-
-    // public function selectCombos(Request $request)
-    // {
-    //     try {
-    //         $selectCombos = $this->ticketBookingService->selectCombos($request);
-    //         return $selectCombos;
-    //     } catch (\Exception $e) {
-    //         return response()->json([
-    //             'status' => false,
-    //             'message' => $e->getMessage()
-    //         ]);
-    //     }
-    // }
-
-
-    public function bookTicket(TicketBookingRequest $request)
+    public function bookTicket(TicketBookingStaffRequest $request)
     {
         try {
             $data = $this->ticketBookingService->bookingTicket($request);
@@ -75,12 +49,12 @@ class BookingController extends Controller
             }
 
             if (session()->get('booking')) {
-                $paymentURL = $this->ticketBookingService->processPayment($request);
-
+                $this->bookTicketBarcode(session()->get('booking'));
+                $booking = $this->ticketBookingService->bookingmapdata(session()->get('booking'));
                 return response()->json([
                     'status' => true,
-                    'message' => 'Đặt vé thành công',
-                    'Url' => $paymentURL
+                    'message' => 'Đặt vé thành công',
+                    'booking' => $booking
                 ]);
             }
             return $this->error('Đặt vé thất bại', 500);
@@ -92,19 +66,10 @@ class BookingController extends Controller
         }
     }
 
-    public function vnpayReturn(Request $request)
+    public function bookTicketBarcode(int $id)
     {
-        $data = $request->only(['vnp_TxnRef', 'vnp_ResponseCode']);
-
-        if ($data['vnp_ResponseCode'] == "00") {
-            // Tìm booking theo ID
-            $booking = Booking::where('id', $data['vnp_TxnRef'])->first();
-
-            // Cập nhật trạng thái đặt vé
-            $booking->status = 'Confirmed';
-
-            // Tạo mã vạch dưới dạng PNG
-            $generator = new BarcodeGeneratorPNG();
+        $booking = Booking::find($id);
+        $generator = new BarcodeGeneratorPNG();
             $barcode = $generator->getBarcode($booking->id, BarcodeGenerator::TYPE_CODE_128);
 
             // Tạo tên file duy nhất cho mã vạch (dựa vào booking ID)
@@ -120,79 +85,38 @@ class BookingController extends Controller
             // Lưu đường dẫn của ảnh mã vạch vào cơ sở dữ liệu (URL từ ImgBB)
             $booking->barcode = $imageUrl;
             $booking->save();
-
-            // Gửi email với hóa đơn và mã vạch
-            Mail::to($booking->user->email)->queue(new InvoiceMail($booking));
-
-            // Xoá session
-            session()->flush();
-
-            // Chuyển hướng về trang yêu cầu
-            return redirect('http://localhost:5173/movieticket');
-        }
-
-        // Xử lý khi mã phản hồi không phải '00'
-        return redirect('http://localhost:5173/movieticket')->with('error', 'Payment failed');
+        return $booking;
     }
 
+    public function checkuser(Request $request){
+        $email = $request->input('email');
+        $user = User::where('email', $email)->first();
+        if ($user) {
+            return response()->json([
+                'status' => true,
+                'message' => 'User found.',
+                'user' => $user
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'User not found.'
+            ]);
+        }
+    }
+    public function confirmBooking(Request $request)
+    {
+        $id = $request->input('id');
+        $booking = Booking::find($id);
+        $booking->status = 'Confirmed';
+        $booking->save();
+        return response()->json([
+            'status' => true,
+            'message' => 'Xây dựng thanh cong',
+            'booking' => $booking
+        ]);
+    }
 
-    // public function selectSeats(Request $request)
-    // {
-    //     $seats = $request->input('seats');
-    //     $existingSeats = [];
-    //     $seatDataList = [];
-    //     if (is_array($seats) && count($seats) > 10) {
-    //         return response()->json(['status' => false, 'message' => 'You can only select up to 10 seats.'], 400);
-    //     }
-
-    //     if (!$seats) {
-    //         return response()->json(['status' => false, 'message' => 'Please select at least one seat.'], 400);
-    //     }
-    //     if (is_array($seats)) {
-    //         foreach ($seats as $seatData) {
-    //             // Kiểm tra xem ghế đã tồn tại
-    //             $seat = Seats::where('seat_name', $seatData['seat_name'])
-    //                 ->where('seat_row', $seatData['seat_row'])
-    //                 ->where('seat_column', $seatData['seat_column'])
-    //                 ->where('room_id', $seatData['room_id'])
-    //                 ->first();
-
-    //             if ($seat) {
-    //                 // Lưu ghế đã tồn tại vào danh sách lỗi
-    //                 $existingSeats[] = $seat->toArray();
-    //             } else {
-    //                 // Tạo ghế mới
-    //                 $seatCreate = Seats::create($seatData);
-
-    //                 if ($seatCreate) {
-    //                     $seatDataList[] = $seatCreate;
-    //                     $seatCreate->reserveForUser();
-    //                 } else {
-    //                     return response()->json(['status' => false, 'message' => 'Failed to create seat.'], 500);
-    //                 }
-    //             }
-    //         }
-
-    //         // Nếu có ghế đã tồn tại, trả về danh sách các ghế đó
-    //         if (!empty($existingSeats)) {
-    //             return response()->json(['status' => false, 'message' => 'Some seats already exist.', 'data' => $existingSeats], 400);
-    //         }
-
-    //         // Nếu tạo ghế thành công, dispatch job cho tất cả ghế đã tạo
-    //         if (!empty($seatDataList)) {
-    //             $this->dispatchResetSeatsJob($seatDataList);
-    //             // Lưu thông tin ghế vào session
-    //             Session::put('seats', $seatDataList);
-    //             Log::info('Seats Session: ' . json_encode(session('seats')));
-    //         }
-
-    //         return response()->json([
-    //             'status' => true,
-    //             'message' => 'Selected seats successfully.',
-    //             'data' => $seatDataList
-    //         ]);
-    //     }
-    // }
 
     public function selectSeats(Request $request)
     {

@@ -22,6 +22,7 @@ use App\Http\Controllers\Api\Movie\MovieCategoryController;
 use App\Http\Controllers\Api\PayMethod\PayMethodController;
 use App\Http\Controllers\Api\Auth\AccountVerificationController;
 use App\Http\Controllers\Api\Auth\ResetPasswordController;
+use App\Http\Controllers\Api\Booking\BookingStaffController;
 use App\Http\Controllers\Api\Filter\DashBoard\FilterOfDashBoarchController;
 use App\Http\Controllers\Api\Filter\FilterMovieByNewController;
 use App\Http\Controllers\Api\Google\GoogleController;
@@ -190,8 +191,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/book-ticket', [BookingController::class, 'bookTicket']);
     Route::post('/seat-selection/{roomId}', [BookingController::class, 'selectedSeats']);
 
-    //==============================
+    //NokingStaff==============================
+    Route::post('selectSeats-staff', [BookingStaffController::class, 'selectSeats']);
+    Route::post('/book-ticket-staff', [BookingStaffController::class, 'bookTicket']);
+    Route::post('/seat-selection-staff/{roomId}', [BookingStaffController::class, 'selectedSeats']);
+    Route::post('/confirmBooking-staff', [BookingStaffController::class, 'confirmBooking']);
+    Route::post('/checkuser', [BookingStaffController::class, 'checkuser']);
 
+    //===============================
     Route::post('/historyOrder', [OrderController::class, 'order']);
     Route::post('/historyOrder/{id}', [OrderController::class, 'orderDetail']);
     Route::get('session', [BookingController::class, 'getSession']);
