@@ -36,7 +36,7 @@ class RankSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'name' => 'Bạch Kim',
+                'name' => 'Kim Cương',
                 'total_order_amount' => 3000000,
                 'percent_discount' => 7,
                 'created_at' => now(),

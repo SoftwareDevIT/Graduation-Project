@@ -73,6 +73,7 @@ class BookingController extends Controller
             if ($data instanceof JsonResponse) {
                 return $data;  // Trả về URL thanh toán hoặc lỗi nếu có
             }
+            
             if (session()->get('booking')) {
                 $paymentURL = $this->ticketBookingService->processPayment($request);
 
@@ -81,8 +82,6 @@ class BookingController extends Controller
                     'message' => 'Đặt vé thành công',
                     'Url' => $paymentURL
                 ]);
-
-
             }
             return $this->error('Đặt vé thất bại', 500);
         } catch (\Exception $e) {
@@ -206,7 +205,7 @@ class BookingController extends Controller
         if (is_array($seats) && count($seats) > 10) {
             return response()->json(['status' => false, 'message' => 'You can only select up to 10 seats.'], 400);
         }
- 
+
         if (!$seats) {
             return response()->json(['status' => false, 'message' => 'Please select at least one seat.'], 400);
         }
@@ -347,7 +346,7 @@ class BookingController extends Controller
                 ], 402);
             }
             $maxColumn = $this->getMaxColumnForRow($row); // Giả sử bạn có phương thức này để lấy số ghế tối đa trong một hàng
-            if ($maxColumn-$lastColumn == 1 ) {
+            if ($maxColumn - $lastColumn == 1) {
                 return response()->json([
                     'status' => false,
                     'message' => 'Please select consecutive seats up to the last seat of the row.',
