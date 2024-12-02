@@ -11,6 +11,7 @@ const DirectorDashboard = () => {
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
     const directorsPerPage = 7;
+    const { Search } = Input;
 
     useEffect(() => {
         const fetchDirectors = async () => {
@@ -109,10 +110,9 @@ const DirectorDashboard = () => {
                         Thêm Đạo Diễn
                     </Button>
                 </Link>
-                <Input
-                    placeholder="Tìm kiếm theo tên"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                <Search
+                    placeholder="Tìm kiếm theo tên đạo diễn"
+                    onSearch={(value) => setSearchTerm(value)}
                     style={{ width: 300 }}
                     allowClear
                 />

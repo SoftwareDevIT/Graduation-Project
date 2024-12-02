@@ -441,7 +441,11 @@ li.city.selected {
     border: none !important;
     margin-top: 20px;
     width: 650px !important;
-    
+    font-size: 14px;
+    padding: 8px;
+    background-size: 11px;
+    width: 714px !important ;
+    border: 1px solid gray  !important;
    
   }
 
@@ -521,8 +525,7 @@ li.city.selected {
     display: block !important;
     border: none !important;
     margin-top: 20px;
-    
-      width: 340px !important;
+   width: 340px !important;
      
       
     
@@ -624,7 +627,7 @@ right: 15px;
 }
 .city-selects {
   width: 100%;
-  max-width: 400px;
+  width: 400px;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -637,11 +640,16 @@ right: 15px;
     no-repeat right 10px center;
   background-size: 10px;
 }
-
-@media (max-width: 768px) {
-  .city-selects {
-    font-size: 14px;
-    padding: 8px;
-    background-size: 11px;
-  }
+.no-showtime-message {
+  text-align: center; /* Canh giữa nội dung */
+  font-size: 16px; /* Kích thước chữ vừa phải */
+  font-weight: normal; /* Chữ không quá đậm */
+  color: #555; /* Màu xám tối cho chữ, dễ nhìn */
+  background-color: #f8f8f8; /* Màu nền nhẹ nhàng */
+  padding: 10px; /* Khoảng cách bên trong */
+  border-radius: 4px; /* Bo góc nhẹ */
+  margin-top: 20px; /* Tạo khoảng cách từ các phần khác */
+  border: 1px solid #ddd; /* Viền màu xám nhẹ */
 }
+
+

@@ -9,7 +9,7 @@ import { EditOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons'; 
 const MoviesDashboard: React.FC = () => {
     const { state, dispatch } = useMovieContext();
     const { movies } = state;
-
+    const { Search } = Input;
     const [error, setError] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState<string>(''); 
     const [currentPage, setCurrentPage] = useState<number>(1); 
@@ -28,6 +28,7 @@ const MoviesDashboard: React.FC = () => {
 
         fetchMovies();
     }, [dispatch]);
+    
 
     const deleteMovie = async (id: number) => {
         if (window.confirm('Bạn có chắc chắn muốn xóa phim này không?')) {
@@ -134,7 +135,7 @@ const MoviesDashboard: React.FC = () => {
                         Thêm Phim Mới
                     </Button>
                 </Link>
-                <Input
+                <Search
                     placeholder="Tìm kiếm theo tên phim"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}

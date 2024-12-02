@@ -36,7 +36,7 @@ use App\Http\Controllers\Api\Promotion\PromotionController;
 use App\Http\Controllers\Api\Ranks\RankContrller;
 use App\Http\Controllers\Api\SeatMap\SeatMapController;
 use App\Http\Controllers\Api\SeatMap\MatrixController;
-
+use App\Http\Controllers\ConfigController;
 
 // use App\Http\Controllers\Api\SeatMap\SeatMapController;
 
@@ -144,8 +144,8 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     // bộ lọc thông kê doanh thu
     Route::get('filter-DashBoarch', [FilterOfDashBoarchController::class, 'filterOfDashBoarch']);
 
-    //Trang dashboard
-    // Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
+   
+    Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
 
 
 });
@@ -212,3 +212,7 @@ Route::patch('/seat-map/{id}/publish', [SeatMapController::class, 'publish'])->n
 // Route::apiResource('room', RoomController::class);
 Route::post('showtimePayload', [ShowtimeController::class, 'storeWithTimeRange']);
 Route::apiResource('ranks', RankContrller::class);
+
+
+
+Route::get('/env-config',[ConfigController::class,'envConfig']);

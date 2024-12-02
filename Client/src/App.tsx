@@ -85,16 +85,19 @@ import MethodManager from "./Page/Admin/Method/MethodManager";
 import MethodFormManager from "./Page/Admin/Method/MethodForm";
 import PromotionsManager from "./Page/Admin/Promotions/PromotionsManager";
 import PromotionsFormManager from "./Page/Admin/Promotions/PromotionsForm";
-
 import OrderPage from "./component/Oders/OrderPage";
-
 import OrdersFormManager from "./Page/Admin/Orders/OrdersForm";
-
 
 import PageTitleUpdater from "./component/PageTitleUpdater/PageTitleUpdater";
 import TicketCinema from "./component/PersonalPage/TicketCinema";
-import SeatLayout from "./component/SeatMap/test";
-import Community from "./component/Community/Community";
+import SeatLayoutManager from "./Page/Admin/SeatLayout/SeatLayoutManager";
+import SeatLayoutFormManager from "./Page/Admin/SeatLayout/SeatLayoutForm";
+import SeatMapManager from "./Page/Admin/SeatMap/SeatMapManager";
+
+import RankManager from "./Page/Admin/Ranks/RankManager";
+import RankForm from "./Page/Admin/Ranks/RankForm";
+import SeatMapForm from "./component/Admin/SeatMap/SeatMapForm";
+
 
 
 
@@ -111,8 +114,8 @@ function App() {
       <Routes>
         <Route index element={<Home />} />
         <Route path="/buy-ticket" element={<Bookcinematickets />} />
-        <Route path="/orders" element={<OrderPage />} />
-        <Route path="/pay" element={<OrderCheckout />} />
+        <Route path="/orders" element={<PrivateRoute><OrderPage /></PrivateRoute>} />
+        <Route path="/pay" element={ <PrivateRoute><OrderCheckout /></PrivateRoute> } />
         <Route path="/seat" element={<CinemaSeatSelection />} />
         <Route path="/movie-detail/:slug" element={<ContentMovie />} />
         <Route path="/schedule/:slug" element={<LichChieu />} />
@@ -133,13 +136,16 @@ function App() {
 
 
         <Route path="/movie/search/:movie_name" element={<SerachMovies />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/Personal" element={<Personal />} />
+        <Route path="/profile" element={
+            <PrivateRoute>
+              <Profile /> 
+            </PrivateRoute>
+          } />
+        <Route path="/Personal" element={<PrivateRoute><Personal /></PrivateRoute>} />
  
-        <Route path="/ticketcinema" element={<TicketCinema/>} />
-        <Route path="/credits" element={<Credits />} />
-        <Route path="/ChangePassword" element={<ChangePassword />} />
-   
+        <Route path="/ticketcinema" element={ <PrivateRoute><TicketCinema/></PrivateRoute>} />
+        <Route path="/credits" element={ <PrivateRoute><Credits /></PrivateRoute>} />
+        <Route path="/ChangePassword" element={ <PrivateRoute><Credits /><ChangePassword /></PrivateRoute>} />
         <Route path="/register" element={<RegisterCinema />} />
         <Route path="/login" element={<LoginCinema />} />
         <Route path="/movieshowing" element={<MovieShowing/>} />
@@ -154,19 +160,18 @@ function App() {
        
         <Route path="/upcoming-movies" element={<UpcomingMovies />} />
         <Route path="/movieshowing" element={<MovieShowing />} />
+        
        
 
         <Route path="/deponsit" element={<Deponsit />} />
         <Route path="/forgetpass" element={<ForgetPass />} />
-        {/* <Route path="/community" element={<Community />} /> */}
-      
 
 
         <Route path="/otp" element={<Otp />} />
         <Route path="/resetPassword" element={<ResetPassword />} />
         <Route path="/earlymovie" element={<EarlyMovie />} />
         <Route path="/resetpass" element={<ResetPasswod />} />
-        <Route path="/test" element={<SeatLayout />} />
+        
 
 
 
@@ -194,6 +199,15 @@ function App() {
         <Route path="/admin/showtimes/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><ShowtimesFormManager /></PrivateRoute>} />
         <Route path="/admin/orders" element={<PrivateRoute allowedRoles={['admin']}><OrdersManager /></PrivateRoute>} />
         <Route path="/admin/orders/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><OrdersFormManager /></PrivateRoute>} />
+        <Route path="/admin/matrix" element={<PrivateRoute allowedRoles={['admin']}><SeatLayoutManager /></PrivateRoute>} />
+        <Route path="/admin/matrix/add" element={<PrivateRoute allowedRoles={['admin']}><SeatLayoutFormManager /></PrivateRoute>} />
+        <Route path="/admin/matrix/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><SeatLayoutFormManager /></PrivateRoute>} />
+        <Route path="/admin/seatmap" element={<PrivateRoute allowedRoles={['admin']}><SeatMapManager /></PrivateRoute>} />
+        <Route path="/admin/seatmap/add" element={<PrivateRoute allowedRoles={['admin']}><SeatMapForm /></PrivateRoute>} />
+        <Route path="/admin/seatmap/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><SeatMapForm /></PrivateRoute>} />
+        <Route path="/admin/rank" element={<PrivateRoute allowedRoles={['admin']}><RankManager /></PrivateRoute>} />
+        <Route path="/admin/rank/add" element={<PrivateRoute allowedRoles={['admin']}><RankForm /></PrivateRoute>} />
+        <Route path="/admin/rank/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><RankForm /></PrivateRoute>} />
       
         <Route path="/admin/posts" element={<PrivateRoute allowedRoles={['admin']}><PostsManager /></PrivateRoute>} />
         <Route path="/admin/posts/:postId" element={<PrivateRoute allowedRoles={['admin']}><PostDetailManager /></PrivateRoute>} />

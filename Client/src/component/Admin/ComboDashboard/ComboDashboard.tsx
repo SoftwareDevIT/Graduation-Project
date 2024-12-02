@@ -11,6 +11,7 @@ const ComboDashboard: React.FC = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const combosPerPage = 5;
+    const { Search } = Input;
 
     useEffect(() => {
         const fetchCombos = async () => {
@@ -131,10 +132,9 @@ const ComboDashboard: React.FC = () => {
                         Thêm Combo
                     </Button>
                 </Link>
-                <Input
-                    placeholder="Tìm kiếm theo tên combo..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                <Search
+                    placeholder="Tìm kiếm theo tên combo"
+                    onSearch={(value) => setSearchTerm(value)}
                     style={{ width: 300 }}
                     allowClear
                 />
