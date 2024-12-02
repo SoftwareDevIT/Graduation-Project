@@ -5,6 +5,7 @@ import Footer from '../Footer/Footer';
 import axios from 'axios';
 import instance from '../../server';
 import { Modal } from 'antd';
+import { Link } from 'react-router-dom';
 
 const EarlyMovie: React.FC = () => {
   const [movies, setMovies] = useState<any[]>([]);
@@ -59,7 +60,7 @@ const EarlyMovie: React.FC = () => {
               <div className="movie-actions">
                 <button className="btn-info">Thông tin phim</button>
                 <button className="btn-trailer" onClick={() => showTrailer(movie)}>Trailer</button> {/* Thêm sự kiện onClick */}
-                <button className="btn-buy">Mua vé</button>
+                <Link to={`/movie-detail/${movie.movie.slug}`} className='btn-buy'>Mua vé</Link>
               </div>
             </div>
           </div>

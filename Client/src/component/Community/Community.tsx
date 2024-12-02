@@ -118,7 +118,7 @@ const Community: React.FC = () => {
 
       <div className="hoat-dong-moi">
         <div className="danh-sach-hoat-dong">
-          <h2 className="tieu-de">Moveek-er đang làm gì?</h2>
+          <h2 className="tieu-de">FlickHive-er đang làm gì?</h2>
           {ratings.slice(0, visibleRatings).map((rating) => (
             <div className="hoat-dong-item" key={rating?.id}>
               <div className="avatar-container">
@@ -139,7 +139,7 @@ const Community: React.FC = () => {
         </div>
 
         <div className="phe-binh-chuyen-nghiep">
-          <h3>Moveek's Approved Critics</h3>
+          <h3>FlickHive's Approved Critics</h3>
           <ul className="danh-sach-phe-binh">
           {ratings.slice(0, visibleRatings).map((rating) => (
             <li className="phe-binh-item" key={rating?.id}>
