@@ -55,56 +55,52 @@ class RankService
     }
 
     public function usePoints($user, $pointsToUse, $totalPrice)
-{
-    if ($pointsToUse > $user->points) {
+    {
+        if ($pointsToUse > $user->points) {
+            return [
+                'success' => false,
+                'message' => 'Số điểm nhập vượt quá số điểm hiện có.'
+            ];
+        }
+
+        if ($pointsToUse > $totalPrice) {
+            return [
+                'success' => false,
+                'message' => 'Số điểm nhập không được vượt quá tổng tiền.'
+            ];
+        }
+
+        $discountValue = $pointsToUse;
+        $finalPrice = $totalPrice - $discountValue;
+
+        $rank = $user->rank;
+
+        // Tính số điểm mới nhận được dựa vào phần trăm cấp bậc
+        $pointsEarned = $totalPrice * ($rank->percent_discount / 100);
+
+        // Cập nhật điểm người dùng
+        $remainingPoints = $user->points - $pointsToUse;
+
+        DB::transaction(function () use ($user, $remainingPoints, $pointsEarned, $pointsToUse, $discountValue, $totalPrice) {
+            // Cập nhật điểm của người dùng
+            $user->points = $remainingPoints + $pointsEarned;
+            $user->save();
+
+            PointHistory::create([
+                'user_id' => $user->id,
+                'points_used' => $pointsToUse,
+                'points_earned' => $pointsEarned,
+                'order_amount' => $totalPrice, 
+            ]);
+        });
+
         return [
-            'success' => false,
-            'message' => 'Số điểm nhập vượt quá số điểm hiện có.'
+            'success' => true,
+            'message' => 'Sử dụng điểm thành công.',
+            'discount_value' => $discountValue,
+            'final_price' => $finalPrice,
+            'remaining_points' => $remainingPoints + $pointsEarned,
+            'points_earned' => $pointsEarned
         ];
     }
-
-    // Tính toán giá trị giảm giá
-    $discountValue = $pointsToUse;
-    $finalPrice = $totalPrice - $discountValue;
-
-    $rank = $user->rank;
-
-    if (!$rank) {
-        return [
-            'success' => false,
-            'message' => 'Cấp bậc không tồn tại.'
-        ];
-    }
-
-    // Tính số điểm mới nhận được dựa vào phần trăm cấp bậc
-    $pointsEarned = $totalPrice * ($rank->percent_discount / 100);
-
-    // Cập nhật điểm người dùng
-    $remainingPoints = $user->points - $pointsToUse;
-
-    DB::transaction(function () use ($user, $remainingPoints, $pointsEarned, $pointsToUse, $discountValue, $totalPrice) {
-        // Cập nhật điểm của người dùng
-        $user->points = $remainingPoints + $pointsEarned;
-        $user->save();
-
-        // Lưu lịch sử điểm
-        PointHistory::create([
-            'user_id' => $user->id,
-            'points_used' => $pointsToUse,
-            'points_earned' => $pointsEarned,
-            'order_amount' => $totalPrice, // Số tiền đơn hàng
-        ]);
-    });
-
-    return [
-        'success' => true,
-        'message' => 'Sử dụng điểm thành công.',
-        'discount_value' => $discountValue,
-        'final_price' => $finalPrice,
-        'remaining_points' => $remainingPoints + $pointsEarned,
-        'points_earned' => $pointsEarned
-    ];
-}
-
-   
 }
