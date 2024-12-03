@@ -1,50 +1,50 @@
-import Echo from 'laravel-echo';
-import Pusher from 'pusher-js'; // Đảm bảo rằng Pusher được import
-import instance from '.';
-import { AxiosError } from 'axios';
+import Echo from "laravel-echo";
+import axios from "axios";
+import Pusher from "pusher-js";
+
+// Hàm khởi tạo Echo với cấu hình từ API
 async function initializeEcho() {
     try {
         // Gọi API lấy cấu hình từ backend
-        const response = await instance.get("/env-config");
+        const response = await axios.get("http://localhost:8000/api/env-config");
         const config = response.data;
-        console.log("Cấu hình từ API:", config);
 
-        // Kiểm tra các tham số cần thiết
-        if (!config.PUSHER_APP_KEY || !config.PUSHER_APP_CLUSTER) {
-            throw new Error("Thiếu PUSHER_APP_KEY hoặc PUSHER_APP_CLUSTER.");
-        }
+        const csrfMeta = document.head.querySelector('meta[name="csrf-token"]') as HTMLMetaElement;
+        const csrfToken = csrfMeta ? csrfMeta.content : ''; // Empty string or a default value
+        
+        
+
 
         // Tạo kết nối với Laravel Echo
         const echo = new Echo({
-            broadcaster: Pusher,
-            key: config.PUSHER_APP_KEY || "default_key",
-            cluster: config.PUSHER_APP_CLUSTER || "mt1",
-            forceTLS: config.PUSHER_SCHEME === "https",
-            wsHost: config.PUSHER_HOST || "localhost",
-            wsPort: config.PUSHER_PORT || 6001,
-            wssPort: config.PUSHER_PORT || 6001,
-            enabledTransports: ["ws", "wss"],
+            broadcaster: "pusher",
+            key: config.PUSHER_APP_KEY,
+            cluster: config.PUSHER_APP_CLUSTER,
+            forceTLS: config.PUSHER_SCHEME === "https",  // Sử dụng TLS nếu backend sử dụng HTTPS
+            wsHost: config.PUSHER_HOST || "localhost",  // Sử dụng localhost nếu không có host cấu hình
+            wsPort: config.PUSHER_PORT || 6001,  // Cổng WebSocket nếu không có
+            wssPort: config.PUSHER_PORT || 6001,  // Cổng WebSocket bảo mật nếu không có
+            enabledTransports: ["ws", "wss"],  // Cung cấp các giao thức ws và wss
+            authEndpoint: "http://localhost:8000/broadcasting/auth",  // Endpoint xác thực
+            csrfToken: csrfToken, // Nếu cần CSRF token
+            bearerToken: 'your-jwt-token-here', // Nếu cần token Bearer
+            debug: true,
+        });
+
+        // Kiểm tra kết nối thành công
+        echo.connector.pusher.connection.bind('connected', function() {
+            console.log('Đã kết nối thành công với Pusher!');
+        });
+
+        echo.connector.pusher.connection.bind('disconnected', function() {
+            console.log('Mất kết nối với Pusher!');
         });
 
         return echo;
     } catch (error) {
-        if (error instanceof Error) {
-            console.error("Lỗi chi tiết:", error.message);
-        }
-    
-        if ((error as AxiosError).response) {
-            const axiosError = error as AxiosError;
-            console.error("Chi tiết AxiosError:", {
-                status: axiosError.response?.status,
-                data: axiosError.response?.data,
-                headers: axiosError.response?.headers,
-            });
-        } else {
-            console.error("Lỗi không xác định:", error);
-        }
+        console.error("Error initializing Echo:", error);
+        return null;
     }
-    
-    
 }
 
 export default initializeEcho;

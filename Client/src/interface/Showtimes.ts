@@ -1,6 +1,7 @@
 
 import { Movie } from "./Movie";
 import { Room } from "./Room";
+import { Seat } from "./Seat";
 export interface Showtime {
     movie: Movie; 
     id: number;
@@ -13,7 +14,8 @@ export interface Showtime {
     status: string;
     price: number;
     room_id:number;
-    room : Room
+    room : Room;
+
     
     
    
