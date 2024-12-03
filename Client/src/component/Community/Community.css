@@ -173,7 +173,9 @@
   border-radius: 10px;
   margin-right: 180px;
 }
-
+.phe-binh-chuyen-nghiep h3{
+  font-size: 20px;
+}
 .tieu-de-phu {
   display: flex;
   justify-content: space-between;
@@ -183,7 +185,7 @@
 
 .tieu-de-phu h3 {
   margin: 0;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
   color: #333;
 }

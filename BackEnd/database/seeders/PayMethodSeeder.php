@@ -37,6 +37,11 @@ class PayMethodSeeder extends Seeder
 
                 'created_at' => now(),
                 'updated_at' => now(),
+            ],[
+                'pay_method_name' => 'Thanh Toán Tại Quầy',
+
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
         ]);
     }

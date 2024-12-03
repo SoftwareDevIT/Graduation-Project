@@ -137,6 +137,8 @@ padding: 10px ;
 .btn-buy {
   background-color: #ff4d4f;
   color: #fff;
+  text-decoration: none;
+  text-align: center;
 }
 
 /* Responsive cho iPad */

@@ -77,7 +77,7 @@ const MovieBanner = () => {
 </span>
 
 <span className="rating-1">
-<LikeOutlined 
+<LikeOutlined  className="icon-likee"
     style={{
     position:"relative",
     left:"8px",
