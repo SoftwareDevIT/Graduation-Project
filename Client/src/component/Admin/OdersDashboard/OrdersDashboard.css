@@ -69,6 +69,7 @@ element.style {
   .ticket-status, .user-info, .payment-info {
     background: #f9f9f9;
     padding: 20px;
+    width: 400px;
     border-radius: 8px;
   }
   
@@ -80,7 +81,7 @@ element.style {
     background-color: #f9f9f9;
     padding: 20px;
     border-radius: 10px;
-    width: 300px;
+    
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     text-align: center;
   }

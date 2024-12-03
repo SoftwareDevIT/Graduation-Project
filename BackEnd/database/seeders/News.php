@@ -59,7 +59,7 @@ class News extends Seeder
             );
 
             DB::table('news')->insert([
-                'user_id' => rand(1, 5),
+                'user_id' => rand(1, 2),
                 'movie_id' => $movieIds->random(),
                 'title' => $item['name'],
                 'slug' => $item['slug'],

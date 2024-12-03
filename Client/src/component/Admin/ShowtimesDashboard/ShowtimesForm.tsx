@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Showtime } from '../../../interface/Showtimes';
 import { useShowtimeContext } from '../../../Context/ShowtimesContext';
 import instance from '../../../server';
@@ -8,7 +8,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Room } from '../../../interface/Room';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { notification } from 'antd';
+import { Button, notification } from 'antd';
+import { PlusOutlined, EditOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
 // Schema validation
 const showtimeSchema = z.object({
@@ -157,6 +158,13 @@ const ShowtimesForm: React.FC = () => {
     <div className="container mt-5">
       <h2 className="text-center mb-4">{id ? 'Cập nhật Suất Chiếu' : 'Thêm Suất Chiếu'}</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="shadow p-4 rounded bg-light">
+      <div className='mb-3'>
+      <Link to="/admin/showtimesauto/add">
+    <Button type="primary" icon={<PlusCircleOutlined />}>
+        Thêm Suất Chiếu Tự Động
+    </Button>
+</Link>
+      </div>
         <div className="mb-3">
           <label className="form-label">Chọn Phim</label>
           <select
