@@ -39,26 +39,26 @@ class UserSeeder extends Seeder
             ]
         ]);
 
-        // $client = new Client();
-        // $response = $client->get('https://rapchieuphim.com/api/v1/users');
-        // $data = json_decode($response->getBody()->getContents(), true);
-        // $data = array_slice($data, 1,10);
+        $client = new Client();
+        $response = $client->get('https://rapchieuphim.com/api/v1/users');
+        $data = json_decode($response->getBody()->getContents(), true);
+        $data = array_slice($data, 1,10);
 
-        // foreach ($data as $item) {
-        //     $randomEmail = strtolower(Str::random(10)) . '@example.com';
-        //     $randomPhone = '0' . rand(100000000, 999999999);
-        //     DB::table('users')->insert([
-        //         'user_name' => $item['name'],
-        //         'avatar' => $item['avatar'],
-        //         'description' => $item['about'],
-        //         'sex' => $item['sex'],
-        //         'password' => Hash::make('password'),
-        //         'email' => $randomEmail,
-        //         'phone' => $item['phone'] ?? $randomPhone,
-        //         'address' => 'Ha Noi',
-        //         'fullname' => $item['name'],
-        //         'email_verified_at' => now(),
-        //     ]);
-        // }
+        foreach ($data as $item) {
+            $randomEmail = strtolower(Str::random(10)) . '@example.com';
+            $randomPhone = '0' . rand(100000000, 999999999);
+            DB::table('users')->insert([
+                'user_name' => $item['name'],
+                'avatar' => $item['avatar'],
+                'description' => $item['about'],
+                'sex' => $item['sex'],
+                'password' => Hash::make('password'),
+                'email' => $randomEmail,
+                'phone' => $item['phone'] ?? $randomPhone,
+                'address' => 'Ha Noi',
+                'fullname' => $item['name'],
+                'email_verified_at' => now(),
+            ]);
+        }
     }
 }

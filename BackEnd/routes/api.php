@@ -36,6 +36,7 @@ use App\Http\Controllers\Api\Promotion\PromotionController;
 use App\Http\Controllers\Api\Ranks\RankContrller;
 use App\Http\Controllers\Api\SeatMap\SeatMapController;
 use App\Http\Controllers\Api\SeatMap\MatrixController;
+use App\Http\Controllers\Api\WebsiteSetting\WebsiteSettingController;
 use App\Http\Controllers\ConfigController;
 
 // use App\Http\Controllers\Api\SeatMap\SeatMapController;
@@ -151,6 +152,8 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
 });
 //Trang dashboard
 Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
+Route::post('/website-settings/update', [WebsiteSettingController::class, 'update']); //Cập Nhập Website Settings
+Route::post('/website-settings/reset', [WebsiteSettingController::class, 'reset']); //Cập Nhập Website Settings
 
 Route::post('/resetPassword', [ResetPasswordController::class, 'resetPassword'])->middleware('auth:sanctum');
 
