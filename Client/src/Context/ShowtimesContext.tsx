@@ -105,6 +105,7 @@ export const ShowtimeProvider: React.FC<{ children: ReactNode }> = ({ children }
         } catch (error) {
             console.error('Error fetching showtimes:', error);
         }
+       
     };
 
     const fetchCinemas = async () => {

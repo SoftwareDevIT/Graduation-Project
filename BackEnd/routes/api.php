@@ -22,6 +22,7 @@ use App\Http\Controllers\Api\Movie\MovieCategoryController;
 use App\Http\Controllers\Api\PayMethod\PayMethodController;
 use App\Http\Controllers\Api\Auth\AccountVerificationController;
 use App\Http\Controllers\Api\Auth\ResetPasswordController;
+use App\Http\Controllers\Api\Booking\BookingStaffController;
 use App\Http\Controllers\Api\Filter\DashBoard\FilterOfDashBoarchController;
 use App\Http\Controllers\Api\Filter\FilterMovieByNewController;
 use App\Http\Controllers\Api\Google\GoogleController;
@@ -36,7 +37,8 @@ use App\Http\Controllers\Api\Promotion\PromotionController;
 use App\Http\Controllers\Api\Ranks\RankContrller;
 use App\Http\Controllers\Api\SeatMap\SeatMapController;
 use App\Http\Controllers\Api\SeatMap\MatrixController;
-
+use App\Http\Controllers\Api\WebsiteSetting\WebsiteSettingController;
+use App\Http\Controllers\ConfigController;
 
 // use App\Http\Controllers\Api\SeatMap\SeatMapController;
 
@@ -144,13 +146,15 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     // bộ lọc thông kê doanh thu
     Route::get('filter-DashBoarch', [FilterOfDashBoarchController::class, 'filterOfDashBoarch']);
 
-    //Trang dashboard
-    // Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
+   
+    Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
 
 
 });
 //Trang dashboard
 Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
+Route::post('/website-settings/update', [WebsiteSettingController::class, 'update']); //Cập Nhập Website Settings
+Route::post('/website-settings/reset', [WebsiteSettingController::class, 'reset']); //Cập Nhập Website Settings
 
 Route::post('/resetPassword', [ResetPasswordController::class, 'resetPassword'])->middleware('auth:sanctum');
 
@@ -190,12 +194,19 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/book-ticket', [BookingController::class, 'bookTicket']);
     Route::post('/seat-selection/{roomId}', [BookingController::class, 'selectedSeats']);
 
-    //==============================
+    //BookingStaff==============================
+    Route::post('selectSeats-staff', [BookingStaffController::class, 'selectSeats']);
+    Route::post('/book-ticket-staff', [BookingStaffController::class, 'bookTicket']);
+    Route::post('/seat-selection-staff/{roomId}', [BookingStaffController::class, 'selectedSeats']);
+    Route::post('/confirmBooking-staff', [BookingStaffController::class, 'confirmBooking']);
+    Route::post('/checkuser', [BookingStaffController::class, 'checkuser']);
 
+    //===============================
     Route::post('/historyOrder', [OrderController::class, 'order']);
     Route::post('/historyOrder/{id}', [OrderController::class, 'orderDetail']);
     Route::get('session', [BookingController::class, 'getSession']);
     Route::get('vouchers', [PromotionController::class, 'getUserVouchers']);
+    Route::post('/use-points', [RankContrller::class, 'usePoints']);                        //Dùng điểm tích lũy và cập nhập cấp bậc
 });
 Route::apiResource('promotions', PromotionController::class);
 Route::post('apply-promotion', [PromotionController::class, 'applyPromotion']);
@@ -210,3 +221,7 @@ Route::patch('/seat-map/{id}/publish', [SeatMapController::class, 'publish'])->n
 // Route::apiResource('room', RoomController::class);
 Route::post('showtimePayload', [ShowtimeController::class, 'storeWithTimeRange']);
 Route::apiResource('ranks', RankContrller::class);
+
+
+
+Route::get('/env-config',[ConfigController::class,'envConfig']);

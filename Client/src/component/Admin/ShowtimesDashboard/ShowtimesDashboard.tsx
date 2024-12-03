@@ -3,28 +3,24 @@ import { Link } from 'react-router-dom';
 import { useShowtimeContext } from '../../../Context/ShowtimesContext';
 import instance from '../../../server';
 import { Movie } from '../../../interface/Movie';
-import { notification, Table, Button, Input, Space, Pagination } from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import {DeleteOutlined, EditOutlined, PlusOutlined} from '@ant-design/icons'
+import { notification, Table, Button, Input, Pagination } from 'antd';
+import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 const ShowtimesDashboard: React.FC = () => {
     const { state, dispatch } = useShowtimeContext();
-    const { showtimes } = state;
+    const { showtimes } = state; // Truyền lại showtimes từ context
     const [error, setError] = useState<string | null>(null);
     const [movies, setMovies] = useState<Movie[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const [showtimesPerPage] = useState<number>(5);
-    const [totalShowtimes, setTotalShowtimes] = useState<number>(0);  // Total showtimes to calculate total pages
-
+    const { Search } = Input;
+    // Fetch showtimes và movies từ API
     useEffect(() => {
         const fetchShowtimes = async () => {
             try {
                 const response = await instance.get(`/showtimes?page=${currentPage}`);
-                if (response.data.data.data && Array.isArray(response.data.data.data)) {
+                if (Array.isArray(response.data.data.data)) {
                     dispatch({ type: 'SET_SHOWTIMES', payload: response.data.data.data });
-                    setTotalShowtimes(response.data.data.total);  // Assuming the response contains the total count of showtimes
                 } else {
                     setError('Không thể lấy showtime: Định dạng phản hồi không mong đợi');
                 }
@@ -48,22 +44,28 @@ const ShowtimesDashboard: React.FC = () => {
 
         fetchShowtimes();
         fetchMovies();
-    }, [dispatch, currentPage, showtimesPerPage]);
+    }, [dispatch, currentPage]);
 
-    const filteredShowtimes = showtimes.filter(showtime =>
-        showtime.movie_in_cinema?.movie?.movie_name?.toLowerCase().includes(searchTerm.toLowerCase())
+    // Lọc showtimes theo tên phim
+    const filteredShowtimes = showtimes.filter((showtime) =>
+        showtime.movie && showtime.movie.movie_name && showtime.movie.movie_name.toLowerCase().includes(searchTerm.toLowerCase())
     );
+    
 
+    // Xử lý xóa showtime
     const deleteShowtime = async (id: number) => {
         if (window.confirm('Bạn có chắc chắn muốn xóa showtime này?')) {
             try {
                 await instance.delete(`/showtimes/${id}`);
                 dispatch({ type: 'DELETE_SHOWTIME', payload: id });
+
+                // Thông báo thành công
                 notification.success({
                     message: 'Xóa Thành Công',
                     description: 'Showtime đã được xóa thành công!',
                 });
             } catch (err) {
+                // Thông báo lỗi
                 notification.error({
                     message: 'Lỗi Xóa Showtime',
                     description: 'Không thể xóa showtime. Vui lòng thử lại sau.',
@@ -72,6 +74,7 @@ const ShowtimesDashboard: React.FC = () => {
         }
     };
 
+    // Định dạng giá tiền
     const formatCurrency = (amount: number) => {
         return new Intl.NumberFormat('vi-VN', {
             style: 'currency',
@@ -79,80 +82,71 @@ const ShowtimesDashboard: React.FC = () => {
         }).format(amount);
     };
 
-    // Pagination handler
-    const handlePageChange = (page: number) => {
-        setCurrentPage(page);
-    };
+    if (error) {
+        return <div className="alert alert-danger">{error}</div>;
+    }
 
+    // Cột hiển thị của bảng Ant Design
     const columns = [
         {
             title: 'Phim',
-            dataIndex: 'movieName',
-            key: 'movieName',
-            render: (text: string, record: any) => <span>{record.movie_in_cinema?.movie?.movie_name}</span>,
+            dataIndex: ['movie','movie_name'],
+            key: 'movie_name',
         },
         {
             title: 'Phòng',
-            dataIndex: 'room',
-            key: 'room',
-            render: (text: string, record: any) => <span>{record.room?.room_name}</span>,
+            dataIndex: ['room', 'room_name'],
+            key: 'room_name',
         },
         {
             title: 'Ngày',
-            dataIndex: 'date',
-            key: 'date',
-            render: (text: string, record: any) => <span>{new Date(record.showtime_date).toLocaleDateString()}</span>,
+            dataIndex: 'showtime_date',
+            key: 'showtime_date',
+            render: (date: string) => new Date(date).toLocaleDateString(),
         },
         {
             title: 'Giờ bắt đầu',
-            dataIndex: 'start',
-            key: 'start',
-            render: (text: string, record: any) => <span>{record.showtime_start}</span>,
+            dataIndex: 'showtime_start',
+            key: 'showtime_start',
         },
         {
             title: 'Giờ kết thúc',
-            dataIndex: 'end',
-            key: 'end',
-            render: (text: string, record: any) => <span>{record.showtime_end}</span>,
+            dataIndex: 'showtime_end',
+            key: 'showtime_end',
         },
         {
             title: 'Giá',
             dataIndex: 'price',
             key: 'price',
-            render: (text: number) => <span>{formatCurrency(text)}</span>,
+            render: (price: number) => formatCurrency(price),
         },
         {
-            title: 'Hành Động',
-            key: 'action',
-            render: (text: string, record: any) => (
-                <Space size="middle">
+            title: 'Hành động',
+            key: 'actions',
+            render: (_ :any, record: any) => (
+                <div className="d-flex justify-content-around">
                     <Link to={`/admin/showtimes/edit/${record.id}`}>
-                    <Button type="primary" icon={<EditOutlined />} />
+                        <Button icon={<EditOutlined />} type="primary" />
                     </Link>
                     <Button
-                     icon={<DeleteOutlined />}
-        
+                        icon={<DeleteOutlined />}
                         danger
                         onClick={() => deleteShowtime(record.id)}
                     />
-                </Space>
+                </div>
             ),
         },
     ];
 
-    if (error) {
-        return <p>{error}</p>;
-    }
-
     return (
-        <div className="container mx-auto p-4">
+        <div className="container mt-5">
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Link to="/admin/showtimes/add">
-                    <Button icon={<PlusOutlined />} type="primary" size="large">
+                    <Button type="primary" icon={<PlusOutlined />}>
                         Thêm Suất Chiếu
                     </Button>
                 </Link>
-                <Input
+                <Search
                     placeholder="Tìm kiếm theo tên phim"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
@@ -160,22 +154,18 @@ const ShowtimesDashboard: React.FC = () => {
                     allowClear
                 />
             </div>
-
             <Table
                 columns={columns}
                 dataSource={filteredShowtimes}
                 rowKey="id"
-                pagination={false}  // Disable default pagination as we will use custom pagination
+                pagination={false}
             />
-
-<div className="d-flex justify-content-center mt-4"> 
+            <div className="d-flex justify-content-center mt-4">
                 <Pagination
                     current={currentPage}
-                    pageSize={showtimesPerPage}
-                    total={totalShowtimes}
-                    onChange={handlePageChange}
+                    onChange={(page) => setCurrentPage(page)}
+                    total={50} // Điều chỉnh tổng số bản ghi phù hợp
                     showSizeChanger={false}
-                    showQuickJumper
                 />
             </div>
         </div>

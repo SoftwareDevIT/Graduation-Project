@@ -45,7 +45,7 @@ class DatabaseSeeder extends Seeder
             FavoriteSeeder::class,
             // BookingSeeder::class,
             // VorcherSeeder::class,
-
+            WebsiteSettingsSeeder::class,
         ]);
         // Tạo các quyền
         $permissions = [
