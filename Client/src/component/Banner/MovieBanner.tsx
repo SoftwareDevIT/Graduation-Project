@@ -6,12 +6,8 @@ import "slick-carousel/slick/slick-theme.css";
 import { Link } from "react-router-dom";
 import { LikeOutlined } from '@ant-design/icons';
 import { useMovieContext } from "../../Context/MoviesContext";
-
 const MovieBanner = () => {
-  // Lấy dữ liệu từ context
   const { state: { movies } } = useMovieContext();
-
-  // Cấu hình cho slider
   const settings = {
     dots: true,
     infinite: true,
@@ -42,9 +38,6 @@ const MovieBanner = () => {
       },
     ],
   };
-
-
-
   return (
     <div className="movie-banner">
       <div className="banner-header">
@@ -75,24 +68,18 @@ const MovieBanner = () => {
         }).replace('-', '/')
         : "N/A"}
 </span>
-
 <span className="rating-1">
 <LikeOutlined  className="icon-likee"
     style={{
     position:"relative",
     left:"8px",
-      color: "#28a745",            // Màu xanh lá cho icon
-      background: "none",          // Không có nền
-      fontSize: "16px"             // Kích thước của icon
+      color: "#28a745",           
+      background: "none",        
+      fontSize: "16px"            
     }} 
   />
   {typeof movie.rating === 'number' ? (movie.rating * 10).toFixed(0) : 0}%
-
-</span>
-
-
-                    
-                  
+</span>     
                   </div>
                 </div>
               </div>

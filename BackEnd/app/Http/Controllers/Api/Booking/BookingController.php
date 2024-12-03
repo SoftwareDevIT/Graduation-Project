@@ -385,7 +385,11 @@ class BookingController extends Controller
 
         // Broadcast sự kiện ghế đã chọn
         broadcast(new SeatSelected($seats, Auth::id(), $roomId));
-
+        Log::info('Broadcasted SeatSelected event successfully', [
+            'seats' => $seats,
+            'userId' => Auth::id(),
+            'roomId' => $roomId
+        ]);
         return $this->success($seats, 'Selected seats successfully.');
     }
 }

@@ -49,7 +49,7 @@ import PrivateRoute from "./PrivateRoute";
 import MovieShowing from "./component/Movies/MovieShowing";
 import SupportCenter from "./component/Support/Support";
 import PostDetail from "./component/Post/PostDetail";
-import Credits from "./component/PersonalPage/Credits";
+
 import Deponsit from "./component/PersonalPage/Deposit";
 import ForgetPass from "./component/Login/ForgetPass";
 
@@ -97,6 +97,10 @@ import SeatMapManager from "./Page/Admin/SeatMap/SeatMapManager";
 import RankManager from "./Page/Admin/Ranks/RankManager";
 import RankForm from "./Page/Admin/Ranks/RankForm";
 import SeatMapForm from "./component/Admin/SeatMap/SeatMapForm";
+import Pointaccumulation from "./component/PersonalPage/Pointaccumulation";
+import MovieTicket from "./component/PersonalPage/MovieTicket";
+
+
 
 
 
@@ -126,6 +130,7 @@ function App() {
         <Route path="/confirm" element={<EmailConfirm />} />
      
         <Route path="/*" element={<NotFound />} />
+        <Route path="/movieticket" element={<MovieTicket/>} />
 
 
         <Route path="/filmnews" element={<FilmNews/>} />
@@ -144,8 +149,8 @@ function App() {
         <Route path="/Personal" element={<PrivateRoute><Personal /></PrivateRoute>} />
  
         <Route path="/ticketcinema" element={ <PrivateRoute><TicketCinema/></PrivateRoute>} />
-        <Route path="/credits" element={ <PrivateRoute><Credits /></PrivateRoute>} />
-        <Route path="/ChangePassword" element={ <PrivateRoute><Credits /><ChangePassword /></PrivateRoute>} />
+    
+        <Route path="/ChangePassword" element={ <PrivateRoute><ChangePassword /></PrivateRoute>} />
         <Route path="/register" element={<RegisterCinema />} />
         <Route path="/login" element={<LoginCinema />} />
         <Route path="/movieshowing" element={<MovieShowing/>} />
@@ -154,6 +159,8 @@ function App() {
         <Route path="/forgetpass" element={<ForgetPass/>} />
         <Route path="/otp" element={<Otp/>} />
         <Route path="/resetPassword" element={<ResetPasswod/>} />
+        <Route path="/test" element={<Pointaccumulation/>} />
+    
        
       
     
