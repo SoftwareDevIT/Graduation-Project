@@ -1,0 +1,107 @@
+/* Giao diện chung */
+.order-detail {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+  }
+  
+  h2 {
+    text-align: center;
+    color: #333;
+  }
+  
+  .order-content {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  /* Cột bên trái - Chi tiết chính */
+  .order-main {
+    flex: 1;
+    margin-right: 20px;
+  }
+  
+  .order-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .order-table th,
+  .order-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+  }
+  
+  .order-table th {
+    background-color: #f4f4f4;
+  }
+  
+  .order-table img {
+    width: 100px;
+    height: 150px;
+    object-fit: cover;
+  }
+  
+  /* Cột bên phải - Sidebar */
+  .order-sidebar {
+    width: 30%;
+  }
+  
+  .ticket-status {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .ticket-status h3 {
+    color: #333;
+  }
+  
+  .ticket-status p {
+    font-size: 14px;
+    margin: 10px 0;
+  }
+  
+  .ticket-status .ant-btn {
+    width: 100%;
+  }
+  
+  /* Trạng thái đơn hàng */
+  .status-paid {
+    color: green;
+    font-weight: bold;
+  }
+  
+  .status-confirmed {
+    color: orange;
+    font-weight: bold;
+  }
+  
+  .status-pending {
+    color: gray;
+    font-weight: bold;
+  }
+  
+  .status-default {
+    color: #999;
+  }
+  
+  /* Các button */
+  .ant-btn-primary {
+    background-color: #4CAF50;
+    border-color: #4CAF50;
+  }
+  
+  .ant-btn-primary:hover {
+    background-color: #45a049;
+    border-color: #45a049;
+  }
+  
+  .ant-btn {
+    margin-top: 20px;
+    padding: 8px 16px;
+    border-radius: 4px;
+  }
+  

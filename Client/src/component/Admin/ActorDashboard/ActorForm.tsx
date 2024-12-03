@@ -6,6 +6,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import instance from "../../../server";
 import { notification } from "antd"; // Import Ant Design's notification component
 import { Actor } from "../../../interface/Actor";
+import { useDropzone } from "react-dropzone";
+import './ActorDashboard.css'
 
 // Định nghĩa schema cho việc xác thực form sử dụng Zod
 
@@ -30,6 +32,7 @@ const ActorForm = () => {
   const [existingPhoto, setExistingPhoto] = useState<string | null>(null); // State để lưu ảnh cũ
   const [countries, setCountries] = useState<string[]>([]); // State to store countries data
   const [loadingCountries, setLoadingCountries] = useState<boolean>(true); // Loading state for countries
+  
 
   const {
     handleSubmit,
@@ -130,6 +133,17 @@ const ActorForm = () => {
       setSelectedFile(event.target.files[0]); // Lưu file đã chọn vào state
     }
   };
+  const onDrop = (acceptedFiles: File[]) => {
+    if (acceptedFiles.length > 0) {
+      setSelectedFile(acceptedFiles[0]);
+    }
+  };
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: { "image/*": [] },
+    multiple: false,
+  });
 
   return (
     <div className="container mt-5">
@@ -180,28 +194,56 @@ const ActorForm = () => {
 
         {/* Ảnh cũ và chọn ảnh mới */}
         <div className="mb-3">
-          <label htmlFor="photo" className="form-label">
-            Ảnh
-          </label>
-          {existingPhoto && !selectedFile && (
-            <div>
-              <img
-                src={existingPhoto}
-                alt="Diễn viên"
-                style={{ width: "150px", height: "auto" }}
-              />
-            </div>
-          )}
-          <input
-            type="file"
-            className={`form-control ${errors.photo ? "is-invalid" : ""}`}
-            accept="image/*"
-            onChange={handleFileChange} // Xử lý khi chọn file
-          />
-          {errors.photo && (
-            <span className="text-danger">{errors.photo.message}</span>
-          )}
-        </div>
+  <label htmlFor="photo" className="form-label">
+    Ảnh
+  </label>
+  {existingPhoto && !selectedFile && (
+    <div className="mb-3 text-center">
+      <img
+        src={existingPhoto}
+        alt="Diễn viên"
+        className="rounded-circle shadow-sm mb-3"
+        style={{
+          width: "150px",
+          height: "150px",
+          objectFit: "cover",
+          border: "3px solid #007bff",
+        }}
+      />
+      <p className="text-muted">Ảnh hiện tại</p>
+    </div>
+  )}
+  <div
+    {...getRootProps()}
+    className="upload-area-modern p-4 rounded text-center"
+  >
+    <input {...getInputProps()} />
+    <div className="upload-content">
+      <p className="fw-bold mb-0">
+        Kéo thả ảnh vào đây hoặc <span className="text-primary">bấm để chọn</span>
+      </p>
+      <small className="text-muted">Định dạng ảnh: JPG, PNG. Kích thước tối đa 5MB</small>
+    </div>
+  </div>
+  {selectedFile && (
+    <div className="mt-3 text-center">
+      <p className="fw-bold">File đã chọn:</p>
+      <p className="text-muted">{selectedFile.name}</p>
+      <img
+        src={URL.createObjectURL(selectedFile)}
+        alt="Preview"
+        className="rounded-circle shadow"
+        style={{
+          width: "150px",
+          height: "150px",
+          objectFit: "cover",
+          border: "3px solid #28a745",
+        }}
+      />
+    </div>
+  )}
+</div>
+
 
         {/* Link Wiki */}
         <div className="mb-3">
