@@ -27,6 +27,7 @@ const OrderCheckout = () => {
     const [discount, setDiscount] = useState<number | null>(null); // Lưu giá trị giảm giá
     const [finalPrice, setFinalPrice] = useState<number | null>(null); // Lưu giá trị giá sau giảm giá
     const [voucherApplied, setVoucherApplied] = useState<boolean>(false); // Trạng thái kiểm tra voucher đã áp dụng hay chưa
+    const [isVoucherVisible, setIsVoucherVisible] = useState<boolean>(false);
     
     const navigate = useNavigate();
     const {
@@ -77,7 +78,7 @@ const OrderCheckout = () => {
     };
     // State for payment method
     const [pay_method_id, setPaymentMethod] = useState<number | null>(null); // Khởi tạo pay_method_id với null
-    const [timeLeft, setTimeLeft] = useState(300);
+    const [timeLeft, setTimeLeft] = useState(30000000);
     useEffect(() => {
         const timer = setInterval(() => {
             setTimeLeft((prevTime) => {
@@ -211,26 +212,66 @@ const OrderCheckout = () => {
                                 ))} 
                             </div>
                         )}
-                         <div className="voucher-section">
-            <h4>Nhập mã voucher</h4>
-            <input
-    type="text"
-    placeholder="Nhập mã voucher"
-    value={voucherCode}
-    onChange={(e) => setVoucherCode(e.target.value)}
-    className="voucher-input"
-/>
-<button className="apply-voucher-btn" onClick={handleApplyVoucher}>
-        Áp dụng
-    </button>
-    {voucherApplied && (
-        <button className="apply-voucher-btn-1" onClick={handleRemoveVoucher}>
-            Xóa voucher
-        </button>
-    )}
-        </div>
+                <div className="voucher-section">
+                        <h4 onClick={() => setIsVoucherVisible(!isVoucherVisible)}>
+                            Nhập mã voucher
+                        </h4>
+
+                        {isVoucherVisible && (
+                            <>
+                                <input
+                                    type="text"
+                                    placeholder="Nhập mã voucher"
+                                    value={voucherCode}
+                                    onChange={(e) => setVoucherCode(e.target.value)}
+                                    className="voucher-input"
+                                />
+                                <button className="apply-voucher-btn" onClick={handleApplyVoucher}>
+                                    Áp dụng
+                                </button>
+                                {voucherApplied && (
+                                    <button className="apply-voucher-btn-1" onClick={handleRemoveVoucher}>
+                                        Xóa voucher
+                                    </button>
+                                )}
+                            </>
+                        )}
+                    </div>
+        <div className="khung-diem-poly">
+  <h3 >Điểm giảm giá FlickHive</h3>
+
+  <div className="table-responsive">
+  <table className="table table-bordered bang-diem-poly">
+    <thead>
+      <tr>
+        <th>Điểm hiện có</th>
+        <th>Nhập điểm</th>
+        <th>Số tiền được giảm</th>
+        <th>Hành động</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>191.600</td>
+        <td>
+          <input type="number" className="nhap-diem" value="100000" />
+        </td>
+        <td>100.000 Vnđ</td>
+        <td>
+          <button className="btn btn-danger nut-huy">Hủy</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</div>
+
+
+
+
         <div className="order-total">
-    <span className="total-title">Tổng trước giảm</span>
+    <span className="total-title">Tổng </span>
     <span className="total-price">{totalPrice?.toLocaleString('vi-VN')} đ</span>
 </div>
 {discount && (
@@ -240,8 +281,8 @@ const OrderCheckout = () => {
     </div>
 )}
 <div className="order-final">
-    <span className="total-title">Tổng sau giảm:</span>
-    <span className="total-title">
+    <span className="total-title2">Tổng sau giảm:</span>
+    <span className="total-title3">
         {(finalPrice || totalPrice)?.toLocaleString('vi-VN')} đ
     </span>
 </div>

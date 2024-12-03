@@ -17,71 +17,30 @@ class FilterOfDashBoarchService
             $query->whereHas('showtime.room.cinema', function ($subQuery) use ($idCinema) {
                 $subQuery->where('id', $idCinema);
             });
-            if (!is_null($status)) {
-                $query->where('status', $status);
-            }
         }
 
         if (!is_null($status)) {
             $query->where('status', $status);
-            if (!is_null($idCinema)) {
-                $query->whereHas('showtime.room.cinema', function ($subQuery) use ($idCinema) {
-                    $subQuery->where('id', $idCinema);
-                });
-            }
         }
 
         if (!is_null($startDate) && !is_null($endDate)) {
-
             $start = Carbon::parse($startDate)->startOfDay();
             $end = Carbon::parse($endDate)->endOfDay();
             $query->whereBetween('created_at', [$start, $end]);
-            if (!is_null($idCinema)) {
-                $query->whereHas('showtime.room.cinema', function ($subQuery) use ($idCinema) {
-                    $subQuery->where('id', $idCinema);
-                });
-            }
-            if (!is_null($status)) {
-                $query->where('status', $status);
-            }
         }
 
         if (!is_null($month)) {
             $carbonDate = Carbon::createFromFormat('Y-m', $month);
             $query->whereYear('created_at', $carbonDate->year)
                 ->whereMonth('created_at', $carbonDate->month);
-            if (!is_null($idCinema)) {
-                $query->whereHas('showtime.room.cinema', function ($subQuery) use ($idCinema) {
-                    $subQuery->where('id', $idCinema);
-                });
-            }
-            if (!is_null($status)) {
-                $query->where('status', $status);
-            }
         }
 
         if (!is_null($year)) {
             $query->whereYear('created_at', $year);
-            if (!is_null($idCinema)) {
-                $query->whereHas('showtime.room.cinema', function ($subQuery) use ($idCinema) {
-                    $subQuery->where('id', $idCinema);
-                });
-            }
-            if (!is_null($status)) {
-                $query->where('status', $status);
-            }
         }
 
         if (!is_null($day)) {
             $query->whereDate('created_at', $day);
-            if (!is_null($idCinema)) {
-                $query->whereHas('showtime.room.cinema', function ($subQuery) use ($idCinema) {
-                    $subQuery->where('id', $idCinema);
-                });
-            }
-            if (!is_null($status)) {
-                $query->where('status', $status);
-            }
         }
 
         $result = $query->get();
