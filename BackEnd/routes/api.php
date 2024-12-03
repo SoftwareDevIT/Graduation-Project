@@ -204,4 +204,12 @@ Route::apiResource('ranks', RankContrller::class);
 
 
 
-Route::get('/env-config',[ConfigController::class,'envConfig']);
+Route::get('/env-config', [ConfigController::class, 'envConfig']);
+
+Route::patch('/movie/{id}/status', [MovieController::class, 'status']);
+Route::patch('/room/{id}/status', [MovieController::class, 'status']);
+Route::patch('/cinema/{id}/status', [MovieController::class, 'status']);
+Route::patch('/combo/{id}/status', [ComboController::class, 'status']);
+Route::patch('/new/{id}/status', [MovieController::class, 'status']);
+Route::patch('/pay/{id}/status', [MovieController::class, 'status']);
+Route::patch('/showtimes/{id}/status', [MovieController::class, 'status']);
