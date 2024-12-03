@@ -44,6 +44,13 @@ class PromotionController extends Controller
     {
         //
     }
+    public function status(int $id)
+    {
+        $movie = Promotion::findOrFail($id);
+        $movie->status = $movie->status == 1 ? 0 : 1;
+        $movie->save();
+        return $this->success('', 'Cập nhật trạng thái thành công.', 200);
+    }
 
     // Cập nhật thông tin mã khuyến mãi
     public function update(Request $request, $id)
