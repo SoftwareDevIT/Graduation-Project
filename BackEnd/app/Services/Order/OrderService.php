@@ -12,7 +12,7 @@ class OrderService
 {
     public function index()
     {
-        $order = Booking::with('showtime.movie','showtime.room','user','payMethod','seats','combos')->orderByDesc('created_at')->paginate(10);
+        $order = Booking::with('showtime.movie','showtime.room','user','payMethod','seats','combos')->orderByDesc('created_at')->get();
         return $order;
     }
 

@@ -53,16 +53,9 @@ export const ComboProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
 const fetchCombos = async () => {
   try {
-    const token = localStorage.getItem('token'); // Lấy token từ localStorage hoặc nơi lưu trữ token khác
-    if (!token) {
-    
-      return;
-    }
+   
 
     const { data } = await instance.get('/combo', {
-      headers: {
-        Authorization: `Bearer ${token}`, // Thêm token vào headers của yêu cầu
-      },
     });
     dispatch({ type: 'SET_COMBOS', payload: data.data });
   } catch (error) {
