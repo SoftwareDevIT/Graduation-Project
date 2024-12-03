@@ -221,7 +221,8 @@ padding-left: 10px;
   color: #28a745; /* Green color for the check mark */
 }
 .payment-methods li {
-  margin-right: 30px;
+  margin-left: 23px;
+width: 670px;
   align-items: center;
   padding: 14px;
   margin-bottom: 12px;
@@ -373,11 +374,18 @@ padding-left: 10px;
 }
 .total-title {
   color: #333;
+  margin-top: 20px;
+  font-size: 20px;
 }
 .total-price {
   font-size: 24px;
   color: #e74c3c;
   font-weight: bold;
+  margin-top: 20px;
+}
+.total-title2{
+  font-weight: bold;
+  font-size: 20px;
 }
 
 
@@ -502,10 +510,30 @@ padding-left: 10px;
   margin-top: 5px;
   transition: border-color 0.3s ease;
 }
+.form-group label{
+  padding-left: 10px;
+}
 .form-group input:focus {
   border-color: #2980b9;
   box-shadow: 0px 0px 5px rgba(41, 128, 185, 0.2);
 }
+.nhom-form.nhom-checkbox {
+  display: inline-flex; /* Sắp xếp theo chiều ngang */
+  align-items: center; /* Căn giữa theo chiều dọc */
+  margin-left: -90px;
+}
+
+.nhom-form.nhom-checkbox input {
+ 
+  margin-right: -80px; /* Khoảng cách giữa checkbox và nhãn */
+}
+
+.nhom-form.nhom-checkbox label {
+  font-size: 14px; /* Kích thước chữ */
+  line-height: 1; /* Giữ dòng chữ đều nhau */
+}
+
+
 
 /* Custom responsive thiết kế */
 @media (max-width: 768px) {
@@ -516,5 +544,23 @@ padding-left: 10px;
   .left-panel, .right-panel {
       width: 100%;
       margin-bottom: 20px;
+  }
+  .payment-methods li{
+    width: 650px;
+  }
+
+
+}
+
+@media (max-width: 480px){
+  .payment-methods li{
+    width: 313px;
+  }
+  .apply-voucher-btn{
+    margin-top: 10px;
+    margin-left: 10px;
+  }
+  .bang-diem-poly th{
+    font-size: 12px;
   }
 }

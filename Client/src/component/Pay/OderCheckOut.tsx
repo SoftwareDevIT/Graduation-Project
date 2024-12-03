@@ -342,10 +342,12 @@ const OrderCheckout = () => {
                                 <label htmlFor="phone">Số điện thoại</label>
                                 <input type="tel" id="phone" placeholder="Nhập số điện thoại" required />
                             </div>
-                            <div className="form-group checkbox-group">
-                                <input type="checkbox" id="create-account"/>
-                                <label htmlFor="create-account">Tạo tài khoản với email và số điện thoại này</label>
-                            </div>
+                            <div className="nhom-form nhom-checkbox">
+    <input type="checkbox" id="tao-tai-khoan" />
+    <label htmlFor="tao-tai-khoan">Tạo tài khoản với email và số điện thoại này.</label>
+</div>
+
+
                         </form>
                     </div>
                 </div>

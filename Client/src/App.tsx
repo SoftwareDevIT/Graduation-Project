@@ -92,6 +92,7 @@ import PageTitleUpdater from "./component/PageTitleUpdater/PageTitleUpdater";
 import TicketCinema from "./component/PersonalPage/TicketCinema";
 import SeatLayout from "./component/SeatMap/test";
 import Community from "./component/Community/Community";
+import Points from "./component/PersonalPage/Points";
 
 
 
@@ -148,6 +149,7 @@ function App() {
         <Route path="/forgetpass" element={<ForgetPass/>} />
         <Route path="/otp" element={<Otp/>} />
         <Route path="/resetPassword" element={<ResetPasswod/>} />
+        <Route path="/points" element={<Points/>} />
        
       
     
