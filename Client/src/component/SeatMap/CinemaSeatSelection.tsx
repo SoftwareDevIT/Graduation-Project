@@ -11,6 +11,7 @@ import { Modal } from 'antd';
 import { Movie } from "../../interface/Movie";
 import initializeEcho from "../../server/realtime";
 import Echo from "laravel-echo";
+// import Echo from "laravel-echo";
 
 type Seat = {
   id: number;
@@ -107,23 +108,23 @@ const CinemaSeatSelection: React.FC = () => {
           
        
           
-            const channel = echo.private(`seats-${roomId}`); 
+            const channel = echo.private(`seats${roomId}`); 
             console.log("Connected to channel:", channel);
-  
+      
             // Lắng nghe sự kiện SeatSelected
-            channel.listen("SeatSelected", (eventData: SeatReservedData) => {
-              console.log("Received seats data:", eventData);
+            channel.listen("SeatSelected", (event:any) => {
+              console.log("Received seats data:", event);
   
-              if (eventData && eventData.seats) {
-                console.log("Received selected seats:", eventData.seats);
+              // if (eventData ) {
+              //   console.log("Received selected seats:", eventData.seats);
   
-                // Cập nhật state với Map
-                const newSelectedSeats = new Map(selectedSeats); // Sao chép bản đồ cũ
-                newSelectedSeats.set(roomId, eventData.seats); // Thêm ghế mới vào Map theo roomId
+              //   // Cập nhật state với Map
+              //   const newSelectedSeats = new Map(selectedSeats); // Sao chép bản đồ cũ
+              //   newSelectedSeats.set(roomId, eventData.seats); // Thêm ghế mới vào Map theo roomId
   
-                setSelectedSeats(newSelectedSeats); // Cập nhật lại state
-                updateSeatsSelection(eventData.seats); // Cập nhật ghế trong lưới
-              }
+              //   setSelectedSeats(newSelectedSeats); // Cập nhật lại state
+              //   updateSeatsSelection(eventData.seats); // Cập nhật ghế trong lưới
+              // }
             });
           } else {
             setStatus("Failed to connect.");

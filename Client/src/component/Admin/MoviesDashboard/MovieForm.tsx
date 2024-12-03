@@ -171,105 +171,110 @@ const MovieForm: React.FC = () => {
 
         {/* Movie Categories */}
         <div className="mb-3">
-          <label className="form-label">Danh mục phim</label>
-          <Controller
-            name="movie_category_id"
-            control={control}
-            render={({ field }) => (
-              <div>
-                {categories.map((category) => (
-                  <div key={category.id} className="form-check">
-                    <input
-                      type="checkbox"
-                      className="form-check-input"
-                      value={category.id}
-                      checked={field.value.includes(category.id)}
-                      onChange={(e) => {
-                        const value = Number(e.target.value);
-                        const newValue = e.target.checked
-                          ? [...field.value, value]
-                          : field.value.filter((id) => id !== value);
-                        field.onChange(newValue);
-                      }}
-                    />
-                    <label className="form-check-label">
-                      {category.category_name}
-                    </label>
-                  </div>
-                ))}
-              </div>
-            )}
-          />
-          {errors.movie_category_id && <p className="text-danger">{errors.movie_category_id.message}</p>}
-        </div>
+  <label className="form-label">Danh mục phim</label>
+  <Controller
+    name="movie_category_id"
+    control={control}
+    render={({ field }) => (
+      <div className="row">
+        {categories.map((category) => (
+          <div key={category.id} className="col-4 mb-2">
+            <div className="form-check">
+              <input
+                type="checkbox"
+                className="form-check-input"
+                value={category.id}
+                checked={field.value.includes(category.id)}
+                onChange={(e) => {
+                  const value = Number(e.target.value);
+                  const newValue = e.target.checked
+                    ? [...field.value, value]
+                    : field.value.filter((id) => id !== value);
+                  field.onChange(newValue);
+                }}
+              />
+              <label className="form-check-label">
+                {category.category_name}
+              </label>
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
+  />
+  {errors.movie_category_id && <p className="text-danger">{errors.movie_category_id.message}</p>}
+</div>
 
         {/* Actors */}
         <div className="mb-3">
-          <label className="form-label">Diễn viên</label>
-          <Controller
-            name="actor_id"
-            control={control}
-            render={({ field }) => (
-              <div>
-                {actors.map((actor) => (
-                  <div key={actor.id} className="form-check">
-                    <input
-                      type="checkbox"
-                      className="form-check-input"
-                      value={actor.id}
-                      checked={field.value.includes(actor.id)}
-                      onChange={(e) => {
-                        const value = Number(e.target.value);
-                        const newValue = e.target.checked
-                          ? [...field.value, value]
-                          : field.value.filter((id) => id !== value);
-                        field.onChange(newValue);
-                      }}
-                    />
-                    <label className="form-check-label">
-                      {actor.actor_name}
-                    </label>
-                  </div>
-                ))}
-              </div>
-            )}
-          />
-          {errors.actor_id && <p className="text-danger">{errors.actor_id.message}</p>}
-        </div>
-
+  <label className="form-label">Diễn viên</label>
+  <Controller
+    name="actor_id"
+    control={control}
+    render={({ field }) => (
+      <div className="row">
+        {actors.map((actor) => (
+          <div key={actor.id} className="col-4 mb-2">
+            <div className="form-check">
+              <input
+                type="checkbox"
+                className="form-check-input"
+                value={actor.id}
+                checked={field.value.includes(actor.id)}
+                onChange={(e) => {
+                  const value = Number(e.target.value);
+                  const newValue = e.target.checked
+                    ? [...field.value, value]
+                    : field.value.filter((id) => id !== value);
+                  field.onChange(newValue);
+                }}
+              />
+              <label className="form-check-label">
+                {actor.actor_name}
+              </label>
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
+  />
+  {errors.actor_id && <p className="text-danger">{errors.actor_id.message}</p>}
+</div>
         {/* Directors */}
         <div className="mb-3">
-          <label className="form-label">Đạo diễn</label>
-          <Controller
-            name="director_id"
-            control={control}
-            render={({ field }) => (
-              <div>
-                {directors.map((director) => (
-                  <div key={director.id} className="form-check">
-                    <input
-                      type="checkbox"
-                      className="form-check-input"
-                      value={director.id}
-                      checked={field.value.includes(director.id)}
-                      onChange={(e) => {
-                        const value = Number(e.target.value);
-                        const newValue = e.target.checked
-                          ? [...field.value, value]
-                          : field.value.filter((id) => id !== value);
-                        field.onChange(newValue);
-                      }}
-                    />
-                    <label className="form-check-label">
-                      {director.director_name}
-                    </label>
-                  </div>
-                ))}
-              </div>
-            )}
-          />
-          {errors.director_id && <p className="text-danger">{errors.director_id.message}</p>}
-        </div>
+  <label className="form-label">Đạo diễn</label>
+  <Controller
+    name="director_id"
+    control={control}
+    render={({ field }) => (
+      <div className="row">
+        {directors.map((director) => (
+          <div key={director.id} className="col-4 mb-2">
+            <div className="form-check">
+              <input
+                type="checkbox"
+                className="form-check-input"
+                value={director.id}
+                checked={field.value.includes(director.id)}
+                onChange={(e) => {
+                  const value = Number(e.target.value);
+                  const newValue = e.target.checked
+                    ? [...field.value, value]
+                    : field.value.filter((id) => id !== value);
+                  field.onChange(newValue);
+                }}
+              />
+              <label className="form-check-label">
+                {director.director_name}
+              </label>
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
+  />
+  {errors.director_id && <p className="text-danger">{errors.director_id.message}</p>}
+</div>
 
         {/* Release Date */}
         <div className="mb-3">

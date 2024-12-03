@@ -10,6 +10,10 @@ export interface Showtime {
     showtime_date: string;
     showtime_start: string;
     showtime_end: string;
+    date: string;
+    opening_time: string;
+    closing_time:string;
+    duration: string;
     cinema:string;
     status: string;
     price: number;

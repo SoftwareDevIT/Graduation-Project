@@ -3,6 +3,8 @@ import { User } from "./User";
 import { PayMethod } from "./PayMethod";
 import { Movie } from "./Movie";
 import { Showtime } from "./Showtimes";
+import { Room } from "./Room";
+import { Combo } from "./Combo";
 
 export interface Booking {
   id: string;
@@ -17,4 +19,7 @@ export interface Booking {
   showtime: Showtime;
   pay_method : PayMethod;
   movie: Movie;
+  room: Room
+  bar_code: string
+  combos: Combo
 }

@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom";
 
 
 import OrderCheckout from "./component/Pay/OderCheckOut";
-import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
+// import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
 import Headerticket from "./component/Headerticket/Headerticket";
 import RegisterCinema from "./Page/Client/RegisterCinema";
 import LoginCinema from "./Page/Client/LoginCinema";
@@ -97,8 +97,12 @@ import SeatMapManager from "./Page/Admin/SeatMap/SeatMapManager";
 import RankManager from "./Page/Admin/Ranks/RankManager";
 import RankForm from "./Page/Admin/Ranks/RankForm";
 import SeatMapForm from "./component/Admin/SeatMap/SeatMapForm";
+import OrdersDetailManager from "./Page/Admin/Orders/OrdersDetail";
+import WebsiteSettingsManager from "./Page/Admin/WebsiteSettings/WebsiteSettingManager";
+import ShowtimesAuto from "./Page/Admin/Showtimes/ShowtimesAuto";
 import Pointaccumulation from "./component/PersonalPage/Pointaccumulation";
 import MovieTicket from "./component/PersonalPage/MovieTicket";
+import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
 
 
 
@@ -203,8 +207,10 @@ function App() {
         <Route path="/admin/director/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><DirectorFormManager/></PrivateRoute>} />
         <Route path="/admin/showtimes" element={<PrivateRoute allowedRoles={['admin']}><ShowtimesManager /></PrivateRoute>} />
         <Route path="/admin/showtimes/add" element={<PrivateRoute allowedRoles={['admin']}><ShowtimesFormManager /></PrivateRoute>} />
+        <Route path="/admin/showtimesauto/add" element={<PrivateRoute allowedRoles={['admin']}><ShowtimesAuto /></PrivateRoute>} />
         <Route path="/admin/showtimes/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><ShowtimesFormManager /></PrivateRoute>} />
         <Route path="/admin/orders" element={<PrivateRoute allowedRoles={['admin']}><OrdersManager /></PrivateRoute>} />
+        <Route path="/admin/ordersdetail/:id" element={<PrivateRoute allowedRoles={['admin']}><OrdersDetailManager /></PrivateRoute>} />
         <Route path="/admin/orders/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><OrdersFormManager /></PrivateRoute>} />
         <Route path="/admin/matrix" element={<PrivateRoute allowedRoles={['admin']}><SeatLayoutManager /></PrivateRoute>} />
         <Route path="/admin/matrix/add" element={<PrivateRoute allowedRoles={['admin']}><SeatLayoutFormManager /></PrivateRoute>} />
@@ -215,6 +221,8 @@ function App() {
         <Route path="/admin/rank" element={<PrivateRoute allowedRoles={['admin']}><RankManager /></PrivateRoute>} />
         <Route path="/admin/rank/add" element={<PrivateRoute allowedRoles={['admin']}><RankForm /></PrivateRoute>} />
         <Route path="/admin/rank/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><RankForm /></PrivateRoute>} />
+        <Route path="/admin/website-settings/update" element={<PrivateRoute allowedRoles={['admin']}><WebsiteSettingsManager /></PrivateRoute>} />
+        <Route path="/admin//website-settings/reset" element={<PrivateRoute allowedRoles={['admin']}><WebsiteSettingsManager /></PrivateRoute>} />
       
         <Route path="/admin/posts" element={<PrivateRoute allowedRoles={['admin']}><PostsManager /></PrivateRoute>} />
         <Route path="/admin/posts/:postId" element={<PrivateRoute allowedRoles={['admin']}><PostDetailManager /></PrivateRoute>} />

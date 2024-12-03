@@ -176,18 +176,11 @@ const OrdersDashboard: React.FC = () => {
       title: "Hành Động",
       key: "actions",
       align: "center" as const,
-      render: (_: any, record: Booking) => (
+      render: (_: any, booking: any) => (
         <Space>
-          <Link to={`/admin/orders/edit/${record.id}`}>
-            <Button type="primary" icon={<EditOutlined />} />
-          </Link>
-          <Button
-            type="default"
-            icon={<FontAwesomeIcon icon={faPrint} />}
-            onClick={() => handlePrintInvoice(record)}
-          >
-            In
-          </Button>
+           <Link to={`/admin/ordersdetail/${booking.booking_id}`} className="btn btn-primary">
+    Chi tiết
+  </Link>
         </Space>
       ),
     },
