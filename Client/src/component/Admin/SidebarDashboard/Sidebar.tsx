@@ -5,11 +5,13 @@ import { FaTachometerAlt, FaUser, FaFilm, FaTicketAlt, FaTag, FaNewspaper, FaLis
 
 const Sidebar = () => {
     const [isActive, setIsActive] = useState(false);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     // Hàm toggle để mở/đóng sidebar
     const toggleSidebar = () => {
         setIsActive(!isActive);
     };
+    
 
     return (
         <>
@@ -28,24 +30,25 @@ const Sidebar = () => {
                 <ul>
                     <li><NavLink to={'/admin/dashboard'} className={({ isActive }) => (isActive ? 'active' : '')}><FaTachometerAlt />Bảng điều khiển</NavLink></li>
                     <li><NavLink to={'/admin/user'} className={({ isActive }) => (isActive ? 'active' : '')}><FaUser />Quản lí người dùng</NavLink></li>
+                    <li><NavLink to={'/admin/rank'} className={({ isActive }) => (isActive ? 'active' : '')}><FaMedal />Quản Lí Hạng</NavLink></li> {/* FaMedal biểu thị huy chương, phù hợp với quản lý hạng */}
+                    <li><NavLink to={'/admin/movies'} className={({ isActive }) => (isActive ? 'active' : '')}><FaFilm /> Quản lí phim</NavLink></li>
                     <li><NavLink to={'/admin/actor'} className={({ isActive }) => (isActive ? 'active' : '')}><FaUserTie /> Quản lí diễn viên</NavLink></li> {/* Sử dụng FaUserTie cho diễn viên */}
                     <li><NavLink to={'/admin/director'} className={({ isActive }) => (isActive ? 'active' : '')}><FaVideo /> Quản lí đạo diễn</NavLink></li> {/* Sử dụng FaVideo cho đạo diễn */}
-                    <li><NavLink to={'/admin/posts'} className={({ isActive }) => (isActive ? 'active' : '')}><FaNewspaper /> Quản lí bài viết</NavLink></li>
-                    <li><NavLink to={'/admin/showtimes'} className={({ isActive }) => (isActive ? 'active' : '')}><FaCalendarAlt /> Quản lí xuất chiếu</NavLink></li>
-                    <li><NavLink to={'/admin/orders'} className={({ isActive }) => (isActive ? 'active' : '')}><FaTag /> Quản lí đơn hàng</NavLink></li>
                     <li><NavLink to={'/admin/categories'} className={({ isActive }) => (isActive ? 'active' : '')}><FaList /> Quản lí thể loại</NavLink></li>
-                    {/* <li><NavLink to={'/admin/countries'} className={({ isActive }) => (isActive ? 'active' : '')}><FaGlobe /> Quản lí khu vực</NavLink></li> */}
-                    <li><NavLink to={'/admin/combo'} className={({ isActive }) => (isActive ? 'active' : '')}><FaCogs /> Quản lí combo nước</NavLink></li>
+                    <li><NavLink to={'/admin/showtimes'} className={({ isActive }) => (isActive ? 'active' : '')}><FaCalendarAlt /> Quản lí xuất chiếu</NavLink></li>
                     <li><NavLink to={'/admin/cinemas'} className={({ isActive }) => (isActive ? 'active' : '')}><FaTheaterMasks /> Quản lí rạp chiếu phim</NavLink></li>
-                    <li><NavLink to={'/admin/movies'} className={({ isActive }) => (isActive ? 'active' : '')}><FaFilm /> Quản lí phim</NavLink></li>
                     <li><NavLink to={'/admin/rooms'} className={({ isActive }) => (isActive ? 'active' : '')}><FaIndustry /> Quản lí phòng rạp</NavLink></li>
-                    <li><NavLink to={'/admin/promotions'} className={({ isActive }) => (isActive ? 'active' : '')}><FaTicketAlt /> Mã giảm giá</NavLink></li>
-                    <li><NavLink to={'/admin/method'} className={({ isActive }) => (isActive ? 'active' : '')}><FaCreditCard /> Phương thức thanh toán</NavLink></li>
-                    <li><NavLink to={'/admin/RevenueByCinema'} className={({ isActive }) => (isActive ? 'active' : '')}><FaChartLine /> Doanh thu theo rạp</NavLink></li>
-                    <li><NavLink to={'/admin/RevenueByMovie'} className={({ isActive }) => (isActive ? 'active' : '')}><FaChartLine /> Doanh thu theo phim</NavLink></li>
                     <li><NavLink to={'/admin/matrix'} className={({ isActive }) => (isActive ? 'active' : '')}><FaTh />Mẫu Sơ Đồ Ghế</NavLink></li> {/* FaTh đại diện cho lưới (grid), phù hợp với sơ đồ mẫu */}
                     <li><NavLink to={'/admin/seatmap'} className={({ isActive }) => (isActive ? 'active' : '')}><FaChair />Sơ Đồ Ghế</NavLink></li> {/* FaChair biểu thị ghế, phù hợp với sơ đồ ghế */}
-                    <li><NavLink to={'/admin/rank'} className={({ isActive }) => (isActive ? 'active' : '')}><FaMedal />Quản Lí Hạng</NavLink></li> {/* FaMedal biểu thị huy chương, phù hợp với quản lý hạng */}
+                    <li><NavLink to={'/admin/orders'} className={({ isActive }) => (isActive ? 'active' : '')}><FaTag /> Quản lí đơn hàng</NavLink></li>
+                    <li><NavLink to={'/admin/posts'} className={({ isActive }) => (isActive ? 'active' : '')}><FaNewspaper /> Quản lí bài viết</NavLink></li>
+                    <li><NavLink to={'/admin/combo'} className={({ isActive }) => (isActive ? 'active' : '')}><FaCogs /> Quản lí combo nước</NavLink></li>
+                    {/* <li><NavLink to={'/admin/countries'} className={({ isActive }) => (isActive ? 'active' : '')}><FaGlobe /> Quản lí khu vực</NavLink></li> */}
+                    <li><NavLink to={'/admin/promotions'} className={({ isActive }) => (isActive ? 'active' : '')}><FaTicketAlt /> Mã giảm giá</NavLink></li>
+                    <li><NavLink to={'/admin/method'} className={({ isActive }) => (isActive ? 'active' : '')}><FaCreditCard /> Phương thức thanh toán</NavLink></li>
+                    {/* <li><NavLink to={'/admin/RevenueByCinema'} className={({ isActive }) => (isActive ? 'active' : '')}><FaChartLine /> Doanh thu theo rạp</NavLink></li>
+                    <li><NavLink to={'/admin/RevenueByMovie'} className={({ isActive }) => (isActive ? 'active' : '')}><FaChartLine /> Doanh thu theo phim</NavLink></li> */}
+                    
 
                 </ul>
             </div>

@@ -97,6 +97,7 @@ import SeatMapManager from "./Page/Admin/SeatMap/SeatMapManager";
 import RankManager from "./Page/Admin/Ranks/RankManager";
 import RankForm from "./Page/Admin/Ranks/RankForm";
 import SeatMapForm from "./component/Admin/SeatMap/SeatMapForm";
+import OrdersDetailManager from "./Page/Admin/Orders/OrdersDetail";
 
 
 
@@ -198,6 +199,7 @@ function App() {
         <Route path="/admin/showtimes/add" element={<PrivateRoute allowedRoles={['admin']}><ShowtimesFormManager /></PrivateRoute>} />
         <Route path="/admin/showtimes/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><ShowtimesFormManager /></PrivateRoute>} />
         <Route path="/admin/orders" element={<PrivateRoute allowedRoles={['admin']}><OrdersManager /></PrivateRoute>} />
+        <Route path="/admin/ordersdetail/:id" element={<PrivateRoute allowedRoles={['admin']}><OrdersDetailManager /></PrivateRoute>} />
         <Route path="/admin/orders/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><OrdersFormManager /></PrivateRoute>} />
         <Route path="/admin/matrix" element={<PrivateRoute allowedRoles={['admin']}><SeatLayoutManager /></PrivateRoute>} />
         <Route path="/admin/matrix/add" element={<PrivateRoute allowedRoles={['admin']}><SeatLayoutFormManager /></PrivateRoute>} />
