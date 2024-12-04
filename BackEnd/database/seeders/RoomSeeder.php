@@ -22,7 +22,7 @@ class RoomSeeder extends Seeder
                 DB::table('room')->insert([
                     'room_name' => 'P' . $i,
                     'cinema_id' => $cinemaId,
-                    'seat_layout_id' => rand(1, 4),
+                    'seat_map_id' => rand(1, 2),
                     'status' => '1', // Active status
                 ]);
             }
