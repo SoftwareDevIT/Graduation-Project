@@ -128,11 +128,11 @@ class BookingController extends Controller
             session()->flush();
 
             // Chuyển hướng về trang yêu cầu
-            return redirect('http://localhost:5173/movieticket');
+            return redirect('http://localhost:5173/ticketcinema');
         }
 
         // Xử lý khi mã phản hồi không phải '00'
-        return redirect('http://localhost:5173/movieticket')->with('error', 'Payment failed');
+        return redirect('http://localhost:5173/ticketcinema')->with('error', 'Payment failed');
     }
 
 

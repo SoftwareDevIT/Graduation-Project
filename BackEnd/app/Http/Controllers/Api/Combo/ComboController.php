@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Combo;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Store\StoreComboRequest;
 use App\Http\Requests\Update\UpdateComboRequest;
+use App\Models\Combo;
 use App\Services\Combo\ComboService;
 use Exception;
 use Illuminate\Http\Request;
@@ -36,7 +37,13 @@ class ComboController extends Controller
             return $e->getMessage();
         }
     }
-
+    public function status(int $id)
+    {
+        $movie = Combo::findOrFail($id);
+        $movie->status = $movie->status == 1 ? 0 : 1;
+        $movie->save();
+        return $this->success('', 'Cập nhật trạng thái thành công.', 200);
+    }
 
     public function store(StoreComboRequest $request)
     {

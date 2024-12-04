@@ -31,92 +31,112 @@ const MovieDetail: React.FC = () => {
 
   useEffect(() => {
     fetchMovies(); // Gọi lại fetchMovies khi slug thay đổi
-  }, [slug]);
-  useEffect(() => {
-    const fetchUserData = async () => {
+
+    const fetchUserStatus = async () => {
       const token = localStorage.getItem("token");
-      const userId = localStorage.getItem("user_id");
-  
-      if (token && userId) {
+
+      if (token) {
         try {
-          const userResponse = await instance.get(`/user/${userId}`);
-          const { favorite_movies = [], ratings = [] } = userResponse.data.data;
-  
-          const isMovieFavorite = favorite_movies.some(
-            (favMovie: any) => favMovie.movie?.id === movie?.id
-          );
-          const hasRated = ratings.some(
-            (rating: any) => rating.movie_id === movie?.id
-          );
-  
-          setUserStatus({
-            isLoggedIn: true,
-            isFavorite: isMovieFavorite,
-            isRated: hasRated,
-            favoriteMovies: favorite_movies,
+          // Lấy danh sách phim yêu thích của người dùng
+          const response = await instance.get("/user", {
+       
+         
           });
+          
+
+          // Kiểm tra xem phim hiện tại có trong danh sách yêu thích không
+          const isFavorite = response.data.favorite_movies.some((favMovie: any) => favMovie.id === movie?.id);
+// console.log("trang thai phim:",isFavorite);
+
+          // Cập nhật trạng thái yêu thích
+          setUserStatus((prev) => ({
+            ...prev,
+            isLoggedIn: true,
+            isFavorite,
+            favoriteMovies: response.data,
+          }));
         } catch (error) {
-          console.error("Error fetching user data:", error);
+          console.error("Error fetching user favorites:", error);
         }
       }
     };
-  
-    fetchUserData();
-  }, [movie?.id]);
-  console.log("Movie ID to be deleted:", movie?.id);
+
+    fetchUserStatus();
+  }, [slug]);
+ 
+
  
   const handleFavoriteToggle = async () => {
     const token = localStorage.getItem("token");
-    if ( !token) {
+  
+    if (!token) {
       notification.warning({
         message: "Yêu cầu đăng nhập",
         description: "Vui lòng đăng nhập để thêm phim vào danh sách yêu thích!",
       });
       return;
     }
+  
     try {
       if (userStatus.isFavorite) {
-        await instance.delete(`/favorites/${movie?.id}`, {
+        // Nếu phim đã được yêu thích, gọi API để xóa khỏi danh sách yêu thích
+        const response = await instance.delete(`/favorites/${movie?.id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        notification.success({
-          message: "Thành công",
-          description: "Phim đã được xóa khỏi danh sách yêu thích!",
-        });
-        console.log("Movie ID to be deleted:", movie?.id);
+  
+        // Kiểm tra nếu xóa thành công
+        if (response.status === 200) {
+          notification.success({
+            message: "Thành công",
+            description: "Phim đã được xóa khỏi danh sách yêu thích!",
+          });
+          console.log("Movie ID to be deleted:", movie?.id);
+        } else {
+          notification.error({
+            message: "Lỗi",
+            description: "Có lỗi xảy ra khi xóa phim khỏi danh sách yêu thích.",
+          });
+        }
       } else {
-        await instance.post(
-          `/favorites/${movie?.id}`,
-          
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        notification.success({
-          message: "Thành công",
-          description: "Phim đã được thêm vào danh sách yêu thích!",
+        // Nếu phim chưa được yêu thích, gọi API để thêm vào danh sách yêu thích
+        const response = await instance.post(`/favorites/${movie?.id}`, {}, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
-        notification.success({
-          message: "Thành công",
-          description: "Phim đã được thêm vào danh sách yêu thích!",
-        });
+  
+        // Kiểm tra nếu thêm thành công
+        if (response.status === 200) {
+          notification.success({
+            message: "Thành công",
+            description: "Phim đã được thêm vào danh sách yêu thích!",
+          });
+        } else {
+          notification.error({
+            message: "Lỗi",
+            description: "Có lỗi xảy ra khi thêm phim vào danh sách yêu thích.",
+          });
+        }
       }
-      
+  
+      // Cập nhật trạng thái yêu thích sau khi thực hiện thành công
       setUserStatus((prev) => ({
         ...prev,
-        isFavorite: !prev.isFavorite,
+        isFavorite: !prev.isFavorite, // Đổi trạng thái yêu thích
       }));
-    } catch {
+    } catch (error) {
+      console.error("Error when toggling favorite:", error);
       notification.error({
         message: "Lỗi",
         description: "Có lỗi xảy ra khi xử lý yêu thích phim.",
       });
     }
   };
+  
+  
+  
 
   const handleRatingSubmit = async () => {
     if (!userStatus.isLoggedIn) {

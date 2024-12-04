@@ -296,9 +296,11 @@ const CinemaSelector: React.FC = () => {
                         {sortedShowtimes.map((showtime: any) => (
                           <button
                             key={showtime.id}
+                            
                             disabled={dayjs(
                               `${selectedDate} ${showtime.showtime_start}`
                             ).isBefore(dayjs())}
+                            
                             onClick={() =>
                               navigate("/seat", {
                                 state: {

@@ -9,7 +9,7 @@ import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
 import './OderCheckOut.css';
 import Header from '../Header/Hearder';
-import { Seat } from '../../interface/Seat';
+import { useUserContext } from '../../Context/UserContext';
 export interface LocationState {
     movieName: string;
     cinemaName: string;
@@ -30,11 +30,20 @@ const OrderCheckout = () => {
     const [voucherApplied, setVoucherApplied] = useState<boolean>(false); // Trạng thái kiểm tra voucher đã áp dụng hay chưa
     const [isVoucherVisible, setIsVoucherVisible] = useState<boolean>(false);
     const [isTableVisible, setIsTableVisible] = useState(false);
-
+    const { userProfile, avatar, setUserProfile } = useUserContext(); // Use context to get user data
+    const [pointHistories, setPointHistories] = useState<any[]>([]);
+    const [pointsToUse, setPointsToUse] = useState(""); // Số điểm nhập
     // Hàm xử lý sự kiện click vào <h3> để thay đổi trạng thái hiển thị bảng
     const toggleTableVisibility = () => {
       setIsTableVisible(!isTableVisible);
     };
+
+    useEffect(() => {
+        if (userProfile) {
+          setPointHistories(userProfile.point_histories);
+        }
+      }, [userProfile]);
+    
     
     const navigate = useNavigate();
     const {
@@ -76,6 +85,54 @@ const OrderCheckout = () => {
             console.error("Error applying voucher:", error);
         }
     };
+    
+    const handleUsePoints = async () => {
+        // Chuyển đổi pointsToUse từ string sang number
+        const points = Number(pointsToUse);
+    
+        // Kiểm tra nếu points không hợp lệ hoặc <= 0
+        if (isNaN(points) || points <= 0) {
+            message.warning("Vui lòng nhập số điểm hợp lệ.");
+            return;
+        }
+    
+        // Kiểm tra nếu số điểm nhập vào vượt quá tổng giá trị đơn hàng
+        if (points > totalPrice) {
+            message.warning("Số điểm không thể vượt quá tổng giá trị đơn hàng.");
+            return;
+        }
+    const availablePoints=userProfile?.points ;
+    const availablePointsNumber = availablePoints ? Number(availablePoints) : 0;
+        // Kiểm tra nếu số điểm nhập vào lớn hơn số điểm hiện có
+        if (points > availablePointsNumber) { // `availablePoints` là số điểm hiện có của người dùng
+            message.warning("Bạn không có đủ điểm để sử dụng.");
+            return;
+        }
+    
+        try {
+            const response = await instance.post("/use-points", {
+                points_to_use: points, // Sử dụng giá trị đã chuyển đổi
+                total_price: totalPrice, // Truyền tổng tiền hiện tại
+            });
+    
+            if (response.status === 200 && response.data) {
+                const { message: successMessage, discount, final_price } = response.data;
+    
+                // Hiển thị thông báo thành công
+                message.success(successMessage);
+    
+                // Cập nhật tổng tiền và giảm giá
+                setDiscount(discount); // Nếu API trả về số tiền quy đổi từ điểm
+                setFinalPrice(final_price); // Cập nhật lại tổng tiền sau khi trừ điểm
+            } else {
+                message.error("Không thể sử dụng điểm. Vui lòng kiểm tra lại.");
+            }
+        } catch (error) {
+            console.error("Lỗi khi sử dụng điểm:", error);
+            message.error("Có lỗi xảy ra, vui lòng thử lại!");
+        }
+    };
+    
     
     const handleRemoveVoucher = () => {
         setVoucherCode(""); // Xóa mã voucher
@@ -166,7 +223,7 @@ const OrderCheckout = () => {
 
             if (response.data) {
                 const redirectUrl = response.data.Url.original.url;
-                message.success("Đặt vé thành công!");
+                // message.success("Đặt vé thành công!");
                 window.location.href = redirectUrl;
             } else {
                 message.error("Có lỗi xảy ra khi đặt vé.");
@@ -255,22 +312,23 @@ const OrderCheckout = () => {
           <table>
             <thead>
               <tr>
-                <th>Mã giảm giá</th>
-                <th>Điều kiện</th>
-                <th>Giảm giá</th>
+                <th>Điểm hiện có</th>
+                <th>Nhập Điểm</th>
+                <th>Thao tác</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>Flick10</td>
-                <td>Giảm 10% cho lần mua đầu tiên</td>
-                <td>10%</td>
+                <td>{userProfile?.points || "0"}</td>
+                <td><input
+                    type="number"
+                    value={pointsToUse}
+                    onChange={(e) => setPointsToUse(e.target.value)}
+                    placeholder="Nhập số điểm"
+                  /></td>
+                <td><button onClick={handleUsePoints}>Áp dụng</button></td>
               </tr>
-              <tr>
-                <td>Flick20</td>
-                <td>Giảm 20% cho hóa đơn trên 500k</td>
-                <td>20%</td>
-              </tr>
+            
         
             </tbody>
           </table>

@@ -6,7 +6,6 @@ import { notification } from "antd";
 import { z } from "zod"; // Import Zod
 import { zodResolver } from "@hookform/resolvers/zod"; // Import zodResolver
 
-
 // Define Zod schema for validation
 const seatMapSchema = z.object({
   seat_layout_id: z.number().min(1, "Bố cục ghế là bắt buộc"),
@@ -21,6 +20,19 @@ const seatMapSchema = z.object({
 });
 
 type SeatMapFormData = z.infer<typeof seatMapSchema>;
+
+// Interface for SeatMap
+export interface SeatMap1 {
+  id: number;
+  seat_layout_id: number;
+  label: string;
+  row: string;
+  column: number;
+  type: string;
+  is_double: number;
+  created_at: string;
+  updated_at: string;
+}
 
 const SeatMapForm = () => {
   const { id } = useParams<{ id: string }>();
@@ -158,7 +170,7 @@ const SeatMapForm = () => {
           </label>
           <select
             className={`form-control ${errors.is_double ? "is-invalid" : ""}`}
-            {...register("is_double",{ valueAsNumber: true })}
+            {...register("is_double", { valueAsNumber: true })}
           >
             <option value={0}>Một ghế</option>
             <option value={1}>Ghế đôi</option>

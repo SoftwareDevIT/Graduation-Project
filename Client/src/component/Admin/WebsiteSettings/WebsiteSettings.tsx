@@ -21,22 +21,20 @@ interface WebsiteSetting {
     about_image: File | null;
     created_at: string | null;
     updated_at: string | null;
-    [key: string]: any;  // Thêm index signature
-  }
-  
+    [key: string]: any;  
+}
 
 const WebsiteSettings: React.FC = () => {
   const [settings, setSettings] = useState<WebsiteSetting | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch settings data
   useEffect(() => {
     const fetchSettings = async () => {
       try {
         setLoading(true);
         const response = await instance.post('/website-settings');
-        setSettings(response.data.data[0]); // Lấy cấu hình đầu tiên
+        setSettings(response.data.data[0]);
       } catch (err: any) {
         setError(err.message || 'Lỗi khi tải cấu hình.');
       } finally {
@@ -50,97 +48,116 @@ const WebsiteSettings: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!settings) return;
-
+  
     try {
       setLoading(true);
       const formData = new FormData();
-      
-      // Append non-file fields to formData
+  
       for (const key in settings) {
-        if (settings[key] !== null && key !== 'logo' && key !== 'privacy_image' && key !== 'terms_image' && key !== 'about_image') {
+        if (
+          settings[key] !== null &&
+          key !== "logo" &&
+          key !== "privacy_image" &&
+          key !== "terms_image" &&
+          key !== "about_image"
+        ) {
           formData.append(key, settings[key] as string);
         }
       }
-      
-      // Append file fields to formData
-      if (settings.logo) formData.append('logo', settings.logo);
-      if (settings.privacy_image) formData.append('privacy_image', settings.privacy_image);
-      if (settings.terms_image) formData.append('terms_image', settings.terms_image);
-      if (settings.about_image) formData.append('about_image', settings.about_image);
-
-      const response = await instance.post(`/website-settings/update/${settings.id}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-
-      alert(response.data.message || 'Cập nhật thành công!');
+  
+      if (settings.logo instanceof File) formData.append("logo", settings.logo);
+      if (settings.privacy_image instanceof File)
+        formData.append("privacy_image", settings.privacy_image);
+      if (settings.terms_image instanceof File)
+        formData.append("terms_image", settings.terms_image);
+      if (settings.about_image instanceof File)
+        formData.append("about_image", settings.about_image);
+  
+      const response = await instance.post(
+        `/website-settings/update/${settings.id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+  
+      alert(response.data.message || "Cập nhật thành công!");
     } catch (err: any) {
-      setError(err.message || 'Lỗi khi cập nhật.');
+      setError(err.message || "Lỗi khi cập nhật.");
     } finally {
       setLoading(false);
     }
   };
+  
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
-  
-    // Nếu là input type="file", sử dụng type assertion
-    if (type === 'file') {
+    if (type === "file") {
       const fileInput = e.target as HTMLInputElement;
       const files = fileInput.files;
-  
-      if (files) {
-        setSettings((prev) => (prev ? { ...prev, [name]: files[0] } : null)); // Cập nhật file vào state
+      if (files && files[0].type.match(/image\/(jpeg|png|jpg|gif)/)) {
+        setSettings((prev) => (prev ? { ...prev, [name]: files[0] } : null));
+      } else {
+        alert("Vui lòng chọn tệp hình ảnh hợp lệ!");
       }
     } else {
-      setSettings((prev) => (prev ? { ...prev, [name]: value } : null)); // Cập nhật giá trị thông thường
+      setSettings((prev) => (prev ? { ...prev, [name]: value } : null));
     }
   };
   
-  
 
-  const handleReset = async () => {
+  const resetSettings = async () => {
     try {
       setLoading(true);
       const response = await instance.post('/website-settings/reset');
-      alert(response.data.message || 'Đặt lại cấu hình thành công!');
-      setSettings(response.data.data[0]); // Reset settings to default
+      if (response.data.data && response.data.data[0]) {
+        setSettings(response.data.data[0]);
+        alert(response.data.message || 'Đặt lại cấu hình thành công!');
+      } else {
+        throw new Error('API không trả về dữ liệu đúng.');
+      }
     } catch (err: any) {
       setError(err.message || 'Lỗi khi đặt lại cấu hình.');
     } finally {
       setLoading(false);
     }
   };
+  
+  
 
-  if (loading) return <p>Đang tải...</p>;
-  if (error) return <p>Lỗi: {error}</p>;
+
 
   return (
-    <div className="website-settings">
-      <h1>Cấu Hình Website</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Tên trang web</label>
-          <input
-            type="text"
-            name="site_name"
-            value={settings?.site_name || ''}
-            onChange={handleChange}
-            className="form-control"
-          />
+    <div className="container mt-5">
+      <h1 className="text-center mb-4">Cấu Hình Website</h1>
+      <form onSubmit={handleSubmit} className="shadow p-4 rounded border">
+        <div className="row">
+          <div className="col-md-6 mb-3">
+            <label className="form-label">Tên trang web</label>
+            <input
+              type="text"
+              name="site_name"
+              value={settings?.site_name || ''}
+              onChange={handleChange}
+              className="form-control"
+            />
+          </div>
+          <div className="col-md-6 mb-3">
+            <label className="form-label">Khẩu hiệu</label>
+            <input
+              type="text"
+              name="tagline"
+              value={settings?.tagline || ''}
+              onChange={handleChange}
+              className="form-control"
+            />
+          </div>
         </div>
-        <div className="form-group">
-          <label>Khẩu hiệu</label>
-          <input
-            type="text"
-            name="tagline"
-            value={settings?.tagline || ''}
-            onChange={handleChange}
-            className="form-control"
-          />
-        </div>
-        <div className="form-group">
-          <label>Email</label>
+
+        <div className="mb-3">
+          <label className="form-label">Email</label>
           <input
             type="email"
             name="email"
@@ -149,8 +166,9 @@ const WebsiteSettings: React.FC = () => {
             className="form-control"
           />
         </div>
-        <div className="form-group">
-          <label>Số điện thoại</label>
+
+        <div className="mb-3">
+          <label className="form-label">Số điện thoại</label>
           <input
             type="text"
             name="phone"
@@ -159,8 +177,9 @@ const WebsiteSettings: React.FC = () => {
             className="form-control"
           />
         </div>
-        <div className="form-group">
-          <label>Địa chỉ</label>
+
+        <div className="mb-3">
+          <label className="form-label">Địa chỉ</label>
           <input
             type="text"
             name="address"
@@ -169,8 +188,9 @@ const WebsiteSettings: React.FC = () => {
             className="form-control"
           />
         </div>
-        <div className="form-group">
-          <label>Giờ làm việc</label>
+
+        <div className="mb-3">
+          <label className="form-label">Giờ làm việc</label>
           <input
             type="text"
             name="working_hours"
@@ -179,8 +199,9 @@ const WebsiteSettings: React.FC = () => {
             className="form-control"
           />
         </div>
-        <div className="form-group">
-          <label>Logo</label>
+
+        <div className="mb-3">
+          <label className="form-label">Logo</label>
           <input
             type="file"
             name="logo"
@@ -189,8 +210,9 @@ const WebsiteSettings: React.FC = () => {
             accept="image/jpeg, image/png, image/jpg, image/gif"
           />
         </div>
-        <div className="form-group">
-          <label>Ảnh quyền riêng tư</label>
+
+        <div className="mb-3">
+          <label className="form-label">Ảnh quyền riêng tư</label>
           <input
             type="file"
             name="privacy_image"
@@ -199,8 +221,9 @@ const WebsiteSettings: React.FC = () => {
             accept="image/jpeg, image/png, image/jpg, image/gif"
           />
         </div>
-        <div className="form-group">
-          <label>Ảnh điều khoản</label>
+
+        <div className="mb-3">
+          <label className="form-label">Ảnh điều khoản</label>
           <input
             type="file"
             name="terms_image"
@@ -209,8 +232,9 @@ const WebsiteSettings: React.FC = () => {
             accept="image/jpeg, image/png, image/jpg, image/gif"
           />
         </div>
-        <div className="form-group">
-          <label>Ảnh về chúng tôi</label>
+
+        <div className="mb-3">
+          <label className="form-label">Ảnh về chúng tôi</label>
           <input
             type="file"
             name="about_image"
@@ -219,8 +243,9 @@ const WebsiteSettings: React.FC = () => {
             accept="image/jpeg, image/png, image/jpg, image/gif"
           />
         </div>
-        <div className="form-group">
-          <label>Facebook Link</label>
+
+        <div className="mb-3">
+          <label className="form-label">Facebook Link</label>
           <input
             type="text"
             name="facebook_link"
@@ -229,8 +254,9 @@ const WebsiteSettings: React.FC = () => {
             className="form-control"
           />
         </div>
-        <div className="form-group">
-          <label>Youtube Link</label>
+
+        <div className="mb-3">
+          <label className="form-label">Youtube Link</label>
           <input
             type="text"
             name="youtube_link"
@@ -239,8 +265,9 @@ const WebsiteSettings: React.FC = () => {
             className="form-control"
           />
         </div>
-        <div className="form-group">
-          <label>Instagram Link</label>
+
+        <div className="mb-3">
+          <label className="form-label">Instagram Link</label>
           <input
             type="text"
             name="instagram_link"
@@ -249,8 +276,9 @@ const WebsiteSettings: React.FC = () => {
             className="form-control"
           />
         </div>
-        <div className="form-group">
-          <label>Copyright</label>
+
+        <div className="mb-3">
+          <label className="form-label">Copyright</label>
           <input
             type="text"
             name="copyright"
@@ -259,8 +287,9 @@ const WebsiteSettings: React.FC = () => {
             className="form-control"
           />
         </div>
-        <div className="form-group">
-          <label>Chính sách quyền riêng tư</label>
+
+        <div className="mb-3">
+          <label className="form-label">Chính sách quyền riêng tư</label>
           <input
             type="text"
             name="privacy_policy"
@@ -269,12 +298,16 @@ const WebsiteSettings: React.FC = () => {
             className="form-control"
           />
         </div>
-        <button type="submit" className="btn btn-primary">
-          Lưu Cấu Hình
-        </button>
-        <button type="button" className="btn btn-secondary" onClick={handleReset}>
-          Đặt Lại
-        </button>
+
+        <div className="d-flex justify-content-between">
+          <button type="submit" className="btn btn-primary">
+            Lưu thay đổi
+          </button>
+          <button type="button" className="btn btn-secondary" onClick={resetSettings}>
+  Đặt lại
+</button>
+
+        </div>
       </form>
     </div>
   );

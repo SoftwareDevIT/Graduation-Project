@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Cinema;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Store\StoreRoomRequest;
 use App\Http\Requests\Update\UpdateRoomRequest;
+use App\Models\Room;
 use App\Services\Cinema\RoomService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -24,7 +25,13 @@ class RoomController extends Controller
         $room = $this->roomService->index();
         return $this->success($room);
     }
-
+    public function status(int $id)
+    {
+        $movie = Room::findOrFail($id);
+        $movie->status = $movie->status == 1 ? 0 : 1;
+        $movie->save();
+        return $this->success('', 'Cập nhật trạng thái thành công.', 200);
+    }
     // public function showtimeByMovieName($movie_name)
     // {
     //     try {
