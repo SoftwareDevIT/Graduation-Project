@@ -13,7 +13,7 @@ class LoginService
     public function index()
     {
         $user = Auth::user();
-        $userWithRoles = User::with('roles')->findOrFail($user->id);
+        $userWithRoles = User::with('roles','rank')->findOrFail($user->id);
         return $userWithRoles;
     }
     public function get(int $id): User
