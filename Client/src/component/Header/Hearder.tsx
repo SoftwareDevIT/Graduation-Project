@@ -20,11 +20,13 @@ const Header = () => {
   const { state } = useCountryContext();
   const locations = state.countries;
   const navigate = useNavigate();
-
+ 
 
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
+
+  
   // Hàm xử lý sự kiện khi người dùng click vào Rạp
   const handleOpenModal = () => {
     setIsModalVisible(true);
@@ -34,7 +36,7 @@ const Header = () => {
   const handleCloseModal = () => {
     setIsModalVisible(false);
   };
-  
+ 
   useEffect(() => {
     // Kiểm tra nếu có userId trong localStorage
     const token = localStorage.getItem("token");
@@ -319,7 +321,12 @@ const Header = () => {
             </Link>
             {isLoggedIn ? (
               <div className="icon-link" onClick={toggleProfileMenu}>
-                <img className="avtat-img" src="https://rapchieuphim.com/photos/36/poster/wall-phim-ong-trum.jpg" alt="" />
+                <img
+  className="avtat-img"
+  src={"https://rapchieuphim.com/photos/36/poster/wall-phim-ong-trum.jpg"}
+  alt="User Avatar"
+/>
+
                 <i className="fas fa-check checkmark"></i>
                 {isProfileMenuVisible && (
                   <div className="profile-dropdown">
