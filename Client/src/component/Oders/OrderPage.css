@@ -227,7 +227,8 @@ font-size: 15px;
         text-align: center;
     }
 .box-thongtinphim{
-    width: 500px;
+    width: 600px;
+    margin-left: 138px;
 }
     .combo-item {
         grid-template-columns: 2fr 1fr 1fr; /* Giữ bố cục 3 cột khi trên 992px */
@@ -260,7 +261,7 @@ font-size: 15px;
    }
    
    .actionsts{
-    margin-left: 30px;
+    margin-left: 3px !important;
     width: 500px !important;
    }
    .back-btn2{
@@ -315,7 +316,7 @@ font-size: 15px;
         width: 100%;
         margin-top: 10px;
         padding: 10px;
-        margin-left: 141px;
+        margin-left: 130px;
     }
     .thongtincombo{
         width: 100%;
