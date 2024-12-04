@@ -78,6 +78,12 @@ const SeatMap = () => {
             className: 'text-center',
         },
         {
+            title: 'Lable',
+            dataIndex: 'label',
+            key: 'label',
+            className: 'text-center',
+        },
+        {
             title: 'Hàng',
             dataIndex: 'row',
             key: 'row',
