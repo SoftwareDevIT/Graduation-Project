@@ -47,43 +47,43 @@ class SeatMapService
         $combo = SeatMap::where('seat_layout_id', $id)->get();
 
         // Adjust for couple seats: Make them span two columns
-        $adjustedSeats = $this->adjustForCoupleSeats($combo);
+        // $adjustedSeats = $this->adjustForCoupleSeats($combo);
 
-        return $adjustedSeats;
+        return $combo;
     }
 
     /**
      * Adjust the seat map data so that couple seats span two columns.
      */
-    private function adjustForCoupleSeats(Collection $seatMaps): Collection
-    {
-        // Create an array to store the adjusted seat map
-        $adjustedSeats = collect();
+    // private function adjustForCoupleSeats(Collection $seatMaps): Collection
+    // {
+    //     // Create an array to store the adjusted seat map
+    //     $adjustedSeats = collect();
 
-        foreach ($seatMaps as $seat) {
-            // Check if this seat is a couple seat and needs to span two columns
-            if ($seat->is_double) {
-                // Find the next column and merge them
-                $nextColumn = $seat->column + 1;
+    //     foreach ($seatMaps as $seat) {
+    //         // Check if this seat is a couple seat and needs to span two columns
+    //         if ($seat->is_double) {
+    //             // Find the next column and merge them
+    //             $nextColumn = $seat->column + 1;
 
-                // Mark both columns as occupied by a couple seat
-                $adjustedSeats->push([
-                    'seat_layout_id' => $seat->seat_layout_id,
-                    'row' => $seat->row,
-                    'column' => $seat->column,
-                    'is_double' => true, // Mark as couple seat
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
+    //             // Mark both columns as occupied by a couple seat
+    //             $adjustedSeats->push([
+    //                 'seat_layout_id' => $seat->seat_layout_id,
+    //                 'row' => $seat->row,
+    //                 'column' => $seat->column,
+    //                 'is_double' => true, // Mark as couple seat
+    //                 'created_at' => now(),
+    //                 'updated_at' => now(),
+    //             ]);
 
-                // Skip next column for couple seat, it will be handled by this one
-                $seatMaps->where('row', $seat->row)->where('column', $nextColumn)->first()->is_double = true;
-            } else {
-                // Regular seat, no change
-                $adjustedSeats->push($seat);
-            }
-        }
+    //             // Skip next column for couple seat, it will be handled by this one
+    //             $seatMaps->where('row', $seat->row)->where('column', $nextColumn)->first()->is_double = true;
+    //         } else {
+    //             // Regular seat, no change
+    //             $adjustedSeats->push($seat);
+    //         }
+    //     }
 
-        return $adjustedSeats;
-    }
+    //     return $adjustedSeats;
+    // }
 }
