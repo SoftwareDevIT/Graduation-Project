@@ -29,10 +29,9 @@ const SeatMapForm = () => {
   const { id } = useParams<{ id: string }>();
   const nav = useNavigate();
 
-  const [seatLayouts, setSeatLayouts] = useState<{ id: number; name: string }[]>(
-    []
-  );
+  const [seatLayouts, setSeatLayouts] = useState<{ id: number; name: string }[]>([]);
   const [seatMap, setSeatMap] = useState<any[][]>([]);
+  
 
   const {
     handleSubmit,
@@ -63,7 +62,7 @@ const SeatMapForm = () => {
     const fetchSeatMap = async () => {
       if (id) {
         try {
-          const { data } = await instance.get(`/seatmap/${id}`);
+          const { data } = await instance.get(`/seat-map/${id}`);
           reset(data.data);
         } catch (error) {
           notification.error({
@@ -82,25 +81,24 @@ const SeatMapForm = () => {
       setSeatMap([]);
       return;
     }
-  
+
     try {
       const { data } = await instance.get(`/matrix/${selectedId}`);
       const { rows, columns, row_regular_seat, row_vip_seat, row_couple_seat } = data.data;
-  
+
       const seatLayout = [];
       for (let i = 0; i < rows; i++) {
         const row = [];
-        let seatType = "Regular"; // Default type for "Regular" seats
-  
-        // Assign seat types in the order: Regular -> VIP -> Couple
+        let seatType = "Regular";
+
         if (i < row_regular_seat) {
-          seatType = "Regular"; // First rows will be Regular seats
+          seatType = "Regular";
         } else if (i >= row_regular_seat && i < row_regular_seat + row_vip_seat) {
-          seatType = "VIP"; // Next rows will be VIP seats
+          seatType = "VIP";
         } else if (i >= row_regular_seat + row_vip_seat) {
-          seatType = "Couple"; // Remaining rows will be Couple seats
+          seatType = "Couple";
         }
-  
+
         for (let j = 0; j < columns; j++) {
           row.push({
             name: `${String.fromCharCode(65 + i)}${j + 1}`,
@@ -117,7 +115,7 @@ const SeatMapForm = () => {
       });
     }
   };
-  
+
   const handleFormSubmit = async (data: SeatMapFormData) => {
     try {
       const requestData = {
@@ -126,17 +124,10 @@ const SeatMapForm = () => {
         is_double: Number(data.is_double),
       };
 
-      if (id) {
-        await instance.put(`/seatmap/${id}`, requestData);
-        notification.success({
-          message: "Cập nhật bản đồ ghế thành công!",
-        });
-      } else {
-        await instance.post("/seatmap", requestData);
-        notification.success({
-          message: "Thêm bản đồ ghế thành công!",
-        });
-      }
+      await instance.put(`/seat-map/${id}`, requestData);
+      notification.success({
+        message: "Cập nhật bản đồ ghế thành công!",
+      });
       nav("/admin/seatmap");
     } catch (error) {
       notification.error({
@@ -144,6 +135,14 @@ const SeatMapForm = () => {
       });
     }
   };
+  const handleSeatClick = (seat: any) => {
+    console.log("Thông tin ghế:", seat);
+    notification.info({
+      message: "Thông tin ghế",
+      description: `Tên ghế: ${seat.name}, Loại: ${seat.type}, Ghế đôi: ${seat.is_double ? "Có" : "Không"}`,
+    });
+  };
+  
 
   return (
     <div className="container mt-5">
@@ -151,9 +150,7 @@ const SeatMapForm = () => {
         onSubmit={handleSubmit(handleFormSubmit)}
         className="shadow p-4 rounded bg-light"
       >
-        <h1 className="text-center mb-4">
-          {id ? "Cập nhật Bản đồ ghế" : "Thêm Bản đồ ghế"}
-        </h1>
+        <h1 className="text-center mb-4">Cập nhật Bản đồ ghế</h1>
 
         <div className="mb-3">
           <label htmlFor="seat_layout_id" className="form-label">
@@ -177,41 +174,39 @@ const SeatMapForm = () => {
         </div>
 
         <div className="seat-map">
-  {seatMap.length > 0 ? (
-    <div className="seat-rows">
-      {seatMap.map((row, rowIndex) => (
-        <div key={rowIndex} className="seat-row">
-          <div className="seat-row-label">{String.fromCharCode(65 + rowIndex)}</div>
-          <div className="seats">
-            
-            {row.map((seat, colIndex) => (
-              <div
-                key={colIndex}
-                className={`seat ${
-                  seat.type === "VIP"
-                    ? "seat-vip"
-                    : seat.type === "Couple"
-                    ? "seat-couple"
-                    : "seat-regular"
-                }`}
-              >
-                {seat.name}
-              </div>
-            ))}
-               
-          </div>
+          {seatMap.length > 0 ? (
+            <div className="seat-rows">
+              {seatMap.map((row, rowIndex) => (
+                <div key={rowIndex} className="seat-row">
+                  <div className="seat-row-label">{String.fromCharCode(65 + rowIndex)}</div>
+                  <div className="seats">
+                    {row.map((seat, colIndex) => (
+                      <div
+                        key={colIndex}
+                        className={`seat ${
+                          seat.type === "VIP"
+                            ? "seat-vip"
+                            : seat.type === "Couple"
+                            ? "seat-couple"
+                            : "seat-regular"
+                        }`}
+                        onClick={() => handleSeatClick(seat)} 
+                      >
+                        {seat.name}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p>Chọn bố cục ghế để hiển thị</p>
+          )}
         </div>
-      ))}
-    </div>
-  ) : (
-    <p>Chọn bố cục ghế để hiển thị</p>
-  )}
-</div>
-
 
         <div className="d-flex justify-content-between">
           <button type="submit" className="btn btn-primary">
-            {id ? "Cập nhật" : "Thêm"}
+            Cập nhật
           </button>
           <button
             type="button"
@@ -227,3 +222,4 @@ const SeatMapForm = () => {
 };
 
 export default SeatMapForm;
+

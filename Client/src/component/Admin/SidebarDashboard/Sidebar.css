@@ -9,6 +9,7 @@
    
     border-right: 1px solid #dee2e6; /* Đường viền xám nhạt */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng nhẹ */
+    overflow: hidden; /* Ẩn thanh cuộn tổng */
 }
 
 /* Logo Section */
@@ -37,7 +38,14 @@
 .sidebar ul {
     list-style-type: none;
     padding: 0;
+    overflow-y: auto; /* Cho phép cuộn theo trục dọc */
+    height: calc(100vh - 100px); /* Trừ chiều cao logo và padding */
 }
+/* Thanh cuộn tùy chỉnh */
+.sidebar ul::-webkit-scrollbar {
+    width: 8px; /* Độ rộng thanh cuộn */
+}
+
 
 /* Individual Menu Item */
 .sidebar ul li {

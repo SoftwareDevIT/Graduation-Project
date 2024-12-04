@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Header1.css';
 import { FaBell, FaCog, FaUserCircle } from 'react-icons/fa';
 import { User } from '../../../interface/User';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 
 const Header = () => {
     const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -85,7 +85,7 @@ const Header = () => {
                         <span className="notification-badge">3</span>
                     </div>
                     <div className="icon">
-                        <FaCog />
+                       <Link to={'/admin/website-settings/update'} style={{color: "#004d40"}} > <FaCog /></Link>
                     </div>
                     <div className="icon profile-pic" onClick={toggleProfile}>
                         <FaUserCircle />

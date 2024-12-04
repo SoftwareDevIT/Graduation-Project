@@ -20,11 +20,7 @@ import dayjs, { Dayjs } from "dayjs"; // Import dayjs for date handling
 import { Cinema } from "../../../interface/Cinema";
 
 import * as XLSX from "xlsx"; // Import XLSX for Excel export
-
-// import * as XLSX from "xlsx"; // Import XLSX library
-
-
-
+import { Link } from "react-router-dom";
 ChartJS.register(
   Title,
   Tooltip,
@@ -171,6 +167,33 @@ const DashboardAdmin = () => {
     <div className="dashboard">
       <h2 className="dashboard-title">Bảng điều khiển Admin</h2>
       <div className="dashboard-content">
+      <div className="summary">
+          {/* Box 1: Weekly Sales */}
+          <div className="summary-card" style={{ background: 'linear-gradient(to right, #ffafbd, #ffc3a0)' }}>
+            <div className="summary-card-header">
+              <i className="fas fa-chart-line summary-icon"></i>
+              <h3>Tổng đơn hàng</h3>
+            </div>
+            <div className="summary-number">{totalBookings !== null ? totalBookings : 'Loading...'}</div>
+          </div>
+
+          {/* Box 2: Total Revenue */}
+          <div className="summary-card" style={{ background: 'linear-gradient(to right, #96fbc4, #96fbc4)' }}>
+            <div className="summary-card-header">
+              <i className="fas fa-map-marker-alt summary-icon"></i>
+              <h3>Doanh Thu</h3>
+            </div>
+            <div className="summary-number">{totalRevenue !== null ? `$ ${totalRevenue.toLocaleString()}` : 'Loading...'}</div>
+          </div>
+
+          <div className="summary-card" style={{ background: 'linear-gradient(to right, #36d1dc, #5b86e5)' }}>
+            <div className="summary-card-header">
+              <i className="fas fa-map-marker-alt summary-icon"></i>
+              <h3>Tổng Doanh Thu</h3>
+            </div>
+            <div className="summary-number">{totalRevenue !== null ? `$ ${totalRevenue.toLocaleString()}` : 'Loading...'}</div>
+          </div>
+        </div>
       <Form className="filter-form" layout="inline" style={{ marginBottom: '20px' }}>
           <Space direction="horizontal" size="middle" style={{ flexWrap: 'wrap' }}>
             {/* Lọc theo rạp */}
@@ -248,43 +271,12 @@ const DashboardAdmin = () => {
                 style={{ width: 160 }}
               />
             </Form.Item>
-
-            {/* Nút xuất Excel */}
-            <Button type="primary" onClick={exportToExcel} block style={{ width: 180 }}>
+               {/* Nút xuất Excel */}
+               <Button type="primary" onClick={exportToExcel} block style={{ width: 180 }}>
               Export to Excel
             </Button>
           </Space>
     </Form>
-
-        <div className="summary">
-          {/* Box 1: Weekly Sales */}
-          <div className="summary-card" style={{ background: 'linear-gradient(to right, #ffafbd, #ffc3a0)' }}>
-            <div className="summary-card-header">
-              <i className="fas fa-chart-line summary-icon"></i>
-              <h3>Tổng đơn hàng</h3>
-            </div>
-            <div className="summary-number">{totalBookings !== null ? totalBookings : 'Loading...'}</div>
-          </div>
-
-          {/* Box 2: Total Revenue */}
-          <div className="summary-card" style={{ background: 'linear-gradient(to right, #96fbc4, #96fbc4)' }}>
-            <div className="summary-card-header">
-              <i className="fas fa-map-marker-alt summary-icon"></i>
-              <h3>Doanh Thu</h3>
-            </div>
-            <div className="summary-number">{totalRevenue !== null ? `$ ${totalRevenue.toLocaleString()}` : 'Loading...'}</div>
-          </div>
-
-          <div className="summary-card" style={{ background: 'linear-gradient(to right, #36d1dc, #5b86e5)' }}>
-            <div className="summary-card-header">
-              <i className="fas fa-map-marker-alt summary-icon"></i>
-              <h3>Tổng Doanh Thu</h3>
-            </div>
-            <div className="summary-number">{totalRevenue !== null ? `$ ${totalRevenue.toLocaleString()}` : 'Loading...'}</div>
-          </div>
-        </div>
-        
-
         <div className="charts-container">
           <div className="quarterly-revenue">
             <h3>Doanh Thu Theo Phim</h3>
@@ -336,7 +328,9 @@ const DashboardAdmin = () => {
                     <td>{booking.status}</td>
                     <td>{booking.created_at}</td>
                     <td>
-                      <button className="btn btn-primary">Chi tiết</button>
+                      <Link to={`/admin/ordersdetail/${booking.booking_id}`} className="btn btn-primary">
+    Chi tiết
+  </Link>
                     </td>
                   </tr>
                 ))
