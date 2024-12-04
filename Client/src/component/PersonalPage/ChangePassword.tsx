@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Input, notification, Avatar } from 'antd';
+import React, { useState } from 'react';
+import { Avatar, Input, notification } from 'antd';
 import { z } from 'zod';  // Import zod
 import './ChangePassword.css';
 import Footer from '../Footer/Footer';
@@ -7,48 +7,27 @@ import Header from '../Header/Hearder';
 import { NavLink } from 'react-router-dom';
 import instance from '../../server';
 import { passwordSchema } from '../../utils/validationSchema';
+import { useUserContext } from '../../Context/UserContext';
+
 
 const ChangePassword: React.FC = () => {
-  const [avatar, setAvatar] = useState('https://cdn.moveek.com/bundles/ornweb/img/no-avatar.png');
+  const { userProfile, avatar } = useUserContext(); // Access userProfile and avatar from context
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [userProfile, setUserProfile] = useState<any>(null);
   const [errors, setErrors] = useState<any>({});
-
-  useEffect(() => {
-    const profileData = localStorage.getItem("user_profile");
-    if (profileData) {
-      const profile = JSON.parse(profileData);
-      const userId = profile.id;
-
-      const fetchUserProfile = async () => {
-        try {
-          const response = await instance.get(`/user/${userId}`);
-          if (response.data.status) {
-            setUserProfile(response.data.data);
-            setAvatar(response.data.data.avatar || "https://cdn.moveek.com/bundles/ornweb/img/no-avatar.png");
-          }
-        } catch (error) {
-          console.error("Error fetching user profile:", error);
-        }
-      };
-
-      fetchUserProfile();
-    }
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Xoá các lỗi cũ trước khi xác thực mới
+    // Clear previous errors
     setErrors({});
 
-    // Validate form với Zod schema
+    // Validate form with Zod schema
     try {
       passwordSchema.parse({ currentPassword, newPassword, confirmPassword });
 
-      // Nếu form hợp lệ, thực hiện việc đổi mật khẩu
+      // If valid, submit the form
       try {
         const response = await instance.post('/resetPassword', {
           current_password: currentPassword,
@@ -73,7 +52,7 @@ const ChangePassword: React.FC = () => {
       setNewPassword('');
       setConfirmPassword('');
     } catch (e: any) {
-      // Lấy lỗi từ Zod và cập nhật state để hiển thị trên UI
+      // Handle validation errors
       const zodErrors = e.errors.reduce((acc: any, error: any) => {
         acc[error.path[0]] = error.message;
         return acc;
@@ -116,7 +95,7 @@ const ChangePassword: React.FC = () => {
                     </div>
                     <div className="account-nav-item">
                       <span className="account-nav-title">
-                        <NavLink to="/movieticket" className={({ isActive }) => isActive ? 'active-link' : ''}>Vé</NavLink>
+                        <NavLink to="/ticketcinema" className={({ isActive }) => isActive ? 'active-link' : ''}>Vé</NavLink>
                       </span>
                     </div>
                     <div className="account-nav-item">

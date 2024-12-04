@@ -1,61 +1,36 @@
 import React, { useEffect, useState } from 'react';
 import './Personal.css'; // Import CSS
 import Footer from '../Footer/Footer';
-import Header from '../Header/Hearder';
-import instance from '../../server';
 import { Movie } from '../../interface/Movie';
-import { formatDistanceToNow } from 'date-fns'; // Thêm thư viện date-fns
+import { formatDistanceToNow } from 'date-fns'; // Add date-fns library
+import { useUserContext } from '../../Context/UserContext'; // Import the context
+import Header from '../Header/Hearder';
 
 const Personal: React.FC = () => {
-  const [avatar, setAvatar] = useState(
-    "https://cdn.moveek.com/bundles/ornweb/img/no-avatar.png"
-  );
-  const [userProfile, setUserProfile] = useState<any>(null);
+  const { userProfile, avatar, setUserProfile, handleUpdateProfile, handleAvatarUpload } = useUserContext();
   const [favoriteMovies, setFavoriteMovies] = useState<Movie[]>([]);
-  const [activities, setActivities] = useState<string[]>([]); // Lưu trữ hoạt động gần đây
-  const [visibleActivities, setVisibleActivities] = useState<string[]>([]); // Hoạt động hiển thị
-  const [showAllActivities, setShowAllActivities] = useState(false); // Trạng thái xem tất cả hoạt động
+  const [activities, setActivities] = useState<string[]>([]); // Store recent activities
+  const [visibleActivities, setVisibleActivities] = useState<string[]>([]); // Activities to show
+  const [showAllActivities, setShowAllActivities] = useState(false); // Show all activities state
 
   useEffect(() => {
-    const profileData = localStorage.getItem("user_profile");
-    if (profileData) {
-      const profile = JSON.parse(profileData);
-      const userId = profile.id;
+    if (userProfile) {
+      const movies = userProfile.favorite_movies || [];
+      setFavoriteMovies(movies);
 
-      // Lấy thông tin người dùng theo ID
-      const fetchUserProfile = async () => {
-        try {
-          const response = await instance.get(`/user/${userId}`);
-          if (response.data.status) {
-            const userProfileData = response.data.data;
-            setUserProfile(userProfileData);
-            setAvatar(
-              userProfileData.avatar ||
-              "https://cdn.moveek.com/bundles/ornweb/img/no-avatar.png"
-            );
-            const movies = userProfileData.favorite_movies || [];
-            setFavoriteMovies(movies);
-
-            // Thêm hoạt động yêu thích phim vào danh sách hoạt động
-            const newActivities = movies.map((movie: Movie) => {
-              const timeAgo = formatDistanceToNow(new Date(movie.created_at), { addSuffix: true });
-              return `${userProfileData.user_name} đã yêu thích phim: ${movie.movie_name} - ${timeAgo}`;
-            });
-            setActivities(newActivities);
-            setVisibleActivities(newActivities.slice(0, 3)); // Hiển thị 3 hoạt động đầu tiên
-          }
-        } catch (error) {
-          console.error("Lỗi khi lấy thông tin người dùng:", error);
-        }
-      };
-
-      fetchUserProfile();
+      // Add favorite movie activities to the activity list
+      const newActivities = movies.map((movie: Movie) => {
+        const timeAgo = formatDistanceToNow(new Date(movie.created_at), { addSuffix: true });
+        return `${userProfile.user_name} đã yêu thích phim: ${movie.movie_name} - ${timeAgo}`;
+      });
+      setActivities(newActivities);
+      setVisibleActivities(newActivities.slice(0, 3)); // Display the first 3 activities
     }
-  }, []);
+  }, [userProfile]);
 
   const handleSeeMore = () => {
     setShowAllActivities(true);
-    setVisibleActivities(activities); // Hiển thị tất cả hoạt động
+    setVisibleActivities(activities); // Show all activities
   };
 
   return (

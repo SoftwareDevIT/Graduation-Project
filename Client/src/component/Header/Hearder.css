@@ -27,7 +27,6 @@ bottom: 4px;
     display: flex;
     align-items: center;
     gap: 12px;
-    right: 49px !important;
     font-family: "Cerebri Sans", sans-serif; 
 }
 
@@ -295,6 +294,7 @@ bottom: 10px;
   }
   .thanhmenu{
     margin-top: 8px;
+    margin-left: -40px;
   }
   .header-left a{
     top:5px;
@@ -410,6 +410,9 @@ width: 149px !important;
 top:60px;
 font-size: 10px;
   }
+   .thanhmenu{
+    margin-left: 20px;
+   }
   
 }
 

@@ -1,26 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import instance from "../../../server";
 import { notification } from "antd";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import "./SeatMap.css";
+import { z } from "zod"; // Import Zod
+import { zodResolver } from "@hookform/resolvers/zod"; // Import zodResolver
 
-// Define Zod schema
+
+// Define Zod schema for validation
 const seatMapSchema = z.object({
-  seat_layout_id: z
-    .number()
-    .min(1, "Bố cục ghế là bắt buộc"),
-  row: z.string().min(1, "Số hàng là bắt buộc"),
+  seat_layout_id: z.number().min(1, "Bố cục ghế là bắt buộc"),
+  label: z.string().min(1, "Nhãn là bắt buộc"),
+  row: z.string().min(1, "Hàng là bắt buộc"),
   column: z
     .number()
-    .min(1, "Số cột là bắt buộc"),
+    .min(1, "Cột là bắt buộc")
+    .refine((val) => !isNaN(Number(val)), "Số cột phải là một số hợp lệ"),
   type: z.string().min(1, "Loại ghế là bắt buộc"),
-  is_double: z
-    .number()
-    .min(0, "Trạng thái ghế phải là 0 hoặc 1")
-    .max(1, "Trạng thái ghế phải là 0 hoặc 1"),
+  is_double: z.number().min(0, "Trạng thái ghế phải hợp lệ").max(1, "Trạng thái ghế phải hợp lệ"),
 });
 
 type SeatMapFormData = z.infer<typeof seatMapSchema>;
@@ -29,120 +26,55 @@ const SeatMapForm = () => {
   const { id } = useParams<{ id: string }>();
   const nav = useNavigate();
 
-  const [seatLayouts, setSeatLayouts] = useState<{ id: number; name: string }[]>([]);
-  const [seatMap, setSeatMap] = useState<any[][]>([]);
-  
-
+  // Integrating Zod with react-hook-form using zodResolver
   const {
     handleSubmit,
     register,
     formState: { errors },
     reset,
   } = useForm<SeatMapFormData>({
-    resolver: zodResolver(seatMapSchema),
+    resolver: zodResolver(seatMapSchema), // Use zodResolver here
   });
-
-  // Fetch seat layouts
-  useEffect(() => {
-    const fetchSeatLayouts = async () => {
-      try {
-        const { data } = await instance.get("/matrix");
-        setSeatLayouts(data.data);
-      } catch (error) {
-        notification.error({
-          message: "Lỗi khi tải bố cục ghế",
-        });
-      }
-    };
-
-    fetchSeatLayouts();
-  }, []);
 
   useEffect(() => {
     const fetchSeatMap = async () => {
       if (id) {
         try {
           const { data } = await instance.get(`/seat-map/${id}`);
-          reset(data.data);
+          reset(data.data); // Reset form with fetched data
         } catch (error) {
-          notification.error({
-            message: "Lỗi khi tải dữ liệu bản đồ ghế",
-          });
+          console.error("Error fetching seat map data:", error);
         }
       }
     };
 
-    fetchSeatMap();
+    fetchSeatMap(); // Fetch data if ID exists
   }, [id, reset]);
-
-  const handleSeatLayoutChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedId = Number(e.target.value);
-    if (!selectedId) {
-      setSeatMap([]);
-      return;
-    }
-
-    try {
-      const { data } = await instance.get(`/matrix/${selectedId}`);
-      const { rows, columns, row_regular_seat, row_vip_seat, row_couple_seat } = data.data;
-
-      const seatLayout = [];
-      for (let i = 0; i < rows; i++) {
-        const row = [];
-        let seatType = "Regular";
-
-        if (i < row_regular_seat) {
-          seatType = "Regular";
-        } else if (i >= row_regular_seat && i < row_regular_seat + row_vip_seat) {
-          seatType = "VIP";
-        } else if (i >= row_regular_seat + row_vip_seat) {
-          seatType = "Couple";
-        }
-
-        for (let j = 0; j < columns; j++) {
-          row.push({
-            name: `${String.fromCharCode(65 + i)}${j + 1}`,
-            type: seatType,
-            is_double: seatType === "Couple" ? 1 : 0,
-          });
-        }
-        seatLayout.push(row);
-      }
-      setSeatMap(seatLayout);
-    } catch (error) {
-      notification.error({
-        message: "Lỗi khi lấy dữ liệu ghế",
-      });
-    }
-  };
 
   const handleFormSubmit = async (data: SeatMapFormData) => {
     try {
-      const requestData = {
-        ...data,
-        column: Number(data.column),
-        is_double: Number(data.is_double),
-      };
-
-      await instance.put(`/seat-map/${id}`, requestData);
-      notification.success({
-        message: "Cập nhật bản đồ ghế thành công!",
-      });
-      nav("/admin/seatmap");
+      // Submit the seat map data (Create or Update)
+      if (id) {
+        // Update seat map
+        await instance.put(`/seat-map/${id}`, data);
+        notification.success({
+          message: "Cập nhật bố cục ghế thành công!",
+        });
+      } else {
+        // Create new seat map
+        await instance.post("/seat-map", data);
+        notification.success({
+          message: "Thêm bố cục ghế thành công!",
+        });
+      }
+      nav("/admin/seat-map"); // Redirect to the seat map list page
     } catch (error) {
+      console.error("Error submitting seat map data:", error);
       notification.error({
-        message: "Lỗi khi gửi dữ liệu bản đồ ghế",
+        message: "Lỗi khi gửi dữ liệu bố cục ghế",
       });
     }
   };
-  const handleSeatClick = (seat: any) => {
-    console.log("Thông tin ghế:", seat);
-    notification.info({
-      message: "Thông tin ghế",
-      description: `Tên ghế: ${seat.name}, Loại: ${seat.type}, Ghế đôi: ${seat.is_double ? "Có" : "Không"}`,
-    });
-  };
-  
 
   return (
     <div className="container mt-5">
@@ -150,68 +82,98 @@ const SeatMapForm = () => {
         onSubmit={handleSubmit(handleFormSubmit)}
         className="shadow p-4 rounded bg-light"
       >
-        <h1 className="text-center mb-4">Cập nhật Bản đồ ghế</h1>
+        <h1 className="text-center mb-4">
+          {id ? "Cập nhật Bố cục ghế" : "Thêm Bố cục ghế"}
+        </h1>
 
+        {/* Seat Layout ID */}
         <div className="mb-3">
           <label htmlFor="seat_layout_id" className="form-label">
             Bố cục ghế
           </label>
-          <select
+          <input
+            type="number"
             className={`form-control ${errors.seat_layout_id ? "is-invalid" : ""}`}
             {...register("seat_layout_id", { valueAsNumber: true })}
-            onChange={handleSeatLayoutChange}
-          >
-            <option value="">Chọn bố cục ghế</option>
-            {seatLayouts.map((layout) => (
-              <option key={layout.id} value={layout.id}>
-                {layout.name}
-              </option>
-            ))}
-          </select>
-          {errors.seat_layout_id && (
-            <div className="invalid-feedback">{errors.seat_layout_id.message}</div>
-          )}
+          />
+          {errors.seat_layout_id && <div className="invalid-feedback">{errors.seat_layout_id.message}</div>}
         </div>
 
-        <div className="seat-map">
-          {seatMap.length > 0 ? (
-            <div className="seat-rows">
-              {seatMap.map((row, rowIndex) => (
-                <div key={rowIndex} className="seat-row">
-                  <div className="seat-row-label">{String.fromCharCode(65 + rowIndex)}</div>
-                  <div className="seats">
-                    {row.map((seat, colIndex) => (
-                      <div
-                        key={colIndex}
-                        className={`seat ${
-                          seat.type === "VIP"
-                            ? "seat-vip"
-                            : seat.type === "Couple"
-                            ? "seat-couple"
-                            : "seat-regular"
-                        }`}
-                        onClick={() => handleSeatClick(seat)} 
-                      >
-                        {seat.name}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p>Chọn bố cục ghế để hiển thị</p>
-          )}
+        {/* Label */}
+        <div className="mb-3">
+          <label htmlFor="label" className="form-label">
+            Nhãn
+          </label>
+          <input
+            type="text"
+            className={`form-control ${errors.label ? "is-invalid" : ""}`}
+            {...register("label")}
+          />
+          {errors.label && <div className="invalid-feedback">{errors.label.message}</div>}
+        </div>
+
+        {/* Row */}
+        <div className="mb-3">
+          <label htmlFor="row" className="form-label">
+            Hàng
+          </label>
+          <input
+            type="text"
+            className={`form-control ${errors.row ? "is-invalid" : ""}`}
+            {...register("row")}
+          />
+          {errors.row && <div className="invalid-feedback">{errors.row.message}</div>}
+        </div>
+
+        {/* Column */}
+        <div className="mb-3">
+          <label htmlFor="column" className="form-label">
+            Cột
+          </label>
+          <input
+            type="number"
+            className={`form-control ${errors.column ? "is-invalid" : ""}`}
+            {...register("column", { valueAsNumber: true })}
+          />
+          {errors.column && <div className="invalid-feedback">{errors.column.message}</div>}
+        </div>
+
+        {/* Type */}
+        <div className="mb-3">
+          <label htmlFor="type" className="form-label">
+            Loại ghế
+          </label>
+          <input
+            type="text"
+            className={`form-control ${errors.type ? "is-invalid" : ""}`}
+            {...register("type")}
+          />
+          {errors.type && <div className="invalid-feedback">{errors.type.message}</div>}
+        </div>
+
+        {/* Double Seat */}
+        <div className="mb-3">
+          <label htmlFor="is_double" className="form-label">
+            Trạng thái ghế
+          </label>
+          <select
+            className={`form-control ${errors.is_double ? "is-invalid" : ""}`}
+            {...register("is_double",{ valueAsNumber: true })}
+          >
+            <option value={0}>Một ghế</option>
+            <option value={1}>Ghế đôi</option>
+          </select>
+          {errors.is_double && <div className="invalid-feedback">{errors.is_double.message}</div>}
         </div>
 
         <div className="d-flex justify-content-between">
           <button type="submit" className="btn btn-primary">
-            Cập nhật
+            {id ? "Cập nhật" : "Thêm"}
           </button>
           <button
             type="button"
             className="btn btn-danger"
-            onClick={() => nav("/admin/seatmap")}
+            onClick={() => nav("/admin/seat-map")}
           >
             Hủy
           </button>
@@ -222,4 +184,3 @@ const SeatMapForm = () => {
 };
 
 export default SeatMapForm;
-

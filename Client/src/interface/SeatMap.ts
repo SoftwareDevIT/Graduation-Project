@@ -1,7 +1,7 @@
 export interface SeatMap1 {
     id: number;
     seat_layout_id: number;
-    lable:string;
+    label: string;  // Sửa từ "lable" thành "label" để đúng chính tả
     row: string;
     column: number;
     type: string;

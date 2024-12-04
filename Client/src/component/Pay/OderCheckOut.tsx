@@ -22,12 +22,19 @@ export interface LocationState {
     selectedCombos :Array<{id:string,quantity:number}>
   }
 const OrderCheckout = () => {
+    
     const location = useLocation();
     const [voucherCode, setVoucherCode] = useState<string>(""); // Lưu mã voucher
     const [discount, setDiscount] = useState<number | null>(null); // Lưu giá trị giảm giá
     const [finalPrice, setFinalPrice] = useState<number | null>(null); // Lưu giá trị giá sau giảm giá
     const [voucherApplied, setVoucherApplied] = useState<boolean>(false); // Trạng thái kiểm tra voucher đã áp dụng hay chưa
     const [isVoucherVisible, setIsVoucherVisible] = useState<boolean>(false);
+    const [isTableVisible, setIsTableVisible] = useState(false);
+
+    // Hàm xử lý sự kiện click vào <h3> để thay đổi trạng thái hiển thị bảng
+    const toggleTableVisibility = () => {
+      setIsTableVisible(!isTableVisible);
+    };
     
     const navigate = useNavigate();
     const {
@@ -168,6 +175,7 @@ const OrderCheckout = () => {
             message.error("Có lỗi xảy ra khi đặt vé.");
             console.error("Error during booking:", error);
         }
+        
     };
 
     return (
@@ -237,35 +245,38 @@ const OrderCheckout = () => {
                             </>
                         )}
                     </div>
+                    <div>
+      {/* Thêm sự kiện onClick vào <h3> */}
+      <h4 onClick={toggleTableVisibility} className='diemgiamgia'>Điểm giảm giá FlickHive</h4>
+
+      {/* Bảng khung-diem-poly chỉ hiển thị khi isTableVisible là true */}
+      {isTableVisible && (
         <div className="khung-diem-poly">
-  <h3 >Điểm giảm giá FlickHive</h3>
-
-  <div className="table-responsive">
-  <table className="table table-bordered bang-diem-poly">
-    <thead>
-      <tr>
-        <th>Điểm hiện có</th>
-        <th>Nhập điểm</th>
-        <th>Số tiền được giảm</th>
-        <th>Hành động</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>191.600</td>
-        <td>
-          <input type="number" className="nhap-diem" value="100000" />
-        </td>
-        <td>100.000 Vnđ</td>
-        <td>
-          <button className="btn btn-danger nut-huy">Hủy</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-</div>
+          <table>
+            <thead>
+              <tr>
+                <th>Mã giảm giá</th>
+                <th>Điều kiện</th>
+                <th>Giảm giá</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Flick10</td>
+                <td>Giảm 10% cho lần mua đầu tiên</td>
+                <td>10%</td>
+              </tr>
+              <tr>
+                <td>Flick20</td>
+                <td>Giảm 20% cho hóa đơn trên 500k</td>
+                <td>20%</td>
+              </tr>
+        
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
 
 
 
@@ -342,10 +353,12 @@ const OrderCheckout = () => {
                                 <label htmlFor="phone">Số điện thoại</label>
                                 <input type="tel" id="phone" placeholder="Nhập số điện thoại" required />
                             </div>
-                            <div className="form-group checkbox-group">
-                                <input type="checkbox" id="create-account"/>
-                                <label htmlFor="create-account">Tạo tài khoản với email và số điện thoại này</label>
-                            </div>
+                            <div className="nhom-form nhom-checkbox">
+    <input type="checkbox" id="tao-tai-khoan" />
+    <label htmlFor="tao-tai-khoan">Tạo tài khoản với email và số điện thoại này.</label>
+</div>
+
+
                         </form>
                     </div>
                 </div>

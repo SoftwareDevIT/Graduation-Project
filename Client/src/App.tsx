@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom";
 
 
 import OrderCheckout from "./component/Pay/OderCheckOut";
-// import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
+
 import Headerticket from "./component/Headerticket/Headerticket";
 import RegisterCinema from "./Page/Client/RegisterCinema";
 import LoginCinema from "./Page/Client/LoginCinema";
@@ -49,7 +49,7 @@ import PrivateRoute from "./PrivateRoute";
 import MovieShowing from "./component/Movies/MovieShowing";
 import SupportCenter from "./component/Support/Support";
 import PostDetail from "./component/Post/PostDetail";
-import Credits from "./component/PersonalPage/Credits";
+
 import Deponsit from "./component/PersonalPage/Deposit";
 import ForgetPass from "./component/Login/ForgetPass";
 
@@ -100,7 +100,9 @@ import SeatMapForm from "./component/Admin/SeatMap/SeatMapForm";
 import OrdersDetailManager from "./Page/Admin/Orders/OrdersDetail";
 import WebsiteSettingsManager from "./Page/Admin/WebsiteSettings/WebsiteSettingManager";
 import ShowtimesAuto from "./Page/Admin/Showtimes/ShowtimesAuto";
-
+import Pointaccumulation from "./component/PersonalPage/Pointaccumulation";
+import MovieTicket from "./component/PersonalPage/MovieTicket";
+import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
 
 
 
@@ -119,7 +121,9 @@ function App() {
         <Route path="/buy-ticket" element={<Bookcinematickets />} />
         <Route path="/orders" element={<PrivateRoute><OrderPage /></PrivateRoute>} />
         <Route path="/pay" element={ <PrivateRoute><OrderCheckout /></PrivateRoute> } />
-        {/* <Route path="/seat" element={<CinemaSeatSelection />} /> */}
+
+        <Route path="/seat" element={<CinemaSeatSelection />} />
+
         <Route path="/movie-detail/:slug" element={<ContentMovie />} />
         <Route path="/schedule/:slug" element={<LichChieu />} />
         <Route path="/reviews/:slug" element={<DanhGia />} />
@@ -129,6 +133,7 @@ function App() {
         <Route path="/confirm" element={<EmailConfirm />} />
      
         <Route path="/*" element={<NotFound />} />
+        <Route path="/movieticket" element={<MovieTicket/>} />
 
 
         <Route path="/filmnews" element={<FilmNews/>} />
@@ -147,16 +152,21 @@ function App() {
         <Route path="/Personal" element={<PrivateRoute><Personal /></PrivateRoute>} />
  
         <Route path="/ticketcinema" element={ <PrivateRoute><TicketCinema/></PrivateRoute>} />
-        <Route path="/credits" element={ <PrivateRoute><Credits /></PrivateRoute>} />
-        <Route path="/ChangePassword" element={ <PrivateRoute><Credits /><ChangePassword /></PrivateRoute>} />
+
+        <Route path="/ChangePassword" element={ <PrivateRoute><ChangePassword /></PrivateRoute>} />
         <Route path="/register" element={<RegisterCinema />} />
         <Route path="/login" element={<LoginCinema />} />
         <Route path="/movieshowing" element={<MovieShowing/>} />
+        <Route path="/seat" element={<CinemaSeatSelection/>} />
       
         <Route path="/deponsit" element={<Deponsit/>} />
         <Route path="/forgetpass" element={<ForgetPass/>} />
         <Route path="/otp" element={<Otp/>} />
         <Route path="/resetPassword" element={<ResetPasswod/>} />
+
+        <Route path="/test" element={<Pointaccumulation/>} />
+    
+
        
       
     
@@ -213,7 +223,8 @@ function App() {
         <Route path="/admin/rank" element={<PrivateRoute allowedRoles={['admin']}><RankManager /></PrivateRoute>} />
         <Route path="/admin/rank/add" element={<PrivateRoute allowedRoles={['admin']}><RankForm /></PrivateRoute>} />
         <Route path="/admin/rank/edit/:id" element={<PrivateRoute allowedRoles={['admin']}><RankForm /></PrivateRoute>} />
-        <Route path="/admin/website-settings/update" element={<PrivateRoute allowedRoles={['admin']}><WebsiteSettingsManager /></PrivateRoute>} />
+        <Route path="/admin/website-settings" element={<PrivateRoute allowedRoles={['admin']}><WebsiteSettingsManager /></PrivateRoute>} />
+        <Route path="/admin/website-settings/update/:id" element={<PrivateRoute allowedRoles={['admin']}><WebsiteSettingsManager /></PrivateRoute>} />
         <Route path="/admin//website-settings/reset" element={<PrivateRoute allowedRoles={['admin']}><WebsiteSettingsManager /></PrivateRoute>} />
       
         <Route path="/admin/posts" element={<PrivateRoute allowedRoles={['admin']}><PostsManager /></PrivateRoute>} />

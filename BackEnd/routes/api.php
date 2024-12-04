@@ -97,7 +97,7 @@ Route::middleware(['auth:sanctum', 'web'])->group(function () {
     Route::post('selectSeats', [BookingController::class, 'selectSeats']);
     Route::post('/book-ticket', [BookingController::class, 'bookTicket']);
     Route::middleware(['auth:sanctum', 'web'])->group(function () {
-        Route::post('favorites/{movie}', [FavoriteController::class, 'store']);            // Thêm phim yêu thích
+        Route::post('favorites/{movie}', [FavoriteController::class, 'store']);                 // Thêm phim yêu thích
         Route::delete('favorites/{movie}', [FavoriteController::class, 'destroy']);             // Xóa phim yêu thích
         Route::apiResource('user', AuthController::class);
         Route::get('/user', function (Request $request) {
@@ -146,15 +146,14 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     // bộ lọc thông kê doanh thu
     Route::get('filter-DashBoarch', [FilterOfDashBoarchController::class, 'filterOfDashBoarch']);
 
-   
-    Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
-
-
-});
 //Trang dashboard
-Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
-Route::post('/website-settings/update', [WebsiteSettingController::class, 'update']); //Cập Nhập Website Settings
-Route::post('/website-settings/reset', [WebsiteSettingController::class, 'reset']); //Cập Nhập Website Settings
+    Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
+});
+
+//Cấu hình website
+Route::post('/website-settings', [WebsiteSettingController::class, 'index']);               //Danh sách Website Settings
+Route::post('/website-settings/update/{id}', [WebsiteSettingController::class, 'update']);  //Cập Nhập Website Settings
+Route::post('/website-settings/reset', [WebsiteSettingController::class, 'reset']);         //Cập Nhập Website Settings
 
 Route::post('/resetPassword', [ResetPasswordController::class, 'resetPassword'])->middleware('auth:sanctum');
 
@@ -164,12 +163,12 @@ Route::get('/movie/search/{movie_name}', [MovieController::class, 'search']);   
 
 Route::get('showtimes/movie/{movie_name}', [ShowtimeController::class, 'showtimeByMovieName']);     // Showtimes by movie name
 Route::get('/filterByDate', [FilterByDateController::class, 'filterByDate']);                       // Phim lọc theo ngày
-Route::get('filterMovie/{id}', [CinemaController::class, 'filterMovie']);                            // Phim lọc của điện ảnh
+Route::get('filterMovie/{id}', [CinemaController::class, 'filterMovie']);                           // Phim lọc của điện ảnh
 Route::get('/movie/{category}', [MovieController::class, 'movieByCategory']);                       // Lọc Phim theo thể loại
 Route::get('/new/{category}', [NewController::class, 'newByCategory']);                             // Lọc chuyên đề theo thể loại
 
 Route::get('/fillMovies/upcoming', [MovieController::class, 'getUpcomingMovies']);                  // Lọc Phim sắp chiếu
-Route::get('/fillMovies/comingSoon', [MovieController::class, 'getComingSoonMovie']);                  // Lọc Phim chiếu sớm
+Route::get('/fillMovies/comingSoon', [MovieController::class, 'getComingSoonMovie']);               // Lọc Phim chiếu sớm
 Route::get('/filterByDateByMovie', [FilterByDateController::class, 'filterByDateByMovie']);         // lọc rạp theo phim và ngày và khu vực
 Route::get('cinema-by-location/{id}', [CinemaController::class, 'showCinemaByLocation']);
 Route::get('filterMovieByNew', [FilterMovieByNewController::class, 'filterMovieByNew']);
@@ -179,9 +178,9 @@ Route::get('filterMovieByNew', [FilterMovieByNewController::class, 'filterMovieB
 Route::get('filterNewByActor/{actor}', [ActorController::class, 'filterNewByActor']);                // Lọc bài viết liên quan tới diễn viễn
 Route::get('filterNewByDictor/{director}', [DirectorController::class, 'filterNewByDictor']);        // Lọc bài viết liên quan tới đạo diễn
 Route::get('filterNewByMovie/{movie}', [MovieController::class, 'filterNewByMovie']);                // Lọc bài viết liên quan tới phim
-Route::get('ratings/{movie}', [RatingController::class, 'show']);                                   // Xem dánh giá phim
-Route::get('rating', [RatingController::class, 'index']);                                           // Xem all dánh giá
-Route::get('filterMoviePopular', [MovieController::class, 'moviePopular']);                // Lọc bài viết liên quan tới phim
+Route::get('ratings/{movie}', [RatingController::class, 'show']);                                    // Xem dánh giá phim
+Route::get('rating', [RatingController::class, 'index']);                                            // Xem all dánh giá
+Route::get('filterMoviePopular', [MovieController::class, 'moviePopular']);                          // Lọc bài viết liên quan tới phim
 
 Route::apiResource('order', OrderController::class);
 
@@ -224,4 +223,4 @@ Route::apiResource('ranks', RankContrller::class);
 
 
 
-Route::get('/env-config',[ConfigController::class,'envConfig']);
+Route::get('/env-config', [ConfigController::class, 'envConfig']);

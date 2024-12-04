@@ -116,23 +116,28 @@ const SeatLayoutDashboard = () => {
             title: 'Hành Động',
             key: 'action',
             className: 'text-center',
-            render: (text: any, seatLayout: SeatLayout) => (
-                <div className="d-flex justify-content-around">
-                    <Link to={`/admin/matrix/edit/${seatLayout.id}`}>
-                        <Button type="primary" icon={<EditOutlined />} />
-                    </Link>
-                    <Popconfirm
-                        title="Bạn có chắc chắn muốn xóa layout ghế này?"
-                        onConfirm={() => handleDelete(seatLayout.id)}
-                        okText="Có"
-                        cancelText="Không"
-                    >
-                        <Button danger icon={<DeleteOutlined />} />
-                    </Popconfirm>
-                </div>
-            ),
+            render: (text: any, record: SeatLayout, index: number) => {
+                // Assuming you have `seatMap` available in your component
+                const seatMap = seatLayouts.find(layout => layout.id === record.id); // Adjust logic to match your data structure
+                return (
+                    <div className="d-flex justify-content-around">
+                        <Link to={`/admin/seatmap/edit/${seatMap?.id}`}>
+                            <Button type="primary" icon={<EditOutlined />} />
+                        </Link>
+                        <Popconfirm
+                            title="Bạn có chắc chắn muốn xóa layout ghế này?"
+                            onConfirm={() => handleDelete(record.id)}
+                            okText="Có"
+                            cancelText="Không"
+                        >
+                            <Button danger icon={<DeleteOutlined />} />
+                        </Popconfirm>
+                    </div>
+                );
+            },
         },
     ];
+    
 
     return (
         <div className="container mt-5">
