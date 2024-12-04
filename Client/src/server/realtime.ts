@@ -16,7 +16,7 @@ async function initializeEcho() {
       key: config.PUSHER_APP_KEY,
       cluster: config.PUSHER_APP_CLUSTER,
       forceTLS: config.PUSHER_SCHEME === "https", // Sử dụng TLS nếu backend sử dụng HTTPS
-    //   wsHost: config.PUSHER_HOST || undefined, // Cấu hình tùy chỉnh cho host nếu có
+      wsHost: config.PUSHER_HOST || undefined, // Cấu hình tùy chỉnh cho host nếu có
       wsPort: config.PUSHER_PORT || undefined, // Cổng WebSocket
       wssPort: config.PUSHER_PORT || undefined, // Cổng WebSocket bảo mật
       enabledTransports: ["ws", "wss"], // Cung cấp các giao thức ws và wss

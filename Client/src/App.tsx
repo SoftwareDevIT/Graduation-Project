@@ -103,6 +103,7 @@ import ShowtimesAuto from "./Page/Admin/Showtimes/ShowtimesAuto";
 import Pointaccumulation from "./component/PersonalPage/Pointaccumulation";
 import MovieTicket from "./component/PersonalPage/MovieTicket";
 import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
+import Community from "./component/Community/Community";
 
 
 
@@ -164,6 +165,7 @@ function App() {
         <Route path="/otp" element={<Otp/>} />
         <Route path="/resetPassword" element={<ResetPasswod/>} />
         <Route path="/test" element={<Pointaccumulation/>} />
+        <Route path="/community" element={<Community/>} />
     
        
       

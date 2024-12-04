@@ -35,10 +35,41 @@ const Community: React.FC = () => {
         });
       }
     };
+    
     fetchRatings();
   }, []);
 
-  const handleFavoriteToggle = async (movieId: string | number) => {
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        try {
+          const response = await instance.get("/user", {
+            
+          });
+  console.log('phim:',response)
+          const favoriteMovies = response.data.favorite_movies.reduce(
+            (acc: { [key: string]: boolean }, movie: any) => {
+              acc[movie.id] = true;
+              return acc;
+            },
+            {}
+          );
+  
+          setFavorites(favoriteMovies); // Cập nhật danh sách yêu thích
+        } catch (error) {
+          console.error("Lỗi tải danh sách yêu thích:", error);
+        }
+      }
+    };
+  
+    fetchFavorites();
+  }, []);
+  
+
+
+  
+  const handleFavoriteToggle = async (movieId: number) => {
     const token = localStorage.getItem("token");
     if (!token) {
       notification.warning({
@@ -47,42 +78,45 @@ const Community: React.FC = () => {
       });
       return;
     }
+  
     try {
       if (favorites[movieId]) {
+        // Xóa khỏi danh sách yêu thích
         await instance.delete(`/favorites/${movieId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
+  
         notification.success({
-          message: "Xóa khỏi yêu thích thành công",
+          message: "Thành công",
           description: "Phim đã được xóa khỏi danh sách yêu thích!",
         });
       } else {
+        // Thêm vào danh sách yêu thích
         await instance.post(`/favorites/${movieId}`, {}, {
           headers: { Authorization: `Bearer ${token}` },
         });
+  
         notification.success({
-          message: "Thêm vào yêu thích thành công",
+          message: "Thành công",
           description: "Phim đã được thêm vào danh sách yêu thích!",
         });
       }
+  
       setFavorites((prev) => ({ ...prev, [movieId]: !prev[movieId] }));
-    } catch {
+    } catch (error) {
+      console.error("Lỗi xử lý yêu thích phim:", error);
       notification.error({
         message: "Lỗi",
         description: "Có lỗi xảy ra khi xử lý yêu thích phim.",
       });
     }
   };
+  
+  
   const handleShowMore = () => {
     setVisibleRatings((prev) => prev + 5); // Mỗi lần nhấn tăng thêm 5 đánh giá
   };
 
-  const critics = [
-    { avatar: "https://via.placeholder.com/50", name: "Bùi An", description: "Phóng viên (HDVietnam)" },
-    { avatar: "https://via.placeholder.com/50", name: "Đào Bội Tú", description: "Phê bình phim tự do" },
-    { avatar: "https://via.placeholder.com/50", name: "Đào Diệu Loan", description: "Phóng viên tự do" },
-    { avatar: "https://via.placeholder.com/50", name: "Gwens Nghé", description: "Phê bình - phân tích phim" },
-  ];
 
   return (
     <>
