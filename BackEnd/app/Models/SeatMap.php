@@ -12,6 +12,9 @@ class SeatMap extends Model
         'description',
         'matrix_row',
         'matrix_column',
+        'row_regular_seat',
+        'row_vip_seat',
+        'row_couple_seat',
         'seat_structure',
     ];
 

@@ -18,6 +18,9 @@ class SeatMapSeeder extends Seeder
                 'description' => 'A typical cinema hall with Regular and VIP seats.',
                 'matrix_row' => 8,
                 'matrix_column' => 10,
+                'row_regular_seat' => 5,
+                'row_vip_seat' => 5,
+                'row_couple_seat' => 2,
                 'seat_structure' => json_encode($this->generateSeatStructure(8, 10, [
                     'Regular' => [1, 6],
                     'VIP' => [7, 8],
@@ -30,6 +33,9 @@ class SeatMapSeeder extends Seeder
                 'description' => 'Premium cinema hall with Couple and VIP seats.',
                 'matrix_row' => 6,
                 'matrix_column' => 8,
+                'row_regular_seat' => 5,
+                'row_vip_seat' => 5,
+                'row_couple_seat' => 2,
                 'seat_structure' => json_encode($this->generateSeatStructure(6, 8, [
                     'Couple' => [1, 2],
                     'VIP' => [3, 6],

@@ -17,6 +17,9 @@ return new class extends Migration
             $table->string('description');
             $table->integer('matrix_row');
             $table->integer('matrix_column');
+            $table->integer('row_regular_seat');
+            $table->integer('row_vip_seat');
+            $table->integer('row_couple_seat');
             $table->json('seat_structure')->nullable();
             $table->timestamps();
         });
