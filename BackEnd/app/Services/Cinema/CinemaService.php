@@ -18,12 +18,8 @@ class CinemaService
     use AuthorizesInService;
     public function index(): Collection
     {
-
-        // return Cinema::all();
-
         return Cinema::with('Location')->orderByDesc('created_at')
             ->get();
-
     }
 
 

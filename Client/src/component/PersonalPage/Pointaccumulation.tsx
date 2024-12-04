@@ -36,10 +36,16 @@ const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 };
 
 const filteredTransactions = pointHistories
-  .filter((transaction) =>
-    transaction.created_at.includes(searchTerm)
-  )
-  .slice(0, selectedItems); // Giới hạn số lượng mục hiển thị
+  .filter((transaction) => {
+    const searchLower = searchTerm.toLowerCase();
+    return (
+      transaction.created_at.toLowerCase().includes(searchLower) ||
+      transaction.status.toLowerCase().includes(searchLower) ||
+      (transaction.points_earned?.toString().includes(searchLower) || "") ||
+      (transaction.points_used?.toString().includes(searchLower) || "")
+    );
+  })
+  .slice(0, selectedItems); // Giới hạn số lượng mục hiển thị // Giới hạn số lượng mục hiển thị
 
  
 

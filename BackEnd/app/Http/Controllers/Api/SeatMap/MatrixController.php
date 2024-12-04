@@ -37,6 +37,13 @@ class MatrixController extends Controller
             return $e->getMessage();
         }
     }
+    public function status(int $id)
+    {
+        $movie = SeatLayout::findOrFail($id);
+        $movie->status = $movie->status == 1 ? 0 : 1;
+        $movie->save();
+        return $this->success('', 'Cập nhật trạng thái thành công.', 200);
+    }
 
 
     public function store(StoreMatrixRequest $request)

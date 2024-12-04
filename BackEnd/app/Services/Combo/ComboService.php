@@ -15,9 +15,7 @@ class ComboService
     use AuthorizesInService;
     public function index(): Collection
     {
-
         return Combo::orderByDesc('created_at')->get();
-
     }
 
 

@@ -107,7 +107,7 @@ import MovieTicket from "./component/PersonalPage/MovieTicket";
 
 
 
-import SeatLayout from "./component/SeatMap/test";
+
 import Community from "./component/Community/Community";
 
 import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
