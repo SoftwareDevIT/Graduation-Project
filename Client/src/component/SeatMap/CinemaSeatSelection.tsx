@@ -9,19 +9,18 @@ import { Room } from "../../interface/Room";
 import { message, Spin } from 'antd';
 import { Modal } from 'antd';
 import { Movie } from "../../interface/Movie";
+import Pusher from "pusher-js";
 import initializeEcho from "../../server/realtime";
-import Echo from "laravel-echo";
-
 type Seat = {
   id: number;
-  label: string;
+  label:string;
   seat_layout_id: number;
-  row: string | undefined;
+  row: string | undefined; 
   column: number;
   type: "Regular" | "VIP" | "Couple";
   status?: "available" | "unavailable";
-  isSelected: boolean;
 };
+
 type Seats = {
   [row: string]: Seat[]; 
 };
@@ -37,31 +36,32 @@ type SeatLayoutResponse = {
   room: Room;
   movie:Movie;
 };
-interface SeatReservedData {
- seats:[]
+interface SeatStatusUpdatedEvent {
+  seat_name: string;
+  status: string;
 }
 
 
-// const CinemaSeatSelection: React.FC = () => {
-//   const location = useLocation();
-//   const navigate = useNavigate(); // Khai báo useNavigate để điều hướng
-//   const { movieName, cinemaName, showtime, showtimeId, cinemaId, price } =
-//     location.state || {};
+const CinemaSeatSelection: React.FC = () => {
+  const location = useLocation();
+  const navigate = useNavigate(); // Khai báo useNavigate để điều 
+ 
+  
+  const { movieName, cinemaName, showtime, showtimeId, cinemaId, price } =
+    location.state || {};
 
   const [selectedSeats, setSelectedSeats] = useState<Map<string, number[]>>(
     new Map()
   );
   const [reservedSeats, setReservedSeats] = useState<Set<string>>(new Set());
-  const [roomData, setRoomData] = useState<Room | null>(null);
   const [seatData, setSeatData] = useState<SeatLayoutResponse | null>(null);
-  const [seats, setSeats] = useState<Seat[]>([]); // Giả sử Seat là kiểu dữ liệu của một ghế
 
-  const [error, setError] = useState("");
 
-  const [echoInstance, setEchoInstance] = useState<Echo<'pusher'> | null>(null);
-
-  const [status, setStatus] = useState("Initializing...");
   
+  const [error, setError] = useState("");
+  
+
+
 
   useEffect(() => {
     const fetchRoomAndSeats = async () => {
@@ -74,72 +74,36 @@ interface SeatReservedData {
         setSeatData(seatLayoutData);
   
         // Fetching seat data
-        try {
-          const seatResponse = await instance.get(`/seat/${showtimeId}`);
-          const seatDataseat = seatResponse.data;
-          
-          const reservedSeatSet = new Set<string>();
-          seatDataseat.data.forEach((seat: { seat_name: string; status: string }) => {
-            if (seat.status === "Reserved Until" || seat.status === "Booked") {
-              reservedSeatSet.add(seat.seat_name);
-            }
-          });
+        const seatResponse = await instance.get(`/seat/${showtimeId}`);
+        const seatData = seatResponse.data;
   
-          // Set reserved seats data
-          setReservedSeats(reservedSeatSet);
-        } catch (seatError) {
-          console.error("Error fetching seat data", seatError);
-          setReservedSeats(new Set<string>());
-        }
+        const reservedSeatSet = new Set<string>();
+        seatData.data.forEach((seat: { seat_name: string; status: string }) => {
+          if (seat.status === "Reserved Until" || seat.status === "Booked") {
+            reservedSeatSet.add(seat.seat_name);
+          }
+        });
   
-        // Khởi tạo Echo và lắng nghe sự kiện realtime
-        const setupRealtime = async () => {
-          const echo = await initializeEcho();
-          console.log("Connected to Pusher!", echo);
-          if (echo) {
-            setEchoInstance(echo);
-            setStatus("Connected to Pusher!");
-            const roomId = response.data.data.room.id;
-            // Kết nối với channel tương ứng
-            echo.connector.pusher.connection.bind('connected', function () {
-              console.log('Pusher connection established');
-          });
-          
-       
-          
-            const channel = echo.private(`seats-${roomId}`); 
-            console.log("Connected to channel:", channel);
+        // Set reserved seats data
+        setReservedSeats(reservedSeatSet);
   
-            // Lắng nghe sự kiện SeatSelected
-            channel.listen("SeatSelected", (eventData: SeatReservedData) => {
-              console.log("Received seats data:", eventData);
-  
-              if (eventData && eventData.seats) {
-                console.log("Received selected seats:", eventData.seats);
-  
-                // Cập nhật state với Map
-                const newSelectedSeats = new Map(selectedSeats); // Sao chép bản đồ cũ
-                newSelectedSeats.set(roomId, eventData.seats); // Thêm ghế mới vào Map theo roomId
-  
-                setSelectedSeats(newSelectedSeats); // Cập nhật lại state
-                updateSeatsSelection(eventData.seats); // Cập nhật ghế trong lưới
-              }
+        // Initialize Laravel Echo and listen for seat changes
+        const echo = await initializeEcho(); // Fetch Echo configuration from API
+        if (echo) {
+          echo.channel(`showtime.${showtimeId}`)
+            .listen('SeatStatusUpdated', (event: SeatStatusUpdatedEvent) => {
+              const { seat_name, status } = event; // Get the seat's new status
+              setReservedSeats(prev => {
+                const updated = new Set(prev);
+                if (status === "Reserved" || status === "Booked") {
+                  updated.add(seat_name);
+                } else {
+                  updated.delete(seat_name);
+                }
+                return updated;
+              });
             });
-          } else {
-            setStatus("Failed to connect.");
-          }
-        };
-  
-        if (!echoInstance) {
-          setupRealtime();
         }
-  
-        // Cleanup khi component bị unmount
-        return () => {
-          if (echoInstance) {
-            echoInstance.disconnect();
-          }
-        };
       } catch (error) {
         console.error("Error fetching room data", error);
         setError("Không thể tải dữ liệu, vui lòng thử lại!");
@@ -147,83 +111,54 @@ interface SeatReservedData {
     };
   
     fetchRoomAndSeats();
-  }, [showtimeId, echoInstance, selectedSeats]);
+  }, [showtimeId]);
   
-  const updateSeatsSelection = (selectedSeats: string[]) => {
-    // Lặp qua từng ghế trong mảng seats
-    const updatedSeats = seats.map((seat: Seat) => {
-      // Tạo khóa ghế từ row và column
-      const seatKey = `${String.fromCharCode(65 + parseInt(seat.row!))}-${seat.column + 1}`;
-      // Kiểm tra xem ghế có trong danh sách ghế đã chọn không
-      seat.isSelected = selectedSeats.includes(seatKey);
-      return seat;
-    });
   
-    setSeats(updatedSeats); // Cập nhật lại mảng ghế
-  };
+  const handleSeatClick = (seat: Seat) => {
+    const seatLabel = seat.label;
+    if (reservedSeats.has(seatLabel)) return;  // Nếu ghế đã bị đặt, không cho phép chọn.
   
-//   const handleSeatClick = (seat: Seat) => {
-//     const seatLabel = seat.label;
-//     if (reservedSeats.has(seatLabel)) return;
+    const currentSeats = new Map(selectedSeats);
+    const row = seat.row!;
+    const index = seat.column - 1;
   
-//     const currentSeats = new Map(selectedSeats);
-//     const row = seat.row!;
-//     const index = seat.column - 1;
-  
-//     // Cập nhật ghế đã chọn cho đúng
-//     if (currentSeats.has(row)) {
-//       const indices = currentSeats.get(row) || [];
-//       if (indices.includes(index)) {
-//         currentSeats.set(row, indices.filter((i) => i !== index)); // xóa ghế khỏi row
-//       } else {
-//         currentSeats.set(row, [...indices, index]); // thêm ghế mới vào row
-//       }
-//     } else {
-//       currentSeats.set(row, [index]); // Trường hợp chưa có row trong currentSeats, thêm vào mới
-//     }
-  
-    // Cập nhật lại state với ghế đã chọn
+    if (currentSeats.has(row)) {
+      const indices = currentSeats.get(row) || [];
+      if (indices.includes(index)) {
+        currentSeats.set(row, indices.filter((i) => i !== index)); // Xóa ghế khỏi row
+      } else {
+        currentSeats.set(row, [...indices, index]); // Thêm ghế mới vào row
+      }
+    } else {
+      currentSeats.set(row, [index]); // Thêm row mới
+    }
     setSelectedSeats(currentSeats);
-  
-    // Chuyển dữ liệu ghế đã chọn thành dạng mảng ghế
-    const updatedSelectedSeats = Array.from(currentSeats.entries())
-      .flatMap(([row, indices]) =>
-        indices.map((colIndex) => `${row}-${colIndex + 1}`)
-      );
-  instance
-      .post(`/seat-selection/${seatData?.room.id}`, {
-        seats: updatedSelectedSeats
-
-
-      })
-
-      .then((response) => {
-        console.log('API response:', response.data);
-      })
-      .catch((error) => {
-        console.error('Error while saving seats:', error);
-      });
   };
+  if (!seatData?.seats) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <Spin tip="Đang Tải Dữ Liệu Ghế..." size="large" />
+      </div>
+    );
+  }
   
   
   
+  if (!seatData?.seats) {
+    return (
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh', // Chiều cao toàn màn hình hoặc thay bằng container phù hợp
+        backgroundColor: '#f9f9f9',
+      }}>
+        <Spin tip="Đang Tải Dữ Liệu Ghế..." size="large" />
+      </div>
+    );
+  }
   
-  
-//   if (!seatData?.seats) {
-//     return (
-//       <div style={{
-//         display: 'flex',
-//         justifyContent: 'center',
-//         alignItems: 'center',
-//         height: '100vh', // Chiều cao toàn màn hình hoặc thay bằng container phù hợp
-//         backgroundColor: '#f9f9f9',
-//       }}>
-//         <Spin tip="Đang Tải Dữ Liệu Ghế..." size="large" />
-//       </div>
-//     );
-//   }
-  
-  // console.log("test",seatData.seats);
+  console.log("test",seatData.seats);
   
   const calculatePrice = () => {
     let totalPrice = 0;
@@ -342,14 +277,14 @@ interface SeatReservedData {
           <div className="seat-info-box">
             <div className="seat-map-box ">
               <div className="screen">MÀN HÌNH</div>
-              <div className="mapseat" style={{ display: "flex", alignItems: "flex-start",marginRight:"70px" }}>
+              <div style={{ display: "flex", alignItems: "flex-start",marginRight:"70px" }}>
       {/* Cột tên hàng */}
       <div style={{ display: "flex", flexDirection: "column", marginRight: "10px" }}>
         {rows.map((row) => (
           <div
             key={row}
             style={{
-              width: "30px",
+              width: "50px",
               height: "30px",
               marginBottom: "10px",
               display: "flex",
@@ -362,162 +297,161 @@ interface SeatReservedData {
              position:"relative",
              right:"50px"
         
-//             }}
-//           >
-//             {row}
-//           </div>
-//         ))}
-//       </div>
+            }}
+          >
+            {row}
+          </div>
+        ))}
+      </div>
 
-//       {/* Cột ghế */}
-//       <div
-//   style={{
-//     display: "grid",
-//     gridTemplateColumns: `repeat(${columns}, 30px)`,
-//     gridGap: "10px",
-//     alignItems: "center", // Đảm bảo các ghế được căn thẳng hàng
-//   }}
-// >
-// {rows.map((row) => {
-//   const rowSeats = seatData.seats[row];
+      {/* Cột ghế */}
+      <div
+  style={{
+    display: "grid",
+    gridTemplateColumns: `repeat(${columns}, 30px)`,
+    gridGap: "10px",
+    alignItems: "center", // Đảm bảo các ghế được căn thẳng hàng
+  }}
+>
+{rows.map((row) => {
+  const rowSeats = seatData.seats[row];
 
-//   // Tạo mảng các ghế cho mỗi hàng, nhưng bỏ qua các ghế có status "unavailable"
-//   const rowArray = Array.from({ length: columns }, (_, i) => {
-//     const seat = rowSeats.find(seat => seat.column === i + 1);
-//     return seat?.status !== "unavailable" ? seat : null; // Loại bỏ ghế "unavailable"
-//   }).filter(seat => seat !== null); // Loại bỏ phần tử null
+  // Tạo mảng các ghế cho mỗi hàng, nhưng bỏ qua các ghế có status "unavailable"
+  const rowArray = Array.from({ length: columns }, (_, i) => {
+    const seat = rowSeats.find(seat => seat.column === i + 1);
+    return seat?.status !== "unavailable" ? seat : null; // Loại bỏ ghế "unavailable"
+  }).filter(seat => seat !== null); // Loại bỏ phần tử null
 
-//   return rowArray.map((seat, index) => {
-//     const seatType = seat?.type || "Regular";
-//     const isSeatAvailable = seat?.status !== "unavailable"; // Kiểm tra ghế có sẵn
-//     const seatLabel = seat?.row ? `${seat.row}${seat.column}` : ""; // Đảm bảo không truy cập row nếu undefined
-//     const isSelected = selectedSeats.get(row)?.includes(index);
-//     const isReserved = reservedSeats.has(seatLabel);
+  return rowArray.map((seat, index) => {
+    const seatType = seat?.type || "Regular";
+    const isSeatAvailable = seat?.status !== "unavailable"; // Kiểm tra ghế có sẵn
+    const seatLabel = seat?.row ? `${seat.row}${seat.column}` : ""; // Đảm bảo không truy cập row nếu undefined
+    const isSelected = selectedSeats.get(row)?.includes(index);
+    const isReserved = reservedSeats.has(seatLabel);
 
-//     // CSS chung cho các ghế (khi ghế không có giá trị, không thể chọn)
-//     const baseStyle = {
-//       color: "#727575",
-//       fontFamily: "LaTo",
-//       fontWeight: "600",
-//       width: "30px",
-//       height: "30px",
-//       display: isSeatAvailable ? "flex" : "none", // Nếu ghế không có sẵn, không hiển thị
-//       justifyContent: "center",
-//       alignItems: "center",
-//       fontSize: "10px",
-//       borderRadius: "5px", // Border radius chung cho tất cả ghế
-//     };
+    // CSS chung cho các ghế (khi ghế không có giá trị, không thể chọn)
+    const baseStyle = {
+      color: "#727575",
+      fontFamily: "LaTo",
+      fontWeight: "600",
+      width: "30px",
+      height: "30px",
+      display: isSeatAvailable ? "flex" : "none", // Nếu ghế không có sẵn, không hiển thị
+      justifyContent: "center",
+      alignItems: "center",
+      fontSize: "10px",
+      borderRadius: "5px", // Border radius chung cho tất cả ghế
+    };
 
-//     // Màu nền khi ghế có giá trị
-//     const seatBackground = isReserved
-//       ? "darkgray" // Màu cho ghế đã đặt
-//       : seat
-//       ? isSelected
-//         ? "green" // Màu sắc khi chọn ghế
-//         : seatType === "VIP"
-//           ? "gold" // Ghế VIP
-//           : seatType === "Couple"
-//             ? "linear-gradient(45deg, gray 50%, rgb(56, 53, 53) 50%)" // Ghế Couple
-//             : "lightgray" // Ghế Regular
-//       : "white"; // Màu nền khi ghế không có giá trị (không thể chọn)
+    // Màu nền khi ghế có giá trị
+    const seatBackground = isReserved
+    ? "darkgray" // Màu cho ghế đã đặt
+    : seat
+      ? isSelected
+        ? "green" // Màu sắc khi chọn ghế
+        : seatType === "VIP"
+          ? "gold" // Ghế VIP
+          : seatType === "Couple"
+            ? "linear-gradient(45deg, gray 50%, rgb(56, 53, 53) 50%)" // Ghế Couple
+            : "lightgray" // Ghế Regular
+      : "white";
 
-//     // Vô hiệu hóa các ghế có màu nền trắng (không thể chọn)
-//     const isDisabled = seatBackground === "white" || !isSeatAvailable || isReserved;
+    // Vô hiệu hóa các ghế có màu nền trắng (không thể chọn)
+    const isDisabled = seatBackground === "white" || !isSeatAvailable || isReserved;
 
-//     return (
-//       <div
-//       className="seat_row"
-//         key={`${row}-${index}`}
-//         onClick={(e) => {
-//           if (isDisabled) return;
+    return (
+      <div
+        key={`${row}-${index}`}
+        onClick={(e) => {
+          if (isDisabled) return;
           
-//           // Find the seat by row and index, and create the seat object
-//           const seat = seatData.seats[row]?.find((s) => s.column === index + 1);
+          // Find the seat by row and index, and create the seat object
+          const seat = seatData.seats[row]?.find((s) => s.column === index + 1);
           
-//           if (seat) {
-//             handleSeatClick(seat); // Pass the seat object directly
-//           }
-//         }}
+          if (seat) {
+            handleSeatClick(seat); // Pass the seat object directly
+          }
+        }}
         
-//         style={{
-//           ...baseStyle, // Áp dụng các style chung
-//           background: seatBackground, // Áp dụng màu nền cho ghế dựa trên loại và trạng thái
-//           cursor: isDisabled ? "not-allowed" : "pointer", // Khi ghế không có sẵn, không thể chọn
-//         }}
-//       >
-//         {seat?.label} {/* Hiển thị tên ghế */}
-//       </div>
-//     );
-//   });
-// })}
+        style={{
+          ...baseStyle, // Áp dụng các style chung
+          background: seatBackground, // Áp dụng màu nền cho ghế dựa trên loại và trạng thái
+          cursor: isDisabled ? "not-allowed" : "pointer", // Khi ghế không có sẵn, không thể chọn
+        }}
+      >
+        {seat?.label} {/* Hiển thị tên ghế */}
+      </div>
+    );
+  });
+})}
 
-// </div>
-
-
-
-//     </div>
-
-
-//               <div className="legend">
-//                 <div>
-//                   <span className="seat selected"></span> Ghế bạn chọn
-//                 </div>
-//                 <div>
-//                   <span className="seat vip"></span> Ghế vip
-//                 </div>
-//                 <div>
-//                   <span className="seat couple-seat"></span> Ghế đôi
-//                 </div>
-//                 <div>
-//                   <span className="seat reserved"></span> Đã bán
-//                 </div>
-//               </div>
-//             </div>
-//             <div className="thongtinphim">
-//               <div className="details-box1">
-//                 <p className="title-phim">{seatData.movie.movie_name}</p>
-//                 <p>
-//                   Rạp:<span> {seatData.room.cinema.cinema_name}</span>
-//                 </p>
-//                 <p>
-//                   Suất: <span> {showtime}</span>
-//                 </p>
-//                 <p>
-//                   Phòng chiếu: <span>{seatData.room.room_name || seatData.room.id}</span>
-//                 </p>
-//                 <p>
-//   Ghế:{" "}
-//   {Array.from(selectedSeats.entries())
-//     .flatMap(([row, indices]) =>
-//       indices
-//         .map((index) => seatData.seats[row]?.find((seat) => seat.column === index + 1)?.label)
-//         .filter((label) => label) // Loại bỏ các giá trị null hoặc undefined
-//     )
-//     .join(", ")}
-// </p>
-
-//               </div>
-//               <div className="price-box1">
-//                 <div className="price">
-//                   Tổng đơn hàng
-//                   <br /> <span>{totalPrice.toLocaleString()} đ</span>
-//                 </div>
-//               </div>
-//               <div className="actionst1">
-//                 <button className="back-btn1" >←</button>
-//                 <button className="continue-btn1" onClick={handleSubmit}>
-//                   Tiếp Tục
-//                 </button>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//       <Footer />
-//     </>
-//   );
-// };
+</div>
 
 
 
-// export default CinemaSeatSelection;
+    </div>
+
+
+              <div className="legend">
+                <div>
+                  <span className="seat selected"></span> Ghế bạn chọn
+                </div>
+                <div>
+                  <span className="seat vip"></span> Ghế vip
+                </div>
+                <div>
+                  <span className="seat couple-seat"></span> Ghế đôi
+                </div>
+                <div>
+                  <span className="seat reserved"></span> Đã bán
+                </div>
+              </div>
+            </div>
+            <div className="thongtinphim">
+              <div className="details-box1">
+                <p className="title-phim">{seatData.movie.movie_name}</p>
+                <p>
+                  Rạp:<span> {seatData.room.cinema.cinema_name}</span>
+                </p>
+                <p>
+                  Suất: <span> {showtime}</span>
+                </p>
+                <p>
+                  Phòng chiếu: <span>{seatData.room.room_name || seatData.room.id}</span>
+                </p>
+                <p>
+  Ghế:{" "}
+  {Array.from(selectedSeats.entries())
+    .flatMap(([row, indices]) =>
+      indices
+        .map((index) => seatData.seats[row]?.find((seat) => seat.column === index + 1)?.label)
+        .filter((label) => label) // Loại bỏ các giá trị null hoặc undefined
+    )
+    .join(", ")}
+</p>
+
+              </div>
+              <div className="price-box1">
+                <div className="price">
+                  Tổng đơn hàng
+                  <br /> <span>{totalPrice.toLocaleString()} đ</span>
+                </div>
+              </div>
+              <div className="actionst1">
+                <button className="back-btn1" >←</button>
+                <button className="continue-btn1" onClick={handleSubmit}>
+                  Tiếp Tục
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <Footer />
+    </>
+  );
+};
+
+
+
+export default CinemaSeatSelection;
