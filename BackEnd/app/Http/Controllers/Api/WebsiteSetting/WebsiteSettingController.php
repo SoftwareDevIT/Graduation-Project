@@ -8,7 +8,11 @@ use Illuminate\Http\Request;
 
 class WebsiteSettingController extends Controller
 {
-    public function update(Request $request)
+    public function index(){
+        $settings = WebsiteSetting::all();
+        return $this->success($settings, 'Cấu hình Website');
+    }
+    public function update(Request $request,$id)
     {
         $data = $request->validate([
             'site_name' => 'required|string|max:255',
@@ -29,7 +33,7 @@ class WebsiteSettingController extends Controller
             'about_image' => 'nullable|mimes:jpeg,png,jpg,gif',
         ]);
 
-        $settings = WebsiteSetting::firstOrFail();
+        $settings = WebsiteSetting::query()->findOrFail($id);
 
         // Upload hình ảnh nếu có
         $data['logo'] = $request->hasFile('logo') ? $this->uploadImage($request->file('logo')) : $settings->logo;
@@ -37,7 +41,6 @@ class WebsiteSettingController extends Controller
         $data['terms_image'] = $request->hasFile('terms_image') ? $this->uploadImage($request->file('terms_image')) : $settings->terms_image;
         $data['about_image'] = $request->hasFile('about_image') ? $this->uploadImage($request->file('about_image')) : $settings->about_image;
 
-        // Cập nhật cấu hình
         $settings->update($data);
 
         return $this->success($settings, 'Cập nhập thành công', 200);
@@ -48,6 +51,7 @@ class WebsiteSettingController extends Controller
     {
         $settings = WebsiteSetting::first();
 
+        //Dữ liệu mặc định
         $settings->update([
             'site_name' => 'Flickhive  Cinemas',
             'tagline' => 'Hãy đặt vé Xem phim ngay!',
