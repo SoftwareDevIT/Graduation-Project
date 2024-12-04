@@ -186,6 +186,7 @@
 }
 
     .filters {
+ margin-left: 35px;
         width: 100%;
         display: flex;
         flex-direction: row;

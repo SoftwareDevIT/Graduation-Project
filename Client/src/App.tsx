@@ -106,6 +106,7 @@ import MovieTicket from "./component/PersonalPage/MovieTicket";
 
 
 
+
 import SeatLayout from "./component/SeatMap/test";
 import Community from "./component/Community/Community";
 import Points from "./component/PersonalPage/Points";
@@ -172,6 +173,7 @@ function App() {
         <Route path="/resetPassword" element={<ResetPasswod/>} />
 
         <Route path="/test" element={<Pointaccumulation/>} />
+        <Route path="/community" element={<Community/>} />
     
 
        

@@ -5,6 +5,7 @@ import { Movie } from '../../interface/Movie';
 import { formatDistanceToNow } from 'date-fns'; // Add date-fns library
 import { useUserContext } from '../../Context/UserContext'; // Import the context
 import Header from '../Header/Hearder';
+import { Link } from 'react-router-dom';
 
 const Personal: React.FC = () => {
   const { userProfile, avatar, setUserProfile, handleUpdateProfile, handleAvatarUpload } = useUserContext();
@@ -84,7 +85,7 @@ const Personal: React.FC = () => {
                     return (
                       <div className="item-phim " key={movie.id}>
                        <div className="img">
-            <img src={movie.poster || undefined} alt={movie.movie_name} />
+           <Link to={`/movie-detail/${movie.slug}`}> <img src={movie.poster || undefined} alt={movie.movie_name} /></Link>
           </div>
                         <div className="movie-title">
             <h5>{movie.movie_name}</h5>

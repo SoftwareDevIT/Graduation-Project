@@ -9,6 +9,7 @@ import Header from "../Header/Hearder";
 
 
 const Pointaccumulation: React.FC = () => {
+  
   const { userProfile, avatar, setUserProfile } = useUserContext(); // Use context to get user data
   const [searchTerm, setSearchTerm] = useState("");
   const [pointHistories, setPointHistories] = useState<any[]>([]);
@@ -129,7 +130,7 @@ const Pointaccumulation: React.FC = () => {
               </div>
               <div className="points-details">
                 <p><strong>Điểm tích lũy:</strong>{userProfile?.points || "0"}  điểm</p>
-                <p><strong>Điểm đã dùng:</strong>  điểm</p>
+            
                 <p><strong>Cấp hạng:</strong> {userProfile?.rank_name || "Gold Member"}</p>
               </div>
             </div>
@@ -155,8 +156,13 @@ const Pointaccumulation: React.FC = () => {
                 rowKey="id"
                 columns={[
                   { title: "Thời gian", dataIndex: "created_at", render: (text: string) => new Date(text).toLocaleString() },
-                  { title: "Số điểm cộng", dataIndex:"points_earned" },
-                  { title: "Số điểm tiêu", dataIndex: "points_used"  },
+                  {
+                    title: "Số điểm cộng",
+                    dataIndex: "points_earned",
+                    render: (points: number) => `+${points}`, // Thêm dấu cộng trước số điểm
+                  },
+                  
+                  { title: "Số điểm tiêu", dataIndex: "points_used" , render: (points: number) => `-${points}`, },
                   { title: "Trạng thái", dataIndex: "status" },
                 ]}
                 pagination={false}
