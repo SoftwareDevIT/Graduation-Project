@@ -145,37 +145,40 @@ const OrderPage: React.FC = () => {
               </div>
             ))}
         </div>
+        <div className="thongtinphim-container">
+  <div className="thongtinphim2">
+    <div className="details-box2">
+      <p className="tenphimm">{movieName}</p>
+      <p>
+        Rạp: <span>{cinemaName}</span>
+      </p>
+      <p>
+        Suất: <span>{showtime}</span>
+      </p>
+      <p>
+        Ghế: <span>{seats.map((seat) => seat.seat_name).join(", ")}</span>
+      </p>
+    </div>
+  </div>
 
-        <div className="thongtinphim box-thongtinphim">
-          <div className="details-box">
-            <p>{movieName}</p>
-            <p>
-              Rạp:<span> {cinemaName}</span>
-            </p>
-            <p>
-              Suất: <span> {showtime}</span>
-            </p>
-            <p>
-              Ghế: <span> {seats.map(seat => seat.seat_name).join(', ')}</span>
-            </p>
-          </div>
+  <div className="price-box2">
+    <div className="price">
+    <span className="tongdonhangg">  Tổng đơn hàng</span>
+      <br /> <span>{totalPrice.toLocaleString()} đ</span>
+    </div>
+  </div>
 
-          <div className="price-box">
-            <div className="price">
-              Tổng đơn hàng
-              <br /> <span>{totalPrice.toLocaleString()} đ</span>
-            </div>
-          </div>
+  <div className="actionsts">
+    <Link to="/" className="back-btn2">
+      <span>←</span> 
+    </Link>
+    <button className="continue-btn2" onClick={handleContinue}>
+      Tiếp Tục
+    </button>
+  </div>
+</div>
 
-          <div className="actionsts">
-            <Link to="/" className="back-btn2">
-              <span>← </span>Quay lại
-            </Link>
-            <button className="continue-btn2" onClick={handleContinue}>
-              Tiếp Tục
-            </button>
-          </div>
-        </div>
+
       </div>
       <Footer />
     </>

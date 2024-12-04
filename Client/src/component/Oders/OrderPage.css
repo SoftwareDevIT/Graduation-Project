@@ -151,64 +151,106 @@
       width: 20px;
       text-align: center;
   }
-  .box-thongtinphim{
+ /* Phần khung chi tiết phim */
+/* Tổng container bao bọc tất cả */
+.thongtinphim-container {
+    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+  }
   
-  width: 100px;
+  /* Khung thông tin phim */
+  .thongtinphim2 {
+    font-family: "Cerebri Sans, sans-serif;";
+    margin-top: -20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    width: 350px;
+    margin-bottom: 15px;
+    font-size: 16px;
+    color: #333;
+  }
   
+  .details-box2 p {
+    margin: 5px 0;
   }
-  .price-box{
-      width: 400px;
-  }
-  .actionsts{
-      display: flex;
-      justify-content: space-between;
-      margin-top: 30px;
-      width: 430px;
-    }
-    .back-btn2{
-      margin-left: 30px;
-      height: 37px;
-      width: 100px ;
-      padding-bottom: 15px;
-      
-    }
-    .back-btn2, .continue-btn2 {
-      
-   width: 120px;
-   height: 40px;
-      padding: 10px 10px;
-      font-size: 1em;
-      background-color: #ffffff;
-      color: black;
-      border: 1px solid black;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.2s;
-      
-    }
-    .descripton {
-  color: #6E849B;
-  font-size: 15px;
-    }
-    
-    .continue-btn2{
-      
-      border: none;
-      width: 200px;
-      background: #6E849B;
-      color: white;
-      
-    }
-  .back-btn2{
-      padding:7px;
-      padding-left: 15px;
-      text-decoration: none;
-     
-  }
-  .back-btn2 span{
-      margin-right: 5px;
   
+  .details-box2 span {
+    font-weight: bold;
+    color: #000;
   }
+  
+  /* Khung tổng đơn hàng */
+  .price-box2 {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  
+    padding: 15px;
+    background-color: white;
+    border-radius: 10px;
+    width: 350px;
+    text-align: left;
+    font-size: 18px;
+    color: #5c5c5c;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  .tongdonhangg{
+    color: #95AAC9 !important;
+  }
+  .price-box2 span {
+    font-size: 20px;
+    color: #000;
+  }
+  .tenphimm{
+    font-size: 18px;
+    font-weight:500;
+  }
+  /* Nút hành động */
+  .actionsts {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 350px;
+  }
+  
+  .back-btn2 {
+    width: 130px;
+    background-color: white;
+    color: #333;
+    font-size: 14px;
+    padding: 8px 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .back-btn2 span {
+    font-size: 18px;
+  }
+  
+  .continue-btn2 {
+    width: 150px;
+    background-color: #5c7ea4;
+    color: white;
+    padding: 10px 30px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .continue-btn2:hover {
+    background-color: #476b8e;
+  }
+  
+  
   /* Media Queries for devices with max width of 992px */
   @media (max-width: 992px) {
       .combo-list {
@@ -226,9 +268,14 @@
           grid-template-columns: 2fr 1fr 1fr; /* Giữ cấu trúc 3 cột */
           text-align: center;
       }
-  .box-thongtinphim{
-      width: 600px;
-      margin-left: 138px;
+  .thongtinphim2{
+    margin-top: 10px;
+      width: 498px;
+      margin-left: 12px;
+  }
+  .price-box2{
+    width: 498px;
+    margin-left: 12px;
   }
       .combo-item {
           grid-template-columns: 2fr 1fr 1fr; /* Giữ bố cục 3 cột khi trên 992px */
@@ -251,18 +298,12 @@
       .back-btn2, .continue-btn2 {
           width: 100%;
       }
-     .price-box{
-      width: 500px;
-     }
-     .details-box{
-      width: 500px;
-     
-     
-     }
+   
+    
      
      .actionsts{
-      margin-left: 3px !important;
-      width: 500px !important;
+      margin-left: 12px !important;
+      width: 498px !important;
      }
      .back-btn2{
          margin-left: 1px;
@@ -312,54 +353,24 @@
           margin: 0 5px;
       }
   
-      .box-thongtinphim {
-          width: 100%;
+      .thongtinphim2 {
+        width: 408px;
           margin-top: 10px;
           padding: 10px;
-          margin-left: 130px;
+         margin-left: -15px;
+     
       }
       .thongtincombo{
           width: 100%;
           margin-left: 1px;
       }
-  
-      .actionsts {
-          align-items: center;
-          width: 100%;
-          gap: 10px;
-         
-          
-      }
+  .price-box2{
+    width: 408px;
+    margin-right: 25px;
+  }
+  .actionsts{
+    width: 408px !important;
+    margin-right: 25px;
+  }
       
-  
-      .back-btn2, .continue-btn2 {
-          width: 90%; 
-      }
-      .back-btn2{
-          margin-left: 1px;
-          padding-left: 40px;
-      }
-      .price-box{
-          width: 413px;
-         }
-         .details-box{
-          margin-left: 23px !important;
-          width: 377px !important;
-         }
-         .price-box{
-          margin-left: 23px !important;
-          width: 377px !important;
-         }
-         .actionsts{
-          margin-left: 23px !important;
-          width: 377px !important;
-          
-         }
-         .back-btn2{
-             margin-left: 1px;
-             padding-left: 40px;
-         }
-         .continue-btn2{
-          margin-left: 50px;
-         }
   }

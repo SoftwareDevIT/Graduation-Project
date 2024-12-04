@@ -102,6 +102,15 @@ const TicketCinema = () => {
       </NavLink>
     </span>
   </div>
+  <div className="account-nav-item">
+    <span className="account-nav-title">
+      <NavLink 
+        to="/test" 
+        className={({ isActive }) => isActive ? 'active-link' : ''}>
+        Tích Điểm
+      </NavLink>
+    </span>
+  </div>
 </div>
 
               </div>

@@ -100,7 +100,7 @@ import SeatMapForm from "./component/Admin/SeatMap/SeatMapForm";
 import OrdersDetailManager from "./Page/Admin/Orders/OrdersDetail";
 import WebsiteSettingsManager from "./Page/Admin/WebsiteSettings/WebsiteSettingManager";
 import ShowtimesAuto from "./Page/Admin/Showtimes/ShowtimesAuto";
-import Pointaccumulation from "./component/PersonalPage/Pointaccumulation";
+
 import MovieTicket from "./component/PersonalPage/MovieTicket";
 
 
@@ -109,8 +109,10 @@ import MovieTicket from "./component/PersonalPage/MovieTicket";
 
 import SeatLayout from "./component/SeatMap/test";
 import Community from "./component/Community/Community";
-import Points from "./component/PersonalPage/Points";
+
 import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
+import Pointaccumulation from "./component/PersonalPage/Pointaccumulation";
+
 
 
 

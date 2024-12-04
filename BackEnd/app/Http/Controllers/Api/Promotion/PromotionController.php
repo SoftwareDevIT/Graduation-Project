@@ -132,7 +132,7 @@ class PromotionController extends Controller
         }
 
         // Lấy danh sách voucher phù hợp
-        $vouchers = Promotion::whereBetween('discount_percentage', [5, 20])
+        $vouchers = Promotion::whereBetween('discount_percentage', [5, 100])
             ->where('is_active', true)
             ->whereDate('valid_to', '>=', now())
             ->get();
