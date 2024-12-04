@@ -16,6 +16,7 @@ class SeatMap extends Model
         'row',
         'label',
         'column',
+        'linkedSeat',
         'is_double',
         'type',
     ];

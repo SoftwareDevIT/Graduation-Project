@@ -26,6 +26,7 @@ class StoreSeatMapRequest extends FormRequest
             '*.row' => 'required|string|max:1',
             '*.column' => 'required|integer',
             '*.type' => 'string',
+            '*.linkedSeat' => 'string',
             '*.label' => 'string',
             '*.is_double' => 'required|boolean',
         ];

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('seat_layout_id');
             $table->string('label');
+            $table->string('linkedSeat')->nullable();
             $table->string('row');
             $table->integer('column');
             $table->enum('type', ['Regular', 'VIP', 'Couple'])->default('Regular');
