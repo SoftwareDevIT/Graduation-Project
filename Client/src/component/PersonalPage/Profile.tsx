@@ -85,6 +85,15 @@ const Profile: React.FC = () => {
       </NavLink>
     </span>
   </div>
+  <div className="account-nav-item">
+    <span className="account-nav-title">
+      <NavLink 
+        to="/points" 
+        className={({ isActive }) => isActive ? 'active-link' : ''}>
+        Tích Điểm
+      </NavLink>
+    </span>
+  </div>
 </div>
 
               </div>

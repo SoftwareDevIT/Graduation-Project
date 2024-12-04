@@ -30,7 +30,7 @@
   margin-bottom: 20px;
  
 }
-.order-summary h3{
+.order-summaryt h3{
   font-size: 16px;               /* Smaller font size as seen in the image */
   color: #9CA3AF;                /* Light gray color similar to the text color */
   font-weight: 400;              /* Lighter font weight */
@@ -134,47 +134,35 @@ padding-left: 10px;
 .apply-voucher-btn:hover {
   background-color: #45a049;
 } 
-
+.diemgiamgia{
+  cursor: pointer;
+  color: black !important;
+  font-size: 18px;
+  font-weight: 600;
+  padding-left: 10px;
+}
 /* Bảng điểm  */
-.bang-diem-poly {
+.khung-diem-poly {
+ 
+  display: block;
+  margin-top: 20px;
+}
+
+.khung-diem-poly table {
   width: 100%;
   border-collapse: collapse;
-  background-color: white;
 }
 
-.bang-diem-poly th,
-.bang-diem-poly td {
-  padding: 10px;
-  text-align: center;
-  border: 1px solid #ccc;
-}
-
-.nhap-diem {
-  width: 100px;
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-}
-
-.nut-huy {
-  background-color: orange;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.nut-huy:hover {
-  background-color: #e67e22;
-}
-
-.khung-diem-poly {
-  background-color: #f5f5f5;
-  padding: 20px;
+.khung-diem-poly th, .khung-diem-poly td {
   border: 1px solid #ddd;
-  border-radius: 5px;
+  padding: 8px;
+  text-align: left;
 }
+
+.khung-diem-poly th {
+  background-color: #f4f4f4;
+}
+
 
 
 /* Tổng giá */
@@ -221,7 +209,8 @@ padding-left: 10px;
   color: #28a745; /* Green color for the check mark */
 }
 .payment-methods li {
-  margin-right: 30px;
+  margin-left: 23px;
+width: 670px;
   align-items: center;
   padding: 14px;
   margin-bottom: 12px;
@@ -373,11 +362,18 @@ padding-left: 10px;
 }
 .total-title {
   color: #333;
+  margin-top: 20px;
+  font-size: 20px;
 }
 .total-price {
   font-size: 24px;
   color: #e74c3c;
   font-weight: bold;
+  margin-top: 20px;
+}
+.total-title2{
+  font-weight: bold;
+  font-size: 20px;
 }
 
 
@@ -502,10 +498,30 @@ padding-left: 10px;
   margin-top: 5px;
   transition: border-color 0.3s ease;
 }
+.form-group label{
+  padding-left: 10px;
+}
 .form-group input:focus {
   border-color: #2980b9;
   box-shadow: 0px 0px 5px rgba(41, 128, 185, 0.2);
 }
+.nhom-form.nhom-checkbox {
+  display: inline-flex; /* Sắp xếp theo chiều ngang */
+  align-items: center; /* Căn giữa theo chiều dọc */
+  margin-left: -90px;
+}
+
+.nhom-form.nhom-checkbox input {
+ 
+  margin-right: -80px; /* Khoảng cách giữa checkbox và nhãn */
+}
+
+.nhom-form.nhom-checkbox label {
+  font-size: 14px; /* Kích thước chữ */
+  line-height: 1; /* Giữ dòng chữ đều nhau */
+}
+
+
 
 /* Custom responsive thiết kế */
 @media (max-width: 768px) {
@@ -516,5 +532,23 @@ padding-left: 10px;
   .left-panel, .right-panel {
       width: 100%;
       margin-bottom: 20px;
+  }
+  .payment-methods li{
+    width: 650px;
+  }
+
+
+}
+
+@media (max-width: 480px){
+  .payment-methods li{
+    width: 313px;
+  }
+  .apply-voucher-btn{
+    margin-top: 10px;
+    margin-left: 10px;
+  }
+  .bang-diem-poly th{
+    font-size: 12px;
   }
 }

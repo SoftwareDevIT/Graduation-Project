@@ -19,4 +19,10 @@ export interface Showtime {
     price: number;
     room_id:number;
     room : Room;
+
+    
+    
+   
+    
+    // Include the Movie interface
 }

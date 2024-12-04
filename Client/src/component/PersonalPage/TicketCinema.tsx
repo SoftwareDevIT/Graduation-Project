@@ -34,11 +34,12 @@ const TicketCinema = () => {
   const [orders, setOrders] = useState<Order[]>([]);
 
   useEffect(() => {
-    instance.get('/order')
+    instance.get('/order') 
+
       .then(response => {
-        if (response.data.success) {
-          setOrders(response.data.data.data);
-        }
+
+          setOrders(response.data.data);
+       
       })
       .catch(error => {
         console.error("Error fetching orders:", error);
