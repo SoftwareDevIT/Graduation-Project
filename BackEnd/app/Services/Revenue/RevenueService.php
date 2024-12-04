@@ -49,6 +49,10 @@ class RevenueService
     {
         return $this->calculateRevenue($status, null, null, null);
     }
+    public function allRevenueCinema(string $status)
+    {
+        return $this->calculateRevenue($status, null, null, null);
+    }
 
 
     public function totalRevenueByCinema(int $idCinema)
