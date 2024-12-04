@@ -75,7 +75,7 @@ class RankContrller extends Controller
     public function usePoints(Request $request)
     {
         $request->validate([
-            'points_to_use' => 'required|integer|min:0',
+            'points_to_use' => 'required|integer|min:0|max:50000',
             'total_price' => 'required|numeric|min:0',
         ]);
 

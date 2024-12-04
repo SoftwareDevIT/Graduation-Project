@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom";
 
 
 import OrderCheckout from "./component/Pay/OderCheckOut";
-// import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
+
 import Headerticket from "./component/Headerticket/Headerticket";
 import RegisterCinema from "./Page/Client/RegisterCinema";
 import LoginCinema from "./Page/Client/LoginCinema";
@@ -107,6 +107,10 @@ import Community from "./component/Community/Community";
 
 
 
+import SeatLayout from "./component/SeatMap/test";
+import Community from "./component/Community/Community";
+import Points from "./component/PersonalPage/Points";
+import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
 
 
 
@@ -125,7 +129,9 @@ function App() {
         <Route path="/buy-ticket" element={<Bookcinematickets />} />
         <Route path="/orders" element={<PrivateRoute><OrderPage /></PrivateRoute>} />
         <Route path="/pay" element={ <PrivateRoute><OrderCheckout /></PrivateRoute> } />
+
         <Route path="/seat" element={<CinemaSeatSelection />} />
+
         <Route path="/movie-detail/:slug" element={<ContentMovie />} />
         <Route path="/schedule/:slug" element={<LichChieu />} />
         <Route path="/reviews/:slug" element={<DanhGia />} />
@@ -154,19 +160,22 @@ function App() {
         <Route path="/Personal" element={<PrivateRoute><Personal /></PrivateRoute>} />
  
         <Route path="/ticketcinema" element={ <PrivateRoute><TicketCinema/></PrivateRoute>} />
-    
+
         <Route path="/ChangePassword" element={ <PrivateRoute><ChangePassword /></PrivateRoute>} />
         <Route path="/register" element={<RegisterCinema />} />
         <Route path="/login" element={<LoginCinema />} />
         <Route path="/movieshowing" element={<MovieShowing/>} />
+        <Route path="/seat" element={<CinemaSeatSelection/>} />
       
         <Route path="/deponsit" element={<Deponsit/>} />
         <Route path="/forgetpass" element={<ForgetPass/>} />
         <Route path="/otp" element={<Otp/>} />
         <Route path="/resetPassword" element={<ResetPasswod/>} />
+
         <Route path="/test" element={<Pointaccumulation/>} />
         <Route path="/community" element={<Community/>} />
     
+
        
       
     
