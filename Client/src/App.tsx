@@ -102,7 +102,7 @@ import WebsiteSettingsManager from "./Page/Admin/WebsiteSettings/WebsiteSettingM
 import ShowtimesAuto from "./Page/Admin/Showtimes/ShowtimesAuto";
 import Pointaccumulation from "./component/PersonalPage/Pointaccumulation";
 import MovieTicket from "./component/PersonalPage/MovieTicket";
-import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
+
 
 
 
