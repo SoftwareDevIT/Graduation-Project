@@ -319,7 +319,7 @@ const OrderCheckout = () => {
             </thead>
             <tbody>
               <tr>
-                <td>{userProfile?.points || "0"}</td>
+                <td >{userProfile?.points || "0"}</td>
                 <td><input
                     type="number"
                     value={pointsToUse}
