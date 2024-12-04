@@ -87,7 +87,7 @@ const CinemaSeatSelection: React.FC = () => {
   
           // Set reserved seats data
           setReservedSeats(reservedSeatSet);
-        } catch (seatError) {/-strong/-heart:>:o:-((:-h console.error("Error fetching seat data", seatError);
+        } catch (seatError) {console.error("Error fetching seat data", seatError);
           setReservedSeats(new Set<string>());
         }
   
@@ -167,7 +167,7 @@ const CinemaSeatSelection: React.FC = () => {
   
     const currentSeats = new Map(selectedSeats);
     const row = seat.row!;
-    const index = seat.column - 1;/-strong/-heart:>:o:-((:-h // Cập nhật ghế đã chọn cho đúng
+    const index = seat.column - 1;// Cập nhật ghế đã chọn cho đúng
     if (currentSeats.has(row)) {
       const indices = currentSeats.get(row) || [];
       if (indices.includes(index)) {
@@ -266,7 +266,7 @@ const CinemaSeatSelection: React.FC = () => {
       seats: selectedSeatsArray,
     };
   
-    try {/-strong/-heart:>:o:-((:-h const response = await instance.post("/selectSeats", payload);
+    try { const response = await instance.post("/selectSeats", payload);
   
       if (response.status === 200) {
         navigate("/orders", {
@@ -355,7 +355,7 @@ const CinemaSeatSelection: React.FC = () => {
               color:'#fff',
               border: "1px solid black", // Add border to row labels
               backgroundColor: "#727575", // Slight background color for clarity
-             position:"relative",/-strong/-heart:>:o:-((:-h right:"50px"
+             position:"relative",right:"50px"
         
             }}
           >

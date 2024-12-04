@@ -309,6 +309,7 @@ const CinemaSelector: React.FC = () => {
                                   showtimeId: showtime.id,
                                   cinemaId: selectedCinemaDetails?.id,
                                   price: showtime.price,
+                                  
                                  
                                 },
                               })

@@ -49,7 +49,7 @@ class AuthController extends Controller
 
             $user->total_amount = $totalAmount;
             $user->rank_name = $rankName;
-            unset($user->rank);
+            // unset($user->rank);
 
             return response()->json(['success' => true, 'user' => $user], 200);
         } catch (Exception $e) {

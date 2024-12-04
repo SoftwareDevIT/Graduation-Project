@@ -18,6 +18,7 @@ import { MovieProvider } from './Context/MoviesContext.tsx'
 import { PostProvider } from './Context/PostContext.tsx'
 import { ShowtimeProvider } from './Context/ShowtimesContext.tsx'
 import { NewsProvider } from './Context/NewsContext.tsx'
+import { UserProvider } from './Context/UserContext.tsx'
 
 
 
@@ -42,7 +43,9 @@ createRoot(document.getElementById('root')!).render(
               <NewsProvider>
          
                 <CountryProvider>
+                <UserProvider>
     <App />
+    </UserProvider>
     </CountryProvider>
     </NewsProvider>
     </ShowtimeProvider>

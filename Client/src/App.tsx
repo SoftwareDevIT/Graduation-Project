@@ -49,7 +49,7 @@ import PrivateRoute from "./PrivateRoute";
 import MovieShowing from "./component/Movies/MovieShowing";
 import SupportCenter from "./component/Support/Support";
 import PostDetail from "./component/Post/PostDetail";
-import Credits from "./component/PersonalPage/Credits";
+
 import Deponsit from "./component/PersonalPage/Deposit";
 import ForgetPass from "./component/Login/ForgetPass";
 
@@ -104,6 +104,7 @@ import ShowtimesAuto from "./Page/Admin/Showtimes/ShowtimesAuto";
 import SeatLayout from "./component/SeatMap/test";
 import Community from "./component/Community/Community";
 import Points from "./component/PersonalPage/Points";
+import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
 
 
 
@@ -151,11 +152,12 @@ function App() {
         <Route path="/Personal" element={<PrivateRoute><Personal /></PrivateRoute>} />
  
         <Route path="/ticketcinema" element={ <PrivateRoute><TicketCinema/></PrivateRoute>} />
-        <Route path="/credits" element={ <PrivateRoute><Credits /></PrivateRoute>} />
-        <Route path="/ChangePassword" element={ <PrivateRoute><Credits /><ChangePassword /></PrivateRoute>} />
+      
+        <Route path="/ChangePassword" element={ <PrivateRoute><ChangePassword /></PrivateRoute>} />
         <Route path="/register" element={<RegisterCinema />} />
         <Route path="/login" element={<LoginCinema />} />
         <Route path="/movieshowing" element={<MovieShowing/>} />
+        <Route path="/seat" element={<CinemaSeatSelection/>} />
       
         <Route path="/deponsit" element={<Deponsit/>} />
         <Route path="/forgetpass" element={<ForgetPass/>} />
