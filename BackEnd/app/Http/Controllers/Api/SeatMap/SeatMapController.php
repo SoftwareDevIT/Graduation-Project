@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Store\StoreSeatMapRequest;
 use App\Http\Requests\Update\UpdateSeatMapRequest;
 use App\Models\SeatLayout;
+use App\Models\SeatMap;
 use App\Services\SeatMap\SeatMapService;
 use Exception;
 use Illuminate\Http\Request;
@@ -35,6 +36,13 @@ class SeatMapController extends Controller
         } catch (Exception $e) {
             return $e->getMessage();
         }
+    }
+    public function status(int $id)
+    {
+        $movie = SeatMap::findOrFail($id);
+        $movie->status = $movie->status == 1 ? 0 : 1;
+        $movie->save();
+        return $this->success('', 'Cập nhật trạng thái thành công.', 200);
     }
 
 

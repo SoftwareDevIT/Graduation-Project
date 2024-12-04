@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Ranks;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Store\StoreRanksRequest;
 use App\Http\Requests\Update\UpdateRanksRequest;
+use App\Models\Rank;
 use App\Services\Ranks\RankService;
 use Illuminate\Http\Request;
 
@@ -86,5 +87,12 @@ class RankContrller extends Controller
         $data = $this->rankService->usePoints($user, $pointsToUse, $totalPrice);
 
         return response()->json($data, $data['success'] ? 200 : 400);
+    }
+    public function status(int $id)
+    {
+        $movie = Rank::findOrFail($id);
+        $movie->status = $movie->status == 1 ? 0 : 1;
+        $movie->save();
+        return $this->success('', 'Cập nhật trạng thái thành công.', 200);
     }
 }

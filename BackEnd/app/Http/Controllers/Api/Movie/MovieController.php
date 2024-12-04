@@ -228,9 +228,9 @@ class MovieController extends Controller
 
             $result = $new->map(function ($item) {
                 return [
-                    'news' => $item, 
-                    'user_name' => $item->user->user_name ?? null, 
-                    'category_name' => $item->newsCategory->news_category_name ?? null, 
+                    'news' => $item,
+                    'user_name' => $item->user->user_name ?? null,
+                    'category_name' => $item->newsCategory->news_category_name ?? null,
                 ];
             });
 
@@ -291,5 +291,12 @@ class MovieController extends Controller
         } catch (Exception $e) {
             return $this->error('Lỗi: ' . $e->getMessage(), 500);
         }
+    }
+    public function status(int $id)
+    {
+        $movie = Movie::findOrFail($id);
+        $movie->status = $movie->status == 1 ? 0 : 1;
+        $movie->save();
+        return $this->success('', 'Cập nhật trạng thái thành công.', 200);
     }
 }

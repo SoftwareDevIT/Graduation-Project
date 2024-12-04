@@ -9,6 +9,7 @@ import Header from "../Header/Hearder";
 
 
 const Pointaccumulation: React.FC = () => {
+  
   const { userProfile, avatar, setUserProfile } = useUserContext(); // Use context to get user data
   const [searchTerm, setSearchTerm] = useState("");
   const [pointHistories, setPointHistories] = useState<any[]>([]);

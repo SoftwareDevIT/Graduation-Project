@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\PayMethod;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Store\StorePayMethodRequest;
 use App\Http\Requests\Update\UpdatePayMethodRequest;
+use App\Models\PayMethod;
 use Illuminate\Http\Request;
 use App\Services\PayMethod\PayMethodService;
 use Exception;
@@ -37,7 +38,13 @@ class PayMethodController extends Controller
             return $e->getMessage();
         }
     }
-
+    public function status(int $id)
+    {
+        $movie = PayMethod::findOrFail($id);
+        $movie->status = $movie->status == 1 ? 0 : 1;
+        $movie->save();
+        return $this->success('', 'Cập nhật trạng thái thành công.', 200);
+    }
 
     public function store(StorePayMethodRequest $request)
     {

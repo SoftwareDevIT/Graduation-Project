@@ -97,6 +97,7 @@ function App() {
         <Route path="/buy-ticket" element={<Bookcinematickets />} />
         <Route path="/orders" element={<PrivateRoute><OrderPage /></PrivateRoute>} />
         <Route path="/pay" element={ <PrivateRoute><OrderCheckout /></PrivateRoute> } />
+        <Route path="/community" element={<Community/>} />
 
         <Route path="/seat" element={<CinemaSeatSelection />} />
 
