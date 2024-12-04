@@ -12,6 +12,8 @@ import { Movie } from "../../interface/Movie";
 import initializeEcho from "../../server/realtime";
 import Echo from "laravel-echo";
 
+
+
 type Seat = {
   id: number;
   label: string;
@@ -87,7 +89,11 @@ const CinemaSeatSelection: React.FC = () => {
   
           // Set reserved seats data
           setReservedSeats(reservedSeatSet);
-        } catch (seatError) {console.error("Error fetching seat data", seatError);
+
+        } catch (seatError) {
+          console.error("Error fetching seat data", seatError);
+
+
           setReservedSeats(new Set<string>());
         }
   
@@ -106,23 +112,24 @@ const CinemaSeatSelection: React.FC = () => {
           
        
           
-            const channel = echo.private(`seats-${roomId}`); 
+            const channel = echo.private(`seats${roomId}`); 
             console.log("Connected to channel:", channel);
-  
+      
             // Lắng nghe sự kiện SeatSelected
-            channel.listen("SeatSelected", (eventData: SeatReservedData) => {
-              console.log("Received seats data:", eventData);
+            channel.listen("SeatSelected", (event:any) => {
+              console.log("Received seats data:", event);
   
-              if (eventData && eventData.seats) {
-                console.log("Received selected seats:", eventData.seats);
+              // if (eventData ) {
+              //   console.log("Received selected seats:", eventData.seats);
   
-                // Cập nhật state với Map
-                const newSelectedSeats = new Map(selectedSeats); // Sao chép bản đồ cũ
-                newSelectedSeats.set(roomId, eventData.seats); // Thêm ghế mới vào Map theo roomId
+              //   // Cập nhật state với Map
+              //   const newSelectedSeats = new Map(selectedSeats); // Sao chép bản đồ cũ
+              //   newSelectedSeats.set(roomId, eventData.seats); // Thêm ghế mới vào Map theo roomId
   
-                setSelectedSeats(newSelectedSeats); // Cập nhật lại state
-                updateSeatsSelection(eventData.seats); // Cập nhật ghế trong lưới
-              }
+              //   setSelectedSeats(newSelectedSeats); // Cập nhật lại state
+              //   updateSeatsSelection(eventData.seats); // Cập nhật ghế trong lưới
+              // }
+
             });
           } else {
             setStatus("Failed to connect.");
@@ -167,7 +174,10 @@ const CinemaSeatSelection: React.FC = () => {
   
     const currentSeats = new Map(selectedSeats);
     const row = seat.row!;
-    const index = seat.column - 1;// Cập nhật ghế đã chọn cho đúng
+
+    const index = seat.column - 1;
+  
+
     if (currentSeats.has(row)) {
       const indices = currentSeats.get(row) || [];
       if (indices.includes(index)) {
@@ -266,7 +276,9 @@ const CinemaSeatSelection: React.FC = () => {
       seats: selectedSeatsArray,
     };
   
-    try { const response = await instance.post("/selectSeats", payload);
+    try {
+      const response = await instance.post("/selectSeats", payload);
+
   
       if (response.status === 200) {
         navigate("/orders", {
@@ -355,7 +367,10 @@ const CinemaSeatSelection: React.FC = () => {
               color:'#fff',
               border: "1px solid black", // Add border to row labels
               backgroundColor: "#727575", // Slight background color for clarity
-             position:"relative",right:"50px"
+
+             position:"relative",
+             right:"50px"
+
         
             }}
           >
@@ -436,7 +451,10 @@ const CinemaSeatSelection: React.FC = () => {
         
         style={{
           ...baseStyle, // Áp dụng các style chung
-          background: seatBackground, // Áp dụng màu nền cho ghế dựa trên loại và trạng thái/-strong/-heart:>:o:-((:-h cursor: isDisabled ? "not-allowed" : "pointer", // Khi ghế không có sẵn, không thể chọn
+
+          background: seatBackground, // Áp dụng màu nền cho ghế dựa trên loại và trạng thái
+          cursor: isDisabled ? "not-allowed" : "pointer", // Khi ghế không có sẵn, không thể chọn
+
         }}
       >
         {seat?.label} {/* Hiển thị tên ghế */}

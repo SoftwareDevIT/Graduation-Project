@@ -17,7 +17,7 @@ class RoomService
     public function index(): Collection
     {
 
-        return Room::orderByDesc('created_at')->get();
+        return Room::with('seatlayout')->orderByDesc('created_at')->get();
     }
 
 

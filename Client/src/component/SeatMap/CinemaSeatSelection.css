@@ -2,7 +2,7 @@
 .container-map {
   margin: 0;
   padding: 0;
-  margin-left: 190px;
+  margin-left: 100px;
   max-width: 1600px; /* Increased width */
 }
 .box-map{
@@ -28,7 +28,7 @@
 }
 
 .thongtinphim {
-  margin-right: 4%;
+  margin-right: 18%;
   margin-top: 0px;
 }
 

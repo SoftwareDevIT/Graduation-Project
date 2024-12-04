@@ -72,22 +72,11 @@ const RoomDashboard: React.FC = () => {
       key: 'room_name',
       className: 'text-center',
     },
+  
     {
-      title: 'Tổng số ghế',
-      dataIndex: 'volume',
-      key: 'volume',
-      className: 'text-center',
-    },
-    {
-      title: 'Số Ghế Đôi',
-      dataIndex: 'quantity_double_seats',
-      key: 'quantity_double_seats',
-      className: 'text-center',
-    },
-    {
-      title: 'Số Ghế VIP',
-      dataIndex: 'quantity_vip_seats',
-      key: 'quantity_vip_seats',
+      title: 'Mẫu Sơ Đồ Ghế',
+      dataIndex: ['seatlayout','name'],
+      key: 'room_name',
       className: 'text-center',
     },
     {

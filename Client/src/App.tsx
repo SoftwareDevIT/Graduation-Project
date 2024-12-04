@@ -100,6 +100,11 @@ import SeatMapForm from "./component/Admin/SeatMap/SeatMapForm";
 import OrdersDetailManager from "./Page/Admin/Orders/OrdersDetail";
 import WebsiteSettingsManager from "./Page/Admin/WebsiteSettings/WebsiteSettingManager";
 import ShowtimesAuto from "./Page/Admin/Showtimes/ShowtimesAuto";
+import Pointaccumulation from "./component/PersonalPage/Pointaccumulation";
+import MovieTicket from "./component/PersonalPage/MovieTicket";
+import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
+
+
 
 import SeatLayout from "./component/SeatMap/test";
 import Community from "./component/Community/Community";
@@ -123,8 +128,9 @@ function App() {
         <Route path="/buy-ticket" element={<Bookcinematickets />} />
         <Route path="/orders" element={<PrivateRoute><OrderPage /></PrivateRoute>} />
         <Route path="/pay" element={ <PrivateRoute><OrderCheckout /></PrivateRoute> } />
-       
-     
+
+        <Route path="/seat" element={<CinemaSeatSelection />} />
+
         <Route path="/movie-detail/:slug" element={<ContentMovie />} />
         <Route path="/schedule/:slug" element={<LichChieu />} />
         <Route path="/reviews/:slug" element={<DanhGia />} />
@@ -134,6 +140,7 @@ function App() {
         <Route path="/confirm" element={<EmailConfirm />} />
      
         <Route path="/*" element={<NotFound />} />
+        <Route path="/movieticket" element={<MovieTicket/>} />
 
 
         <Route path="/filmnews" element={<FilmNews/>} />
@@ -152,7 +159,7 @@ function App() {
         <Route path="/Personal" element={<PrivateRoute><Personal /></PrivateRoute>} />
  
         <Route path="/ticketcinema" element={ <PrivateRoute><TicketCinema/></PrivateRoute>} />
-      
+
         <Route path="/ChangePassword" element={ <PrivateRoute><ChangePassword /></PrivateRoute>} />
         <Route path="/register" element={<RegisterCinema />} />
         <Route path="/login" element={<LoginCinema />} />
@@ -163,7 +170,10 @@ function App() {
         <Route path="/forgetpass" element={<ForgetPass/>} />
         <Route path="/otp" element={<Otp/>} />
         <Route path="/resetPassword" element={<ResetPasswod/>} />
-        <Route path="/points" element={<Points/>} />
+
+        <Route path="/test" element={<Pointaccumulation/>} />
+    
+
        
       
     

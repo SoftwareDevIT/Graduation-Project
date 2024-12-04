@@ -4,37 +4,40 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Room } from '../../../interface/Room';
 import { Cinema } from '../../../interface/Cinema';
 import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod'; // For integrating Zod with React Hook Form
+import { zodResolver } from '@hookform/resolvers/zod';
 import instance from '../../../server';
-import { notification } from 'antd'; // Import notification from Ant Design
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { notification } from 'antd';
+
 
 // Zod schema validation
 const roomSchema = z.object({
   room_name: z.string().min(1, 'Tên phòng không được bỏ trống'),
   cinema_id: z.number().min(1, 'Vui lòng chọn rạp'),
+  seat_layout_id: z.number().min(1, 'Vui lòng chọn kiểu bố trí ghế'),
 });
-
-
-
 
 const RoomsForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { register, handleSubmit, reset, formState: { errors } } = useForm<Room>({
-    resolver: zodResolver(roomSchema), // Use Zod resolver for validation
+    resolver: zodResolver(roomSchema),
   });
   const nav = useNavigate();
 
   const [cinemas, setCinemas] = useState<Cinema[]>([]);
+  const [seatLayouts, setSeatLayouts] = useState<any[]>([]); // Dữ liệu seat_layouts
 
   useEffect(() => {
-    // Fetch all cinemas
     const fetchCinemas = async () => {
       const response = await instance.get('/cinema');
       setCinemas(response.data.data);
     };
 
-    // Fetch room details if editing
+    const fetchSeatLayouts = async () => {
+      // Giả sử có API cho seat layouts
+      const response = await instance.get('/matrix');
+      setSeatLayouts(response.data.data);
+    };
+
     const fetchRoom = async () => {
       if (id) {
         const response = await instance.get(`/room/${id}`);
@@ -42,17 +45,19 @@ const RoomsForm: React.FC = () => {
         reset({
           room_name: roomData.room_name,
           cinema_id: roomData.cinema_id,
+          seat_layout_id: roomData.seat_layout_id,
         });
       }
     };
 
     fetchCinemas();
+    fetchSeatLayouts();
     fetchRoom();
   }, [id, reset]);
 
   const onSubmit: SubmitHandler<Room> = async (data) => {
-    console.log('Submitted Data:', data); // Debug log
-    if (!data.room_name || !data.cinema_id) {
+    console.log('Submitted Data:', data);
+    if (!data.room_name || !data.cinema_id || !data.seat_layout_id) {
       notification.error({
         message: 'Thông báo',
         description: 'Vui lòng điền đầy đủ thông tin.',
@@ -70,7 +75,6 @@ const RoomsForm: React.FC = () => {
       } else {
         const mappedData = {
           ...data,
-       
         };
         await instance.post('/room', mappedData);
         notification.success({
@@ -103,11 +107,12 @@ const RoomsForm: React.FC = () => {
           />
           {errors.room_name && <div className="invalid-feedback">{errors.room_name.message}</div>}
         </div>
+
         {/* Rạp */}
         <div className="mb-3">
           <label className="form-label">Rạp</label>
           <select
-            {...register('cinema_id',{valueAsNumber: true})}
+            {...register('cinema_id', { valueAsNumber: true })}
             className={`form-control ${errors.cinema_id ? 'is-invalid' : ''}`}
           >
             <option value="">Chọn Rạp</option>
@@ -119,6 +124,24 @@ const RoomsForm: React.FC = () => {
           </select>
           {errors.cinema_id && <div className="invalid-feedback">{errors.cinema_id.message}</div>}
         </div>
+
+        {/* Kiểu Bố trí Ghế */}
+        <div className="mb-3">
+          <label className="form-label">Kiểu Bố trí Ghế</label>
+          <select
+            {...register('seat_layout_id', { valueAsNumber: true })}
+            className={`form-control ${errors.seat_layout_id ? 'is-invalid' : ''}`}
+          >
+            <option value="">Chọn Kiểu Bố trí Ghế</option>
+            {seatLayouts.map((layout) => (
+              <option key={layout.id} value={layout.id}>
+                {layout.name} {/* Giả sử mỗi layout có thuộc tính name */}
+              </option>
+            ))}
+          </select>
+          {errors.seat_layout_id && <div className="invalid-feedback">{errors.seat_layout_id.message}</div>}
+        </div>
+
         <button type="submit" className="btn btn-primary">
           {id ? "Cập nhật Phòng" : "Thêm Phòng"}
         </button>
