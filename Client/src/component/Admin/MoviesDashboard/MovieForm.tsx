@@ -19,14 +19,14 @@ const movieSchema = z.object({
   director_id: z.array(z.number()).min(1, 'Chọn ít nhất một đạo diễn'),
   release_date: z
     .string()
-    .refine((date) => moment(date, 'YYYY-MM-DD', true).isValid(), 'Ngày phát hành không hợp lệ')
-    .refine((date) => moment(date).isSameOrAfter(moment(), 'day'), 'Ngày phát hành không được bé hơn ngày hiện tại'),
+    .refine((date) => moment(date, 'YYYY-MM-DD', true).isValid(), 'Ngày phát hành không hợp lệ'),
+    // .refine((date) => moment(date).isSameOrAfter(moment(), 'day'), 'Ngày phát hành không được bé hơn ngày hiện tại'),
   age_limit: z
     .number()
     .int()
     .min(5, 'Giới hạn độ tuổi tối thiểu là 5')
     .max(18, 'Giới hạn độ tuổi tối đa là 18'),
-  description: z.string().min(10, 'Mô tả phải có ít nhất 10 ký tự').max(500,'Mô tả tối đa 500 ký tự'),
+  description: z.string().min(10, 'Mô tả phải có ít nhất 10 ký tự').max(5000,'Mô tả tối đa 500 ký tự'),
   duration: z
   .string()
   .min(1, 'Thời lượng là bắt buộc')
