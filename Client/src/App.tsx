@@ -1,9 +1,6 @@
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
-
-
 import OrderCheckout from "./component/Pay/OderCheckOut";
-
 import Headerticket from "./component/Headerticket/Headerticket";
 import RegisterCinema from "./Page/Client/RegisterCinema";
 import LoginCinema from "./Page/Client/LoginCinema";
@@ -11,7 +8,6 @@ import Dashboard from "./Page/Admin/Dashboard/Dashboard";
 import User from "./Page/Admin/User/UserManager";
 import ShowtimesManager from "./Page/Admin/Showtimes/ShowtimesManager";
 import OrdersManager from "./Page/Admin/Orders/OrdersManager";
-
 import PostsManager from "./Page/Admin/Posts/PostsManager";
 import CategoriesManager from "./Page/Admin/Categories/CategoriesManager";
 import CountriesManager from "./Page/Admin/Countries/CountriesManager";
@@ -29,7 +25,6 @@ import CinemasFormManager from "./Page/Admin/Cinemas/CinemasForm";
 import ComboFormManager from "./Page/Admin/Combo/ComboForm";
 import ShowtimesFormManager from "./Page/Admin/Showtimes/ShowtimesForm";
 import MoviesManagerForm from "./Page/Admin/Movies/MoviesForm";
-
 import PostsFormManager from "./Page/Admin/Posts/PostForm";
 import LichChieu from "./component/MovieDetail/LichChieu";
 import DanhGia from "./component/MovieDetail/DanhGia";
@@ -40,22 +35,17 @@ import MoviesAddManager from "./Page/Admin/Movies/MoviesForm";
 import CategoriesFormManager from "./Page/Admin/Categories/CategoriesForm";
 import MuaVe from "./component/MovieDetail/MuaVe";
 import SerachMovies from "./component/SerachMovies/SerachMovies";
-
 import Personal from "./component/PersonalPage/Personal";
 import ChangePassword from "./component/PersonalPage/ChangePassword";
 import Profile from "./component/PersonalPage/Profile";
 import PrivateRoute from "./PrivateRoute";
-
 import MovieShowing from "./component/Movies/MovieShowing";
 import SupportCenter from "./component/Support/Support";
 import PostDetail from "./component/Post/PostDetail";
-
 import Deponsit from "./component/PersonalPage/Deposit";
 import ForgetPass from "./component/Login/ForgetPass";
-
 import AdminLogin from "./component/Admin/Login/LoginAdmin";
 import PostDetailManager from "./component/Admin/PostsDasboard/PostDetailManager";
-
 import EarlyMovie from "./component/Movies/EarlyMovie";
 import ResetPassword from "./component/Login/ResetPasswod";
 import Otp from "./component/Login/Otp";
@@ -63,37 +53,26 @@ import NotFound from "./component/NotFoud/NotFound";
 import ResetPasswod from "./component/Login/ResetPasswod";
 import { QueryClientProvider } from "@tanstack/react-query";
 import queryClient from '../src/server/queryClient'; 
-
 import RoomsManager from "./Page/Admin/Rooms/RoomsManager";
 import RoomsFormManager from "./Page/Admin/Rooms/RoomsForm";
 import Video from "./component/News/Video";
 import FilmNews from "./component/News/FilmNews";
-
-
-
-
-
 import ActorManager from "./Page/Admin/Actor/ActorManager";
 import ActorForm from "./Page/Admin/Actor/ActorForm";
 import DirectorManager from "./Page/Admin/Director/DirectorManager";
 import DirectorFormManager from "./Page/Admin/Director/DirectorForm";
 import UpcomingMovies from "./component/Movies/UpcomingMovies";
-
-// import PageTitleUpdater from "./component/PageTitleUpdater/PageTitleUpdater";
-
 import MethodManager from "./Page/Admin/Method/MethodManager";
 import MethodFormManager from "./Page/Admin/Method/MethodForm";
 import PromotionsManager from "./Page/Admin/Promotions/PromotionsManager";
 import PromotionsFormManager from "./Page/Admin/Promotions/PromotionsForm";
 import OrderPage from "./component/Oders/OrderPage";
 import OrdersFormManager from "./Page/Admin/Orders/OrdersForm";
-
 import PageTitleUpdater from "./component/PageTitleUpdater/PageTitleUpdater";
 import TicketCinema from "./component/PersonalPage/TicketCinema";
 import SeatLayoutManager from "./Page/Admin/SeatLayout/SeatLayoutManager";
 import SeatLayoutFormManager from "./Page/Admin/SeatLayout/SeatLayoutForm";
 import SeatMapManager from "./Page/Admin/SeatMap/SeatMapManager";
-
 import RankManager from "./Page/Admin/Ranks/RankManager";
 import RankForm from "./Page/Admin/Ranks/RankForm";
 import SeatMapForm from "./component/Admin/SeatMap/SeatMapForm";
@@ -102,21 +81,10 @@ import WebsiteSettingsManager from "./Page/Admin/WebsiteSettings/WebsiteSettingM
 import ShowtimesAuto from "./Page/Admin/Showtimes/ShowtimesAuto";
 import Pointaccumulation from "./component/PersonalPage/Pointaccumulation";
 import MovieTicket from "./component/PersonalPage/MovieTicket";
-
-
-
-
-
-import SeatLayout from "./component/SeatMap/test";
+import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
 import Community from "./component/Community/Community";
-import Points from "./component/PersonalPage/Points";
-
-
-
-
-
-
-
+import SeatLayout from "./component/SeatMap/test";
+import MyMapComponent from "./component/GG map/Ggmap";
 
 function App() {
 
@@ -143,6 +111,7 @@ function App() {
      
         <Route path="/*" element={<NotFound />} />
         <Route path="/movieticket" element={<MovieTicket/>} />
+        <Route path="/map" element={<MyMapComponent/>} />
 
 
         <Route path="/filmnews" element={<FilmNews/>} />
