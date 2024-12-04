@@ -28,11 +28,13 @@ class SeatSelected implements ShouldBroadcast
     public function broadcastOn()
     {
         // Đảm bảo rằng bạn broadcast đúng kênh theo roomId
-        return new PrivateChannel('seats-' . $this->roomId);
+        Log::info("broadcastOn");
+        return new PrivateChannel('seats' . $this->roomId);
     }
 
     public function broadcastWith(): array
     {
+        Log::info("broadcastWith");
         return [
             'seats' => $this->seats,
             'userId' => $this->userId
