@@ -13,15 +13,12 @@ return new class extends Migration
     {
         Schema::create('seat_map', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('seat_layout_id');
-            $table->string('label');
-            $table->string('linkedSeat')->nullable();
-            $table->string('row');
-            $table->integer('column');
-            $table->enum('type', ['Regular', 'VIP', 'Couple'])->default('Regular');
-            $table->boolean('is_double')->default(false);
+            $table->string('name');
+            $table->string('description');
+            $table->integer('matrix_row');
+            $table->integer('matrix_column');
+            $table->json('seat_structure')->nullable();
             $table->timestamps();
-            $table->foreign('seat_layout_id')->references('id')->on('seat_layouts')->onDelete('cascade');
         });
     }
 
