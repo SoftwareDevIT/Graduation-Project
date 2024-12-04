@@ -293,95 +293,77 @@ class BookingController extends Controller
 
     public function hasGapIssue($seats)
     {
-        // Sắp xếp chỗ ngồi theo cột của họ trước và hàng thứ hai
         usort($seats, function ($a, $b) {
-            if ($a['seat_column'] == $b['seat_column']) {
-                return strcmp($a['seat_row'], $b['seat_row']);
-            }
-            return $a['seat_column'] - $b['seat_column'];
+            return strcmp($a['seat_name'], $b['seat_name']); // Sắp xếp theo tên ghế
         });
 
-        // Store selected rows within columns
-        $selectedColumns = [];
+        // Lưu ghế theo hàng
+        $selectedRows = [];
         foreach ($seats as $seat) {
-            $column = $seat['seat_column'];
-            $row = $seat['seat_row'];
+            preg_match('/([A-Za-z]+)(\d+)/', $seat['seat_name'], $match);
+            $row = $match[1]; // Hàng
+            $column = (int)$match[2]; // Cột
 
-            // If column is not recorded yet, initialize it
-            if (!isset($selectedColumns[$column])) {
-                $selectedColumns[$column] = [];
+            // Kiểm tra xem hàng đã được chọn chưa
+            if (!isset($selectedRows[$row])) {
+                $selectedRows[$row] = [];
             }
-
-            // Append rows to the respective column
-            $selectedColumns[$column][] = $row;
+            // Thêm cột của ghế vào danh sách ghế đã chọn
+            $selectedRows[$row][] = $column;
         }
 
-        // Check for gaps in each column
-        foreach ($selectedColumns as $column => $rows) {
-            sort($rows); // Đảm bảo các hàng trong cột được sắp xếp theo thứ tự bảng chữ cái
+        // Kiểm tra các ghế trong cùng một hàng
+        foreach ($selectedRows as $row => $columns) {
+            sort($columns); // Sắp xếp lại các cột của ghế trong hàng
 
-            // Validate consecutive rows in the column
-            for ($i = 0; $i < count($rows) - 1; $i++) {
-                $currentRow = $rows[$i];
-                $nextRow = $rows[$i + 1];
-
-                // Check for gaps between rows
-                if (ord($nextRow) - ord($currentRow) == 2) {
+            // Kiểm tra nếu có sự bỏ trống giữa các cột trong hàng
+            for ($i = 0; $i < count($columns) - 1; $i++) {
+                $currentColumn = $columns[$i];
+                $nextColumn = $columns[$i + 1];
+                // Kiểm tra sự chênh lệch giữa các cột
+                if ($nextColumn - $currentColumn == 2) {
                     return response()->json([
                         'status' => false,
-                        'message' => 'Vui lòng chọn chỗ ngồi liên tiếp mà không có khoảng trống.',
+                        'message' => 'Please select consecutive seats without gaps.',
                         'data' => [
-                            'missing_seat' => chr(ord($currentRow) + 1) . $column // Identify the missing seat
+                            'missing_seat' => $row . ($currentColumn + 1) // Ghế bị bỏ trống giữa các ghế đã chọn
                         ]
                     ], 402);
                 }
             }
 
-            $firstRow = $rows[0];
-            $lastRow = end($rows);
-
-            // Validate selection starting from the first row of the column
-            if (ord($firstRow) > ord('A')) {
+            $firstColumn = $columns[0];
+            $lastColumn = end($columns);
+            // var_dump($firstColumn, $lastColumn);
+            // die;
+            if ($firstColumn == 2) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Vui lòng chọn ghế liên tiếp bắt đầu từ hàng đầu tiên của cột.',
+                    'message' => 'Please select consecutive seats starting from the first seat of the row.',
                     'data' => [
-                        'missing_seat' => 'A' . $column
+                        'missing_seat' => $row . '1' // Ghế đầu hàng bị bỏ trống
                     ]
                 ], 402);
             }
-
-            // Validate selection ending at the last row of the column
-            $maxRow = $this->getMaxRowForColumn($column);
-            if (ord($lastRow) < ord($maxRow)) {
+            $maxColumn = $this->getMaxColumnForRow($row); // Giả sử bạn có phương thức này để lấy số ghế tối đa trong một hàng
+            if ($maxColumn - $lastColumn == 1) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Vui lòng chọn ghế liên tiếp lên đến hàng cuối cùng của cột.',
+                    'message' => 'Please select consecutive seats up to the last seat of the row.',
                     'data' => [
-                        'missing_seat' => $maxRow . $column
+                        'missing_seat' => $row . $maxColumn // Ghế cuối hàng bị bỏ trống
                     ]
                 ], 402);
             }
         }
-
-        // No gap issues detected
-        return null;
     }
 
-
-    private function getMaxRowForColumn($column)
+    private function getMaxColumnForRow($row)
     {
-        // Giả sử ánh xạ cấu trúc cột sang hàng được xác định trước
-        $maxRows = [
-            1 => 'J', // Cột 1 có hàng 'A' đến 'J'
-            2 => 'H', // Column 2 has rows 'A' to 'H'
-            3 => 'K', // Column 3 has rows 'A' to 'K'
-            // Add other columns as necessary
-        ];
-
-        return $maxRows[$column] ?? 'J'; // mặc định là 'j' nếu không có ánh xạ cụ thể tồn tại
+        // Giả sử bạn có một bảng hoặc cách để lấy số cột tối đa cho một hàng cụ thể
+        // Ví dụ: nếu hàng có 10 ghế thì trả về 10
+        return 10;  // Giá trị này có thể thay đổi tùy thuộc vào cấu trúc ghế của bạn
     }
-
 
 
 
