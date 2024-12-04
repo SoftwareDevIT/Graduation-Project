@@ -70,18 +70,24 @@ class Showtime extends Model
     protected static function booted()
     {
         static::creating(function ($showtime) {
-            // Lấy duration từ movie liên kết qua movie_in_cinema
-            if ($showtime->movieInCinema && $showtime->movieInCinema->movie && $showtime->showtime_start) {
-                $duration = $showtime->movieInCinema->movie->duration;
-                $showtime->showtime_end = self::calculateShowtimesEnd($showtime->showtime_start, $duration);
+            // Lấy duration từ movie liên kết qua movie_id
+            if ($showtime->movie_id && $showtime->showtime_start) {
+                $movie = Movie::find($showtime->movie_id); // Tìm thông tin phim từ movie_id
+                if ($movie) {
+                    $duration = $movie->duration;
+                    $showtime->showtime_end = self::calculateShowtimesEnd($showtime->showtime_start, $duration);
+                }
             }
         });
 
         static::updating(function ($showtime) {
-            // Cập nhật showtime_end khi showtime_start thay đổi
-            if ($showtime->isDirty('showtime_start') && $showtime->movieInCinema && $showtime->movieInCinema->movie) {
-                $duration = $showtime->movieInCinema->movie->duration;
-                $showtime->showtime_end = self::calculateShowtimesEnd($showtime->showtime_start, $duration);
+            // Cập nhật showtime_end khi showtime_start hoặc movie_id thay đổi
+            if ($showtime->isDirty(['showtime_start', 'movie_id'])) {
+                $movie = Movie::find($showtime->movie_id); // Tìm thông tin phim từ movie_id
+                if ($movie) {
+                    $duration = $movie->duration;
+                    $showtime->showtime_end = self::calculateShowtimesEnd($showtime->showtime_start, $duration);
+                }
             }
         });
     }
@@ -93,7 +99,8 @@ class Showtime extends Model
 
 
     public static function calculateShowtimesEnd($showtimeStart, $duration)
-    {
-        return date('H:i:s', strtotime($showtimeStart) + ($duration * 60));
-    }
+{
+    // Tính toán thời gian kết thúc dựa trên thời gian bắt đầu và thời lượng phim
+    return date('H:i:s', strtotime($showtimeStart) + ($duration * 60));
+}
 }
