@@ -14,8 +14,6 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 const postSchema = z.object({
   title: z.string().min(1, 'Tiêu đề là bắt buộc').max(100,'Tiêu đề tối đa 100 ký tự'), // Title is required
   news_category_id: z.number().min(1, 'Chọn một danh mục'), // Category is required
- 
- 
   content: z.string().min(1, 'Nội dung là bắt buộc').max(10000,'Nội dung tối đa 10000 ký tự'), // Content is required
 });
 
@@ -33,6 +31,7 @@ const PostsForm: React.FC = () => {
   const [oldBanner, setOldBanner] = useState<string | null>(null); // Store old banner URL
   const { addOrUpdatePost } = usePostsContext();
   const nav = useNavigate();
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -106,8 +105,8 @@ const PostsForm: React.FC = () => {
   
   return (
     <div className="container mt-5">
-      <h2>{id ? 'Chỉnh sửa bài viết' : 'Thêm bài viết'}</h2>
-      <form onSubmit={handleSubmit(onSubmit)} className="needs-validation" noValidate>
+      <h2 className='text-center'>{id ? 'Chỉnh sửa bài viết' : 'Thêm bài viết'}</h2>
+      <form onSubmit={handleSubmit(onSubmit)} className="needs-validation" style={{ maxWidth: "500px", margin: "0 auto"}} noValidate>
         <div className="mb-3">
           <label className="form-label">Tiêu đề:</label>
           <input
@@ -188,7 +187,7 @@ const PostsForm: React.FC = () => {
           {errors.content && <span className="text-danger">{errors.content.message}</span>}
         </div>
 
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className="btn btn-primary w-100">
           {id ? 'Cập nhật bài viết' : 'Thêm bài viết'}
         </button>
       </form>

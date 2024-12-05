@@ -54,9 +54,9 @@ class RankService
         return $method;
     }
 
-    public function usePoints($user, $pointsToUse, $totalPrice, $booking_id)
+    public function usePoints($user, $pointsToUse, $totalPrice)
     {
-        $usedPointsSessionKey = 'used_points_' . $booking_id;
+        $usedPointsSessionKey = 'used_points_';
         if (session()->has($usedPointsSessionKey)) {
             return [
                 'success' => false,
@@ -71,10 +71,11 @@ class RankService
             ];
         }
 
-        if ($pointsToUse > $totalPrice) {
+        $maxPointsAllowed = $totalPrice * 0.2;
+        if ($pointsToUse > $maxPointsAllowed) {
             return [
                 'success' => false,
-                'message' => 'Số điểm nhập không được vượt quá tổng tiền.'
+                'message' => 'Số điểm nhập không được vượt quá 20% tổng tiền.'
             ];
         }
 
@@ -110,6 +111,8 @@ class RankService
         ]);
 
         Log::info(session()->all());
+
+
 
         $this->updateRank($user);
 
