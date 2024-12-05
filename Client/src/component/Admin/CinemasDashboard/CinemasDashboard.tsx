@@ -36,6 +36,7 @@ const CinemasDashboard: React.FC = () => {
     }, []);
 
     const filteredCinemas = cinemas.filter((cinema) =>
+        cinema.cinema_name &&
         cinema.cinema_name.toLowerCase().includes(searchTerm.toLowerCase())
     );
     const totalCinemas = filteredCinemas.length;

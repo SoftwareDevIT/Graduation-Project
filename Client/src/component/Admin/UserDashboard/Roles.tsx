@@ -144,7 +144,7 @@ const RoleAndUserManagement = () => {
           Tạo vai trò
         </button>
 
-        <h3 style={{ marginTop: '20px' }}>Vai trò hiện có</h3>
+        {/* <h3 style={{ marginTop: '20px' }}>Vai trò hiện có</h3>
         <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
           <thead>
             <tr>
@@ -216,7 +216,7 @@ const RoleAndUserManagement = () => {
               </tr>
             ))}
           </tbody>
-        </table>
+        </table> */}
       </div>
       <h2>Quản lý người dùng</h2>
       <div>
@@ -225,7 +225,7 @@ const RoleAndUserManagement = () => {
             <tr>
               <th style={{ padding: '10px', border: '1px solid #ddd' }}>Tên người dùng</th>
               <th style={{ padding: '10px', border: '1px solid #ddd' }}>Vai trò</th>
-              <th style={{ padding: '10px', border: '1px solid #ddd' }}>Hành động</th>
+              <th style={{ padding: '10px', border: '1px solid #ddd' }}>Rạp</th>
             </tr>
           </thead>
           <tbody>
@@ -256,19 +256,6 @@ const RoleAndUserManagement = () => {
       </td>
       <td style={{ padding: '10px', border: '1px solid #ddd' }}>
        
-        <button
-          // Gọi hàm xóa người dùng
-          style={{
-            backgroundColor: '#dc3545',
-            color: 'white',
-            border: 'none',
-            padding: '8px 12px',
-            borderRadius: '5px',
-            cursor: 'pointer',
-          }}
-        >
-          Xóa người dùng
-        </button>
       </td>
     </tr>
   ))}

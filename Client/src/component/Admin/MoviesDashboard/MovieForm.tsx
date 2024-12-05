@@ -9,10 +9,14 @@ import { Director } from '../../../interface/Director';
 import { useMovieContext } from '../../../Context/MoviesContext';
 import instance from '../../../server';
 import { MovieCategory } from '../../../interface/MovieCategory';
+
+import { Select,notification } from 'antd';
+
 import { Input, notification } from 'antd';
 import { Select } from 'antd';
 import "./MovieForm.css"
 const { Option } = Select;
+
 
 // Zod schema for form validation
 const movieSchema = z.object({
@@ -180,6 +184,19 @@ const MovieForm: React.FC = () => {
     control={control}
     render={({ field }) => (
       <Select
+
+        {...field}
+        mode="multiple"
+        allowClear
+        style={{ width: '100%' }}
+        placeholder="Chọn danh mục phim"
+        options={categories.map((category) => ({
+          label: category.category_name,
+          value: category.id,
+        }))}
+        onChange={(value) => field.onChange(value)}
+      />
+
         mode="multiple"
         style={{ width: '100%' }}
         placeholder="Chọn danh mục phim"
@@ -192,18 +209,39 @@ const MovieForm: React.FC = () => {
           </Option>
         ))}
       </Select>
+
     )}
   />
   {errors.movie_category_id && <p className="text-danger">{errors.movie_category_id.message}</p>}
 </div>
+
+
+
+        {/* Actors */}
+        <div className="mb-3">
+
      {/* Actors */}
 <div className="mb-3">
+
   <label className="form-label">Diễn viên</label>
   <Controller
     name="actor_id"
     control={control}
     render={({ field }) => (
       <Select
+
+        {...field}
+        mode="multiple"
+        allowClear
+        style={{ width: '100%' }}
+        placeholder="Chọn diễn viên"
+        options={actors.map((actor) => ({
+          label: actor.actor_name,
+          value: actor.id,
+        }))}
+        onChange={(value) => field.onChange(value)}
+      />
+
         mode="multiple"
         style={{ width: '100%' }}
         placeholder="Chọn diễn viên"
@@ -216,18 +254,37 @@ const MovieForm: React.FC = () => {
           </Option>
         ))}
       </Select>
+
     )}
   />
   {errors.actor_id && <p className="text-danger">{errors.actor_id.message}</p>}
 </div>
+
+
+        {/* Directors */}
+        <div className="mb-3">
+
     {/* Director */}
 <div className="mb-3">
+
   <label className="form-label">Đạo diễn</label>
   <Controller
     name="director_id"
     control={control}
     render={({ field }) => (
       <Select
+
+        {...field}
+        mode="multiple"
+        allowClear
+        style={{ width: '100%' }}
+        placeholder="Chọn đạo diễn"
+        options={directors.map((director) => ({
+          label: director.director_name,
+          value: director.id,
+        }))}
+        onChange={(value) => field.onChange(value)}
+      />
         mode="multiple"
         style={{ width: '100%' }}
         placeholder="Chọn đạo diễn"
@@ -240,10 +297,24 @@ const MovieForm: React.FC = () => {
           </Option>
         ))}
       </Select>
+
     )}
   />
   {errors.director_id && <p className="text-danger">{errors.director_id.message}</p>}
 </div>
+
+
+
+        {/* Release Date */}
+        <div className="mb-3">
+          <label className="form-label">Ngày phát hành</label>
+          <input
+            type="date"
+            className="form-control"
+            {...register('release_date')}
+          />
+          {errors.release_date && <p className="text-danger">{errors.release_date.message}</p>}
+        </div>
 
 <div className="mb-3 row">
   {/* Ngày phát hành */}
@@ -262,6 +333,7 @@ const MovieForm: React.FC = () => {
     />
     {errors.release_date && <p className="text-danger">{errors.release_date.message}</p>}
   </div>
+
 
   {/* Giới hạn độ tuổi */}
   <div className="col-md-6">
@@ -388,6 +460,86 @@ const MovieForm: React.FC = () => {
           {errors.description && <p className="text-danger">{errors.description.message}</p>}
         </div>
 
+
+        {/* Duration */}
+        <div className="mb-3">
+          <label className="form-label">Thời lượng</label>
+          <input
+            type="text"
+            className="form-control"
+            {...register('duration')}
+          />
+          {errors.duration && <p className="text-danger">{errors.duration.message}</p>}
+        </div>
+
+       {/* Country */}
+       <div className="mb-3">
+          <label className="form-label">Quốc gia</label>
+          <select
+            className="form-control"
+            {...register('country')}
+            onChange={(e) => setCountry(e.target.value)}
+            value={country}
+          >
+            <option value="">Chọn quốc gia</option>
+            {countries.map((countryName) => (
+              <option key={countryName} value={countryName}>
+                {countryName}
+              </option>
+            ))}
+          </select>
+          {errors.country && <p className="text-danger">{errors.country.message}</p>}
+        </div>
+
+        {/* Trailer */}
+        <div className="mb-3">
+          <label className="form-label">Trailer (URL)</label>
+          <input
+            type="text"
+            className="form-control"
+            {...register('trailer')}
+            value={trailer}
+            onChange={(e) => setTrailer(e.target.value)}
+          />
+          {errors.trailer && <p className="text-danger">{errors.trailer.message}</p>}
+        </div>
+ {/* Thumbnail */}
+<div className="mb-3">
+  <label className="form-label">Thumbnail</label>
+  {thumbnailFile && (
+    <div className="mb-2">
+      <img
+        src={typeof thumbnailFile === 'string' ? thumbnailFile : URL.createObjectURL(thumbnailFile)}
+        alt="Thumbnail cũ"
+        style={{ width: '150px', height: 'auto' }}
+      />
+    </div>
+  )}
+  <input
+    type="file"
+    className="form-control"
+    onChange={(e) => setThumbnailFile(e.target.files?.[0] || null)}
+  />
+</div>
+
+       {/* Poster File */}
+<div className="mb-3">
+  <label className="form-label">Poster</label>
+  {posterFile && (
+    <div className="mb-2">
+      <img
+        src={typeof posterFile === 'string' ? posterFile : URL.createObjectURL(posterFile)}
+        alt="Poster cũ"
+        style={{ width: '150px', height: 'auto' }}
+      />
+    </div>
+  )}
+  <input
+    type="file"
+    className="form-control"
+    onChange={(e) => setPosterFile(e.target.files?.[0] || null)}
+  />
+</div>
 
         <button type="submit" className="btn btn-primary btn-lg w-100">
           {id ? 'Cập nhật phim' : 'Thêm phim'}
