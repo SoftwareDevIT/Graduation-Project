@@ -36,4 +36,9 @@ class RevenueController extends Controller
         $totalRevenue = $this->revenueService->totalRevenueBetweenDates($startDate, $endDate);
         return $this->success($totalRevenue);
     }
+    public function allRevenueCinema()
+    {
+        $totalRevenue = $this->revenueService->allRevenueCinema('Pain');
+        return $this->success($totalRevenue);
+    }
 }

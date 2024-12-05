@@ -21,4 +21,7 @@ class SeatMap extends Model
     protected $casts = [
         'seat_structure' => 'array', // Tự động cast JSON thành array khi truy cập
     ];
+
+
+
 }
