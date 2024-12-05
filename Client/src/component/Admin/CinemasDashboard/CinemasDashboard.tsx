@@ -7,6 +7,8 @@ import { MovieInCinema } from '../../../interface/MovieInCinema';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; 
 import { faEdit, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'; 
 import { notification } from 'antd';  // Import notification from Ant Design
+import { Modal, Form, Input, Button } from 'antd';
+
 
 const CinemasDashboard: React.FC = () => {
     const { state, dispatch } = useCinemaContext();
@@ -21,6 +23,9 @@ const CinemasDashboard: React.FC = () => {
     const [selectedCinemaMovies, setSelectedCinemaMovies] = useState<MovieInCinema[]>([]); 
     const [allMovies, setAllMovies] = useState<Movie[]>([]); 
     const [searchTerm, setSearchTerm] = useState<string>(''); // State cho tìm kiếm
+    const [isModalVisible, setIsModalVisible] = useState(false);
+const [form] = Form.useForm();
+
 
     useEffect(() => {
         const fetchAllMovies = async () => {
@@ -64,6 +69,34 @@ const CinemasDashboard: React.FC = () => {
             }
         }
     };
+    const showModal = () => {
+        setIsModalVisible(true);
+    };
+    
+    const handleCancel = () => {
+        setIsModalVisible(false);
+        form.resetFields(); // Xóa dữ liệu trong form khi đóng
+    };
+    
+    const handleAddCinema = async (values: any) => {
+        try {
+            const response = await instance.post('/cinemas', values); // Gửi dữ liệu thêm rạp
+            dispatch({ type: 'ADD_CINEMA', payload: response.data }); // Cập nhật danh sách rạp
+            notification.success({
+                message: 'Thành công',
+                description: 'Thêm rạp thành công!',
+            });
+            setIsModalVisible(false);
+            form.resetFields();
+        } catch (error) {
+            console.error('Lỗi khi thêm rạp:', error);
+            notification.error({
+                message: 'Lỗi',
+                description: 'Không thể thêm rạp.',
+            });
+        }
+    };
+    
 
     const fetchMoviesForCinema = async (cinemaId: number) => {
         try {
@@ -155,7 +188,59 @@ const CinemasDashboard: React.FC = () => {
         <div className="container mt-5">
         
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <Link to={'/admin/cinemas/add'} className="btn btn-outline-primary"><FontAwesomeIcon icon={faPlus} /> Thêm Rạp</Link>
+            <button onClick={showModal} className="btn btn-outline-primary">
+    <FontAwesomeIcon icon={faPlus} /> Thêm Rạp
+</button>
+<Modal
+    title="Thêm Rạp Mới"
+    visible={isModalVisible}
+    onCancel={handleCancel}
+    footer={null}
+>
+    <Form
+        form={form}
+        layout="vertical"
+        onFinish={handleAddCinema}
+    >
+        <Form.Item
+            name="cinema_name"
+            label="Tên Rạp"
+            rules={[{ required: true, message: 'Vui lòng nhập tên rạp!' }]}
+        >
+            <Input placeholder="Nhập tên rạp" />
+        </Form.Item>
+        <Form.Item
+            name="phone"
+            label="Số Điện Thoại"
+            rules={[{ required: true, message: 'Vui lòng nhập số điện thoại!' }]}
+        >
+            <Input placeholder="Nhập số điện thoại" />
+        </Form.Item>
+        <Form.Item
+            name="location_name"
+            label="Vị Trí"
+            rules={[{ required: true, message: 'Vui lòng nhập vị trí!' }]}
+        >
+            <Input placeholder="Nhập vị trí" />
+        </Form.Item>
+        <Form.Item
+            name="cinema_address"
+            label="Địa Chỉ"
+            rules={[{ required: true, message: 'Vui lòng nhập địa chỉ!' }]}
+        >
+            <Input placeholder="Nhập địa chỉ" />
+        </Form.Item>
+        <div className="text-right">
+            <Button onClick={handleCancel} style={{ marginRight: '10px' }}>
+                Hủy
+            </Button>
+            <Button type="primary" htmlType="submit">
+                Thêm
+            </Button>
+        </div>
+    </Form>
+</Modal>
+
                 <input
                     type="text"
                     placeholder="Tìm kiếm theo tên"

@@ -1,0 +1,95 @@
+/* Nền của form */
+.container {
+    background-color: #f9f9f9;  /* Nền nhẹ nhàng */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Bóng mờ */
+  }
+  
+  /* Tiêu đề form */
+  h2 {
+    color: #333;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  /* Các trường input */
+  .form-control {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border 0.3s ease;
+  }
+  
+  .form-control:focus {
+    border-color: #4CAF50;  /* Màu xanh khi chọn */
+    box-shadow: 0 0 5px rgba(0, 255, 0, 0.2); /* Bóng nhẹ khi focus */
+  }
+  
+  /* Các lựa chọn Select */
+  .ant-select-selector {
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+  }
+  
+  .ant-select-selector:hover {
+    border-color: #4CAF50; /* Màu khi hover */
+  }
+  
+  /* Màu của thông báo lỗi */
+  .text-danger {
+    color: #e74c3c;
+    font-size: 12px;
+    margin-top: 5px;
+  }
+  
+  /* Các nút */
+  button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #45a049;  /* Màu khi hover */
+  }
+  
+  /* Phần ảnh (Poster, Thumbnail) */
+  input[type="file"] {
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #fff;
+  }
+  
+  input[type="file"]:focus {
+    border-color: #4CAF50; /* Màu khi focus */
+  }
+  
+  img {
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+  
+  /* Layout của các phần trong form */
+  .mb-3 {
+    margin-bottom: 20px;
+  }
+  
+  .d-flex {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .row {
+    margin-bottom: 20px;
+  }
+  
