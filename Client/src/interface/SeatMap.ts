@@ -1,11 +1,15 @@
-export interface SeatMap1 {
+import { SeatAdmin } from "./SeatAdmin";
+
+ export interface SeatMapAdmin {
     id: number;
-    seat_layout_id: number;
-    label: string;  // Sửa từ "lable" thành "label" để đúng chính tả
-    row: string;
-    column: number;
-    type: string;
-    is_double: number;
+    name: string;
+    description: string;
+    matrix_row: number;
+    matrix_column: number;
+    row_regular_seat: number;
+    row_vip_seat: number;
+    row_couple_seat: number;
+    seat_structure: SeatAdmin[] | null;
     created_at: string;
     updated_at: string;
-}
+  }

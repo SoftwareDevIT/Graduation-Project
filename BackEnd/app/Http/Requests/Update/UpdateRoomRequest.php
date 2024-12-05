@@ -23,7 +23,7 @@ class UpdateRoomRequest extends FormRequest
     {
         return [
             "room_name" => "string",
-            "seat_layout_id" => "integer",
+            "seat_map_id" => "integer",
             "cinema_id" => "integer",
             "status" => "integer"
         ];

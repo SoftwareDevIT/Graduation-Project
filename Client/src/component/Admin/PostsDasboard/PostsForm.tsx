@@ -67,7 +67,8 @@ const PostsForm: React.FC = () => {
     const finalThumbnail = thumbnailFile || oldThumbnail;
     const finalBanner = bannerFile || oldBanner;
   
-    // Check if both thumbnail and banner are available (for new post creation)
+   
+  
     if (!finalThumbnail) {
       notification.error({
         message: 'Lỗi xác thực',
@@ -85,12 +86,11 @@ const PostsForm: React.FC = () => {
       return;
     }
   
-    // Proceed with data submission
     await addOrUpdatePost(
       {
         ...data,
-        thumbnailFile: finalThumbnail instanceof File ? finalThumbnail : undefined,  // Only include the file if it's new
-        bannerFile: finalBanner instanceof File ? finalBanner : undefined,
+        thumnail: finalThumbnail instanceof File ? finalThumbnail : undefined,  // Kiểm tra thumnail
+        banner: finalBanner instanceof File ? finalBanner : undefined,
       },
       id
     );
@@ -103,7 +103,7 @@ const PostsForm: React.FC = () => {
   
     nav('/admin/posts');
   };
-
+  
   return (
     <div className="container mt-5">
       <h2>{id ? 'Chỉnh sửa bài viết' : 'Thêm bài viết'}</h2>
@@ -141,14 +141,16 @@ const PostsForm: React.FC = () => {
         <div className="mb-3">
           <label className="form-label">Ảnh thu nhỏ mới:</label>
           <input
-            type="file"
-            className="form-control d-block"
-            onChange={(e) => {
-              if (e.target.files) {
-                setThumbnailFile(e.target.files[0]);
-              }
-            }}
-          />
+  type="file"
+  className="form-control d-block"
+  onChange={(e) => {
+    if (e.target.files) {
+      setThumbnailFile(e.target.files[0]);
+      console.log("Thumbnail File:", e.target.files[0]); // Log giá trị file để kiểm tra
+    }
+  }}
+/>
+
           
         </div>
 

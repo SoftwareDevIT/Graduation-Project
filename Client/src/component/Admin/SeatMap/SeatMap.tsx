@@ -3,31 +3,31 @@ import { Link } from 'react-router-dom';
 import { EditOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons'; // Ant Design icons
 import { notification, Table, Pagination, Input, Button, Popconfirm } from 'antd'; // Import Ant Design components
 import instance from '../../../server';
-import { SeatMap1 } from '../../../interface/SeatMap';
+import { SeatMapAdmin } from '../../../interface/SeatMap';
 
 
 const SeatMap = () => {
-    const [seatMaps, setSeatMaps] = useState<SeatMap1[]>([]); // Use SeatMap interface here
+    const [seatLayouts, setSeatLayouts] = useState<SeatMapAdmin[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [searchTerm, setSearchTerm] = useState<string>('');
-    const seatMapsPerPage = 7;
+    const seatLayoutsPerPage = 7;
     const { Search } = Input;
 
     useEffect(() => {
-        const fetchSeatMaps = async () => {
+        const fetchSeatLayouts = async () => {
             try {
-                const response = await instance.get('/seat-map'); // API call for seat maps
-                setSeatMaps(response.data.data); // Assuming the structure is { data: [...] }
+                const response = await instance.get('/seat-maps'); // API call for seat layouts
+                setSeatLayouts(response.data);
             } catch (error) {
-                console.error('Error fetching seat maps:', error);
+                console.error('Error fetching seat layouts:', error);
                 notification.error({
                     message: 'Error',
-                    description: 'Unable to load seat maps!',
+                    description: 'Unable to load seat layouts!',
                     placement: 'topRight',
                 });
             }
         };
-        fetchSeatMaps();
+        fetchSeatLayouts();
     }, []);
 
     const handleDelete = async (id: number) => {
@@ -35,15 +35,15 @@ const SeatMap = () => {
         if (!isConfirmed) return;
 
         try {
-            await instance.delete(`/seat-map/${id}`); // API call for deleting seat map
-            setSeatMaps((prevMaps) => prevMaps.filter((map) => map.id !== id));
+            await instance.delete(`/seat-maps/${id}`);
+            setSeatLayouts((prevLayouts) => prevLayouts.filter((layout) => layout.id !== id));
             notification.success({
                 message: 'Thành công',
                 description: 'Layout ghế đã được xóa!',
                 placement: 'topRight',
             });
         } catch (error) {
-            console.error('Error deleting seat map:', error);
+            console.error('Error deleting seat layout:', error);
             notification.error({
                 message: 'Lỗi',
                 description: 'Không thể xóa layout ghế!',
@@ -52,14 +52,14 @@ const SeatMap = () => {
         }
     };
 
-    const filteredSeatMaps = seatMaps.filter(map =>
-        map.row.toLowerCase().includes(searchTerm.toLowerCase()) // Assuming you want to search by row
+    const filteredSeatLayouts = seatLayouts.filter(layout =>
+        layout.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    const totalSeatMaps = filteredSeatMaps.length;
-    const currentSeatMaps = filteredSeatMaps.slice(
-        (currentPage - 1) * seatMapsPerPage,
-        currentPage * seatMapsPerPage
+    const totalSeatLayouts = filteredSeatLayouts.length;
+    const currentSeatLayouts = filteredSeatLayouts.slice(
+        (currentPage - 1) * seatLayoutsPerPage,
+        currentPage * seatLayoutsPerPage
     );
 
     const handlePageChange = (page: number) => setCurrentPage(page);
@@ -72,54 +72,59 @@ const SeatMap = () => {
             className: 'text-center',
         },
         {
-            title: 'Layout ID',
-            dataIndex: 'seat_layout_id',
-            key: 'seat_layout_id',
+            title: 'Tên Sơ Đồ',
+            dataIndex: 'name',
+            key: 'name',
             className: 'text-center',
         },
         {
-            title: 'Lable',
-            dataIndex: 'label',
-            key: 'label',
+            title: 'Mô Tả',
+            dataIndex: 'description',
+            key: 'description',
             className: 'text-center',
         },
         {
             title: 'Hàng',
-            dataIndex: 'row',
-            key: 'row',
+            dataIndex: 'matrix_row',
+            key: 'matrix_row',
             className: 'text-center',
         },
         {
             title: 'Cột',
-            dataIndex: 'column',
-            key: 'column',
+            dataIndex: 'matrix_column',
+            key: 'matrix_column',
             className: 'text-center',
         },
         {
-            title: 'Loại Ghế',
-            dataIndex: 'type',
-            key: 'type',
+            title: 'Hàng Ghế Thường',
+            dataIndex: 'row_regular_seat',
+            key: 'row_regular_seat',
             className: 'text-center',
         },
         {
-            title: 'Ghế Cặp',
-            dataIndex: 'is_double',
-            key: 'is_double',
+            title: 'Hàng Ghế VIP',
+            dataIndex: 'row_vip_seat',
+            key: 'row_vip_seat',
             className: 'text-center',
-            render: (isDouble: number) => (isDouble ? 'Có' : 'Không'),
+        },
+        {
+            title: 'Hàng Ghế Cặp',
+            dataIndex: 'row_couple_seat',
+            key: 'row_couple_seat',
+            className: 'text-center',
         },
         {
             title: 'Hành Động',
             key: 'action',
             className: 'text-center',
-            render: (text: any, seatMap: SeatMap1) => (
+            render: (text: any, seatLayout: SeatMapAdmin) => (
                 <div className="d-flex justify-content-around">
-                    <Link to={`/admin/seatmap/edit/${seatMap.id}`}>
+                    <Link to={`/admin/seat-maps/edit/${seatLayout.id}`}>
                         <Button type="primary" icon={<EditOutlined />} />
                     </Link>
                     <Popconfirm
                         title="Bạn có chắc chắn muốn xóa layout ghế này?"
-                        onConfirm={() => handleDelete(seatMap.id)}
+                        onConfirm={() => handleDelete(seatLayout.id)}
                         okText="Có"
                         cancelText="Không"
                     >
@@ -129,17 +134,16 @@ const SeatMap = () => {
             ),
         },
     ];
-
     return (
         <div className="container mt-5">
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <Link to={'/admin/seatmap/add'}>
+                <Link to={'/admin/seat-maps/add'}>
                     <Button type="primary" icon={<PlusOutlined />} size="large">
                         Thêm Sơ Đồ Ghế
                     </Button>
                 </Link>
                 <Search
-                    placeholder="Tìm kiếm theo hàng"
+                    placeholder="Tìm kiếm theo tên layout"
                     onSearch={(value) => setSearchTerm(value)}
                     style={{ width: 300 }}
                     allowClear
@@ -147,7 +151,7 @@ const SeatMap = () => {
             </div>
             <Table
                 columns={columns}
-                dataSource={currentSeatMaps}
+                dataSource={currentSeatLayouts}
                 rowKey="id"
                 pagination={false} // Disable built-in pagination
                 locale={{
@@ -157,8 +161,8 @@ const SeatMap = () => {
             <div className="d-flex justify-content-center mt-4">
                 <Pagination
                     current={currentPage}
-                    total={totalSeatMaps}
-                    pageSize={seatMapsPerPage}
+                    total={totalSeatLayouts}
+                    pageSize={seatLayoutsPerPage}
                     onChange={handlePageChange}
                     showSizeChanger={false}
                     showQuickJumper

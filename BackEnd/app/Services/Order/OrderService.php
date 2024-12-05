@@ -31,9 +31,9 @@ class OrderService
 
     public function update(string $status, int $id)
     {
-        $order = Booking::findOrFail($id); 
-        $order->status = $status; 
-        $order->save(); 
+        $order = Booking::findOrFail($id);
+        $order->status = $status;
+        $order->save();
         return $order;
     }
 
