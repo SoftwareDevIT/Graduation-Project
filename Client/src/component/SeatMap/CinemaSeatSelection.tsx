@@ -474,9 +474,6 @@ setReservedSeats(reservedSeatSet);
           })}
         </div>
       </div>
-
-
-
   </div>
 
 
