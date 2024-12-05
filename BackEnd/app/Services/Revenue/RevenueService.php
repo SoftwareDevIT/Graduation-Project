@@ -23,7 +23,7 @@ class RevenueService
 
         // Lọc theo cinema_id nếu có
         if (!is_null($idCinema)) {
-            $query->whereHas('showtime.movieInCinema.cinema', function ($subQuery) use ($idCinema) {
+            $query->whereHas('showtime.room.cinema', function ($subQuery) use ($idCinema) {
                 $subQuery->where('id', $idCinema);
             });
         }

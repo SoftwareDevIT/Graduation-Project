@@ -94,7 +94,7 @@ const CinemaSeatSelection: React.FC = () => {
 
 
 seatDataseat.data.forEach((seat: any) => {
-  if (seat.status === "Reserved Until") {
+  if (seat.seat_type === "Standard" ) {
     reservedSeatSet.add(seat.seat_name);
   }
 });
@@ -189,34 +189,38 @@ setReservedSeats(reservedSeatSet);
   
   
   const handleSeatClick = (row: string, col: number) => {
-    const seatLabel = `${row}${col}`;
+    // Tìm ghế trong seat_structure
+    const seat = seat_structure.find(
+      (s) => s.row === row && s.column === col
+    );
+    if (!seat) {
+      console.error(`Seat not found for row ${row}, column ${col}`);
+      return;
+    }
+  
+    const seatLabel = seat.label;
+  
+    // Kiểm tra trạng thái ghế
     if (reservedSeats.has(seatLabel)) {
       message.warning("Ghế này đã được đặt.");
       return;
     }
   
+    // Thêm hoặc xóa ghế khỏi trạng thái selectedSeats
     const newSelectedSeats = new Map(selectedSeats);
-    if (newSelectedSeats.has(row)) {
-      const indices = newSelectedSeats.get(row);
-      const index = indices?.indexOf(col);
-  
-      if (index !== undefined && index !== -1) {
-        indices?.splice(index, 1); // Xóa ghế khỏi danh sách đã chọn
-      } else {
-        indices?.push(col); // Thêm ghế vào danh sách đã chọn
-      }
-  
-      if (indices?.length === 0) {
-        newSelectedSeats.delete(row); // Xóa hàng nếu không còn ghế nào trong hàng đó
-      } else {
-        newSelectedSeats.set(row, indices!); // Cập nhật hàng với danh sách ghế mới
-      }
+    const currentIndices = newSelectedSeats.get(row) || [];
+    if (currentIndices.includes(col)) {
+      // Nếu ghế đã chọn, xóa khỏi danh sách
+      newSelectedSeats.set(row, currentIndices.filter((index) => index !== col));
     } else {
-      newSelectedSeats.set(row, [col]); // Thêm hàng mới với ghế đã chọn
+      // Nếu ghế chưa chọn, thêm vào danh sách
+      newSelectedSeats.set(row, [...currentIndices, col]);
     }
   
     setSelectedSeats(newSelectedSeats);
   };
+  
+  
   
   
   
@@ -261,6 +265,7 @@ setReservedSeats(reservedSeatSet);
     }),
     {}
   );
+  
  
   
   // const rows = Object.keys(seatData.seats);
@@ -268,13 +273,18 @@ setReservedSeats(reservedSeatSet);
   const handleSubmit = async () => {
     const selectedSeatsArray = Array.from(selectedSeats.entries()).flatMap(
       ([row, indices]) =>
-        indices.map((index) => ({
-          seat_name: `${row}${index + 1}`,
-          room_id: showtimeData?.room.id ,
-          showtime_id: showtimeId,
-          seat_row: row.charCodeAt(0) - 65 + 1,
-          seat_column: index + 1,
-        }))
+        indices.map((index) => {
+          const seat = seat_structure.find(
+            (s) => s.row === row && s.column === index
+          );
+          return {
+            seat_name: seat?.label || `${row}${index}`,
+            room_id: showtimeData?.room.id,
+            showtime_id: showtimeId,
+            seat_row: row.charCodeAt(0) - 65 + 1,
+            seat_column: index,
+          };
+        })
     );
     const payload = {
       cinemaId,
@@ -516,7 +526,8 @@ setReservedSeats(reservedSeatSet);
               <div className="price-box1">
                 <div className="price">
                   Tổng đơn hàng
-                  <br /> <span>{totalPrice.toLocaleString()} đ</span>
+                  <br /> <span>{totalPrice.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} đ</span>
+
                 </div>
               </div>
               <div className="actionst1">
