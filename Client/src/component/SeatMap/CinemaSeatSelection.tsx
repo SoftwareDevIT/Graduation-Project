@@ -106,9 +106,7 @@ const CinemaSeatSelection: React.FC = () => {
             setStatus("Connected to Pusher!");
             const roomId = response.data.data.room.id;
             // Kết nối với channel tương ứng
-            echo.connector.pusher.connection.bind('connected', function () {
-              console.log('Pusher connection established');
-          });
+        
           
        
           
@@ -116,8 +114,8 @@ const CinemaSeatSelection: React.FC = () => {
             console.log("Connected to channel:", channel);
       
             // Lắng nghe sự kiện SeatSelected
-            channel.listen("SeatSelected", (event:any) => {
-              console.log("Received seats data:", event);
+            channel.listen("SeatSelected", (eventData:any) => {
+              console.log("Received seats data:", eventData);
   
               // if (eventData ) {
               //   console.log("Received selected seats:", eventData.seats);
@@ -260,6 +258,8 @@ const CinemaSeatSelection: React.FC = () => {
   const rows = Object.keys(seatData.seats);
   const columns = seatData.room.seat_layout.columns;
   const handleSubmit = async () => {
+
+  
     const selectedSeatsArray = Array.from(selectedSeats.entries()).flatMap(
       ([row, indices]) =>
         indices.map((index) => ({
@@ -453,8 +453,7 @@ const CinemaSeatSelection: React.FC = () => {
           ...baseStyle, // Áp dụng các style chung
 
           background: seatBackground, // Áp dụng màu nền cho ghế dựa trên loại và trạng thái
-          cursor: isDisabled ? "not-allowed" : "pointer", // Khi ghế không có sẵn, không thể chọn
-
+          // Khi ghế không có sẵn, không thể chọn
         }}
       >
         {seat?.label} {/* Hiển thị tên ghế */}
@@ -517,7 +516,15 @@ const CinemaSeatSelection: React.FC = () => {
               </div>
               <div className="actionst1">
                 <button className="back-btn1" >←</button>
-                <button className="continue-btn1" onClick={handleSubmit}>
+                <button className="continue-btn1"  disabled={Array.from(selectedSeats.values()).flat().length === 0}
+            style={{
+              backgroundColor: Array.from(selectedSeats.values()).flat().length === 0
+                ? "#ccc"
+                : "#6E849B",
+              cursor: Array.from(selectedSeats.values()).flat().length === 0
+                ? "not-allowed"
+                : "pointer",
+            }} onClick={handleSubmit}>
                   Tiếp Tục
                 </button>
               </div>

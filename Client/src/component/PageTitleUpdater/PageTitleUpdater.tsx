@@ -40,6 +40,12 @@ const PageTitleUpdater = () => {
     else if (path ==="/movieticket") {
         title = "MovieTicket";
     }
+    else if (path ==="/ticketcinema") {
+      title = "TicketCinema";
+  }
+    else if (path ==="/earlymovie") {
+      title = "EarlyMovie";
+  }
 
     else if (path === "/admin/dashboard"){
         title = "Dashboard"

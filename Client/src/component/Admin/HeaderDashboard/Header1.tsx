@@ -85,7 +85,7 @@ const Header = () => {
                         <span className="notification-badge">3</span>
                     </div>
                     <div className="icon">
-                       <Link to={'/admin/website-settings/update'} style={{color: "#004d40"}} > <FaCog /></Link>
+                       <Link to={'/admin/website-settings'} style={{color: "#004d40"}} > <FaCog /></Link>
                     </div>
                     <div className="icon profile-pic" onClick={toggleProfile}>
                         <FaUserCircle />

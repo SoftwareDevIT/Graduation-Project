@@ -20,11 +20,13 @@ const Header = () => {
   const { state } = useCountryContext();
   const locations = state.countries;
   const navigate = useNavigate();
-
+ 
 
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
+
+  
   // Hàm xử lý sự kiện khi người dùng click vào Rạp
   const handleOpenModal = () => {
     setIsModalVisible(true);
@@ -34,7 +36,7 @@ const Header = () => {
   const handleCloseModal = () => {
     setIsModalVisible(false);
   };
-  
+ 
   useEffect(() => {
     // Kiểm tra nếu có userId trong localStorage
     const token = localStorage.getItem("token");
@@ -95,7 +97,8 @@ const Header = () => {
   const handleLocationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const locationId = e.target.value;
     setSelectedLocation(locationId);
-  }  
+  };
+    
 
   return (
     <header className="header">
@@ -319,7 +322,12 @@ const Header = () => {
             </Link>
             {isLoggedIn ? (
               <div className="icon-link" onClick={toggleProfileMenu}>
-                <img className="avtat-img" src="https://rapchieuphim.com/photos/36/poster/wall-phim-ong-trum.jpg" alt="" />
+                <img
+  className="avtat-img"
+  src={"https://rapchieuphim.com/photos/36/poster/wall-phim-ong-trum.jpg"}
+  alt="User Avatar"
+/>
+
                 <i className="fas fa-check checkmark"></i>
                 {isProfileMenuVisible && (
                   <div className="profile-dropdown">
@@ -356,12 +364,18 @@ const Header = () => {
             )}
 
 <span className="thongbao" onClick={handleNotificationClick}>
-  &#128276;
+  &#128276; {/* Biểu tượng thông báo */}
   {isNotificationVisible && (
     <div className="notification-dropdown">
       {vouchers && vouchers.length > 0 ? (
         vouchers.map((voucher, index) => (
-          <p key={index}>• {voucher.code}</p> 
+          <p key={index}>
+            {/* Thêm icon voucher từ FontAwesome */}
+            <span className="voucher-icon">
+              <i className="fas fa-ticket-alt"></i> {/* Icon vé voucher */}
+            </span>
+            {voucher.code}
+          </p>
         ))
       ) : (
         <p>Không có thông báo mới</p>
@@ -369,6 +383,11 @@ const Header = () => {
     </div>
   )}
 </span>
+
+
+
+
+
 
           </div>
         </div>

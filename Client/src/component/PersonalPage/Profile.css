@@ -94,6 +94,9 @@ select {
   text-decoration: none;
   color: #333;
 }
+.account-nav{
+  margin-left: 90px;
+}
 .active-link {
   font-weight: bold;
   color: #4322ff; /* Example color */

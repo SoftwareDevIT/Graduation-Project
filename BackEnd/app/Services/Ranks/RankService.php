@@ -54,8 +54,16 @@ class RankService
         return $method;
     }
 
-    public function usePoints($user, $pointsToUse, $totalPrice)
+    public function usePoints($user, $pointsToUse, $totalPrice, $booking_id)
     {
+        $usedPointsSessionKey = 'used_points_' . $booking_id;
+        if (session()->has($usedPointsSessionKey)) {
+            return [
+                'success' => false,
+                'message' => 'Bạn đã sử dụng điểm cho đơn hàng này.'
+            ];
+        }
+
         if ($pointsToUse > $user->points) {
             return [
                 'success' => false,
@@ -93,6 +101,12 @@ class RankService
                 'order_amount' => $totalPrice,
             ]);
         });
+
+        session()->put($usedPointsSessionKey, [
+            'points_used' => $pointsToUse,
+            'discount_value' => $discountValue,
+            'final_price' => $finalPrice
+        ]);
 
         $this->updateRank($user);
 
