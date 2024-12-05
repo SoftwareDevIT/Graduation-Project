@@ -102,7 +102,6 @@ import ShowtimesAuto from "./Page/Admin/Showtimes/ShowtimesAuto";
 
 import MovieTicket from "./component/PersonalPage/MovieTicket";
 
-
 import SeatMapFormManager from "./Page/Admin/SeatMap/SeatMapForm";
 
 
@@ -116,7 +115,16 @@ import Community from "./component/Community/Community";
 
 
 import Pointaccumulation from "./component/PersonalPage/Pointaccumulation";
+
+
+
+
+
+
+
+
 import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
+
 function App() {
 
   return (
@@ -189,6 +197,8 @@ function App() {
 
         <Route path="/deponsit" element={<Deponsit />} />
         <Route path="/forgetpass" element={<ForgetPass />} />
+        <Route path="/seat" element={<CinemaSeatSelection />} />
+        <Route path="/seat" element={<CinemaSeatSelection />} />
 
 
         <Route path="/otp" element={<Otp />} />
