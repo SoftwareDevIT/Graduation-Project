@@ -110,6 +110,7 @@ class BookingStaffController extends Controller
         $booking = Booking::find($id);
         $booking->status = 'Confirmed';
         $booking->save();
+        session()->flush();
         return response()->json([
             'status' => true,
             'message' => 'Xây dựng thanh cong',
