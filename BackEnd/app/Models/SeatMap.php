@@ -2,27 +2,23 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class SeatMap extends Model
 {
-    use HasFactory;
-
-    protected $table = 'seat_map';
-
+    protected $table = "seat_map";
     protected $fillable = [
-        'seat_layout_id',
-        'row',
-        'label',
-        'column',
-        'is_double',
-        'type',
+        'name',
+        'description',
+        'matrix_row',
+        'matrix_column',
+        'row_regular_seat',
+        'row_vip_seat',
+        'row_couple_seat',
+        'seat_structure',
     ];
 
-    // Link back to the SeatLayout
-    public function seatLayout()
-    {
-        return $this->belongsTo(SeatLayout::class);
-    }
+    protected $casts = [
+        'seat_structure' => 'array', // Tự động cast JSON thành array khi truy cập
+    ];
 }
