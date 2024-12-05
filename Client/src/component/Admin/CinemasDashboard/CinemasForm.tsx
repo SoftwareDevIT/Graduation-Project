@@ -122,7 +122,7 @@ const CinemaForm = () => {
 
   return (
     <div className="container mt-5">
-      <form onSubmit={handleSubmit(handleFormSubmit)} className="shadow-lg p-5 rounded bg-white">
+      <form onSubmit={handleSubmit(handleFormSubmit)} className="shadow-lg p-5 rounded bg-white" style={{ maxWidth: "500px", margin: "0 auto",height: "630px" }}>
         <h2 className="text-center mb-5 text-primary">{isEditMode ? "Chỉnh sửa Rạp" : "Thêm Rạp Mới"}</h2>
 
         {/* Cinema Name */}
@@ -205,7 +205,7 @@ const CinemaForm = () => {
 
         {/* Submit and Add Movies Button */}
         <div className="d-flex justify-content-between">
-          <button type="submit" className="btn btn-primary px-4 py-2">
+          <button type="submit" className="btn btn-primary px-4 py-2 w-100">
             {isEditMode ? "Cập Nhật Rạp" : "Thêm Rạp"}
           </button>
           {isEditMode && (

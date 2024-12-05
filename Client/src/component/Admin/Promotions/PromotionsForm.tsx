@@ -121,6 +121,7 @@ const PromotionForm = () => {
       <form
         onSubmit={handleSubmit(handleFormSubmit)}
         className="shadow p-4 rounded bg-light"
+        style={{ maxWidth: "700px", margin: "0 auto",height: "800px" }}
       >
         <h1 className="text-center mb-4">
           {id ? "Cập nhật Khuyến mãi" : "Thêm Khuyến mãi"}
