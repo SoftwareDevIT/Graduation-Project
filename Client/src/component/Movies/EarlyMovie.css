@@ -112,6 +112,10 @@ padding: 10px ;
   gap: 40px;
   margin-top: 20px;
 }
+.movie-actions a{
+  text-decoration: none;
+  
+}
 
 .btn-info,
 .btn-trailer,

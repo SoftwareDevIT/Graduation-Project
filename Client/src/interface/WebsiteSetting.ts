@@ -1,4 +1,4 @@
-export interface WebsiteSettings {
+export interface WebsiteSetting {
     id: number; // ID tự tăng
     site_name: string; // Tên trang web
     tagline: string | null; // Khẩu hiệu

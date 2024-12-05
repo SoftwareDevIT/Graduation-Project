@@ -5,6 +5,7 @@ import instance from '../../../server';
 import { Movie } from '../../../interface/Movie';
 import { notification, Table, Pagination, Input, Button, Popconfirm } from 'antd'; // Import Ant Design components
 import { EditOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons'; // Ant Design icons
+import { Switch } from 'antd';
 
 const MoviesDashboard: React.FC = () => {
     const { state, dispatch } = useMovieContext();
@@ -57,63 +58,98 @@ const MoviesDashboard: React.FC = () => {
           ) 
         : [];
 
-    const columns = [
-        {
-            title: 'ID',
-            dataIndex: 'id',
-            key: 'id',
-            className: 'text-center',
-        },
-        {
-            title: 'Tiêu Đề',
-            dataIndex: 'movie_name',
-            key: 'movie_name',
-            className: 'text-center',
-        },
-        {
-            title: 'Ảnh',
-            dataIndex: 'poster',
-            key: 'poster',
-            render: (poster: string) => (
-                <img src={poster} alt="Poster" style={{ width: '100px', height: '150px', objectFit: 'cover' }} />
-            ),
-            className: 'text-center',
-        },
-        {
-            title: 'Thể Loại',
-            dataIndex: 'movie_category',
-            key: 'movie_category',
-            render: (categories: any[]) => categories.map(category => category.category_name).join(', '),
-            className: 'text-center',
-        },
-        {
-            title: 'Diễn Viên',
-            dataIndex: 'actor',
-            key: 'actor',
-            render: (actors: any[]) => actors.map(actor => actor.actor_name).join(', '),
-            className: 'text-center',
-        },
-        {
-            title: 'Hành Động',
-            key: 'action',
-            render: (text: any, movie: any) => (
-                <div className="d-flex justify-content-around">
-                    <Link to={`/admin/movies/edit/${movie.id}`}>
-                        <Button type="primary" icon={<EditOutlined />} />
-                    </Link>
-                    <Popconfirm
-                        title="Bạn có chắc chắn muốn xóa phim này?"
-                        onConfirm={() => deleteMovie(movie.id)}
-                        okText="Có"
-                        cancelText="Không"
-                    >
-                        <Button danger icon={<DeleteOutlined />} />
-                    </Popconfirm>
-                </div>
-            ),
-            className: 'text-center',
-        },
-    ];
+       
+const columns = [
+    {
+        title: 'ID',
+        dataIndex: 'id',
+        key: 'id',
+        className: 'text-center',
+    },
+    {
+        title: 'Ảnh',
+        dataIndex: 'poster',
+        key: 'poster',
+        render: (poster: string) => (
+            <img src={poster} alt="Poster" style={{ width: '100px', height: '150px', objectFit: 'cover' }} />
+        ),
+        className: 'text-center',
+    },
+    {
+        title: 'Thông Tin Phim',
+        key: 'movie_info',
+        render: (movie: Movie) => (
+            <div>
+                <p><strong>Tên phim :</strong> {movie.movie_name}</p>
+                <p><strong>Thời Lượng:</strong> {movie.duration} phút</p>
+                <p><strong>Giới Hạn Tuổi:</strong> {movie.age_limit}+</p>
+                <p><strong>Quốc gia:</strong> {movie.country}</p>
+                <p><strong>Ngày Công Chiếu:</strong> {movie.release_date}</p>
+                {/* <p><strong>Luợt xem :</strong> {movie.views}</p>
+                <p><strong>Đánh giá :</strong> {movie.rating}</p> */}
+            </div>
+        ),
+        className: 'text-left',
+    },
+    {
+        title: 'Trạng Thái',
+        key: 'status',
+        render: (movie: Movie) => (
+            <div style={{ textAlign: 'left' }}>
+                <Switch 
+                    checked={movie.active} 
+                    onChange={(checked) => toggleStatus(movie.id, checked)} 
+                    checkedChildren="On" 
+                    unCheckedChildren="Off" 
+                />
+            </div>
+        ),
+        className: 'text-left',
+    },
+    {
+        title: 'Hành Động',
+        key: 'action',
+        render: (text: any, movie: any) => (
+            <div className="d-flex justify-content-around">
+                <Link to={`/admin/movies/edit/${movie.id}`}>
+                    <Button type="primary" icon={<EditOutlined />} />
+                </Link>
+                <Popconfirm
+                    title="Bạn có chắc chắn muốn xóa phim này?"
+                    onConfirm={() => deleteMovie(movie.id)}
+                    okText="Có"
+                    cancelText="Không"
+                >
+                    <Button danger icon={<DeleteOutlined />} />
+                </Popconfirm>
+            </div>
+        ),
+        className: 'text-center`',
+    },
+];
+const toggleStatus = async (id: number, checked: boolean) => {
+    try {
+        await instance.patch(`/movies/${id}`, { active: checked });
+        dispatch({
+            type: 'UPDATE_MOVIE_STATUS',
+            payload: { id, active: checked },
+        });
+        notification.success({
+            message: 'Cập nhật trạng thái',
+            description: `Trạng thái phim đã được thay đổi.`,
+            placement: 'topRight',
+        });
+    } catch (error) {
+        console.error('Lỗi khi cập nhật trạng thái phim:', error);
+        notification.error({
+            message: 'Lỗi',
+            description: 'Không thể cập nhật trạng thái phim.',
+            placement: 'topRight',
+        });
+    }
+};
+
+        
 
     const handlePageChange = (page: number) => setCurrentPage(page);
 

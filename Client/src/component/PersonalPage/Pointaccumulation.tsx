@@ -13,7 +13,7 @@ const Pointaccumulation: React.FC = () => {
   const { userProfile, avatar, setUserProfile } = useUserContext(); // Use context to get user data
   const [searchTerm, setSearchTerm] = useState("");
   const [pointHistories, setPointHistories] = useState<any[]>([]);
-
+  
   useEffect(() => {
     if (userProfile) {
       setPointHistories(userProfile.point_histories);
@@ -24,13 +24,30 @@ const Pointaccumulation: React.FC = () => {
     setSearchTerm(e.target.value);
   };
 
-  const filteredTransactions = pointHistories.filter((transaction) =>
-    transaction.created_at.includes(searchTerm)
-  );
+
 
   const totalAmount = userProfile?.total_amount || 0;
   const maxAmount = 5000000; // Giới hạn của Diamond level, có thể thay đổi theo nhu cầu
-  const progressPercentage = (totalAmount / maxAmount) * 100; // Tính tỷ lệ phần trăm
+  const progressPercentage = Math.min((totalAmount / maxAmount) * 100, 100); // Tính tỷ lệ phần trăm
+  const [selectedItems, setSelectedItems] = useState(10); // Mặc định hiển thị 10 mục
+
+const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  setSelectedItems(parseInt(e.target.value));
+};
+
+const filteredTransactions = pointHistories
+  .filter((transaction) => {
+    const searchLower = searchTerm.toLowerCase();
+    return (
+      transaction.created_at.toLowerCase().includes(searchLower) ||
+      transaction.status.toLowerCase().includes(searchLower) ||
+      (transaction.points_earned?.toString().includes(searchLower) || "") ||
+      (transaction.points_used?.toString().includes(searchLower) || "")
+    );
+  })
+  .slice(0, selectedItems); // Giới hạn số lượng mục hiển thị // Giới hạn số lượng mục hiển thị
+
+ 
 
   return (
     <>
@@ -102,6 +119,15 @@ const Pointaccumulation: React.FC = () => {
       </NavLink>
     </span>
   </div>
+  <div className="account-nav-item">
+    <span className="account-nav-title">
+      <NavLink 
+        to="/test" 
+        className={({ isActive }) => isActive ? 'active-link' : ''}>
+        Tích Điểm
+      </NavLink>
+    </span>
+  </div>
 </div>
               </div>
             </div>
@@ -123,10 +149,11 @@ const Pointaccumulation: React.FC = () => {
                 ></div>
               </div>
               <div className="membership-levels">
-                <span>Member: 0 VND</span>
-                <span>Gold: 1.000.000 VND</span>
-                <span>Platinum: 3.000.000 VND</span>
-                <span>Diamond: 5.000.000 VND</span>
+                <span>Thành Viên: 0 VND</span>
+                <span>Bạc: 200.000 VND</span>
+                <span>Vàng: 500.000 VND</span>
+                <span>Bạch Kim: 1.500.000 VND</span>
+                <span>Kim Cương: 3.000.000 VND</span>
               </div>
               <div className="points-details">
                 <p><strong>Điểm tích lũy:</strong>{userProfile?.points || "0"}  điểm</p>
@@ -139,15 +166,16 @@ const Pointaccumulation: React.FC = () => {
             <div className="points-history">
               <h3>Lịch sử điểm</h3>
               <div className="history-header">
-                <label>
-                  Hiển thị
-                  <select>
-                    <option value="10">10</option>
-                    <option value="20">20</option>
-                    <option value="50">50</option>
-                  </select>
-                  mục
-                </label>
+              <label>
+  Hiển thị
+  <select onChange={handleSelectChange} value={selectedItems}>
+    <option value="10">10</option>
+    <option value="20">20</option>
+    <option value="50">50</option>
+  </select>
+  mục
+</label>
+
                 <input type="text" placeholder="Tìm kiếm..." onChange={handleSearchChange} />
               </div>
 

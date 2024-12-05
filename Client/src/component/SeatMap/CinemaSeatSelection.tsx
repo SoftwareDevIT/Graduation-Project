@@ -258,6 +258,8 @@ const CinemaSeatSelection: React.FC = () => {
   const rows = Object.keys(seatData.seats);
   const columns = seatData.room.seat_layout.columns;
   const handleSubmit = async () => {
+
+  
     const selectedSeatsArray = Array.from(selectedSeats.entries()).flatMap(
       ([row, indices]) =>
         indices.map((index) => ({
@@ -514,7 +516,15 @@ const CinemaSeatSelection: React.FC = () => {
               </div>
               <div className="actionst1">
                 <button className="back-btn1" >←</button>
-                <button className="continue-btn1" onClick={handleSubmit}>
+                <button className="continue-btn1"  disabled={Array.from(selectedSeats.values()).flat().length === 0}
+            style={{
+              backgroundColor: Array.from(selectedSeats.values()).flat().length === 0
+                ? "#ccc"
+                : "#6E849B",
+              cursor: Array.from(selectedSeats.values()).flat().length === 0
+                ? "not-allowed"
+                : "pointer",
+            }} onClick={handleSubmit}>
                   Tiếp Tục
                 </button>
               </div>

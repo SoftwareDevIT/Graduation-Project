@@ -14,14 +14,14 @@ class Room extends Model
     protected $fillable = [
         'room_name',
         'cinema_id',
-        'seat_layout_id',
+        'seat_map_id',
         'status',
     ];
 
     // Define relation to SeatLayout
-    public function seatLayout()
+    public function seatMap()
     {
-        return $this->belongsTo(SeatLayout::class);
+        return $this->belongsTo(SeatMap::class);
     }
 
     // Define relation to Showtimes

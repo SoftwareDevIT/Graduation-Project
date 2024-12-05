@@ -424,7 +424,7 @@ color: #727575;
     width: 200px;
   }
   .thongtinphim {
-    margin-left: 135px;
+    margin-left: 150px !important;
     margin-top: 10px;
   }
 
@@ -518,7 +518,7 @@ color: #727575;
   }
 
   .thongtinphim {
-    margin-left: 142px; /* Giảm khoảng cách bên trái */
+    margin-left: 136px; /* Giảm khoảng cách bên trái */
     margin-top: 10px;
   }
 
