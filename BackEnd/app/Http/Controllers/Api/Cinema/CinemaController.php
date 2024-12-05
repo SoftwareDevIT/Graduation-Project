@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Cinema;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Store\StoreCinemaRequest;
 use App\Http\Requests\Update\UpdateCinemaRequest;
+use App\Models\Cinema;
 use App\Models\Movie;
 use App\Models\MovieInCinema;
 use Illuminate\Http\Request;
@@ -142,7 +143,13 @@ class CinemaController extends Controller
         }
     }
 
-
+    public function status(int $id)
+    {
+        $movie = Cinema::findOrFail($id);
+        $movie->status = $movie->status == 1 ? 0 : 1;
+        $movie->save();
+        return $this->success('', 'Cập nhật trạng thái thành công.', 200);
+    }
 
 
 

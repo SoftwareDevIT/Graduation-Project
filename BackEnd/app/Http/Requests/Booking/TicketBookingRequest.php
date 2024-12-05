@@ -23,7 +23,7 @@ class TicketBookingRequest extends FormRequest
     {
         return [
             'showtime_id' => 'required|integer|exists:showtimes,id',
-            'amount' => 'required|integer',
+            'amount' => 'required',
             'pay_method_id' => 'required|integer',
         ];
     }

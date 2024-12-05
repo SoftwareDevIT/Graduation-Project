@@ -8,6 +8,7 @@ use App\Http\Requests\Update\UpdateShowtimeRequest;
 use App\Models\Cinema;
 use App\Models\Movie;
 use App\Models\Room;
+use App\Models\Showtime;
 use App\Services\Cinema\ShowtimeService;
 // use Dotenv\Validator;
 use Illuminate\Http\Request;
@@ -77,7 +78,6 @@ class ShowtimeController extends Controller
             $createdShowtime = $this->showtimeService->store($showtimeData);
             return $this->success($createdShowtime, 'Single showtime created successfully.');
         }
-
     }
 
     /**
@@ -129,28 +129,45 @@ class ShowtimeController extends Controller
     }
 
     public function storeWithTimeRange(Request $request)
-{
-    $validator = Validator::make($request->all(), [
-        'room_id' => 'required|integer|exists:room,id',
-        'movie_id' => 'required|integer|exists:movies,id',
-        'date' => 'required|date',
-        'opening_time' => 'required|date_format:H:i',
-        'closing_time' => 'required|date_format:H:i|after:opening_time',
-        'duration' => 'required|integer|min:30', // Duration in minutes
-        'price' => 'required|numeric|min:0',
-    ]);
+    {
+        $validator = Validator::make($request->all(), [
+            'room_id' => 'required|integer|exists:room,id',
+            'movie_id' => 'required|integer|exists:movies,id',
+            'date' => 'required|date',
+            'opening_time' => 'required|date_format:H:i',
+            'closing_time' => 'required|date_format:H:i|after:opening_time',
+            'price' => 'required|numeric|min:0',
+        ]);
 
-    if ($validator->fails()) {
-        return $this->error($validator->errors()->first());
-    }
+        if ($validator->fails()) {
+            return $this->error($validator->errors()->first());
+        }
 
-    try {
-        $data = $validator->validated();
-        $createdShowtimes = $this->showtimeService->generateShowtimes($data);
-        return $this->success($createdShowtimes, 'Showtimes created successfully.');
-    } catch (Exception $e) {
-        return $this->error($e->getMessage());
+        try {
+            $data = $validator->validated();
+
+            // Fetch the duration from the movie_id
+            $movie = Movie::find($data['movie_id']);
+            if (!$movie) {
+                return $this->error('The movie associated with the provided movie_id does not exist.');
+            }
+
+            // Use the movie duration in the data
+            $data['duration'] = $movie->duration;
+
+            // Generate showtimes using the service
+            $createdShowtimes = $this->showtimeService->generateShowtimes($data);
+            return $this->success($createdShowtimes, 'Showtimes created successfully.');
+        } catch (Exception $e) {
+            return $this->error($e->getMessage());
+        }
     }
-}
+    public function status(int $id)
+    {
+        $movie = Showtime::findOrFail($id);
+        $movie->status = $movie->status == 1 ? 0 : 1;
+        $movie->save();
+        return $this->success('', 'Cập nhật trạng thái thành công.', 200);
+    }
 
 }

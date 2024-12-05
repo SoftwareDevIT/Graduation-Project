@@ -34,6 +34,13 @@ class NewController extends Controller
     {
         //
     }
+    public function status(int $id)
+    {
+        $movie = News::findOrFail($id);
+        $movie->status = $movie->status == 1 ? 0 : 1;
+        $movie->save();
+        return $this->success('', 'Cập nhật trạng thái thành công.', 200);
+    }
 
     /**
      * Store a newly created resource in storage.

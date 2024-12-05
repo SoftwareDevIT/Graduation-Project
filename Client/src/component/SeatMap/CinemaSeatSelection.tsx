@@ -11,39 +11,40 @@ import { Modal } from 'antd';
 import { Movie } from "../../interface/Movie";
 import initializeEcho from "../../server/realtime";
 import Echo from "laravel-echo";
-
-
-
-type Seat = {
-  id: number;
+import { Cinema } from "../../interface/Cinema";
+interface Seat {
+  row: string;
+  type: string;
   label: string;
-  seat_layout_id: number;
-  row: string | undefined;
   column: number;
-  type: "Regular" | "VIP" | "Couple";
-  status?: "available" | "unavailable";
-  isSelected: boolean;
-};
-type Seats = {
-  [row: string]: Seat[]; 
-};
+  status: number;
+}
 
-type SeatLayoutResponse = {
+interface SeatMap {
+  seat_structure: Seat[];
+  matrix_row: number;
+  matrix_column: number;
+}
+interface Showtime {
   id: number;
   movie_id: number;
+  movie: Movie;
   room_id: number;
-  seats: Seats;
+  room: {
+    id:string;
+    room_name:string;
+    cinema: Cinema;
+    seat_map: SeatMap;
+  };
   showtime_date: string;
   showtime_start: string;
   showtime_end: string;
-  room: Room;
-  movie:Movie;
-};
-interface SeatReservedData {
- seats:[]
+  price: number;
+  status: number;
+  created_at: string;
+  updated_at: string;
+ 
 }
-
-
 const CinemaSeatSelection: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate(); // Khai báo useNavigate để điều hướng
@@ -53,10 +54,14 @@ const CinemaSeatSelection: React.FC = () => {
   const [selectedSeats, setSelectedSeats] = useState<Map<string, number[]>>(
     new Map()
   );
+  
   const [reservedSeats, setReservedSeats] = useState<Set<string>>(new Set());
-  const [roomData, setRoomData] = useState<Room | null>(null);
-  const [seatData, setSeatData] = useState<SeatLayoutResponse | null>(null);
-  const [seats, setSeats] = useState<Seat[]>([]); // Giả sử Seat là kiểu dữ liệu của một ghế
+  const [showtimeData, setShowtimeData] = useState<Showtime>();
+  const [seatData, setSeatData] = useState<SeatMap>({
+    seat_structure: [],
+    matrix_row: 0,
+    matrix_column: 0,
+  });
 
   const [error, setError] = useState("");
 
@@ -71,24 +76,31 @@ const CinemaSeatSelection: React.FC = () => {
         // Fetching the showtime data
         const response = await instance.get(`/showtimes/${showtimeId}`);
         const seatLayoutData = response.data.data;
-  
+        const seatStructure = response.data?.data?.room?.seat_map?.seat_structure;
+        setShowtimeData(seatLayoutData);
+
         // Setting seat data
-        setSeatData(seatLayoutData);
-  
+        setSeatData({
+          seat_structure: seatStructure,
+          matrix_row: response.data?.data?.room.seat_map?.matrix_row || 0,
+          matrix_column:   response.data?.data?.room.seat_map?.matrix_column || 0,
+        });
         // Fetching seat data
         try {
           const seatResponse = await instance.get(`/seat/${showtimeId}`);
           const seatDataseat = seatResponse.data;
-          
-          const reservedSeatSet = new Set<string>();
-          seatDataseat.data.forEach((seat: { seat_name: string; status: string }) => {
-            if (seat.status === "Reserved Until" || seat.status === "Booked") {
-              reservedSeatSet.add(seat.seat_name);
-            }
-          });
-  
-          // Set reserved seats data
-          setReservedSeats(reservedSeatSet);
+          console.log("Seat Data:", seatResponse.data); // Log dữ liệu ghế
+          const reservedSeatSet: Set<string> = new Set();
+
+
+seatDataseat.data.forEach((seat: any) => {
+  if (seat.status === "Booked") {
+    reservedSeatSet.add(seat.seat_name);
+  }
+});
+
+// Cập nhật state
+setReservedSeats(reservedSeatSet);
 
         } catch (seatError) {
           console.error("Error fetching seat data", seatError);
@@ -153,118 +165,101 @@ const CinemaSeatSelection: React.FC = () => {
     fetchRoomAndSeats();
   }, [showtimeId, echoInstance, selectedSeats]);
   
-  const updateSeatsSelection = (selectedSeats: string[]) => {
-    // Lặp qua từng ghế trong mảng seats
-    const updatedSeats = seats.map((seat: Seat) => {
-      // Tạo khóa ghế từ row và column
-      const seatKey = `${String.fromCharCode(65 + parseInt(seat.row!))}-${seat.column + 1}`;
-      // Kiểm tra xem ghế có trong danh sách ghế đã chọn không
-      seat.isSelected = selectedSeats.includes(seatKey);
-      return seat;
-    });
+  // const updateSeatsSelection = (selectedSeats: string[]) => {
+  //   // Lặp qua từng ghế trong mảng seats
+  //   const updatedSeats = seats.map((seat: Seat) => {
+  //     // Tạo khóa ghế từ row và column
+  //     const seatKey = `${String.fromCharCode(65 + parseInt(seat.row!))}-${seat.column + 1}`;
+  //     // Kiểm tra xem ghế có trong danh sách ghế đã chọn không
+  //     seat.isSelected = selectedSeats.includes(seatKey);
+  //     return seat;
+  //   });
   
-    setSeats(updatedSeats); // Cập nhật lại mảng ghế
-  };
-  
-  const handleSeatClick = (seat: Seat) => {
-    const seatLabel = seat.label;
-    if (reservedSeats.has(seatLabel)) return;
-  
-    const currentSeats = new Map(selectedSeats);
-    const row = seat.row!;
+  //   setSeats(updatedSeats); // Cập nhật lại mảng ghế
+  // };
+  const { seat_structure, matrix_row, matrix_column } = seatData;
 
-    const index = seat.column - 1;
-  
+  // Tạo mảng các hàng (A, B, C, ...) dựa trên số lượng hàng
+  const rows = Array.from({ length: matrix_row }, (_, i) =>
+    String.fromCharCode(65 + i)
+  );
+  // Tạo mảng các cột
+  const columns = Array.from({ length: matrix_column }, (_, i) => i + 1);
 
-    if (currentSeats.has(row)) {
-      const indices = currentSeats.get(row) || [];
-      if (indices.includes(index)) {
-        currentSeats.set(row, indices.filter((i) => i !== index)); // xóa ghế khỏi row
-      } else {
-        currentSeats.set(row, [...indices, index]); // thêm ghế mới vào row
-      }
-    } else {
-      currentSeats.set(row, [index]); // Trường hợp chưa có row trong currentSeats, thêm vào mới
+  
+  
+  const handleSeatClick = (row: string, col: number) => {
+    const seatLabel = `${row}${col}`;
+    if (reservedSeats.has(seatLabel)) {
+      message.warning("Ghế này đã được đặt.");
+      return;
     }
   
-    // Cập nhật lại state với ghế đã chọn
-    setSelectedSeats(currentSeats);
+    const newSelectedSeats = new Map(selectedSeats);
+    if (newSelectedSeats.has(row)) {
+      const indices = newSelectedSeats.get(row);
+      const index = indices?.indexOf(col);
   
-    // Chuyển dữ liệu ghế đã chọn thành dạng mảng ghế
-    const updatedSelectedSeats = Array.from(currentSeats.entries())
-      .flatMap(([row, indices]) =>
-        indices.map((colIndex) => `${row}-${colIndex + 1}`)
-      );
-  instance
-      .post(`/seat-selection/${seatData?.room.id}`, {
-        seats: updatedSelectedSeats
-
-
-      })
-
-      .then((response) => {
-        console.log('API response:', response.data);
-      })
-      .catch((error) => {
-        console.error('Error while saving seats:', error);
-      });
+      if (index !== undefined && index !== -1) {
+        indices?.splice(index, 1); // Xóa ghế khỏi danh sách đã chọn
+      } else {
+        indices?.push(col); // Thêm ghế vào danh sách đã chọn
+      }
+  
+      if (indices?.length === 0) {
+        newSelectedSeats.delete(row); // Xóa hàng nếu không còn ghế nào trong hàng đó
+      } else {
+        newSelectedSeats.set(row, indices!); // Cập nhật hàng với danh sách ghế mới
+      }
+    } else {
+      newSelectedSeats.set(row, [col]); // Thêm hàng mới với ghế đã chọn
+    }
+  
+    setSelectedSeats(newSelectedSeats);
   };
   
   
   
-  
-  
-  if (!seatData?.seats) {
-    return (
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh', // Chiều cao toàn màn hình hoặc thay bằng container phù hợp
-        backgroundColor: '#f9f9f9',
-      }}>
-        <Spin tip="Đang Tải Dữ Liệu Ghế..." size="large" />
-      </div>
-    );
-  }
-  
-  // console.log("test",seatData.seats);
+
+ 
   
   const calculatePrice = () => {
     let totalPrice = 0;
   
     selectedSeats.forEach((indices, row) => {
-      indices.forEach((index) => {
-        // Lấy thông tin ghế dựa trên hàng và cột
-        const seat = seatData.seats[row]?.find((s) => s.column === index + 1);
-        if (!seat) return; // Nếu ghế không tồn tại, bỏ qua
+      indices.forEach((col) => {
+        // Tìm ghế trong seat_structure dựa trên hàng (row) và cột (col)
+        const seat = seatData.seat_structure.find(
+          (s) => s.row === row && s.column === col
+        );
+  
+        if (!seat) return; // Nếu không tìm thấy ghế, bỏ qua
   
         // Tính giá vé dựa trên loại ghế
         if (seat.type === "VIP") {
-          totalPrice += price * 1.3; // Giá vé VIP
+          totalPrice += price * 1.3; // Giá vé cho ghế VIP
         } else if (seat.type === "Couple") {
-          totalPrice += price * 1.3  * 2; // Giá vé đôi
+          totalPrice += price * 1.3 * 2; // Giá vé cho ghế đôi (giá đôi)
         } else {
-          totalPrice += price; // Giá vé thường
+          totalPrice += price; // Giá vé cho ghế thường
         }
       });
     });
   
     return totalPrice;
   };
+  
   const totalPrice = calculatePrice();
   
 
-  const rows = Object.keys(seatData.seats);
-  const columns = seatData.room.seat_layout.columns;
+  // const rows = Object.keys(seatData.seats);
+  // const columns = seatData.room.seat_layout.columns;
   const handleSubmit = async () => {
-
-  
     const selectedSeatsArray = Array.from(selectedSeats.entries()).flatMap(
       ([row, indices]) =>
         indices.map((index) => ({
           seat_name: `${row}${index + 1}`,
-          room_id: seatData.room.id,
+          room_id: showtimeData?.room.id ,
           showtime_id: showtimeId,
           seat_row: row.charCodeAt(0) - 65 + 1,
           seat_column: index + 1,
@@ -288,7 +283,7 @@ const CinemaSeatSelection: React.FC = () => {
             showtime,
             showtimeId,
             cinemaId,
-            roomId: seatData.room_id,
+            roomId: showtimeData?.room.id,
             seats: selectedSeatsArray,
             totalPrice,
           },
@@ -351,118 +346,111 @@ const CinemaSeatSelection: React.FC = () => {
             <div className="seat-map-box ">
               <div className="screen">MÀN HÌNH</div>
               <div className="mapseat" style={{ display: "flex", alignItems: "flex-start",marginRight:"70px" }}>
-      {/* Cột tên hàng */}
-      <div style={{ display: "flex", flexDirection: "column", marginRight: "10px" }}>
-        {rows.map((row) => (
-          <div
-            key={row}
-            style={{
-              width: "30px",
-              height: "30px",
-              marginBottom: "10px",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              fontWeight: "bold",
-              color:'#fff',
-              border: "1px solid black", // Add border to row labels
-              backgroundColor: "#727575", // Slight background color for clarity
+              <div style={{ display: "flex", flexDirection: "row" }}>
+        {/* Render cột tên hàng */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            marginRight: "10px",
+          }}
+        >
+          {rows.map((row) => (
+            <div
+              key={row}
+              style={{
+                width: "50px",
+                height: "30px",
+                marginBottom: "10px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                fontWeight: "bold",
+                color: "#fff",
+                border: "1px solid black",
+                backgroundColor: "#727575",
+              }}
+            >
+              {row}
+            </div>
+          ))}
+        </div>
 
-             position:"relative",
-             right:"50px"
-
-        
-            }}
-          >
-            {row}
-          </div>
-        ))}
-      </div>
-
-      {/* Cột ghế */}
-      <div
-  style={{
-    display: "grid",
-    gridTemplateColumns: `repeat(${columns}, 30px)`,
-    gridGap: "10px",
-    alignItems: "center", // Đảm bảo các ghế được căn thẳng hàng
-  }}
->
-{rows.map((row) => {
-  const rowSeats = seatData.seats[row];
-
-  // Tạo mảng các ghế cho mỗi hàng, nhưng bỏ qua các ghế có status "unavailable"
-  const rowArray = Array.from({ length: columns }, (_, i) => {
-    const seat = rowSeats.find(seat => seat.column === i + 1);
-    return seat?.status !== "unavailable" ? seat : null; // Loại bỏ ghế "unavailable"
-  }).filter(seat => seat !== null); // Loại bỏ phần tử null
-
-  return rowArray.map((seat, index) => {
-    const seatType = seat?.type || "Regular";
-    const isSeatAvailable = seat?.status !== "unavailable"; // Kiểm tra ghế có sẵn
-    const seatLabel = seat?.row ? `${seat.row}${seat.column}` : ""; // Đảm bảo không truy cập row nếu undefined
-    const isSelected = selectedSeats.get(row)?.includes(index);
-    const isReserved = reservedSeats.has(seatLabel);
-
-    // CSS chung cho các ghế (khi ghế không có giá trị, không thể chọn)
-    const baseStyle = {
-      color: "#727575",
-      fontFamily: "LaTo",
-      fontWeight: "600",
-      width: "30px",
-      height: "30px",
-      display: isSeatAvailable ? "flex" : "none", // Nếu ghế không có sẵn, không hiển thị
-      justifyContent: "center",
-      alignItems: "center",
-      fontSize: "10px",
-      borderRadius: "5px", // Border radius chung cho tất cả ghế
-    };
-
-    // Màu nền khi ghế có giá trị
-    const seatBackground = isReserved
-      ? "darkgray" // Màu cho ghế đã đặt
-      : seat
-      ? isSelected
-        ? "green" // Màu sắc khi chọn ghế
-        : seatType === "VIP"
-          ? "gold" // Ghế VIP
-          : seatType === "Couple"
-            ? "linear-gradient(45deg, gray 50%, rgb(56, 53, 53) 50%)" // Ghế Couple
-            : "lightgray" // Ghế Regular
-      : "white"; // Màu nền khi ghế không có giá trị (không thể chọn)
-
-    // Vô hiệu hóa các ghế có màu nền trắng (không thể chọn)
-    const isDisabled = seatBackground === "white" || !isSeatAvailable || isReserved;
-
-    return (
-      <div
-      className="seat_row"
-        key={`${row}-${index}`}
-        onClick={(e) => {
-          if (isDisabled) return;
+        {/* Render các ghế */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+          }}
           
-          // Find the seat by row and index, and create the seat object
-          const seat = seatData.seats[row]?.find((s) => s.column === index + 1);
-          
-          if (seat) {
-            handleSeatClick(seat); // Pass the seat object directly
-          }
-        }}
-        
-        style={{
-          ...baseStyle, // Áp dụng các style chung
+        >
+          {rows.map((row) => {
+            return (
+              <div
+                key={row}
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  marginBottom: "10px",
+                }}
+              >
+                {columns.map((col) => {
+                  const seatLabel = `${row}${col}`;
+                 
+                  const seat = seat_structure.find(
+                    (s) => s.row === row && s.column === col
+                  );
+                  const isReserved = reservedSeats.has(seatLabel);
 
-          background: seatBackground, // Áp dụng màu nền cho ghế dựa trên loại và trạng thái
-          // Khi ghế không có sẵn, không thể chọn
-        }}
-      >
-        {seat?.label} {/* Hiển thị tên ghế */}
+                  const isSelected = selectedSeats.has(row) && selectedSeats.get(row)?.includes(col);
+                  const seatType = seat?.type || "Regular"; // Default to regular seat
+                
+                  const isSeatEmpty = !seat; // Check if seat data is missing
+             
+                  return (
+                    <div
+                    key={seatLabel}
+                    style={{
+                      width: "30px",
+                      height: "30px",
+                      background: isSelected
+                      ? "#00bfff" // Màu xanh dương nếu ghế được chọn
+                      : isReserved
+                       ? "#999999" // Màu xanh dương nếu ghế được chọn
+                        : seatType === "VIP"
+                        ? "gold" // Màu vàng cho ghế VIP
+                        : seatType === "Couple"
+                        ? "linear-gradient(45deg, gray 50%, rgb(56, 53, 53) 50%)" // Màu gradient cho ghế đôi
+                        : isSeatEmpty
+                        ? "white" // Màu trắng nếu ghế không có dữ liệu
+                        : "lightgray", // Màu xám nhạt cho ghế thường
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      fontSize: "10px",
+                      borderRadius: "5px",
+                      color: isSeatEmpty ? "transparent" : "#727575", // Màu chữ hoặc trong suốt nếu ghế không có dữ liệu
+                      fontFamily: "LaTo",
+                      fontWeight: "600",
+                      marginRight: "5px",
+                      cursor: "pointer",
+                      border: isSeatEmpty ? "none" : "1px solid #ddd", // Không có viền nếu ghế không có dữ liệu
+                      opacity: seat ? 1 : 0.5, // Làm mờ ghế không có dữ liệu
+                      pointerEvents: isSeatEmpty ? "none" : "auto", // Vô hiệu hóa tương tác nếu ghế không có dữ liệu
+                    }}
+                    onClick={() => handleSeatClick(row, col)}
+                  >
+                    {seat ? seat.label : ""} {/* Hiển thị nhãn ghế hoặc để trống */}
+                  </div>
+                  
+                  );
+                })}
+              </div>
+            );
+          })}
+        </div>
       </div>
-    );
-  });
-})}
-
-</div>
 
 
 
@@ -486,26 +474,37 @@ const CinemaSeatSelection: React.FC = () => {
             </div>
             <div className="thongtinphim">
               <div className="details-box1">
-                <p className="title-phim">{seatData.movie.movie_name}</p>
+                <p className="title-phim">{showtimeData?.movie.movie_name}</p>
                 <p>
-                  Rạp:<span> {seatData.room.cinema.cinema_name}</span>
+                  Rạp:<span> {showtimeData?.room.cinema.cinema_name}</span>
                 </p>
                 <p>
                   Suất: <span> {showtime}</span>
                 </p>
                 <p>
-                  Phòng chiếu: <span>{seatData.room.room_name || seatData.room.id}</span>
+                  Phòng chiếu: <span>{showtimeData?.room.room_name }</span>
                 </p>
                 <p>
   Ghế:{" "}
   {Array.from(selectedSeats.entries())
-    .flatMap(([row, indices]) =>
-      indices
-        .map((index) => seatData.seats[row]?.find((seat) => seat.column === index + 1)?.label)
-        .filter((label) => label) // Loại bỏ các giá trị null hoặc undefined
+    .flatMap(([row, cols]) =>
+      cols
+        .map((col) => {
+          const seat = seat_structure.find(
+            (s) => s.row === row && s.column === col
+          );
+          return seat ? seat.label : null; // Lấy label nếu ghế tồn tại
+        })
+        .filter(Boolean) // Loại bỏ giá trị null hoặc undefined
     )
     .join(", ")}
 </p>
+
+
+
+
+
+
 
               </div>
               <div className="price-box1">
@@ -516,15 +515,7 @@ const CinemaSeatSelection: React.FC = () => {
               </div>
               <div className="actionst1">
                 <button className="back-btn1" >←</button>
-                <button className="continue-btn1"  disabled={Array.from(selectedSeats.values()).flat().length === 0}
-            style={{
-              backgroundColor: Array.from(selectedSeats.values()).flat().length === 0
-                ? "#ccc"
-                : "#6E849B",
-              cursor: Array.from(selectedSeats.values()).flat().length === 0
-                ? "not-allowed"
-                : "pointer",
-            }} onClick={handleSubmit}>
+                <button className="continue-btn1" onClick={handleSubmit}>
                   Tiếp Tục
                 </button>
               </div>

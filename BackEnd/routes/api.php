@@ -137,6 +137,8 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy'); // delete role
     Route::delete('/delete-user/{id}', [RoleController::class, 'destroy'])->name('roles.destroyUser'); // delete role
 
+
+    Route::get('allRevenueCinema', [RevenueController::class, 'allRevenueCinema']); // Doanh thu cuả tất cả các rạp
     // Thống kê doanh thu theo rạp vào ngày
     Route::get('total-revenue/{status}', [RevenueController::class, 'totalRevenue']);
     Route::get('total-revenue-cinema/{cinema_id}', [RevenueController::class, 'totalRevenueByCinema']);
@@ -224,3 +226,13 @@ Route::apiResource('ranks', RankContrller::class);
 
 
 Route::get('/env-config', [ConfigController::class, 'envConfig']);
+
+
+Route::prefix('seat-maps')->group(function () {
+    Route::get('/', [SeatMapController::class, 'index']);
+    Route::get('/{id}', [SeatMapController::class, 'show']);
+    Route::post('/', [SeatMapController::class, 'store']);
+    Route::put('/{id}', [SeatMapController::class, 'update']);
+    Route::delete('/{id}', [SeatMapController::class, 'destroy']);
+});
+

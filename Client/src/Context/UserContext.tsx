@@ -5,18 +5,19 @@ import { Movie } from '../interface/Movie';
 
   
   interface UserProfile {
-    id: string;
+    id: string ;  
     user_name: string;
     email: string;
     fullname: string;
     phone: string;
     avatar: string;
     favorite_movies: Movie[];  // Field for favorite movies
-    points: string;
+   
     rank_name: string;
     total_amount: number;
     rank: Rank;
     point_histories: PointHistory[];
+    points: number; 
   }
   
   interface Rank {

@@ -196,7 +196,9 @@ color: #727575;
   margin-top: 30px;
 
 }
-
+.seat-row {
+  display: inline; /* Để các ghế nằm ngang trên cùng một dòng */
+}
 .back-btn1 {
   margin-left: 30px;
   height: 37px;
@@ -614,7 +616,7 @@ color: #727575;
 }
 
 .seat.selected {
-  background-color: green; /* Màu nền cho ghế đã chọn */
+  background-color:#00bfff; /* Màu nền cho ghế đã chọn */
 }
 .custom-error-modal .ant-modal-content {
   border-radius: 10px; /* Bo góc */

@@ -6,28 +6,29 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreSeatMapRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
-    public function rules()
+    public function rules(): array
     {
         return [
-            '*.seat_layout_id' => 'required|integer',
-            '*.row' => 'required|string|max:1',
-            '*.column' => 'required|integer',
-            '*.type' => 'string',
-            '*.label' => 'string',
-            '*.is_double' => 'required|boolean',
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'matrix_row' => 'required|integer|min:1',
+            'matrix_column' => 'required|integer|min:1',
+            'row_regular_seat' => 'required|integer|min:2',
+            'row_vip_seat' => 'required|integer|min:2',
+            'row_couple_seat' => 'required|integer|min:2',
+            'seat_structure' => 'nullable|array',
+            'seat_structure.*.label' => 'required|string',
+            'seat_structure.*.linkedSeat' => 'nullable|string',
+            'seat_structure.*.row' => 'required|string|max:1',
+            'seat_structure.*.column' => 'required|integer',
+            'seat_structure.*.type' => 'required|string|in:Regular,VIP,Couple',
+            'seat_structure.*.status' => 'required|boolean',
+            'seat_structure.*.is_double' => 'required|boolean',
         ];
     }
 }
