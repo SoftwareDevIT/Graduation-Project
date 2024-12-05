@@ -9,7 +9,7 @@ import { Director } from '../../../interface/Director';
 import { useMovieContext } from '../../../Context/MoviesContext';
 import instance from '../../../server';
 import { MovieCategory } from '../../../interface/MovieCategory';
-import { notification } from 'antd';
+import { Select,notification } from 'antd';
 
 // Zod schema for form validation
 const movieSchema = z.object({
@@ -176,34 +176,23 @@ const MovieForm: React.FC = () => {
     name="movie_category_id"
     control={control}
     render={({ field }) => (
-      <div className="row">
-        {categories.map((category) => (
-          <div key={category.id} className="col-4 mb-2">
-            <div className="form-check">
-              <input
-                type="checkbox"
-                className="form-check-input"
-                value={category.id}
-                checked={field.value.includes(category.id)}
-                onChange={(e) => {
-                  const value = Number(e.target.value);
-                  const newValue = e.target.checked
-                    ? [...field.value, value]
-                    : field.value.filter((id) => id !== value);
-                  field.onChange(newValue);
-                }}
-              />
-              <label className="form-check-label">
-                {category.category_name}
-              </label>
-            </div>
-          </div>
-        ))}
-      </div>
+      <Select
+        {...field}
+        mode="multiple"
+        allowClear
+        style={{ width: '100%' }}
+        placeholder="Chọn danh mục phim"
+        options={categories.map((category) => ({
+          label: category.category_name,
+          value: category.id,
+        }))}
+        onChange={(value) => field.onChange(value)}
+      />
     )}
   />
   {errors.movie_category_id && <p className="text-danger">{errors.movie_category_id.message}</p>}
 </div>
+
 
         {/* Actors */}
         <div className="mb-3">
@@ -212,34 +201,23 @@ const MovieForm: React.FC = () => {
     name="actor_id"
     control={control}
     render={({ field }) => (
-      <div className="row">
-        {actors.map((actor) => (
-          <div key={actor.id} className="col-4 mb-2">
-            <div className="form-check">
-              <input
-                type="checkbox"
-                className="form-check-input"
-                value={actor.id}
-                checked={field.value.includes(actor.id)}
-                onChange={(e) => {
-                  const value = Number(e.target.value);
-                  const newValue = e.target.checked
-                    ? [...field.value, value]
-                    : field.value.filter((id) => id !== value);
-                  field.onChange(newValue);
-                }}
-              />
-              <label className="form-check-label">
-                {actor.actor_name}
-              </label>
-            </div>
-          </div>
-        ))}
-      </div>
+      <Select
+        {...field}
+        mode="multiple"
+        allowClear
+        style={{ width: '100%' }}
+        placeholder="Chọn diễn viên"
+        options={actors.map((actor) => ({
+          label: actor.actor_name,
+          value: actor.id,
+        }))}
+        onChange={(value) => field.onChange(value)}
+      />
     )}
   />
   {errors.actor_id && <p className="text-danger">{errors.actor_id.message}</p>}
 </div>
+
         {/* Directors */}
         <div className="mb-3">
   <label className="form-label">Đạo diễn</label>
@@ -247,34 +225,23 @@ const MovieForm: React.FC = () => {
     name="director_id"
     control={control}
     render={({ field }) => (
-      <div className="row">
-        {directors.map((director) => (
-          <div key={director.id} className="col-4 mb-2">
-            <div className="form-check">
-              <input
-                type="checkbox"
-                className="form-check-input"
-                value={director.id}
-                checked={field.value.includes(director.id)}
-                onChange={(e) => {
-                  const value = Number(e.target.value);
-                  const newValue = e.target.checked
-                    ? [...field.value, value]
-                    : field.value.filter((id) => id !== value);
-                  field.onChange(newValue);
-                }}
-              />
-              <label className="form-check-label">
-                {director.director_name}
-              </label>
-            </div>
-          </div>
-        ))}
-      </div>
+      <Select
+        {...field}
+        mode="multiple"
+        allowClear
+        style={{ width: '100%' }}
+        placeholder="Chọn đạo diễn"
+        options={directors.map((director) => ({
+          label: director.director_name,
+          value: director.id,
+        }))}
+        onChange={(value) => field.onChange(value)}
+      />
     )}
   />
   {errors.director_id && <p className="text-danger">{errors.director_id.message}</p>}
 </div>
+
 
         {/* Release Date */}
         <div className="mb-3">
@@ -388,8 +355,6 @@ const MovieForm: React.FC = () => {
     onChange={(e) => setPosterFile(e.target.files?.[0] || null)}
   />
 </div>
-
-
         <button type="submit" className="btn btn-primary btn-lg w-100">
           {id ? 'Cập nhật phim' : 'Thêm phim'}
         </button>

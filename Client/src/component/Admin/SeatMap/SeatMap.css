@@ -1,15 +1,15 @@
-.seat-matrix {
+.custom-seat-matrix {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.seat-row {
+.custom-seat-row {
   display: flex;
   align-items: center;
 }
 
-.seat-row-label {
+.custom-seat-row-label {
   display: inline-block;
   width: 37px; /* Chiều rộng chữ cái */
   text-align: center;
@@ -17,12 +17,11 @@
   margin-right: 8px; /* Khoảng cách giữa chữ cái và ghế */
 }
 
-
-.seat-row-buttons {
+.custom-seat-row-buttons {
   margin-left: 12px;
 }
 
-.seat {
+.custom-seat {
   width: 40px;
   height: 40px;
   margin: 5px;
@@ -31,18 +30,18 @@
   text-align: center;
 }
 
-.occupied {
+.custom-occupied {
   background-color: red;
 }
 
-.regular {
+.custom-regular {
   background-color: #f0f0f0;
 }
 
-.vip {
+.custom-vip {
   background-color: #ffd700;
 }
 
-.couple {
+.custom-couple {
   background-color: #ff69b4;
 }

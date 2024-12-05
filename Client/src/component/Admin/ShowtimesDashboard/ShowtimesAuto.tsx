@@ -104,7 +104,7 @@ const ShowtimeAuto = () => {
     return (
         <div className="container mt-5">
             <h2 className="text-center mb-4">Thêm Suất Chiếu Tự Động</h2>
-            <form onSubmit={handleSubmit} className="shadow p-4 rounded bg-light">
+            <form onSubmit={handleSubmit} className="shadow p-4 rounded bg-light" style={{ maxWidth: "500px", margin: "0 auto",height: "700px" }}>
                 <div className="mb-3">
                     <label htmlFor="movie_id" className="form-label">Phim</label>
                     <select
@@ -194,7 +194,7 @@ const ShowtimeAuto = () => {
                         onChange={handleChange}
                     />
                 </div>
-                <button type="submit" className="btn btn-primary">Thêm Showtime</button>
+                <button type="submit" className="btn btn-primary w-100">Thêm Showtime</button>
             </form>
         </div>
     );
