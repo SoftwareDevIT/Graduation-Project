@@ -99,11 +99,27 @@ import RankForm from "./Page/Admin/Ranks/RankForm";
 import OrdersDetailManager from "./Page/Admin/Orders/OrdersDetail";
 import WebsiteSettingsManager from "./Page/Admin/WebsiteSettings/WebsiteSettingManager";
 import ShowtimesAuto from "./Page/Admin/Showtimes/ShowtimesAuto";
-import Pointaccumulation from "./component/PersonalPage/Pointaccumulation";
+
 import MovieTicket from "./component/PersonalPage/MovieTicket";
+
 import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
+
 import SeatMapForm from "./component/Admin/SeatMap/SeatMapForm";
 import SeatMapFormManager from "./Page/Admin/SeatMap/SeatMapForm";
+
+
+
+
+
+
+
+
+import Community from "./component/Community/Community";
+
+
+import Pointaccumulation from "./component/PersonalPage/Pointaccumulation";
+
+
 
 
 
@@ -122,7 +138,9 @@ function App() {
         <Route path="/buy-ticket" element={<Bookcinematickets />} />
         <Route path="/orders" element={<PrivateRoute><OrderPage /></PrivateRoute>} />
         <Route path="/pay" element={ <PrivateRoute><OrderCheckout /></PrivateRoute> } />
+
         {/* <Route path="/community" element={<Community/>} /> */}
+
 
         <Route path="/seat" element={<CinemaSeatSelection />} />
 

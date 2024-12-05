@@ -157,6 +157,7 @@ class TicketBookingService
                 'booking_id' => $item->id,
                 'user_name' => $item->user->user_name,
                 'email' => $item->user->email,
+                'booking_code' => $item->booking_code,
                 'barcode' => $item->barcode,
                 'qrcode' => $item->qrcode,
                 'payMethod' => $item->payMethod->pay_method_name,

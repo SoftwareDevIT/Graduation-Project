@@ -113,6 +113,7 @@ padding-left: 10px;
 
 
 .apply-voucher-btn {
+  margin-left: 10px;
   padding: 8px 16px;
   background-color: #4CAF50;
   color: white;
@@ -121,6 +122,7 @@ padding-left: 10px;
   cursor: pointer;
 }
 .apply-voucher-btn-1 {
+  margin-left: 10px;
   padding: 8px 16px;
   background-color: red;
   color: white;
@@ -143,25 +145,75 @@ padding-left: 10px;
 }
 /* Bảng điểm  */
 .khung-diem-poly {
- 
-  display: block;
-  margin-top: 20px;
+  width: 100%;
+  max-width: 650px;
+  margin: 20px auto;
+  border-collapse: collapse;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
 .khung-diem-poly table {
   width: 100%;
-  border-collapse: collapse;
+  border-spacing: 0;
 }
 
-.khung-diem-poly th, .khung-diem-poly td {
-  border: 1px solid #ddd;
-  padding: 8px;
+.khung-diem-poly thead {
+  background-color: #45d4e1;
+}
+
+.khung-diem-poly thead th {
+  color: #fff;
   text-align: left;
+  padding: 15px 10px;
+  font-size: 16px;
+  font-weight: bold;
 }
 
-.khung-diem-poly th {
-  background-color: #f4f4f4;
+.khung-diem-poly tbody tr {
+  border-bottom: 1px solid #e6e6e6;
 }
+
+.khung-diem-poly tbody tr:last-child {
+  border-bottom: none;
+}
+
+.khung-diem-poly tbody td {
+
+  padding: 15px 10px;
+  font-size: 14px;
+  color: #333;
+}
+
+.khung-diem-poly tbody tr:hover {
+  background-color: #f5f5f5;
+}
+
+.khung-diem-poly input[type="number"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.khung-diem-poly button {
+
+  background-color:#45a049;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.khung-diem-poly button:hover {
+  background-color: #d9363e;
+}
+
 
 
 
@@ -180,9 +232,16 @@ padding-left: 10px;
   color: #333;
 }
 .total-price {
+  margin-right: 30px;
   font-size: 24px;
   color: #e74c3c;
   font-weight: bold;
+}
+.total-title3{
+  font-weight: 600;
+  color:#e74c3c;
+margin-left: 400px;
+  font-size: 24px;
 }
 
 
@@ -537,7 +596,9 @@ width: 670px;
     width: 650px;
   }
 
-
+  .total-title3{
+    margin-left: 365px;
+  }
 }
 
 @media (max-width: 480px){
@@ -550,5 +611,15 @@ width: 670px;
   }
   .bang-diem-poly th{
     font-size: 12px;
+  }
+  .total-title3{
+    font-size: 20px;
+    margin-left: 45px;
+  }
+  .total-title{
+    font-size: 20px;
+  }
+  .total-price{
+    font-size: 20px;
   }
 }

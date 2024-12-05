@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { EditOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons';
-import { notification, Table, Pagination, Input, Button, Popconfirm } from 'antd';
+import { notification, Table, Pagination, Input, Button, Popconfirm, Modal, Form, Select } from 'antd';
 import instance from '../../../server';
 import { Room } from '../../../interface/Room';
 
@@ -9,6 +9,9 @@ const RoomDashboard: React.FC = () => {
   const [rooms, setRooms] = useState<Room[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [isModalVisible, setIsModalVisible] = useState(false);  // State for modal visibility
+  const [form] = Form.useForm();  // To handle form data
+
   const roomsPerPage = 7;
   const { Search } = Input;
 
@@ -59,6 +62,27 @@ const RoomDashboard: React.FC = () => {
     }
   };
 
+  const handleAddRoom = async (values: any) => {
+    try {
+      await instance.post('/room', values);
+      setIsModalVisible(false);
+      notification.success({
+        message: 'Thêm phòng thành công!',
+        description: 'Phòng đã được thêm vào hệ thống.',
+        placement: 'topRight',
+      });
+     // Reload rooms after adding a new one
+    } catch (error) {
+      console.error('Error adding room:', error);
+      notification.error({
+        message: 'Lỗi!',
+        description: 'Không thể thêm phòng. Vui lòng thử lại sau.',
+        placement: 'topRight',
+      });
+    }
+  };
+  
+
   const columns = [
     {
       title: 'ID',
@@ -72,7 +96,6 @@ const RoomDashboard: React.FC = () => {
       key: 'room_name',
       className: 'text-center',
     },
-  
     {
       title: 'Mẫu Sơ Đồ Ghế',
       dataIndex: ['seatmap','name'],
@@ -104,11 +127,14 @@ const RoomDashboard: React.FC = () => {
   return (
     <div className="container mt-5">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <Link to={'/admin/rooms/add'}>
-          <Button type="primary" icon={<PlusOutlined />} size="large">
-            Thêm Phòng
-          </Button>
-        </Link>
+        <Button
+          type="primary"
+          icon={<PlusOutlined />}
+          size="large"
+          onClick={() => setIsModalVisible(true)}  // Show modal on click
+        >
+          Thêm Phòng
+        </Button>
         <Search
           placeholder="Tìm kiếm theo tên phòng"
           value={searchTerm}
@@ -137,6 +163,54 @@ const RoomDashboard: React.FC = () => {
           showTotal={(total) => `Tổng số ${total} phòng`}
         />
       </div>
+
+      {/* Modal Add Room */}
+      <Modal
+        title="Thêm Phòng"
+        visible={isModalVisible}
+        onCancel={() => setIsModalVisible(false)}
+        footer={null}
+      >
+        <Form form={form} onFinish={handleAddRoom} layout="vertical">
+          <Form.Item
+            name="room_name"
+            label="Tên Phòng"
+            rules={[{ required: true, message: 'Vui lòng nhập tên phòng!' }]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            name="cinema"
+            label="Chọn Rạp"
+            rules={[{ required: true, message: 'Vui lòng chọn rạp!' }]}
+          >
+            <Select placeholder="Chọn rạp">
+              {/* Thêm các lựa chọn rạp ở đây */}
+              <Select.Option value="cinema1">Rạp 1</Select.Option>
+              <Select.Option value="cinema2">Rạp 2</Select.Option>
+            </Select>
+          </Form.Item>
+
+          <Form.Item
+            name="seatlayout"
+            label="Kiểu Bố Trí Ghế"
+            rules={[{ required: true, message: 'Vui lòng chọn kiểu bố trí ghế!' }]}
+          >
+            <Select placeholder="Chọn kiểu bố trí ghế">
+              {/* Thêm các lựa chọn kiểu ghế ở đây */}
+              <Select.Option value="layout1">Bố trí 1</Select.Option>
+              <Select.Option value="layout2">Bố trí 2</Select.Option>
+            </Select>
+          </Form.Item>
+
+          <Form.Item>
+            <Button type="primary" htmlType="submit" block>
+              Thêm Phòng
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 };
