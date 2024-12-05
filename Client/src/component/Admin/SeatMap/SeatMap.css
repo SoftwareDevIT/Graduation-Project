@@ -1,48 +1,49 @@
-.seat-matrix {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.custom-seat-matrix {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.seat-row {
-  display: flex;
-  align-items: center;
+.custom-seat-row {
+    display: flex;
+    align-items: center;
 }
 
-.seat-row-label {
-  display: inline-block;
-  width: 37px; /* Chiều rộng chữ cái */
-  text-align: center;
-  font-weight: bold;
-  margin-right: 8px; /* Khoảng cách giữa chữ cái và ghế */
+.custom-seat-row-label {
+    display: inline-block;
+    width: 37px;
+    /* Chiều rộng chữ cái */
+    text-align: center;
+    font-weight: bold;
+    margin-right: 8px;
+    /* Khoảng cách giữa chữ cái và ghế */
 }
 
-
-.seat-row-buttons {
-  margin-left: 12px;
+.custom-seat-row-buttons {
+    margin-left: 12px;
 }
 
-.seat {
-  width: 40px;
-  height: 40px;
-  margin: 5px;
-  border-radius: 4px;
-  font-size: 16px;
-  text-align: center;
+.custom-seat {
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+    border-radius: 4px;
+    font-size: 16px;
+    text-align: center;
 }
 
-.occupied {
-  background-color: red;
+.custom-occupied {
+    background-color: red;
 }
 
-.regular {
-  background-color: #f0f0f0;
+.custom-regular {
+    background-color: #f0f0f0;
 }
 
-.vip {
-  background-color: #ffd700;
+.custom-vip {
+    background-color: #ffd700;
 }
 
-.couple {
-  background-color: #ff69b4;
+.custom-couple {
+    background-color: #ff69b4;
 }

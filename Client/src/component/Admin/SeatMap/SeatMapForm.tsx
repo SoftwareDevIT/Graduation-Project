@@ -345,18 +345,18 @@ const SeatMapForm = () => {
 {/* Seat Matrix */}
 <div className="mb-3">
   <h3 className="text-center">Ma Trận Ghế</h3>
-  <div className="seat-matrix">
+  <div className="custom-seat-matrix">
     {seatMatrix.map((row, rowIndex) => (
-      <div key={rowIndex} className="seat-row">
+      <div key={rowIndex} className="custom-seat-row">
         {/* Render cột chữ cái cho hàng ghế */}
-        <div className="seat-row-label">{String.fromCharCode(65 + rowIndex)}</div>
+        <div className="custom-seat-row-label">{String.fromCharCode(65 + rowIndex)}</div>
 
         {/* Render các ghế trong hàng */}
         {row.map((seat, colIndex) => (
           <button
             key={colIndex}
             type="button"
-            className={`seat ${seat?.occupied ? "occupied" : seat?.type}`}
+            className={`custom-seat ${seat?.occupied ? "custom-occupied" : `custom-${seat?.type}`}`}
             onClick={() => handleSeatClick(rowIndex, colIndex)}
           >
             {seat?.occupied ? "X" : seat?.type === "regular" ? "R" : seat?.type === "vip" ? "V" : "C"}
@@ -364,26 +364,28 @@ const SeatMapForm = () => {
         ))}
 
         {/* Hai nút bên phải mỗi hàng ghế */}
-        <div className="seat-row-buttons">
-           <Button type="primary" icon={<PlusOutlined />} size="large"
-            className="seat-row-button"
+        <div className="custom-seat-row-buttons">
+          <Button
+            type="primary"
+            icon={<PlusOutlined />}
+            size="large"
+            className="custom-seat-row-button"
             onClick={() => handleRowSelect(rowIndex, true)}
-            style={{marginLeft: "12px"}}
+            style={{ marginLeft: "12px" }}
           >
-           
           </Button>
           <Button
-          danger
-           icon={<DeleteOutlined />}
-            className="seat-row-button"
+            danger
+            icon={<DeleteOutlined />}
+            className="custom-seat-row-button"
             onClick={() => handleRowSelect(rowIndex, false)} // Thêm logic cho nút "Delete"
-            style={{marginLeft: "12px",width:"40px",height:"40px"}}
+            style={{ marginLeft: "12px", width: "40px", height: "40px" }}
           >
           </Button>
         </div>
       </div>
     ))}
-  </div>
+</div>
 </div>
 <button type="submit" className="btn btn-primary w-100">
   {id ? "Cập nhật" : "Thêm"}
