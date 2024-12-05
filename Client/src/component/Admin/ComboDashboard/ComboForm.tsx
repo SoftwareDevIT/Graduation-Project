@@ -76,7 +76,7 @@ const ComboForm = () => {
 
   return (
     <div className="container mt-5">
-      <form onSubmit={handleSubmit(handleFormSubmit)} className="shadow p-4 rounded bg-light" style={{ maxWidth: "700px", margin: "0 auto",height: "650px" }}>
+      <form onSubmit={handleSubmit(handleFormSubmit)} className="shadow p-4 rounded bg-light" style={{ maxWidth: "900px", margin: "0 auto",height: "650px" }}>
         <h1 className="text-center mb-4">{id ? "Cập nhật Combo" : "Thêm Combo"}</h1>
 
         {/* Tên Combo */}

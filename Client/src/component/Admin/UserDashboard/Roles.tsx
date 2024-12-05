@@ -60,13 +60,37 @@ const RoleAndUserManagement = () => {
     }
   };
   const handleAssignRoles = async (userId: number, selectedRoles: string[]) => {
+    // Kiểm tra xem vai trò có phải là "manager" hoặc "staff" không
+    const selectedRoleNames = selectedRoles.map(role => role.toLowerCase());
+    const isManagerOrStaff = selectedRoleNames.includes('manager');
+  
+    // Nếu người dùng chọn "manager" hoặc "staff", yêu cầu nhập cinema_id
+    let cinemaId: string | null = null;
+    if (isManagerOrStaff) {
+      cinemaId = prompt("Please enter Cinema ID:");
+      if (!cinemaId) {
+        alert("Cinema ID is required for manager or staff roles!");
+        return;  // Dừng lại nếu không có cinema_id
+      }
+    }
+  
     try {
-      // Gửi yêu cầu API để cấp quyền cho người dùng
-      const response = await instance.post(`/roles/${userId}/users`, { roles: selectedRoles });
+      // Tạo payload yêu cầu
+      const requestPayload: { roles: string[], cinema_id?: string } = {
+        roles: selectedRoles,
+      };
+  
+      // Nếu có cinemaId, thêm vào payload
+      if (cinemaId) {
+        requestPayload.cinema_id = cinemaId;
+      }
+  
+      // Gửi yêu cầu API để đồng bộ vai trò
+      const response = await instance.post(`/roles/${userId}/users`, requestPayload);
   
       if (response.data.status) {
         alert('Cập nhật quyền thành công!');
-        // Cập nhật lại danh sách người dùng hoặc vai trò nếu cần
+        // Cập nhật vai trò của người dùng trong giao diện
         setUsers((prevUsers) =>
           prevUsers.map((user) =>
             user.id === userId ? { ...user, roles: selectedRoles } : user
@@ -78,7 +102,9 @@ const RoleAndUserManagement = () => {
     } catch (error) {
       console.error('Lỗi khi cấp quyền:', error);
     }
-  }
+  };
+  
+  
   const handleUpdatePermissions = async (roleId: string) => {
     const permissionsToUpdate = selectedPermissions[roleId]?.map((permissionName) => {
       const permission = permissions.find((p) => p.name === permissionName);
@@ -225,7 +251,6 @@ const RoleAndUserManagement = () => {
             <tr>
               <th style={{ padding: '10px', border: '1px solid #ddd' }}>Tên người dùng</th>
               <th style={{ padding: '10px', border: '1px solid #ddd' }}>Vai trò</th>
-              <th style={{ padding: '10px', border: '1px solid #ddd' }}>Rạp</th>
             </tr>
           </thead>
           <tbody>
@@ -254,9 +279,7 @@ const RoleAndUserManagement = () => {
           ))}
         </select>
       </td>
-      <td style={{ padding: '10px', border: '1px solid #ddd' }}>
-       
-      </td>
+    
     </tr>
   ))}
 </tbody>
