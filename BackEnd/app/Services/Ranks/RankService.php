@@ -112,8 +112,6 @@ class RankService
 
         Log::info(session()->all());
 
-
-
         $this->updateRank($user);
 
         return [
