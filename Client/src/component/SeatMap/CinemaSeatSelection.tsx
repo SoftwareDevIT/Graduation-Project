@@ -1,316 +1,549 @@
 import React, { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom"; // Thêm useNavigate để điều hướng
+import Header from "../Header/Hearder";
+import Footer from "../Footer/Footer";
+import Headerticket from "../Headerticket/Headerticket";
+import "./CinemaSeatSelection.css";
 import instance from "../../server";
-import "./CinemaSelector.css";
-import { Cinema } from "../../interface/Cinema";
-import { Actor } from "../../interface/Actor";
+import { Room } from "../../interface/Room";
+import { message, Spin } from 'antd';
+import { Modal } from 'antd';
 import { Movie } from "../../interface/Movie";
-import { useNavigate } from "react-router-dom"; 
-import dayjs from "dayjs";
-import { useCountryContext } from "../../Context/CountriesContext";
-import { Spin } from 'antd';  // Import Spin từ Ant Design
-import { UserProfile } from "../../interface/UserProfile";
+import initializeEcho from "../../server/realtime";
+import Echo from "laravel-echo";
+import { Cinema } from "../../interface/Cinema";
+interface Seat {
+  row: string;
+  type: string;
+  label: string;
+  column: number;
+  status: number;
+}
 
+interface SeatMap {
+  seat_structure: Seat[];
+  matrix_row: number;
+  matrix_column: number;
+}
+interface Showtime {
+  id: number;
+  movie_id: number;
+  movie: Movie;
+  room_id: number;
+  room: {
+    id:string;
+    room_name:string;
+    cinema: Cinema;
+    seat_map: SeatMap;
+  };
+  showtime_date: string;
+  showtime_start: string;
+  showtime_end: string;
+  price: number;
+  status: number;
+  created_at: string;
+  updated_at: string;
+ 
+}
+const CinemaSeatSelection: React.FC = () => {
+  const location = useLocation();
+  const navigate = useNavigate(); // Khai báo useNavigate để điều hướng
+  const { movieName, cinemaName, showtime, showtimeId, cinemaId, price } =
+    location.state || {};
 
+  const [selectedSeats, setSelectedSeats] = useState<Map<string, number[]>>(
+    new Map()
+  );
+  
+  const [reservedSeats, setReservedSeats] = useState<Set<string>>(new Set());
+  const [showtimeData, setShowtimeData] = useState<Showtime>();
+  const [seatData, setSeatData] = useState<SeatMap>({
+    seat_structure: [],
+    matrix_row: 0,
+    matrix_column: 0,
+  });
 
-  const CinemaSelector: React.FC = () => {
-    const [cinemas, setCinemas] = useState<Cinema[]>([]);
-    const [actors, setActors] = useState<Actor[]>([]);
-    const [movies, setMovies] = useState<Movie[]>([]);
-    const [selectedCity, setSelectedCity] = useState<number | null>(null);
-    const [selectedCinema, setSelectedCinema] = useState<number | null>(null);
-    const [selectedDate, setSelectedDate] = useState<string>("");
+  const [error, setError] = useState("");
+
+  const [echoInstance, setEchoInstance] = useState<Echo<'pusher'> | null>(null);
+
+  const [status, setStatus] = useState("Initializing...");
   
-    const [filteredCinemas, setFilteredCinemas] = useState<Cinema[]>([]);
-    const [loading, setLoading] = useState<boolean>(false);  
-  
-    const userProfilea: UserProfile | null = JSON.parse(localStorage.getItem("user_profile") || "null");
-    const userRoles = userProfilea?.roles || [];
-    const isAdmin = userRoles.length > 0 && userRoles[0]?.name === "admin";
-  
-    const navigate = useNavigate();
-    
-    // Lấy danh sách vị trí từ CountryContext
-    const {
-      state: { countries: locations },
-    } = useCountryContext();
-  
-    const getCurrentDate = (): string => {
-      const today = new Date();
-      const year = today.getFullYear();
-      const month = String(today.getMonth() + 1).padStart(2, "0");
-      const day = String(today.getDate()).padStart(2, "0");
-      return `${year}-${month}-${day}`;
-    };
-  
-    const generateDateList = (): string[] => {
-      return Array.from({ length: 7 }, (_, i) =>
-        dayjs().add(i, "day").format("YYYY-MM-DD")
-      );
-    };
-  
-    useEffect(() => {
-      const fetchCinemas = async () => {
+
+  useEffect(() => {
+    const fetchRoomAndSeats = async () => {
+      try {
+        // Fetching the showtime data
+        const response = await instance.get(`/showtimes/${showtimeId}`);
+        const seatLayoutData = response.data.data;
+        const seatStructure = response.data?.data?.room?.seat_map?.seat_structure;
+        setShowtimeData(seatLayoutData);
+
+        // Setting seat data
+        setSeatData({
+          seat_structure: seatStructure,
+          matrix_row: response.data?.data?.room.seat_map?.matrix_row || 0,
+          matrix_column:   response.data?.data?.room.seat_map?.matrix_column || 0,
+        });
+        // Fetching seat data
         try {
-          const response = await instance.get("/cinema");
-          setCinemas(response.data.data || []);
-        } catch (error) {
-          console.error("không có dữ liệu:", error);
+          const seatResponse = await instance.get(`/seat/${showtimeId}`);
+          const seatDataseat = seatResponse.data;
+          console.log("Seat Data:", seatResponse.data); // Log dữ liệu ghế
+          const reservedSeatSet: Set<string> = new Set();
+
+
+seatDataseat.data.forEach((seat: any) => {
+  if (seat.seat_type === "Standard" ) {
+    reservedSeatSet.add(seat.seat_name);
+  }
+});
+
+// Cập nhật state
+setReservedSeats(reservedSeatSet);
+
+        } catch (seatError) {
+          console.error("Error fetching seat data", seatError);
+
+
+          setReservedSeats(new Set<string>());
         }
-      };
-    
-      const fetchActors = async () => {
-        try {
-          const response = await instance.get("/actor");
-          setActors(response.data.data || []);
-        } catch (error) {
-          console.error("không có dữ liệu:", error);
-          setActors([]);
-        }
-      };
-    
-      fetchActors();
-      fetchCinemas();
-      setSelectedDate(getCurrentDate());
-    }, []);
   
-    useEffect(() => {
-      if (cinemas.length > 0 && locations.length > 0) {
-        setLoading(false);  // Tắt loading khi có dữ liệu khu vực và rạp
-      } else {
-        setLoading(true);  // Hiển thị loading nếu chưa có dữ liệu khu vực hoặc rạp
-      }
-    }, [cinemas, locations]);
+        // Khởi tạo Echo và lắng nghe sự kiện realtime
+        const setupRealtime = async () => {
+          const echo = await initializeEcho();
+          console.log("Connected to Pusher!", echo);
+          if (echo) {
+            setEchoInstance(echo);
+            setStatus("Connected to Pusher!");
+            const roomId = response.data.data.room.id;
+            // Kết nối với channel tương ứng
+        
+          
+       
+          
+            const channel = echo.private(`seats${roomId}`); 
+            console.log("Connected to channel:", channel);
+      
+            // Lắng nghe sự kiện SeatSelected
+            channel.listen("SeatSelected", (eventData:any) => {
+              console.log("Received seats data:", eventData);
   
-    useEffect(() => {
-      if (cinemas.length > 0) {
-        const sortedLocations = locations
-          .map((location) => ({
-            ...location,
-            cinemaCount: cinemas.filter(
-              (cinema) => cinema.location_id === location.id
-            ).length,
-          }))
-          .sort((a, b) => b.cinemaCount - a.cinemaCount);
+              // if (eventData ) {
+              //   console.log("Received selected seats:", eventData.seats);
   
-        const locationWithMostCinemas = sortedLocations[0];
-        setSelectedCity(locationWithMostCinemas.id);
-      }
-    }, [cinemas, locations]);
+              //   // Cập nhật state với Map
+              //   const newSelectedSeats = new Map(selectedSeats); // Sao chép bản đồ cũ
+              //   newSelectedSeats.set(roomId, eventData.seats); // Thêm ghế mới vào Map theo roomId
   
-    const sortedLocations = locations
-      .map((location) => ({
-        ...location,
-        cinemaCount: cinemas.filter(
-          (cinema) => cinema.location_id === location.id
-        ).length,
-      }))
-      .sort((a, b) => b.cinemaCount - a.cinemaCount);
-  
-    const filteredLocations = sortedLocations.filter((location) =>
-      cinemas.some((cinema) => cinema.location_id === location.id)
-    );
-  
-    useEffect(() => {
-      if (selectedCity) {
-        const filtered = cinemas.filter(
-          (cinema) => cinema.location_id === selectedCity
-        );
-        setFilteredCinemas(filtered);
-        if (filtered.length > 0) {
-          setSelectedCinema(filtered[0].id ?? null); 
-        }
-      } else {
-        setFilteredCinemas(cinemas);
-      }
-    }, [selectedCity, cinemas]);
-  
-    useEffect(() => {
-      const fetchMoviesForSelectedCinemaAndDate = async () => {
-        if (selectedCinema && selectedDate) {
-          try {
-            const cinemaResponse = await instance.get(`/filterByDate`, {
-              params: {
-                cinema_id: selectedCinema,
-                showtime_date: selectedDate,
-              },
+              //   setSelectedSeats(newSelectedSeats); // Cập nhật lại state
+              //   updateSeatsSelection(eventData.seats); // Cập nhật ghế trong lưới
+              // }
+
             });
-  
-            const cinemaMovies = cinemaResponse.data?.data || [];
-            setMovies(cinemaMovies);
-          } catch (error) {
-            setMovies([]);
+          } else {
+            setStatus("Failed to connect.");
           }
+        };
+  
+        if (!echoInstance) {
+          setupRealtime();
         }
-      };
   
-      fetchMoviesForSelectedCinemaAndDate();
-    }, [selectedCinema, selectedDate]);
+        // Cleanup khi component bị unmount
+        return () => {
+          if (echoInstance) {
+            echoInstance.disconnect();
+          }
+        };
+      } catch (error) {
+        console.error("Error fetching room data", error);
+        setError("Không thể tải dữ liệu, vui lòng thử lại!");
+      }
+    };
   
-    const selectedCinemaDetails = cinemas.find(
-      (cinema) => cinema.id === selectedCinema
+    fetchRoomAndSeats();
+  }, [showtimeId, echoInstance, selectedSeats]);
+  
+  // const updateSeatsSelection = (selectedSeats: string[]) => {
+  //   // Lặp qua từng ghế trong mảng seats
+  //   const updatedSeats = seats.map((seat: Seat) => {
+  //     // Tạo khóa ghế từ row và column
+  //     const seatKey = `${String.fromCharCode(65 + parseInt(seat.row!))}-${seat.column + 1}`;
+  //     // Kiểm tra xem ghế có trong danh sách ghế đã chọn không
+  //     seat.isSelected = selectedSeats.includes(seatKey);
+  //     return seat;
+  //   });
+  
+  //   setSeats(updatedSeats); // Cập nhật lại mảng ghế
+  // };
+  const { seat_structure, matrix_row, matrix_column } = seatData;
+
+  // Tạo mảng các hàng (A, B, C, ...) dựa trên số lượng hàng
+  const rows = Array.from({ length: matrix_row }, (_, i) =>
+    String.fromCharCode(65 + i)
+  );
+  // Tạo mảng các cột
+  const columns = Array.from({ length: matrix_column }, (_, i) => i + 1);
+
+  
+  
+  const handleSeatClick = (row: string, col: number) => {
+    // Tìm ghế trong seat_structure
+    const seat = seat_structure.find(
+      (s) => s.row === row && s.column === col
     );
+    if (!seat) {
+      console.error(`Seat not found for row ${row}, column ${col}`);
+      return;
+    }
   
-    // Kiểm tra xem có dữ liệu khu vực hay không, nếu chưa có thì hiển thị loading
-    if (loading) {
-      return (
+    const seatLabel = seat.label;
+  
+    // Kiểm tra trạng thái ghế
+    if (reservedSeats.has(seatLabel)) {
+      message.warning("Ghế này đã được đặt.");
+      return;
+    }
+  
+    // Thêm hoặc xóa ghế khỏi trạng thái selectedSeats
+    const newSelectedSeats = new Map(selectedSeats);
+    const currentIndices = newSelectedSeats.get(row) || [];
+    if (currentIndices.includes(col)) {
+      // Nếu ghế đã chọn, xóa khỏi danh sách
+      newSelectedSeats.set(row, currentIndices.filter((index) => index !== col));
+    } else {
+      // Nếu ghế chưa chọn, thêm vào danh sách
+      newSelectedSeats.set(row, [...currentIndices, col]);
+    }
+  
+    setSelectedSeats(newSelectedSeats);
+  };
+  
+  
+  
+  
+  
+
+ 
+  
+  const calculatePrice = () => {
+    let totalPrice = 0;
+  
+    selectedSeats.forEach((indices, row) => {
+      indices.forEach((col) => {
+        // Tìm ghế trong seat_structure dựa trên hàng (row) và cột (col)
+        const seat = seatData.seat_structure.find(
+          (s) => s.row === row && s.column === col
+        );
+  
+        if (!seat) return; // Nếu không tìm thấy ghế, bỏ qua
+  
+        // Tính giá vé dựa trên loại ghế
+        if (seat.type === "VIP") {
+          totalPrice += price * 1.3; // Giá vé cho ghế VIP
+        } else if (seat.type === "Couple") {
+          totalPrice += price * 1.3 * 2; // Giá vé cho ghế đôi (giá đôi)
+        } else {
+          totalPrice += price; // Giá vé cho ghế thường
+        }
+      });
+    });
+  
+    return totalPrice;
+  };
+  
+  const totalPrice = calculatePrice();
+  
+  const getTotalSeatsInRow = (row: string) => {
+    return seat_structure.filter((seat) => seat.row === row).length;
+  };
+  const totalSeatsInRows: Record<string, number> = rows.reduce(
+    (acc, row) => ({
+      ...acc,
+      [row]: getTotalSeatsInRow(row), // Tính tổng số ghế của từng hàng
+    }),
+    {}
+  );
+  
+ 
+  
+  // const rows = Object.keys(seatData.seats);
+  // const columns = seatData.room.seat_layout.columns;
+  const handleSubmit = async () => {
+    const selectedSeatsArray = Array.from(selectedSeats.entries()).flatMap(
+      ([row, indices]) =>
+        indices.map((index) => {
+          const seat = seat_structure.find(
+            (s) => s.row === row && s.column === index
+          );
+          return {
+            seat_name: seat?.label || `${row}${index}`,
+            room_id: showtimeData?.room.id,
+            showtime_id: showtimeId,
+            seat_row: row.charCodeAt(0) - 65 + 1,
+            seat_column: index,
+          };
+        })
+    );
+    const payload = {
+      cinemaId,
+      showtimeId,
+      seats: selectedSeatsArray,
+      totalSeatsInRows
+    };
+  
+    try {
+      const response = await instance.post("/selectSeats", payload);
+
+  
+      if (response.status === 200) {
+        navigate("/orders", {
+          state: {
+            movieName,
+            cinemaName,
+            showtime,
+            showtimeId,
+            cinemaId,
+            roomId: showtimeData?.room.id,
+            seats: selectedSeatsArray,
+            totalPrice,
+          },
+        });
+      } else if (response.data.message === "Some seats already exist.") {
+        message.error("Một số ghế đã được đặt trước. Chuyển về trang chủ sau 3 giây!", 3);
+        setTimeout(() => {
+          navigate("/");
+        }, 3000);
+      } else {
+        console.error("Error: API call successful but status is not 200");
+      }
+    } catch (error: any) {
+      if (error.response) {
+        // Kiểm tra mã lỗi
+        if (error.response.status === 401) {
+          message.warning("Vui lòng đăng nhập để tiếp tục.");
+          navigate("/login"); // Chuyển đến trang đăng nhập
+        } else if (error.response.status === 402) {
+          Modal.error({
+            content: "Vui lòng không để trống ghế ở giữa!",
+            icon: null,
+            className: "custom-error-modal",
+          });
+        } if(error.response.status === 400){
+          Modal.error({
+            title: "Ghế đã được đặt",
+            content: "Ghế của bạn đã được đặt vui lòng đặt lại ghế khác",
+            icon: null,
+            className: "custom-error-modal",
+          });
+  
+        }
+      } else {
+        Modal.error({
+          title: "Lỗi kết nối",
+          content: "Không thể kết nối tới máy chủ, vui lòng kiểm tra lại kết nối.",
+        });
+      }
+    }
+  };
+  
+  
+
+
+  // Hiển thị thông báo lỗi nếu có lỗi trong việc chọn ghế hoặc submit API
+  if (error) {
+    return <div>{error}</div>;
+  }
+
+
+  return (
+    <>
+      <Header />
+      <Headerticket />
+      
+      <div className="box-map">
+        <div className="container container-map">
+          <div className="seat-info-box">
+            <div className="seat-map-box ">
+              <div className="screen">MÀN HÌNH</div>
+              <div className="mapseat" style={{ display: "flex", alignItems: "flex-start",marginRight:"70px" }}>
+              <div style={{ display: "flex", flexDirection: "row" }}>
+        {/* Render cột tên hàng */}
+        <div
+          style={{
+            position:"relative",
+            display: "flex",
+            flexDirection: "column",
+            right:"150px",
+          }}
+        >
+          {rows.map((row) => (
+            <div
+              key={row}
+              style={{
+                width: "50px",
+                height: "30px",
+                marginBottom: "10px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                fontWeight: "bold",
+                color: "#fff",
+                border: "1px solid black",
+                backgroundColor: "#727575",
+              }}
+            >
+              {row}
+            </div>
+          ))}
+        </div>
+
+        {/* Render các ghế */}
         <div
           style={{
             display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "50vh",
-            backgroundColor: "#f9f9f9",
+            flexDirection: "column",
+            alignItems: "flex-start",
           }}
+          
         >
-          <Spin tip="Đang Tải Dữ Liệu Khu Vực..." size="large" />
-        </div>
-      );
-    }
-  
-    // If the user is an admin, only show the first location and first cinema
-    const displayLocations = isAdmin ? filteredLocations.slice(0, 1) : filteredLocations;
-    const displayCinemas = isAdmin && selectedCity ? cinemas.filter(cinema => cinema.location_id === selectedCity).slice(0, 1) : filteredCinemas;
-  
-    return (
-      <div className="div-content">
-        <h2 className="titles">Mua vé theo rạp</h2>
-        <div className="container">
-          <div className="locations">
-            <h3 className="khuvuc">Khu vực</h3>
-            <ul className="list-tp">
-              <div className="list">
-                {displayLocations.map((location) => (
-                  <li
-                    key={location.id}
-                    className={`city ${selectedCity === location.id ? "selected" : ""}`}
-                    onClick={() => setSelectedCity(location.id)}
-                  >
-                    {location.location_name}
-                    <span className="cinema-count">{location.cinemaCount}</span>
-                  </li>
-                ))}
-              </div>
-              {!isAdmin && (
-                <select
-                  className="city-selects"
-                  value={selectedCity ?? ""}
-                  onChange={(e) => setSelectedCity(Number(e.target.value))}
-                >
-                  <option className="city-selects-option" value="">
-                    Chọn khu vực
-                  </option>
-                  {locations.map((location) => (
-                    <option key={location.id} value={location.id}>
-                      {location.location_name}
-                    </option>
-                  ))}
-                </select>
-              )}
-            </ul>
-          </div>
-  
-          <div className="cinemas">
-            <h3 className="khuvuc">Rạp</h3>
-            <ul className="list-tp">
-              <div className="list">
-                {displayCinemas.map((cinema) => (
-                  <li
-                    key={cinema.id}
-                    className={`cinema ${selectedCinema === cinema.id ? "selected" : ""}`}
-                    onClick={() => setSelectedCinema(cinema.id ?? null)}
-                  >
-                    {cinema.cinema_name}
-                  </li>
-                ))}
-              </div>
-              {!isAdmin && (
-                <select
-                  className="city-selects"
-                  value={selectedCinema ?? ""}
-                  onChange={(e) => setSelectedCinema(Number(e.target.value))}
-                >
-                  <option className="city-selects-option" value="">
-                    Chọn rạp
-                  </option>
-                  {filteredCinemas.map((cinema) => (
-                    <option key={cinema.id} value={cinema.id}>
-                      {cinema.cinema_name}
-                    </option>
-                  ))}
-                </select>
-              )}
-            </ul>
-          </div>
-  
-          <div className="showtimes">
-            <div className="calendar-custom-1">
-              {generateDateList().map((date) => (
-                <div
-                  key={date}
-                  className={`date-custom-1 ${selectedDate === date ? "active" : ""}`}
-                  onClick={() => setSelectedDate(date)}
-                >
-                  <span>{dayjs(date).format("DD/MM")}</span>
-                  <small>{dayjs(date).day() === 0 ? "CN" : `Thứ ${dayjs(date).day() + 1}`}</small>
-                </div>
-              ))}
-            </div>
-  
-            {movies.length > 0 ? (
-              <div className="movies">
-                {movies.map((movieData) => {
-                  const movie = movieData;
-  
-                  const sortedShowtimes = movieData.showtimes.sort((a: any, b: any) => {
-                    const timeA = dayjs(`${selectedDate} ${a.showtime_start}`, "YYYY-MM-DD HH:mm");
-                    const timeB = dayjs(`${selectedDate} ${b.showtime_start}`, "YYYY-MM-DD HH:mm");
-                    return timeA.isBefore(timeB) ? -1 : 1;
-                  });
-  
+          {rows.map((row) => {
+            return (
+              <div
+                key={row}
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  marginBottom: "10px",
+                }}
+              >
+                {columns.map((col) => {
+                  const seatLabel = `${row}${col}`;
+                 
+                  const seat = seat_structure.find(
+                    (s) => s.row === row && s.column === col
+                  );
+                  const isReserved = reservedSeats.has(seatLabel);
+
+                  const isSelected = selectedSeats.has(row) && selectedSeats.get(row)?.includes(col);
+                  const seatType = seat?.type || "Regular"; // Default to regular seat
+                
+                  const isSeatEmpty = !seat; // Check if seat data is missing
+             
                   return (
-                    <div key={movie.id} className="movie">
-                      <img src={movie.poster ?? undefined} alt={movie.movie_name} />
-                      <div className="details">
-                        <h4>{movie.movie_name}</h4>
-                        <p>Thời gian: {movie.duration}</p>
-                        <p>Giới hạn tuổi: {movie.age_limit}+</p>
-                        <div className="showtimes-list">
-                          {sortedShowtimes.map((showtime: any) => (
-                            <button
-                              key={showtime.id}
-                              disabled={dayjs(`${selectedDate} ${showtime.showtime_start}`).isBefore(dayjs())}
-                              onClick={() =>
-                                navigate("/seat", {
-                                  state: {
-                                    movieName: movie.movie_name,
-                                    cinemaName: selectedCinemaDetails?.cinema_name,
-                                    showtime: showtime.showtime_start,
-                                    showtimeId: showtime.id,
-                                    cinemaId: selectedCinemaDetails?.id,
-                                    price: showtime.price,
-                                  },
-                                })
-                              }
-                            >
-                              {showtime.showtime_start.slice(0, 5)}
-                              <p> {`${showtime.price / 1000}k`}</p>
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
+                    <div
+                    key={seatLabel}
+                    style={{
+                      width: "30px",
+                      height: "30px",
+                      background: isSelected
+                      ? "#00bfff" // Màu xanh dương nếu ghế được chọn
+                      : isReserved
+                       ? "#999999" // Màu xanh dương nếu ghế được chọn
+                        : seatType === "VIP"
+                        ? "gold" // Màu vàng cho ghế VIP
+                        : seatType === "Couple"
+                        ? "linear-gradient(45deg, gray 50%, rgb(56, 53, 53) 50%)" // Màu gradient cho ghế đôi
+                        : isSeatEmpty
+                        ? "white" // Màu trắng nếu ghế không có dữ liệu
+                        : "lightgray", // Màu xám nhạt cho ghế thường
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      fontSize: "10px",
+                      borderRadius: "5px",
+                      color: isSeatEmpty ? "transparent" : "#727575", // Màu chữ hoặc trong suốt nếu ghế không có dữ liệu
+                      fontFamily: "LaTo",
+                      fontWeight: "600",
+                      marginRight: "5px",
+                      cursor: "pointer",
+                      border: isSeatEmpty ? "none" : "1px solid #ddd", // Không có viền nếu ghế không có dữ liệu
+                      opacity: seat ? 1 : 0.5, // Làm mờ ghế không có dữ liệu
+                      pointerEvents: isSeatEmpty ? "none" : "auto", // Vô hiệu hóa tương tác nếu ghế không có dữ liệu
+                    }}
+                    onClick={() => handleSeatClick(row, col)}
+                  >
+                    {seat ? seat.label : ""} {/* Hiển thị nhãn ghế hoặc để trống */}
+                  </div>
+                  
                   );
                 })}
               </div>
-            ) : (
-              <p className="no-showtime-message">Không có suất chiếu</p>
-            )}
+            );
+          })}
+        </div>
+      </div>
+
+
+
+  </div>
+
+
+              <div className="legend">
+                <div>
+                  <span className="seat selected"></span> Ghế bạn chọn
+                </div>
+                <div>
+                  <span className="seat vip"></span> Ghế vip
+                </div>
+                <div>
+                  <span className="seat couple-seat"></span> Ghế đôi
+                </div>
+                <div>
+                  <span className="seat reserved"></span> Đã bán
+                </div>
+              </div>
+            </div>
+            <div className="thongtinphim">
+              <div className="details-box1">
+                <p className="title-phim">{showtimeData?.movie.movie_name}</p>
+                <p>
+                  Rạp:<span> {showtimeData?.room.cinema.cinema_name}</span>
+                </p>
+                <p>
+                  Suất: <span> {showtime}</span>
+                </p>
+                <p>
+                  Phòng chiếu: <span>{showtimeData?.room.room_name }</span>
+                </p>
+                <p>
+  Ghế:{" "}
+  {Array.from(selectedSeats.entries())
+    .flatMap(([row, cols]) =>
+      cols
+        .map((col) => {
+          const seat = seat_structure.find(
+            (s) => s.row === row && s.column === col
+          );
+          return seat ? seat.label : null; // Lấy label nếu ghế tồn tại
+        })
+        .filter(Boolean) // Loại bỏ giá trị null hoặc undefined
+    )
+    .join(", ")}
+</p>
+              </div>
+              <div className="price-box1">
+                <div className="price">
+                  Tổng đơn hàng
+                  <br /> <span>{totalPrice.toLocaleString()} đ</span>
+                </div>
+              </div>
+              <div className="actionst1">
+                <button className="back-btn1" >←</button>
+                <button className="continue-btn1" onClick={handleSubmit} disabled={Array.from(selectedSeats.values()).flat().length === 0} >
+                  Tiếp Tục
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    );
-  };
-  
+      <Footer />
+    </>
+  );
+};
 
-  
-export default CinemaSelector;
+
+
+export default CinemaSeatSelection;
