@@ -71,10 +71,11 @@ class RankService
             ];
         }
 
-        if ($pointsToUse > $totalPrice) {
+        $maxPointsAllowed = $totalPrice * 0.2;
+        if ($pointsToUse > $maxPointsAllowed) {
             return [
                 'success' => false,
-                'message' => 'Số điểm nhập không được vượt quá tổng tiền.'
+                'message' => 'Số điểm nhập không được vượt quá 20% tổng tiền.'
             ];
         }
 
