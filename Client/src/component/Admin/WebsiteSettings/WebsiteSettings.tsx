@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import instance from '../../../server';
+import { notification } from 'antd'; // Import notification
 
 interface WebsiteSetting {
     id: number;
@@ -37,6 +38,10 @@ const WebsiteSettings: React.FC = () => {
         setSettings(response.data.data[0]);
       } catch (err: any) {
         setError(err.message || 'Lỗi khi tải cấu hình.');
+        notification.error({
+          message: 'Lỗi',
+          description: err.message || 'Lỗi khi tải cấu hình.',
+        });
       } finally {
         setLoading(false);
       }
@@ -83,14 +88,20 @@ const WebsiteSettings: React.FC = () => {
         }
       );
   
-      alert(response.data.message || "Cập nhật thành công!");
+      notification.success({
+        message: 'Cập nhật thành công',
+        description: response.data.message || "Cập nhật thành công!",
+      });
     } catch (err: any) {
       setError(err.message || "Lỗi khi cập nhật.");
+      notification.error({
+        message: 'Lỗi',
+        description: err.message || 'Lỗi khi cập nhật.',
+      });
     } finally {
       setLoading(false);
     }
   };
-  
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
@@ -100,39 +111,53 @@ const WebsiteSettings: React.FC = () => {
       if (files && files[0].type.match(/image\/(jpeg|png|jpg|gif)/)) {
         setSettings((prev) => (prev ? { ...prev, [name]: files[0] } : null));
       } else {
-        alert("Vui lòng chọn tệp hình ảnh hợp lệ!");
+        notification.error({
+          message: 'Lỗi',
+          description: 'Vui lòng chọn tệp hình ảnh hợp lệ!',
+        });
       }
     } else {
       setSettings((prev) => (prev ? { ...prev, [name]: value } : null));
     }
   };
-  
 
   const resetSettings = async () => {
     try {
       setLoading(true);
       const response = await instance.post('/website-settings/reset');
-      if (response.data.data && response.data.data[0]) {
-        setSettings(response.data.data[0]);
-        alert(response.data.message || 'Đặt lại cấu hình thành công!');
+      
+      // Kiểm tra xem API trả về có chứa trường data hay không
+      if (response.data && response.data.data) {
+        // Kiểm tra xem dữ liệu có phải là một đối tượng hợp lệ không
+        if (response.data.data.id) {
+          setSettings(response.data.data); // Cập nhật lại state settings
+          notification.success({
+            message: 'Đặt lại thành công',
+            description: response.data.message || 'Đặt lại cấu hình thành công!',
+          });
+        } else {
+          throw new Error('Dữ liệu không hợp lệ.');
+        }
       } else {
         throw new Error('API không trả về dữ liệu đúng.');
       }
     } catch (err: any) {
+      console.error(err); // In ra lỗi nếu có
       setError(err.message || 'Lỗi khi đặt lại cấu hình.');
+      notification.error({
+        message: 'Lỗi',
+        description: err.message || 'Lỗi khi đặt lại cấu hình.',
+      });
     } finally {
       setLoading(false);
     }
   };
-  
-  
-
-
 
   return (
     <div className="container mt-5">
       <h1 className="text-center mb-4">Cấu Hình Website</h1>
-      <form onSubmit={handleSubmit} className="shadow p-4 rounded border">
+      <form onSubmit={handleSubmit} className="shadow p-4 rounded border" style={{ maxWidth: "1000px", margin: "0 auto" }}>
+        {/* Group: Thông tin chung */}
         <div className="row">
           <div className="col-md-6 mb-3">
             <label className="form-label">Tên trang web</label>
@@ -156,157 +181,102 @@ const WebsiteSettings: React.FC = () => {
           </div>
         </div>
 
-        <div className="mb-3">
-          <label className="form-label">Email</label>
-          <input
-            type="email"
-            name="email"
-            value={settings?.email || ''}
-            onChange={handleChange}
-            className="form-control"
-          />
+        {/* Group: Liên hệ */}
+        <div className="row">
+          <div className="col-md-4 mb-3">
+            <label className="form-label">Email</label>
+            <input
+              type="email"
+              name="email"
+              value={settings?.email || ''}
+              onChange={handleChange}
+              className="form-control"
+            />
+          </div>
+          <div className="col-md-4 mb-3">
+            <label className="form-label">Số điện thoại</label>
+            <input
+              type="text"
+              name="phone"
+              value={settings?.phone || ''}
+              onChange={handleChange}
+              className="form-control"
+            />
+          </div>
+          <div className="col-md-4 mb-3">
+            <label className="form-label">Địa chỉ</label>
+            <input
+              type="text"
+              name="address"
+              value={settings?.address || ''}
+              onChange={handleChange}
+              className="form-control"
+            />
+          </div>
         </div>
 
-        <div className="mb-3">
-          <label className="form-label">Số điện thoại</label>
-          <input
-            type="text"
-            name="phone"
-            value={settings?.phone || ''}
-            onChange={handleChange}
-            className="form-control"
-          />
+        {/* Group: Mạng xã hội */}
+        <div className="row">
+          <div className="col-md-4 mb-3">
+            <label className="form-label">Facebook Link</label>
+            <input
+              type="text"
+              name="facebook_link"
+              value={settings?.facebook_link || ''}
+              onChange={handleChange}
+              className="form-control"
+            />
+          </div>
+          <div className="col-md-4 mb-3">
+            <label className="form-label">YouTube Link</label>
+            <input
+              type="text"
+              name="youtube_link"
+              value={settings?.youtube_link || ''}
+              onChange={handleChange}
+              className="form-control"
+            />
+          </div>
+          <div className="col-md-4 mb-3">
+            <label className="form-label">Instagram Link</label>
+            <input
+              type="text"
+              name="instagram_link"
+              value={settings?.instagram_link || ''}
+              onChange={handleChange}
+              className="form-control"
+            />
+          </div>
         </div>
 
-        <div className="mb-3">
-          <label className="form-label">Địa chỉ</label>
-          <input
-            type="text"
-            name="address"
-            value={settings?.address || ''}
-            onChange={handleChange}
-            className="form-control"
-          />
+        {/* Group: Hình ảnh */}
+        <div className="row">
+          <div className="col-md-6 mb-3">
+            <label className="form-label">Logo</label>
+            <input
+              type="file"
+              name="logo"
+              onChange={handleChange}
+              className="form-control"
+              accept="image/jpeg, image/png, image/jpg"
+            />
+          </div>
+          <div className="col-md-6 mb-3">
+            <label className="form-label">Ảnh Chính Sách Quyền Riêng Tư</label>
+            <input
+              type="file"
+              name="privacy_image"
+              onChange={handleChange}
+              className="form-control"
+              accept="image/jpeg, image/png, image/jpg"
+            />
+          </div>
         </div>
 
-        <div className="mb-3">
-          <label className="form-label">Giờ làm việc</label>
-          <input
-            type="text"
-            name="working_hours"
-            value={settings?.working_hours || ''}
-            onChange={handleChange}
-            className="form-control"
-          />
-        </div>
-
-        <div className="mb-3">
-          <label className="form-label">Logo</label>
-          <input
-            type="file"
-            name="logo"
-            onChange={handleChange}
-            className="form-control"
-            accept="image/jpeg, image/png, image/jpg, image/gif"
-          />
-        </div>
-
-        <div className="mb-3">
-          <label className="form-label">Ảnh quyền riêng tư</label>
-          <input
-            type="file"
-            name="privacy_image"
-            onChange={handleChange}
-            className="form-control"
-            accept="image/jpeg, image/png, image/jpg, image/gif"
-          />
-        </div>
-
-        <div className="mb-3">
-          <label className="form-label">Ảnh điều khoản</label>
-          <input
-            type="file"
-            name="terms_image"
-            onChange={handleChange}
-            className="form-control"
-            accept="image/jpeg, image/png, image/jpg, image/gif"
-          />
-        </div>
-
-        <div className="mb-3">
-          <label className="form-label">Ảnh về chúng tôi</label>
-          <input
-            type="file"
-            name="about_image"
-            onChange={handleChange}
-            className="form-control"
-            accept="image/jpeg, image/png, image/jpg, image/gif"
-          />
-        </div>
-
-        <div className="mb-3">
-          <label className="form-label">Facebook Link</label>
-          <input
-            type="text"
-            name="facebook_link"
-            value={settings?.facebook_link || ''}
-            onChange={handleChange}
-            className="form-control"
-          />
-        </div>
-
-        <div className="mb-3">
-          <label className="form-label">Youtube Link</label>
-          <input
-            type="text"
-            name="youtube_link"
-            value={settings?.youtube_link || ''}
-            onChange={handleChange}
-            className="form-control"
-          />
-        </div>
-
-        <div className="mb-3">
-          <label className="form-label">Instagram Link</label>
-          <input
-            type="text"
-            name="instagram_link"
-            value={settings?.instagram_link || ''}
-            onChange={handleChange}
-            className="form-control"
-          />
-        </div>
-
-        <div className="mb-3">
-          <label className="form-label">Copyright</label>
-          <input
-            type="text"
-            name="copyright"
-            value={settings?.copyright || ''}
-            onChange={handleChange}
-            className="form-control"
-          />
-        </div>
-
-        <div className="mb-3">
-          <label className="form-label">Chính sách quyền riêng tư</label>
-          <input
-            type="text"
-            name="privacy_policy"
-            value={settings?.privacy_policy || ''}
-            onChange={handleChange}
-            className="form-control"
-          />
-        </div>
-
-        <div className="d-flex justify-content-between">
-          <button type="submit" className="btn btn-primary">
-            Lưu thay đổi
+        <div className="d-flex justify-content-end">
+          <button type="submit" className="btn btn-primary" disabled={loading}>
+            {loading ? 'Đang Cập Nhật...' : 'Cập Nhật'}
           </button>
-          <button type="button" className="btn btn-secondary" onClick={resetSettings}>
-  Đặt lại
-</button>
-
         </div>
       </form>
     </div>

@@ -2,6 +2,7 @@
 
 namespace App\Services\Ranks;
 
+use App\Models\Booking;
 use App\Models\PointHistory;
 use App\Models\Rank;
 use App\Models\User;
@@ -9,6 +10,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Traits\AuthorizesInService;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -82,26 +84,28 @@ class RankService
         $discountValue = $pointsToUse;
         $finalPrice = $totalPrice - $discountValue;
 
-        $rank = $user->rank;
-
+        
         // Tính số điểm mới nhận được dựa vào phần trăm cấp bậc
-        $pointsEarned = $totalPrice * ($rank->percent_discount / 100);
+        // $rank = $user->rank;
+        // $pointsEarned = $totalPrice * ($rank->percent_discount / 100);
 
         // Cập nhật điểm người dùng
         $remainingPoints = $user->points - $pointsToUse;
+        $user->points = $remainingPoints;
+        $user->save();
 
-        DB::transaction(function () use ($user, $remainingPoints, $pointsEarned, $pointsToUse, $discountValue, $totalPrice) {
-            // Cập nhật điểm của người dùng
-            $user->points = $remainingPoints + $pointsEarned;
-            $user->save();
+        // DB::transaction(function () use ($user, $remainingPoints, $pointsEarned, $pointsToUse, $discountValue, $totalPrice) {
+        //     // Cập nhật điểm của người dùng
+        //     $user->points = $remainingPoints + $pointsEarned;
+        //     $user->save();
 
             PointHistory::create([
                 'user_id' => $user->id,
                 'points_used' => $pointsToUse,
-                'points_earned' => $pointsEarned,
-                'order_amount' => $totalPrice,
+                'points_earned' => 0,
+                'type' => 'used',
             ]);
-        });
+        // });
 
         session()->put($usedPointsSessionKey, [
             'points_used' => $pointsToUse,
@@ -110,11 +114,7 @@ class RankService
             'remaining_points' => $remainingPoints
         ]);
 
-        Log::info(session()->all());
-
-
-
-        $this->updateRank($user);
+        Log::info(session()->get($usedPointsSessionKey));
 
         return [
             'success' => true,
@@ -122,7 +122,7 @@ class RankService
             'discount_value' => $discountValue,
             'final_price' => $finalPrice,
             'remaining_points' => $remainingPoints,
-            'points_earned' => $pointsEarned
+            // 'points_earned' => $pointsEarned
         ];
     }
 
@@ -134,8 +134,7 @@ class RankService
             }
 
             // Tính tổng số tiền từ bảng points_history
-            $totalAmount = $user->pointHistories()->sum('order_amount');
-
+            $totalAmount = Booking::where('user_id', $user->id)->sum('amount');
             $rank = $this->determineRank($totalAmount);
 
             if (!$rank) {
@@ -157,5 +156,18 @@ class RankService
         return Rank::where('total_order_amount', '<=', $totalAmount)
             ->orderBy('total_order_amount', 'desc')
             ->first();
+    }
+
+    public function points($booking){
+        $user = Auth::user();
+        $this->updateRank($user);
+        $total = $booking->amount;
+        $rank = $user->rank;
+        $pointsEarned = $total * ($rank->percent_discount / 100);
+        PointHistory::create([
+            'user_id' => $user->id,
+            'points_earned' => $pointsEarned,
+            'type' => 'earned',
+        ]);
     }
 }

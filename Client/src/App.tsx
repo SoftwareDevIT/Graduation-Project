@@ -123,8 +123,6 @@ import Pointaccumulation from "./component/PersonalPage/Pointaccumulation";
 
 
 
-import SeatLayout from "./component/SeatMap/test";
-import MyMapComponent from "./component/GG map/Ggmap";
 import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
 
 function App() {
@@ -198,6 +196,7 @@ function App() {
 
         <Route path="/deponsit" element={<Deponsit />} />
         <Route path="/forgetpass" element={<ForgetPass />} />
+        <Route path="/seat" element={<CinemaSeatSelection />} />
         <Route path="/seat" element={<CinemaSeatSelection />} />
 
 
