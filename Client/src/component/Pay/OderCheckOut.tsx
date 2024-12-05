@@ -159,7 +159,7 @@ const OrderCheckout = () => {
     };
     // State for payment method
     const [pay_method_id, setPaymentMethod] = useState<number | null>(null); // Khởi tạo pay_method_id với null
-    const [timeLeft, setTimeLeft] = useState(30000000);
+    const [timeLeft, setTimeLeft] = useState(300);
     useEffect(() => {
         const timer = setInterval(() => {
             setTimeLeft((prevTime) => {
