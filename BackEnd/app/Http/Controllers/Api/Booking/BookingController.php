@@ -15,6 +15,7 @@ use App\Models\Room;
 use App\Models\Seats;
 use App\Models\TemporaryBooking;
 use App\Services\Booking\TicketBookingService;
+use App\Services\Ranks\RankService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -32,10 +33,12 @@ use Picqer\Barcode\BarcodeGenerator;
 class BookingController extends Controller
 {
     protected TicketBookingService $ticketBookingService;
+    protected RankService $rankService;
 
-    public function __construct(TicketBookingService $ticketBookingService)
+    public function __construct(TicketBookingService $ticketBookingService,RankService $rankService)
     {
         $this->ticketBookingService = $ticketBookingService;
+        $this->rankService = $rankService;
     }
 
     // public function slectMovieAndSeats(Request $request)
@@ -121,6 +124,8 @@ class BookingController extends Controller
             $booking->barcode = $imageUrl;
             $booking->save();
 
+            $this->rankService->points($booking);
+
             // Gửi email với hóa đơn và mã vạch
             Mail::to($booking->user->email)->queue(new InvoiceMail($booking));
 
@@ -134,7 +139,6 @@ class BookingController extends Controller
         // Xử lý khi mã phản hồi không phải '00'
         return redirect('http://localhost:5173/ticketcinema')->with('error', 'Payment failed');
     }
-
 
     // public function selectSeats(Request $request)
     // {
@@ -193,6 +197,7 @@ class BookingController extends Controller
     //         ]);
     //     }
     // }
+    
 
     public function selectSeats(Request $request)
     {
