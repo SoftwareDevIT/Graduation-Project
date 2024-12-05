@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Traits\AuthorizesInService;
 use Exception;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class LocationService.
@@ -106,8 +106,13 @@ class RankService
         session()->put($usedPointsSessionKey, [
             'points_used' => $pointsToUse,
             'discount_value' => $discountValue,
-            'final_price' => $finalPrice
+            'final_price' => $finalPrice,
+            'remaining_points' => $remainingPoints
         ]);
+
+        Log::info(session()->all());
+
+
 
         $this->updateRank($user);
 
@@ -116,7 +121,7 @@ class RankService
             'message' => 'Sử dụng điểm thành công.',
             'discount_value' => $discountValue,
             'final_price' => $finalPrice,
-            'remaining_points' => $remainingPoints + $pointsEarned,
+            'remaining_points' => $remainingPoints,
             'points_earned' => $pointsEarned
         ];
     }
@@ -124,8 +129,6 @@ class RankService
     public function updateRank($user)
     {
         try {
-
-
             if (!$user) {
                 return response()->json(['error' => 'User  not found'], 404);
             }
