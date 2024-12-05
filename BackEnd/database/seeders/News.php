@@ -17,7 +17,7 @@ class News extends Seeder
         $client = new Client();
         $response = $client->get('https://rapchieuphim.com/api/v1/posts');
         $data = json_decode($response->getBody()->getContents(), true);
-        $data = array_slice($data, 0, 10);
+        $data = array_slice($data, 0, 200);
 
         // Lấy danh sách movie_id từ bảng movies
         $movieIds = DB::table('movies')->pluck('id');

@@ -98,7 +98,7 @@ const RoomDashboard: React.FC = () => {
     },
     {
       title: 'Mẫu Sơ Đồ Ghế',
-      dataIndex: ['seatlayout','name'],
+      dataIndex: ['seatmap','name'],
       key: 'room_name',
       className: 'text-center',
     },

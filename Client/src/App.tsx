@@ -116,7 +116,7 @@ import SeatMapFormManager from "./Page/Admin/SeatMap/SeatMapForm";
 
 import Community from "./component/Community/Community";
 
-import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
+
 import Pointaccumulation from "./component/PersonalPage/Pointaccumulation";
 
 
