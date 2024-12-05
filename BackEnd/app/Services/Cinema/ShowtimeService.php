@@ -49,16 +49,14 @@ class ShowtimeService
 
     public function get(int $id)
     {
-        $showtime = Showtime::with(['movie', 'room.cinema', 'room.seatLayout.seatMap']) // Include SeatMap to show seat data
+        $showtime = Showtime::with(['movie', 'room.cinema', 'room.seatMap']) // Include SeatMap to show seat data
             ->findOrFail($id);
 
         // If needed, format the seats
-        $seats = $showtime->room->seatLayout->seatMap->groupBy('row');
+        $seats = $showtime->room->seatMap->groupBy('row');
 
         // Append formatted seats to the showtime data for easier rendering
         $showtimeData = $showtime->toArray();
-        $showtimeData['seats'] = $seats;
-
         return $showtimeData;
     }
 
