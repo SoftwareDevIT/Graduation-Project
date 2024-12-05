@@ -1,6 +1,43 @@
-/* Sidebar Container */
 .sidebar {
     width: 250px;
+
+    background-color: #15212d;
+    color: #ecf0f1;
+    position: fixed; /* Sidebar cố định */
+    top: 0;
+    left: 0;
+    height: 100vh; /* Đảm bảo chiều cao đầy đủ */
+    padding: 20px 15px;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+    overflow-y: auto; /* Cuộn nếu nội dung quá dài */
+  }
+  
+  .container-wrapper {
+    margin-left: 213px; /* Đẩy nội dung chính sang bên phải */
+    padding: 20px; /* Tạo khoảng cách giữa nội dung và các cạnh */
+    transition: margin-left 0.3s ease-in-out; /* Hiệu ứng chuyển động */
+  }
+  
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .sidebar ul :hover{
+    color: #1abc9c;
+  }
+  .sidebar ul li {
+    padding: 10px 20px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    margin-bottom: 10px;
+  }
+  
+  .sidebar ul li a {
+  margin-top: 20px;
+    color: #ecf0f1;
+
     background-color: #f8f9fa;
     color: #343a40; /* Màu chữ tối */
     padding: 20px;
@@ -9,6 +46,7 @@
    
     border-right: 1px solid #dee2e6; /* Đường viền xám nhạt */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng nhẹ */
+    overflow: hidden; /* Ẩn thanh cuộn tổng */
 }
 
 /* Logo Section */
@@ -37,7 +75,14 @@
 .sidebar ul {
     list-style-type: none;
     padding: 0;
+    overflow-y: auto; /* Cho phép cuộn theo trục dọc */
+    height: calc(100vh - 100px); /* Trừ chiều cao logo và padding */
 }
+/* Thanh cuộn tùy chỉnh */
+.sidebar ul::-webkit-scrollbar {
+    width: 8px; /* Độ rộng thanh cuộn */
+}
+
 
 /* Individual Menu Item */
 .sidebar ul li {
@@ -52,99 +97,57 @@
 /* Link Styling */
 .sidebar ul li a {
     color: #343a40; /* Màu chữ tối */
+
     text-decoration: none;
     display: flex;
     align-items: center;
-    padding: 12px;
-    border-radius: 5px;
-    transition: background 0.3s, color 0.3s; /* Hiệu ứng chuyển đổi */
-}
-
-/* Hover Effect */
-.sidebar ul li a:hover {
-    background-color: #007bff; /* Nền xanh khi hover */
-    color: #ffffff; /* Chữ trắng khi hover */
-}
-
-/* Icon Styling */
-.sidebar ul li a svg {
-    margin-right: 10px; /* Khoảng cách giữa icon và chữ */
-    font-size: 1.2rem; /* Kích thước icon */
-}
-
-/* Active State */
-.sidebar ul li a.active {
-    background-color: #007bff; /* Nền đậm hơn cho trạng thái active */
-    color: #ffffff; /* Chữ trắng */
-}
-.logo-first-letter1{
-    padding-left: 100px;
-}
-/* Mặc định ẩn mũi tên trên màn hình lớn */
-.sidebar-toggle {
+    transition: color 0.3s ease;
+  }
+  
+  .sidebar ul li a:hover {
+    color: #1abc9c;
+  }
+  
+  .submenu {
     display: none;
-}
-@media (max-width: 768px) {
-    .sidebar {
-        display: none; /* Ẩn sidebar */
-        position: fixed; /* Đảm bảo sidebar hiển thị đúng khi được mở */
-        left: 0;
-        top: 0;
-        width: 250px; /* Chiều rộng của sidebar */
-        height: 100%; /* Chiều cao full màn hình */
-        background-color: #f8f9fa; /* Màu nền của sidebar */
-        z-index: 999; /* Đảm bảo sidebar hiển thị trên các phần tử khác */
-        overflow-y: auto;
-        transition: transform 0.3s ease; /* Thêm hiệu ứng chuyển đổi cho sidebar */
-        transform: translateX(-100%); /* Đẩy sidebar ra ngoài màn hình */
-    }
-
-    /* Khi sidebar được mở, hiển thị */
-    .sidebar.active {
-        display: block; /* Hiển thị lại sidebar */
-        transform: translateX(0); /* Đưa sidebar về vị trí hiển thị */
-    }
-
-    /* CSS cho nút toggle */
-    .sidebar-toggle {
-        display: block;
-        position: fixed;
-        top: 10px;
-        left: 1px;
-        cursor: pointer;
-        z-index: 1000; /* Đảm bảo nút mũi tên hiển thị trên sidebar */
-        font-size: 1.5rem;
-        color: #f8f9fa; /* Màu mũi tên */
-    }
-}
-
-@media (max-width: 480px) {
-    .sidebar {
-        display: none; /* Ẩn sidebar */
-        position: fixed; /* Đảm bảo sidebar hiển thị đúng khi được mở */
-        left: 0;
-        top: 0;
-        width: 250px; /* Chiều rộng của sidebar */
-        height: 100%; /* Chiều cao full màn hình */
-        background-color: #f8f9fa; /* Màu nền của sidebar */
-        z-index: 999; /* Đảm bảo sidebar hiển thị trên các phần tử khác */
-        overflow-y: auto;
-    }
-
-    /* Khi sidebar được mở, hiển thị */
-    .sidebar.active {
-        display: block; /* Hiển thị lại sidebar */
-    }
-   /* CSS cho nút toggle */
-.sidebar-toggle {
+    padding-left: 20px;
+    margin-top: 10px;
+  }
+  
+  .submenu.open {
     display: block;
-    position: fixed;
-    top: 10px;
-    left: 1px;
-    cursor: pointer;
-    z-index: 1000; /* Đảm bảo nút mũi tên hiển thị trên sidebar */
-    font-size: 1.5rem;
-    color: #f8f9fa; /* Màu mũi tên */
-}
 
-}
+    border-left: 4px solid #1abc9c;
+  }
+  
+  .sidebar ul li:hover {
+  
+    border-radius: 5px;
+    color: #1abc9c  ;
+  }
+  
+  .sidebar ul li span {
+    margin-top: 10px;
+    margin-left: -20px;
+    display: flex;
+    justify-content: space-between; /* Căn giữa nội dung và mũi tên */
+    align-items: center;
+    cursor: pointer;
+    color: #ecf0f1;
+    padding: 10px 20px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .sidebar ul li span svg {
+    margin-right: -40px; /* Khoảng cách từ mũi tên đến lề phải */
+    font-size: 14px; /* Điều chỉnh kích thước mũi tên nếu cần */
+    transition: transform 0.3s ease;
+  }
+  
+
+  
+  .submenu.open span svg {
+    transform: rotate(180deg); /* Xoay mũi tên khi mở submenu */
+  }
+  

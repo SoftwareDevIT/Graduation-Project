@@ -85,9 +85,9 @@ class RankContrller extends Controller
         $user = auth()->user();
         $pointsToUse = $request->points_to_use;
         $totalPrice = $request->total_price;
-        $booking_id = $request->booking_id;
+        // $booking_id = $request->booking_id;
 
-        $data = $this->rankService->usePoints($user, $pointsToUse, $totalPrice,$booking_id);
+        $data = $this->rankService->usePoints($user, $pointsToUse, $totalPrice);
 
         return response()->json($data, $data['success'] ? 200 : 400);
     }
