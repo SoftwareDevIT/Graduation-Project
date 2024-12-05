@@ -16,10 +16,85 @@
     
 }
 
+/* Biểu tượng thông báo */
 .thongbao {
-  font-size: 25px;
- 
+  position: relative;
+  cursor: pointer;
+  font-size: 24px;
+  color: #1890ff;
 }
+
+.notification-dropdown {
+  position: absolute;
+  top: 30px;
+  right: 0;
+  width: 200px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+.notification-dropdown p {
+  font-size: 14px;
+  color: #333;
+  margin: 8px 0;
+  display: flex;
+  align-items: center; /* Căn giữa nội dung */
+}
+
+.notification-dropdown p:first-child {
+  margin-top: 0;
+}
+
+.notification-dropdown p:last-child {
+  margin-bottom: 0;
+}
+
+/* Thêm icon voucher */
+.voucher-icon {
+  color: orange;
+  font-size: 16px; /* Kích thước icon */
+  margin-right: 8px; /* Khoảng cách giữa icon và văn bản */
+}
+
+/* Tạo hiệu ứng hover cho các mục thông báo */
+.notification-dropdown p:hover {
+  background-color: #f0faff;
+  cursor: pointer;
+}
+
+/* Khi không có thông báo, hiển thị thông báo mặc định */
+.notification-dropdown p {
+  text-align: center;
+  font-style: italic;
+  color: #888;
+}
+.voucher-icon {
+  font-size: 16px; /* Kích thước icon */
+  margin-right: 8px; /* Khoảng cách giữa icon và văn bản */
+}
+
+.notification-dropdown p {
+  font-size: 14px;
+  color: #333;
+  margin: 8px 0;
+  display: flex;
+  align-items: center; /* Căn giữa nội dung */
+}
+/* Responsive cho màn hình nhỏ */
+@media (max-width: 768px) {
+  .notification-dropdown {
+    width: 180px;
+  }
+  .thongbao {
+    font-size: 20px;
+  }
+}
+
 
 .header-left {
   position: relative;
@@ -318,6 +393,7 @@ bottom: 10px;
     border-radius: 15px;
     width: 300px;
   }
+ 
 }
 @media (max-width:576px) {
   .thanhmenu{

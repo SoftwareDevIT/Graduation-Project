@@ -97,7 +97,8 @@ const Header = () => {
   const handleLocationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const locationId = e.target.value;
     setSelectedLocation(locationId);
-  }  
+  };
+    
 
   return (
     <header className="header">
@@ -363,12 +364,18 @@ const Header = () => {
             )}
 
 <span className="thongbao" onClick={handleNotificationClick}>
-  &#128276;
+  &#128276; {/* Biểu tượng thông báo */}
   {isNotificationVisible && (
     <div className="notification-dropdown">
       {vouchers && vouchers.length > 0 ? (
         vouchers.map((voucher, index) => (
-          <p key={index}>• {voucher.code}</p> 
+          <p key={index}>
+            {/* Thêm icon voucher từ FontAwesome */}
+            <span className="voucher-icon">
+              <i className="fas fa-ticket-alt"></i> {/* Icon vé voucher */}
+            </span>
+            {voucher.code}
+          </p>
         ))
       ) : (
         <p>Không có thông báo mới</p>
@@ -376,6 +383,11 @@ const Header = () => {
     </div>
   )}
 </span>
+
+
+
+
+
 
           </div>
         </div>
