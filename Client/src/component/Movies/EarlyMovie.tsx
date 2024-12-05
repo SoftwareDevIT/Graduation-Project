@@ -2,11 +2,10 @@ import React, { useEffect, useState } from 'react';
 import './EarlyMovie.css';
 import Header from '../Header/Hearder';
 import Footer from '../Footer/Footer';
-import axios from 'axios';
 import instance from '../../server';
 import { Modal } from 'antd';
 import { Link } from 'react-router-dom';
-
+import { stripHtml } from '../../assets/Font/quillConfig';
 const EarlyMovie: React.FC = () => {
   const [movies, setMovies] = useState<any[]>([]);
   const [isTrailerVisible, setIsTrailerVisible] = useState(false);
@@ -47,7 +46,7 @@ const EarlyMovie: React.FC = () => {
             <div className="movie-card-info">
               <h3>{movie.movie.movie_name}</h3>
               <p className="movie-genre">{movie.movie.movie_name} - Comedy, Action, Adventure</p>
-              <p className="movie-description">{movie.movie.description}</p>
+              <p className="movie-description">{stripHtml(movie.movie.description)}</p>
               <div className="movie-details1">
                 <div className="movie-info1">
                   <span className="duration1"><i className="fas fa-clock"></i> {movie.movie.duration} phút</span>
@@ -58,9 +57,9 @@ const EarlyMovie: React.FC = () => {
                 </div>
               </div>
               <div className="movie-actions">
-                <button className="btn-info">Thông tin phim</button>
+                <button className="btn-info"><Link to={`/movie-detail/${movie.movie.slug}`}>Thông tin phim</Link></button>
                 <button className="btn-trailer" onClick={() => showTrailer(movie)}>Trailer</button> {/* Thêm sự kiện onClick */}
-                <Link to={`/movie-detail/${movie.movie.slug}`} className='btn-buy'>Mua vé</Link>
+                <Link to={`/buy-now/${movie.movie.slug}`} className='btn-buy'>Mua vé</Link>
               </div>
             </div>
           </div>
