@@ -172,7 +172,7 @@ class TicketBookingService
 
     public function generateQrCode($booking)
     {
-        $url = 'http://localhost:5173/booking/' . $booking->id;
+        $url = 'http://localhost:5173/admin/ordersdetail/' . $booking->id;
         // Tạo mã QR với URL đó dưới dạng PNG
         $qrcode = QrCode::format('png')->generate($url);
         // Đặt tên file và lưu vào thư mục public

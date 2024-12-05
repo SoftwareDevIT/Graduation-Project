@@ -211,8 +211,8 @@ Route::apiResource('promotions', PromotionController::class);
 Route::post('apply-promotion', [PromotionController::class, 'applyPromotion']);
 
 
-Route::apiResource('matrix', MatrixController::class);
-Route::apiResource('seat-map', SeatMapController::class);
+// Route::apiResource('matrix', MatrixController::class);
+// Route::apiResource('seat-map', SeatMapController::class);
 
 // Route riêng cho chức năng publish
 Route::patch('/seat-map/{id}/publish', [SeatMapController::class, 'publish'])->name('seat-map.publish');
@@ -224,3 +224,12 @@ Route::apiResource('ranks', RankContrller::class);
 
 
 Route::get('/env-config', [ConfigController::class, 'envConfig']);
+
+Route::prefix('seat-maps')->group(function () {
+    Route::get('/', [SeatMapController::class, 'index']);
+    Route::get('/{id}', [SeatMapController::class, 'show']);
+    Route::post('/', [SeatMapController::class, 'store']);
+    Route::put('/{id}', [SeatMapController::class, 'update']);
+    Route::delete('/{id}', [SeatMapController::class, 'destroy']);
+});
+

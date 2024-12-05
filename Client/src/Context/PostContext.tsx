@@ -55,7 +55,7 @@ export const PostProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const addOrUpdatePost = async (
-    data: { title: string; news_category_id: number; content: string; status: string; thumbnail?: File; banner?: File },
+    data: { title: string; news_category_id: number; content: string; status: string; thumnail?: File; banner?: File },
     id?: string
   ) => {
     const formData = new FormData();
@@ -78,12 +78,12 @@ export const PostProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
 
-    if (data.thumbnail) {
-      if (!allowedTypes.includes(data.thumbnail.type)) {
+    if (data.thumnail) {
+      if (!allowedTypes.includes(data.thumnail.type)) {
         console.error('Invalid thumbnail file type');
         return;
       }
-      formData.append('thumbnail', data.thumbnail);
+      formData.append('thumnail', data.thumnail);
     }
 
     if (data.banner) {

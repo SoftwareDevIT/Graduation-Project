@@ -5,12 +5,9 @@ namespace App\Http\Controllers\Api\SeatMap;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Store\StoreSeatMapRequest;
 use App\Http\Requests\Update\UpdateSeatMapRequest;
-use App\Models\SeatLayout;
-use App\Models\SeatMap;
 use App\Services\SeatMap\SeatMapService;
-use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 
 class SeatMapController extends Controller
 {
@@ -21,78 +18,45 @@ class SeatMapController extends Controller
         $this->seatMapService = $seatMapService;
     }
 
-    public function index()
+    public function index(): JsonResponse
     {
-        $combo = $this->seatMapService->index();
-        return $this->success($combo);
+        $seatMaps = $this->seatMapService->getAll();
+        return response()->json($seatMaps);
     }
-    public function show($id)
+
+    public function show(int $id): JsonResponse
     {
         try {
-            $combo = $this->seatMapService->get($id);
-            return $this->success($combo);
+            $seatMap = $this->seatMapService->getById($id);
+            return response()->json($seatMap);
         } catch (ModelNotFoundException $e) {
-            return $this->notFound("Không có id {$id} trong cơ sở dữ liệu");
-        } catch (Exception $e) {
-            return $e->getMessage();
-        }
-    }
-    public function status(int $id)
-    {
-        $movie = SeatMap::findOrFail($id);
-        $movie->status = $movie->status == 1 ? 0 : 1;
-        $movie->save();
-        return $this->success('', 'Cập nhật trạng thái thành công.', 200);
-    }
-
-
-    public function store(StoreSeatMapRequest $request)
-    {
-        $seatDataArray = $request->validated(); // Dữ liệu đã được xác thực từ request
-        $storedSeats = []; // Mảng để lưu kết quả đã lưu
-
-        foreach ($seatDataArray as $seatData) {
-            $storedSeats[] = $this->seatMapService->store($seatData); // Lưu từng đối tượng và thêm vào mảng
-        }
-
-        return $this->success($storedSeats); // Trả về tất cả các dữ liệu đã lưu
-    }
-
-
-    public function update(UpdateSeatMapRequest $request, $id)
-    {
-        try {
-            $combo = $this->seatMapService->update($id, $request->validated());
-            return $this->success($combo);
-        } catch (ModelNotFoundException $e) {
-            return $this->notFound("Không có id {$id} trong cơ sở dữ liệu");
-        } catch (Exception $e) {
-            return $e->getMessage();
+            return response()->json(['error' => 'Seat map not found'], 404);
         }
     }
 
-    public function destroy($id)
+    public function store(StoreSeatMapRequest $request): JsonResponse
+    {
+        $seatMap = $this->seatMapService->create($request->validated());
+        return response()->json($seatMap, 201);
+    }
+
+    public function update(UpdateSeatMapRequest $request, int $id): JsonResponse
     {
         try {
-            return $this->success($this->seatMapService->delete($id));
+            $seatMap = $this->seatMapService->update($id, $request->validated());
+            return response()->json($seatMap);
         } catch (ModelNotFoundException $e) {
-            return $this->notFound("Không có id {$id} trong cơ sở dữ liệu");
-        } catch (Exception $e) {
-            return $e->getMessage();
+            return response()->json(['error' => 'Seat map not found'], 404);
         }
     }
-    public function publish($id)
+
+    public function destroy(int $id): JsonResponse
     {
         try {
-            // Kiểm tra id có tồn tại không
-            $layout = SeatLayout::findOrFail($id);
-            $layout->update(['status' => 'Xuất bản']);
-
-            return response()->json(['message' => 'Seat layout published successfully!']);
+            $this->seatMapService->delete($id);
+            return response()->json(['message' => 'Seat map deleted successfully']);
         } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => "Không tìm thấy id {$id} trong cơ sở dữ liệu"], 404);
-        } catch (Exception $e) {
-            return response()->json(['error' => 'Đã xảy ra lỗi: ' . $e->getMessage()], 500);
+            return response()->json(['error' => 'Seat map not found'], 404);
         }
     }
 }

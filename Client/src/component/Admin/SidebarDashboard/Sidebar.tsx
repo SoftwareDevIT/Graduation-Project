@@ -25,6 +25,7 @@ const Sidebar: React.FC = () => {
   };
 
   return (
+    <div className="container-wrapper">
     <div className="sidebar">
       <ul>
         <li>
@@ -101,6 +102,7 @@ const Sidebar: React.FC = () => {
           </NavLink>
         </li>
       </ul>
+    </div>
     </div>
   );
 };
