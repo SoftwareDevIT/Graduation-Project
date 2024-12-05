@@ -5,7 +5,7 @@ import { message,Modal } from 'antd'; // Import message from Ant Design
 import Headerticket from '../Headerticket/Headerticket';
 import Footer from '../Footer/Footer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 
 import './OderCheckOut.css';
 import Header from '../Header/Hearder';
@@ -48,13 +48,20 @@ const OrderCheckout = () => {
     const userProfilea: UserProfile | null = JSON.parse(localStorage.getItem("user_profile") || "null");
     const userRoles = userProfilea?.roles || []; // Lấy danh sách vai trò nếu có
     const isAdmin = userRoles.length > 0 && userRoles[0]?.name === "admin";
-  
-      
+    const [isModalVisible, setIsModalVisible] = useState(false);
 
     const toggleTableVisibility = () => {
       setIsTableVisible(!isTableVisible);
     };
-
+    const showModal = () => {
+        setIsModalVisible(true);
+    };
+    const handleOk = () => {
+        setIsModalVisible(false);
+    };
+    const handleCancel = () => {
+        setIsModalVisible(false);
+    };
     useEffect(() => {
         if (userProfile) {
           setPointHistories(userProfile.point_histories);
@@ -133,13 +140,15 @@ const OrderCheckout = () => {
             });
     
             if (response.status === 200 && response.data) {
-                const { message: successMessage, discount, final_price } = response.data;
+                const { message: successMessage, discount_value
+                    , final_price } = response.data;
     
                 // Hiển thị thông báo thành công
                 message.success(successMessage);
     
                 // Cập nhật tổng tiền và giảm giá
-                setDiscount(discount); // Nếu API trả về số tiền quy đổi từ điểm
+                setDiscount(discount_value
+                ); // Nếu API trả về số tiền quy đổi từ điểm
                 setFinalPrice(final_price); // Cập nhật lại tổng tiền sau khi trừ điểm
             } else {
                 message.error("Không thể sử dụng điểm. Vui lòng kiểm tra lại.");
@@ -159,7 +168,7 @@ const OrderCheckout = () => {
     };
     // State for payment method
     const [pay_method_id, setPaymentMethod] = useState<number | null>(null); // Khởi tạo pay_method_id với null
-    const [timeLeft, setTimeLeft] = useState(30000000);
+    const [timeLeft, setTimeLeft] = useState(300);
     useEffect(() => {
         const timer = setInterval(() => {
             setTimeLeft((prevTime) => {
@@ -364,9 +373,9 @@ const OrderCheckout = () => {
 {!isAdmin && ( // Kiểm tra nếu không phải là admin mới hiển thị bảng điểm giảm giá
     <div>
         {/* Thêm sự kiện onClick vào <h4> */}
-        <h4 onClick={toggleTableVisibility} className="diemgiamgia">
-            Điểm giảm giá FlickHive
-        </h4>
+        <h4 onClick={toggleTableVisibility} className='diemgiamgia'>Điểm giảm giá FlickHive
+      <FontAwesomeIcon icon={faQuestionCircle} style={{ marginLeft: '10px', cursor: 'pointer' }} onClick={showModal} />
+      </h4>
 
         {/* Bảng khung-diem-poly chỉ hiển thị khi isTableVisible là true */}
         {isTableVisible && (
@@ -399,13 +408,47 @@ const OrderCheckout = () => {
             </div>
         )}
     </div>
+    
 )}
+ <Modal
+                    title="Hướng Dẫn Quy Đổi Điểm"
+                    visible={isModalVisible}
+                    onOk={handleOk}
+                    onCancel={handleCancel}
+                    cancelButtonProps={{ style: { display: 'none' } }}
+                >
+                    <p>Quy trình quy đổi điểm của FlickHive:</p>
+                    <ul>
+                        <li>Sử dụng điểm để giảm giá trực tiếp vào đơn hàng.</li>
+                        <li>Mỗi 1000 điểm tương đương với 1000VND</li>
+                        <li>Bạn có thể nhập số điểm cần sử dụng để giảm giá cho đơn hàng.</li>
+                        <li>Lưu ý: Số điểm không được vượt quá tổng giá trị đơn hàng.</li>
+                    </ul>
+                    <p>Chúc bạn có trải nghiệm tốt!</p>
+                </Modal>
+<div>
+    
+  <div className="order-total d-flex justify-content-between">
+    <span className="total-title">Tổng</span>
+    <span className="total-price">{totalPrice?.toLocaleString('vi-VN')} đ</span>
+  </div>
+  {discount && (
+  <div className="order-discount d-flex justify-content-between">
+    <span className="total-title">Giảm giá:</span>
+    <span className="total-title"> -{discount.toLocaleString('vi-VN')} đ</span>
+  </div>
+  )}
+  <div className="order-final d-flex justify-content-between">
+    <span className="total-title">Tổng sau giảm:</span>
+    <span className="total-title">
+      {(finalPrice || totalPrice)?.toLocaleString('vi-VN')} đ
+    </span>
+  </div>
+</div>
 
 
 
-
-
-        <div className="order-total">
+        {/* <div className="order-total">
     <span className="total-title">Tổng </span>
     <span className="total-price">{totalPrice?.toLocaleString('vi-VN')} đ</span>
 </div>
@@ -422,7 +465,7 @@ const OrderCheckout = () => {
     <span className="total-title3">
         {(finalPrice || totalPrice)?.toLocaleString('vi-VN')} đ
     </span>
-</div>
+</div> */}
 
 
                     </div>

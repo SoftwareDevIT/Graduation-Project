@@ -51,9 +51,9 @@ const Sidebar: React.FC = () => {
           </span>
           <ul className={openMenu['cinema'] ? 'submenu open' : 'submenu'}>
             {/* <li><NavLink to="/admin/branch-management">Quản lý chi nhánh</NavLink></li> */}
-            <li><NavLink to="/admin/cinemas">Quản lý rạp</NavLink></li>
+            <li><NavLink to="/admin/cinema">Quản lý rạp</NavLink></li>
             <li><NavLink to="/admin/rooms">Quản lý phòng chiếu</NavLink></li>
-            <li><NavLink to="/admin/seatmap">Mẫu sơ đồ ghế</NavLink></li>
+            <li><NavLink to="/admin/seat-maps">Mẫu sơ đồ ghế</NavLink></li>
             <li><NavLink to="/admin/rank">Cấp thành viên</NavLink></li>
           </ul>
         </li>
