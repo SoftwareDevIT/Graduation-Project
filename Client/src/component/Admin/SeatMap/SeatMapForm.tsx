@@ -263,8 +263,8 @@ const SeatMapForm = () => {
 
   return (
     <div className="container mt-5">
-      <form onSubmit={handleSubmit(onSubmit)} className="shadow p-4 rounded bg-light">
-        <h1 className="text-center mb-4">{id ? "Edit Seat Map" : "Add Seat Map"}</h1>
+      <form onSubmit={handleSubmit(onSubmit)} className="shadow p-4 rounded bg-light" >
+        <h1 className="text-center mb-4">{id ? "Thêm Ghế" : "Thêm Sơ Đồ Ghế"}</h1>
 
         {/* Name */}
         <div className="mb-3">
@@ -386,6 +386,9 @@ const SeatMapForm = () => {
       </div>
     ))}
 </div>
+
+
+
 </div>
 <button type="submit" className="btn btn-primary w-100">
   {id ? "Cập nhật" : "Thêm"}

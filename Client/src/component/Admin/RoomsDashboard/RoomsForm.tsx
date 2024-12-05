@@ -96,7 +96,7 @@ const RoomsForm: React.FC = () => {
   return (
     <div className="container mt-5">
       <h2 className="text-center mb-4">{id ? "Cập nhật Phòng" : "Thêm Phòng"}</h2>
-      <form onSubmit={handleSubmit(onSubmit)} className="shadow p-4 rounded bg-light">
+      <form onSubmit={handleSubmit(onSubmit)} className="shadow p-4 rounded bg-light" style={{ maxWidth: "500px", margin: "0 auto",height: "430px" }}>
         {/* Tên Phòng */}
         <div className="mb-3">
           <label className="form-label">Tên Phòng</label>
@@ -142,7 +142,7 @@ const RoomsForm: React.FC = () => {
           {errors.seat_map_id && <div className="invalid-feedback">{errors.seat_map_id.message}</div>}
         </div>
 
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className="btn btn-primary w-100">
           {id ? "Cập nhật Phòng" : "Thêm Phòng"}
         </button>
       </form>

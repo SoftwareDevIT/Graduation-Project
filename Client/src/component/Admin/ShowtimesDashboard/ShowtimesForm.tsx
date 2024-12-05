@@ -157,7 +157,7 @@ const ShowtimesForm: React.FC = () => {
   return (
     <div className="container mt-5">
       <h2 className="text-center mb-4">{id ? 'Cập nhật Suất Chiếu' : 'Thêm Suất Chiếu'}</h2>
-      <form onSubmit={handleSubmit(onSubmit)} className="shadow p-4 rounded bg-light">
+      <form onSubmit={handleSubmit(onSubmit)} className="shadow p-4 rounded bg-light" style={{ maxWidth: "500px", margin: "0 auto",height: "590px" }}>
       <div className='mb-3'>
       <Link to="/admin/showtimesauto/add">
     <Button type="primary" icon={<PlusCircleOutlined />}>
