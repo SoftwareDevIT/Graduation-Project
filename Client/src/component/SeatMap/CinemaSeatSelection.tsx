@@ -526,7 +526,8 @@ setReservedSeats(reservedSeatSet);
               <div className="price-box1">
                 <div className="price">
                   Tổng đơn hàng
-                  <br /> <span>{totalPrice.toLocaleString()} đ</span>
+                  <br /> <span>{totalPrice.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} đ</span>
+
                 </div>
               </div>
               <div className="actionst1">
