@@ -102,9 +102,9 @@ import ShowtimesAuto from "./Page/Admin/Showtimes/ShowtimesAuto";
 
 import MovieTicket from "./component/PersonalPage/MovieTicket";
 
-import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
 
 import SeatMapForm from "./component/Admin/SeatMap/SeatMapForm";
+
 import SeatMapFormManager from "./Page/Admin/SeatMap/SeatMapForm";
 
 
@@ -116,7 +116,7 @@ import SeatMapFormManager from "./Page/Admin/SeatMap/SeatMapForm";
 
 import Community from "./component/Community/Community";
 
-import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
+
 import Pointaccumulation from "./component/PersonalPage/Pointaccumulation";
 
 
@@ -126,6 +126,8 @@ import Pointaccumulation from "./component/PersonalPage/Pointaccumulation";
 
 
 
+import SeatLayout from "./component/SeatMap/test";
+import MyMapComponent from "./component/GG map/Ggmap";
 
 function App() {
 
@@ -139,10 +141,9 @@ function App() {
         <Route path="/orders" element={<PrivateRoute><OrderPage /></PrivateRoute>} />
         <Route path="/pay" element={ <PrivateRoute><OrderCheckout /></PrivateRoute> } />
 
-        {/* <Route path="/community" element={<Community/>} /> */}
+        <Route path="/community" element={<Community/>} />
 
 
-        <Route path="/seat" element={<CinemaSeatSelection />} />
 
         <Route path="/movie-detail/:slug" element={<ContentMovie />} />
         <Route path="/schedule/:slug" element={<LichChieu />} />
@@ -177,7 +178,7 @@ function App() {
         <Route path="/register" element={<RegisterCinema />} />
         <Route path="/login" element={<LoginCinema />} />
         <Route path="/movieshowing" element={<MovieShowing/>} />
-        <Route path="/seat" element={<CinemaSeatSelection/>} />
+  
       
         <Route path="/deponsit" element={<Deponsit/>} />
         <Route path="/forgetpass" element={<ForgetPass/>} />

@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { notification, Table, Pagination, Input, Button, Popconfirm, Modal, Form, Input as AntdInput } from 'antd'; // Import Ant Design components
+import { notification, Table, Pagination, Input, Button, Popconfirm } from 'antd'; // Import Ant Design components
 import { EditOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons'; // Ant Design icons
 import { Rank } from '../../../interface/Rank';
 import instance from '../../../server';
+
 
 const RankDashboard = () => {
     const [ranks, setRanks] = useState<Rank[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
-    const [modalVisible, setModalVisible] = useState<boolean>(false);
-    const [form] = Form.useForm();
-    const [totalOrderFilter, setTotalOrderFilter] = useState<number | null>(null); // Trạng thái lọc theo tổng số đơn hàng
-    const [discountFilter, setDiscountFilter] = useState<number | null>(null); // Trạng thái lọc theo phần trăm giảm giá
 
     const ranksPerPage = 7;
     const { Search } = Input;
@@ -39,12 +36,9 @@ const RankDashboard = () => {
     }, []);
 
     // Lọc và phân trang
-    const filteredRanks = ranks.filter((rank) => {
-        const matchesSearchTerm = rank.name.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesTotalOrderFilter = totalOrderFilter ? rank.total_order_amount >= totalOrderFilter : true;
-        const matchesDiscountFilter = discountFilter ? rank.percent_discount >= discountFilter : true;
-        return matchesSearchTerm && matchesTotalOrderFilter && matchesDiscountFilter;
-    });
+    const filteredRanks = ranks.filter((rank) =>
+        rank.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     const totalRanks = filteredRanks.length;
     const currentRanks = filteredRanks.slice(
@@ -74,29 +68,7 @@ const RankDashboard = () => {
             setLoading(false);
         }
     };
-
-    const handleAddRank = async (values: any) => {
-        setLoading(true);
-        try {
-            await instance.post('/ranks', values);
-            setRanks((prevRanks) => [...prevRanks, values]);
-            notification.success({
-                message: 'Thành công',
-                description: 'Hạng đã được thêm thành công.',
-                placement: 'topRight',
-            });
-            setModalVisible(false); // Close modal after successful submission
-            form.resetFields(); // Reset the form fields
-        } catch (error) {
-            notification.error({
-                message: 'Lỗi',
-                description: 'Không thể thêm hạng. Vui lòng thử lại sau.',
-                placement: 'topRight',
-            });
-        } finally {
-            setLoading(false);
-        }
-    };
+    
 
     // Cấu hình cột bảng
     const columns = [
@@ -150,33 +122,17 @@ const RankDashboard = () => {
     return (
         <div className="container mt-5">
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <Button
-                    type="primary"
-                    icon={<PlusOutlined />}
-                    size="large"
-                    onClick={() => setModalVisible(true)} // Open modal when clicked
-                >
-                    Thêm Hạng
-                </Button>
+                <Link to={'/admin/rank/add'}>
+                    <Button type="primary" icon={<PlusOutlined />} size="large">
+                        Thêm Hạng
+                    </Button>
+                </Link>
                 <Search
                     placeholder="Tìm kiếm theo tên hạng"
                     onSearch={(value) => setSearchTerm(value)}
                     style={{ width: 300 }}
                     allowClear
                 />
-                {/* Bộ lọc theo Tổng Số Đơn Hàng và Phần Trăm Giảm Giá */}
-                <div className="d-flex gap-3">
-                    <AntdInput
-                        type="number"
-                        placeholder="Lọc theo tổng số đơn hàng"
-                        onChange={(e) => setTotalOrderFilter(e.target.value ? Number(e.target.value) : null)}
-                    />
-                    <AntdInput
-                        type="number"
-                        placeholder="Lọc theo phần trăm giảm giá"
-                        onChange={(e) => setDiscountFilter(e.target.value ? Number(e.target.value) : null)}
-                    />
-                </div>
             </div>
             <Table
                 columns={columns}
@@ -199,48 +155,6 @@ const RankDashboard = () => {
                     showTotal={(total) => `Tổng số ${total} hạng`}
                 />
             </div>
-
-            {/* Modal Thêm Hạng */}
-            <Modal
-                title="Thêm Hạng"
-                visible={modalVisible}
-                onCancel={() => setModalVisible(false)} // Close modal when cancel
-                footer={null}
-                width={600}
-            >
-                <Form
-                    form={form}
-                    onFinish={handleAddRank} // Submit form when finished
-                    layout="vertical"
-                >
-                    <Form.Item
-                        label="Tên Hạng"
-                        name="name"
-                        rules={[{ required: true, message: 'Vui lòng nhập tên hạng!' }]}
-                    >
-                        <AntdInput />
-                    </Form.Item>
-                    <Form.Item
-                        label="Tổng Số Đơn Hàng"
-                        name="total_order_amount"
-                        rules={[{ required: true, message: 'Vui lòng nhập tổng số đơn hàng!' }]}
-                    >
-                        <AntdInput type="number" />
-                    </Form.Item>
-                    <Form.Item
-                        label="Phần Trăm Giảm Giá"
-                        name="percent_discount"
-                        rules={[{ required: true, message: 'Vui lòng nhập phần trăm giảm giá!' }]}
-                    >
-                        <AntdInput type="number" />
-                    </Form.Item>
-                    <Form.Item>
-                        <Button type="primary" htmlType="submit" loading={loading}>
-                            Thêm Hạng
-                        </Button>
-                    </Form.Item>
-                </Form>
-            </Modal>
         </div>
     );
 };
