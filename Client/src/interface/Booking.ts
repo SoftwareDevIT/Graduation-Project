@@ -20,7 +20,7 @@ export interface Booking {
   pay_method : PayMethod;
   movie: Movie;
   room: Room
-  combos: Combo
+  combos: Combo[]
   qrcode: string
   booking_code: string
 }

@@ -5,7 +5,27 @@ import instance from "../../../server";
 import { Button, notification } from "antd";
 import { SeatMapAdmin } from "../../../interface/SeatMap";
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons'; // Ant Design icons
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import './SeatMap.css'
+const seatMapSchema = z.object({
+  name: z.string().min(1, "Tên sơ đồ chỗ ngồi là bắt buộc").max(255, "Tên sơ đồ quá dài"),
+  description: z.string().min(1, "Mô tả là bắt buộc").max(500, "Mô tả quá dài"),
+  matrix_row: z.number().min(12, "Số hàng phải từ 12 trở lên").max(15, "Số hàng không vượt quá 15"),
+  matrix_column: z.number().min(12, "Số cột phải từ 12 trở lên").max(15, "Số cột không vượt quá 15"),
+  row_regular_seat: z.number().min(1, "Số hàng ghế thường phải lớn hơn hoặc bằng 1"),
+  row_vip_seat: z.number().min(1, "Số hàng ghế VIP phải lớn hơn hoặc bằng 1"),
+  row_couple_seat: z.number().min(0, "Số hàng ghế đôi không thể nhỏ hơn 0"),
+  seat_structure: z.array(z.object({
+    label: z.string(),
+    linkedSeat: z.string().nullable(),
+    row: z.string(),
+    column: z.number(),
+    type: z.string(),
+    status: z.number(),
+    is_double: z.number()
+  })).optional()
+});
 const SeatMapForm = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -13,7 +33,10 @@ const SeatMapForm = () => {
   const [seatMatrix, setSeatMatrix] = useState<any[][]>([]);
   const [seatStructure, setSeatStructure] = useState<any[]>([]);
   const [selectedSeats, setSelectedSeats] = useState<any[]>([]);
-  const { handleSubmit, register, setValue, formState: { errors } } = useForm<Partial<SeatMapAdmin>>();
+  const { handleSubmit, register, setValue, formState: { errors } } = useForm<Partial<SeatMapAdmin>>({
+    resolver: zodResolver(seatMapSchema)
+  });
+  const nav = useNavigate()
 
   useEffect(() => {
     if (id) {
@@ -249,6 +272,7 @@ const SeatMapForm = () => {
       if (id) {
         await instance.put(`/seat-maps/${id}`, seatMapData);
         notification.success({ message: "Bản đồ chỗ ngồi đã được cập nhật thành công!" });
+        nav('/admin/seat-maps')
       } else {
         const res = await instance.post(`/seat-maps`, seatMapData);
         notification.success({ message: "Bản đồ chỗ ngồi đã được thêm thành công!" });
@@ -265,15 +289,16 @@ const SeatMapForm = () => {
     <div className="container mt-5">
       <form onSubmit={handleSubmit(onSubmit)} className="shadow p-4 rounded bg-light" >
         <h1 className="text-center mb-4">{id ? "Thêm Ghế" : "Thêm Sơ Đồ Ghế"}</h1>
-
         {/* Name */}
         <div className="mb-3">
           <label className="form-label">Tên Sơ Đồ</label>
           <input
-            {...register("name", { required: "Name is required." })}
+            {...register("name")}
             className={`form-control ${errors.name ? "is-invalid" : ""}`}
           />
-          {errors.name && <div className="invalid-feedback">{errors.name.message}</div>}
+        {errors.name && (
+            <span className="text-danger">{errors.name.message}</span>
+          )}
         </div>
 
         {/* Description */}
@@ -281,8 +306,12 @@ const SeatMapForm = () => {
           <label className="form-label">Mô tả</label>
           <input
             {...register("description")}
-            className="form-control"
+            className={`form-control ${errors.matrix_row ? "is-invalid" : ""}`}
+            
           />
+            {errors.description && (
+            <span className="text-danger">{errors.description.message}</span>
+          )}
         </div>
 
         {/* Matrix Row */}
@@ -290,10 +319,12 @@ const SeatMapForm = () => {
           <label className="form-label">Số Hàng</label>
           <input
             type="number"
-            {...register("matrix_row", { required: "Matrix row is required." })}
+            {...register("matrix_row",{valueAsNumber: true})}
             className={`form-control ${errors.matrix_row ? "is-invalid" : ""}`}
           />
-          {errors.matrix_row && <div className="invalid-feedback">{errors.matrix_row.message}</div>}
+           {errors.matrix_row && (
+            <span className="text-danger">{errors.matrix_row.message}</span>
+          )}
         </div>
 
         {/* Matrix Column */}
@@ -301,10 +332,12 @@ const SeatMapForm = () => {
           <label className="form-label">Số Cột</label>
           <input
             type="number"
-            {...register("matrix_column", { required: "Matrix column is required." })}
+            {...register("matrix_column",{valueAsNumber: true})}
             className={`form-control ${errors.matrix_column ? "is-invalid" : ""}`}
           />
-          {errors.matrix_column && <div className="invalid-feedback">{errors.matrix_column.message}</div>}
+          {errors.matrix_column && (
+            <span className="text-danger">{errors.matrix_column.message}</span>
+          )}
         </div>
 
         {/* Row Regular Seat */}
@@ -312,10 +345,12 @@ const SeatMapForm = () => {
           <label className="form-label">Số Hàng Ghế Thường</label>
           <input
             type="number"
-            {...register("row_regular_seat", { required: "Row regular seat is required." })}
+            {...register("row_regular_seat",{valueAsNumber: true})}
             className={`form-control ${errors.row_regular_seat ? "is-invalid" : ""}`}
           />
-          {errors.row_regular_seat && <div className="invalid-feedback">{errors.row_regular_seat.message}</div>}
+          {errors.row_regular_seat && (
+            <span className="text-danger">{errors.row_regular_seat.message}</span>
+          )}
         </div>
 
         {/* Row VIP Seat */}
@@ -323,10 +358,12 @@ const SeatMapForm = () => {
           <label className="form-label">Số Hàng Ghế VIP</label>
           <input
             type="number"
-            {...register("row_vip_seat", { required: "Row VIP seat is required." })}
+            {...register("row_vip_seat",{valueAsNumber: true})}
             className={`form-control ${errors.row_vip_seat ? "is-invalid" : ""}`}
           />
-          {errors.row_vip_seat && <div className="invalid-feedback">{errors.row_vip_seat.message}</div>}
+         {errors.row_vip_seat && (
+            <span className="text-danger">{errors.row_vip_seat.message}</span>
+          )}
         </div>
 
         {/* Row Couple Seat */}
@@ -334,10 +371,12 @@ const SeatMapForm = () => {
           <label className="form-label">Số Hàng Ghế Đôi</label>
           <input
             type="number"
-            {...register("row_couple_seat", { required: "Row couple seat is required." })}
+            {...register("row_couple_seat",{valueAsNumber: true})}
             className={`form-control ${errors.row_couple_seat ? "is-invalid" : ""}`}
           />
-          {errors.row_couple_seat && <div className="invalid-feedback">{errors.row_couple_seat.message}</div>}
+          {errors.row_couple_seat && (
+            <span className="text-danger">{errors.row_couple_seat.message}</span>
+          )}
         </div>
 
         {/* Seat Matrix */}
@@ -345,7 +384,7 @@ const SeatMapForm = () => {
 {/* Seat Matrix */}
 <div className="mb-3">
   <h3 className="text-center">Ma Trận Ghế</h3>
-  <div className="custom-seat-matrix">
+<div className="custom-seat-matrix">
     {seatMatrix.map((row, rowIndex) => (
       <div key={rowIndex} className="custom-seat-row">
         {/* Render cột chữ cái cho hàng ghế */}
@@ -386,8 +425,6 @@ const SeatMapForm = () => {
       </div>
     ))}
 </div>
-
-
 
 </div>
 <button type="submit" className="btn btn-primary w-100">

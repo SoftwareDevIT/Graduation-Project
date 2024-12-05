@@ -84,7 +84,7 @@ const MethodForm = () => {
         </div>
 
         <div className="mb-3">
-          <button className="btn btn-primary w-100">{id ? "Cập nhật Phương Thức" : "Thêm Phương Thức"}</button>
+          <button className="btn btn-primary w-30">{id ? "Cập nhật Phương Thức" : "Thêm Phương Thức"}</button>
         </div>
       </form>
     </div>

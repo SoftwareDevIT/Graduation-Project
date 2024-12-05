@@ -124,7 +124,7 @@ import Pointaccumulation from "./component/PersonalPage/Pointaccumulation";
 
 
 
-import SeatLayout from "./component/SeatMap/test";
+
 import MyMapComponent from "./component/GG map/Ggmap";
 
 import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";

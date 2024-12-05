@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { EditOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons';
-
-import { notification, Table, Pagination, Input, Button, Popconfirm, Switch } from 'antd';
-
+import { notification, Table, Pagination, Input, Button, Popconfirm } from 'antd';
 import instance from '../../../server';
 import { Room } from '../../../interface/Room';
 
