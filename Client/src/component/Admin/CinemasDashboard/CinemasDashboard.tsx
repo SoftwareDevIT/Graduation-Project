@@ -73,8 +73,7 @@ const CinemasDashboard: React.FC = () => {
             });
             setSelectedCinemaMovies(moviesInCinema);
         } catch (error) {
-            notification.error({
-                message: 'Lỗi',
+            notification.error({message: 'Lỗi',
                 description: 'Lỗi khi lấy phim của rạp.',
             });
         }
@@ -168,8 +167,7 @@ const CinemasDashboard: React.FC = () => {
                 />
             </div>
             <Table
-                dataSource={currentCinemas}
-                columns={columns}
+                dataSource={currentCinemas} columns={columns}
                 pagination={false}
                 rowKey="id"
                 expandable={{

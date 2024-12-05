@@ -13,7 +13,7 @@ import { notification } from 'antd';
 const roomSchema = z.object({
   room_name: z.string().min(1, 'Tên phòng không được bỏ trống'),
   cinema_id: z.number().min(1, 'Vui lòng chọn rạp'),
-  seat_layout_id: z.number().min(1, 'Vui lòng chọn kiểu bố trí ghế'),
+  seat_map_id: z.number().min(1, 'Vui lòng chọn kiểu bố trí ghế'),
 });
 
 const RoomsForm: React.FC = () => {
@@ -34,8 +34,8 @@ const RoomsForm: React.FC = () => {
 
     const fetchSeatLayouts = async () => {
       // Giả sử có API cho seat layouts
-      const response = await instance.get('/matrix');
-      setSeatLayouts(response.data.data);
+      const response = await instance.get('/seat-maps');
+      setSeatLayouts(response.data);
     };
 
     const fetchRoom = async () => {
@@ -45,7 +45,7 @@ const RoomsForm: React.FC = () => {
         reset({
           room_name: roomData.room_name,
           cinema_id: roomData.cinema_id,
-          seat_layout_id: roomData.seat_layout_id,
+          seat_map_id: roomData.seat_map_id,
         });
       }
     };
@@ -57,7 +57,7 @@ const RoomsForm: React.FC = () => {
 
   const onSubmit: SubmitHandler<Room> = async (data) => {
     console.log('Submitted Data:', data);
-    if (!data.room_name || !data.cinema_id || !data.seat_layout_id) {
+    if (!data.room_name || !data.cinema_id || !data.seat_map_id) {
       notification.error({
         message: 'Thông báo',
         description: 'Vui lòng điền đầy đủ thông tin.',
@@ -129,8 +129,8 @@ const RoomsForm: React.FC = () => {
         <div className="mb-3">
           <label className="form-label">Kiểu Bố trí Ghế</label>
           <select
-            {...register('seat_layout_id', { valueAsNumber: true })}
-            className={`form-control ${errors.seat_layout_id ? 'is-invalid' : ''}`}
+            {...register('seat_map_id', { valueAsNumber: true })}
+            className={`form-control ${errors.seat_map_id ? 'is-invalid' : ''}`}
           >
             <option value="">Chọn Kiểu Bố trí Ghế</option>
             {seatLayouts.map((layout) => (
@@ -139,7 +139,7 @@ const RoomsForm: React.FC = () => {
               </option>
             ))}
           </select>
-          {errors.seat_layout_id && <div className="invalid-feedback">{errors.seat_layout_id.message}</div>}
+          {errors.seat_map_id && <div className="invalid-feedback">{errors.seat_map_id.message}</div>}
         </div>
 
         <button type="submit" className="btn btn-primary">
