@@ -88,14 +88,7 @@ const DirectorDashboard = () => {
                     <Link to={`/admin/director/edit/${director.id}`}>
                         <Button type="primary" icon={<EditOutlined />} />
                     </Link>
-                    <Popconfirm
-                        title="Bạn có chắc chắn muốn xóa đạo diễn này?"
-                        onConfirm={() => handleDelete(director.id)}
-                        okText="Có"
-                        cancelText="Không"
-                    >
-                        <Button danger icon={<DeleteOutlined />} />
-                    </Popconfirm>
+                    
                 </div>
             ),
             className: 'text-center',
