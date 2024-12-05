@@ -26,14 +26,14 @@ const showtimeSchema = z.object({
     }, 'Ngày chiếu không được nhỏ hơn ngày hiện tại'),
   showtime_start: z
     .string()
-    .min(1, 'Vui lòng chọn giờ bắt đầu')
-    .refine((value) => {
-      const selectedTime = value.split(':'); // Tách giờ và phút từ giá trị nhập
-      const now = new Date(); // Lấy thời gian hiện tại
-      const today = new Date();
-      today.setHours(Number(selectedTime[0]), Number(selectedTime[1]), 0, 0); // Gán giờ và phút từ giá trị nhập
-      return today >= now; // So sánh giờ bắt đầu với thời gian hiện tại
-    }, 'Giờ bắt đầu không được nhỏ hơn thời gian hiện tại'),
+    .min(1, 'Vui lòng chọn giờ bắt đầu'),
+    // .refine((value) => {
+    //   const selectedTime = value.split(':'); // Tách giờ và phút từ giá trị nhập
+    //   const now = new Date(); // Lấy thời gian hiện tại
+    //   const today = new Date();
+    //   today.setHours(Number(selectedTime[0]), Number(selectedTime[1]), 0, 0); // Gán giờ và phút từ giá trị nhập
+    //   return today >= now; // So sánh giờ bắt đầu với thời gian hiện tại
+    // }, 'Giờ bắt đầu không được nhỏ hơn thời gian hiện tại'),
   price: z
     .number()
     .min(0, 'Giá phải lớn hơn hoặc bằng 0')

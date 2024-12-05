@@ -1,55 +1,66 @@
 .sidebar {
     width: 250px;
-
     background-color: #15212d;
     color: #ecf0f1;
-    position: fixed; /* Sidebar cố định */
+    position: fixed;
+    /* Sidebar cố định */
     top: 0;
     left: 0;
-    height: 100vh; /* Đảm bảo chiều cao đầy đủ */
+    height: 100vh;
+    /* Đảm bảo chiều cao đầy đủ */
     padding: 20px 15px;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
     z-index: 999;
-    overflow-y: auto; /* Cuộn nếu nội dung quá dài */
-  }
-  
-  .container-wrapper {
-    margin-left: 213px; /* Đẩy nội dung chính sang bên phải */
-    padding: 20px; /* Tạo khoảng cách giữa nội dung và các cạnh */
-    transition: margin-left 0.3s ease-in-out; /* Hiệu ứng chuyển động */
-  }
-  
-  .sidebar ul {
+    overflow-y: auto;
+    /* Cuộn nếu nội dung quá dài */
+}
+
+.container-wrapper {
+    margin-left: 213px;
+    /* Đẩy nội dung chính sang bên phải */
+    padding: 20px;
+    /* Tạo khoảng cách giữa nội dung và các cạnh */
+    transition: margin-left 0.3s ease-in-out;
+    /* Hiệu ứng chuyển động */
+}
+
+.sidebar ul {
     list-style: none;
     padding: 0;
     margin: 0;
-  }
-  .sidebar ul :hover{
+}
+
+.sidebar ul :hover {
     color: #1abc9c;
-  }
-  .sidebar ul li {
+}
+
+.sidebar ul li {
     padding: 10px 20px;
     font-size: 16px;
     transition: background-color 0.3s ease;
     margin-bottom: 10px;
-  }
-  
-  .sidebar ul li a {
-  margin-top: 20px;
-    color: #ecf0f1;
+}
 
+.sidebar ul li a {
+    margin-top: 20px;
+    color: #ecf0f1;
     background-color: #f8f9fa;
-    color: #343a40; /* Màu chữ tối */
+    color: #343a40;
+    /* Màu chữ tối */
     padding: 20px;
     display: flex;
     flex-direction: column;
-   
-    border-right: 1px solid #dee2e6; /* Đường viền xám nhạt */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng nhẹ */
-    overflow: hidden; /* Ẩn thanh cuộn tổng */
+    border-right: 1px solid #dee2e6;
+    /* Đường viền xám nhạt */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    /* Hiệu ứng bóng nhẹ */
+    overflow: hidden;
+    /* Ẩn thanh cuộn tổng */
 }
 
+
 /* Logo Section */
+
 .logo {
     display: flex;
     flex-direction: column;
@@ -57,97 +68,109 @@
     margin-bottom: 30px;
 }
 
-
 .logo img {
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    border: 3px solid #007bff; /* Viền màu xanh */
+    border: 3px solid #007bff;
+    /* Viền màu xanh */
 }
 
 .logo h2 {
     margin-top: 10px;
     font-size: 1.3rem;
-    color: #007bff; /* Màu xanh cho tiêu đề */
+    color: #007bff;
+    /* Màu xanh cho tiêu đề */
 }
 
+
 /* Navigation Menu */
+
 .sidebar ul {
     list-style-type: none;
     padding: 0;
-    overflow-y: auto; /* Cho phép cuộn theo trục dọc */
-    height: calc(100vh - 100px); /* Trừ chiều cao logo và padding */
+    overflow-y: auto;
+    /* Cho phép cuộn theo trục dọc */
+    height: calc(100vh - 100px);
+    /* Trừ chiều cao logo và padding */
 }
+
+
 /* Thanh cuộn tùy chỉnh */
+
 .sidebar ul::-webkit-scrollbar {
-    width: 8px; /* Độ rộng thanh cuộn */
+    width: 8px;
+    /* Độ rộng thanh cuộn */
 }
 
 
 /* Individual Menu Item */
+
 .sidebar ul li {
     margin: 15px 0;
 }
+
 .sidebar .active {
-    color: #ff0000; /* Example color for active link */
+    color: #ff0000;
+    /* Example color for active link */
     font-weight: bold;
 }
 
 
 /* Link Styling */
-.sidebar ul li a {
-    color: #343a40; /* Màu chữ tối */
 
+.sidebar ul li a {
+    color: #343a40;
+    /* Màu chữ tối */
     text-decoration: none;
     display: flex;
     align-items: center;
     transition: color 0.3s ease;
-  }
-  
-  .sidebar ul li a:hover {
+}
+
+.sidebar ul li a:hover {
     color: #1abc9c;
-  }
-  
-  .submenu {
+}
+
+.submenu {
     display: none;
     padding-left: 20px;
     margin-top: 10px;
-  }
-  
-  .submenu.open {
-    display: block;
+}
 
+.submenu.open {
+    display: block;
     border-left: 4px solid #1abc9c;
-  }
-  
-  .sidebar ul li:hover {
-  
+}
+
+.sidebar ul li:hover {
     border-radius: 5px;
-    color: #1abc9c  ;
-  }
-  
-  .sidebar ul li span {
+    color: #1abc9c;
+}
+
+.sidebar ul li span {
     margin-top: 10px;
     margin-left: -20px;
     display: flex;
-    justify-content: space-between; /* Căn giữa nội dung và mũi tên */
+    justify-content: space-between;
+    /* Căn giữa nội dung và mũi tên */
     align-items: center;
     cursor: pointer;
     color: #ecf0f1;
     padding: 10px 20px;
     font-size: 16px;
     transition: background-color 0.3s ease;
-  }
-  
-  .sidebar ul li span svg {
-    margin-right: -40px; /* Khoảng cách từ mũi tên đến lề phải */
-    font-size: 14px; /* Điều chỉnh kích thước mũi tên nếu cần */
-    transition: transform 0.3s ease;
-  }
-  
+}
 
-  
-  .submenu.open span svg {
-    transform: rotate(180deg); /* Xoay mũi tên khi mở submenu */
-  }
-  
+.sidebar ul li span svg {
+    margin-right: -40px;
+    /* Khoảng cách từ mũi tên đến lề phải */
+    font-size: 14px;
+    /* Điều chỉnh kích thước mũi tên nếu cần */
+    transition: transform 0.3s ease;
+}
+
+.submenu.open span svg {
+    transform: rotate(180deg);
+    /* Xoay mũi tên khi mở submenu */
+}
