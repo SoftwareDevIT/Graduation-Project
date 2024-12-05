@@ -9,14 +9,7 @@ import { Director } from '../../../interface/Director';
 import { useMovieContext } from '../../../Context/MoviesContext';
 import instance from '../../../server';
 import { MovieCategory } from '../../../interface/MovieCategory';
-
 import { Select,notification } from 'antd';
-
-import { Input, notification } from 'antd';
-import { Select } from 'antd';
-import "./MovieForm.css"
-const { Option } = Select;
-
 
 // Zod schema for form validation
 const movieSchema = z.object({
@@ -56,7 +49,7 @@ const MovieForm: React.FC = () => {
     handleSubmit,
     reset,
     control,
-    setValue,
+    
     formState: { errors },
   } = useForm<MovieFormValues>({
     resolver: zodResolver(movieSchema),
@@ -176,15 +169,14 @@ const MovieForm: React.FC = () => {
           {errors.movie_name && <p className="text-danger">{errors.movie_name.message}</p>}
         </div>
 
-      {/* Movie Categories */}
-<div className="mb-3">
+        {/* Movie Categories */}
+        <div className="mb-3">
   <label className="form-label">Danh mục phim</label>
   <Controller
     name="movie_category_id"
     control={control}
     render={({ field }) => (
       <Select
-
         {...field}
         mode="multiple"
         allowClear
@@ -196,40 +188,20 @@ const MovieForm: React.FC = () => {
         }))}
         onChange={(value) => field.onChange(value)}
       />
-
-        mode="multiple"
-        style={{ width: '100%' }}
-        placeholder="Chọn danh mục phim"
-        onChange={(value) => field.onChange(value)}
-        value={field.value}
-      >
-        {categories.map((category) => (
-          <Option key={category.id} value={category.id}>
-            {category.category_name}
-          </Option>
-        ))}
-      </Select>
-
     )}
   />
   {errors.movie_category_id && <p className="text-danger">{errors.movie_category_id.message}</p>}
 </div>
 
 
-
         {/* Actors */}
         <div className="mb-3">
-
-     {/* Actors */}
-<div className="mb-3">
-
   <label className="form-label">Diễn viên</label>
   <Controller
     name="actor_id"
     control={control}
     render={({ field }) => (
       <Select
-
         {...field}
         mode="multiple"
         allowClear
@@ -241,39 +213,19 @@ const MovieForm: React.FC = () => {
         }))}
         onChange={(value) => field.onChange(value)}
       />
-
-        mode="multiple"
-        style={{ width: '100%' }}
-        placeholder="Chọn diễn viên"
-        onChange={(value) => field.onChange(value)}
-        value={field.value}
-      >
-        {actors.map((actor) => (
-          <Option key={actor.id} value={actor.id}>
-            {actor.actor_name}
-          </Option>
-        ))}
-      </Select>
-
     )}
   />
   {errors.actor_id && <p className="text-danger">{errors.actor_id.message}</p>}
 </div>
 
-
         {/* Directors */}
         <div className="mb-3">
-
-    {/* Director */}
-<div className="mb-3">
-
   <label className="form-label">Đạo diễn</label>
   <Controller
     name="director_id"
     control={control}
     render={({ field }) => (
       <Select
-
         {...field}
         mode="multiple"
         allowClear
@@ -285,24 +237,10 @@ const MovieForm: React.FC = () => {
         }))}
         onChange={(value) => field.onChange(value)}
       />
-        mode="multiple"
-        style={{ width: '100%' }}
-        placeholder="Chọn đạo diễn"
-        onChange={(value) => field.onChange(value)}
-        value={field.value}
-      >
-        {directors.map((director) => (
-          <Option key={director.id} value={director.id}>
-            {director.director_name}
-          </Option>
-        ))}
-      </Select>
-
     )}
   />
   {errors.director_id && <p className="text-danger">{errors.director_id.message}</p>}
 </div>
-
 
 
         {/* Release Date */}
@@ -316,150 +254,27 @@ const MovieForm: React.FC = () => {
           {errors.release_date && <p className="text-danger">{errors.release_date.message}</p>}
         </div>
 
-<div className="mb-3 row">
-  {/* Ngày phát hành */}
-  <div className="col-md-6">
-    <label className="form-label">Ngày phát hành</label>
-    <Controller
-      name="release_date"
-      control={control}
-      render={({ field }) => (
-        <Input
-          type="date"
-          className="form-control"
-          {...field}
-        />
-      )}
-    />
-    {errors.release_date && <p className="text-danger">{errors.release_date.message}</p>}
-  </div>
-
-
-  {/* Giới hạn độ tuổi */}
-  <div className="col-md-6">
-    <label className="form-label">Giới hạn độ tuổi</label>
-    <Controller
-      name="age_limit"
-      control={control}
-      render={({ field }) => (
-        <Input
-          type="number"
-          className="form-control"
-          {...field}
-        />
-      )}
-    />
-    {errors.age_limit && <p className="text-danger">{errors.age_limit.message}</p>}
-  </div>
-</div>
+        {/* Age Limit */}
+        <div className="mb-3">
+          <label className="form-label">Giới hạn độ tuổi</label>
+          <input
+            type="number"
+            className="form-control"
+            {...register('age_limit', { valueAsNumber: true })}
+          />
+          {errors.age_limit && <p className="text-danger">{errors.age_limit.message}</p>}
+        </div>
 
         {/* Description */}
-      
-
-        <div className="mb-3 row">
-  {/* Thời lượng */}
-  <div className="col-md-4">
-    <label className="form-label">Thời lượng (phút)</label>
-    <Controller
-      name="duration"
-      control={control}
-      render={({ field }) => (
-        <Input
-          type="number"
-          className="form-control"
-          {...field}
-        />
-      )}
-    />
-    {errors.duration && <p className="text-danger">{errors.duration.message}</p>}
-  </div>
-
-  {/* Quốc gia */}
-  <div className="col-md-4">
-    <label className="form-label">Quốc gia</label>
-    <Controller
-      name="country"
-      control={control}
-      render={({ field }) => (
-        <Input
-          type="text"
-          className="form-control"
-          {...field}
-        />
-      )}
-    />
-    {errors.country && <p className="text-danger">{errors.country.message}</p>}
-  </div>
-
-  {/* Trailer */}
-  <div className="col-md-4">
-    <label className="form-label">Trailer</label>
-    <Controller
-      name="trailer"
-      control={control}
-      render={({ field }) => (
-        <Input
-          type="url"
-          className="form-control"
-          {...field}
-        />
-      )}
-    />
-    {errors.trailer && <p className="text-danger">{errors.trailer.message}</p>}
-  </div>
-</div>
-
-<div className="d-flex gap-5">
-  {/* Thumbnail */}
-  <div className="mb-3" style={{ width: '48%' }}>
-    <label className="form-label">Thumbnail</label>
-    {thumbnailFile && (
-      <div className="mb-2">
-        <img
-          src={typeof thumbnailFile === 'string' ? thumbnailFile : URL.createObjectURL(thumbnailFile)}
-          alt="Thumbnail cũ"
-          style={{ width: '150px', height: 'auto' }}
-        />
-      </div>
-    )}
-    <input
-      type="file"
-      className="form-control"
-      onChange={(e) => setThumbnailFile(e.target.files?.[0] || null)}
-    />
-  </div>
-
-  {/* Poster */}
-  <div className="mb-3" style={{ width: '48%' }}>
-    <label className="form-label">Poster</label>
-    {posterFile && (
-      <div className="mb-2">
-        <img
-          src={typeof posterFile === 'string' ? posterFile : URL.createObjectURL(posterFile)}
-          alt="Poster cũ"
-          style={{ width: '150px', height: 'auto' }}
-        />
-      </div>
-    )}
-    <input
-      type="file"
-      className="form-control"
-      onChange={(e) => setPosterFile(e.target.files?.[0] || null)}
-    />
-  </div>
-</div>
-
-<div className="mb-3">
+        <div className="mb-3">
           <label className="form-label">Mô tả</label>
           <textarea
             className="form-control"
             rows={4}
             {...register('description')}
-            style={{height: '180px' }}
           />
           {errors.description && <p className="text-danger">{errors.description.message}</p>}
         </div>
-
 
         {/* Duration */}
         <div className="mb-3">
@@ -540,7 +355,6 @@ const MovieForm: React.FC = () => {
     onChange={(e) => setPosterFile(e.target.files?.[0] || null)}
   />
 </div>
-
         <button type="submit" className="btn btn-primary btn-lg w-100">
           {id ? 'Cập nhật phim' : 'Thêm phim'}
         </button>
