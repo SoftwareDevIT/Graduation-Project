@@ -138,6 +138,7 @@ function App() {
         <Route path="/pay" element={ <PrivateRoute><OrderCheckout /></PrivateRoute> } />
 
         <Route path="/community" element={<Community/>} />
+        <Route path="/seat" element={<CinemaSeatSelection/>} />
 
 
 
