@@ -94,7 +94,7 @@ const CinemaSeatSelection: React.FC = () => {
 
 
 seatDataseat.data.forEach((seat: any) => {
-  if (seat.status === "Booked") {
+  if (seat.status === "Reserved Until") {
     reservedSeatSet.add(seat.seat_name);
   }
 });
@@ -251,7 +251,18 @@ setReservedSeats(reservedSeatSet);
   
   const totalPrice = calculatePrice();
   
-
+  const getTotalSeatsInRow = (row: string) => {
+    return seat_structure.filter((seat) => seat.row === row).length;
+  };
+  const totalSeatsInRows: Record<string, number> = rows.reduce(
+    (acc, row) => ({
+      ...acc,
+      [row]: getTotalSeatsInRow(row), // Tính tổng số ghế của từng hàng
+    }),
+    {}
+  );
+ 
+  
   // const rows = Object.keys(seatData.seats);
   // const columns = seatData.room.seat_layout.columns;
   const handleSubmit = async () => {
@@ -269,6 +280,7 @@ setReservedSeats(reservedSeatSet);
       cinemaId,
       showtimeId,
       seats: selectedSeatsArray,
+      totalSeatsInRows
     };
   
     try {
@@ -350,9 +362,10 @@ setReservedSeats(reservedSeatSet);
         {/* Render cột tên hàng */}
         <div
           style={{
+            position:"relative",
             display: "flex",
             flexDirection: "column",
-            marginRight: "10px",
+            right:"150px",
           }}
         >
           {rows.map((row) => (
@@ -499,13 +512,6 @@ setReservedSeats(reservedSeatSet);
     )
     .join(", ")}
 </p>
-
-
-
-
-
-
-
               </div>
               <div className="price-box1">
                 <div className="price">
@@ -515,7 +521,7 @@ setReservedSeats(reservedSeatSet);
               </div>
               <div className="actionst1">
                 <button className="back-btn1" >←</button>
-                <button className="continue-btn1" onClick={handleSubmit}>
+                <button className="continue-btn1" onClick={handleSubmit} disabled={Array.from(selectedSeats.values()).flat().length === 0} >
                   Tiếp Tục
                 </button>
               </div>

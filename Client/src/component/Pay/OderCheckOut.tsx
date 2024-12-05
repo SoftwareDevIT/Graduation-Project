@@ -113,59 +113,65 @@ const OrderCheckout = () => {
             console.error("Error applying voucher:", error);
         }
     };
-    const handleUsePoints = async () => {
-        const points = Number(pointsToUse);
-    
-        if (isNaN(points) || points <= 0) {
-            message.warning("Vui lòng nhập số điểm hợp lệ.");
-            return;
-        }
-    
-        if (points > totalPrice) {
-            message.warning("Số điểm không thể vượt quá tổng giá trị đơn hàng.");
-            return;
-        }
-    
-        // Giới hạn số điểm không vượt quá 20% giá trị đơn hàng
-        const maxPointsAllowed = totalPrice * 0.2;  // 20% của tổng giá trị đơn hàng
-        if (points > maxPointsAllowed) {
-            message.warning(`Số điểm không thể vượt quá 20% giá trị đơn hàng. Bạn chỉ có thể sử dụng tối đa ${maxPointsAllowed.toLocaleString('vi-VN')} đ.`);
-            return;
-        }
-    
-        const availablePoints = userProfile?.points;
-        const availablePointsNumber = availablePoints ? Number(availablePoints) : 0;
-    
-        if (points > availablePointsNumber) {
-            message.warning("Bạn không có đủ điểm để sử dụng.");
-            return;
-        }
-    
-        try {
-            const response = await instance.post("/use-points", {
-                points_to_use: points,
-                total_price: totalPrice,
-            });
-    
-            console.log("API Response:", response.data);  // Kiểm tra dữ liệu trả về
-    
-            if (response.status === 200 && response.data) {
-                const { message: successMessage, discount_value, final_price } = response.data;
-    
-                message.success(successMessage);
-                setDiscount(discount_value);
-                setFinalPrice(final_price);
-    
-                // Hiển thị thêm số tiền giảm giá từ điểm
-                setPointsDiscount(discount); // Lưu giá trị giảm giá từ điểm
-            } else {
-                message.error("Không thể sử dụng điểm. Vui lòng kiểm tra lại.");
+const handleUsePoints = async () => {
+    const points = Number(pointsToUse);
+
+    if (isNaN(points) || points <= 0) {
+        message.warning("Vui lòng nhập số điểm hợp lệ.");
+        return;
+    }
+
+    if (points > totalPrice) {
+        message.warning("Số điểm không thể vượt quá tổng giá trị đơn hàng.");
+        return;
+    }
+
+    // Giới hạn số điểm không vượt quá 20% giá trị đơn hàng
+    const maxPointsAllowed = totalPrice * 0.2;  // 20% của tổng giá trị đơn hàng
+    if (points > maxPointsAllowed) {
+        message.warning(`Số điểm không thể vượt quá 20% giá trị đơn hàng. Bạn chỉ có thể sử dụng tối đa ${maxPointsAllowed.toLocaleString('vi-VN')} đ.`);
+        return;
+    }
+
+    const availablePoints = userProfile?.points;
+    const availablePointsNumber = availablePoints ? Number(availablePoints) : 0;
+
+    if (points > availablePointsNumber) {
+        message.warning("Bạn không có đủ điểm để sử dụng.");
+        return;
+    }
+
+    try {
+        const response = await instance.post("/use-points", {
+            points_to_use: points,
+            total_price: totalPrice,
+        });
+
+        if (response.status === 200 && response.data) {
+            const { message: successMessage, discount_value, final_price } = response.data;
+
+            message.success(successMessage);
+            setDiscount(discount_value);
+            setFinalPrice(final_price);
+
+            // Cập nhật điểm sau khi sử dụng
+            if (userProfile) {
+                const updatedProfile = { ...userProfile, points: availablePointsNumber - points }; // Trừ đi số điểm sử dụng
+                setUserProfile(updatedProfile); // Cập nhật lại context state
             }
-        } catch (error) {
-            console.error("Lỗi khi sử dụng điểm:", error);
-            message.error("Có lỗi xảy ra, vui lòng thử lại!");
+
+            // Hiển thị thêm số tiền giảm giá từ điểm
+            setPointsDiscount(discount_value); // Lưu giá trị giảm giá từ điểm
+        } else {
+            message.error("Không thể sử dụng điểm. Vui lòng kiểm tra lại.");
         }
-    };
+    } catch (error) {
+        console.error("Lỗi khi sử dụng điểm:", error);
+        message.error("Có lỗi xảy ra, vui lòng thử lại!");
+    }
+};
+
+    
     
     
     

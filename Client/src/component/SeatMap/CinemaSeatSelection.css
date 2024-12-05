@@ -602,7 +602,10 @@ color: #727575;
 .seat.vip {
   background-color: gold; /* Màu nền cho ghế VIP */
 }
-
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 .seat.couple-seat {
   background-color: pink; /* Màu nền cho ghế đôi */
 }

@@ -102,9 +102,6 @@ import ShowtimesAuto from "./Page/Admin/Showtimes/ShowtimesAuto";
 
 import MovieTicket from "./component/PersonalPage/MovieTicket";
 
-import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
-
-import SeatMapForm from "./component/Admin/SeatMap/SeatMapForm";
 import SeatMapFormManager from "./Page/Admin/SeatMap/SeatMapForm";
 
 
