@@ -285,7 +285,7 @@
                 <p>Keep your tickets handy</p>
                 <button class="email-confirm-button-get-tickets">Get the app</button>
             </div>
-            <img class="barcode" src="{{ $booking->barcode }}" alt="barcode">
+            <img class="barcode" src="{{ $booking->qrcode }}" alt="barcode">
 
         </header>
         <main class="email-confirm-event-details">

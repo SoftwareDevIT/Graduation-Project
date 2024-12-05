@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { EditOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons';
-import { notification, Table, Pagination, Input, Button, Popconfirm } from 'antd';
+
+import { notification, Table, Pagination, Input, Button, Popconfirm, Switch } from 'antd';
+
 import instance from '../../../server';
 import { Room } from '../../../interface/Room';
 
@@ -109,6 +111,7 @@ const RoomDashboard: React.FC = () => {
             Thêm Phòng
           </Button>
         </Link>
+
         <Link to={'/admin/rooms/add'}>
           <Button type="primary" icon={<PlusOutlined />} size="large">
             Thêm Phòng

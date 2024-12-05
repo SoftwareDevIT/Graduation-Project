@@ -2,13 +2,31 @@
     width: 270px;
     background-color: #0d2946;
     color: #ecf0f1;
-    position: fixed; /* Sidebar cố định */
+    position: fixed;
+    /* Sidebar cố định */
     top: 0;
     left: 0;
-    height: 100vh; /* Đảm bảo chiều cao đầy đủ */
+    height: 100vh;
+    /* Đảm bảo chiều cao đầy đủ */
     padding: 20px 15px;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
     z-index: 999;
+
+    overflow-y: auto;
+    /* Cuộn nếu nội dung quá dài */
+}
+
+.container-wrapper {
+    margin-left: 215px;
+    /* Đẩy nội dung chính sang bên phải */
+    padding: 20px;
+    /* Tạo khoảng cách giữa nội dung và các cạnh */
+    transition: margin-left 0.3s ease-in-out;
+    /* Hiệu ứng chuyển động */
+}
+
+.sidebar ul {
+
     overflow-y: auto; /* Cuộn nếu nội dung quá dài */
   }
   
@@ -19,38 +37,49 @@
   }
   
   .sidebar ul {
+
     list-style: none;
     padding: 0;
     margin: 0;
-  }
-  
-  .sidebar ul li {
+}
+
+.sidebar ul li {
     padding: 10px 20px;
     font-size: 16px;
     transition: background-color 0.3s ease;
     margin-bottom: 10px;
-  }
-  
-  .sidebar ul li a {
+}
+
+.sidebar ul li a {
     color: #ecf0f1;
     text-decoration: none;
     display: flex;
     align-items: center;
     transition: color 0.3s ease;
-  }
-  
-  .sidebar ul li a:hover {
+}
+
+.sidebar ul li a:hover {
     color: #1abc9c;
-  }
-  
-  .submenu {
+}
+
+.submenu {
     display: none;
     padding-left: 20px;
     margin-top: 10px;
-  }
-  
-  .submenu.open {
+}
+
+.submenu.open {
     display: block;
+
+    border-left: 4px solid #1abc9c;
+}
+
+.sidebar ul li span :hover {
+    color: #1abc9c;
+}
+
+.sidebar ul li span {
+
   
     border-left: 4px solid #1abc9c;
   }
@@ -60,21 +89,33 @@
  
   
   .sidebar ul li span {
+
     margin-left: -20px;
     display: flex;
-    justify-content: space-between; /* Căn giữa nội dung và mũi tên */
+    justify-content: space-between;
+    /* Căn giữa nội dung và mũi tên */
     align-items: center;
     cursor: pointer;
     color: #ecf0f1;
     padding: 10px 20px;
     font-size: 16px;
     transition: background-color 0.3s ease;
-  }
-  
-  .sidebar ul li span svg {
-    margin-right: -40px; /* Khoảng cách từ mũi tên đến lề phải */
-    font-size: 14px; /* Điều chỉnh kích thước mũi tên nếu cần */
+}
+
+.sidebar ul li span svg {
+    margin-right: -40px;
+    /* Khoảng cách từ mũi tên đến lề phải */
+    font-size: 14px;
+    /* Điều chỉnh kích thước mũi tên nếu cần */
     transition: transform 0.3s ease;
+
+}
+
+.submenu.open span svg {
+    transform: rotate(180deg);
+    /* Xoay mũi tên khi mở submenu */
+}
+
   }
   
 .sidebar ul li a svg {
@@ -129,4 +170,4 @@
     .sidebar ul li a.active:hover {
       background-color: #16a085; /* Màu nền khi hover trên link active */
     }
-    
+

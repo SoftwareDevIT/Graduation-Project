@@ -39,6 +39,7 @@ class User extends Authenticatable
         'rating',
         'points',
         'google_id',
+        'cinema_id',
         'rank_id',
         'email_verified_at',
         'status',
