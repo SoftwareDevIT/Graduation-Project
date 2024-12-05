@@ -103,8 +103,8 @@ import ShowtimesAuto from "./Page/Admin/Showtimes/ShowtimesAuto";
 import MovieTicket from "./component/PersonalPage/MovieTicket";
 
 
-
 import SeatMapForm from "./component/Admin/SeatMap/SeatMapForm";
+
 import SeatMapFormManager from "./Page/Admin/SeatMap/SeatMapForm";
 
 
@@ -126,6 +126,8 @@ import Pointaccumulation from "./component/PersonalPage/Pointaccumulation";
 
 
 
+import SeatLayout from "./component/SeatMap/test";
+import MyMapComponent from "./component/GG map/Ggmap";
 
 function App() {
 

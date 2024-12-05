@@ -5,11 +5,12 @@ import { message,Modal } from 'antd'; // Import message from Ant Design
 import Headerticket from '../Headerticket/Headerticket';
 import Footer from '../Footer/Footer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 
 import './OderCheckOut.css';
 import Header from '../Header/Hearder';
 import { useUserContext } from '../../Context/UserContext';
+
 export interface LocationState {
     movieName: string;
     cinemaName: string;
@@ -43,18 +44,28 @@ const OrderCheckout = () => {
     const { userProfile, avatar, setUserProfile } = useUserContext(); // Use context to get user data
     const [pointHistories, setPointHistories] = useState<any[]>([]);
     const [pointsToUse, setPointsToUse] = useState(""); // Số điểm nhập
-    const [userRole, setUserRole] = useState(null); 
-    // Hàm xử lý sự kiện click vào <h3> để thay đổi trạng thái hiển thị bảng
+    const [isModalVisible, setIsModalVisible] = useState(false);
+  
     const userProfilea: UserProfile | null = JSON.parse(localStorage.getItem("user_profile") || "null");
     const userRoles = userProfilea?.roles || []; // Lấy danh sách vai trò nếu có
     const isAdmin = userRoles.length > 0 && userRoles[0]?.name === "admin";
-  
+    const [pointsDiscount, setPointsDiscount] = useState<number | null>(null);
+
       
 
     const toggleTableVisibility = () => {
       setIsTableVisible(!isTableVisible);
     };
-
+    const showModal = () => {
+        setIsModalVisible(true);
+    };
+    const handleOk = () => {
+        setIsModalVisible(false);
+    };
+    const handleCancel = () => {
+        setIsModalVisible(false);
+    };
+    
     useEffect(() => {
         if (userProfile) {
           setPointHistories(userProfile.point_histories);
@@ -102,53 +113,68 @@ const OrderCheckout = () => {
             console.error("Error applying voucher:", error);
         }
     };
-    
-    const handleUsePoints = async () => {
-        // Chuyển đổi pointsToUse từ string sang number
-        const points = Number(pointsToUse);
-    
-        // Kiểm tra nếu points không hợp lệ hoặc <= 0
-        if (isNaN(points) || points <= 0) {
-            message.warning("Vui lòng nhập số điểm hợp lệ.");
-            return;
-        }
-    
-        // Kiểm tra nếu số điểm nhập vào vượt quá tổng giá trị đơn hàng
-        if (points > totalPrice) {
-            message.warning("Số điểm không thể vượt quá tổng giá trị đơn hàng.");
-            return;
-        }
-    const availablePoints=userProfile?.points ;
+const handleUsePoints = async () => {
+    const points = Number(pointsToUse);
+
+    if (isNaN(points) || points <= 0) {
+        message.warning("Vui lòng nhập số điểm hợp lệ.");
+        return;
+    }
+
+    if (points > totalPrice) {
+        message.warning("Số điểm không thể vượt quá tổng giá trị đơn hàng.");
+        return;
+    }
+
+    // Giới hạn số điểm không vượt quá 20% giá trị đơn hàng
+    const maxPointsAllowed = totalPrice * 0.2;  // 20% của tổng giá trị đơn hàng
+    if (points > maxPointsAllowed) {
+        message.warning(`Số điểm không thể vượt quá 20% giá trị đơn hàng. Bạn chỉ có thể sử dụng tối đa ${maxPointsAllowed.toLocaleString('vi-VN')} đ.`);
+        return;
+    }
+
+    const availablePoints = userProfile?.points;
     const availablePointsNumber = availablePoints ? Number(availablePoints) : 0;
-        // Kiểm tra nếu số điểm nhập vào lớn hơn số điểm hiện có
-        if (points > availablePointsNumber) { // `availablePoints` là số điểm hiện có của người dùng
-            message.warning("Bạn không có đủ điểm để sử dụng.");
-            return;
-        }
-    
-        try {
-            const response = await instance.post("/use-points", {
-                points_to_use: points, // Sử dụng giá trị đã chuyển đổi
-                total_price: totalPrice, // Truyền tổng tiền hiện tại
-            });
-    
-            if (response.status === 200 && response.data) {
-                const { message: successMessage, discount, final_price } = response.data;
-    
-                // Hiển thị thông báo thành công
-                message.success(successMessage);
-    
-                // Cập nhật tổng tiền và giảm giá
-                setDiscount(discount); // Nếu API trả về số tiền quy đổi từ điểm
-                setFinalPrice(final_price); // Cập nhật lại tổng tiền sau khi trừ điểm
-            } else {
-                message.error("Không thể sử dụng điểm. Vui lòng kiểm tra lại.");
+
+    if (points > availablePointsNumber) {
+        message.warning("Bạn không có đủ điểm để sử dụng.");
+        return;
+    }
+
+    try {
+        const response = await instance.post("/use-points", {
+            points_to_use: points,
+            total_price: totalPrice,
+        });
+
+        if (response.status === 200 && response.data) {
+            const { message: successMessage, discount_value, final_price } = response.data;
+
+            message.success(successMessage);
+            setDiscount(discount_value);
+            setFinalPrice(final_price);
+
+            // Cập nhật điểm sau khi sử dụng
+            if (userProfile) {
+                const updatedProfile = { ...userProfile, points: availablePointsNumber - points }; // Trừ đi số điểm sử dụng
+                setUserProfile(updatedProfile); // Cập nhật lại context state
             }
-        } catch (error) {
-            console.error("Lỗi khi sử dụng điểm:", error);
-            message.error("Có lỗi xảy ra, vui lòng thử lại!");
+
+            // Hiển thị thêm số tiền giảm giá từ điểm
+            setPointsDiscount(discount_value); // Lưu giá trị giảm giá từ điểm
+        } else {
+            message.error("Không thể sử dụng điểm. Vui lòng kiểm tra lại.");
         }
-    };
+    } catch (error) {
+        console.error("Lỗi khi sử dụng điểm:", error);
+        message.error("Có lỗi xảy ra, vui lòng thử lại!");
+    }
+};
+
+    
+    
+    
+    
     
     
     const handleRemoveVoucher = () => {
@@ -228,54 +254,20 @@ const OrderCheckout = () => {
             pay_method_id,
             comboId: selectedCombos,
         };
-    
-        // Kiểm tra nếu là admin, thêm email vào bookingData
-        if (isAdmin) {
-            bookingData.email = email; // Truyền email vào nếu là admin
-        }
-    
+        // console.log(bookingData);
+
         try {
-            let response;
-    
-            if (isAdmin) {
-                // Dữ liệu gửi lên cho admin sử dụng API book-ticket-staff
-                response = await instance.post("/book-ticket-staff", bookingData, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-            } else {
-                // Dữ liệu gửi lên cho người dùng bình thường sử dụng API book-ticket
-                response = await instance.post("/book-ticket", bookingData, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-            }
-    
-            if (response.data && response.data.status === true) {
-                // Hiển thị modal với thông tin đơn hàng
-                const bookingInfo = response.data.booking[0]; // Giả sử dữ liệu trả về nằm trong mảng booking
-                
-                // Nếu là admin, hiển thị thông tin đơn hàng trong modal
-                Modal.success({
-                    title: 'Đặt vé thành công!',
-                    content: (
-                        <div>
-                            <p><strong>Thông tin đơn hàng:</strong></p>
-                            <p><strong>Mã đơn hàng:</strong> {bookingInfo.booking_id}</p>
-                            <p><strong>Tên khách hàng:</strong> {bookingInfo.user_name}</p>
-                            <p><strong>Email:</strong> {bookingInfo.email}</p>
-                            <p><strong>Số ghế:</strong> {seats.map((seat: any) => seat.seat_name).join(', ')}</p>
-                            <p><strong>Tổng tiền:</strong> {finalPrice || totalPrice} VNĐ</p>
-                        </div>
-                    ),
-                    okText: 'Xác nhận đơn hàng',
-                    onOk: () => {
-                        // Chuyển hướng về trang chủ nếu là admin
-                        window.location.href = `/admin/ordersdetail/${bookingInfo.booking_id}`;
-                    },
-                });
+            const response = await instance.post("/book-ticket", bookingData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+             
+            });
+
+            if (response.data) {
+                const redirectUrl = response.data.Url.original.url;
+                message.success("Đặt vé thành công!");
+                window.location.href = redirectUrl;
             } else {
                 message.error("Có lỗi xảy ra khi đặt vé.");
             }
@@ -355,7 +347,9 @@ const OrderCheckout = () => {
                     </div>
                     <div>
       {/* Thêm sự kiện onClick vào <h3> */}
-      <h4 onClick={toggleTableVisibility} className='diemgiamgia'>Điểm giảm giá FlickHive</h4>
+      <h4 onClick={toggleTableVisibility} className='diemgiamgia'>Điểm giảm giá FlickHive
+      <FontAwesomeIcon icon={faQuestionCircle} style={{ marginLeft: '10px', cursor: 'pointer' }} onClick={showModal} />
+      </h4>
 
       {/* Bảng khung-diem-poly chỉ hiển thị khi isTableVisible là true */}
       {isTableVisible && (
@@ -383,10 +377,25 @@ const OrderCheckout = () => {
         
             </tbody>
           </table>
-        </div>
+         </div>
       )}
     </div>
-
+    <Modal
+                    title="Hướng Dẫn Quy Đổi Điểm"
+                    visible={isModalVisible}
+                    onOk={handleOk}
+                    onCancel={handleCancel}
+                    cancelButtonProps={{ style: { display: 'none' } }}
+                >
+                    <p>Quy trình quy đổi điểm của FlickHive:</p>
+                    <ul>
+                        <li>Sử dụng điểm để giảm giá trực tiếp vào đơn hàng.</li>
+                        <li>Mỗi 1000 điểm tương đương với 1000VND</li>
+                        <li>Bạn có thể nhập số điểm cần sử dụng để giảm giá cho đơn hàng.</li>
+                        <li>Lưu ý: Số điểm không được vượt quá tổng giá trị đơn hàng.</li>
+                    </ul>
+                    <p>Chúc bạn có trải nghiệm tốt!</p>
+                </Modal>
 
 
 

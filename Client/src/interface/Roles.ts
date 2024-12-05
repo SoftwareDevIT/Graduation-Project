@@ -7,5 +7,7 @@ export interface Roles{
     name: string;
     user: User
     permissions: Permission[]
-    role_has_permissions: RolesHasPermissions
+    role_has_permissions: RolesHasPermissions;
+    guard_name: string;
+    created_at: string;
 }
