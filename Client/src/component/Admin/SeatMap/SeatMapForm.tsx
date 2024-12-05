@@ -387,6 +387,8 @@ const SeatMapForm = () => {
     ))}
 </div>
 
+
+
 </div>
 <button type="submit" className="btn btn-primary w-100">
   {id ? "Cập nhật" : "Thêm"}
