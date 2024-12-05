@@ -76,7 +76,8 @@ class RankContrller extends Controller
     public function usePoints(Request $request)
     {
         $request->validate([
-            'points_to_use' => 'required|integer|min:0|max:50000',
+            // 'points_to_use' => 'required|integer|min:0|max:50000',
+            'points_to_use' => 'required|integer|min:0',
             'total_price' => 'required|numeric|min:0',
             // 'booking_id' =>'integer'
         ]);
@@ -86,7 +87,7 @@ class RankContrller extends Controller
         $totalPrice = $request->total_price;
         $booking_id = $request->booking_id;
 
-        $data = $this->rankService->usePoints($user, $pointsToUse, $totalPrice, $booking_id);
+        $data = $this->rankService->usePoints($user, $pointsToUse, $totalPrice,$booking_id);
 
         return response()->json($data, $data['success'] ? 200 : 400);
     }
