@@ -6,8 +6,7 @@ export interface Room {
   id: number; 
   cinema:Cinema;
   cinema_id: number; 
-  seat_layout: SeatLayout; 
-  seat_layout_id: number;
+  seat_map_id: number;
   room_name: string; 
   status: boolean; 
   created_at: string | null; 
