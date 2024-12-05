@@ -54,9 +54,9 @@ class RankService
         return $method;
     }
 
-    public function usePoints($user, $pointsToUse, $totalPrice, $booking_id)
+    public function usePoints($user, $pointsToUse, $totalPrice)
     {
-        $usedPointsSessionKey = 'used_points_' . $booking_id;
+        $usedPointsSessionKey = 'used_points_';
         if (session()->has($usedPointsSessionKey)) {
             return [
                 'success' => false,
