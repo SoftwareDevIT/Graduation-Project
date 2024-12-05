@@ -1,6 +1,6 @@
 .sidebar {
-    width: 250px;
-    background-color: #16212b;
+    width: 270px;
+    background-color: #0d2946;
     color: #ecf0f1;
     position: fixed; /* Sidebar cố định */
     top: 0;
@@ -13,7 +13,7 @@
   }
   
   .container-wrapper {
-    margin-left: 215px; /* Đẩy nội dung chính sang bên phải */
+    margin-left: 230px; /* Đẩy nội dung chính sang bên phải */
     padding: 20px; /* Tạo khoảng cách giữa nội dung và các cạnh */
     transition: margin-left 0.3s ease-in-out; /* Hiệu ứng chuyển động */
   }
@@ -77,9 +77,56 @@
     transition: transform 0.3s ease;
   }
   
-
+.sidebar ul li a svg {
+  margin-right: 10px; /* Add this to create space between the icon and the text */
+}
   
   .submenu.open span svg {
     transform: rotate(180deg); /* Xoay mũi tên khi mở submenu */
   }
+  .sidebar ul li span:hover {
   
+    color: #1abc9c; /* Màu chữ thay đổi khi hover */
+  }
+
+  .header-logoo {
+ 
+    color: #e50914;
+    font-size: 26px;
+    font-weight: bold;
+    text-transform: lowercase;
+  
+  }
+  .header-logoo a{
+    margin-left: 20px;
+      font-size: 24px; /* Kích thước chữ tổng thể */
+      font-weight: bold; /* Làm đậm chữ */
+      color: #f02630; /* Màu sắc nổi bật */
+      text-transform: uppercase; /* Chuyển thành in hoa */
+      letter-spacing: 2px; /* Giãn cách giữa các chữ */
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Đổ bóng */
+      font-family: "Cerebri Sans", sans-serif; /* Chọn font chữ */
+      display: inline-block;
+      transition: all 0.3s ease; /* Hiệu ứng hover */
+      position: relative;
+      bottom: 5px;
+       text-decoration: none;
+    }
+    
+    .logo-first-letter1 {
+      font-size: 36px; /* Kích thước lớn hơn cho chữ "F" */
+      color: #f02630; /* Có thể sử dụng màu khác cho chữ "F" */
+   
+    }
+  
+    .sidebar ul li a.active {
+      padding: 10px;
+      background-color: #1abc9c; /* Màu nền khi chọn */
+      color: #fff; /* Màu chữ khi chọn */
+      border-radius: 5px; /* Thêm bo góc nếu muốn */
+    }
+    
+    .sidebar ul li a.active:hover {
+      background-color: #16a085; /* Màu nền khi hover trên link active */
+    }
+    
