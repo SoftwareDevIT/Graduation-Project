@@ -16,6 +16,7 @@ use App\Models\Seats;
 use App\Models\TemporaryBooking;
 use App\Models\User;
 use App\Services\BookingStaff\TicketBookingService as BookingStaffTicketBookingService;
+use App\Services\Ranks\RankService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -34,9 +35,12 @@ class BookingStaffController extends Controller
 {
     protected BookingStaffTicketBookingService $ticketBookingService;
 
-    public function __construct(BookingStaffTicketBookingService $ticketBookingService)
+    protected RankService $rankService;
+
+    public function __construct(BookingStaffTicketBookingService $ticketBookingService,RankService $rankService)
     {
         $this->ticketBookingService = $ticketBookingService;
+        $this->rankService = $rankService;
     }
 
     public function bookTicket(TicketBookingStaffRequest $request)
@@ -110,6 +114,7 @@ class BookingStaffController extends Controller
         $booking = Booking::find($id);
         $booking->status = 'Confirmed';
         $booking->save();
+        $this->rankService->points($booking);
         session()->flush();
         return response()->json([
             'status' => true,

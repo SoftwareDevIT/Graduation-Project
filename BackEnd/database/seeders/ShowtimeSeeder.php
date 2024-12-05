@@ -2,12 +2,14 @@
 
 namespace Database\Seeders;
 
+use App\Traits\RandomDateTrait;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 class ShowtimeSeeder extends Seeder
 {
+    use RandomDateTrait;
     public function run(): void
     {
         $rooms = DB::table('room')->pluck('id'); // Lấy danh sách các phòng
@@ -27,7 +29,7 @@ class ShowtimeSeeder extends Seeder
         $showtimeData = [];
 
         // Tạo 10 suất chiếu ngẫu nhiên
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 1000; $i++) {
             $roomId = $rooms->random(); // Chọn phòng ngẫu nhiên
             $movieId = $movies->random(); // Chọn phim ngẫu nhiên
             $showtimeStart = $showtimes[array_rand($showtimes)]; // Chọn thời gian ngẫu nhiên
@@ -39,7 +41,7 @@ class ShowtimeSeeder extends Seeder
             $showtimeData[] = [
                 'room_id' => $roomId,
                 'movie_id' => $movieId,
-                'showtime_date' => $showtimeDate,
+                'showtime_date' => $this->randomDate('2023-01-01', now()->subDay()),
                 'showtime_start' => $showtimeStart,
                 'showtime_end' => $showtimeEnd,
                 'price' => rand(45000, 60000), // Giá vé ngẫu nhiên

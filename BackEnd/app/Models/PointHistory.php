@@ -13,7 +13,7 @@ class PointHistory extends Model
         'user_id',
         'points_used',
         'points_earned',
-        'order_amount',
+        'type',
     ];
 
     public function user()
