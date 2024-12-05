@@ -2,6 +2,7 @@ import { Cinema } from "./Cinema";
 import { SeatLayout } from "./SeatLayout";
 
 export interface Room {
+  isActive: boolean | undefined;
   id: number; 
   cinema:Cinema;
   cinema_id: number; 

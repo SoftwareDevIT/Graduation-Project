@@ -8,16 +8,10 @@ import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import { useCountryContext } from "../../Context/CountriesContext";
 import { Spin } from 'antd';  // Import Spin từ Ant Design
-  interface Role {
-    id: number;
-    name: string;
-    guard_name: string;
-    created_at: string;
-  }
-  
-interface UserProfile {
-    roles: Role[];
-  }
+import { UserProfile } from "../../interface/UserProfile";
+
+
+
   const CinemaSelector: React.FC = () => {
     const [cinemas, setCinemas] = useState<Cinema[]>([]);
     const [actors, setActors] = useState<Actor[]>([]);

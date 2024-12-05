@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { EditOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons'; // Ant Design icons
-import { notification, Table, Pagination, Input, Button, Popconfirm } from 'antd'; // Import Ant Design components
+import { EditOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons';
+import { notification, Table, Pagination, Input, Button, Popconfirm, Modal, Form } from 'antd';
 
 import './CategoriesDashboard.css';
 import { useCategoryContext } from '../../../Context/CategoriesContext';
 
 const CategoriesDashboard = () => {
-    const { state, deleteCategory } = useCategoryContext();
+    const { state, deleteCategory, addCategory } = useCategoryContext();
     const { categories } = state;
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [searchTerm, setSearchTerm] = useState<string>('');
+    const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+    const [form] = Form.useForm();
     const categoriesPerPage = 7;
     const { Search } = Input;
 
@@ -33,6 +35,23 @@ const CategoriesDashboard = () => {
             description: 'Thể loại đã được xóa thành công!',
             placement: 'topRight',
         });
+    };
+
+    const handleAddCategory = async (values: any) => {
+        try {
+            await addCategory(values); // Giả định hàm addCategory đã có
+            notification.success({
+                message: 'Thành Công',
+                description: 'Thêm thể loại thành công!',
+            });
+            setIsModalVisible(false);
+            form.resetFields();
+        } catch (error) {
+            notification.error({
+                message: 'Lỗi',
+                description: 'Không thể thêm thể loại.',
+            });
+        }
     };
 
     const columns = [
@@ -73,11 +92,14 @@ const CategoriesDashboard = () => {
     return (
         <div className="container mt-5">
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <Link to={'/admin/categories/add'}>
-                    <Button type="primary" icon={<PlusOutlined />} size="large">
-                        Thêm Thể Loại Phim
-                    </Button>
-                </Link>
+                <Button
+                    type="primary"
+                    icon={<PlusOutlined />}
+                    size="large"
+                    onClick={() => setIsModalVisible(true)}
+                >
+                    Thêm Thể Loại Phim
+                </Button>
                 <Search
                     placeholder="Tìm kiếm theo tên thể loại"
                     onSearch={(value) => setSearchTerm(value)}
@@ -89,10 +111,8 @@ const CategoriesDashboard = () => {
                 columns={columns}
                 dataSource={currentCategories}
                 rowKey="id"
-                pagination={false} // Disable built-in pagination
-                locale={{
-                    emptyText: 'Không có thể loại nào.',
-                }}
+                pagination={false}
+                locale={{ emptyText: 'Không có thể loại nào.' }}
             />
             <div className="d-flex justify-content-center mt-4">
                 <Pagination
@@ -105,6 +125,32 @@ const CategoriesDashboard = () => {
                     showTotal={(total) => `Tổng số ${total} thể loại`}
                 />
             </div>
+
+            {/* Modal Thêm Thể Loại */}
+            <Modal
+                title="Thêm Thể Loại Phim"
+                visible={isModalVisible}
+                onCancel={() => setIsModalVisible(false)}
+                footer={null}
+            >
+                <Form form={form} layout="vertical" onFinish={handleAddCategory}>
+                    <Form.Item
+                        name="category_name"
+                        label="Tên Thể Loại"
+                        rules={[{ required: true, message: 'Vui lòng nhập tên thể loại!' }]}
+                    >
+                        <Input placeholder="Nhập tên thể loại" />
+                    </Form.Item>
+                    <div className="text-right">
+                        <Button onClick={() => setIsModalVisible(false)} style={{ marginRight: '10px' }}>
+                            Hủy
+                        </Button>
+                        <Button type="primary" htmlType="submit">
+                            Thêm
+                        </Button>
+                    </div>
+                </Form>
+            </Modal>
         </div>
     );
 };
