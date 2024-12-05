@@ -122,8 +122,8 @@ const CinemaForm = () => {
 
   return (
     <div className="container mt-5">
-      <form onSubmit={handleSubmit(handleFormSubmit)} className="shadow-lg p-5 rounded bg-white" style={{ maxWidth: "500px", margin: "0 auto",height: "630px" }}>
-        <h2 className="text-center mb-5 text-primary">{isEditMode ? "Chỉnh sửa Rạp" : "Thêm Rạp Mới"}</h2>
+      <form onSubmit={handleSubmit(handleFormSubmit)} className="shadow-lg p-5 rounded bg-white" style={{ maxWidth: "900px", margin: "0 auto",height: "700px" }}>
+        <h2 className="text-center mb-5 ">{isEditMode ? "Chỉnh sửa Rạp" : "Thêm Rạp Mới"}</h2>
 
         {/* Cinema Name */}
         <div className="mb-4">
@@ -181,7 +181,7 @@ const CinemaForm = () => {
 
         {/* Select Movies */}
         {/* Select Movies */}
-{isEditMode && (
+{/* {isEditMode && (
   <div className="mb-4">
     <label htmlFor="movies" className="form-label fw-bold">Chọn Phim</label>
     <select
@@ -200,7 +200,7 @@ const CinemaForm = () => {
       ))}
     </select>
   </div>
-)}
+)} */}
 
 
         {/* Submit and Add Movies Button */}
@@ -208,7 +208,7 @@ const CinemaForm = () => {
           <button type="submit" className="btn btn-primary px-4 py-2 w-100">
             {isEditMode ? "Cập Nhật Rạp" : "Thêm Rạp"}
           </button>
-          {isEditMode && (
+          {/* {isEditMode && (
             <button
               type="button"
               className="btn btn-secondary px-4 py-2"
@@ -216,7 +216,7 @@ const CinemaForm = () => {
             >
               Thêm Phim Đã Chọn vào Rạp
             </button>
-          )}
+          )} */}
         </div>
       </form>
     </div>

@@ -155,7 +155,7 @@ const DirectorForm = () => {
         onSubmit={handleSubmit(handleFormSubmit)}
         className="shadow p-4 rounded bg-light"
         encType="multipart/form-data"
-        style={{ maxWidth: "500px", margin: "0 auto",height: "790px" }}
+        style={{ maxWidth: "900px", margin: "0 auto",height: "900px" }}
       >
         <h1 className="text-center mb-4">
           {id ? "Cập nhật Đạo diễn" : "Thêm Đạo diễn"}
@@ -287,7 +287,7 @@ const DirectorForm = () => {
         </div>
 
         <div className="mb-3">
-          <button className="btn btn-primary w-100">
+          <button className="btn btn-primary w-30">
             {id ? "Cập nhật Đạo diễn" : "Thêm Đạo diễn"}
           </button>
         </div>

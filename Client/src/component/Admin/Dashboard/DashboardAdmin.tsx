@@ -32,6 +32,7 @@ ChartJS.register(
   PointElement
 );
 
+
 const DashboardAdmin = () => {
   const [bookings, setBookings] = useState<any[]>([]); // Update this type to match your API response
   const [totalRevenue, setTotalRevenue] = useState<number | null>(null);
@@ -78,7 +79,7 @@ const DashboardAdmin = () => {
         setTotalRevenue(dashboardResponse.data.chart.total_amount);
         setTotalBookings(dashboardResponse.data.chart.booking_count);
         setBookings(dashboardResponse.data.data);
-        setMovieRevenue(dashboardResponse.data.movie);
+        setMovieRevenue(dashboardResponse.data.movie)
         
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
@@ -107,30 +108,31 @@ const DashboardAdmin = () => {
     // Export the Excel file
     XLSX.writeFile(wb, "Bookings_Report.xlsx");
   };
-  const doughnutData = {
-    labels: ["Search Engines", "Direct Click", "Bookmarks Click"],
-    datasets: [
-      {
-        data: [30, 30, 40],
-        backgroundColor: ["#36a2eb", "#4bc0c0", "#ff6384"],
-        hoverBackgroundColor: ["#36a2eb", "#4bc0c0", "#ff6384"],
-      },
-    ],
-  };
+// Chỉnh sửa doughnutData để lấy dữ liệu từ movieRevenue
+const doughnutData = {
+  labels: movieRevenue.map((movie: any) => movie.movie_name), // Các tên phim làm nhãn
+  datasets: [
+    {
+      data: movieRevenue.map((movie: any) => movie.total_amount), // Dữ liệu tổng doanh thu theo phim
+      backgroundColor: ['#27ae60', '#3498db', '#e74c3c', '#f1c40f', '#9b59b6'],
+    },
+  ],
+};
 
-
-  const doughnutOptions = {
-    maintainAspectRatio: false,
-    cutout: '70%', 
-    plugins: {
-      legend: {
-        position: "right",
-        labels: {
-          boxWidth: 20,
-        },
+const doughnutOptions = {
+  maintainAspectRatio: false,
+  cutout: '70%',
+  plugins: {
+    legend: {
+      position: "right",
+      labels: {
+        boxWidth: 20,
       },
     },
-  };
+  },
+  responsive: true, 
+};
+
   const getRandomColor = () => {
     const letters = '0123456789ABCDEF';
     let color = '#';
@@ -161,7 +163,9 @@ const DashboardAdmin = () => {
         beginAtZero: true,
       },
     },
+    responsive: true, 
   };
+  
 
   return (
     <div className="dashboard">
@@ -279,7 +283,7 @@ const DashboardAdmin = () => {
     </Form>
         <div className="charts-container">
           <div className="quarterly-revenue">
-            <h3>Doanh Thu Theo Phim</h3>
+            <h3>Doanh Thu Phim Theo Rạp</h3>
             <div className="area-chart">
               <Bar data={barData} options={barOptions} />
               
@@ -287,15 +291,16 @@ const DashboardAdmin = () => {
           </div>
 
           <div className="revenue-summary">
-            <h3>Doanh Thu Theo Rạp</h3>
-            <div className="revenue-chart">
-              <Doughnut
-                data={doughnutData}
-                options={{ maintainAspectRatio: false }}
-              />
-            </div>
-            <p className="revenue-amount">$120,000</p>
-          </div>
+  <h3>Doanh Thu Phim Theo Rạp</h3>
+  <div className="revenue-chart">
+    <Doughnut
+      data={doughnutData}  // Dữ liệu từ movieRevenue
+      
+    />
+  </div>
+  <p className="revenue-amount">{totalRevenue ? `${totalRevenue.toLocaleString()}VNĐ` : 'Loading...'}</p>
+</div>
+
         </div>
 
         {/* Thêm bảng vào dưới biểu đồ */}

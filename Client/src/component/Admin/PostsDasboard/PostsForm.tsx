@@ -106,7 +106,7 @@ const PostsForm: React.FC = () => {
   return (
     <div className="container mt-5">
       <h2 className='text-center'>{id ? 'Chỉnh sửa bài viết' : 'Thêm bài viết'}</h2>
-      <form onSubmit={handleSubmit(onSubmit)} className="needs-validation" style={{ maxWidth: "500px", margin: "0 auto"}} noValidate>
+      <form onSubmit={handleSubmit(onSubmit)} className="needs-validation"  style={{ maxWidth: "900px", margin: "0 auto",height:"800px" }} noValidate>
         <div className="mb-3">
           <label className="form-label">Tiêu đề:</label>
           <input
@@ -187,7 +187,7 @@ const PostsForm: React.FC = () => {
           {errors.content && <span className="text-danger">{errors.content.message}</span>}
         </div>
 
-        <button type="submit" className="btn btn-primary w-100">
+        <button type="submit" className="btn btn-primary w-20">
           {id ? 'Cập nhật bài viết' : 'Thêm bài viết'}
         </button>
       </form>

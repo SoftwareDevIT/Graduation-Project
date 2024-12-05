@@ -160,7 +160,7 @@ const ActorForm = () => {
       <form
         onSubmit={handleSubmit(handleFormSubmit)}
         className="shadow p-4 rounded bg-light"
-        style={{ maxWidth: "500px", margin: "0 auto",height: "790px" }}
+        style={{ maxWidth: "900px", margin: "0 auto",height: "900px" }}
         encType="multipart/form-data"
       >
         <h1 className="text-center mb-4">
@@ -293,7 +293,7 @@ const ActorForm = () => {
         </div>
 
         <div className="mb-3">
-          <button className="btn btn-primary w-100">
+          <button className="btn btn-primary w-30">
             {id ? "Cập nhật Diễn viên" : "Thêm Diễn viên"}
           </button>
         </div>

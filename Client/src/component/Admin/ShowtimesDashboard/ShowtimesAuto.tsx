@@ -18,7 +18,7 @@ const ShowtimeAuto = () => {
         date: '',
         opening_time: '',
         closing_time: '',
-        duration: '', // Thời gian sẽ được tự động cập nhật khi chọn phim
+        duration: '',
         cinema: '',
         status: '',
         price: 0,
@@ -29,14 +29,13 @@ const ShowtimeAuto = () => {
     const [movies, setMovies] = useState<Movie[]>([]);
     const [rooms, setRooms] = useState<Room[]>([]);
 
-    // Fetch movies and rooms data
     useEffect(() => {
         const fetchMoviesAndRooms = async () => {
             try {
-                const movieResponse = await instance.get("/movies");  // Thay thế với endpoint chính xác
+                const movieResponse = await instance.get("/movies");
                 setMovies(movieResponse.data.data.original);
 
-                const roomResponse = await instance.get("/room");  // Thay thế với endpoint chính xác
+                const roomResponse = await instance.get("/room");
                 setRooms(roomResponse.data.data);
             } catch (error) {
                 console.error("Lỗi khi lấy dữ liệu phim và phòng:", error);
@@ -58,7 +57,6 @@ const ShowtimeAuto = () => {
         });
     };
 
-    // Cập nhật thời gian khi người dùng chọn một bộ phim
     const handleMovieChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedMovieId = parseInt(e.target.value);
         const selectedMovie = movies.find(movie => movie.id === selectedMovieId);
@@ -67,7 +65,7 @@ const ShowtimeAuto = () => {
             setFormData({
                 ...formData,
                 movie_id: selectedMovieId,
-                duration: selectedMovie.duration || '' // Giả sử trường `duration` có sẵn trong đối tượng `Movie`
+                duration: selectedMovie.duration || ''
             });
         }
     };
@@ -75,7 +73,6 @@ const ShowtimeAuto = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Gửi dữ liệu lên API
         try {
             const response = await instance.post('/showtimePayload', {
                 room_id: formData.room_id,
@@ -104,95 +101,91 @@ const ShowtimeAuto = () => {
     return (
         <div className="container mt-5">
             <h2 className="text-center mb-4">Thêm Suất Chiếu Tự Động</h2>
-            <form onSubmit={handleSubmit} className="shadow p-4 rounded bg-light" style={{ maxWidth: "500px", margin: "0 auto",height: "700px" }}>
-                <div className="mb-3">
-                    <label htmlFor="movie_id" className="form-label">Phim</label>
-                    <select
-                        className="form-control"
-                        id="movie_id"
-                        name="movie_id"
-                        value={formData.movie_id}
-                        onChange={handleMovieChange} // Sử dụng handleMovieChange để cập nhật thời gian
-                    >
-                        <option value="">Chọn Phim</option>
-                        {movies.map((movie) => (
-                            <option key={movie.id} value={movie.id}>
-                                {movie.movie_name}
-                            </option>
-                        ))}
-                    </select>
+            <form onSubmit={handleSubmit} className="shadow p-4 rounded bg-light">
+                <div className="row">
+                    <div className="col-md-6 mb-3">
+                        <label htmlFor="movie_id" className="form-label">Phim</label>
+                        <select
+                            className="form-control"
+                            id="movie_id"
+                            name="movie_id"
+                            value={formData.movie_id}
+                            onChange={handleMovieChange}
+                        >
+                            <option value="">Chọn Phim</option>
+                            {movies.map((movie) => (
+                                <option key={movie.id} value={movie.id}>
+                                    {movie.movie_name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="col-md-6 mb-3">
+                        <label htmlFor="room_id" className="form-label">Phòng</label>
+                        <select
+                            className="form-control"
+                            id="room_id"
+                            name="room_id"
+                            value={formData.room_id}
+                            onChange={handleChange}
+                        >
+                            <option value="">Chọn Phòng</option>
+                            {rooms.map((room) => (
+                                <option key={room.id} value={room.id}>
+                                    {room.room_name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
                 </div>
-                <div className="mb-3">
-                    <label htmlFor="room_id" className="form-label">Phòng</label>
-                    <select
-                        className="form-control"
-                        id="room_id"
-                        name="room_id"
-                        value={formData.room_id}
-                        onChange={handleChange}
-                    >
-                        <option value="">Chọn Phòng</option>
-                        {rooms.map((room) => (
-                            <option key={room.id} value={room.id}>
-                                {room.room_name}
-                            </option>
-                        ))}
-                    </select>
+                <div className="row">
+                    <div className="col-md-6 mb-3">
+                        <label htmlFor="date" className="form-label">Ngày</label>
+                        <input
+                            type="date"
+                            className="form-control"
+                            id="date"
+                            name="date"
+                            value={formData.date}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div className="col-md-6 mb-3">
+                        <label htmlFor="opening_time" className="form-label">Thời Gian Mở Cửa</label>
+                        <input
+                            type="time"
+                            className="form-control"
+                            id="opening_time"
+                            name="opening_time"
+                            value={formData.opening_time}
+                            onChange={handleChange}
+                        />
+                    </div>
                 </div>
-                <div className="mb-3">
-                    <label htmlFor="date" className="form-label">Ngày</label>
-                    <input
-                        type="date"
-                        className="form-control"
-                        id="date"
-                        name="date"
-                        value={formData.date}
-                        onChange={handleChange}
-                    />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="opening_time" className="form-label">Giờ Chiếu</label>
-                    <input
-                        type="time"
-                        className="form-control"
-                        id="opening_time"
-                        name="opening_time"
-                        value={formData.opening_time}
-                        onChange={handleChange}
-                    />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="closing_time" className="form-label">Giờ Kết Thúc</label>
-                    <input
-                        type="time"
-                        className="form-control"
-                        id="closing_time"
-                        name="closing_time"
-                        value={formData.closing_time}
-                        onChange={handleChange}
-                    />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="duration" className="form-label">Thời Gian (phút)</label>
-                    <input
-                        type="number"
-                        className="form-control"
-                        id="duration"
-                        name="duration"
-                        value={formData.duration}
-                        onChange={handleChange}
-                    />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="price" className="form-label">Giá</label>
-                    <input
-                        type="number"
-                        className="form-control"
-                        id="price"
-                        name="price"
-                        value={formData.price}
-                        onChange={handleChange}
-                    />
+                <div className="row">
+                    <div className="col-md-6 mb-3">
+                        <label htmlFor="closing_time" className="form-label">Thời Gian Đóng Cửa</label>
+                        <input
+                            type="time"
+                            className="form-control"
+                            id="closing_time"
+                            name="closing_time"
+                            value={formData.closing_time}
+                            onChange={handleChange}
+                        />
+                    </div>
+                    <div className="col-md-6 mb-3">
+                        <label htmlFor="price" className="form-label">Giá</label>
+                        <input
+                            type="number"
+                            className="form-control"
+                            id="price"
+                            name="price"
+                            value={formData.price}
+                            onChange={handleChange}
+                            style={{ width: "100%" }}
+                        />
+                    </div>
                 </div>
                 <button type="submit" className="btn btn-primary w-100">Thêm Showtime</button>
             </form>
