@@ -103,7 +103,7 @@ class RankService
                 'user_id' => $user->id,
                 'points_used' => $pointsToUse,
                 'points_earned' => 0,
-                'type' => 'used',
+                'type' => 'Tiêu điểm',
             ]);
         // });
 
@@ -159,15 +159,15 @@ class RankService
     }
 
     public function points($booking){
-        $user = Auth::user();
+        $user = User::where('id', $booking->user_id)->first();
         $this->updateRank($user);
         $total = $booking->amount;
-        $rank = $user->rank;
-        $pointsEarned = $total * ($rank->percent_discount / 100);
+        // $rank = $user->rank;
+        $pointsEarned = $total * ($user->rank->percent_discount / 100);
         PointHistory::create([
             'user_id' => $user->id,
             'points_earned' => $pointsEarned,
-            'type' => 'earned',
+            'type' => 'Tích điểm',
         ]);
     }
 }

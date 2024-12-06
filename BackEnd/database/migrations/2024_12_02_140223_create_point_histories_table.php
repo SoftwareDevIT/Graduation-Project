@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignIdFor(User::class)->constrained();
             $table->integer('points_used')->default(0); 
             $table->integer('points_earned')->default(0); 
-            $table->enum('type', ['used', 'earned'])->default('used'); 
+            $table->enum('type', ['Tiêu điểm', 'Tích điểm'])->default('used'); 
             $table->timestamps();
         });
     }
