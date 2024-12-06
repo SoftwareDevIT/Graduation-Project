@@ -76,6 +76,8 @@ const CinemaSeatSelection: React.FC = () => {
         // Fetching the showtime data
         const response = await instance.get(`/showtimes/${showtimeId}`);
         const seatLayoutData = response.data.data;
+
+
         const seatStructure = response.data?.data?.room?.seat_map?.seat_structure;
         setShowtimeData(seatLayoutData);
 
@@ -475,8 +477,6 @@ setReservedSeats(reservedSeatSet);
         </div>
       </div>
 
-
-
   </div>
 
 
@@ -486,11 +486,19 @@ setReservedSeats(reservedSeatSet);
                 </div>
                 <div>
                   <span className="seat vip"></span> Ghế vip
+
                 </div>
                 <div>
                   <span className="seat couple-seat"></span> Ghế đôi
                 </div>
                 <div>
+
+                </div>
+                <div>
+                  <span className="seat couple-seat"></span> Ghế đôi
+                </div>
+                <div>
+
                   <span className="seat reserved"></span> Đã bán
                 </div>
               </div>
@@ -526,8 +534,10 @@ setReservedSeats(reservedSeatSet);
               <div className="price-box1">
                 <div className="price">
                   Tổng đơn hàng
-                  <br /> <span>{totalPrice.toLocaleString()} đ</span>
+                  <br /> <span>{totalPrice.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} đ</span>
+
                 </div>
+
               </div>
               <div className="actionst1">
                 <button className="back-btn1" >←</button>
@@ -535,6 +545,15 @@ setReservedSeats(reservedSeatSet);
                   Tiếp Tục
                 </button>
               </div>
+
+              </div>
+              <div className="actionst1">
+                <button className="back-btn1" >←</button>
+                <button className="continue-btn1" onClick={handleSubmit} disabled={Array.from(selectedSeats.values()).flat().length === 0} >
+                  Tiếp Tục
+                </button>
+              </div>
+
             </div>
           </div>
         </div>

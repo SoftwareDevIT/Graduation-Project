@@ -49,7 +49,7 @@ const MovieForm: React.FC = () => {
     handleSubmit,
     reset,
     control,
-    setValue,
+    
     formState: { errors },
   } = useForm<MovieFormValues>({
     resolver: zodResolver(movieSchema),

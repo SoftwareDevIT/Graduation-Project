@@ -109,6 +109,7 @@ const RoomDashboard: React.FC = () => {
             Thêm Phòng
           </Button>
         </Link>
+
         <Link to={'/admin/rooms/add'}>
           <Button type="primary" icon={<PlusOutlined />} size="large">
             Thêm Phòng

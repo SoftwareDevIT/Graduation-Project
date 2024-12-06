@@ -77,8 +77,8 @@ const CategoriesForm = () => {
 
   return (
     <div className="container mt-5">
-      <form onSubmit={handleSubmit(handleFormSubmit)} className="shadow-lg p-4 rounded bg-white" style={{ maxWidth: "500px", margin: "0 auto",height: "290px" }}>
-        <h2 className="text-center mb-4 text-primary">{isEditMode ? 'Chỉnh Sửa Thể Loại' : 'Thêm Mới Thể Loại'}</h2>
+      <form onSubmit={handleSubmit(handleFormSubmit)} className="shadow-lg p-4 rounded bg-white" style={{ maxWidth: "900px", margin: "0 auto",height: "290px" }}>
+        <h2 className="text-center mb-4 ">{isEditMode ? 'Chỉnh Sửa Thể Loại' : 'Thêm Mới Thể Loại'}</h2>
 
         <div className="form-group mb-3">
           <label htmlFor="category_name" className="form-label fw-bold">Tên Thể Loại</label>

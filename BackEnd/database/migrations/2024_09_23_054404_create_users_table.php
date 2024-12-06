@@ -29,8 +29,10 @@ return new class extends Migration
             $table->decimal('points',15,0)->default(0);
             $table->string('google_id')->nullable();
             $table->timestamp('email_verified_at')->nullable();
+            $table->unsignedBigInteger('cinema_id')->nullable();
             $table->boolean('status')->default(true);
             $table->foreignIdFor(Rank::class)->default(1)->constrained();
+            $table->foreign('cinema_id')->references('id')->on('cinema')->onDelete('cascade');
             $table->timestamps();
 
         });

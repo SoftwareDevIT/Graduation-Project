@@ -60,6 +60,7 @@ width: 700px;
   .order-table th {
     background-color: #95c8e4;
     font-weight: bold;
+    width: 12px;
   }
   .order-table td {
     background-color: #ecf0f1;  /* Màu nền sáng */
