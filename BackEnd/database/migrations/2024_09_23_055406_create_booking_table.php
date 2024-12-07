@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('barcode')->nullable();
             $table->string('qrcode')->nullable();
             $table->string('booking_code')->nullable();
-            $table->enum('status', ['Pending', 'Confirmed', 'Pain'])->default('Pending');
+            $table->enum('status', ['Thanh toán thành công', 'Thanh toán thất bại', 'Đã hủy', 'Đang xử lý', 'Đã in vé'])->default('Đang xử lý');
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('pay_method_id')->references('id')->on('pay_method')->onDelete('cascade');
