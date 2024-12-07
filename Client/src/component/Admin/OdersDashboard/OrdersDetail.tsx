@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPrint } from '@fortawesome/free-solid-svg-icons';
 import { CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 
+
 const { Option } = Select;
 
 const OrderDetail = () => {
@@ -55,6 +56,15 @@ const OrderDetail = () => {
   if (!orderDetails) return <div>No order details found</div>;
 
   const handlePrintInvoice = (orderDetails: Booking) => {
+    if (!orderDetails.seats || orderDetails.seats.length === 0) {
+      notification.error({
+        message: "Lỗi",
+        description: "Không có ghế nào để in hóa đơn.",
+      });
+      return;
+    }
+  
+    // Mở cửa sổ in
     const invoiceWindow = window.open("", "_blank");
     if (!invoiceWindow) {
       notification.error({
@@ -63,40 +73,129 @@ const OrderDetail = () => {
       });
       return;
     }
+  
+    const invoiceDetails = orderDetails.seats
+      .map(
+        (seat, index) => `
+        <div style="page-break-after: always; border: 1px solid #e0e0e0; margin-bottom: 30px; padding: 20px; background-color: #f9f9f9;">
+          <h1 style="text-align: center; color: #444; font-size: 24px; font-weight: bold;">Hóa Đơn Chi Tiết</h1>
+          <div style="margin-bottom: 20px; text-align: center;">
+            <img src="https://example.com/logo.png" alt="Logo" style="width: 150px; margin-bottom: 10px;" />
+            <p><strong>CÔNG TY TNHH FLICKHIVE</strong></p>
+            <p>Địa chỉ: Trịnh Văn Bô - Bắc Từ Liêm - Hà Nội</p>
+            <p>Mã số thuế: 0315367026</p>
+          </div>
+          <hr />
+          <p><strong>Mã Đơn Hàng:</strong> ${orderDetails.booking_code}</p>
+          <p><strong>Người Dùng:</strong> ${orderDetails.user?.user_name || "Không xác định"}</p>
+          <p><strong>Tên Đầy Đủ:</strong> ${orderDetails.user?.fullname || "Không xác định"}</p>
+          <p><strong>Email:</strong> ${orderDetails.user?.email || "Không xác định"}</p>
+          <p><strong>SĐT:</strong> ${orderDetails.user?.phone || "Không xác định"}</p>
+          <hr />
+          <p><strong>Phim:</strong> ${orderDetails.showtime.movie.movie_name || "Không xác định"}</p>
+          <p><strong>Ngày:</strong> ${orderDetails.showtime?.showtime_date || "Không xác định"}</p>
+          <p><strong>Suất Chiếu:</strong> ${orderDetails.showtime?.showtime_start} ~ ${orderDetails.showtime?.showtime_end} </p>
+          <p><strong>Phòng:</strong> ${orderDetails.showtime?.room.room_name || "Không xác định"}</p>
+          <p><strong>Ghế:</strong> ${orderDetails.seats.map(seat => seat.seat_name).join(", ")}</p>
+          <hr />
+          <p><strong>Phương Thức Thanh Toán:</strong> ${orderDetails.pay_method.pay_method_name}</p>
+          <p><strong>Tổng Tiền:</strong> ${formatCurrency(orderDetails.amount)} VNĐ</p>
+          <hr />
+          <div style="text-align: center; margin-top: 20px;">
+            <strong><img src="${orderDetails.barcode}" alt="Barcode" style="width: 200px; display: block; margin: 0 auto;" /></strong>
+            <p style="font-style: italic; color: #777;">Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!</p>
+          </div>
+        </div>`
+      )
+      .join("");
+  
+    // Tạo nội dung cho hóa đơn ghế
+    const invoiceSeats = orderDetails.seats
+      .map(
+        (seat) => `
+        <div style="page-break-after: always; border: 1px solid #e0e0e0; margin-bottom: 30px; padding: 20px; background-color: #f9f9f9;">
+          <h1 style="text-align: center; color: #444; font-size: 24px; font-weight: bold;">Vé Xem Phim</h1>
+          <div style="margin-bottom: 20px; text-align: center;">
+            <img src="https://example.com/logo.png" alt="Logo" style="width: 150px; margin-bottom: 10px;" />
+            <p><strong>CÔNG TY TNHH FLICKHIVE</strong></p>
+            <p>Địa chỉ: Trịnh Văn Bô - Bắc Từ Liêm - Hà Nội</p>
+            <p>Mã số thuế: 0315367026</p>
+          </div>
+          <hr />
+          <p><strong>Phim:</strong> ${orderDetails.showtime.movie.movie_name || "Không xác định"}</p>
+          <p><strong>Ngày:</strong> ${orderDetails.showtime?.showtime_date || "Không xác định"}</p>
+          <p><strong>Suất Chiếu</strong> ${orderDetails.showtime?.showtime_start} ~ ${orderDetails.showtime?.showtime_end} </p>
+          <p><strong>Phòng:</strong> ${orderDetails.showtime?.room.room_name || "Không xác định"}</p>
+          <p><strong>Ghế:</strong> ${seat.seat_name}</p>
+          <hr />
+          <p><strong>Phương Thức Thanh Toán:</strong> ${orderDetails.pay_method.pay_method_name}</p>
+          <p><strong>Tổng Tiền:</strong> ${formatCurrency(orderDetails.showtime.price)} VNĐ</p>
+          <hr />
+          <div style="text-align: center; margin-top: 20px;">
+            <strong><img src="${orderDetails.barcode}" alt="Barcode" style="width: 200px; display: block; margin: 0 auto;" /></strong>
+            <p style="font-style: italic; color: #777;">Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!</p>
+          </div>
+        </div>`
+      )
+      .join("");
+  
+    // Tạo nội dung hóa đơn Combo với ngắt trang trước
+    const invoiceCombos = orderDetails.combos
+      .map(
+        (combo) => `
+        <div style="page-break-before: always; border: 1px solid #e0e0e0; margin-bottom: 50px; padding: 20px; background-color: #f9f9f9;">
+          <h1 style="text-align: center; color: #444; font-size: 24px; font-weight: bold;">Hóa Đơn Combo</h1>
+          <div style="margin-bottom: 20px; text-align: center;">
+            <img src="https://example.com/logo.png" alt="Logo" style="width: 150px; margin-bottom: 10px;" />
+            <p><strong>CÔNG TY TNHH FLICKHIVE</strong></p>
+            <p>Địa chỉ: Trịnh Văn Bô - Bắc Từ Liêm - Hà Nội</p>
+            <p>Mã số thuế: 0315367026</p>
+          </div>
+          <hr />
+          <p><strong>Mã Đơn Hàng:</strong> ${orderDetails.booking_code}</p>
+          <p><strong>Combo:</strong> ${combo.combo_name}</p>
+          <p><strong>Giá Combo:</strong> ${formatCurrency(combo.price)} VNĐ</p>
+          <hr />
+          <div style="text-align: center; margin-top: 20px;">
+            <strong><img src="${orderDetails.barcode}" alt="Barcode" style="width: 200px; display: block; margin: 0 auto;" /></strong>
+            <p style="font-style: italic; color: #777;">Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!</p>
+          </div>
+        </div>`
+      )
+      .join("");
+  
+    // Gộp tất cả hóa đơn vào một trang
     const invoiceContent = `
       <html>
       <head>
-        <title>Hóa đơn</title>
         <style>
-          body { font-family: Arial, sans-serif; margin: 20px; }
-          h1 { text-align: center; color: #333; }
-          table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-          th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
-          th { background-color: #f4f4f4; }
+          body { font-family: 'Arial', sans-serif; margin: 20px; color: #444; }
+          h1 { font-size: 24px; font-weight: bold; text-align: center; color: #444; }
+          .invoice-section { border: 1px solid #e0e0e0; margin-bottom: 30px; padding: 20px; background-color: #f9f9f9; }
+          .invoice-section + .invoice-section { page-break-before: always; }
+          .invoice-section:last-child { page-break-after: avoid; }
         </style>
       </head>
       <body>
-        <h1>Hóa đơn</h1>
-        <p><strong>Mã Đơn Hàng:</strong> ${orderDetails.booking_code}</p>
-        <p><strong>Người Dùng:</strong> ${orderDetails.user?.user_name || "Không xác định"}</p>
-        <p><strong>Tên Đầy Đủ:</strong> ${orderDetails.user?.fullname || "Không xác định"}</p>
-        <p><strong>Email:</strong> ${orderDetails.user?.email || "Không xác định"}</p>
-        <p><strong>SĐT:</strong> ${orderDetails.user?.phone || "Không xác định"}</p>
-        <p><strong>Suất Chiếu:</strong> ${orderDetails.showtime?.showtime_date || "Không xác định"}</p>
-        <p><strong>Phim:</strong> ${orderDetails.showtime.movie.movie_name || "Không xác định"}</p>
-       
-        <p><strong>Phương Thức Thanh Toán:</strong> ${orderDetails.pay_method.pay_method_name}</p>
-        <p><strong>Tên Khách Hàng:</strong> ${orderDetails.user.fullname}</p>
-        <p><strong>Tổng Tiền:</strong> ${orderDetails.amount} VND</p>
-        <hr />
-        <p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!</p>
+        ${invoiceDetails}
+        ${invoiceSeats}
+        ${invoiceCombos}
       </body>
       </html>
     `;
-    invoiceWindow.document.write(invoiceContent);
-    invoiceWindow.document.close();
-    invoiceWindow.print();
+  
+    invoiceWindow.document.write(invoiceContent); // Ghi nội dung hóa đơn vào cửa sổ
+    invoiceWindow.document.close(); // Đóng nội dung để chuẩn bị in
+    invoiceWindow.print(); // Kích hoạt in
   };
+  
+  
+  
+  
+  
+  
+  
+  
 
   const getStatusStyle = (status: any) => {
     switch (status) {
@@ -122,8 +221,11 @@ const OrderDetail = () => {
         };
     }
   };
-
+  const formatCurrency = (amount: any) => {
+    return amount.toLocaleString('vi-VN');
+  }
   const { className, icon } = getStatusStyle(orderDetails.status);
+  
 
   return (
     <div className="order-detail">
@@ -147,17 +249,16 @@ const OrderDetail = () => {
                   <span>{orderDetails.showtime.movie.movie_name}</span>
                 </td>
                 <td>
-                  <p>Phòng: {orderDetails.showtime.room.room_name} <br /></p>
-                  <p>Ngày Chiếu: {orderDetails.showtime.showtime_date}</p> <br />
-                  <p>Suất Chiếu: {orderDetails.showtime.showtime_start} ~ {orderDetails.showtime.showtime_end}</p>
-                
+                  <p>{orderDetails.showtime.room.room_name}</p>
+                  <p>{orderDetails.showtime.showtime_date}</p>
+                  <p>{orderDetails.showtime.showtime_start} ~ {orderDetails.showtime.showtime_end}</p>
                 </td>
                 <td>
   {orderDetails.combos?.length > 0 ? (
     orderDetails.combos.map((combos, index) => (
       <div key={index}>
-        <p>Combo: {combos.combo_name}</p>
-        <p>Giá: {combos.price} VND</p>
+        <p><strong>{combos.combo_name} x {combos.volume}</strong></p>
+        <p>({formatCurrency(combos.price)} VNĐ)</p>
       </div>
     ))
   ) : (
@@ -165,12 +266,37 @@ const OrderDetail = () => {
   )}
 </td>
 
-                <td>
-                  {orderDetails.showtime.room.room_name}
-                </td>
+<td>
+  {orderDetails.seats.length > 0 ? (
+    orderDetails.seats.map((seats, index) => (
+      <div key={index}>
+        <p>{seats.seat_name}({seats.type})</p>
+      </div>
+    ))
+  ) : (
+    <p>Không có combo nào</p>
+  )}
+</td>
+
               </tr>
             </tbody>
           </table>
+          <div className="tongtien">
+  <p><strong>Tiền Vé:</strong> {formatCurrency(orderDetails.showtime.price * orderDetails.seats.length)} VNĐ</p><br />
+  
+  {orderDetails.combos?.length > 0 ? (
+    orderDetails.combos.map((combos, index) => (
+      <div key={index}>
+        <p><strong>Giá Combos:</strong> {formatCurrency(combos.price)} VNĐ</p><br />
+      </div>
+    ))
+  ) : (
+    <p>Không có combo nào</p>
+  )}
+  
+  <p><strong>Tổng tiền: {formatCurrency(orderDetails.amount)} VNĐ</strong></p>
+</div>
+
         </div>
 
         {/* Right Column: Sidebar */}
@@ -193,7 +319,7 @@ const OrderDetail = () => {
             </div>
 
             <div className="ticket-content">
-              <img src={orderDetails.qrcode} alt="" />
+              <img src={orderDetails.barcode} alt="" />
               <Button
                 type="primary"
                 icon={<FontAwesomeIcon icon={faPrint} />}
