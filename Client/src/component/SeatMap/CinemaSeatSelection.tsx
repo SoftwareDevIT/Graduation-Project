@@ -557,7 +557,7 @@ setReservedSeats(reservedSeatSet);
             </div>
           </div>
         </div>
-      </div>
+    
       <Footer />
     </>
   );
