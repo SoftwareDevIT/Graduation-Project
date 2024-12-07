@@ -171,34 +171,34 @@ class BookingController extends Controller
     //         ]);
     //     }
     // }
-    
 
-    public function selectSeats(Request $request)
-    {
-        $seats = $request->input('seats'); // Ghế người dùng chọn
 
-        // Kiểm tra nếu không có ghế được chọn
-        if (empty($seats)) {
-            return response()->json(['status' => false, 'message' => 'Please select at least one seat.'], 400);
-        }
-        if (is_array($seats) && count($seats) > 10) {
-            return response()->json(['status' => false, 'message' => 'You can only select up to 10 seats.'], 400);
-        }
+    // public function selectSeats(Request $request)
+    // {
+    //     $seats = $request->input('seats'); // Ghế người dùng chọn
 
-        if (!$seats) {
-            return response()->json(['status' => false, 'message' => 'Please select at least one seat.'], 400);
-        }
-        // Sắp xếp các ghế đã chọn theo `seat_name` (theo tên ghế)
-        $gapIssue = $this->hasGapIssue($seats);
-        if ($gapIssue) {
-            return $gapIssue;  // Trả về lỗi nếu có khoảng trống
-        }
-        // Nếu không có lỗi, tiếp tục xử lý ghế đã chọn
-        $saveSeats = $this->saveSeats($seats);
-        if ($saveSeats) {
-            return $saveSeats;
-        }
-    }
+    //     // Kiểm tra nếu không có ghế được chọn
+    //     if (empty($seats)) {
+    //         return response()->json(['status' => false, 'message' => 'Please select at least one seat.'], 400);
+    //     }
+    //     if (is_array($seats) && count($seats) > 10) {
+    //         return response()->json(['status' => false, 'message' => 'You can only select up to 10 seats.'], 400);
+    //     }
+
+    //     if (!$seats) {
+    //         return response()->json(['status' => false, 'message' => 'Please select at least one seat.'], 400);
+    //     }
+    //     // Sắp xếp các ghế đã chọn theo `seat_name` (theo tên ghế)
+    //     $gapIssue = $this->hasGapIssue($seats);
+    //     if ($gapIssue) {
+    //         return $gapIssue;  // Trả về lỗi nếu có khoảng trống
+    //     }
+    //     // Nếu không có lỗi, tiếp tục xử lý ghế đã chọn
+    //     $saveSeats = $this->saveSeats($seats);
+    //     if ($saveSeats) {
+    //         return $saveSeats;
+    //     }
+    // }
 
     public function saveSeats($seats)
     {
@@ -298,22 +298,22 @@ class BookingController extends Controller
         usort($seats, function ($a, $b) {
             return strcmp($a['seat_name'], $b['seat_name']); // Sắp xếp theo tên ghế
         });
-    
+
         $selectedRows = [];
         foreach ($seats as $seat) {
             preg_match('/([A-Za-z]+)(\d+)/', $seat['seat_name'], $match);
             $row = $match[1]; // Hàng
             $column = (int)$match[2]; // Cột
-    
+
             if (!isset($selectedRows[$row])) {
                 $selectedRows[$row] = [];
             }
             $selectedRows[$row][] = $column;
         }
-    
+
         foreach ($selectedRows as $row => $columns) {
             sort($columns);
-    
+
             // Lấy danh sách ghế đã được mua trong phòng và hàng
             $purchasedSeats = Seats::where('room_id', $seats[0]['room_id'])
                 ->get()->toArray();
@@ -322,15 +322,15 @@ class BookingController extends Controller
             $purchasedColumns = array_map(fn($seat) => $seat['seat_column'], $purchasedSeats);
             $combinedSeats = array_merge($purchasedColumns, $columns);
             sort($combinedSeats);
-    
+
             // Kiểm tra khoảng trống giữa các ghế (bao gồm cả ghế đã mua)
             for ($i = 0; $i < count($combinedSeats) - 1; $i++) {
                 if ($combinedSeats[$i + 1] - $combinedSeats[$i] == 2) {
                     $missingColumn = $combinedSeats[$i] + 1;
-    
+
                     // Xác định tên ghế bị thiếu (tên đầy đủ)
                     $missingSeatName = $row . $missingColumn;
-    
+
                     return response()->json([
                         'status' => false,
                         'message' => 'Please select consecutive seats without gaps.',
@@ -340,11 +340,11 @@ class BookingController extends Controller
                     ], 402);
                 }
             }
-    
+
             $firstColumn = $combinedSeats[0];
             $lastColumn = end($combinedSeats);
             $maxColumn = $this->getMaxColumnForRow($row, $totalSeatsInRows);
-    
+
             // Kiểm tra bỏ ghế đầu hàng
             if ($firstColumn == 2) {
                 return response()->json([
@@ -355,7 +355,7 @@ class BookingController extends Controller
                     ]
                 ], 402);
             }
-    
+
             // Kiểm tra bỏ ghế cuối hàng
             if ($maxColumn - $lastColumn == 1) {
                 return response()->json([
@@ -367,10 +367,10 @@ class BookingController extends Controller
                 ], 402);
             }
         }
-    
+
         return null; // Không có lỗi
     }
-    
+
 
 
     private function getMaxColumnForRow($row, $totalSeatsInRows)
