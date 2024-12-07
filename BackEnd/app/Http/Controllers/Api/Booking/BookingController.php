@@ -78,7 +78,7 @@ class BookingController extends Controller
             $booking = Booking::where('id', $data['vnp_TxnRef'])->first();
 
             // Cập nhật trạng thái đặt vé
-            $booking->status = 'Confirmed';
+            $booking->status = 'Thanh toán thành công';
 
             // Tạo mã vạch dưới dạng PNG
             $generator = new BarcodeGeneratorPNG();
