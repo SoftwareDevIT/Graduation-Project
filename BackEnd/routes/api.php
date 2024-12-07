@@ -226,6 +226,7 @@ Route::apiResource('ranks', RankContrller::class);
 
 
 Route::get('/env-config', [ConfigController::class, 'envConfig']);
+Route::post('printTicket', [OrderController::class, 'printTicket']);
 
 
 Route::prefix('seat-maps')->group(function () {

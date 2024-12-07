@@ -57,18 +57,18 @@ class RevenueService
 
     public function totalRevenueByCinema(int $idCinema)
     {
-        return $this->calculateRevenue('Confirmed', $idCinema, null, null);
+        return $this->calculateRevenue('Thanh toán thành công', $idCinema, null, null);
     }
 
 
     public function totalRevenueByCinemaBetweenDates(int $idCinema, string $startDate, string $endDate)
     {
-        return $this->calculateRevenue('Confirmed', $idCinema, $startDate, $endDate);
+        return $this->calculateRevenue('Thanh toán thành công', $idCinema, $startDate, $endDate);
     }
 
 
     public function totalRevenueBetweenDates(string $startDate, string $endDate)
     {
-        return $this->calculateRevenue('Confirmed', null, $startDate, $endDate);
+        return $this->calculateRevenue('Thanh toán thành công', null, $startDate, $endDate);
     }
 }
