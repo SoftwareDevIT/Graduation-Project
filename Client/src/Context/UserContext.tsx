@@ -16,7 +16,8 @@ import { Movie } from '../interface/Movie';
     rank_name: string;
     total_amount: number;
     rank: Rank;
-    point_histories: PointHistory[];
+    
+point_histories: PointHistory[];
     points: number; 
   }
   
@@ -76,6 +77,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
           const response = await instance.get(`/user/${userId}`);
           if (response.data.success) {
             const userProfileData = response.data.user;
+            console.log('data-user',userProfileData)
             setUserProfile(userProfileData);
             setAvatar(userProfileData.avatar || "https://cdn.moveek.com/bundles/ornweb/img/no-avatar.png");
           }
