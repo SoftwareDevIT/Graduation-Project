@@ -129,6 +129,7 @@ import MyMapComponent from "./component/GG map/Ggmap";
 
 import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
 import OrderHistoryApp from "./component/PersonalPage/MovieTicket";
+import BookingManager from "./component/TicketandSeat/BookingManager";
 
 function App() {
 
@@ -180,6 +181,7 @@ function App() {
         <Route path="/register" element={<RegisterCinema />} />
         <Route path="/login" element={<LoginCinema />} />
         <Route path="/movieshowing" element={<MovieShowing/>} />
+        <Route path="/bookingticket" element={<BookingManager/>} />
   
       
         <Route path="/deponsit" element={<Deponsit/>} />

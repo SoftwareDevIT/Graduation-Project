@@ -214,8 +214,9 @@ font-weight: 500;
   .avatas img {
     width: 100px;
     height: 100px;
-    margin-left: 0;
+    margin-left: 40px;
     bottom: 0;
+    margin-bottom: 20px;
   }
 
   .nameacount {

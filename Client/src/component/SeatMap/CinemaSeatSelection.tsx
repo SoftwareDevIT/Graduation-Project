@@ -69,7 +69,10 @@
     const [echoInstance, setEchoInstance] = useState<Echo<'pusher'> | null>(null);
 
     const [status, setStatus] = useState("Initializing...");
-    
+    const [isModalVisible, setIsModalVisible] = useState<boolean>(true);
+    const handleOk = () => {
+      setIsModalVisible(false);
+    };
 
     useEffect(() => {
       const fetchRoomAndSeats = async () => {
@@ -414,7 +417,15 @@
       <>
         <Header />
         <Headerticket />
-        
+        <Modal
+        title="Thông báo"
+        visible={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleOk}
+        okText="Đóng"
+      >
+        <p>Theo quy định của Bộ Văn Hóa, Thể Thao và Du Lịch: Rạp phim không được phép phục vụ khách hàng dưới 13 tuổi cho các suất chiếu kết thúc sau 22:00 và dưới 16 tuổi cho các suất chiếu kết thúc sau 23:00. Rạp sẽ không hoàn tiền nếu người xem không đáp ứng đủ điều kiện.</p>
+      </Modal>
         <div className="box-map">
           <div className="container container-map">
             <div className="seat-info-box">
