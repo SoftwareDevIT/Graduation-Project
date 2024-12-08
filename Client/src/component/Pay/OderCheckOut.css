@@ -229,6 +229,7 @@ padding-left: 10px;
   margin-top: -1px !important;
 }
 .total-title {
+  font-weight: 700;
   color: #333;
 }
 .total-price {
@@ -237,10 +238,10 @@ padding-left: 10px;
   color: #e74c3c;
   font-weight: bold;
 }
-.total-title3{
+.total-titlee{
   font-weight: 600;
   color:#e74c3c;
-margin-left: 400px;
+margin-right: 30px;
   font-size: 24px;
 }
 
@@ -616,7 +617,8 @@ width: 670px;
     font-size: 20px;
     margin-left: 45px;
   }
-  .total-title{
+  .total-titlee{
+    margin-top: 20px;
     font-size: 20px;
   }
   .total-price{
