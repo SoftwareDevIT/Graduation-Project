@@ -316,7 +316,7 @@ class BookingController extends Controller
 
         foreach ($selectedRows as $row => $columns) {
             sort($columns);
-           
+
             // Lấy danh sách ghế đã được mua trong phòng và hàng
             $purchasedSeats = Seats::where('showtime_id',1046 )
                 ->get()->toArray();
@@ -326,7 +326,9 @@ class BookingController extends Controller
             $purchasedColumns = array_map(fn($seat) => $seat['seat_column'], $purchasedSeats);
             $combinedSeats = array_merge($purchasedColumns, $columns);
             sort($combinedSeats);
+
             $missingSeats = [];
+
             // Kiểm tra khoảng trống giữa các ghế (bao gồm cả ghế đã mua)
             for ($i = 0; $i < count($combinedSeats) - 1; $i++) {
                 if ($combinedSeats[$i + 1] - $combinedSeats[$i] == 2) {
@@ -334,22 +336,35 @@ class BookingController extends Controller
 
                     // Xác định tên ghế bị thiếu (tên đầy đủ)
                     $missingSeatName = $row . $missingColumn;
+
                     $missingSeats[] = $missingSeatName;
                    
+
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'Please select consecutive seats without gaps.',
+                        'data' => [
+                            'missing_seat' => $missingSeatName,
+                        ]
+                    ], 402);
+
                 }
             }
 
             $firstColumn = $combinedSeats[0];
             $lastColumn = end($combinedSeats);
             $maxColumn = $this->getMaxColumnForRow($row, $totalSeatsInRows);
+
             Log::info('Combined seats:', $combinedSeats);
+
 
             // Kiểm tra bỏ ghế đầu hàng
             if ($firstColumn == 2) {
                 $missingSeats[] = $row . '1';
             }
 
-            // Kiểm tra bỏ ghế cuối hàngdd
+
+
             if ($maxColumn - $lastColumn == 1) {
                 $missingSeats[] = $row . '1';
             }

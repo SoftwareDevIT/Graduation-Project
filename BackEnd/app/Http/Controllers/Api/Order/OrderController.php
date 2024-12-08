@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Order;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Order\UpdateOrderRequest;
+use App\Models\Booking;
 use App\Services\Order\OrderService;
 use Illuminate\Http\Request;
 
@@ -64,7 +65,7 @@ class OrderController extends Controller
      */
     public function update(UpdateOrderRequest $request, string $id)
     {
-        $request->validated(); 
+        $request->validated();
         $updatedOrder = $this->orderService->update($request->status, $id);
         return $this->success($updatedOrder, 'Trạng thái đã được cập nhật thành công.');
     }
@@ -83,5 +84,16 @@ class OrderController extends Controller
     {
         $order = $this->orderService->order();
         return $this->success($order, 'success');
+    }
+    public function printTicket(int $id)
+    {
+        $movie = Booking::findOrFail($id);
+        if ($movie->status == 'Thanh toán thành công') {
+            $movie->status = $movie->status == 'Đã in vé';
+            $movie->save();
+            return $this->success('', 'In vé thành công', 200);
+        } else {
+            return $this->success('', 'In vé không thành công', 200);
+        }
     }
 }
