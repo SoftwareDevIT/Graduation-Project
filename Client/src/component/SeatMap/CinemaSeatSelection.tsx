@@ -12,20 +12,10 @@
   import initializeEcho from "../../server/realtime";
   import Echo from "laravel-echo";
   import { Cinema } from "../../interface/Cinema";
-  interface Seat {
-    row: string;
-    type: string;
-    label: string;
-    column: number;
-    status: number;
-    linkedSeat?: string;
-  }
+import { SeatMap } from "../../interface/SeatMapp";
 
-  interface SeatMap {
-    seat_structure: Seat[];
-    matrix_row: number;
-    matrix_column: number;
-  }
+
+  
   interface Showtime {
     id: number;
     movie_id: number;
@@ -247,15 +237,6 @@
     
       setSelectedSeats(newSelectedSeats);
     };
-    
-    
-    
-    
-    
-    
-
-  
-    
     const calculatePrice = () => {
       let totalPrice = 0;
     
@@ -359,7 +340,7 @@
               navigate("/login"); // Chuyển đến trang đăng nhập
             } else if (error.response.status === 402) {
               const backendMessage = error.response.data?.message;
-              const missingSeat = error.response.data?.data?.missing_seat;
+              const missingSeat = error.response.data?.data?.missing_seats;
         
               if (backendMessage === "Please select consecutive seats without gaps." || "Please select consecutive seats up to the last seat of the row.") {
                 Modal.error({
