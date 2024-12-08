@@ -80,6 +80,7 @@ import { UserProfile } from "../../interface/UserProfile";
         setLoading(true);  // Hiển thị loading nếu chưa có dữ liệu khu vực hoặc rạp
       }
     }, [cinemas, locations]);
+  console.log( locations);
   
     useEffect(() => {
       if (cinemas.length > 0) {
@@ -94,6 +95,9 @@ import { UserProfile } from "../../interface/UserProfile";
   
         const locationWithMostCinemas = sortedLocations[0];
         setSelectedCity(locationWithMostCinemas.id);
+        console.log('====================================');
+        console.log(locationWithMostCinemas.id);
+        console.log('====================================');
       }
     }, [cinemas, locations]);
   
@@ -168,9 +172,8 @@ import { UserProfile } from "../../interface/UserProfile";
     }
   
     // If the user is an admin, only show the first location and first cinema
-    const displayLocations = isAdmin ? filteredLocations.slice(0, 1) : filteredLocations;
+const displayLocations = isAdmin ? filteredLocations.slice(0, 1) : filteredLocations;
     const displayCinemas = isAdmin && selectedCity ? cinemas.filter(cinema => cinema.location_id === selectedCity).slice(0, 1) : filteredCinemas;
-  
     return (
       <div className="div-content">
         <h2 className="titles">Mua vé theo rạp</h2>

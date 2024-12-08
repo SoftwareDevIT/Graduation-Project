@@ -5,7 +5,7 @@ import { Movie } from "./Movie";
 import { Showtime } from "./Showtimes";
 import { Room } from "./Room";
 import { Combo } from "./Combo";
-
+import {Seat} from "./Seat"
 export interface Booking {
   id: string;
   user_id : number;
@@ -20,7 +20,9 @@ export interface Booking {
   pay_method : PayMethod;
   movie: Movie;
   room: Room
-  combos: Combo
+  combos: Combo[]
   qrcode: string
-  booking_code: string
+  booking_code: string;
+  seats:Seat[];
+
 }

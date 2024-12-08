@@ -156,7 +156,7 @@ const filteredTransactions = pointHistories
                 <span>Kim Cương: 3.000.000 VND</span>
               </div>
               <div className="points-details">
-                <p><strong>Điểm tích lũy:</strong>{userProfile?.points || "0"}  điểm</p>
+                <p><strong>Điểm tích lũy:</strong>{userProfile?.rank.total_order_amount || "0"}  điểm</p>
             
                 <p><strong>Cấp hạng:</strong> {userProfile?.rank_name || "Gold Member"}</p>
               </div>
@@ -191,7 +191,7 @@ const filteredTransactions = pointHistories
                   },
                   
                   { title: "Số điểm tiêu", dataIndex: "points_used" , render: (points: number) => `-${points}`, },
-                  { title: "Trạng thái", dataIndex: "status" },
+                  { title: "Trạng thái", dataIndex: "type" },
                 ]}
                 pagination={false}
                 bordered

@@ -22,6 +22,8 @@ const OrderDetail = () => {
       try {
         const response = await instance.get(`/order/${id}`); // Fetch the order details using the booking_id
         setOrderDetails(response.data.data);
+        console.log("datacombo",response.data.data
+        )
         setNewStatus(response.data.data.status); // Initialize status from the fetched data
       } catch (err) {
         setError('Failed to load order details');
@@ -148,14 +150,28 @@ const OrderDetail = () => {
                   <p>Phòng: {orderDetails.showtime.room.room_name} <br /></p>
                   <p>Ngày Chiếu: {orderDetails.showtime.showtime_date}</p> <br />
                   <p>Suất Chiếu: {orderDetails.showtime.showtime_start} ~ {orderDetails.showtime.showtime_end}</p>
+                
                 </td>
                 <td>
-                  {orderDetails.combos.combo_name}
-                  {orderDetails.combos.price}
-                </td>
-                <td>
-                  {orderDetails.showtime.room.room_name}
-                </td>
+  {orderDetails.combos?.length > 0 ? (
+    orderDetails.combos.map((combos, index) => (
+      <div key={index}>
+        <p>Combo: {combos.combo_name}</p>
+        <p>Giá: {combos.price} VND</p>
+      </div>
+    ))
+  ) : (
+    <p>Không có combo nào</p>
+  )}
+</td>
+
+                
+                {orderDetails.seats.map((item)=>(
+                  <td>
+                    {item.seat_name}
+                   </td>
+                ))}
+               
               </tr>
             </tbody>
           </table>

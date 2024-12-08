@@ -17,7 +17,7 @@ class VorcherSeeder extends Seeder
 
         for ($i = 0; $i < 10; $i++) {
             $data[] = [
-                'code' => 'DISCOUNT' . rand(100, 999),
+                'code' => 'DISCOUNT' . rand(1, 9999),
                 'discount_percentage' => rand(1, 50),
                 'max_discount' => 100000,
                 'min_purchase' => 200000,

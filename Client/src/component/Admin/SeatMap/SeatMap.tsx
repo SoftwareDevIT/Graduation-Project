@@ -119,9 +119,7 @@ const SeatMap = () => {
             className: 'text-center',
             render: (text: any, seatLayout: SeatMapAdmin) => (
                 <div className="d-flex justify-content-around">
-                    <Link to={`/admin/seat-maps/edit/${seatLayout.id}`}>
-                        <Button type="primary" icon={<EditOutlined />} />
-                    </Link>
+             
                     <Popconfirm
                         title="Bạn có chắc chắn muốn xóa layout ghế này?"
                         onConfirm={() => handleDelete(seatLayout.id)}

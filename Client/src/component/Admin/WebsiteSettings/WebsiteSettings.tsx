@@ -274,6 +274,14 @@ const WebsiteSettings: React.FC = () => {
         </div>
 
         <div className="d-flex justify-content-end">
+        <button
+    type="button"
+    className="btn btn-secondary me-2"
+    disabled={loading}
+    onClick={resetSettings}
+  >
+    {loading ? 'Đang Đặt Lại...' : 'Đặt Lại'}
+  </button>
           <button type="submit" className="btn btn-primary" disabled={loading}>
             {loading ? 'Đang Cập Nhật...' : 'Cập Nhật'}
           </button>

@@ -131,7 +131,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
 
 
     // phan quyen
-    Route::resource('roles', RoleController::class); // add roles and show
+    Route::apiResource('roles', RoleController::class); // add roles and show
     Route::post('/roles/{role}/permissions', [RoleController::class, 'syncPermissions'])->name('roles.permissions.sync'); // chia chuc nang cho quyen
     Route::post('/roles/{user}/users', [RoleController::class, 'syncRoles'])->name('users.roles.sync'); // cap quyen cho user
     Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy'); // delete role
@@ -226,6 +226,7 @@ Route::apiResource('ranks', RankContrller::class);
 
 
 Route::get('/env-config', [ConfigController::class, 'envConfig']);
+Route::post('printTicket', [OrderController::class, 'printTicket']);
 
 
 Route::prefix('seat-maps')->group(function () {

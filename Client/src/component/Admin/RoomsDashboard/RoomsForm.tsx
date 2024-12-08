@@ -96,7 +96,7 @@ const RoomsForm: React.FC = () => {
   return (
     <div className="container mt-5">
       <h2 className="text-center mb-4">{id ? "Cập nhật Phòng" : "Thêm Phòng"}</h2>
-      <form onSubmit={handleSubmit(onSubmit)} className="shadow p-4 rounded bg-light" style={{ maxWidth: "500px", margin: "0 auto",height: "430px" }}>
+      <form onSubmit={handleSubmit(onSubmit)} className="shadow p-4 rounded bg-light" style={{ maxWidth: "900px", margin: "0 auto",height: "430px" }}>
         {/* Tên Phòng */}
         <div className="mb-3">
           <label className="form-label">Tên Phòng</label>
