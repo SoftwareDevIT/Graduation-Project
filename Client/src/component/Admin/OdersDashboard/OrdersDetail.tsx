@@ -22,7 +22,7 @@ const OrderDetail = () => {
       try {
         const response = await instance.get(`/order/${id}`); // Fetch the order details using the booking_id
         setOrderDetails(response.data.data);
-        console.log("datacombo",response.data.data.combos.combo_name
+        console.log("datacombo",response.data.data
         )
         setNewStatus(response.data.data.status); // Initialize status from the fetched data
       } catch (err) {
@@ -165,9 +165,13 @@ const OrderDetail = () => {
   )}
 </td>
 
-                <td>
-                  {orderDetails.showtime.room.room_name}
-                </td>
+                
+                {orderDetails.seats.map((item)=>(
+                  <td>
+                    {item.seat_name}
+                   </td>
+                ))}
+               
               </tr>
             </tbody>
           </table>

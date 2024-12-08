@@ -83,7 +83,7 @@ const OrderCheckout = () => {
     } = (location.state as LocationState) || {};
 
     // Log selectedSeats to verify data
-    // console.log(seats);
+    console.log(seats);
     // console.log(selectedCombos); // Check if combos are passed correctly
     const handleApplyVoucher = async () => {
         if (!voucherCode) {
@@ -221,6 +221,7 @@ const OrderCheckout = () => {
         }
     
         const seatsData = seats.map((seat: any) => ({
+            seat_id:seat.id,
             seat_name: seat.seat_name,
             room_id: roomId,
             showtime_id: showtimeId,
@@ -370,14 +371,14 @@ const OrderCheckout = () => {
     </div>
 )}
 
-{!isAdmin && ( // Kiểm tra nếu không phải là admin mới hiển thị bảng điểm giảm giá
+{!isAdmin && ( 
     <div>
-        {/* Thêm sự kiện onClick vào <h4> */}
+       
         <h4 onClick={toggleTableVisibility} className='diemgiamgia'>Điểm giảm giá FlickHive
       <FontAwesomeIcon icon={faQuestionCircle} style={{ marginLeft: '10px', cursor: 'pointer' }} onClick={showModal} />
       </h4>
 
-        {/* Bảng khung-diem-poly chỉ hiển thị khi isTableVisible là true */}
+    
         {isTableVisible && (
             <div className="khung-diem-poly">
                 <table>
@@ -446,26 +447,6 @@ const OrderCheckout = () => {
   </div>
 </div>
 
-
-
-        {/* <div className="order-total">
-    <span className="total-title">Tổng </span>
-    <span className="total-price">{totalPrice?.toLocaleString('vi-VN')} đ</span>
-</div>
-{discount && (
-    <div className="order-discount">
-        <span className="total-title">Giảm giá:</span>
-        <span className="total-title"> -{discount.toLocaleString('vi-VN')} đ</span>
-    </div>
-    
-    
-)}
-<div className="order-final">
-    <span className="total-title2">Tổng sau giảm:</span>
-    <span className="total-title3">
-        {(finalPrice || totalPrice)?.toLocaleString('vi-VN')} đ
-    </span>
-</div> */}
 
 
                     </div>

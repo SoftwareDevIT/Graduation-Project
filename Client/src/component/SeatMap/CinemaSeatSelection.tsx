@@ -55,7 +55,7 @@
     const [selectedSeats, setSelectedSeats] = useState<Map<string, number[]>>(
       new Map()
     );
-    
+    const [loading, setLoading] = useState(true); // Add loading state
     const [reservedSeats, setReservedSeats] = useState<Set<string>>(new Set());
     const [showtimeData, setShowtimeData] = useState<Showtime>();
     const [seatData, setSeatData] = useState<SeatMap>({
@@ -77,7 +77,7 @@
           // Fetching the showtime data
           const response = await instance.get(`/showtimes/${showtimeId}`);
           const seatLayoutData = response.data.data;
-        
+          // console.log('showtimedata3444',seatLayoutData)
           const seatStructure = response.data?.data?.room?.seat_map?.seat_structure;
           console.log('showtimedata',seatStructure)
           setShowtimeData(seatLayoutData);
@@ -104,54 +104,55 @@
 
   // Cập nhật state
   setReservedSeats(reservedSeatSet);
-
+  setLoading(false);
           } catch (seatError) {
             console.error("Error fetching seat data", seatError);
 
 
             setReservedSeats(new Set<string>());
+            setLoading(false);
           }
     
           // Khởi tạo Echo và lắng nghe sự kiện realtime
-          const setupRealtime = async () => {
-            const echo = await initializeEcho();
-            console.log("Connected to Pusher!", echo);
-            if (echo) {
-              setEchoInstance(echo);
-              setStatus("Connected to Pusher!");
-              const roomId = response.data.data.room.id;
-              // Kết nối với channel tương ứng
+          // const setupRealtime = async () => {
+          //   const echo = await initializeEcho();
+          //   console.log("Connected to Pusher!", echo);
+          //   if (echo) {
+          //     setEchoInstance(echo);
+          //     setStatus("Connected to Pusher!");
+          //     const roomId = response.data.data.room.id;
+          //     // Kết nối với channel tương ứng
           
             
         
             
-              const channel = echo.private(`seats${roomId}`); 
-              console.log("Connected to channel:", channel);
+          //     const channel = echo.private(`seats${roomId}`); 
+          //     console.log("Connected to channel:", channel);
         
-              // Lắng nghe sự kiện SeatSelected
-              channel.listen("SeatSelected", (eventData:any) => {
-                console.log("Received seats data:", eventData);
+          //     // Lắng nghe sự kiện SeatSelected
+          //     channel.listen("SeatSelected", (eventData:any) => {
+          //       console.log("Received seats data:", eventData);
     
-                // if (eventData ) {
-                //   console.log("Received selected seats:", eventData.seats);
+          //       // if (eventData ) {
+          //       //   console.log("Received selected seats:", eventData.seats);
     
-                //   // Cập nhật state với Map
-                //   const newSelectedSeats = new Map(selectedSeats); // Sao chép bản đồ cũ
-                //   newSelectedSeats.set(roomId, eventData.seats); // Thêm ghế mới vào Map theo roomId
+          //       //   // Cập nhật state với Map
+          //       //   const newSelectedSeats = new Map(selectedSeats); // Sao chép bản đồ cũ
+          //       //   newSelectedSeats.set(roomId, eventData.seats); // Thêm ghế mới vào Map theo roomId
     
-                //   setSelectedSeats(newSelectedSeats); // Cập nhật lại state
-                //   updateSeatsSelection(eventData.seats); // Cập nhật ghế trong lưới
-                // }
+          //       //   setSelectedSeats(newSelectedSeats); // Cập nhật lại state
+          //       //   updateSeatsSelection(eventData.seats); // Cập nhật ghế trong lưới
+          //       // }
 
-              });
-            } else {
-              setStatus("Failed to connect.");
-            }
-          };
+          //     });
+          //   } else {
+          //     setStatus("Failed to connect.");
+          //   }
+          // };
     
-          if (!echoInstance) {
-            setupRealtime();
-          }
+          // if (!echoInstance) {
+          //   setupRealtime();
+          // }
     
           // Cleanup khi component bị unmount
           return () => {
@@ -162,6 +163,7 @@
         } catch (error) {
           console.error("Error fetching room data", error);
           setError("Không thể tải dữ liệu, vui lòng thử lại!");
+          setLoading(false);
         }
       };
     
@@ -307,6 +309,7 @@
       
             // Bao gồm cả linkedSeat
             return {
+             
               seat_name: seat?.label || `${row}${index}`,
               room_id: showtimeData?.room.id,
               showtime_id: showtimeId,
@@ -315,7 +318,7 @@
             };
           })
       );
-      
+      console.log("du lieu seat:",selectedSeatsArray)
       const payload = {
         cinemaId,
         showtimeId,
@@ -348,39 +351,59 @@
         } else {
           console.error("Error: API call successful but status is not 200");
         }
-      } catch (error: any) {
-        if (error.response) {
-          // Kiểm tra mã lỗi
-          if (error.response.status === 401) {
-            message.warning("Vui lòng đăng nhập để tiếp tục.");
-            navigate("/login"); // Chuyển đến trang đăng nhập
-          } else if (error.response.status === 402) {
+      }  catch (error: any) {
+          if (error.response) {
+            // Kiểm tra mã lỗi
+            if (error.response.status === 401) {
+              message.warning("Vui lòng đăng nhập để tiếp tục.");
+              navigate("/login"); // Chuyển đến trang đăng nhập
+            } else if (error.response.status === 402) {
+              const backendMessage = error.response.data?.message;
+              const missingSeat = error.response.data?.data?.missing_seat;
+        
+              if (backendMessage === "Please select consecutive seats without gaps." || "Please select consecutive seats up to the last seat of the row.") {
+                Modal.error({
+                  title: "Lỗi chọn ghế",
+                  content: `Vui lòng không để trống ghế ${missingSeat || "Không xác định"}`,
+                  icon: null,
+                  className: "custom-error-modal",
+                });
+              }
+            } else if (error.response.status === 400) {
+              Modal.error({
+                title: "Ghế đã được đặt",
+                content: "Ghế của bạn đã được chọn trước vui lòng chọn ghế khác ",
+                icon: null,
+                className: "custom-error-modal",
+              });
+            }
+          } else {
             Modal.error({
-              content: "Vui lòng không để trống ghế ở giữa!",
-              icon: null,
-              className: "custom-error-modal",
+              title: "Lỗi kết nối",
+              content: "Không thể kết nối tới máy chủ, vui lòng kiểm tra lại kết nối.",
             });
-          } if(error.response.status === 400){
-            Modal.error({
-              title: "Ghế đã được đặt",
-              content: "Ghế của bạn đã được đặt vui lòng đặt lại ghế khác",
-              icon: null,
-              className: "custom-error-modal",
-            });
-    
           }
-        } else {
-          Modal.error({
-            title: "Lỗi kết nối",
-            content: "Không thể kết nối tới máy chủ, vui lòng kiểm tra lại kết nối.",
-          });
         }
-      }
+        
     };
     
     
 
-
+    if (loading) {
+      return (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "50vh",
+            backgroundColor: "#f9f9f9",
+          }}
+        >
+          <Spin tip="Đang Tải Dữ Liệu Khu Vực..." size="large" />
+        </div>
+      );
+    }
     // Hiển thị thông báo lỗi nếu có lỗi trong việc chọn ghế hoặc submit API
     if (error) {
       return <div>{error}</div>;

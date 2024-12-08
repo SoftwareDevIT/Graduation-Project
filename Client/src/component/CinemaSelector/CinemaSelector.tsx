@@ -172,9 +172,8 @@ import { UserProfile } from "../../interface/UserProfile";
     }
   
     // If the user is an admin, only show the first location and first cinema
-    const displayLocations =  filteredLocations;
-    const displayCinemas = filteredCinemas;
-  
+const displayLocations = isAdmin ? filteredLocations.slice(0, 1) : filteredLocations;
+    const displayCinemas = isAdmin && selectedCity ? cinemas.filter(cinema => cinema.location_id === selectedCity).slice(0, 1) : filteredCinemas;
     return (
       <div className="div-content">
         <h2 className="titles">Mua vé theo rạp</h2>

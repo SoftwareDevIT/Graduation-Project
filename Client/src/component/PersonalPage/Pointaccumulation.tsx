@@ -191,7 +191,7 @@ const filteredTransactions = pointHistories
                   },
                   
                   { title: "Số điểm tiêu", dataIndex: "points_used" , render: (points: number) => `-${points}`, },
-                  { title: "Trạng thái", dataIndex: "status" },
+                  { title: "Trạng thái", dataIndex: "type" },
                 ]}
                 pagination={false}
                 bordered
