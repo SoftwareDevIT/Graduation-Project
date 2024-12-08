@@ -52,7 +52,7 @@ class BookingSeeder extends Seeder
                 'showtime_id' => $showtimes->random(),
                 'pay_method_id' => $payMethods->random(),
                 'amount' => rand(100000, 1000000),
-                'status' => ['Pending', 'Confirmed', 'Pain'][array_rand(['Pending', 'Confirmed', 'Pain'])],
+                'status' => ['Thanh toán thành công', 'Thanh toán thất bại', 'Đã hủy','Đang xử lý','Đã in vé'][array_rand(['Thanh toán thành công', 'Thanh toán thất bại', 'Đã hủy','Đang xử lý','Đã in vé'])],
                 'created_at' => $this->randomDate('2023-01-01', now()),
                 'updated_at' => now(),
             ]);

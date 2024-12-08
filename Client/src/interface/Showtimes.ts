@@ -20,7 +20,7 @@ export interface Showtime {
     room_id:number;
     room : Room;
 
-    
+    showtime_id:string;
     
    
     

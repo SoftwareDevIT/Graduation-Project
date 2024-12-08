@@ -112,7 +112,7 @@ class BookingStaffController extends Controller
     {
         $id = $request->input('id');
         $booking = Booking::find($id);
-        $booking->status = 'Confirmed';
+        $booking->status = 'Thanh toán thành công';
         $booking->save();
         $this->rankService->points($booking);
         session()->flush();

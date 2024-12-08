@@ -58,7 +58,7 @@ class RankService
 
     public function usePoints($user, $pointsToUse, $totalPrice)
     {
-        $usedPointsSessionKey = 'used_points_';
+        $usedPointsSessionKey = 'used_points_'.$user->id;
         if (session()->has($usedPointsSessionKey)) {
             return [
                 'success' => false,
@@ -107,14 +107,9 @@ class RankService
             ]);
         // });
 
-        session()->put($usedPointsSessionKey, [
-            'points_used' => $pointsToUse,
-            'discount_value' => $discountValue,
-            'final_price' => $finalPrice,
-            'remaining_points' => $remainingPoints
-        ]);
-
-        Log::info(session()->get($usedPointsSessionKey));
+        session()->put($usedPointsSessionKey, $totalPrice);
+        session()->save();
+        Log::info(session()->all());
 
         return [
             'success' => true,

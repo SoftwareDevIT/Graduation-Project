@@ -18,7 +18,6 @@ use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
-
 class AuthController extends Controller
 {
     protected $userRegistrationService;
