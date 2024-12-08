@@ -318,7 +318,7 @@ class BookingController extends Controller
             sort($columns);
            
             // Lấy danh sách ghế đã được mua trong phòng và hàng
-            $purchasedSeats = Seats::where('showtime_id',1046 )
+            $purchasedSeats = Seats::where('showtime_id',$showtime_id )
                 ->get()->toArray();
                 Log::info('ghe', ['purchasedSeats' => $purchasedSeats]);
 
