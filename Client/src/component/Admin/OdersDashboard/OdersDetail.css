@@ -38,12 +38,12 @@ width: 700px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
   .trangthaive{
-    display: flex;
+ 
   
   }
   .trangthaive h3{
-    padding-left: 50px;
-    padding-right: 10px;
+    padding-left: 5px;
+    
   }
   /* Tạo kiểu cho bảng thông tin đơn hàng */
   .order-table {
@@ -122,6 +122,40 @@ width: 700px;
   
   .ticket-status .ant-btn:hover {
     background-color: #004c99;
+  }
+  .tongtien {
+   
+    margin-top: 20px;
+    float: right;
+    padding-top: 10px;
+    font-family: 'Arial', sans-serif;
+    
+  }
+  
+  .tongtien p {
+    margin: 5px 0;
+    font-size: 17px;
+    color: #333;
+  }
+  
+  .tongtien p strong {
+    font-weight: bold;
+    color: #000;
+  }
+  
+  .tongtien div {
+    margin-top: 5px;
+  }
+  
+  .tongtien .tongtien-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .tongtien .combos {
+    margin-left: 10px;
+    font-size: 14px;
   }
   
   /* Kiểu cho các trạng thái của vé */
