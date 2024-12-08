@@ -38,7 +38,7 @@ class RevenueController extends Controller
     }
     public function allRevenueCinema()
     {
-        $totalRevenue = $this->revenueService->allRevenueCinema('Pain');
+        $totalRevenue = $this->revenueService->allRevenueCinema('Thanh toán thành công');
         return $this->success($totalRevenue);
     }
 }
