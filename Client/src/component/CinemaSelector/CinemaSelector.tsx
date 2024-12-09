@@ -54,6 +54,8 @@ import { UserProfile } from "../../interface/UserProfile";
         try {
           const response = await instance.get("/cinema");
           setCinemas(response.data.data || []);
+          console.log('ertyui',response.data.data);
+          
         } catch (error) {
           console.error("không có dữ liệu:", error);
         }

@@ -27,7 +27,7 @@ class CinemaService
             $query->where('status', 1);
         } elseif ($user->hasRole('manager')) {
             // Manager: chỉ lấy rạp theo cinema_id của họ
-            $query->where('cinema_id', $user->cinema_id);
+            $query->where('id', $user->cinema_id);
         } elseif (!$user->hasRole('admin')) {
             // Người dùng không phải admin: chỉ lấy rạp có status = 1
             $query->where('status', 1);
