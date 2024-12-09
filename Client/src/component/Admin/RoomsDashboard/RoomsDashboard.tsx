@@ -95,7 +95,7 @@ const RoomDashboard: React.FC = () => {
             cancelText="Không"
           >
             <Button danger icon={<DeleteOutlined />} />
-          </Popconfirm>
+</Popconfirm>
         </div>
       ),
     },
