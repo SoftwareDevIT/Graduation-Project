@@ -299,13 +299,13 @@ class BookingController extends Controller
         usort($seats, function ($a, $b) {
             return strcmp($a['seat_name'], $b['seat_name']); // Sắp xếp theo tên ghế
         });
+        Log::info('Seats:'.json_encode($seats));
 
         $selectedRows = [];
         foreach ($seats as $seat) {
             preg_match('/([A-Za-z]+)(\d+)/', $seat['seat_name'], $match);
             $row = $match[1]; // Hàng
             $column = (int)$match[2]; // Cột
-
             if (!isset($selectedRows[$row])) {
                 $selectedRows[$row] = [];
             }
@@ -314,7 +314,7 @@ class BookingController extends Controller
 
         foreach ($selectedRows as $row => $columns) {
             sort($columns);
-
+            Log::info('Columns:'.json_encode($columns));
             // Lấy danh sách ghế đã được mua trong phòng và hàng
             $purchasedSeats = Seats::where('showtime_id',$showtime_id )
                 ->get()->toArray();
@@ -336,13 +336,13 @@ class BookingController extends Controller
                     $missingSeats[] = $missingSeatName;
 
 
-                    return response()->json([
-                        'status' => false,
-                        'message' => 'Please select consecutive seats without gaps.',
-                        'data' => [
-                            'missing_seat' => $missingSeatName,
-                        ]
-                    ], 402);
+                    // return response()->json([
+                    //     'status' => false,
+                    //     'message' => 'Please select consecutive seats without gaps.',
+                    //     'data' => [
+                    //         'missing_seat' => $missingSeatName,
+                    //     ]
+                    // ], 402);
 
                 }
             }
@@ -351,7 +351,10 @@ class BookingController extends Controller
             $lastColumn = end($combinedSeats);
             $maxColumn = $this->getMaxColumnForRow($row, $totalSeatsInRows);
 
-            Log::info('Combined seats:', $combinedSeats);
+            Log::info('Combined seats: ' . json_encode($combinedSeats));
+            Log::info('First column seat: ' . $firstColumn);
+            Log::info('Max column seat: ' . $maxColumn);
+
 
 
             // Kiểm tra bỏ ghế đầu hàng
