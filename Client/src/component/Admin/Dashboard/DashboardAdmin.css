@@ -27,68 +27,54 @@
 
     /* Thẻ tóm tắt */
     .summary {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
         gap: 20px;
-        margin-bottom: 30px;
-        padding-top: 20px;
-    }
-
-    .summary-card {
-        background-color: #ffffff; /* Màu nền trắng */
-        background-color: #ffffff; /* Màu nền trắng */
-        padding:30px;
-        border-radius: 12px;
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        margin: 20px 0;
+      }
+      
+      .summary-card {
+      
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        padding: 20px;
+        flex: 1 1 300px;
+        max-width: 350px;
         text-align: center;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
-        color: white; /* Màu chữ trắng để nổi bật trên nền gradient */
-    }
-
-
-    .summary-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-    }
-
-    .summary-card-header {
+      }
+      
+      .summary-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+      }
+      
+      .summary-card-header {
         display: flex;
         align-items: center;
         justify-content: center;
-    }
-
-    .summary-card-header h3 {
-        font-size: 1.5rem;
-        color: white; /* Màu chữ trắng */
-    }
-
-    .summary-icon {
-        font-size: 2rem;
-        margin-right: 20px;
-        color: #00796b; /* Xanh biển */
-        color: #00796b; /* Xanh biển */
-    }
-
-    .summary-number {
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+      
+      .summary-icon {
         font-size: 2.5rem;
-        color: white; /* Màu chữ trắng */
+        color: #4a90e2;
+      }
+      
+      .summary-card h3 {
+        font-size: 1.5rem;
+        color: #333;
+        margin: 0;
+      }
+      
+      .summary-number {
+        font-size: 2rem;
         font-weight: bold;
-    }
-
-    .summary-footer {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-top: 15px;
-        font-size: 1rem;
-        color: white; /* Màu chữ trắng */
-    }
-
-    .summary-footer .summary-change i {
-        font-size: 1.2rem;
-        margin-right: 5px;
-    }
+        color: #2c3e50;
+      }
+      
     .positive {
         color: #4caf50; /* Xanh lá */
     }

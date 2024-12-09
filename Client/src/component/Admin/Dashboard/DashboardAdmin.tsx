@@ -178,15 +178,18 @@ const doughnutOptions = {
 
   return (
     <div className="dashboard">
-      <h2 className="dashboard-title">Bảng điều khiển Admin</h2>
       <h1 className="dashboard-subtitle">{selectedCinemaName}</h1>
-      <Form.Item label="Chọn Rạp">
+      <div className="dashboard-content">
+      <Form className="filter-form" layout="inline" style={{ marginBottom: '20px' }}>
+          <Space direction="horizontal" size="middle" style={{ flexWrap: 'wrap' }}>
+            {/* Lọc theo rạp */}
+            <Form.Item label="Chọn Rạp">
               <Select
                 placeholder="Chọn rạp"
                 allowClear
                 value={selectedCinema}
                 onChange={(value) => setSelectedCinema(value)}
-                style={{ width: 270 }}
+                style={{ width: 300 }}
               >
                 <Option value="">Tất cả</Option>
                 {cinemas.map((cinema) => (
@@ -196,59 +199,67 @@ const doughnutOptions = {
                 ))}
               </Select>
             </Form.Item>
-      <div className="dashboard-content">
-      <div className="summary">
-          {/* Box 1: Weekly Sales */}
-          <div className="summary-card" style={{ background: 'linear-gradient(to right, #ffafbd, #ffc3a0)' }}>
-            <div className="summary-card-header">
-              <i className="fas fa-chart-line summary-icon"></i>
-              <h3>Tổng đơn hàng</h3>
-            </div>
-            <div className="summary-number">{totalBookings !== null ? totalBookings : 'Loading...'}</div>
-            <Form.Item label="">
+
+            {/* Lọc theo ngày */}
+            <Form.Item label="Ngày">
               <DatePicker
                 placeholder="Chọn ngày"
                 format="YYYY-MM-DD"
                 value={selectedDate}
                 onChange={(date) => setSelectedDate(date)}
-                style={{ width: 160 ,background: 'linear-gradient(to right, #ffafbd, #ffc3a0)' }}
+                style={{ width: 160 }}
               />
             </Form.Item>
-          </div>
 
-          {/* Box 2: Total Revenue */}
-          <div className="summary-card" style={{ background: 'linear-gradient(to right, #96fbc4, #96fbc4)' }}>
-            <div className="summary-card-header">
-              <i className="fas fa-map-marker-alt summary-icon"></i>
-              <h3>Doanh Thu</h3>
-            </div>
-            <div className="summary-number">{totalRevenue !== null ? `$ ${totalRevenue.toLocaleString()}` : 'Loading...'}</div>
-            <Form.Item label="">
+            {/* Lọc theo tháng */}
+            <Form.Item label="Tháng">
               <DatePicker
                 picker="month"
                 placeholder="Chọn tháng"
                 value={selectedMonth}
                 onChange={(date) => setSelectedMonth(date)}
-                style={{ width: 160,background: 'linear-gradient(to right, #96fbc4, #96fbc4)' }}
+                style={{ width: 160 }}
               />
             </Form.Item>
-          </div>
 
-          <div className="summary-card" style={{ background: 'linear-gradient(to right, #36d1dc, #5b86e5)' }}>
-            <div className="summary-card-header">
-              <i className="fas fa-map-marker-alt summary-icon"></i>
-              <h3>Tổng Doanh Thu</h3>
-            </div>
-            <div className="summary-number">{totalRevenue !== null ? `$ ${totalRevenue.toLocaleString()}` : 'Loading...'}</div>
-            <Form.Item label="">
+            {/* Lọc theo năm */}
+            <Form.Item label="Năm">
               <DatePicker
                 picker="year"
                 placeholder="Chọn năm"
                 value={selectedYear}
                 onChange={(date) => setSelectedYear(date)}
-                style={{ width: 160 ,background: 'linear-gradient(to right, #36d1dc, #5b86e5)'}}
+                style={{ width: 160 }}
               />
             </Form.Item>
+          </Space>
+    </Form>
+      <div className="summary">
+          {/* Box 1: Weekly Sales */}
+          <div className="summary-card" >
+            <div className="summary-card-header">
+            
+              <h3>Doanh Thu</h3>
+            </div>
+            <div className="summary-number">{totalBookings !== null ? totalBookings : 'Loading...'}</div>
+            
+          </div>
+
+          {/* Box 2: Total Revenue */}
+          <div className="summary-card" >
+            <div className="summary-card-header">
+        
+              <h3>Doanh Thu</h3>
+            </div>
+            <div className="summary-number">{totalRevenue !== null ? `$ ${totalRevenue.toLocaleString()}` : 'Loading...'}</div>
+          </div>
+
+          <div className="summary-card" >
+            <div className="summary-card-header">
+              
+              <h3>Doanh Thu</h3>
+            </div>
+            <div className="summary-number">{totalRevenue !== null ? `$ ${totalRevenue.toLocaleString()}` : 'Loading...'}</div>
           </div>
         </div>
         <div className="charts-container">

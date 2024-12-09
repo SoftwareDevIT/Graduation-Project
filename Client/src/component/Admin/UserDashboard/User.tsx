@@ -80,26 +80,7 @@ const UserDashboard: React.FC = () => {
             align: 'center' as const,  // Corrected here, use 'center' instead of string
             render: (text: string) => new Date(text).toLocaleDateString(),
         },
-        {
-            title: 'Hành Động',
-            key: 'action',
-            render: (_: any, user: User) => (
-                <div className="d-flex justify-content-around">
-                    <Link to={`/admin/user/edit/${user.id}`}>
-                        <Button type="primary" icon={<EditOutlined />} />
-                    </Link>
-                    <Popconfirm
-                        title="Bạn có chắc chắn muốn xóa người dùng này?"
-                        onConfirm={() => handleDelete(user.id)}
-                        okText="Có"
-                        cancelText="Không"
-                    >
-                        <Button danger icon={<DeleteOutlined />} />
-                    </Popconfirm>
-                </div>
-            ),
-            align: 'center' as const,  // Corrected here, use 'center' instead of string
-        },
+      
     ];
 
     if (error) {
