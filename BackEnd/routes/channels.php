@@ -20,6 +20,6 @@ Broadcast::channel('seats', function ($user) {
     return true; // Hoặc điều kiện xác thực nếu cần thiết
 });
 Broadcast::channel('seats-{roomId}', function ($user, $roomId) {
-    return true;
-    // return auth()->check();  // Hoặc có thể thay đổi logic để kiểm tra quyền của người dùng
+   
+    return auth()->check();  // Hoặc có thể thay đổi logic để kiểm tra quyền của người dùng
 });

@@ -158,6 +158,7 @@ function App() {
      
         <Route path="/*" element={<NotFound />} />
         <Route path="/movieticket" element={<MovieTicket/>} />
+        <Route path="/pointaccumulation" element={<Pointaccumulation/>} />
 
 
         <Route path="/filmnews" element={<FilmNews/>} />
@@ -176,43 +177,21 @@ function App() {
         <Route path="/Personal" element={<PrivateRoute><Personal /></PrivateRoute>} />
  
         <Route path="/ticketcinema" element={ <PrivateRoute><OrderHistoryApp/></PrivateRoute>} />
-
         <Route path="/ChangePassword" element={ <PrivateRoute><ChangePassword /></PrivateRoute>} />
         <Route path="/register" element={<RegisterCinema />} />
         <Route path="/login" element={<LoginCinema />} />
         <Route path="/movieshowing" element={<MovieShowing/>} />
-        <Route path="/bookingticket" element={<BookingManager/>} />
-  
-      
         <Route path="/deponsit" element={<Deponsit/>} />
         <Route path="/forgetpass" element={<ForgetPass/>} />
         <Route path="/otp" element={<Otp/>} />
         <Route path="/resetPassword" element={<ResetPasswod/>} />
-
-
-    
-
-       
-      
-    
-       
         <Route path="/upcoming-movies" element={<UpcomingMovies />} />
         <Route path="/movieshowing" element={<MovieShowing />} />
-        
-       
-
         <Route path="/deponsit" element={<Deponsit />} />
-        <Route path="/forgetpass" element={<ForgetPass />} />
         <Route path="/seat" element={<CinemaSeatSelection />} />
-
-        <Route path="/seat" element={<CinemaSeatSelection />} />
-
-
-
-        <Route path="/otp" element={<Otp />} />
         <Route path="/resetPassword" element={<ResetPassword />} />
         <Route path="/earlymovie" element={<EarlyMovie />} />
-        <Route path="/resetpass" element={<ResetPasswod />} />
+       
         
 
 

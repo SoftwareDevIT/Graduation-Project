@@ -73,7 +73,7 @@ const MovieForm: React.FC = () => {
   const [directors, setDirectors] = useState<Director[]>([]);
   const [categories, setCategories] = useState<MovieCategory[]>([]);
   const [posterFile, setPosterFile] = useState<File | null>(null);
-  const [thumbnailFile, setThumbnailFile] = useState<File | null>(null); // State for thumbnail
+const [thumbnailFile, setThumbnailFile] = useState<File | null>(null); // State for thumbnail
   const [country, setCountry] = useState<string>(''); // State for country
   const [countries, setCountries] = useState<any[]>([]); // State for country options
   const [trailer, setTrailer] = useState<string>(''); // State for trailer URL
@@ -144,7 +144,7 @@ const MovieForm: React.FC = () => {
   
     const updatedData = {
       ...data,
-      posterFile: posterFile instanceof File ? posterFile : undefined,  // Only include the file if it's new
+posterFile: posterFile instanceof File ? posterFile : undefined,  // Only include the file if it's new
       thumbnailFile: thumbnailFile instanceof File ? thumbnailFile : undefined,  // Only include the file if it's new
       country,
       trailer,
@@ -247,7 +247,7 @@ const MovieForm: React.FC = () => {
         <div className="mb-3">
           <label className="form-label">Ngày phát hành</label>
           <input
-            type="date"
+type="date"
             className="form-control"
             {...register('release_date')}
           />
@@ -340,7 +340,7 @@ const MovieForm: React.FC = () => {
        {/* Poster File */}
 <div className="mb-3">
   <label className="form-label">Poster</label>
-  {posterFile && (
+{posterFile && (
     <div className="mb-2">
       <img
         src={typeof posterFile === 'string' ? posterFile : URL.createObjectURL(posterFile)}
