@@ -69,16 +69,15 @@ font-weight: 500;
 }
 
 .phimyeuthich-container {
-  width: 900px; /* Điều chỉnh để phù hợp với banner */
+  width: 500px; /* Điều chỉnh để phù hợp với banner */
   margin: 0 auto;
   padding: 20px;
 }
 
 .phimyeuthich {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-  
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Kích thước nhỏ hơn */
+  gap: 15px; /* Điều chỉnh khoảng cách giữa các mục */
 }
 
 .item-phim {
@@ -86,41 +85,28 @@ font-weight: 500;
   flex-direction: column;
   align-items: center;
   background-color: #fff;
-  border-radius: 10px;
+  border-radius: 8px; /* Nhỏ hơn để phù hợp kích thước */
   overflow: hidden;
-  margin: 15px;
+  margin: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.item-phim:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
-}
-
-.item-phim .img {
-  width: 100%;
-  height: auto;
-  overflow: hidden;
+  padding: 10px; /* Giảm padding */
 }
 
 .item-phim .img img {
-  width: 100%;
-  height: auto;
+  width: 100px; /* Thu nhỏ kích thước ảnh */
+  height: 150px;
+  border-radius: 5px; /* Giảm độ bo tròn */
   object-fit: cover;
-  transition: transform 0.2s ease;
 }
-
-
 
 .movie-title {
-  padding: 10px;
-  font-size: 14px; /* Làm nhỏ hơn để cân đối */
-  font-weight: 600;
-  color: #333;
+  margin-top: 8px;
+  font-size: 12px !important; /* Thu nhỏ font chữ */
   text-align: center;
-  font-family: "Cerebri Sans, sans-serif";
+  font-weight: 500; /* Nhẹ hơn để cân đối */
 }
+
 
 .moveslike{
   margin-top: 16px;
