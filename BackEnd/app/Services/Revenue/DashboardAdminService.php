@@ -186,7 +186,7 @@ class DashboardAdminService
             $movieId = $book->showtime->movie->id ?? null;
             $totalPrice = $book->amount ?? 0;
             $movieName = $book->showtime->movie->movie_name ?? 'Unknown';
-            $movieImage = $book->showtime->movie->thumbnail ?? null;
+            $movieImage = $book->showtime->movie->poster ?? null;
 
             if ($movieId) {
                 if (!isset($movieRevenue[$movieId])) {
@@ -298,19 +298,17 @@ class DashboardAdminService
         ];
     }
 
-    public function monthlyRevenue($idCinema, $status = null, $year = null)
+    // chart theo tháng
+    public function monthlyRevenue($status, ?int $idCinema, ?int $year)
     {
-        // Create the initial query
         $query = Booking::query()->with('showtime.movie');
 
-        // Apply cinema filter if provided
         if (!is_null($idCinema)) {
             $query->whereHas('showtime.room.cinema', function ($subQuery) use ($idCinema) {
                 $subQuery->where('id', $idCinema);
             });
         }
 
-        // Apply status filter if provided
         if (!is_null($status)) {
             if (is_array($status)) {
                 $query->whereIn('status', $status);
@@ -319,21 +317,18 @@ class DashboardAdminService
             }
         }
 
-        // Apply year filter if provided
         if (!is_null($year)) {
             $query->whereYear('created_at', $year);
         }
 
-        // Initialize an empty array for the revenue data
         $monthlyRevenue = [];
-
-        // Loop through each month (1 to 12)
+        $booking = $query->get();
         for ($month = 1; $month <= 12; $month++) {
             $mo = Carbon::createFromDate($year, $month, 1);
-            $monthlyBookings = $query->whereMonth('created_at', $mo->month)
-                ->whereYear('created_at', $mo->year)
-                ->get();
-            
+            $monthlyBookings = $booking->filter(function ($item) use ($mo) {
+                return Carbon::parse($item->created_at)->month == $mo->month
+                    && Carbon::parse($item->created_at)->year == $mo->year;
+            });
             $totalRevenue = $monthlyBookings->sum('amount');
             $monthlyRevenue[$month] = $totalRevenue;
         }
@@ -341,27 +336,28 @@ class DashboardAdminService
         return $monthlyRevenue;
     }
 
-
-    public function revenueByDateRange($booking, $startDate = null, $endDate = null)
+    //chart theo khoảng thời gian
+    public function revenueByDateRange($booking, ?string $startDate, ?string $endDate)
     {
-
         if (is_null($startDate) || is_null($endDate)) {
             $endDate = now();
             $startDate = now()->subDays(15);
         }
-        
+        Log::info($startDate);
+        Log::info($endDate);
         $dailyRevenue = [];
-        
         $dateRange = Carbon::parse($startDate)->toPeriod(Carbon::parse($endDate));
-        
+
+        $dailyRevenue = [];
+
         foreach ($dateRange as $date) {
-            $revenueForDay = $booking
-                ->whereDate('created_at', $date->format('Y-m-d'))
-                ->sum('amount');
-        
+            $revenueForDay = $booking->filter(function ($item) use ($date) {
+                return Carbon::parse($item->created_at)->isSameDay($date); 
+            })->sum('amount');
+
             $dailyRevenue[$date->format('Y-m-d')] = $revenueForDay;
         }
-        
+
         return $dailyRevenue;
     }
 }
