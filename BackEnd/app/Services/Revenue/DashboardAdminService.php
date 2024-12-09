@@ -343,16 +343,23 @@ class DashboardAdminService
             $endDate = now();
             $startDate = now()->subDays(15);
         }
-        Log::info($startDate);
-        Log::info($endDate);
-        $dailyRevenue = [];
-        $dateRange = Carbon::parse($startDate)->toPeriod(Carbon::parse($endDate));
+        $startDate = Carbon::parse($startDate);
+        $endDate = Carbon::parse($endDate);
+
+        if ($startDate->diffInDays($endDate) > 15) {
+            throw new \Exception('Không được nhập cách nhau quá 15 ngày', 401);
+        }
+
+        Log::info("Start Date: " . $startDate->toDateString());
+        Log::info("End Date: " . $endDate->toDateString());
+
+        $dateRange = $startDate->toPeriod($endDate);
 
         $dailyRevenue = [];
 
         foreach ($dateRange as $date) {
             $revenueForDay = $booking->filter(function ($item) use ($date) {
-                return Carbon::parse($item->created_at)->isSameDay($date); 
+                return Carbon::parse($item->created_at)->isSameDay($date);
             })->sum('amount');
 
             $dailyRevenue[$date->format('Y-m-d')] = $revenueForDay;
