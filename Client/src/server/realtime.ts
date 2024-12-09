@@ -1,12 +1,22 @@
 import Echo from "laravel-echo";
 import axios from "axios";
 import Pusher from "pusher-js";
-
+import instance from ".";
+declare global {
+    interface Window {
+      Pusher: any;
+    }
+  }
+  
+  export {};
 // Hàm khởi tạo Echo với cấu hình từ API
 async function initializeEcho() {
     try {
+        // Gán Pusher vào window
+        window.Pusher = Pusher;
+
         // Gọi API lấy cấu hình từ backend
-        const response = await axios.get("http://localhost:8000/api/env-config");
+        const response = await instance.get("http://localhost:8000/api/env-config");
         const config = response.data;
 
         // Tạo kết nối với Laravel Echo
@@ -19,7 +29,7 @@ async function initializeEcho() {
             wssPort: config.PUSHER_PORT || undefined,  // Cổng WebSocket bảo mật
             enabledTransports: ["ws", "wss"],  // Cung cấp các giao thức ws và wss
             authEndpoint: "http://localhost:8000/broadcasting/auth",  // Endpoint xác thực
-            debug: true, 
+            debug: true,
         });
 
         return echo;
