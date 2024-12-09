@@ -5,7 +5,7 @@ import { message,Modal } from 'antd'; // Import message from Ant Design
 import Headerticket from '../Headerticket/Headerticket';
 import Footer from '../Footer/Footer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 
 import './OderCheckOut.css';
 import Header from '../Header/Hearder';
@@ -48,13 +48,22 @@ const OrderCheckout = () => {
     const userProfilea: UserProfile | null = JSON.parse(localStorage.getItem("user_profile") || "null");
     const userRoles = userProfilea?.roles || []; // Lấy danh sách vai trò nếu có
     const isAdmin = userRoles.length > 0 && userRoles[0]?.name === "admin";
+    const [isModalVisible, setIsModalVisible] = useState(false);
   
-      
+    const handleOk = () => {
+      setIsModalVisible(false);
+    };
 
     const toggleTableVisibility = () => {
       setIsTableVisible(!isTableVisible);
     };
-
+    const showModal = () => {
+        setIsModalVisible(true);
+    };
+   
+    const handleCancel = () => {
+        setIsModalVisible(false);
+    };
     useEffect(() => {
         if (userProfile) {
           setPointHistories(userProfile.point_histories);
@@ -76,7 +85,7 @@ const OrderCheckout = () => {
     } = (location.state as LocationState) || {};
 
     // Log selectedSeats to verify data
-    // console.log(seats);
+    console.log(seats);
     // console.log(selectedCombos); // Check if combos are passed correctly
     const handleApplyVoucher = async () => {
         if (!voucherCode) {
@@ -133,13 +142,15 @@ const OrderCheckout = () => {
             });
     
             if (response.status === 200 && response.data) {
-                const { message: successMessage, discount, final_price } = response.data;
+                const { message: successMessage, discount_value
+                    , final_price } = response.data;
     
                 // Hiển thị thông báo thành công
                 message.success(successMessage);
     
                 // Cập nhật tổng tiền và giảm giá
-                setDiscount(discount); // Nếu API trả về số tiền quy đổi từ điểm
+                setDiscount(discount_value
+                ); // Nếu API trả về số tiền quy đổi từ điểm
                 setFinalPrice(final_price); // Cập nhật lại tổng tiền sau khi trừ điểm
             } else {
                 message.error("Không thể sử dụng điểm. Vui lòng kiểm tra lại.");
@@ -159,7 +170,7 @@ const OrderCheckout = () => {
     };
     // State for payment method
     const [pay_method_id, setPaymentMethod] = useState<number | null>(null); // Khởi tạo pay_method_id với null
-    const [timeLeft, setTimeLeft] = useState(30000000);
+    const [timeLeft, setTimeLeft] = useState(300);
     useEffect(() => {
         const timer = setInterval(() => {
             setTimeLeft((prevTime) => {
@@ -212,6 +223,7 @@ const OrderCheckout = () => {
         }
     
         const seatsData = seats.map((seat: any) => ({
+            seat_id:seat.id,
             seat_name: seat.seat_name,
             room_id: roomId,
             showtime_id: showtimeId,
@@ -235,7 +247,6 @@ const OrderCheckout = () => {
         }
     
         try {
-
             let response;
     
             if (isAdmin) {
@@ -254,38 +265,41 @@ const OrderCheckout = () => {
                 });
             }
     
-            if (response.data && response.data.status === true) {
-                // Hiển thị modal với thông tin đơn hàng
-                const bookingInfo = response.data.booking[0]; // Giả sử dữ liệu trả về nằm trong mảng booking
-                
-                // Nếu là admin, hiển thị thông tin đơn hàng trong modal
-                Modal.success({
-                    title: 'Đặt vé thành công!',
-                    content: (
-                        <div>
-                            <p><strong>Thông tin đơn hàng:</strong></p>
-                            <p><strong>Mã đơn hàng:</strong> {bookingInfo.booking_id}</p>
-                            <p><strong>Tên khách hàng:</strong> {bookingInfo.user_name}</p>
-                            <p><strong>Email:</strong> {bookingInfo.email}</p>
-                            <p><strong>Số ghế:</strong> {seats.map((seat: any) => seat.seat_name).join(', ')}</p>
-                            <p><strong>Tổng tiền:</strong> {finalPrice || totalPrice} VNĐ</p>
-                        </div>
-                    ),
-                    okText: 'Xác nhận đơn hàng',
-                    onOk: () => {
-                        // Chuyển hướng về trang chủ nếu là admin
-                        window.location.href = `/admin/ordersdetail/${bookingInfo.booking_id}`;
-                    },
-                });
-
-            } else {
-                message.error("Có lỗi xảy ra khi đặt vé.");
+            if (response.data) {
+                if (isAdmin) {
+                    const bookingInfo = response.data.booking[0]; // Truy xuất phần tử đầu tiên của mảng booking
+                    
+                    // Hiển thị modal cho admin với thông tin đơn hàng
+                    Modal.success({
+                        title: 'Đặt vé thành công!',
+                        content: (
+                            <div>
+                                <p><strong>Thông tin đơn hàng:</strong></p>
+                                <p><strong>Mã đơn hàng:</strong> {bookingInfo.booking_code}</p>
+                                <p><strong>Tên khách hàng:</strong> {bookingInfo.user_name}</p>
+                                <p><strong>Email:</strong> {bookingInfo.email}</p>
+                                <p><strong>Số ghế:</strong> {seats.map((seat: any) => seat.seat_name).join(', ')}</p>
+                                <p><strong>Tổng tiền:</strong> {finalPrice || totalPrice} VNĐ</p>
+                            </div>
+                        ),
+                        okText: 'Xác nhận đơn hàng',
+                        onOk: () => {
+                            // Chuyển hướng về trang chi tiết đơn hàng của admin
+                            window.location.href = `/admin/ordersdetail/${bookingInfo.booking_id}`;
+                        },
+                    });
+                } else {
+                    const redirectUrl = response.data.Url.original.url;
+                    window.location.href = redirectUrl;  // Chuyển hướng về trang thanh toán nếu là người dùng
+                }
             }
         } catch (error) {
             message.error("Có lỗi xảy ra khi đặt vé.");
             console.error("Error during booking:", error);
         }
     };
+    
+    
     
 
     return (
@@ -330,90 +344,118 @@ const OrderCheckout = () => {
                                 ))} 
                             </div>
                         )}
-                <div className="voucher-section">
-                        <h4 onClick={() => setIsVoucherVisible(!isVoucherVisible)}>
-                            Nhập mã voucher
-                        </h4>
+                       
+                       {!isAdmin && ( // Kiểm tra nếu không phải là admin mới hiển thị toàn bộ phần này
+    <div className="voucher-section">
+        <h4 onClick={() => setIsVoucherVisible(!isVoucherVisible)}>
+            Nhập mã voucher
+        </h4>
 
-                        {isVoucherVisible && (
-                            <>
-                                <input
-                                    type="text"
-                                    placeholder="Nhập mã voucher"
-                                    value={voucherCode}
-                                    onChange={(e) => setVoucherCode(e.target.value)}
-                                    className="voucher-input"
-                                />
-                                <button className="apply-voucher-btn" onClick={handleApplyVoucher}>
-                                    Áp dụng
-                                </button>
-                                {voucherApplied && (
-                                    <button className="apply-voucher-btn-1" onClick={handleRemoveVoucher}>
-                                        Xóa voucher
-                                    </button>
-                                )}
-                            </>
-                        )}
-                    </div>
-                    <div>
-      {/* Thêm sự kiện onClick vào <h3> */}
-      <h4 onClick={toggleTableVisibility} className='diemgiamgia'>Điểm giảm giá FlickHive</h4>
-
-      {/* Bảng khung-diem-poly chỉ hiển thị khi isTableVisible là true */}
-      {isTableVisible && (
-        <div className="khung-diem-poly">
-          <table>
-            <thead>
-              <tr>
-                <th>Điểm hiện có</th>
-                <th>Nhập Điểm</th>
-                <th>Thao tác</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{userProfile?.points || "0"}</td>
-                <td><input
-                    type="number"
-                    value={pointsToUse}
-                    onChange={(e) => setPointsToUse(e.target.value)}
-                    placeholder="Nhập số điểm"
-                  /></td>
-                <td><button onClick={handleUsePoints}>Áp dụng</button></td>
-              </tr>
-            
-        
-            </tbody>
-          </table>
-        </div>
-      )}
-    </div>
-
-
-
-
-        <div className="order-total">
-    <span className="total-title">Tổng </span>
-    <span className="total-price">{totalPrice?.toLocaleString('vi-VN')} đ</span>
-</div>
-{discount && (
-    <div className="order-discount">
-        <span className="total-title">Giảm giá:</span>
-        <span className="total-title"> -{discount.toLocaleString('vi-VN')} đ</span>
+        {isVoucherVisible && (
+            <>
+                <input
+                    type="text"
+                    placeholder="Nhập mã voucher"
+                    value={voucherCode}
+                    onChange={(e) => setVoucherCode(e.target.value)}
+                    className="voucher-input"
+                />
+                <button className="apply-voucher-btn" onClick={handleApplyVoucher}>
+                    Áp dụng
+                </button>
+                {voucherApplied && (
+                    <button className="apply-voucher-btn-1" onClick={handleRemoveVoucher}>
+                        Xóa voucher
+                    </button>
+                )}
+            </>
+        )}
     </div>
 )}
-<div className="order-final">
-    <span className="total-title2">Tổng sau giảm:</span>
-    <span className="total-title3">
-        {(finalPrice || totalPrice)?.toLocaleString('vi-VN')} đ
+
+{!isAdmin && ( 
+    <div>
+       
+        <h4 onClick={toggleTableVisibility} className='diemgiamgia'>Điểm giảm giá FlickHive
+      <FontAwesomeIcon icon={faQuestionCircle} style={{ marginLeft: '10px', cursor: 'pointer' }} onClick={showModal} />
+      </h4>
+
+    
+        {isTableVisible && (
+            <div className="khung-diem-poly">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Điểm hiện có</th>
+                            <th>Nhập Điểm</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{userProfile?.points || "0"}</td>
+                            <td>
+                                <input
+                                    type="number"
+                                    value={pointsToUse}
+                                    onChange={(e) => setPointsToUse(e.target.value)}
+                                    placeholder="Nhập số điểm"
+                                />
+                            </td>
+                            <td>
+                                <button onClick={handleUsePoints}>Áp dụng</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        )}
+    </div>
+    
+)}
+ <Modal
+                    title="Hướng Dẫn Quy Đổi Điểm"
+                    visible={isModalVisible}
+                    onOk={handleOk}
+                    onCancel={handleCancel}
+                    cancelButtonProps={{ style: { display: 'none' } }}
+                >
+                    <p>Quy trình quy đổi điểm của FlickHive:</p>
+                    <ul>
+                        <li>Sử dụng điểm để giảm giá trực tiếp vào đơn hàng.</li>
+                        <li>Mỗi 1000 điểm tương đương với 1000VND</li>
+                        <li>Bạn có thể nhập số điểm cần sử dụng để giảm giá cho đơn hàng.</li>
+                        <li>Lưu ý: Số điểm không được vượt quá tổng giá trị đơn hàng.</li>
+                    </ul>
+                    <p>Chúc bạn có trải nghiệm tốt!</p>
+                </Modal>
+<div>
+    
+  <div className="order-total d-flex justify-content-between">
+    <span className="total-title">Tổng</span>
+    <span className="total-price">{totalPrice?.toLocaleString('vi-VN')} đ</span>
+  </div>
+  {discount && (
+  <div className="order-discount d-flex justify-content-between">
+    <span className="total-title">Giảm giá:</span>
+    <span className="total-title"> -{discount.toLocaleString('vi-VN')} đ</span>
+  </div>
+  )}
+  <div className="order-final d-flex justify-content-between">
+    <span className="total-title">Tổng sau giảm:</span>
+    <span className="total-titlee">
+      {(finalPrice || totalPrice)?.toLocaleString('vi-VN')} đ
     </span>
+  </div>
 </div>
+
+
 
                     </div>
 
+                
 
-                    {!
-                    isAdmin ? (
+                    {!  isAdmin ? (
     // Admin-specific content
     <div className="payment-methods">
         <h3>Hình thức thanh toán</h3>
