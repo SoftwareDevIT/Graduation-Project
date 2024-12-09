@@ -27,7 +27,7 @@ const OrderCheckout = () => {
     const [pointsToUse, setPointsToUse] = useState(""); // Số điểm nhập
     const userProfilea: UserProfile | null = JSON.parse(localStorage.getItem("user_profile") || "null");
     const userRoles = userProfilea?.roles || []; // Lấy danh sách vai trò nếu có
-    const isAdmin = userRoles.length > 0 && userRoles[0]?.name === "admin";
+    const isAdmin = userRoles.length > 0 && userRoles[0]?.name === "staff";
     const [isModalVisible, setIsModalVisible] = useState(false);
    
     const [isPointsUsed, setIsPointsUsed] = useState(false); // Flag to track if points have been used
@@ -50,7 +50,7 @@ const OrderCheckout = () => {
             setIsPointsUsed(false); // Reset usage flag if user profile changes
         }
     }, [userProfile]);
-    
+    console.log("data",userProfile)
     
     const navigate = useNavigate();
     const {
@@ -66,7 +66,7 @@ const OrderCheckout = () => {
     } = (location.state as LocationState) || {};
 
     // Log selectedSeats to verify data
-    console.log(seats);
+    // console.log(seats);
     // console.log(selectedCombos); // Check if combos are passed correctly
     const handleApplyVoucher = async () => {
         if (!voucherCode) {

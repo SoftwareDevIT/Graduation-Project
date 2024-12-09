@@ -159,6 +159,8 @@ class RankService
         $total = $booking->amount;
         // $rank = $user->rank;
         $pointsEarned = $total * ($user->rank->percent_discount / 100);
+        $user->points += $pointsEarned;
+        $user->save();
         PointHistory::create([
             'user_id' => $user->id,
             'points_earned' => $pointsEarned,

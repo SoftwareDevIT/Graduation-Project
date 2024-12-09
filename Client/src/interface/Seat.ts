@@ -6,5 +6,5 @@
     column: number;
     status: number;
     linkedSeat?: string;
-    
+    isSelected?: boolean; 
   }
