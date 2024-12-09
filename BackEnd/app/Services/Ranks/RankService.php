@@ -103,7 +103,7 @@ class RankService
                 'user_id' => $user->id,
                 'points_used' => $pointsToUse,
                 'points_earned' => 0,
-                'type' => 'used',
+                'type' => 'Tiêu điểm',
             ]);
         // });
 
@@ -164,7 +164,7 @@ class RankService
         PointHistory::create([
             'user_id' => $user->id,
             'points_earned' => $pointsEarned,
-            'type' => 'earned',
+            'type' => 'Tích điểm',
         ]);
     }
 }

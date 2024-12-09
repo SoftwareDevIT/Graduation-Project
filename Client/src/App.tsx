@@ -129,6 +129,7 @@ import MyMapComponent from "./component/GG map/Ggmap";
 
 import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
 import OrderHistoryApp from "./component/PersonalPage/MovieTicket";
+import BookingManager from "./component/TicketandSeat/BookingManager";
 
 function App() {
 

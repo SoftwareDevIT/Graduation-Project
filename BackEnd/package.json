@@ -13,6 +13,6 @@
     "dependencies": {
         "laravel-echo": "^1.17.1",
         "pusher-js": "^8.4.0-rc2",
-        "ws": "^8.18.0"
+        "ws": "^8.18.0" 
     }
 }

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\Store\StoreUserRequest;
 use App\Http\Requests\Update\UpdateUserRequest;
+use App\Models\Booking;
 use App\Models\Rank;
 use App\Models\User;
 use App\Services\Auth\LoginService;
@@ -17,7 +18,6 @@ use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
-use App\Models\Booking;
 class AuthController extends Controller
 {
     protected $userRegistrationService;
