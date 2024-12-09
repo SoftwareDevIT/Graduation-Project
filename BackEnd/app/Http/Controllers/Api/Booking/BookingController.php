@@ -317,7 +317,6 @@ class BookingController extends Controller
             // Lấy danh sách ghế đã được mua trong phòng và hàng
             $purchasedSeats = Seats::where('room_id', $seats[0]['room_id'])
                 ->get()->toArray();
-            Log::info($purchasedSeats);
             // Tạo danh sách hợp nhất các ghế (cột) đã mua và đang chọn
             $purchasedColumns = array_map(fn($seat) => $seat['seat_column'], $purchasedSeats);
             $combinedSeats = array_merge($purchasedColumns, $columns);
