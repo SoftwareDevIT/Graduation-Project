@@ -26,6 +26,7 @@ import { UserProfile } from "../../interface/UserProfile";
     const userProfilea: UserProfile | null = JSON.parse(localStorage.getItem("user_profile") || "null");
     const userRoles = userProfilea?.roles || [];
     const isAdmin = userRoles.length > 0 && userRoles[0]?.name === "admin";
+    
   
     const navigate = useNavigate();
     

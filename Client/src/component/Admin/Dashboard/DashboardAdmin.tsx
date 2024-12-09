@@ -14,8 +14,8 @@ import {
 } from "chart.js";
 import "@fortawesome/fontawesome-free/css/all.min.css"; // Import FontAwesome
 import instance from "../../../server";
-import { Button, DatePicker, Form, Select, Space } from "antd";
-import { Booking } from "../../../interface/Booking";
+import { Button, DatePicker, Form, Pagination, Select, Space } from "antd";
+
 import dayjs, { Dayjs } from "dayjs"; // Import dayjs for date handling
 import { Cinema } from "../../../interface/Cinema";
 
@@ -45,6 +45,8 @@ const DashboardAdmin = () => {
   const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
   const [selectedMonth, setSelectedMonth] = useState<Dayjs | null>(null); 
   const [selectedYear, setSelectedYear] = useState<Dayjs | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const { Option } = Select;
   const { RangePicker } = DatePicker;
 
@@ -124,7 +126,7 @@ const doughnutOptions = {
   cutout: '70%',
   plugins: {
     legend: {
-      position: "right",
+      position: 'top' as 'chartArea',
       labels: {
         boxWidth: 20,
       },
@@ -165,49 +167,26 @@ const doughnutOptions = {
     },
     responsive: true, 
   };
-  
+  const selectedCinemaName = selectedCinema
+  ? cinemas.find((cinema) => cinema.id === selectedCinema)?.cinema_name || "Rạp không xác định"
+  : "Tất cả các rạp";
+
+  const paginatedBookings = bookings.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
 
   return (
     <div className="dashboard">
       <h2 className="dashboard-title">Bảng điều khiển Admin</h2>
-      <div className="dashboard-content">
-      <div className="summary">
-          {/* Box 1: Weekly Sales */}
-          <div className="summary-card" style={{ background: 'linear-gradient(to right, #ffafbd, #ffc3a0)' }}>
-            <div className="summary-card-header">
-              <i className="fas fa-chart-line summary-icon"></i>
-              <h3>Tổng đơn hàng</h3>
-            </div>
-            <div className="summary-number">{totalBookings !== null ? totalBookings : 'Loading...'}</div>
-          </div>
-
-          {/* Box 2: Total Revenue */}
-          <div className="summary-card" style={{ background: 'linear-gradient(to right, #96fbc4, #96fbc4)' }}>
-            <div className="summary-card-header">
-              <i className="fas fa-map-marker-alt summary-icon"></i>
-              <h3>Doanh Thu</h3>
-            </div>
-            <div className="summary-number">{totalRevenue !== null ? `$ ${totalRevenue.toLocaleString()}` : 'Loading...'}</div>
-          </div>
-
-          <div className="summary-card" style={{ background: 'linear-gradient(to right, #36d1dc, #5b86e5)' }}>
-            <div className="summary-card-header">
-              <i className="fas fa-map-marker-alt summary-icon"></i>
-              <h3>Tổng Doanh Thu</h3>
-            </div>
-            <div className="summary-number">{totalRevenue !== null ? `$ ${totalRevenue.toLocaleString()}` : 'Loading...'}</div>
-          </div>
-        </div>
-      <Form className="filter-form" layout="inline" style={{ marginBottom: '20px' }}>
-          <Space direction="horizontal" size="middle" style={{ flexWrap: 'wrap' }}>
-            {/* Lọc theo rạp */}
-            <Form.Item label="Chọn Rạp">
+      <h1 className="dashboard-subtitle">{selectedCinemaName}</h1>
+      <Form.Item label="Chọn Rạp">
               <Select
                 placeholder="Chọn rạp"
                 allowClear
                 value={selectedCinema}
                 onChange={(value) => setSelectedCinema(value)}
-                style={{ width: 160 }}
+                style={{ width: 270 }}
               >
                 <Option value="">Tất cả</Option>
                 {cinemas.map((cinema) => (
@@ -217,70 +196,61 @@ const doughnutOptions = {
                 ))}
               </Select>
             </Form.Item>
-
-            {/* Lọc theo trạng thái */}
-            <Form.Item label="Trạng Thái">
-              <Select
-                placeholder="Chọn trạng thái"
-                value={selectedStatus}
-                onChange={(value) => setSelectedStatus(value)}
-                allowClear
-                style={{ width: 160 }}
-              >
-                <Option value="Pain">Pain</Option>
-                <Option value="Pending">Pending</Option>
-                <Option value="Confirmed">Confirmed</Option>
-              </Select>
-            </Form.Item>
-
-            {/* Lọc theo ngày bắt đầu và ngày kết thúc */}
-            <Form.Item label="Ngày Bắt Đầu & Kết Thúc">
-              <RangePicker
-                format="YYYY-MM-DD"
-                value={selectedDateRange}
-                onChange={(dates) => setSelectedDateRange(dates)}
-                style={{ width: 240 }}
-              />
-            </Form.Item>
-
-            {/* Lọc theo ngày */}
-            <Form.Item label="Ngày">
+      <div className="dashboard-content">
+      <div className="summary">
+          {/* Box 1: Weekly Sales */}
+          <div className="summary-card" style={{ background: 'linear-gradient(to right, #ffafbd, #ffc3a0)' }}>
+            <div className="summary-card-header">
+              <i className="fas fa-chart-line summary-icon"></i>
+              <h3>Tổng đơn hàng</h3>
+            </div>
+            <div className="summary-number">{totalBookings !== null ? totalBookings : 'Loading...'}</div>
+            <Form.Item label="">
               <DatePicker
                 placeholder="Chọn ngày"
                 format="YYYY-MM-DD"
                 value={selectedDate}
                 onChange={(date) => setSelectedDate(date)}
-                style={{ width: 160 }}
+                style={{ width: 160 ,background: 'linear-gradient(to right, #ffafbd, #ffc3a0)' }}
               />
             </Form.Item>
+          </div>
 
-            {/* Lọc theo tháng */}
-            <Form.Item label="Tháng">
+          {/* Box 2: Total Revenue */}
+          <div className="summary-card" style={{ background: 'linear-gradient(to right, #96fbc4, #96fbc4)' }}>
+            <div className="summary-card-header">
+              <i className="fas fa-map-marker-alt summary-icon"></i>
+              <h3>Doanh Thu</h3>
+            </div>
+            <div className="summary-number">{totalRevenue !== null ? `$ ${totalRevenue.toLocaleString()}` : 'Loading...'}</div>
+            <Form.Item label="">
               <DatePicker
                 picker="month"
                 placeholder="Chọn tháng"
                 value={selectedMonth}
                 onChange={(date) => setSelectedMonth(date)}
-                style={{ width: 160 }}
+                style={{ width: 160,background: 'linear-gradient(to right, #96fbc4, #96fbc4)' }}
               />
             </Form.Item>
+          </div>
 
-            {/* Lọc theo năm */}
-            <Form.Item label="Năm">
+          <div className="summary-card" style={{ background: 'linear-gradient(to right, #36d1dc, #5b86e5)' }}>
+            <div className="summary-card-header">
+              <i className="fas fa-map-marker-alt summary-icon"></i>
+              <h3>Tổng Doanh Thu</h3>
+            </div>
+            <div className="summary-number">{totalRevenue !== null ? `$ ${totalRevenue.toLocaleString()}` : 'Loading...'}</div>
+            <Form.Item label="">
               <DatePicker
                 picker="year"
                 placeholder="Chọn năm"
                 value={selectedYear}
                 onChange={(date) => setSelectedYear(date)}
-                style={{ width: 160 }}
+                style={{ width: 160 ,background: 'linear-gradient(to right, #36d1dc, #5b86e5)'}}
               />
             </Form.Item>
-               {/* Nút xuất Excel */}
-               <Button type="primary" onClick={exportToExcel} block style={{ width: 180 }}>
-              Export to Excel
-            </Button>
-          </Space>
-    </Form>
+          </div>
+        </div>
         <div className="charts-container">
           <div className="quarterly-revenue">
             <h3>Doanh Thu Phim Theo Rạp</h3>
@@ -294,8 +264,7 @@ const doughnutOptions = {
   <h3>Doanh Thu Phim Theo Rạp</h3>
   <div className="revenue-chart">
     <Doughnut
-      data={doughnutData}  // Dữ liệu từ movieRevenue
-      
+      data={doughnutData} options={doughnutOptions}  // Dữ liệu từ movieRevenue
     />
   </div>
   <p className="revenue-amount">{totalRevenue ? `${totalRevenue.toLocaleString()}VNĐ` : 'Loading...'}</p>
@@ -305,7 +274,37 @@ const doughnutOptions = {
 
         {/* Thêm bảng vào dưới biểu đồ */}
         <div className="recent-orders">
-          <h3>Đơn hàng gần đây</h3>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <h3>Đơn hàng gần đây</h3>
+    <Form.Item label="">
+              <RangePicker
+                format="YYYY-MM-DD"
+                value={selectedDateRange}
+                onChange={(dates) => setSelectedDateRange(dates)}
+                style={{ width: 240 }}
+              />
+            </Form.Item>
+    <Form.Item label="">
+              <Select
+                placeholder="Chọn trạng thái"
+                value={selectedStatus}
+                onChange={(value) => setSelectedStatus(value)}
+                allowClear
+                style={{ width: 160 }}
+              >
+                <Option value="Thanh toán thành công">Thanh toán thành công</Option>
+                <Option value="Thanh toán thất bại">Thanh toán thất bại</Option>
+                <Option value="Đã hủy">Đã hủy</Option>
+                <Option value="Đang xử lý">Đang xử lý</Option>
+                <Option value="Đã in vé">Đã in vé</Option>
+              </Select>
+            </Form.Item>
+            <Form.Item label="">
+            <Button type="primary" onClick={exportToExcel} block style={{ width: 180 }}>
+      Export to Excel
+    </Button>
+            </Form.Item>
+  </div>
           <table>
             <thead>
               <tr>
@@ -321,8 +320,8 @@ const doughnutOptions = {
               </tr>
             </thead>
             <tbody>
-              {bookings.length > 0 ? (
-                bookings.map((booking: any) => (
+              {paginatedBookings.length > 0 ? (
+                paginatedBookings.map((booking: any) => (
                   <tr key={booking.booking_id}>
                     <td>{booking.booking_id}</td>
                     <td>{booking.user_name}</td>
@@ -348,6 +347,18 @@ const doughnutOptions = {
               )}
             </tbody>
           </table>
+          <div style={{ marginTop: '20px', textAlign: 'right' }} className="d-flex justify-content-center mt-4">
+        <Pagination
+          current={currentPage}
+          pageSize={pageSize}
+          total={bookings.length}
+          onChange={(page, size) => {
+            setCurrentPage(page);
+            setPageSize(size);
+          }}
+          showSizeChanger
+        />
+      </div>
         </div>
       </div>
     </div>

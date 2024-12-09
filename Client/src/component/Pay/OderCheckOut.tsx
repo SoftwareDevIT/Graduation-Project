@@ -49,6 +49,10 @@ const OrderCheckout = () => {
     const userRoles = userProfilea?.roles || []; // Lấy danh sách vai trò nếu có
     const isAdmin = userRoles.length > 0 && userRoles[0]?.name === "admin";
     const [isModalVisible, setIsModalVisible] = useState(false);
+  
+    const handleOk = () => {
+      setIsModalVisible(false);
+    };
 
     const toggleTableVisibility = () => {
       setIsTableVisible(!isTableVisible);
@@ -56,9 +60,7 @@ const OrderCheckout = () => {
     const showModal = () => {
         setIsModalVisible(true);
     };
-    const handleOk = () => {
-        setIsModalVisible(false);
-    };
+   
     const handleCancel = () => {
         setIsModalVisible(false);
     };
@@ -441,7 +443,7 @@ const OrderCheckout = () => {
   )}
   <div className="order-final d-flex justify-content-between">
     <span className="total-title">Tổng sau giảm:</span>
-    <span className="total-title">
+    <span className="total-titlee">
       {(finalPrice || totalPrice)?.toLocaleString('vi-VN')} đ
     </span>
   </div>
