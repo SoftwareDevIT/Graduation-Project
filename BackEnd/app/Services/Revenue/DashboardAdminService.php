@@ -33,7 +33,7 @@ class DashboardAdminService
         // Lọc theo khoảng thời gian
         if (!is_null($startDate) && !is_null($endDate)) {
             try {
-                
+
                 $start = Carbon::parse($startDate)->startOfDay();
                 $end = Carbon::parse($endDate)->endOfDay();
                 if ($start->lessThanOrEqualTo($end)) {
@@ -156,5 +156,186 @@ class DashboardAdminService
             'total_amount' => $totalAmount,
             'booking_count' => $bookingCount
         ];
+    }
+
+
+    public function revenuebooking($idCinema, $status = null)
+    {
+        $query = Booking::query()->with('showtime.movie');
+
+        if (!is_null($idCinema)) {
+            $query->whereHas('showtime.room.cinema', function ($subQuery) use ($idCinema) {
+                $subQuery->where('id', $idCinema);
+            });
+        }
+        if (!is_null($status)) {
+            if (is_array($status)) {
+                $query->whereIn('status', $status);
+            } else {
+                $query->where('status', $status);
+            }
+        }
+        return $query->get();
+    }
+
+    public function movierevenue($booking)
+    {
+        $movieRevenue = [];
+
+        foreach ($booking as $book) {
+            $movieId = $book->showtime->movie->id ?? null;
+            $totalPrice = $book->amount ?? 0;
+            $movieName = $book->showtime->movie->movie_name ?? 'Unknown';
+            $movieImage = $book->showtime->movie->thumbnail ?? null;
+
+            if ($movieId) {
+                if (!isset($movieRevenue[$movieId])) {
+                    $movieRevenue[$movieId] = [
+                        'movie_id' => $movieId,
+                        'movie_name' => $movieName,
+                        'movie_image' => $movieImage,
+                        'total_revenue' => 0,
+                        'showtime_count' => 0,
+                    ];
+                }
+
+                $movieRevenue[$movieId]['total_revenue'] += $totalPrice;
+                $movieRevenue[$movieId]['showtime_count'] += 1;
+            }
+        }
+
+        return array_values($movieRevenue);
+    }
+
+    public function dayrevenue($booking, $day)
+    {
+        $selectedDate = Carbon::createFromFormat('d-m-Y', $day);
+        $previousDate = $selectedDate->copy()->subDay();
+
+        $revenueToday = 0;
+        $revenueYesterday = 0;
+
+        foreach ($booking as $book) {
+            $bookingDate = Carbon::parse($book->created_at);
+
+            if ($bookingDate->isSameDay($selectedDate)) {
+                $revenueToday += $book->total_price;
+            }
+
+            if ($bookingDate->isSameDay($previousDate)) {
+                $revenueYesterday += $book->total_price;
+            }
+        }
+
+        $percentageChange = $revenueYesterday > 0
+            ? (($revenueToday - $revenueYesterday) / $revenueYesterday) * 100
+            : ($revenueToday > 0 ? 100 : 0);
+
+        return [
+            'current_revenue' => $revenueToday, // ngày được chọn
+            'previous_revenue' => $revenueYesterday, // ngàyngày trước ngày được chọn 
+            'percentage_change' => round($percentageChange, 2), // tỉ lệ tăng giảm
+        ];
+    }
+
+    public function monthrevenue($booking, $month)
+    {
+        $selectedMonth = Carbon::createFromFormat('m-Y', $month);
+        $previousMonth = $selectedMonth->copy()->subMonth();
+        $revenueThisMonth = 0;
+        $revenueLastMonth = 0;
+
+        foreach ($booking as $book) {
+            $bookingDate = Carbon::parse($book->created_at);
+
+            if ($bookingDate->month == $selectedMonth->month && $bookingDate->year == $selectedMonth->year) {
+                $revenueThisMonth += $book->total_price;
+            }
+            if ($bookingDate->month == $previousMonth->month && $bookingDate->year == $previousMonth->year) {
+                $revenueLastMonth += $book->total_price;
+            }
+        }
+
+        $percentageChange = $revenueLastMonth > 0
+            ? (($revenueThisMonth - $revenueLastMonth) / $revenueLastMonth) * 100
+            : ($revenueThisMonth > 0 ? 100 : 0);
+
+        return [
+            'current_revenue' => $revenueThisMonth, // Tháng được chọn
+            'previous_revenue' => $revenueLastMonth, // Tháng trước đó
+            'percentage_change' => round($percentageChange, 2), // tỉ lệ tăng giảm
+        ];
+    }
+
+    public function yearrevenue($booking, $year)
+    {
+        $selectedYear = Carbon::create($year, 1, 1); // Năm được chọn
+        $previousYear = $selectedYear->copy()->subYear(); // Năm trước đó
+
+        $revenueThisYear = 0;
+        $revenueLastYear = 0;
+
+        foreach ($booking as $book) {
+            $bookingDate = Carbon::parse($book->created_at);
+
+            if ($bookingDate->year == $selectedYear->year) {
+                $revenueThisYear += $book->total_price;
+            }
+
+            if ($bookingDate->year == $previousYear->year) {
+                $revenueLastYear += $book->total_price;
+            }
+        }
+
+        $percentageChange = $revenueLastYear > 0
+            ? (($revenueThisYear - $revenueLastYear) / $revenueLastYear) * 100
+            : ($revenueThisYear > 0 ? 100 : 0);
+
+        return [
+            'current_revenue' => $revenueThisYear, // Năm được chọn
+            'previous_revenue' => $revenueLastYear, // Năm trước đó
+            'percentage_change' => round($percentageChange, 2), // tỉ lệ tăng giảm
+        ];
+    }
+
+    public function monthlyRevenue($booking, $year)
+    {
+
+        $booking->whereYear('created_at', $year);
+
+
+        $monthlyRevenue = [];
+
+        for ($month = 1; $month <= 12; $month++) {
+            $monthlyBookings = $booking->whereMonth('created_at', $month)->get();
+            $totalRevenue = $monthlyBookings->sum('amount');
+            $monthlyRevenue[$month] = $totalRevenue;
+        }
+
+        return $monthlyRevenue;
+    }
+
+    public function revenueByDateRange($booking,$startDate = null, $endDate = null)
+    {
+
+        if (is_null($startDate) || is_null($endDate)) {
+
+            $endDate = now(); 
+            $startDate = now()->subDays(15); 
+        }
+
+        $dailyRevenue = [];
+
+        $dateRange = Carbon::parse($startDate)->toPeriod(Carbon::parse($endDate));
+
+        foreach ($dateRange as $date) {
+            $revenueForDay = $booking
+                ->whereDate('created_at', $date->format('Y-m-d'))
+                ->sum('amount');
+
+            $dailyRevenue[$date->format('Y-m-d')] = $revenueForDay;
+        }
+
+        return $dailyRevenue;
     }
 }
