@@ -57,9 +57,9 @@ class DashboardAdminController extends Controller
         $cinema_id = $request->query('cinema_id');
         $start_date = $request->query('start_date');
         $end_date = $request->query('end_date');
-        $month = $request->query('month', now()->format('m-Y')); 
+        $month = $request->query('month', now()->format('Y-m')); 
         $year = $request->query('year', now()->year);             
-        $day = $request->query('day', now()->format('d-m-Y')); 
+        $day = $request->query('day', now()->format('Y-m-d')); 
 
         // Gọi hàm lọc từ service
         if (empty($status)) {
@@ -77,8 +77,8 @@ class DashboardAdminController extends Controller
         $monthRevenue = $this->dashboardAdminService->monthrevenue($bookingRevenue,$month);
         $yearRevenue = $this->dashboardAdminService->yearrevenue($bookingRevenue,$year);
 
-        $monthlyRevenueChart = $this->dashboardAdminService->monthlyRevenue($bookingRevenue,$year);
-        $dailyRevenueChart = $this->dashboardAdminService->revenueByDateRange($bookingRevenue,$start_date, $end_date);
+        // $monthlyRevenueChart = $this->dashboardAdminService->monthlyRevenue($status,$cinema_id,$year);
+        // $dailyRevenueChart = $this->dashboardAdminService->revenueByDateRange($bookingRevenue,$start_date, $end_date);
 
         
        
@@ -89,8 +89,8 @@ class DashboardAdminController extends Controller
             'month_revenue' => $monthRevenue,
             'year_revenue' => $yearRevenue,
             // 'chart' => $total,
-            'monthly_revenue_chart' => $monthlyRevenueChart,
-            'daily_revenue_chart' => $dailyRevenueChart,
+            // 'monthly_revenue_chart' => $monthlyRevenueChart,
+            // 'daily_revenue_chart' => $dailyRevenueChart,
             'booking_revenue' => $bookingRevenue,
             'movie_revenue' => $movieRevenue,
         ], 200);

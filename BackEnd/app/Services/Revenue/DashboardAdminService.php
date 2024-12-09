@@ -159,7 +159,7 @@ class DashboardAdminService
     }
 
 
-    public function revenuebooking($idCinema, $status = null)
+    public function revenuebooking($status, ?int $idCinema)
     {
         $query = Booking::query()->with('showtime.movie');
 
@@ -209,7 +209,7 @@ class DashboardAdminService
 
     public function dayrevenue($booking, $day)
     {
-        $selectedDate = Carbon::createFromFormat('d-m-Y', $day);
+        $selectedDate = Carbon::createFromFormat('Y-m-d', $day);
         $previousDate = $selectedDate->copy()->subDay();
 
         $revenueToday = 0;
@@ -219,11 +219,11 @@ class DashboardAdminService
             $bookingDate = Carbon::parse($book->created_at);
 
             if ($bookingDate->isSameDay($selectedDate)) {
-                $revenueToday += $book->total_price;
+                $revenueToday += $book->amount;
             }
 
             if ($bookingDate->isSameDay($previousDate)) {
-                $revenueYesterday += $book->total_price;
+                $revenueYesterday += $book->amount;
             }
         }
 
@@ -240,7 +240,7 @@ class DashboardAdminService
 
     public function monthrevenue($booking, $month)
     {
-        $selectedMonth = Carbon::createFromFormat('m-Y', $month);
+        $selectedMonth = Carbon::createFromFormat('Y-m', $month);
         $previousMonth = $selectedMonth->copy()->subMonth();
         $revenueThisMonth = 0;
         $revenueLastMonth = 0;
@@ -249,10 +249,10 @@ class DashboardAdminService
             $bookingDate = Carbon::parse($book->created_at);
 
             if ($bookingDate->month == $selectedMonth->month && $bookingDate->year == $selectedMonth->year) {
-                $revenueThisMonth += $book->total_price;
+                $revenueThisMonth += $book->amount;
             }
             if ($bookingDate->month == $previousMonth->month && $bookingDate->year == $previousMonth->year) {
-                $revenueLastMonth += $book->total_price;
+                $revenueLastMonth += $book->amount;
             }
         }
 
@@ -279,11 +279,11 @@ class DashboardAdminService
             $bookingDate = Carbon::parse($book->created_at);
 
             if ($bookingDate->year == $selectedYear->year) {
-                $revenueThisYear += $book->total_price;
+                $revenueThisYear += $book->amount;
             }
 
             if ($bookingDate->year == $previousYear->year) {
-                $revenueLastYear += $book->total_price;
+                $revenueLastYear += $book->amount;
             }
         }
 
@@ -298,16 +298,42 @@ class DashboardAdminService
         ];
     }
 
-    public function monthlyRevenue($booking, $year)
+    public function monthlyRevenue($idCinema, $status = null, $year = null)
     {
+        // Create the initial query
+        $query = Booking::query()->with('showtime.movie');
 
-        $booking->whereYear('created_at', $year);
+        // Apply cinema filter if provided
+        if (!is_null($idCinema)) {
+            $query->whereHas('showtime.room.cinema', function ($subQuery) use ($idCinema) {
+                $subQuery->where('id', $idCinema);
+            });
+        }
 
+        // Apply status filter if provided
+        if (!is_null($status)) {
+            if (is_array($status)) {
+                $query->whereIn('status', $status);
+            } else {
+                $query->where('status', $status);
+            }
+        }
 
+        // Apply year filter if provided
+        if (!is_null($year)) {
+            $query->whereYear('created_at', $year);
+        }
+
+        // Initialize an empty array for the revenue data
         $monthlyRevenue = [];
 
+        // Loop through each month (1 to 12)
         for ($month = 1; $month <= 12; $month++) {
-            $monthlyBookings = $booking->whereMonth('created_at', $month)->get();
+            $mo = Carbon::createFromDate($year, $month, 1);
+            $monthlyBookings = $query->whereMonth('created_at', $mo->month)
+                ->whereYear('created_at', $mo->year)
+                ->get();
+            
             $totalRevenue = $monthlyBookings->sum('amount');
             $monthlyRevenue[$month] = $totalRevenue;
         }
@@ -315,27 +341,27 @@ class DashboardAdminService
         return $monthlyRevenue;
     }
 
-    public function revenueByDateRange($booking,$startDate = null, $endDate = null)
+
+    public function revenueByDateRange($booking, $startDate = null, $endDate = null)
     {
 
         if (is_null($startDate) || is_null($endDate)) {
-
-            $endDate = now(); 
-            $startDate = now()->subDays(15); 
+            $endDate = now();
+            $startDate = now()->subDays(15);
         }
-
+        
         $dailyRevenue = [];
-
+        
         $dateRange = Carbon::parse($startDate)->toPeriod(Carbon::parse($endDate));
-
+        
         foreach ($dateRange as $date) {
             $revenueForDay = $booking
                 ->whereDate('created_at', $date->format('Y-m-d'))
                 ->sum('amount');
-
+        
             $dailyRevenue[$date->format('Y-m-d')] = $revenueForDay;
         }
-
+        
         return $dailyRevenue;
     }
 }
