@@ -17,7 +17,7 @@ use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
-
+use App\Models\Booking;
 class AuthController extends Controller
 {
     protected $userRegistrationService;
@@ -44,7 +44,7 @@ class AuthController extends Controller
                 return response()->json(['error' => 'User  not found'], 404);
             }
 
-            $totalAmount = $user->pointHistories()->sum('order_amount');
+            $totalAmount = Booking::where('user_id', $user->id)->sum('amount');
             $rankName = $user->rank ? $user->rank->name : 'Không có rank';
 
             $user->total_amount = $totalAmount;
