@@ -107,10 +107,8 @@ const CinemaSeatSelection: React.FC = () => {
             setStatus("Connected to Pusher!");
             const roomId = response.data.data.room.id;
             // Kết nối với channel tương ứng
-
-            const channel = echo.private(`seats${roomId}`);
+            const channel = echo.private(`seats-${roomId}`);
             console.log("Connected to channel:", channel);
-
             // Lắng nghe sự kiện SeatSelected
             channel.listen("SeatSelected", (eventData: any) => {
               console.log("Received seats data:", eventData);
@@ -308,7 +306,7 @@ const CinemaSeatSelection: React.FC = () => {
           };
         })
     );
-    console.log("du lieu seat:", selectedSeatsArray);
+    // console.log("du lieu seat:", selectedSeatsArray);
     const payload = {
       cinemaId,
       showtimeId,

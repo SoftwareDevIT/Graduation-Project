@@ -53,26 +53,7 @@ const Personal: React.FC = () => {
             </div>
           </div>
 
-          {/* <div className="moveslike">
-            <h3>Phim tui thích</h3>
-            <div className="phimyeuthich-container">
-  <div className="phimyeuthich">
-    {favoriteMovies.length > 0 ? (
-      favoriteMovies.map((movie) => (
-        <div className="item-phim" key={movie.id}>
-          <div className="img">
-            <img src={movie.poster || undefined} alt={movie.movie_name} />
-          </div>
-          <div className="movie-title">
-            <h5>{movie.movie_name}</h5>
-          </div>
-        </div>
-      ))
-    ) : (
-      <div className="col-12 text-center">Chưa có phim yêu thích nào.</div>
-    )}
-  </div>
-</div> */}
+   
 
 
           </div>

@@ -4,6 +4,7 @@ namespace App\Services\Revenue;
 
 use App\Models\Booking;
 use App\Models\Movie;
+use App\Models\Seats;
 use App\Models\Showtime;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -161,7 +162,7 @@ class DashboardAdminService
 
     public function revenuebooking($status, ?int $idCinema)
     {
-        $query = Booking::query()->with('showtime.movie');
+        $query = Booking::query()->with('showtime.movie', 'user', 'payMethod');
 
         if (!is_null($idCinema)) {
             $query->whereHas('showtime.room.cinema', function ($subQuery) use ($idCinema) {
@@ -186,7 +187,7 @@ class DashboardAdminService
             $movieId = $book->showtime->movie->id ?? null;
             $totalPrice = $book->amount ?? 0;
             $movieName = $book->showtime->movie->movie_name ?? 'Unknown';
-            $movieImage = $book->showtime->movie->thumbnail ?? null;
+            $movieImage = $book->showtime->movie->poster ?? null;
 
             if ($movieId) {
                 if (!isset($movieRevenue[$movieId])) {
@@ -238,9 +239,10 @@ class DashboardAdminService
         ];
     }
 
-    public function monthrevenue($booking, $month)
+    public function monthrevenue($booking, $day)
     {
-        $selectedMonth = Carbon::createFromFormat('Y-m', $month);
+
+        $selectedMonth = Carbon::parse($day)->startOfMonth();
         $previousMonth = $selectedMonth->copy()->subMonth();
         $revenueThisMonth = 0;
         $revenueLastMonth = 0;
@@ -267,9 +269,9 @@ class DashboardAdminService
         ];
     }
 
-    public function yearrevenue($booking, $year)
+    public function yearrevenue($booking, $day)
     {
-        $selectedYear = Carbon::create($year, 1, 1); // Năm được chọn
+        $selectedYear = Carbon::parse($day)->startOfYear(); // Năm được chọn
         $previousYear = $selectedYear->copy()->subYear(); // Năm trước đó
 
         $revenueThisYear = 0;
@@ -298,19 +300,17 @@ class DashboardAdminService
         ];
     }
 
-    public function monthlyRevenue($idCinema, $status = null, $year = null)
+    // chart theo tháng
+    public function monthlyRevenue($status, ?int $idCinema, ?int $year)
     {
-        // Create the initial query
         $query = Booking::query()->with('showtime.movie');
 
-        // Apply cinema filter if provided
         if (!is_null($idCinema)) {
             $query->whereHas('showtime.room.cinema', function ($subQuery) use ($idCinema) {
                 $subQuery->where('id', $idCinema);
             });
         }
 
-        // Apply status filter if provided
         if (!is_null($status)) {
             if (is_array($status)) {
                 $query->whereIn('status', $status);
@@ -319,21 +319,18 @@ class DashboardAdminService
             }
         }
 
-        // Apply year filter if provided
         if (!is_null($year)) {
             $query->whereYear('created_at', $year);
         }
 
-        // Initialize an empty array for the revenue data
         $monthlyRevenue = [];
-
-        // Loop through each month (1 to 12)
+        $booking = $query->get();
         for ($month = 1; $month <= 12; $month++) {
             $mo = Carbon::createFromDate($year, $month, 1);
-            $monthlyBookings = $query->whereMonth('created_at', $mo->month)
-                ->whereYear('created_at', $mo->year)
-                ->get();
-            
+            $monthlyBookings = $booking->filter(function ($item) use ($mo) {
+                return Carbon::parse($item->created_at)->month == $mo->month
+                    && Carbon::parse($item->created_at)->year == $mo->year;
+            });
             $totalRevenue = $monthlyBookings->sum('amount');
             $monthlyRevenue[$month] = $totalRevenue;
         }
@@ -341,27 +338,65 @@ class DashboardAdminService
         return $monthlyRevenue;
     }
 
-
-    public function revenueByDateRange($booking, $startDate = null, $endDate = null)
+    //chart theo khoảng thời gian
+    public function revenueByDateRange($booking, ?string $startDate, ?string $endDate)
     {
-
         if (is_null($startDate) || is_null($endDate)) {
             $endDate = now();
             $startDate = now()->subDays(15);
         }
-        
+        $startDate = Carbon::parse($startDate);
+        $endDate = Carbon::parse($endDate);
+
+        $diffInDays = $startDate->diffInDays($endDate);
+        if ($diffInDays > 15) {
+            return response()->json(['error' => 'Khoảng cách giữa ngày bắt đầu và ngày kết thúc không được vượt quá 15 ngày.'], 400);
+        }
+
+        Log::info("Start Date: " . $startDate->toDateString());
+        Log::info("End Date: " . $endDate->toDateString());
+
+        $dateRange = $startDate->toPeriod($endDate);
+
         $dailyRevenue = [];
-        
-        $dateRange = Carbon::parse($startDate)->toPeriod(Carbon::parse($endDate));
-        
+
         foreach ($dateRange as $date) {
-            $revenueForDay = $booking
-                ->whereDate('created_at', $date->format('Y-m-d'))
-                ->sum('amount');
-        
+            $revenueForDay = $booking->filter(function ($item) use ($date) {
+                return Carbon::parse($item->created_at)->isSameDay($date);
+            })->sum('amount');
+
             $dailyRevenue[$date->format('Y-m-d')] = $revenueForDay;
         }
-        
+
         return $dailyRevenue;
+    }
+
+    public function chartseats($bookings)
+    {
+        $bookingIds = $bookings->pluck('id')->toArray();
+        Log::info($bookingIds);
+        $seats = Booking::with('seats') 
+            ->whereIn('id', $bookingIds)
+            ->get()
+            ->flatMap(function ($booking) {
+                return $booking->seats;
+            });
+        $seatCounts = $seats->groupBy('seat_type')->map(function ($group) {
+            return $group->count();
+        });
+
+        $totalSeats = $seats->count();
+
+        $seatRatios = $seatCounts->map(function ($count, $seatType) use ($totalSeats) {
+            return [
+                'seat_type' => $seatType,
+                'count' => $count,
+                'ratio' => $totalSeats > 0 ? round(($count / $totalSeats) * 100, 2) : 0
+            ];
+        });
+
+        Log::info($seatRatios);
+
+        return $seatRatios;
     }
 }
