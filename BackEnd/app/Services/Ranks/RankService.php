@@ -58,7 +58,7 @@ class RankService
 
     public function usePoints($user, $pointsToUse, $totalPrice)
     {
-        $usedPointsSessionKey = 'used_points_';
+        $usedPointsSessionKey = 'used_points_'.$user->id;
         if (session()->has($usedPointsSessionKey)) {
             return [
                 'success' => false,
@@ -103,18 +103,13 @@ class RankService
                 'user_id' => $user->id,
                 'points_used' => $pointsToUse,
                 'points_earned' => 0,
-                'type' => 'used',
+                'type' => 'Tiêu điểm',
             ]);
         // });
 
-        session()->put($usedPointsSessionKey, [
-            'points_used' => $pointsToUse,
-            'discount_value' => $discountValue,
-            'final_price' => $finalPrice,
-            'remaining_points' => $remainingPoints
-        ]);
-
-        Log::info(session()->get($usedPointsSessionKey));
+        session()->put($usedPointsSessionKey, $totalPrice);
+        session()->save();
+        Log::info(session()->all());
 
         return [
             'success' => true,
@@ -159,15 +154,17 @@ class RankService
     }
 
     public function points($booking){
-        $user = Auth::user();
+        $user = User::where('id', $booking->user_id)->first();
         $this->updateRank($user);
         $total = $booking->amount;
-        $rank = $user->rank;
-        $pointsEarned = $total * ($rank->percent_discount / 100);
+        // $rank = $user->rank;
+        $pointsEarned = $total * ($user->rank->percent_discount / 100);
+        $user->points += $pointsEarned;
+        $user->save();
         PointHistory::create([
             'user_id' => $user->id,
             'points_earned' => $pointsEarned,
-            'type' => 'earned',
+            'type' => 'Tích điểm',
         ]);
     }
 }

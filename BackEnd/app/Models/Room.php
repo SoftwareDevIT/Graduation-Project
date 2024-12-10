@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use PhpParser\Builder\Function_;
+use PhpParser\Node\Stmt\Return_;
 
 class Room extends Model
 {
@@ -25,6 +27,10 @@ class Room extends Model
     }
 
     // Define relation to Showtimes
+    public function showtimes()
+    {
+        return $this->hasMany(Showtime::class);
+    }
 
     // Relation to Cinema
     public function cinema()

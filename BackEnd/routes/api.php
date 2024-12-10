@@ -146,10 +146,11 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get('total-revenue-cinema-by-date/{cinema_id}/{start_date}/{end_date}', [RevenueController::class, 'totalRevenueByCinemaBetweenDates']);
 
     // bộ lọc thông kê doanh thu
-    Route::get('filter-DashBoarch', [FilterOfDashBoarchController::class, 'filterOfDashBoarch']);
+    // Route::get('filter-DashBoarch', [FilterOfDashBoarchController::class, 'filterOfDashBoarch']);
 
 //Trang dashboard
-    Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
+    // Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
+    Route::get('/dashboard', [DashboardAdminController::class, 'dashboard']);
 });
 
 //Cấu hình website
@@ -231,7 +232,8 @@ Route::post('printTicket', [OrderController::class, 'printTicket']);
 
 Route::prefix('seat-maps')->group(function () {
     Route::get('/', [SeatMapController::class, 'index']);
-    Route::get('/{id}', [SeatMapController::class, 'show']);
+    Route::get('/{id}', [SeatMapController::class, 'show']
+);
     Route::post('/', [SeatMapController::class, 'store']);
     Route::put('/{id}', [SeatMapController::class, 'update']);
     Route::delete('/{id}', [SeatMapController::class, 'destroy']);

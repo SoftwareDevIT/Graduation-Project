@@ -163,7 +163,7 @@ const LichChieuUpdated: React.FC = () => {
                   movieName: movie?.movie_name,
                   cinemaName: cinema.cinema_name,
                   showtime: showtime.showtime_start,
-                  showtimeId: showtime.id,
+                  showtimeId: showtime.showtime_id,
                   cinemaId: cinema.id,
                   roomId: showtime.room_id,
                   price: showtime.price,

@@ -25,6 +25,11 @@ const OrderDetail = () => {
       try {
         const response = await instance.get(`/order/${id}`); // Fetch the order details using the booking_id
         setOrderDetails(response.data.data);
+
+
+        console.log("datacombo",response.data.data
+        )
+
         setNewStatus(response.data.data.status); // Initialize status from the fetched data
       } catch (err) {
         setError('Failed to load order details');
@@ -320,7 +325,6 @@ const OrderDetail = () => {
     <p>Không có combo nào</p>
   )}
 </td>
-
               </tr>
             </tbody>
           </table>

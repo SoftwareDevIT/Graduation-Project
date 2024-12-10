@@ -14,7 +14,7 @@ const { Option } = Select;
 const { RangePicker } = DatePicker;
 
 const OrdersDashboard: React.FC = () => {
-  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [bookings, setBookings] = useState<any[]>([]);  // Update type to any[]
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [statusFilter, setStatusFilter] = useState<string>("");
   const [dateRange, setDateRange] = useState<[string, string] | null>(null);
@@ -38,8 +38,8 @@ const OrdersDashboard: React.FC = () => {
         }
 
         const response = await instance.get("/dashboard", { params });
-        setBookings(response.data.data);
-        setTotal(response.data.total);  // Cập nhật tổng số bản ghi
+        setBookings(response.data.booking_revenue);  // Use the booking_revenue from response
+        setTotal(response.data.booking_revenue.length);  // Set total records
       } catch (error) {
         notification.error({
           message: "Lỗi",
@@ -85,61 +85,59 @@ const OrdersDashboard: React.FC = () => {
         };
     }
   };
-  
-  
 
   const columns = [
     {
       title: "ID",
-      dataIndex: "booking_id",
-      key: "booking_id",
+      dataIndex: "booking_code", // Update to booking_code
+      key: "booking_code",
       align: "center" as const,
     },
     {
       title: "Người Dùng",
-      dataIndex: ["user_name"],
-      key: "user_name",
+      dataIndex: "user_id", // Nested data for movie_name
+      key: "user_id",
       align: "center" as const,
       render: (text: string) => text || "Unknown User",
     },
     {
       title: "Suất Chiếu",
-      dataIndex: ["showtime_date"],
-      key: "showtime_date",
+      dataIndex: ["showtime","showtime_date"], // Nested data for showtime_date
+      key: "showtime.showtime_date",
       align: "center" as const,
     },
     {
       title: "Phòng",
-      dataIndex: ["room_name"],
+      dataIndex: ["showtime","room_id"], // Nested data for room_id
       key: "room_name",
       align: "center" as const,
     },
     {
       title: "Phim",
-      dataIndex: ["movie_name"],
+      dataIndex: ["showtime","movie","movie_name"], // Nested data for movie_name
       key: "movie_name",
       align: "center" as const,
     },
     {
       title: "Phương Thức Thanh Toán",
-      dataIndex: ["payMethod"],
-      key: "payMethod",
+      dataIndex: "pay_method_id", // pay_method_id
+      key: "pay_method",
       align: "center" as const,
     },
     {
       title: "Tổng Tiền",
-      dataIndex: "amount",
+      dataIndex: "amount", // amount
       key: "amount",
       align: "center" as const,
     },
     {
       title: "Trạng Thái",
-      dataIndex: "status",
+      dataIndex: "status", // status
       key: "status",
       render: (text: string) => {
-        const {style,icon } = getStatusStyle(text);
+        const { style, icon } = getStatusStyle(text);
         return (
-          <span >
+          <span style={style}>
             {icon}
             {text}
           </span>
@@ -152,7 +150,7 @@ const OrdersDashboard: React.FC = () => {
       align: "center" as const,
       render: (_: any, booking: any) => (
         <Space>
-          <Link to={`/admin/ordersdetail/${booking.booking_id}`} className="btn btn-primary">
+          <Link to={`/admin/ordersdetail/${booking.id}`} className="btn btn-primary">
             Chi tiết
           </Link>
         </Space>
@@ -184,7 +182,7 @@ const OrdersDashboard: React.FC = () => {
         <Table
           columns={columns}
           dataSource={bookings}
-          rowKey={(record) => record.booking_id}
+          rowKey={(record) => record.id} // Use id as rowKey
           pagination={{
             current: currentPage,
             pageSize: pageSize,
