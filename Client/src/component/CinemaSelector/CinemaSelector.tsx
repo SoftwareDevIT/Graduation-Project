@@ -9,15 +9,15 @@ import dayjs from "dayjs";
 import { useCountryContext } from "../../Context/CountriesContext";
 import { Spin } from 'antd';  // Import Spin từ Ant Design
 import { UserProfile } from "../../interface/UserProfile";
+import { useCinemaContext } from "../../Context/CinemasContext";
 
 
 
   const CinemaSelector: React.FC = () => {
-    const [cinemas, setCinemas] = useState<Cinema[]>([]);
     const [actors, setActors] = useState<Actor[]>([]);
     const [movies, setMovies] = useState<Movie[]>([]);
     const [selectedCity, setSelectedCity] = useState<number >();
-    
+    const { state} = useCinemaContext();
     const [selectedCinema, setSelectedCinema] = useState<number>();
     const [selectedDate, setSelectedDate] = useState<string>("");
   
@@ -35,6 +35,7 @@ import { UserProfile } from "../../interface/UserProfile";
       state: { countries: locations },
     } = useCountryContext();
   
+    const cinemas = state.cinemas;
     const getCurrentDate = (): string => {
       const today = new Date();
       const year = today.getFullYear();
@@ -50,22 +51,7 @@ import { UserProfile } from "../../interface/UserProfile";
     };
   
     useEffect(() => {
-      const fetchCinemas = async () => {
-        try {
-
-            const response = await instance.get("/cinema");
-            const cinemaData = response.data.data;
-            if (Array.isArray(cinemaData)) {
-                setCinemas(cinemaData);
-            } else {
-                console.error("Unexpected response format:", response);
-                setCinemas([]);
-            }
-        } catch (error) {
-            console.error("Error fetching cinemas:", error);
-            setCinemas([]);
-        }
-    };
+   
     
     
       const fetchActors = async () => {
@@ -79,7 +65,7 @@ import { UserProfile } from "../../interface/UserProfile";
       };
     
       fetchActors();
-      fetchCinemas();
+   
       setSelectedDate(getCurrentDate());
     }, []);
   
@@ -116,7 +102,7 @@ import { UserProfile } from "../../interface/UserProfile";
 
         setSelectedCity(locationWithMostCinemas?.id);
      
-     
+        
       }
     }, [cinemas, locations]);
   

@@ -231,7 +231,7 @@ function App() {
         <Route path="/admin/website-settings" element={<PrivateRoute allowedRoles={['admin']}><WebsiteSettingsManager /></PrivateRoute>} />
         <Route path="/admin/website-settings/update/:id" element={<PrivateRoute allowedRoles={['admin']}><WebsiteSettingsManager /></PrivateRoute>} />
         <Route path="/admin//website-settings/reset" element={<PrivateRoute allowedRoles={['admin']}><WebsiteSettingsManager /></PrivateRoute>} />
-      
+    
         <Route path="/admin/posts" element={<PrivateRoute allowedRoles={['manager']}><PostsManager /></PrivateRoute>} />
         <Route path="/admin/posts/:postId" element={<PrivateRoute allowedRoles={['manager']}><PostDetailManager /></PrivateRoute>} />
         <Route path="/admin/posts/add" element={<PrivateRoute allowedRoles={['manager']}><PostsFormManager /></PrivateRoute>} />

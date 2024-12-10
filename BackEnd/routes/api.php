@@ -81,7 +81,6 @@ Route::apiResource('showtimes', ShowtimeController::class)->only(['index', 'show
 Route::apiResource('news_category', NewCategoryController::class)->only(['index', 'show']);
 Route::get('/cinema/{id}/room', [RoomController::class, 'getRoomByCinema']);  // get room by cinema
 
-
 // Các tuyến có thể truy cập được cho người dùng được xác thực
 Route::middleware(['auth:sanctum', 'web'])->group(function () {
     Route::post('favorites/{movie_id}', [FavoriteController::class, 'store']);                 // Thêm phim yêu thích
@@ -105,7 +104,7 @@ Route::get('/vnpay-return', [BookingController::class, 'vnPayReturn']);
 // Các route quản trị và quản lý
 Route::middleware(['auth:sanctum', 'role:admin|manager'])->group(function () {
     Route::apiResource('location', LocationController::class)->except(['index', 'show']);
-    Route::apiResource('cinema', CinemaController::class)->except(['index', 'show']);
+    // Route::apiResource('cinema', CinemaController::class);
     Route::apiResource('room', RoomController::class)->except(['index', 'show']);
     Route::apiResource('showtimes', ShowtimeController::class)->except(['index', 'show']);
     Route::apiResource('actor', ActorController::class)->except(['index', 'show']);

@@ -59,6 +59,7 @@ const OrderHistoryApp: React.FC = () => {
           },
           seats: order.seats,
           amount: order.amount,
+          combo:order.combos
         }));
         setOrders(mappedOrders);
         setFilteredOrders(mappedOrders); // Show all orders initially
@@ -67,7 +68,6 @@ const OrderHistoryApp: React.FC = () => {
         console.error("Error fetching orders:", error);
       });
   }, []);
-
   const handleDateFilter = (date: moment.Moment | null, dateString: string | string[]) => {
     const filterDate = Array.isArray(dateString) ? dateString[0] : dateString;
   
@@ -276,6 +276,7 @@ const OrderHistoryApp: React.FC = () => {
                       <TeamOutlined style={{ marginRight: "10px", color: "#52c41a" }} />
                       <b>Ghế:</b> {selectedOrder.seats.map((s) => s.seat_name).join(", ")}
                     </Text>
+                  
   
                     <Text style={{ fontSize: "16px" }}>
                       <EnvironmentOutlined style={{ marginRight: "10px", color: "#1890ff" }} />
