@@ -24,7 +24,6 @@ export interface Booking {
   room: Room
   combos: Combo[]
   qrcode: string
-
   barcode: string
   seats: Seat[]
   booking_code: string
