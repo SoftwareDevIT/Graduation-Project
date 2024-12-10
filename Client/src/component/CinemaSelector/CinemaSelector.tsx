@@ -94,9 +94,9 @@ import { UserProfile } from "../../interface/UserProfile";
               .sort((a, b) => b.cinemaCount - a.cinemaCount);
   
           const locationWithMostCinemas = sortedLocations[0];
-          if (locationWithMostCinemas) {
-              setSelectedCity(locationWithMostCinemas.id);
-          }
+          
+              setSelectedCity(locationWithMostCinemas?.id);
+          
       }
   }, [cinemas, locations]);
   
@@ -113,7 +113,7 @@ import { UserProfile } from "../../interface/UserProfile";
   
         const locationWithMostCinemas = sortedLocations[0];
 
-        setSelectedCity(locationWithMostCinemas.id);
+        setSelectedCity(locationWithMostCinemas?.id);
      
      
       }

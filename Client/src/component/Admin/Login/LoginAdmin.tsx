@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate, Link } from "react-router-dom";
 import instance from "../../../server";
@@ -19,6 +19,17 @@ const AdminLogin = () => {
           description,
         });
       };
+      const [userRole, setUserRole] = useState<string>("");
+      useEffect(() => {
+        // Lấy thông tin từ localStorage
+        const userData = JSON.parse(localStorage.getItem("user_profile") || "{}");
+        const roles = userData.roles || [];
+        console.log("data role:", roles);
+        // Lấy vai trò đầu tiên (nếu có)
+        if (roles.length > 0) {
+          setUserRole(roles[0].name); // Gán vai trò (ví dụ: "staff", "admin")
+        }
+      }, []);
     
       const onSubmit: SubmitHandler<LoginSchema> = async (data) => {
         try {
@@ -33,7 +44,14 @@ const AdminLogin = () => {
             instance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     
             openNotificationWithIcon("success", "Đăng nhập thành công", "Bạn đã đăng nhập thành công.");
-            navigate("/admin/dashboard");
+            if(userRole === "admin"){
+              navigate("/admin/dashboard");
+            }else if(userRole === "manager"){
+              navigate("/admin/actor");
+            }else if(userRole === "staff"){
+              navigate("/admin/orders");
+            }
+            
           } else {
             openNotificationWithIcon("error", "Lỗi", "Đăng nhập không thành công.");
           }

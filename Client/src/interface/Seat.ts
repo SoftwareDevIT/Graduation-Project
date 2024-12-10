@@ -7,4 +7,5 @@
     status: number;
     linkedSeat?: string;
     isSelected?: boolean; 
+    isMainProcessed?: boolean;
   }

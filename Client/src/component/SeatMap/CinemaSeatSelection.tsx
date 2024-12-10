@@ -503,6 +503,7 @@ const CinemaSeatSelection: React.FC = () => {
 
                             return (
                               <div
+                              
                                 key={seatLabel}
                                 style={{
                                   width: "30px",
