@@ -21,6 +21,7 @@ Broadcast::channel('seats', function ($user) {
 });
 
 Broadcast::channel('seats-{roomId}', function ($user, $roomId) {
-    return $user != null && $user->hasRoomAccess($roomId); // Hoặc điều kiện của bạn
+    // return $user != null && $user->hasRoomAccess($roomId); // Hoặc điều kiện của bạn
+    return true;
 });
 
