@@ -37,7 +37,8 @@ class SeatSelected implements ShouldBroadcast
         Log::info("broadcastWith");
         return [
             'seats' => $this->seats,
-            'userId' => $this->userId
+            'userId' => $this->userId,
+            'roomId' => $this->roomId
         ];
     }
 }
