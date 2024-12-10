@@ -44,7 +44,7 @@ class Seats extends Model
     }
     public function bookings()
     {
-        return $this->belongsToMany(Booking::class, 'booking_seats');
+        return $this->belongsToMany(Booking::class, 'booking_seats', 'seat_id', 'booking_id');
     }
 
     public static function updateSeatsStatus(array $seatIds, string $newStatus)

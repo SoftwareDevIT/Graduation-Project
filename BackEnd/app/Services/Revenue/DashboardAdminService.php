@@ -4,6 +4,7 @@ namespace App\Services\Revenue;
 
 use App\Models\Booking;
 use App\Models\Movie;
+use App\Models\Seats;
 use App\Models\Showtime;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -161,7 +162,7 @@ class DashboardAdminService
 
     public function revenuebooking($status, ?int $idCinema)
     {
-        $query = Booking::query()->with('showtime.movie');
+        $query = Booking::query()->with('showtime.movie', 'user', 'payMethod');
 
         if (!is_null($idCinema)) {
             $query->whereHas('showtime.room.cinema', function ($subQuery) use ($idCinema) {
@@ -238,9 +239,10 @@ class DashboardAdminService
         ];
     }
 
-    public function monthrevenue($booking, $month)
+    public function monthrevenue($booking, $day)
     {
-        $selectedMonth = Carbon::createFromFormat('Y-m', $month);
+
+        $selectedMonth = Carbon::parse($day)->startOfMonth();
         $previousMonth = $selectedMonth->copy()->subMonth();
         $revenueThisMonth = 0;
         $revenueLastMonth = 0;
@@ -267,9 +269,9 @@ class DashboardAdminService
         ];
     }
 
-    public function yearrevenue($booking, $year)
+    public function yearrevenue($booking, $day)
     {
-        $selectedYear = Carbon::create($year, 1, 1); // Năm được chọn
+        $selectedYear = Carbon::parse($day)->startOfYear(); // Năm được chọn
         $previousYear = $selectedYear->copy()->subYear(); // Năm trước đó
 
         $revenueThisYear = 0;
@@ -346,8 +348,9 @@ class DashboardAdminService
         $startDate = Carbon::parse($startDate);
         $endDate = Carbon::parse($endDate);
 
-        if ($startDate->diffInDays($endDate) > 15) {
-            throw new \Exception('Không được nhập cách nhau quá 15 ngày', 401);
+        $diffInDays = $startDate->diffInDays($endDate);
+        if ($diffInDays > 15) {
+            return response()->json(['error' => 'Khoảng cách giữa ngày bắt đầu và ngày kết thúc không được vượt quá 15 ngày.'], 400);
         }
 
         Log::info("Start Date: " . $startDate->toDateString());
@@ -366,5 +369,34 @@ class DashboardAdminService
         }
 
         return $dailyRevenue;
+    }
+
+    public function chartseats($bookings)
+    {
+        $bookingIds = $bookings->pluck('id')->toArray();
+        Log::info($bookingIds);
+        $seats = Booking::with('seats') 
+            ->whereIn('id', $bookingIds)
+            ->get()
+            ->flatMap(function ($booking) {
+                return $booking->seats;
+            });
+        $seatCounts = $seats->groupBy('seat_type')->map(function ($group) {
+            return $group->count();
+        });
+
+        $totalSeats = $seats->count();
+
+        $seatRatios = $seatCounts->map(function ($count, $seatType) use ($totalSeats) {
+            return [
+                'seat_type' => $seatType,
+                'count' => $count,
+                'ratio' => $totalSeats > 0 ? round(($count / $totalSeats) * 100, 2) : 0
+            ];
+        });
+
+        Log::info($seatRatios);
+
+        return $seatRatios;
     }
 }

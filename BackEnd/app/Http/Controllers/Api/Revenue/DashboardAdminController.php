@@ -57,7 +57,7 @@ class DashboardAdminController extends Controller
         $cinema_id = $request->query('cinema_id');
         $start_date = $request->query('start_date');
         $end_date = $request->query('end_date');
-        $month = $request->query('month', now()->format('Y-m')); 
+        // $month = $request->query('month', now()->format('Y-m')); 
         $year = $request->query('year', now()->year);             
         $day = $request->query('day', now()->format('Y-m-d')); 
 
@@ -74,13 +74,13 @@ class DashboardAdminController extends Controller
         $movieRevenue = $this->dashboardAdminService->movierevenue($bookingRevenue);
 
         $dayRevenue = $this->dashboardAdminService->dayrevenue($bookingRevenue,$day);
-        $monthRevenue = $this->dashboardAdminService->monthrevenue($bookingRevenue,$month);
-        $yearRevenue = $this->dashboardAdminService->yearrevenue($bookingRevenue,$year);
+        $monthRevenue = $this->dashboardAdminService->monthrevenue($bookingRevenue,$day);
+        $yearRevenue = $this->dashboardAdminService->yearrevenue($bookingRevenue,$day);
 
         $monthlyRevenueChart = $this->dashboardAdminService->monthlyRevenue($status,$cinema_id,$year);
         $dailyRevenueChart = $this->dashboardAdminService->revenueByDateRange($bookingRevenue,$start_date, $end_date);
 
-        
+        $chartSeats = $this->dashboardAdminService->chartseats($bookingRevenue);
        
         return response()->json([
             'status' => true,
@@ -90,6 +90,7 @@ class DashboardAdminController extends Controller
             'year_revenue' => $yearRevenue,
             'monthly_revenue_chart' => $monthlyRevenueChart,
             'daily_revenue_chart' => $dailyRevenueChart,
+            'chart_seats' => $chartSeats,
             'booking_revenue' => $bookingRevenue,
             'movie_revenue' => $movieRevenue,
         ], 200);
