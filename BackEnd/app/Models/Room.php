@@ -25,20 +25,13 @@ class Room extends Model
     {
         return $this->belongsTo(SeatMap::class);
     }
-
-    // Define relation to Showtimes
-public Function Showtimes(){
-    return $this->hasMany(Showtime::class);
-}
     // Relation to Cinema
     public function cinema()
     {
         return $this->belongsTo(Cinema::class);
     }
-public function showtimes()
-{
-    return $this->hasMany(Showtime::class);
-}
-
-
+    public function showtimes()
+    {
+        return $this->hasMany(Showtime::class);
+    }
 }
