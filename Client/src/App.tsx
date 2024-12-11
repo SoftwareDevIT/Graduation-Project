@@ -174,6 +174,7 @@ function App() {
             </PrivateRoute>
           } />
         <Route path="/Personal" element={<PrivateRoute><Personal /></PrivateRoute>} />
+       
  
         <Route path="/ticketcinema" element={ <PrivateRoute><OrderHistoryApp/></PrivateRoute>} />
 
@@ -182,6 +183,7 @@ function App() {
         <Route path="/login" element={<LoginCinema />} />
         <Route path="/movieshowing" element={<MovieShowing/>} />
         <Route path="/bookingticket" element={<BookingManager/>} />
+        <Route path="/point" element={<Pointaccumulation/>} />
   
       
         <Route path="/deponsit" element={<Deponsit/>} />
