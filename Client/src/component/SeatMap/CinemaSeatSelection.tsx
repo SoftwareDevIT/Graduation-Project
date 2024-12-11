@@ -107,10 +107,8 @@ const CinemaSeatSelection: React.FC = () => {
             setStatus("Connected to Pusher!");
             const roomId = response.data.data.room.id;
             // Kết nối với channel tương ứng
-
-            const channel = echo.private(`seats${roomId}`);
+            const channel = echo.private(`seats-${roomId}`);
             console.log("Connected to channel:", channel);
-
             // Lắng nghe sự kiện SeatSelected
             channel.listen("SeatSelected", (eventData: any) => {
               console.log("Received seats data:", eventData);
@@ -121,8 +119,9 @@ const CinemaSeatSelection: React.FC = () => {
                 // Cập nhật state với Map
                 const newSelectedSeats = new Map(selectedSeats); // Sao chép bản đồ cũ
                 newSelectedSeats.set(roomId, eventData.seats); // Thêm ghế mới vào Map theo roomId
-
                 setSelectedSeats(newSelectedSeats); // Cập nhật lại state
+
+                
                 updateSeatsSelection(eventData.seats); // Cập nhật ghế trong lưới
               }
             });
@@ -149,7 +148,7 @@ const CinemaSeatSelection: React.FC = () => {
     };
 
     fetchRoomAndSeats();
-  }, [showtimeId, echoInstance, selectedSeats]);
+  }, [showtimeId, selectedSeats,echoInstance ]);
 
   const updateSeatsSelection = (selectedSeats: string[]) => {
     // Lặp qua từng ghế trong seat_structure
@@ -308,7 +307,7 @@ const CinemaSeatSelection: React.FC = () => {
           };
         })
     );
-    console.log("du lieu seat:", selectedSeatsArray);
+    // console.log("du lieu seat:", selectedSeatsArray);
     const payload = {
       cinemaId,
       showtimeId,

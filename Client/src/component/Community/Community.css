@@ -172,7 +172,9 @@
   padding: 30px;
   border-radius: 10px;
   margin-right: 180px;
+  position: relative;
 }
+
 .phe-binh-chuyen-nghiep h3{
   font-size: 20px;
 }
