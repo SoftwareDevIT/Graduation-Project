@@ -119,8 +119,9 @@ const CinemaSeatSelection: React.FC = () => {
                 // Cập nhật state với Map
                 const newSelectedSeats = new Map(selectedSeats); // Sao chép bản đồ cũ
                 newSelectedSeats.set(roomId, eventData.seats); // Thêm ghế mới vào Map theo roomId
-
                 setSelectedSeats(newSelectedSeats); // Cập nhật lại state
+
+                
                 updateSeatsSelection(eventData.seats); // Cập nhật ghế trong lưới
               }
             });
@@ -147,7 +148,7 @@ const CinemaSeatSelection: React.FC = () => {
     };
 
     fetchRoomAndSeats();
-  }, [showtimeId, echoInstance, selectedSeats]);
+  }, [showtimeId, selectedSeats,echoInstance ]);
 
   const updateSeatsSelection = (selectedSeats: string[]) => {
     // Lặp qua từng ghế trong seat_structure

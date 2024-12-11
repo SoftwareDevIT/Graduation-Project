@@ -60,6 +60,13 @@ Route::get('/callback', [GoogleController::class, 'loginCallback']);  // login g
 Route::get('/autocomplete', [GoongMapController::class, 'autocomplete']);
 Route::post('logout', [AuthController::class, 'logout']);
 Route::post('register', [AuthController::class, 'register']); // Đăng ký người dùng
+Route::middleware(['api', 'session'])->group(function () {
+    Route::post('password/send-otp', [ForgotPasswordController::class, 'sendOtp']); // Gửi OTP đến email
+    Route::post('password/verify-otp', [ForgotPasswordController::class, 'verifyOtp']); // Xác minh OTP
+    Route::post('password/reset', [ForgotPasswordController::class, 'forgotPassword']); // Đặt lại mật khẩu
+});
+
+
 Route::post('password/send-otp', [ForgotPasswordController::class, 'sendOtp']);                     // Gửi OTP đến email
 Route::post('password/verify-otp', [ForgotPasswordController::class, 'verifyOtp']);                 // Xác minh OTP
 Route::post('password/reset', [ForgotPasswordController::class, 'forgotPassword']);                 // Đặt lại mật khẩu
@@ -80,6 +87,7 @@ Route::apiResource('room', RoomController::class)->only(['index', 'show']);
 Route::apiResource('showtimes', ShowtimeController::class)->only(['index', 'show']);
 Route::apiResource('news_category', NewCategoryController::class)->only(['index', 'show']);
 Route::get('/cinema/{id}/room', [RoomController::class, 'getRoomByCinema']);  // get room by cinema
+
 
 // Các tuyến có thể truy cập được cho người dùng được xác thực
 Route::middleware(['auth:sanctum', 'web'])->group(function () {
@@ -102,9 +110,9 @@ Route::get('/vnpay-return', [BookingController::class, 'vnPayReturn']);
 
 
 // Các route quản trị và quản lý
-Route::middleware(['auth:sanctum', 'role:admin|manager'])->group(function () {
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::apiResource('location', LocationController::class)->except(['index', 'show']);
-    // Route::apiResource('cinema', CinemaController::class);
+    Route::apiResource('cinema', CinemaController::class)->except(['index', 'show']);
     Route::apiResource('room', RoomController::class)->except(['index', 'show']);
     Route::apiResource('showtimes', ShowtimeController::class)->except(['index', 'show']);
     Route::apiResource('actor', ActorController::class)->except(['index', 'show']);
@@ -229,3 +237,4 @@ Route::prefix('seat-maps')->group(function () {
     Route::put('/{id}', [SeatMapController::class, 'update']);
     Route::delete('/{id}', [SeatMapController::class, 'destroy']);
 });
+
