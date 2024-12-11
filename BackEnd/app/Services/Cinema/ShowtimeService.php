@@ -2,6 +2,7 @@
 
 namespace App\Services\Cinema;
 
+use App\Models\Combo;
 use App\Models\Showtime;
 use App\Models\Movie;
 use Illuminate\Database\Eloquent\Collection;
@@ -59,12 +60,20 @@ class ShowtimeService
         $query = Showtime::with(['movie', 'room.cinema', 'room.seatMap']);
         $showtime = $this->filterByRole($query)->findOrFail($id);
 
-        // Định dạng lại chỗ ngồi
+        // Retrieve all combos associated with the cinema
+        $cinemaId = $showtime->room->cinema->id;
+        $cinemaCombos = Combo::where('cinema_id', $cinemaId)->get();
+
+        // Format the seat map
         $showtimeData = $showtime->toArray();
         $showtimeData['formatted_seats'] = $showtime->room->seatMap->groupBy('row');
 
+        // Add cinema combos to the response
+        $showtimeData['cinema_combos'] = $cinemaCombos;
+
         return $showtimeData;
     }
+
 
     public function getShowtimesByMovieName(string $movieName)
     {
@@ -93,7 +102,7 @@ class ShowtimeService
                 'room_id' => $data['room_id'],
                 'movie_id' => $data['movie_id'],
                 'showtime_date' => $data['date'],
-                'showtime_start' => $startTime,
+                'showtime_start' => $startTime, 
                 'showtime_end' => $endTime,
                 'price' => $price,
                 'status' => '1',
