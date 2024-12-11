@@ -26,7 +26,7 @@ class Booking extends Model
 
     public function seats()
     {
-        return $this->belongsToMany(Seats::class, 'booking_seats', 'booking_id');
+        return $this->belongsToMany(Seats::class, 'booking_seats', 'booking_id', 'seat_id');
     }
 
 
@@ -35,7 +35,7 @@ class Booking extends Model
         return $this->belongsToMany(Combo::class, 'booking_combos')->withPivot('quantity');
     }
 
-    public function booking_users()        
+    public function booking_users()
     {
         return $this->belongsToMany(User::class, 'booking_users', 'booking_id', 'user_id');
     }

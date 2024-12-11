@@ -22,6 +22,7 @@ import { Cinema } from "../../../interface/Cinema";
 
 import * as XLSX from "xlsx"; // Import XLSX for Excel export
 import { Link } from "react-router-dom";
+import { Movie } from "../../../interface/Movie";
 ChartJS.register(
   Title,
   Tooltip,
@@ -37,9 +38,6 @@ ChartJS.register(
 
 const DashboardAdmin = () => {
   const [bookings, setBookings] = useState<any[]>([]); // Update this type to match your API response
-  const [totalRevenue, setTotalRevenue] = useState<number | null>(null);
-  const [totalBookings, setTotalBookings] = useState<number | null>(null);
-  const [movieRevenue, setMovieRevenue] = useState<any[]>([]); // To store movie revenue details
   const [cinemas, setCinemas] = useState<Cinema[]>([]); // State for cinemas
   const [selectedCinema, setSelectedCinema] = useState<number | null>(null);
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null); 
@@ -54,6 +52,10 @@ const DashboardAdmin = () => {
   const [dayRevenue, setDayRevenue] = useState<any>(null);
 const [monthRevenue, setMonthRevenue] = useState<any>(null);
 const [yearRevenue, setYearRevenue] = useState<any>(null);
+const [dailyData, setDailyData] = useState({});
+const [monthlyData, setMonthlyData] = useState({});
+const [movieRevenue, setMovieRevenue] = useState<Movie[]>([]);
+
 
 
 useEffect(() => {
@@ -86,13 +88,17 @@ useEffect(() => {
 
       // setTotalRevenue(dashboardResponse.data.chart.total_amount);
       setBookings(dashboardResponse.data.booking_revenue);
+      setMovieRevenue(dashboardResponse.data.movie_revenue);
       // setBookings(dashboardResponse.data.data);
       // setMovieRevenue(dashboardResponse.data.movie);
+      setDailyData(dashboardResponse.data.daily_revenue_chart);
+        setMonthlyData(dashboardResponse.data.monthly_revenue_chart);
       
       // Set day, month, and year revenue data
       setDayRevenue(dashboardResponse.data.day_revenue);
       setMonthRevenue(dashboardResponse.data.month_revenue);
       setYearRevenue(dashboardResponse.data.year_revenue);
+      
 
     } catch (error) {
       console.error("Error fetching dashboard data:", error);
@@ -122,60 +128,39 @@ useEffect(() => {
     // Export the Excel file
     XLSX.writeFile(wb, "Bookings_Report.xlsx");
   };
-  const doughnutData = {
-    labels: movieRevenue.map((movie: any) => movie.movie_name), // Các tên phim làm nhãn
+  const dailyLabels = Object.keys(dailyData);
+  const dailyValues = Object.values(dailyData);
+
+  const monthlyLabels = Object.keys(monthlyData).map((month) => `Tháng ${month}`);
+  const monthlyValues = Object.values(monthlyData);
+  
+  const dailyChartData = {
+    labels: dailyLabels,
     datasets: [
       {
-        data: movieRevenue.map((movie: any) => movie.total_amount), // Dữ liệu tổng doanh thu theo phim
-        backgroundColor: ['#27ae60', '#3498db', '#e74c3c', '#f1c40f', '#9b59b6'],
+        label: "Doanh thu theo ngày",
+        data: dailyValues,
+        borderColor: 'rgba(75, 192, 192, 1)',
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        fill: true,
       },
     ],
   };
-
-
-const doughnutOptions = {
-  maintainAspectRatio: false,
-  cutout: '70%',
-  plugins: {
-    legend: {
-      position: 'top' as 'chartArea',
-      labels: {
-        boxWidth: 20,
-      },
-    },
-  },
-  responsive: true, 
-};
-
-  const getRandomColor = () => {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-  };
-  const areaData = {
-    labels: cinemaRevenue.map(item => item.cinema_name),
+  const monthlyChartData = {
+    labels: monthlyLabels,
     datasets: [
-        {
-            label: 'Doanh thu',
-            data: cinemaRevenue.map(item => item.revenue),
-            backgroundColor: 'rgba(39, 174, 96, 0.4)',
-            borderColor: '#27ae60',
-            borderWidth: 2,
-            fill: true,
-        },
+      {
+        label: "Doanh thu theo tháng",
+        data: monthlyValues,
+        borderColor: 'rgba(153, 102, 255, 1)',
+        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+        fill: true,
+      },
     ],
-};
+  };
   const selectedCinemaName = selectedCinema
   ? cinemas.find((cinema) => cinema.id === selectedCinema)?.cinema_name || "Rạp không xác định"
   : "Tất cả các rạp";
-
-  const paginatedBookings = bookings.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize
-  );
 
   return (
     <div className="dashboard">
@@ -342,104 +327,193 @@ const doughnutOptions = {
 
         <div className="charts-container">
           <div className="quarterly-revenue">
-            <h3>Doanh Thu Phim Theo Rạp</h3>
+            <h3>Doanh Thu Theo Ngày</h3>
             <div className="area-chart">
-            <Line
-    data={areaData}
-    options={{
-        responsive: true,
-        plugins: {
-            legend: { position: 'top' },
-            tooltip: {
-                callbacks: {
-                    label: (context) => {
-                        const value = context.raw as number; // Ép kiểu context.raw sang number
-                        return `${value.toLocaleString('vi-VN')}₫`;
-                    },
-                },
-            },
-        },
-        scales: {
-            x: { title: { display: true, text: 'Các rạp' } },
-            y: {
-                title: { display: true, text: 'Doanh thu (VND)' },
-                ticks: {
-                    callback: (value) => `${value.toLocaleString('vi-VN')}₫`,
-                },
-            },
-        },
-    }}
-/>
-              
+            <Line data={dailyChartData} options={{
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            tooltip: {
+                                callbacks: {
+                                  label: (context) => {
+                                    const value = Number(context.raw); // Ép kiểu thành số
+                                    return value ? `${value.toLocaleString()}₫` : ''; // Hiển thị VNĐ
+                                  },
+                                },
+                            },
+                        },
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: '',
+                                },
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: '',
+                                },
+                                ticks: {
+                                  callback: (value) => `${value.toLocaleString()}₫`, // Hiển thị VNĐ
+                                },
+                            },
+                        },
+                    }} />   
             </div>
           </div>
 
-          <div className="revenue-summary">
-  <h3>Doanh Thu Phim Theo Rạp</h3>
-  <div className="revenue-chart">
-    <Doughnut
-      data={doughnutData} options={doughnutOptions}  // Dữ liệu từ movieRevenue
-    />
+          <div className="quarterly-revenue">
+  <h3>Doanh Thu Theo Tháng</h3>
+  <div className="bar-chart">
+  <Bar data={monthlyChartData} options={{
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                      label: (context) => {
+                                        const value = Number(context.raw); // Ép kiểu thành số
+                                        return value ? `${value.toLocaleString()}₫` : ''; // Hiển thị VNĐ
+                                      },
+                                    }
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    beginAtZero: true
+                                },
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                      callback: (value) => `${value.toLocaleString()}₫`, // Hiển thị VNĐ
+                                    },
+                                }
+                            }
+                        }} />
   </div>
-  <p className="revenue-amount">{totalRevenue ? `${totalRevenue.toLocaleString()}VNĐ` : 'Loading...'}</p>
 </div>
+
 
         </div>
 
         {/* Thêm bảng vào dưới biểu đồ */}
-        <div className="recent-orders">
-  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div className="recent-container">
+  <div className="recent-orders">
     <h3>Đơn hàng gần đây</h3>
-  </div>
-  <table>
-    <thead>
-      <tr>
-        <th>Mã Đơn Hàng</th>
-        <th>Người Dùng</th>
-        <th>Phương Thức Thanh Toán</th>
-        <th>Phim</th>
-        <th>Tổng Tiền</th>
-        <th>Trạng Thái</th>
-        <th>Ngày Đặt</th>
-      </tr>
-    </thead>
-    <tbody>
-      {bookings.length > 0 ? (
-        bookings.map((booking: any) => (
-          <tr key={booking.booking_id}>
-            <td>{booking.booking_code}</td>
-            <td>{booking.user_id}</td>
-            <td>{booking.pay_method_id}</td>
-            <td>{booking.showtime.movie.movie_name}</td>
-            <td>{booking.amount}</td>
-            <td>{booking.status}</td>
-            <td>{booking.created_at}</td>
-            
+    <div style={{ overflowX: 'auto' }}>
+      <table>
+        <thead>
+          <tr>
+            <th>Mã Đơn Hàng</th>
+            <th>Phim</th>
+            <th>Tổng Tiền</th>
+            <th>Trạng Thái</th>
+            <th>Ngày Đặt</th>
           </tr>
-        ))
-      ) : (
-        <tr>
-          <td colSpan={9} className="text-center">
-            Không có đơn hàng nào.
-          </td>
-        </tr>
-      )}
-    </tbody>
-  </table>
-  <div style={{ marginTop: '20px', textAlign: 'right' }} className="d-flex justify-content-center mt-4">
-    <Pagination
-      current={currentPage}
-      pageSize={pageSize}
-      total={bookings.length}
-      onChange={(page, size) => {
-        setCurrentPage(page);
-        setPageSize(size);
+        </thead>
+        <tbody>
+          {bookings.length > 0 ? (
+            bookings.map((booking: any) => (
+              <tr key={booking.booking_id}>
+                <td>{booking.booking_code}</td>
+                <td>{booking.showtime.movie.movie_name}</td>
+                <td>{booking.amount}</td>
+                <td>{booking.status}</td>
+                <td>{booking.created_at}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan={5} className="text-center">
+                Không có đơn hàng nào.
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
+
+    {/* Phân trang */}
+    <div style={{ marginTop: '20px', textAlign: 'center' }}>
+      <Pagination
+        current={currentPage}
+        pageSize={pageSize}
+        total={bookings.length}
+        onChange={(page, pageSize) => {
+          setCurrentPage(page);
+          setPageSize(pageSize);
+        }}
+      />
+    </div>
+  </div>
+
+  {/* Biểu đồ tròn nằm bên phải bảng */}
+  <div className="chart-container1">
+    <h3>Tỷ lệ chọn ghế</h3>
+    <Doughnut
+      data={{
+        labels: ['Thanh toán thành công', 'Đã in vé'],
+        datasets: [
+          {
+            label: 'Doanh Thu',
+            data: [12000, 8000],
+            backgroundColor: ['#4caf50', '#ff9800'],
+            borderColor: ['#4caf50', '#ff9800'],
+            borderWidth: 1,
+          },
+        ],
       }}
-      showSizeChanger
+      options={{
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          tooltip: {
+            callbacks: {
+              label: (context) => `${context.label}: ${context.raw}₫`,
+            },
+          },
+        },
+      }}
     />
   </div>
 </div>
-
+<div className="recent-orders">
+          <h3>Doanh thu theo phim</h3>
+          <table>
+            <thead>
+              <tr>
+              <th>Ảnh Phim</th>
+            <th>Tên Phim</th>
+            <th>Doanh Thu Của Phim</th>
+            <th>Tổng Suất Chiếu</th>
+              </tr>
+            </thead>
+            <tbody>
+            {movieRevenue.map((movie) => (
+            <tr key={movie.movie_id}>
+              <td>
+                <img
+                  src={movie.movie_image}
+                  alt={movie.movie_name}
+                  width="100"
+                />
+              </td>
+              <td>{movie.movie_name}</td>
+              <td>{movie.total_revenue.toLocaleString()}₫</td>
+              <td>{movie.showtime_count}</td>
+            </tr>
+          ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
