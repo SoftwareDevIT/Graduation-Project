@@ -1,8 +1,10 @@
-export interface Seat {
-  type: "Normal" | "Couple" | "VIP";
+
+  export interface Seat {
     row: string;
-    seat_name: string;
-    seat_row: number;
-    seat_column: number;
+    type: string;
+    label: string;
+    column: number;
+    status: number;
+    linkedSeat?: string;
+    isSelected?: boolean; 
   }
-  
