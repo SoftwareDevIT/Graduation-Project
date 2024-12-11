@@ -232,7 +232,8 @@ Route::post('printTicket', [OrderController::class, 'printTicket']);
 
 Route::prefix('seat-maps')->group(function () {
     Route::get('/', [SeatMapController::class, 'index']);
-    Route::get('/{id}', [SeatMapController::class, 'show']);
+    Route::get('/{id}', [SeatMapController::class, 'show']
+);
     Route::post('/', [SeatMapController::class, 'store']);
     Route::put('/{id}', [SeatMapController::class, 'update']);
     Route::delete('/{id}', [SeatMapController::class, 'destroy']);

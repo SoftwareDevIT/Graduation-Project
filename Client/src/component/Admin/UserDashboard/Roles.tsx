@@ -170,7 +170,7 @@ const RoleAndUserManagement = () => {
           Tạo vai trò
         </button>
 
-        {/* <h3 style={{ marginTop: '20px' }}>Vai trò hiện có</h3>
+        <h3 style={{ marginTop: '20px' }}>Vai trò hiện có</h3>
         <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
           <thead>
             <tr>
@@ -242,7 +242,7 @@ const RoleAndUserManagement = () => {
               </tr>
             ))}
           </tbody>
-        </table> */}
+        </table>
       </div>
       <h2>Quản lý người dùng</h2>
       <div>

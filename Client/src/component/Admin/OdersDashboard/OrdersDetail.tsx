@@ -325,16 +325,6 @@ const OrderDetail = () => {
     <p>Không có combo nào</p>
   )}
 </td>
-
-
-                
-                {orderDetails.seats.map((item)=>(
-                  <td>
-                    {item.seat_name}
-                   </td>
-                ))}
-               
-
               </tr>
             </tbody>
           </table>

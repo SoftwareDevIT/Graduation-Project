@@ -24,9 +24,10 @@ const showtimeSchema = z.object({
       today.setHours(0, 0, 0, 0); // Reset giờ phút giây để chỉ so sánh ngày
       return selectedDate >= today;
     }, 'Ngày chiếu không được nhỏ hơn ngày hiện tại'),
-  showtime_start: z
+    showtime_start: z
     .string()
-    .min(1, 'Vui lòng chọn giờ bắt đầu'),
+    .min(1, 'Vui lòng chọn giờ bắt đầu')
+    .regex(/^\d{2}:\d{2}$/, 'Giờ bắt đầu phải có định dạng HH:mm'),
   price: z
     .number()
     .min(0, 'Giá phải lớn hơn hoặc bằng 0')
@@ -91,9 +92,9 @@ const ShowtimesForm: React.FC = () => {
   const onSubmit: SubmitHandler<Showtime> = async (data) => {
     const formattedData = {
       ...data,
-      showtime_start: `${data.showtime_start}:00`,
+      showtime_start: `${data.showtime_start}:00`, // Add ':00' to make it HH:mm:ss
     };
-
+  
     if (!id) {
       setShowtimesList((prevList) => [...prevList, formattedData]);
     } else {
@@ -104,9 +105,10 @@ const ShowtimesForm: React.FC = () => {
       });
       navigate('/admin/showtimes');
     }
-
+  
     reset();
   };
+  
 
   // Delete a showtime
   const handleDelete = (index: number) => {
