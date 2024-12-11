@@ -53,7 +53,7 @@ class DashboardAdminController extends Controller
     
     public function dashboard(Request $request)
     {
-        // $status = $request->query('status');
+        $status = $request->query('status');
         $cinema_id = $request->query('cinema_id');
         $start_date = $request->query('start_date');
         $end_date = $request->query('end_date');
