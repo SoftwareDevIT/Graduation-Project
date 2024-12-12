@@ -63,9 +63,12 @@ const Header = () => {
             
         })
         .catch(error => {
-            
+          console.log("Error fetching vouchers:", error.response?.data || error.message);
+       
         });
 }, []);
+
+
   const toggleHeaderLeft = () => {
     setHeaderLeftVisible((prev) => !prev);
   };
@@ -233,9 +236,9 @@ const Header = () => {
                       <path
                         d="M4 6L8 10L12 6"
                         stroke="#555"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                       />
                     </svg>
                   </span>
@@ -261,9 +264,9 @@ const Header = () => {
                       <path
                         d="M4 6L8 10L12 6"
                         stroke="#555"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
+                         strokeWidth="2" 
+                         strokeLinecap="round"
+                         strokeLinejoin="round"
                       />
                     </svg>
                   </span>

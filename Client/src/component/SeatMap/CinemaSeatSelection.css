@@ -19,7 +19,7 @@
 }
 
 .seat-map-box {
-  margin-left: 128px;
+  margin-left: 189px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -28,7 +28,7 @@
 }
 
 .thongtinphim {
-  margin-right: 18%;
+  margin-right: 13%;
   margin-top: 0px;
 }
 
@@ -375,9 +375,11 @@ color: #727575;
   }
 
   .legend {
-    display: flex;
+    display: flex !important;
     align-items: center;
     margin-top: 10px;
+    width: 129%;
+    margin-left: 70px;
   }
 
   .legend div {
@@ -478,7 +480,7 @@ color: #727575;
     display: flex;
     align-items: center;
     margin-top: 10px;
-    flex-wrap: wrap; /* Cho phép dòng chữ legend gọn hơn */
+  
     justify-content: center; /* Canh giữa nội dung */
   }
 
@@ -572,7 +574,7 @@ color: #727575;
     display: flex;
     align-items: center;
     margin-top: 10px;
-    flex-wrap: wrap; /* Cho phép dòng chữ legend gọn hơn */
+  
     justify-content: center; /* Canh giữa nội dung */
   }
 

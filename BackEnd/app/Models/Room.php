@@ -37,10 +37,5 @@ class Room extends Model
     {
         return $this->belongsTo(Cinema::class);
     }
-<<<<<<< HEAD
 
-
-
-=======
->>>>>>> a36b393479aa48db53b2a9665009f3adb83ad6b1
 }

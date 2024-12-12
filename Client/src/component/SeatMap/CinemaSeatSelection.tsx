@@ -67,6 +67,7 @@ const CinemaSeatSelection: React.FC = () => {
         const seatStructure =
           response.data?.data?.room?.seat_map?.seat_structure;
         // console.log('showtimedata',seatStructure)
+      
         setShowtimeData(seatLayoutData);
 
         // Setting seat data
@@ -110,20 +111,23 @@ const CinemaSeatSelection: React.FC = () => {
             const channel = echo.private(`seats-${roomId}`);
             console.log("Connected to channel:", channel);
             // Lắng nghe sự kiện SeatSelected
+            const normalizeSeats = (seats: string[]): string[] => {
+              return seats.map((seat) => {
+                // Tách chuỗi ghế và giữ lại phần cuối cùng sau dấu "-"
+                const parts = seat.split("-");
+                return `${parts[parts.length - 2]}-${parts[parts.length - 1]}`;
+              });
+            };
+            
             channel.listen("SeatSelected", (eventData: any) => {
-              console.log("Received seats data:", eventData);
-
-              if (eventData) {
-                console.log("Received selected seats:", eventData.seats);
-
-                // Cập nhật state với Map
-                const newSelectedSeats = new Map(selectedSeats); // Sao chép bản đồ cũ
-                newSelectedSeats.set(roomId, eventData.seats); // Thêm ghế mới vào Map theo roomId
-                setSelectedSeats(newSelectedSeats); // Cập nhật lại state
-
-                
-                updateSeatsSelection(eventData.seats); // Cập nhật ghế trong lưới
-              }
+              console.log("Raw seats data receizved:", eventData.seats);
+            
+              // Chuẩn hóa dữ liệu
+              const normalizedSeats = normalizeSeats(eventData.seats);
+              console.log("Normalized seats data:", normalizedSeats);
+            
+              // Cập nhật danh sách ghế được chọn
+              updateSeatsSelection(normalizedSeats);
             });
           } else {
             setStatus("Failed to connect.");
@@ -151,21 +155,36 @@ const CinemaSeatSelection: React.FC = () => {
   }, [showtimeId, selectedSeats,echoInstance ]);
 
   const updateSeatsSelection = (selectedSeats: string[]) => {
-    // Lặp qua từng ghế trong seat_structure
-    const updatedSeats = seatData.seat_structure.map((seat) => {
-      // Tạo khóa ghế từ row và column
-      const seatKey = `${seat.row}-${seat.column}`;
-      // Kiểm tra xem ghế có trong danh sách ghế đã chọn không
-      seat.isSelected = selectedSeats.includes(seatKey);
-      return seat;
+    setSeatData((prevSeatData) => {
+      if (!prevSeatData || !prevSeatData.seat_structure || prevSeatData.seat_structure.length === 0) {
+        console.error("Seat structure is not available or empty!");
+        return prevSeatData; // Giữ nguyên nếu dữ liệu không hợp lệ
+      }
+  
+      console.log("Seat structure before update:", prevSeatData.seat_structure);
+  
+      // Map qua seat_structure để cập nhật trạng thái của ghế
+      const updatedSeats = prevSeatData.seat_structure.map((seat) => {
+        const seatKey = `${seat.row}-${seat.column}`;
+        return {
+          ...seat,
+          isSelected: selectedSeats.includes(seatKey),
+        };
+      });
+  
+      console.log("Updated seat structure:", updatedSeats);
+  
+      // Cập nhật lại state với dữ liệu mới
+      return {
+        ...prevSeatData,
+        seat_structure: updatedSeats,
+      };
     });
-
-    // Cập nhật lại seat_structure trong state
-    setSeatData((prev) => ({
-      ...prev,
-      seat_structure: updatedSeats,
-    }));
   };
+  
+  
+  
+  
 
   const { seat_structure, matrix_row, matrix_column } = seatData;
 
@@ -197,7 +216,6 @@ const CinemaSeatSelection: React.FC = () => {
 
     const newSelectedSeats = new Map(selectedSeats);
 
-    // Xử lý chọn/bỏ chọn ghế và ghế liên kết
     const currentIndices = newSelectedSeats.get(row) || [];
     if (currentIndices.includes(col)) {
       // Bỏ chọn ghế
@@ -235,7 +253,8 @@ const CinemaSeatSelection: React.FC = () => {
     const updatedSelectedSeats = Array.from(newSelectedSeats.entries()).flatMap(
       ([row, indices]) => indices.map((colIndex) => `${row}-${colIndex}`) // Bỏ +1 nếu không cần thiết
     );
-    // Gọi API để lưu ghế đã chọn
+   
+    
     instance
       .post(`/seat-selection/${showtimeData?.room.id}`, {
         seats: updatedSelectedSeats,
@@ -502,7 +521,6 @@ const CinemaSeatSelection: React.FC = () => {
 
                             return (
                               <div
-                              
                                 key={seatLabel}
                                 style={{
                                   width: "30px",

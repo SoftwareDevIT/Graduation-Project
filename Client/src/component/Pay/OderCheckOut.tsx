@@ -275,10 +275,6 @@ const OrderCheckout = () => {
             console.error("Error during booking:", error);
         }
     };
-    
-    
-    
-
     return (
         <>
             <Header />

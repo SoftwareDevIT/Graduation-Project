@@ -51,24 +51,24 @@ const comboReducer = (state: ComboState, action: Action): ComboState => {
 export const ComboProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(comboReducer, { combos: [] });
 
-const fetchCombos = async () => {
-  try {
+// const fetchCombos = async () => {
+//   try {
    
 
-    const { data } = await instance.get('/combo', {
-    });
-    dispatch({ type: 'SET_COMBOS', payload: data.data });
-  } catch (error) {
-    console.error('Failed to fetch combos:', error);
-  }
-};
+//     const { data } = await instance.get('/combo', {
+//     });
+//     dispatch({ type: 'SET_COMBOS', payload: data.data });
+//   } catch (error) {
+//     console.error('Failed to fetch combos:', error);
+//   }
+// };
 
 
   const addCombo = async (combo: Combo) => {
     try {
       const { data } = await instance.post('/combo', combo);
       dispatch({ type: 'ADD_COMBO', payload: data.data });
-      fetchCombos()
+      // fetchCombos()
     } catch (error) {
       console.error('Failed to add combo:', error);
     }
@@ -93,7 +93,7 @@ const fetchCombos = async () => {
   };
 
   useEffect(() => {
-    fetchCombos();
+    // fetchCombos();
   }, []);
 
   return (
