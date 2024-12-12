@@ -75,7 +75,7 @@ const Sidebar: React.FC = () => {
               </li>
             </>
           )}
-          {userRole == "manager" && (
+          {userRole == "admin || manager"  && (
             <li>
               <span onClick={() => toggleMenu("cinema")}>
                 <FaBuilding style={{ marginRight: "-80px" }} /> Hệ thống rạp{" "}

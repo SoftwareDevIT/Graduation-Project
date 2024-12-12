@@ -74,7 +74,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
       const fetchUserProfile = async () => {
         try {
-          const response = await instance.get(`/user/${userId}`);
+          const response = await instance.get(`/manager/user/${userId}`);
           if (response.data.success) {
             const userProfileData = response.data.user;
             console.log('data-user',userProfileData)
@@ -116,7 +116,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     }
 
     try {
-      const response = await instance.post(`/user/${userProfile.id}`, formData, {
+      const response = await instance.post(`/manager/user/${userProfile.id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

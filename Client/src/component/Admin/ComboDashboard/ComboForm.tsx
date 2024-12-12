@@ -41,7 +41,7 @@ const ComboForm = () => {
     const fetchCombo = async () => {
       if (id) {
         try {
-          const { data } = await instance.get(`/combo/${id}`);
+          const { data } = await instance.get(`/manager/combo/${id}`);
           reset(data.data); // Reset form với dữ liệu đã lấy
         } catch (error) {
           console.error("Lỗi khi lấy dữ liệu combo:", error);

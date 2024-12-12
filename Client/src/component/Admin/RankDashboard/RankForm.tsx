@@ -35,7 +35,7 @@ const RankForm = () => {
     const fetchRank = async () => {
       if (id) {
         try {
-          const { data } = await instance.get(`/ranks/${id}`);
+          const { data } = await instance.get(`/admin/ranks/${id}`);
           reset(data.data);
         } catch (error) {
           console.error("Lỗi khi lấy dữ liệu hạng:", error);
@@ -53,12 +53,12 @@ const RankForm = () => {
   const handleFormSubmit = async (data: Rank) => {
     try {
       if (id) {
-        await instance.put(`/ranks/${id}`, data);
+        await instance.put(`/admin/ranks/${id}`, data);
         notification.success({
           message: "Cập nhật hạng thành công!",
         });
       } else {
-        await instance.post("/ranks", data);
+        await instance.post("/admin/ranks", data);
         notification.success({
           message: "Thêm hạng thành công!",
         });

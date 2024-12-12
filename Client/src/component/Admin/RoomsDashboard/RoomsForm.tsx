@@ -40,7 +40,7 @@ const RoomsForm: React.FC = () => {
 
     const fetchRoom = async () => {
       if (id) {
-        const response = await instance.get(`/room/${id}`);
+        const response = await instance.get(`manager/room/${id}`);
         const roomData = response.data.data;
         reset({
           room_name: roomData.room_name,
@@ -67,7 +67,7 @@ const RoomsForm: React.FC = () => {
 
     try {
       if (id) {
-        await instance.put(`/room/${id}`, data);
+        await instance.put(`manager/room/${id}`, data);
         notification.success({
           message: 'Cập nhật Phòng',
           description: 'Cập nhật phòng thành công!',
@@ -76,7 +76,7 @@ const RoomsForm: React.FC = () => {
         const mappedData = {
           ...data,
         };
-        await instance.post('/room', mappedData);
+        await instance.post('manager/room', mappedData);
         notification.success({
           message: 'Thêm Phòng',
           description: 'Thêm phòng thành công!',

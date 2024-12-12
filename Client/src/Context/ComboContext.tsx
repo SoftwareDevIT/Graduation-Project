@@ -55,7 +55,7 @@ const fetchCombos = async () => {
   try {
    
 
-    const { data } = await instance.get('/combo', {
+    const { data } = await instance.get('/manager/combo', {
     });
     dispatch({ type: 'SET_COMBOS', payload: data.data });
   } catch (error) {
@@ -66,7 +66,7 @@ const fetchCombos = async () => {
 
   const addCombo = async (combo: Combo) => {
     try {
-      const { data } = await instance.post('/combo', combo);
+      const { data } = await instance.post('/manager/combo', combo);
       dispatch({ type: 'ADD_COMBO', payload: data.data });
       fetchCombos()
     } catch (error) {
@@ -76,7 +76,7 @@ const fetchCombos = async () => {
 
   const updateCombo = async (id: number, combo: Combo) => {
     try {
-      const { data } = await instance.put(`/combo/${id}`, combo);
+      const { data } = await instance.put(`/manager/combo/${id}`, combo);
       dispatch({ type: 'UPDATE_COMBO', payload: data.data });
     } catch (error) {
       console.error('Failed to update combo:', error);
@@ -85,7 +85,7 @@ const fetchCombos = async () => {
 
   const deleteCombo = async (id: number) => {
     try {
-      await instance.delete(`/combo/${id}`);
+      await instance.delete(`/manager/combo/${id}`);
       dispatch({ type: 'DELETE_COMBO', payload: id });
     } catch (error) {
       console.error('Failed to delete combo:', error);

@@ -16,7 +16,7 @@ const SeatMap = () => {
     useEffect(() => {
         const fetchSeatLayouts = async () => {
             try {
-                const response = await instance.get('/seat-maps'); // API call for seat layouts
+                const response = await instance.get('/manager/seat-maps'); // API call for seat layouts
                 setSeatLayouts(response.data);
             } catch (error) {
                 console.error('Error fetching seat layouts:', error);
@@ -35,7 +35,7 @@ const SeatMap = () => {
         if (!isConfirmed) return;
 
         try {
-            await instance.delete(`/seat-maps/${id}`);
+            await instance.delete(`/manager/seat-maps/${id}`);
             setSeatLayouts((prevLayouts) => prevLayouts.filter((layout) => layout.id !== id));
             notification.success({
                 message: 'Thành công',
