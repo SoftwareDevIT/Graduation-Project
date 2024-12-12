@@ -6,31 +6,14 @@ import Headerticket from '../Headerticket/Headerticket';
 import Footer from '../Footer/Footer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
-
 import './OderCheckOut.css';
 import Header from '../Header/Hearder';
 import { useUserContext } from '../../Context/UserContext';
-export interface LocationState {
-    movieName: string;
-    cinemaName: string;
-    showtime: string;
-    seats: Array<{ seat_name: string; room_id: number; showtime_id: number; seat_row: number; seat_column: number; }>;
-    totalPrice: number;
-    showtimeId: number;
-    roomId: number;
-    cinemaId: number;
-    selectedCombos :Array<{id:string,quantity:number}>
-  }
-  interface Role {
-    id: number;
-    name: string;
-    guard_name: string;
-    created_at: string;
-  }
-  
-interface UserProfile {
-    roles: Role[];
-  }
+import { LocationState } from '../../interface/LocationState';
+import { UserProfile } from '../../interface/UserProfile';
+
+
+
 const OrderCheckout = () => {
     const [email, setEmail] = useState("");
     const location = useLocation();
@@ -41,35 +24,34 @@ const OrderCheckout = () => {
     const [isVoucherVisible, setIsVoucherVisible] = useState<boolean>(false);
     const [isTableVisible, setIsTableVisible] = useState(false);
     const { userProfile, avatar, setUserProfile } = useUserContext(); // Use context to get user data
-    const [pointHistories, setPointHistories] = useState<any[]>([]);
     const [pointsToUse, setPointsToUse] = useState(""); // Số điểm nhập
-    const [userRole, setUserRole] = useState(null); 
-    // Hàm xử lý sự kiện click vào <h3> để thay đổi trạng thái hiển thị bảng
     const userProfilea: UserProfile | null = JSON.parse(localStorage.getItem("user_profile") || "null");
     const userRoles = userProfilea?.roles || []; // Lấy danh sách vai trò nếu có
-    const isAdmin = userRoles.length > 0 && userRoles[0]?.name === "admin";
+    const isAdmin = userRoles.length > 0 && userRoles[0]?.name === "staff";
     const [isModalVisible, setIsModalVisible] = useState(false);
-  
-    const handleOk = () => {
-      setIsModalVisible(false);
-    };
-
+   
+    const [isPointsUsed, setIsPointsUsed] = useState(false); // Flag to track if points have been used
+    const [availablePoints, setAvailablePoints] = useState(userProfile?.points || 0); // Available points
     const toggleTableVisibility = () => {
       setIsTableVisible(!isTableVisible);
     };
     const showModal = () => {
         setIsModalVisible(true);
     };
-   
+    const handleOk = () => {
+        setIsModalVisible(false);
+      };
+  
     const handleCancel = () => {
         setIsModalVisible(false);
     };
     useEffect(() => {
         if (userProfile) {
-          setPointHistories(userProfile.point_histories);
+            setAvailablePoints(userProfile.points);
+            setIsPointsUsed(false); // Reset usage flag if user profile changes
         }
-      }, [userProfile]);
-    
+    }, [userProfile]);
+    console.log("data",userProfile)
     
     const navigate = useNavigate();
     const {
@@ -85,14 +67,13 @@ const OrderCheckout = () => {
     } = (location.state as LocationState) || {};
 
     // Log selectedSeats to verify data
-    console.log(seats);
+    // console.log(seats);
     // console.log(selectedCombos); // Check if combos are passed correctly
     const handleApplyVoucher = async () => {
         if (!voucherCode) {
             message.warning("Vui lòng nhập mã voucher.");
             return;
         }
-    
         try {
             const response = await instance.post("/apply-promotion", {
                 code: voucherCode,
@@ -121,16 +102,13 @@ const OrderCheckout = () => {
             message.warning("Vui lòng nhập số điểm hợp lệ.");
             return;
         }
-    
-        // Kiểm tra nếu số điểm nhập vào vượt quá tổng giá trị đơn hàng
         if (points > totalPrice) {
             message.warning("Số điểm không thể vượt quá tổng giá trị đơn hàng.");
             return;
         }
-    const availablePoints=userProfile?.points ;
-    const availablePointsNumber = availablePoints ? Number(availablePoints) : 0;
+    
         // Kiểm tra nếu số điểm nhập vào lớn hơn số điểm hiện có
-        if (points > availablePointsNumber) { // `availablePoints` là số điểm hiện có của người dùng
+        if (points > availablePoints) {
             message.warning("Bạn không có đủ điểm để sử dụng.");
             return;
         }
@@ -142,16 +120,20 @@ const OrderCheckout = () => {
             });
     
             if (response.status === 200 && response.data) {
-                const { message: successMessage, discount_value
-                    , final_price } = response.data;
+                const { message: successMessage, discount_value, final_price } = response.data;
     
                 // Hiển thị thông báo thành công
                 message.success(successMessage);
     
                 // Cập nhật tổng tiền và giảm giá
-                setDiscount(discount_value
-                ); // Nếu API trả về số tiền quy đổi từ điểm
+                setDiscount(discount_value); // Nếu API trả về số tiền quy đổi từ điểm
                 setFinalPrice(final_price); // Cập nhật lại tổng tiền sau khi trừ điểm
+    
+                // Cập nhật lại số điểm còn lại
+                setAvailablePoints((prevPoints) => prevPoints - points);
+    
+                // Đánh dấu là điểm đã được sử dụng
+                setIsPointsUsed(true);
             } else {
                 message.error("Không thể sử dụng điểm. Vui lòng kiểm tra lại.");
             }
@@ -160,8 +142,6 @@ const OrderCheckout = () => {
             message.error("Có lỗi xảy ra, vui lòng thử lại!");
         }
     };
-    
-    
     const handleRemoveVoucher = () => {
         setVoucherCode(""); // Xóa mã voucher
         setDiscount(null); // Đặt lại giảm giá về null
@@ -195,9 +175,6 @@ const OrderCheckout = () => {
         const secs = seconds % 60;
         return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
     };
-
-
-
     const handleCheckout = async () => {
         const token = localStorage.getItem("token");
     
@@ -373,46 +350,59 @@ const OrderCheckout = () => {
     </div>
 )}
 
-{!isAdmin && ( 
-    <div>
-       
-        <h4 onClick={toggleTableVisibility} className='diemgiamgia'>Điểm giảm giá FlickHive
-      <FontAwesomeIcon icon={faQuestionCircle} style={{ marginLeft: '10px', cursor: 'pointer' }} onClick={showModal} />
-      </h4>
+{ !isAdmin && (
+        <div>
+            <h4 onClick={toggleTableVisibility} className='diemgiamgia'>
+                Điểm giảm giá FlickHive
+                <FontAwesomeIcon
+                    icon={faQuestionCircle}
+                    style={{ marginLeft: '10px', cursor: 'pointer' }}
+                    onClick={showModal}
+                />
+            </h4>
 
-    
-        {isTableVisible && (
-            <div className="khung-diem-poly">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Điểm hiện có</th>
-                            <th>Nhập Điểm</th>
-                            <th>Thao tác</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>{userProfile?.points || "0"}</td>
-                            <td>
-                                <input
-                                    type="number"
-                                    value={pointsToUse}
-                                    onChange={(e) => setPointsToUse(e.target.value)}
-                                    placeholder="Nhập số điểm"
-                                />
-                            </td>
-                            <td>
-                                <button onClick={handleUsePoints}>Áp dụng</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        )}
-    </div>
-    
-)}
+            {isTableVisible && (
+                <div className="khung-diem-poly">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Điểm hiện có</th>
+                                <th>Nhập Điểm</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                {/* Displaying available points */}
+                                <td>{availablePoints || "0"}</td>
+
+                                {/* Input for points to use */}
+                                <td>
+                                    <input
+                                        type="number"
+                                        value={pointsToUse}
+                                        onChange={(e) => setPointsToUse(e.target.value)}
+                                        placeholder="Nhập số điểm"
+                                        disabled={isPointsUsed} // Disable input if points are already used
+                                    />
+                                </td>
+
+                                {/* Apply button */}
+                                <td>
+                                    <button
+                                        onClick={handleUsePoints}
+                                        disabled={isPointsUsed} // Disable button if points are already used
+                                    >
+                                        Áp dụng
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            )}
+        </div>
+    )}
  <Modal
                     title="Hướng Dẫn Quy Đổi Điểm"
                     visible={isModalVisible}

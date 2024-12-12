@@ -16,8 +16,9 @@ import { UserProfile } from "../../interface/UserProfile";
     const [cinemas, setCinemas] = useState<Cinema[]>([]);
     const [actors, setActors] = useState<Actor[]>([]);
     const [movies, setMovies] = useState<Movie[]>([]);
-    const [selectedCity, setSelectedCity] = useState<number | null>(null);
-    const [selectedCinema, setSelectedCinema] = useState<number | null>(null);
+    const [selectedCity, setSelectedCity] = useState<number >();
+    
+    const [selectedCinema, setSelectedCinema] = useState<number>();
     const [selectedDate, setSelectedDate] = useState<string>("");
   
     const [filteredCinemas, setFilteredCinemas] = useState<Cinema[]>([]);
@@ -25,8 +26,7 @@ import { UserProfile } from "../../interface/UserProfile";
   
     const userProfilea: UserProfile | null = JSON.parse(localStorage.getItem("user_profile") || "null");
     const userRoles = userProfilea?.roles || [];
-    const isAdmin = userRoles.length > 0 && userRoles[0]?.name === "admin";
-    
+    const isAdmin = userRoles.length > 0 && userRoles[0]?.name === "staff";
   
     const navigate = useNavigate();
     
@@ -52,12 +52,21 @@ import { UserProfile } from "../../interface/UserProfile";
     useEffect(() => {
       const fetchCinemas = async () => {
         try {
-          const response = await instance.get("/cinema");
-          setCinemas(response.data.data || []);
+
+            const response = await instance.get("/cinema");
+            const cinemaData = response.data.data;
+            if (Array.isArray(cinemaData)) {
+                setCinemas(cinemaData);
+            } else {
+                console.error("Unexpected response format:", response);
+                setCinemas([]);
+            }
         } catch (error) {
-          console.error("không có dữ liệu:", error);
+            console.error("Error fetching cinemas:", error);
+            setCinemas([]);
         }
-      };
+    };
+    
     
       const fetchActors = async () => {
         try {
@@ -76,12 +85,21 @@ import { UserProfile } from "../../interface/UserProfile";
   
     useEffect(() => {
       if (cinemas.length > 0 && locations.length > 0) {
-        setLoading(false);  // Tắt loading khi có dữ liệu khu vực và rạp
-      } else {
-        setLoading(true);  // Hiển thị loading nếu chưa có dữ liệu khu vực hoặc rạp
+          const sortedLocations = locations
+              .map((location) => ({
+                  ...location,
+                  cinemaCount: cinemas.filter(
+                      (cinema) => cinema.location_id === location.id
+                  ).length,
+              }))
+              .sort((a, b) => b.cinemaCount - a.cinemaCount);
+  
+          const locationWithMostCinemas = sortedLocations[0];
+          if (locationWithMostCinemas) {
+              setSelectedCity(locationWithMostCinemas.id);
+          }
       }
-    }, [cinemas, locations]);
-  console.log( locations);
+  }, [cinemas, locations]);
   
     useEffect(() => {
       if (cinemas.length > 0) {
@@ -95,10 +113,10 @@ import { UserProfile } from "../../interface/UserProfile";
           .sort((a, b) => b.cinemaCount - a.cinemaCount);
   
         const locationWithMostCinemas = sortedLocations[0];
+
         setSelectedCity(locationWithMostCinemas.id);
-        console.log('====================================');
-        console.log(locationWithMostCinemas.id);
-        console.log('====================================');
+     
+     
       }
     }, [cinemas, locations]);
   
@@ -122,7 +140,7 @@ import { UserProfile } from "../../interface/UserProfile";
         );
         setFilteredCinemas(filtered);
         if (filtered.length > 0) {
-          setSelectedCinema(filtered[0].id ?? null); 
+          setSelectedCinema(filtered[0].id); 
         }
       } else {
         setFilteredCinemas(cinemas);
@@ -221,7 +239,7 @@ const displayLocations = isAdmin ? filteredLocations.slice(0, 1) : filteredLocat
                   <li
                     key={cinema.id}
                     className={`cinema ${selectedCinema === cinema.id ? "selected" : ""}`}
-                    onClick={() => setSelectedCinema(cinema.id ?? null)}
+                    onClick={() => setSelectedCinema(cinema.id )}
                   >
                     {cinema.cinema_name}
                   </li>

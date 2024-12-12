@@ -11,6 +11,8 @@ import {
 import instance from "../../server";
 import moment from 'moment';
 import Header from "../Header/Hearder";
+import Footer from "../Footer/Footer";
+
 
 const { Title, Text } = Typography;
 
@@ -310,6 +312,7 @@ const OrderHistoryApp: React.FC = () => {
         
         )}
       </div>
+      <Footer/>
     </>
   );
   

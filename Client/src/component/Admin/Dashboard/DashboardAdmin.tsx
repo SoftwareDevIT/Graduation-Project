@@ -64,7 +64,7 @@ const DashboardAdmin = () => {
         setCinemas(cinemasResponse.data.data);  // Cập nhật danh sách rạp
   
         // Lấy dữ liệu bảng điều khiển với tham số chọn rạp (nếu có)
-        const dashboardResponse = await instance.get("/dashboard", {
+        const dashboardResponse = await instance.get("/admin/dashboard", {
           params: { 
             cinema_id: selectedCinema ,
              status: selectedStatus,
@@ -75,7 +75,6 @@ const DashboardAdmin = () => {
              year: formattedYear
             }
         });
-  
         console.log("Dashboard API Response:", dashboardResponse.data);
   
         setTotalRevenue(dashboardResponse.data.chart.total_amount);
