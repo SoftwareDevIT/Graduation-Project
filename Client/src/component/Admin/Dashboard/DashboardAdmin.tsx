@@ -71,7 +71,7 @@ useEffect(() => {
       const cinemasResponse = await instance.get("/cinema");
       setCinemas(cinemasResponse.data.data);
 
-      const dashboardResponse = await instance.get("/dashboard", {
+      const dashboardResponse = await instance.get("/admin/dashboard", {
         params: {
           cinema_id: selectedCinema,
           status: selectedStatus,

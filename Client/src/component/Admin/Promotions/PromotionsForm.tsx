@@ -63,7 +63,7 @@ const PromotionForm = () => {
     const fetchPromotion = async () => {
       if (id) {
         try {
-          const { data } = await instance.get(`/promotions/${id}`);
+          const { data } = await instance.get(`/manager/promotions/${id}`);
           
           // Convert date fields to 'YYYY-MM-DD' format if needed
           if (data.valid_from) {
@@ -95,7 +95,7 @@ const PromotionForm = () => {
     try {
       if (id) {
         // Update promotion
-        await instance.put(`/promotions/${id}`, data);
+        await instance.put(`/manager/promotions/${id}`, data);
         notification.success({
           message: "Cập nhật khuyến mãi thành công!",
         });

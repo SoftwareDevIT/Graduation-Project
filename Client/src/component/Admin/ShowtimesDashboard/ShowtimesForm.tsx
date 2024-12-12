@@ -54,13 +54,13 @@ const ShowtimesForm: React.FC = () => {
   // Fetch initial data
   useEffect(() => {
     const fetchMovies = async () => {
-      const response = await instance.get('/movies');
+      const response = await instance.get('/manager/movies');
       setMoviesList(response.data.data.original);
     };
 
     const fetchShowtime = async () => {
       if (id) {
-        const response = await instance.get(`/showtimes/${id}`);
+        const response = await instance.get(`/manager/showtimes/${id}`);
         const showtimeData = response.data.data;
 
         // Populate form fields for edit mode
@@ -84,7 +84,7 @@ const ShowtimesForm: React.FC = () => {
 
   // Fetch rooms by movie
   const fetchRooms = async () => {
-    const response = await instance.get('/room'); // Lấy danh sách phòng từ API
+    const response = await instance.get('/manager/room'); // Lấy danh sách phòng từ API
     setRoomsList(response.data.data);
   };
 

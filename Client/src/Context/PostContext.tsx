@@ -47,7 +47,7 @@ export const PostProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const fetchPosts = async () => {
     try {
-      const response = await instance.get('/news'); // Ensure this endpoint is correct
+      const response = await instance.get('/manager/news'); // Ensure this endpoint is correct
       dispatch({ type: 'SET_POSTS', payload: response.data.data });
     } catch (error) {
       console.error('Error fetching posts:', error);
@@ -96,8 +96,8 @@ export const PostProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     try {
       const response = id
-        ? await instance.post(`/news/${id}`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
-        : await instance.post('/news', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+        ? await instance.post(`/manager/news/${id}`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+        : await instance.post('/manager/news', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
 
       if (id) {
         dispatch({ type: 'UPDATE_POST', payload: response.data.data });
@@ -112,7 +112,7 @@ export const PostProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const deletePost = async (id: number) => {
     try {
-      await instance.delete(`/news/${id}`);
+      await instance.delete(`/manager/news/${id}`);
       dispatch({ type: 'DELETE_POST', payload: id });
     } catch (error) {
       console.error('Error deleting post:', error);
