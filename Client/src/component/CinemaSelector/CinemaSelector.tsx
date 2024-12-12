@@ -50,6 +50,20 @@ import { useCinemaContext } from "../../Context/CinemasContext";
       );
     };
   
+    const [userRole, setUserRole] = useState<string>("");
+
+    // Fetch user role from localStorage
+    useEffect(() => {
+      const userData = JSON.parse(localStorage.getItem("user_profile") || "{}");
+      const roles = userData.roles || [];
+      console.log("data role:", roles);
+      if (roles.length > 0) {
+        setUserRole(roles[0].name);
+      } else {
+        setUserRole("unknown"); // Gán giá trị mặc định khi không có vai trò
+      }
+    }, []);
+    
     useEffect(() => {
    
     
@@ -137,23 +151,49 @@ import { useCinemaContext } from "../../Context/CinemasContext";
       const fetchMoviesForSelectedCinemaAndDate = async () => {
         if (selectedCinema && selectedDate) {
           try {
-            const cinemaResponse = await instance.get(`/filterByDate`, {
-              params: {
-                cinema_id: selectedCinema,
-                showtime_date: selectedDate,
-              },
-            });
-  
-            const cinemaMovies = cinemaResponse.data?.data || [];
+            let response;
+            if (userRole === "admin") {
+              // Admin has access to the full list
+              response = await instance.get(`/admin/filterByDate`, {
+                params: {
+                  cinema_id: selectedCinema,
+                  showtime_date: selectedDate,
+                },
+              });
+            } else if (userRole === "staff") {
+              // Staff has limited access, for example to a specific endpoint
+              response = await instance.get(`/staff/filterByDate`, {
+                params: {
+                  cinema_id: selectedCinema,
+                  showtime_date: selectedDate,
+                },
+              });
+            } else if (userRole === "manager") {
+              // Manager also has a specific endpoint
+              response = await instance.get(`/manager/filterByDate`, {
+                params: {
+                  cinema_id: selectedCinema,
+                  showtime_date: selectedDate,
+                },
+              });
+            } else {
+              // If the user role is unknown, don't fetch movies
+              console.error("Unauthorized role");
+              return;
+            }
+    
+            const cinemaMovies = response.data?.data || [];
             setMovies(cinemaMovies);
           } catch (error) {
             setMovies([]);
+            console.error("Error fetching movies:", error);
           }
         }
       };
-  
+    
       fetchMoviesForSelectedCinemaAndDate();
-    }, [selectedCinema, selectedDate]);
+    }, [selectedCinema, selectedDate, userRole]);
+    
   
     const selectedCinemaDetails = cinemas.find(
       (cinema) => cinema.id === selectedCinema

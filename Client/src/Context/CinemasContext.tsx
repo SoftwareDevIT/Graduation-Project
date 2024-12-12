@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useContext, useEffect } from 'react';
+import React, { createContext, useReducer, useContext, useEffect, useState } from 'react';
 import { Cinema } from '../interface/Cinema';
 import instance from '../server';
 
@@ -50,10 +50,36 @@ const cinemaReducer = (state: CinemaState, action: Action): CinemaState => {
 // Create a provider component
 export const CinemaProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(cinemaReducer, { cinemas: [] });
+  const [userRole, setUserRole] = useState<string>("");
 
+  // Fetch user role from localStorage
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("user_profile") || "{}");
+    const roles = userData.roles || [];
+    console.log("data role:", roles);
+    if (roles.length > 0) {
+      setUserRole(roles[0].name);
+    } else {
+      setUserRole("unknown"); // Gán giá trị mặc định khi không có vai trò
+    }
+  }, []);
+  
+  
+
+  // Fetch cinemas based on user role
   const fetchCinemas = async () => {
     try {
-      const response = await instance.get('/cinema');
+      let response;
+      if (userRole === "admin") {
+        response = await instance.get('/admin/cinema');
+      } else if (userRole === "staff") {
+        response = await instance.get('/staff/cinema');
+      } else if (userRole === "manager") {
+        response = await instance.get('/manager/cinema');
+      } else {
+        response = await instance.get('/cinema');
+      }
+
       dispatch({ type: 'SET_CINEMAS', payload: response.data.data });
     } catch (error) {
       console.error('Failed to fetch cinemas:', error);
@@ -61,37 +87,39 @@ export const CinemaProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   };
 
   useEffect(() => {
-    fetchCinemas(); // Fetch cinemas when the provider mounts
-  }, []);
+    if (userRole !== "") {
+      fetchCinemas();
+    }
+  }, [userRole]);
 
-  // Function to add a new cinema
+  // Add cinema
   const addCinema = async (cinema: Cinema) => {
     try {
       const response = await instance.post('/cinema', cinema);
-      dispatch({ type: 'ADD_CINEMA', payload: response.data }); // Dispatch add action
-      fetchCinemas(); // Re-fetch cinemas after adding
+      dispatch({ type: 'ADD_CINEMA', payload: response.data });
+      fetchCinemas();
     } catch (error) {
       console.error('Failed to add cinema:', error);
     }
   };
 
-  // Function to update an existing cinema
+  // Update cinema
   const updateCinema = async (id: number, cinema: Cinema) => {
     try {
       const response = await instance.patch(`/cinema/${id}`, cinema);
-      dispatch({ type: 'UPDATE_CINEMA', payload: response.data }); // Dispatch update action
-      fetchCinemas(); // Re-fetch cinemas after updating
+      dispatch({ type: 'UPDATE_CINEMA', payload: response.data });
+      fetchCinemas();
     } catch (error) {
       console.error('Failed to update cinema:', error);
     }
   };
 
-  // Function to delete a cinema
+  // Delete cinema
   const deleteCinema = async (id: number) => {
     try {
       await instance.delete(`/cinema/${id}`);
-      dispatch({ type: 'DELETE_CINEMA', payload: id }); // Dispatch delete action
-      fetchCinemas(); // Re-fetch cinemas after deleting
+      dispatch({ type: 'DELETE_CINEMA', payload: id });
+      fetchCinemas();
     } catch (error) {
       console.error('Failed to delete cinema:', error);
     }

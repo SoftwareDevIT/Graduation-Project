@@ -18,7 +18,7 @@ const ShowtimesDashboard: React.FC = () => {
     useEffect(() => {
         const fetchShowtimes = async () => {
             try {
-                const response = await instance.get(`/showtimes?page=${currentPage}`);
+                const response = await instance.get(`/manager/showtimes?page=${currentPage}`);
                 if (Array.isArray(response.data.data.data)) {
                     dispatch({ type: 'SET_SHOWTIMES', payload: response.data.data.data });
                 } else {

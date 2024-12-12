@@ -16,7 +16,7 @@ const SeatMap = () => {
     useEffect(() => {
         const fetchSeatLayouts = async () => {
             try {
-                const response = await instance.get('/seat-maps'); // API call for seat layouts
+                const response = await instance.get('/manager/seat-maps'); // API call for seat layouts
                 setSeatLayouts(response.data);
             } catch (error) {
                 console.error('Error fetching seat layouts:', error);

@@ -34,7 +34,7 @@ const RoomsForm: React.FC = () => {
 
     const fetchSeatLayouts = async () => {
       // Giả sử có API cho seat layouts
-      const response = await instance.get('/seat-maps');
+      const response = await instance.get('/manager/seat-maps');
       setSeatLayouts(response.data);
     };
 

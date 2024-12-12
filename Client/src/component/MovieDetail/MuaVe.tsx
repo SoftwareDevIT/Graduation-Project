@@ -25,7 +25,19 @@ const MuaVe: React.FC = () => {
   ); // Ngày hiện tại
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [userRole, setUserRole] = useState<string>("");
 
+  // Fetch user role from localStorage
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("user_profile") || "{}");
+    const roles = userData.roles || [];
+    console.log("data role:", roles);
+    if (roles.length > 0) {
+      setUserRole(roles[0].name);
+    } else {
+      setUserRole("unknown"); // Gán giá trị mặc định khi không có vai trò
+    }
+  }, []);
   // Lấy phim theo ID
   const movie = state.movies.find((movie) => movie.slug === slug);
   useEffect(() => {
@@ -43,32 +55,60 @@ const MuaVe: React.FC = () => {
   }, [countryState, selectedLocation]);
 
   // Lấy danh sách rạp chiếu
+
   useEffect(() => {
     const fetchCinemasAndShowtimes = async () => {
-      try {
-        const response = await instance.get(`/filterByDateByMovie`, {
-          params: {
-            location_id: selectedLocation,
-            showtime_date: selectedDate,
-            movie_id: movie?.id,
-          },
-        });
-
-        const cinemaData = response.data?.data || [];
-        // console.log(cinemaData)
-        setCinemas(
-          cinemaData.map((item: any) => ({
-            ...item.cinema,
-            showtimes: item.showtimes,
-          }))
-        );
-      } catch (error) {
-        console.error("Error fetching cinemas and showtimes:", error);
-        setError("Không thể tải lịch chiếu cho phim này.");
+      if (selectedLocation && movie?.id) {
+        try {
+          let response;
+          if (userRole === "admin") {
+            // Admin: full access to the cinemas and showtimes
+            response = await instance.get(`/admin/filterByDateByMovie`, {
+              params: {
+                location_id: selectedLocation,
+                showtime_date: selectedDate,
+                movie_id: movie.id,
+              },
+            });
+          } else if (userRole === "staff") {
+            // Staff: access to a staff-specific endpoint (if any)
+            response = await instance.get(`/staff/filterByDateByMovie`, {
+              params: {
+                location_id: selectedLocation,
+                showtime_date: selectedDate,
+                movie_id: movie.id,
+              },
+            });
+          } else if (userRole === "manager") {
+            // Manager: access to the manager-specific endpoint (if any)
+            response = await instance.get(`/manager/filterByDateByMovie`, {
+              params: {
+                location_id: selectedLocation,
+                showtime_date: selectedDate,
+                movie_id: movie.id,
+              },
+            });
+          } else {
+            console.error("Unauthorized role");
+            return;
+          }
+  
+          const cinemaData = response.data?.data || [];
+          setCinemas(
+            cinemaData.map((item: any) => ({
+              ...item.cinema,
+              showtimes: item.showtimes,
+            }))
+          );
+        } catch (err) {
+          console.error("Error fetching cinemas and showtimes:", err);
+          setError("Không thể tải lịch chiếu cho phim này.");
+        }
       }
     };
-    if (selectedLocation) fetchCinemasAndShowtimes();
-  }, [selectedLocation, selectedDate, movie?.id]);
+  
+    fetchCinemasAndShowtimes();
+  }, [selectedLocation, selectedDate, movie?.id, userRole]);
 
   const toggleCinemas = (index: number) => {
     setExpandedIndex(expandedIndex === index ? null : index);

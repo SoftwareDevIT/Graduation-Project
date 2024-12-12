@@ -44,14 +44,7 @@ const AdminLogin = () => {
             instance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     
             openNotificationWithIcon("success", "Đăng nhập thành công", "Bạn đã đăng nhập thành công.");
-            if(userRole === "admin"){
-              navigate("/admin/dashboard");
-            }else if(userRole === "manager"){
-              navigate("/admin/actor");
-            }else if(userRole === "staff"){
-              navigate("/admin/orders");
-            }
-            
+            navigate("/admin/dashboard");
           } else {
             openNotificationWithIcon("error", "Lỗi", "Đăng nhập không thành công.");
           }

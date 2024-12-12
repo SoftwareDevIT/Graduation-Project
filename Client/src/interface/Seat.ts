@@ -1,5 +1,8 @@
 
   export interface Seat {
+    seat_name: string;
+    seat_row: number;
+    seat_column: number;
     row: string;
     type: string;
     label: string;
