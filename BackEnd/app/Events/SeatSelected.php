@@ -29,6 +29,7 @@ class SeatSelected implements ShouldBroadcast
     {
         // Đảm bảo rằng bạn broadcast đúng kênh theo roomId
         Log::info("broadcastOn");
+        Log::info("'seats-'.$this->roomId");
         return new PrivateChannel('seats-'.$this->roomId);
     }
 

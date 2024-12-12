@@ -51,6 +51,11 @@ class Showtime extends Model
     {
         return $this->belongsTo(Room::class);
     }
+
+    public function combo()
+    {
+        return $this->belongsTo(Combo::class);
+    }
     public function seats()
     {
         return $this->hasMany(Seats::class, 'showtime_id');

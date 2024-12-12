@@ -33,6 +33,7 @@ export default async function initializeEcho() {
       },
       debug: true,
     });
+    console.log("Echo initialized:", echo);
 
     return echo;
   } catch (error) {
