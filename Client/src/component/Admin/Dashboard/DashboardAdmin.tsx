@@ -398,10 +398,7 @@ useEffect(() => {
                         }} />
   </div>
 </div>
-
-
         </div>
-
         {/* Thêm bảng vào dưới biểu đồ */}
         <div className="recent-container">
   <div className="recent-orders">
