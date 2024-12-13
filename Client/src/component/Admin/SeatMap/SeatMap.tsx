@@ -35,7 +35,7 @@ const SeatMap = () => {
         if (!isConfirmed) return;
 
         try {
-            await instance.delete(`/seat-maps/${id}`);
+            await instance.delete(`/manager/seat-maps/${id}`);
             setSeatLayouts((prevLayouts) => prevLayouts.filter((layout) => layout.id !== id));
             notification.success({
                 message: 'Thành công',

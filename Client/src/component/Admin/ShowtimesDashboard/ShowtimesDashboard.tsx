@@ -31,7 +31,7 @@ const ShowtimesDashboard: React.FC = () => {
 
         const fetchMovies = async () => {
             try {
-                const movieResponse = await instance.get('/movies');
+                const movieResponse = await instance.get('/manager/movies');
                 if (Array.isArray(movieResponse.data.data.original)) {
                     setMovies(movieResponse.data.data.original);
                 } else {
@@ -56,7 +56,7 @@ const ShowtimesDashboard: React.FC = () => {
     const deleteShowtime = async (id: number) => {
         if (window.confirm('Bạn có chắc chắn muốn xóa showtime này?')) {
             try {
-                await instance.delete(`/showtimes/${id}`);
+                await instance.delete(`/manager/showtimes/${id}`);
                 dispatch({ type: 'DELETE_SHOWTIME', payload: id });
 
                 // Thông báo thành công

@@ -11,7 +11,5 @@
     linkedSeat?: string;
     isSelected?: boolean; 
     isMainProcessed?: boolean;
-    seat_name: string;
-    seat_row: number;
-    seat_column: number;
+    isDisabled?: boolean; 
   }

@@ -36,11 +36,11 @@ const PostsForm: React.FC = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const categoryResponse = await instance.get('/news_category');
+        const categoryResponse = await instance.get('/manager/news_category');
         setCategories(Array.isArray(categoryResponse.data.data) ? categoryResponse.data.data : []);
 
         if (id) {
-          const postResponse = await instance.get(`/news/${id}`);
+          const postResponse = await instance.get(`/manager/news/${id}`);
           const postData = postResponse.data.data;
           console.log(postData);
 

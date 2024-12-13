@@ -299,8 +299,7 @@ const SeatMapForm = () => {
         {errors.name && (
             <span className="text-danger">{errors.name.message}</span>
           )}
-        </div>
-
+        </div>  
         {/* Description */}
         <div className="mb-3">
           <label className="form-label">Mô tả</label>

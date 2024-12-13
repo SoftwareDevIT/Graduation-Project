@@ -95,7 +95,17 @@ export const CinemaProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   // Add cinema
   const addCinema = async (cinema: Cinema) => {
     try {
-      const response = await instance.post('/cinema', cinema);
+      let response;
+      if (userRole === "admin") {
+        response = await instance.post('/admin/cinema');
+      } else if (userRole === "staff") {
+        response = await instance.post('/staff/cinema');
+      } else if (userRole === "manager") {
+        response = await instance.post('/manager/cinema');
+      } else {
+        response = await instance.post('/cinema');
+      }
+
       dispatch({ type: 'ADD_CINEMA', payload: response.data });
       fetchCinemas();
     } catch (error) {
@@ -104,26 +114,51 @@ export const CinemaProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   };
 
   // Update cinema
-  const updateCinema = async (id: number, cinema: Cinema) => {
-    try {
-      const response = await instance.patch(`/cinema/${id}`, cinema);
-      dispatch({ type: 'UPDATE_CINEMA', payload: response.data });
-      fetchCinemas();
-    } catch (error) {
-      console.error('Failed to update cinema:', error);
+ // Update cinema
+const updateCinema = async (id: number, cinema: Cinema) => {
+  try {
+    let response;
+    if (userRole === "admin") {
+      response = await instance.patch(`/admin/cinema/${id}`, cinema);
+    } else if (userRole === "staff") {
+      response = await instance.patch(`/staff/cinema/${id}`, cinema);
+    } else if (userRole === "manager") {
+      response = await instance.patch(`/manager/cinema/${id}`, cinema);
+    } else {
+      // Trường hợp không có quyền hoặc vai trò không hợp lệ
+      throw new Error("Unauthorized to update cinema");
     }
-  };
+
+    dispatch({ type: 'UPDATE_CINEMA', payload: response.data });
+    fetchCinemas(); // Cập nhật danh sách rạp chiếu
+  } catch (error) {
+    console.error('Failed to update cinema:', error);
+  }
+};
+
 
   // Delete cinema
-  const deleteCinema = async (id: number) => {
-    try {
-      await instance.delete(`/cinema/${id}`);
-      dispatch({ type: 'DELETE_CINEMA', payload: id });
-      fetchCinemas();
-    } catch (error) {
-      console.error('Failed to delete cinema:', error);
+ // Delete cinema
+const deleteCinema = async (id: number) => {
+  try {
+    if (userRole === "admin") {
+      await instance.delete(`/admin/cinema/${id}`);
+    } else if (userRole === "staff") {
+      await instance.delete(`/staff/cinema/${id}`);
+    } else if (userRole === "manager") {
+      await instance.delete(`/manager/cinema/${id}`);
+    } else {
+      // Trường hợp không có quyền hoặc vai trò không hợp lệ
+      throw new Error("Unauthorized to delete cinema");
     }
-  };
+
+    dispatch({ type: 'DELETE_CINEMA', payload: id });
+    fetchCinemas(); // Cập nhật danh sách rạp chiếu
+  } catch (error) {
+    console.error('Failed to delete cinema:', error);
+  }
+};
+
 
   return (
     <CinemaContext.Provider value={{ state, dispatch, addCinema, updateCinema, deleteCinema }}>

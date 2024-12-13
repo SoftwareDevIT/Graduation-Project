@@ -16,7 +16,7 @@ const UserDashboard: React.FC = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await instance.get(`/all-user?page=${currentPage}`);
+                const response = await instance.get(`/manager/all-user?page=${currentPage}`);
                 setUsers(response.data.data);
                 setTotalPages(response.data.last_page);
             } catch (err) {

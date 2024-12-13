@@ -15,7 +15,7 @@ const RoomDashboard: React.FC = () => {
   useEffect(() => {
     const fetchRooms = async () => {
       try {
-        const response = await instance.get('/room');
+        const response = await instance.get('/manager/room');
         setRooms(response.data.data);
       } catch (error) {
         console.error('Error fetching rooms:', error);
@@ -41,7 +41,7 @@ const RoomDashboard: React.FC = () => {
     const confirmDelete = window.confirm("Bạn có chắc chắn muốn xóa phòng này?");
     if (confirmDelete) {
       try {
-        await instance.delete(`/room/${id}`);
+        await instance.delete(`/manager/room/${id}`);
         setRooms(rooms.filter((room) => room.id !== id));
         notification.success({
           message: 'Xóa phòng thành công!',

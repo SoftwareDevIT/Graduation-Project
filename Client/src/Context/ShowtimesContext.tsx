@@ -79,14 +79,14 @@ export const ShowtimeProvider: React.FC<{ children: ReactNode }> = ({ children }
         try {
             if (Array.isArray(data)) {
                 const responses = await Promise.all(data.map(async (showtime) => {
-                    const response = await instance.post('/showtimes', showtime);
+                    const response = await instance.post('/manager/showtimes', showtime);
                     return response.data.data;
                 }));
                 dispatch({ type: 'ADD_SHOWTIMES', payload: responses });
             } else {
                 const response = id
-                    ? await instance.put(`/showtimes/${id}`, data)
-                    : await instance.post('/showtimes', data);
+                    ? await instance.put(`/manager/showtimes/${id}`, data)
+                    : await instance.post('/manager/showtimes', data);
 
                 if (id) {
                     dispatch({ type: 'UPDATE_SHOWTIME', payload: response.data });
@@ -101,7 +101,7 @@ export const ShowtimeProvider: React.FC<{ children: ReactNode }> = ({ children }
 
     const deleteShowtime = async (id: number) => {
         try {
-            await instance.delete(`/showtimes/${id}`);
+            await instance.delete(`/manager/showtimes/${id}`);
             dispatch({ type: 'DELETE_SHOWTIME', payload: id });
         } catch (error) {
             console.error('Error deleting showtime:', error);
@@ -110,7 +110,7 @@ export const ShowtimeProvider: React.FC<{ children: ReactNode }> = ({ children }
 
     const fetchShowtimes = async () => {
         try {
-            const response = await instance.get('/showtimes');
+            const response = await instance.get('/manager/showtimes');
             dispatch({ type: 'SET_SHOWTIMES', payload: response.data.data.data });
         } catch (error) {
             console.error('Error fetching showtimes:', error);

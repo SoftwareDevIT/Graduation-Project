@@ -49,9 +49,10 @@ const OrderCheckout = () => {
         if (userProfile) {
             setAvailablePoints(userProfile.points);
             setIsPointsUsed(false); // Reset usage flag if user profile changes
+            console.log("data",userProfile.points)
         }
     }, [userProfile]);
-    console.log("data",userProfile)
+
     
     const navigate = useNavigate();
     const {

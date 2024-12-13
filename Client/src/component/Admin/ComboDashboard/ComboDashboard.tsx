@@ -16,7 +16,7 @@ const ComboDashboard: React.FC = () => {
     useEffect(() => {
         const fetchCombos = async () => {
             try {
-                await instance.get('/combo');
+                await instance.get('/manager/combo');
             } catch (err) {
                 notification.error({
                     message: 'Lỗi',

@@ -51,24 +51,24 @@ const comboReducer = (state: ComboState, action: Action): ComboState => {
 export const ComboProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(comboReducer, { combos: [] });
 
-// const fetchCombos = async () => {
-//   try {
+const fetchCombos = async () => {
+  try {
    
 
-//     const { data } = await instance.get('/combo', {
-//     });
-//     dispatch({ type: 'SET_COMBOS', payload: data.data });
-//   } catch (error) {
-//     console.error('Failed to fetch combos:', error);
-//   }
-// };
+    const { data } = await instance.get('/manager/combo', {
+    });
+    dispatch({ type: 'SET_COMBOS', payload: data.data });
+  } catch (error) {
+    console.error('Failed to fetch combos:', error);
+  }
+};
 
 
   const addCombo = async (combo: Combo) => {
     try {
-      const { data } = await instance.post('/combo', combo);
+      const { data } = await instance.post('/manager/combo', combo);
       dispatch({ type: 'ADD_COMBO', payload: data.data });
-      // fetchCombos()
+      fetchCombos()
     } catch (error) {
       console.error('Failed to add combo:', error);
     }
@@ -76,7 +76,7 @@ export const ComboProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const updateCombo = async (id: number, combo: Combo) => {
     try {
-      const { data } = await instance.put(`/combo/${id}`, combo);
+      const { data } = await instance.put(`/manager/combo/${id}`, combo);
       dispatch({ type: 'UPDATE_COMBO', payload: data.data });
     } catch (error) {
       console.error('Failed to update combo:', error);
@@ -85,7 +85,7 @@ export const ComboProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const deleteCombo = async (id: number) => {
     try {
-      await instance.delete(`/combo/${id}`);
+      await instance.delete(`/manager/combo/${id}`);
       dispatch({ type: 'DELETE_COMBO', payload: id });
     } catch (error) {
       console.error('Failed to delete combo:', error);
@@ -93,7 +93,7 @@ export const ComboProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   };
 
   useEffect(() => {
-    // fetchCombos();
+    fetchCombos();
   }, []);
 
   return (
