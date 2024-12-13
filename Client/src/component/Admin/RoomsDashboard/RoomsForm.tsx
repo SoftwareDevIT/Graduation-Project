@@ -12,7 +12,7 @@ import { notification } from 'antd';
 // Zod schema validation
 const roomSchema = z.object({
   room_name: z.string().min(1, 'Tên phòng không được bỏ trống'),
-  cinema_id: z.number().min(1, 'Vui lòng chọn rạp'),
+
   seat_map_id: z.number().min(1, 'Vui lòng chọn kiểu bố trí ghế'),
 });
 
@@ -34,7 +34,7 @@ const RoomsForm: React.FC = () => {
 
     const fetchSeatLayouts = async () => {
       // Giả sử có API cho seat layouts
-      const response = await instance.get('/seat-maps');
+      const response = await instance.get('/manager/seat-maps');
       setSeatLayouts(response.data);
     };
 
@@ -57,7 +57,7 @@ const RoomsForm: React.FC = () => {
 
   const onSubmit: SubmitHandler<Room> = async (data) => {
     console.log('Submitted Data:', data);
-    if (!data.room_name || !data.cinema_id || !data.seat_map_id) {
+    if (!data.room_name || !data.seat_map_id) {
       notification.error({
         message: 'Thông báo',
         description: 'Vui lòng điền đầy đủ thông tin.',
@@ -106,23 +106,6 @@ const RoomsForm: React.FC = () => {
             className={`form-control ${errors.room_name ? 'is-invalid' : ''}`}
           />
           {errors.room_name && <div className="invalid-feedback">{errors.room_name.message}</div>}
-        </div>
-
-        {/* Rạp */}
-        <div className="mb-3">
-          <label className="form-label">Rạp</label>
-          <select
-            {...register('cinema_id', { valueAsNumber: true })}
-            className={`form-control ${errors.cinema_id ? 'is-invalid' : ''}`}
-          >
-            <option value="">Chọn Rạp</option>
-            {cinemas.map((cinema) => (
-              <option key={cinema.id} value={cinema.id}>
-                {cinema.cinema_name}
-              </option>
-            ))}
-          </select>
-          {errors.cinema_id && <div className="invalid-feedback">{errors.cinema_id.message}</div>}
         </div>
 
         {/* Kiểu Bố trí Ghế */}

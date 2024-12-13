@@ -20,7 +20,7 @@ class RoomService
             return $query;
         } elseif ($user->hasRole('manager')) {
             // Manager hoặc Staff: chỉ lấy rạp theo cinema_id của họ
-            $query->where('id', $user->cinema_id);
+            $query->where('cinenma_id', $user->cinema_id);
         } else {
             // Các vai trò khác (không phải admin/manager/staff): chỉ lấy rạp có status = 1
             $query->where('status', 1);
