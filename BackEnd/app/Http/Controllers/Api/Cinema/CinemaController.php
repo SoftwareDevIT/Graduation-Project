@@ -50,7 +50,7 @@ class CinemaController extends Controller
         $cinema = $this->cinemaService->store($request->validated());
         return $this->success($cinema);
     }
-    
+
 
     public function status(int $id)
     {

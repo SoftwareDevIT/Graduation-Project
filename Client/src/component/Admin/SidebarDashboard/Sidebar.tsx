@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import {
   FaTachometerAlt,
@@ -28,6 +28,39 @@ import './Sidebar.css';
 
 const Sidebar: React.FC = () => {
   const [openMenu, setOpenMenu] = useState<{ [key: string]: boolean }>({});
+  useEffect(() => {
+    const path = location.pathname;
+
+    // Xác định các menu con liên quan
+    const updatedMenuState: { [key: string]: boolean } = {};
+    if (
+      path.startsWith('/admin/cinemas') ||
+      path.startsWith('/admin/rooms') ||
+      path.startsWith('/admin/seat-maps') ||
+      path.startsWith('/admin/rank')
+    ) {
+      updatedMenuState['cinema'] = true;
+    }
+    if (
+      path.startsWith('/admin/movies') ||
+      path.startsWith('/admin/showtimes')
+    ) {
+      updatedMenuState['movies'] = true;
+    }
+    if (
+      path.startsWith('/admin/combo') ||
+      path.startsWith('/admin/promotions') ||
+      path.startsWith('/admin/method') ||
+      path.startsWith('/admin/orders')
+    ) {
+      updatedMenuState['services'] = true;
+    }
+    if (path.startsWith('/admin/posts')) {
+      updatedMenuState['content'] = true;
+    }
+
+    setOpenMenu(updatedMenuState);
+  }, [location.pathname]);
 
   const toggleMenu = (menuKey: string) => {
     setOpenMenu((prev) => ({
@@ -70,7 +103,8 @@ const Sidebar: React.FC = () => {
   <FaPlayCircle /> Phim và suất chiếu {openMenu['movies'] ? <FaChevronDown /> : <FaChevronRight />}
 </span>
             <ul className={openMenu['movies'] ? 'submenu open' : 'submenu'}>
-              <li><NavLink to={'/admin/movies'} onClick={handleLinkClick} className={({ isActive }) => (isActive ? 'active' : '')}><FaFilm /> Quản lí phim</NavLink></li> <li><NavLink to={'/admin/showtimes'} onClick={handleLinkClick} className={({ isActive }) => (isActive ? 'active' : '')}><FaCalendarAlt /> Quản lí xuất chiếu</NavLink></li>
+              <li><NavLink to={'/admin/movies'} onClick={handleLinkClick} className={({ isActive }) => (isActive ? 'active' : '')}><FaFilm /> Quản lí phim</NavLink></li> 
+              <li><NavLink to={'/admin/showtimes'} onClick={handleLinkClick} className={({ isActive }) => (isActive ? 'active' : '')}><FaCalendarAlt /> Quản lí xuất chiếu</NavLink></li>
             </ul>
           </li>
 

@@ -2,6 +2,7 @@
 
 namespace App\Services\Cinema;
 
+use App\Models\Combo;
 use App\Models\Showtime;
 use App\Models\Movie;
 use Illuminate\Database\Eloquent\Collection;
@@ -40,43 +41,7 @@ class ShowtimeService
     {
         return Showtime::create($data);
     }
-
-    public function update(int $id, array $data): Showtime
-    {
-        $showtime = $this->filterByRole(Showtime::where('id', $id))->firstOrFail();
-        $showtime->update($data);
-        return $showtime;
-    }
-
-    public function delete(int $id): ?bool
-    {
-        $showtime = $this->filterByRole(Showtime::where('id', $id))->firstOrFail();
-        return $showtime->delete();
-    }
-
-    public function get(int $id)
-    {
-        $query = Showtime::with(['movie', 'room.cinema', 'room.seatMap']);
-        $showtime = $this->filterByRole($query)->findOrFail($id);
-
-        // Định dạng lại chỗ ngồi
-        $showtimeData = $showtime->toArray();
-        $showtimeData['formatted_seats'] = $showtime->room->seatMap->groupBy('row');
-
-        return $showtimeData;
-    }
-
-    public function getShowtimesByMovieName(string $movieName)
-    {
-        $movie = Movie::where('movie_name', 'like', '%' . $movieName . '%')->first();
-
-        if (!$movie) {
-            throw new \Exception('Movie not found');
-        }
-
-        return $this->filterByRole($movie->showtimes()->getQuery())->get();
-    }
-
+    
     public function generateShowtimes(array $data): array
     {
         $openingTime = Carbon::createFromFormat('H:i', $data['opening_time']);
@@ -101,5 +66,49 @@ class ShowtimeService
         }
 
         return $showtimes;
+    }
+
+    public function update(int $id, array $data): Showtime
+    {
+        $showtime = $this->filterByRole(Showtime::where('id', $id))->firstOrFail();
+        $showtime->update($data);
+        return $showtime;
+    }
+
+    public function delete(int $id): ?bool
+    {
+        $showtime = $this->filterByRole(Showtime::where('id', $id))->firstOrFail();
+        return $showtime->delete();
+    }
+
+    public function get(int $id)
+    {
+        $query = Showtime::with(['movie', 'room.cinema', 'room.seatMap']);
+        $showtime = $this->filterByRole($query)->findOrFail($id);
+
+        // Retrieve all combos associated with the cinema
+        $cinemaId = $showtime->room->cinema->id;
+        $cinemaCombos = Combo::where('cinema_id', $cinemaId)->get();
+
+        // Format the seat map
+        $showtimeData = $showtime->toArray();
+        $showtimeData['formatted_seats'] = $showtime->room->seatMap->groupBy('row');
+
+        // Add cinema combos to the response
+        $showtimeData['cinema_combos'] = $cinemaCombos;
+
+        return $showtimeData;
+    }
+
+
+    public function getShowtimesByMovieName(string $movieName)
+    {
+        $movie = Movie::where('movie_name', 'like', '%' . $movieName . '%')->first();
+
+        if (!$movie) {
+            throw new \Exception('Movie not found');
+        }
+
+        return $this->filterByRole($movie->showtimes()->getQuery())->get();
     }
 }

@@ -97,8 +97,6 @@ const columns = [
         render: (movie: Movie) => (
             <div style={{ textAlign: 'left' }}>
                 <Switch 
-                    checked={movie.active} 
-                    onChange={(checked) => toggleStatus(movie.id, checked)} 
                     checkedChildren="On" 
                     unCheckedChildren="Off" 
                 />
@@ -128,25 +126,7 @@ const columns = [
     },
 ];
 const toggleStatus = async (id: number, checked: boolean) => {
-    try {
-        await instance.patch(`/movies/${id}`, { active: checked });
-        dispatch({
-            type: 'UPDATE_MOVIE_STATUS',
-            payload: { id, active: checked },
-        });
-        notification.success({
-            message: 'Cập nhật trạng thái',
-            description: `Trạng thái phim đã được thay đổi.`,
-            placement: 'topRight',
-        });
-    } catch (error) {
-        console.error('Lỗi khi cập nhật trạng thái phim:', error);
-        notification.error({
-            message: 'Lỗi',
-            description: 'Không thể cập nhật trạng thái phim.',
-            placement: 'topRight',
-        });
-    }
+
 };
 
         

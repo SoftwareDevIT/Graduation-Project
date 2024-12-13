@@ -80,7 +80,7 @@ const UserDashboard: React.FC = () => {
             align: 'center' as const,  // Corrected here, use 'center' instead of string
             render: (text: string) => new Date(text).toLocaleDateString(),
         },
-        
+      
     ];
 
     if (error) {
