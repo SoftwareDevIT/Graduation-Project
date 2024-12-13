@@ -17,7 +17,7 @@ const ActorDashboard = () => {
         // Fetch the actors from the API
         const fetchActors = async () => {
             try {
-                const response = await instance.get('/actor');
+                const response = await instance.get('/manager/actor');
                 setActors(response.data.data);
             } catch (error) {
                 console.error('Error fetching actor data:', error);

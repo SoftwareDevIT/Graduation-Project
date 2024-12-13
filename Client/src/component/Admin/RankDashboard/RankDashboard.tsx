@@ -20,7 +20,7 @@ const RankDashboard = () => {
         const fetchRanks = async () => {
             setLoading(true);
             try {
-                const response = await instance.get('/ranks');
+                const response = await instance.get('/admin/ranks');
                 setRanks(response.data.data);
             } catch (error) {
                 notification.error({

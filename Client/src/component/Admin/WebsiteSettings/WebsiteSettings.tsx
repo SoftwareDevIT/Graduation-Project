@@ -34,7 +34,7 @@ const WebsiteSettings: React.FC = () => {
     const fetchSettings = async () => {
       try {
         setLoading(true);
-        const response = await instance.post('/website-settings');
+        const response = await instance.post('/admin/website-settings');
         setSettings(response.data.data[0]);
       } catch (err: any) {
         setError(err.message || 'Lỗi khi tải cấu hình.');
@@ -79,7 +79,7 @@ const WebsiteSettings: React.FC = () => {
         formData.append("about_image", settings.about_image);
   
       const response = await instance.post(
-        `/website-settings/update/${settings.id}`,
+        `/admin/website-settings/update/${settings.id}`,
         formData,
         {
           headers: {
@@ -124,7 +124,7 @@ const WebsiteSettings: React.FC = () => {
   const resetSettings = async () => {
     try {
       setLoading(true);
-      const response = await instance.post('/website-settings/reset');
+      const response = await instance.post('/admin/website-settings/reset');
       
       // Kiểm tra xem API trả về có chứa trường data hay không
       if (response.data && response.data.data) {

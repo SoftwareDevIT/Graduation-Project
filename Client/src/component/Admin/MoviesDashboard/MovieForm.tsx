@@ -83,9 +83,9 @@ const [thumbnailFile, setThumbnailFile] = useState<File | null>(null); // State 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const actorResponse = await instance.get('/actor');
-        const directorResponse = await instance.get('/director');
-        const categoryResponse = await instance.get('/movie-category');
+        const actorResponse = await instance.get('/manager/actor');
+        const directorResponse = await instance.get('/manager/director');
+        const categoryResponse = await instance.get('/manager/movie-category');
         const countriesResponse = await fetch('https://restcountries.com/v3.1/all?fields=name');
         const countriesData = await countriesResponse.json();
 
@@ -96,7 +96,7 @@ const [thumbnailFile, setThumbnailFile] = useState<File | null>(null); // State 
 
 
         if (id) {
-          const movieResponse = await instance.get(`/movies/${id}`);
+          const movieResponse = await instance.get(`/manager/movies/${id}`);
           const movieData = movieResponse.data.data.original;
 
           reset({

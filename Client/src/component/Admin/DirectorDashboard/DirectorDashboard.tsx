@@ -16,7 +16,7 @@ const DirectorDashboard = () => {
     useEffect(() => {
         const fetchDirectors = async () => {
             try {
-                const response = await instance.get('/director');
+                const response = await instance.get('/manager/director');
                 setDirectors(response.data.data);
             } catch (error) {
                 setError('Không thể tải danh sách đạo diễn');

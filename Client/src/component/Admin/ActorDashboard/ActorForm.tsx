@@ -67,7 +67,7 @@ const ActorForm = () => {
     const fetchActor = async () => {
       if (id) {
         try {
-          const { data } = await instance.get(`/actor/${id}`);
+          const { data } = await instance.get(`/manager/actor/${id}`);
           reset(data.data); // Reset form với dữ liệu đã lấy
           setExistingPhoto(data.data.photo); // Lưu URL ảnh cũ
         } catch (error) {
@@ -106,14 +106,14 @@ const ActorForm = () => {
 
     try {
       if (id) {
-        await instance.post(`/actor/${id}`, formData, {
+        await instance.post(`/manager/actor/${id}`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         }); // Cập nhật diễn viên
         notification.success({
           message: "Cập nhật diễn viên thành công!",
         });
       } else {
-        await instance.post("/actor", formData, {
+        await instance.post("/manager/actor", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         }); // Thêm diễn viên mới
         notification.success({

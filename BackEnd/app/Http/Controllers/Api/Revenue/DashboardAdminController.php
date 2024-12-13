@@ -77,6 +77,7 @@ class DashboardAdminController extends Controller
         $monthRevenue = $this->dashboardAdminService->monthrevenue($bookingRevenue,$day);
         $yearRevenue = $this->dashboardAdminService->yearrevenue($bookingRevenue,$day);
 
+        $cinemaRevenue = $this->dashboardAdminService->cinemarevenue($bookingRevenue);
         $monthlyRevenueChart = $this->dashboardAdminService->monthlyRevenue($status,$cinema_id,$year);
         $dailyRevenueChart = $this->dashboardAdminService->revenueByDateRange($bookingRevenue,$start_date, $end_date);
 
@@ -88,6 +89,7 @@ class DashboardAdminController extends Controller
             'day_revenue' => $dayRevenue,
             'month_revenue' => $monthRevenue,
             'year_revenue' => $yearRevenue,
+            'cinema_chart_revenue' => $cinemaRevenue,
             'monthly_revenue_chart' => $monthlyRevenueChart,
             'daily_revenue_chart' => $dailyRevenueChart,
             'chart_seats' => $chartSeats,

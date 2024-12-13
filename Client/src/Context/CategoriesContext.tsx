@@ -54,7 +54,7 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   const fetchCategories = async () => {
     try {
-      const response = await instance.get('/movie-category');
+      const response = await instance.get('/manager/movie-category');
       dispatch({ type: 'SET_CATEGORIES', payload: response.data.data }); // Assuming response.data contains the categories
     } catch (error) {
       console.error('Failed to fetch categories:', error);
@@ -68,7 +68,7 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   // Function to add a new category
   const addCategory = async (category: MovieCategory) => {
     try {
-      const response = await instance.post('/movie-category', category);
+      const response = await instance.post('/manager/movie-category', category);
       dispatch({ type: 'ADD_CATEGORY', payload: response.data }); // Dispatch add action
       fetchCategories(); // Re-fetch categories after adding
     } catch (error) {
@@ -79,7 +79,7 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   // Function to update an existing category
   const updateCategory = async (id: number, category: MovieCategory) => {
     try {
-      const response = await instance.patch(`/movie-category/${id}`, category);
+      const response = await instance.patch(`/manager/movie-category/${id}`, category);
       dispatch({ type: 'UPDATE_CATEGORY', payload: response.data }); // Dispatch update action
       fetchCategories(); // Re-fetch categories after updating
     } catch (error) {
@@ -90,7 +90,7 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   // Function to delete a category
   const deleteCategory = async (id: number) => {
     try {
-      await instance.delete(`/movie-category/${id}`);
+      await instance.delete(`/manager/movie-category/${id}`);
       dispatch({ type: 'DELETE_CATEGORY', payload: id }); // Dispatch delete action
       fetchCategories(); // Re-fetch categories after deleting
     } catch (error) {

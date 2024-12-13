@@ -71,7 +71,7 @@ useEffect(() => {
       const cinemasResponse = await instance.get("/cinema");
       setCinemas(cinemasResponse.data.data);
 
-      const dashboardResponse = await instance.get("/dashboard", {
+      const dashboardResponse = await instance.get("/admin/dashboard", {
         params: {
           cinema_id: selectedCinema,
           status: selectedStatus,
@@ -398,10 +398,7 @@ useEffect(() => {
                         }} />
   </div>
 </div>
-
-
         </div>
-
         {/* Thêm bảng vào dưới biểu đồ */}
         <div className="recent-container">
   <div className="recent-orders">

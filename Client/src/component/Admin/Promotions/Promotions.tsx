@@ -16,7 +16,7 @@ const PromotionsDashboard = () => {
     useEffect(() => {
         const fetchPromotions = async () => {
             try {
-                const response = await instance.get('/promotions');
+                const response = await instance.get('/manager/promotions');
                 setPromotions(response.data);
             } catch (error) {
                 console.error('Lỗi khi lấy dữ liệu khuyến mãi:', error);
@@ -44,7 +44,7 @@ const PromotionsDashboard = () => {
 
     const deletePromotion = async (id: number) => {
         try {
-            await instance.delete(`/promotions/${id}`);
+            await instance.delete(`/manager/promotions/${id}`);
             setPromotions(promotions.filter((promotion) => promotion.id !== id));
             notification.success({
                 message: 'Thành Công',
