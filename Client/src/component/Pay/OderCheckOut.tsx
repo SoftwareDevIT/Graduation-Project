@@ -42,13 +42,17 @@ const OrderCheckout = () => {
     const handleCancel = () => {
         setIsModalVisible(false);
     };
+    const handleOk = () => {
+        setIsModalVisible(false);
+    };
     useEffect(() => {
         if (userProfile) {
             setAvailablePoints(userProfile.points);
             setIsPointsUsed(false); // Reset usage flag if user profile changes
+            console.log("data",userProfile.points)
         }
     }, [userProfile]);
-    console.log("data",userProfile)
+
     
     const navigate = useNavigate();
     const {
@@ -272,10 +276,6 @@ const OrderCheckout = () => {
             console.error("Error during booking:", error);
         }
     };
-    
-    
-    
-
     return (
         <>
             <Header />
