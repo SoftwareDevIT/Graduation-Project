@@ -171,7 +171,7 @@ Route::middleware(['auth:sanctum', 'role:manager'])->prefix('manager')->group(fu
 
     // Dashboard and Filters
     Route::get('filter-dashboard', [FilterOfDashBoarchController::class, 'filterOfDashBoarch']); // Filter dashboard data
-    Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']); // Dashboard page
+   // Dashboard page
 
     // status
     Route::post('movieStatus/{id}', [MovieController::class, 'status']);
@@ -195,7 +195,7 @@ Route::middleware(['auth:sanctum', 'role:staff'])->prefix('staff')->group(functi
     Route::post('checkInSeat/{code}', [CheckInTicketController::class, 'checkInSeat']);
     Route::post('checkInBooking/{code}', [CheckInTicketController::class, 'checkInBooking']);
 });
-
+Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
 
 // Các tuyến đường dành riêng cho phim
 Route::get('/movie/search/{movie_name}', [MovieController::class, 'search']);                       // Tìm kiếm phim theo tên
