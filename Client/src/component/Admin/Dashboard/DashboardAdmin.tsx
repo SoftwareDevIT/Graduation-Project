@@ -23,6 +23,7 @@ import { Cinema } from "../../../interface/Cinema";
 import * as XLSX from "xlsx"; // Import XLSX for Excel export
 
 import { Movie } from "../../../interface/Movie";
+import { Link } from "react-router-dom";
 ChartJS.register(
   Title,
   Tooltip,
@@ -507,6 +508,7 @@ useEffect(() => {
               <th>Tên Phim</th>
               <th>Doanh Thu Của Phim</th>
               <th>Tổng Suất Chiếu</th>
+              <th>Hành Động</th>
             </tr>
           </thead>
           <tbody>
@@ -527,6 +529,9 @@ useEffect(() => {
                   <td>{movie.movie_name}</td>
                   <td>{movie.total_revenue.toLocaleString()}₫</td>
                   <td>{movie.showtime_count}</td>
+                  <td>
+                    <Link to={''} className="btn btn-primary">Chi Tiết</Link>
+                  </td>
                 </tr>
               ))}
           </tbody>

@@ -27,10 +27,7 @@ const RoomsForm: React.FC = () => {
   const [seatLayouts, setSeatLayouts] = useState<any[]>([]); // Dữ liệu seat_layouts
 
   useEffect(() => {
-    const fetchCinemas = async () => {
-      const response = await instance.get('/cinema');
-      setCinemas(response.data.data);
-    };
+ 
 
     const fetchSeatLayouts = async () => {
       // Giả sử có API cho seat layouts
@@ -50,7 +47,7 @@ const RoomsForm: React.FC = () => {
       }
     };
 
-    fetchCinemas();
+ 
     fetchSeatLayouts();
     fetchRoom();
   }, [id, reset]);
@@ -107,6 +104,8 @@ const RoomsForm: React.FC = () => {
           />
           {errors.room_name && <div className="invalid-feedback">{errors.room_name.message}</div>}
         </div>
+
+        {/* Rạp */}
 
         {/* Kiểu Bố trí Ghế */}
         <div className="mb-3">

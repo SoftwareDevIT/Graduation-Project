@@ -200,9 +200,9 @@ function App() {
 
         {/* Phân quyền cho các route admin */}
         <Route path="/admin" element={<PrivateRoute allowedRoles={['admin','manager','staff']}><AdminLogin/></PrivateRoute>}/>
-        <Route path="/admin/dashboard" element={<PrivateRoute allowedRoles={['admin']}><Dashboard /></PrivateRoute>} />
-        <Route path="/admin/user" element={<PrivateRoute allowedRoles={['admin']}><User /></PrivateRoute>} />
-        <Route path="/admin/user/roles" element={<PrivateRoute allowedRoles={['admin']}><UserAddManager /></PrivateRoute>} />
+        <Route path="/admin/dashboard" element={<PrivateRoute allowedRoles={['admin','manager']}><Dashboard /></PrivateRoute>} />
+        <Route path="/admin/user" element={<PrivateRoute allowedRoles={['admin','manager']}><User /></PrivateRoute>} />
+        <Route path="/admin/user/roles" element={<PrivateRoute allowedRoles={['admin','manager']}><UserAddManager /></PrivateRoute>} />
         <Route path="/admin/actor" element={<PrivateRoute allowedRoles={['manager']}><ActorManager/></PrivateRoute>} />
         <Route path="/admin/actor/add" element={<PrivateRoute allowedRoles={['manager']}><ActorForm/></PrivateRoute>} />
         <Route path="/admin/method" element={<PrivateRoute allowedRoles={['admin','manager']}><MethodManager/></PrivateRoute>} />
@@ -219,8 +219,8 @@ function App() {
         <Route path="/admin/showtimes/add" element={<PrivateRoute allowedRoles={['admin','manager','staff']}><ShowtimesFormManager /></PrivateRoute>} />
         <Route path="/admin/showtimesauto/add" element={<PrivateRoute allowedRoles={['admin','manager','staff']}><ShowtimesAuto /></PrivateRoute>} />
         <Route path="/admin/showtimes/edit/:id" element={<PrivateRoute allowedRoles={['admin','manager','staff']}><ShowtimesFormManager /></PrivateRoute>} />
-        <Route path="/admin/orders" element={<PrivateRoute allowedRoles={['admin','staff','manager']}><OrdersManager /></PrivateRoute>} />
-        <Route path="/admin/ordersdetail/:id" element={<PrivateRoute allowedRoles={['admin','manager','staff']}><OrdersDetailManager /></PrivateRoute>} />
+        <Route path="/admin/orders" element={<PrivateRoute allowedRoles={['admin','manager','staff']}><OrdersManager /></PrivateRoute>} />
+        <Route path="/admin/ordersdetail/:id" element={<PrivateRoute allowedRoles={['staff','manager']}><OrdersDetailManager /></PrivateRoute>} />
         <Route path="/admin/orders/edit/:id" element={<PrivateRoute allowedRoles={['admin','manager','staff']}><OrdersFormManager /></PrivateRoute>} />
         <Route path="/admin/seat-maps" element={<PrivateRoute allowedRoles={['admin','manager','staff']}><SeatMapManager /></PrivateRoute>} />
         <Route path="/admin/seat-maps/add" element={<PrivateRoute allowedRoles={['admin','manager','staff']}><SeatMapFormManager /></PrivateRoute>} />
@@ -231,7 +231,7 @@ function App() {
         <Route path="/admin/website-settings" element={<PrivateRoute allowedRoles={['admin']}><WebsiteSettingsManager /></PrivateRoute>} />
         <Route path="/admin/website-settings/update/:id" element={<PrivateRoute allowedRoles={['admin']}><WebsiteSettingsManager /></PrivateRoute>} />
         <Route path="/admin//website-settings/reset" element={<PrivateRoute allowedRoles={['admin']}><WebsiteSettingsManager /></PrivateRoute>} />
-      
+    
         <Route path="/admin/posts" element={<PrivateRoute allowedRoles={['manager']}><PostsManager /></PrivateRoute>} />
         <Route path="/admin/posts/:postId" element={<PrivateRoute allowedRoles={['manager']}><PostDetailManager /></PrivateRoute>} />
         <Route path="/admin/posts/add" element={<PrivateRoute allowedRoles={['manager']}><PostsFormManager /></PrivateRoute>} />

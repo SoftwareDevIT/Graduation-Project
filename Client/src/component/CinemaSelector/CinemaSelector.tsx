@@ -9,15 +9,15 @@ import dayjs from "dayjs";
 import { useCountryContext } from "../../Context/CountriesContext";
 import { Spin } from 'antd';  // Import Spin từ Ant Design
 import { UserProfile } from "../../interface/UserProfile";
+import { useCinemaContext } from "../../Context/CinemasContext";
 
 
 
   const CinemaSelector: React.FC = () => {
-    const [cinemas, setCinemas] = useState<Cinema[]>([]);
     const [actors, setActors] = useState<Actor[]>([]);
     const [movies, setMovies] = useState<Movie[]>([]);
     const [selectedCity, setSelectedCity] = useState<number >();
-    
+    const { state} = useCinemaContext();
     const [selectedCinema, setSelectedCinema] = useState<number>();
     const [selectedDate, setSelectedDate] = useState<string>("");
   
@@ -35,6 +35,7 @@ import { UserProfile } from "../../interface/UserProfile";
       state: { countries: locations },
     } = useCountryContext();
   
+    const cinemas = state.cinemas;
     const getCurrentDate = (): string => {
       const today = new Date();
       const year = today.getFullYear();
@@ -49,23 +50,22 @@ import { UserProfile } from "../../interface/UserProfile";
       );
     };
   
-    useEffect(() => {
-      const fetchCinemas = async () => {
-        try {
+    const [userRole, setUserRole] = useState<string>("");
 
-            const response = await instance.get("/cinema");
-            const cinemaData = response.data.data;
-            if (Array.isArray(cinemaData)) {
-                setCinemas(cinemaData);
-            } else {
-                console.error("Unexpected response format:", response);
-                setCinemas([]);
-            }
-        } catch (error) {
-            console.error("Error fetching cinemas:", error);
-            setCinemas([]);
-        }
-    };
+    // Fetch user role from localStorage
+    useEffect(() => {
+      const userData = JSON.parse(localStorage.getItem("user_profile") || "{}");
+      const roles = userData.roles || [];
+      console.log("data role:", roles);
+      if (roles.length > 0) {
+        setUserRole(roles[0].name);
+      } else {
+        setUserRole("unknown"); // Gán giá trị mặc định khi không có vai trò
+      }
+    }, []);
+    
+    useEffect(() => {
+   
     
     
       const fetchActors = async () => {
@@ -79,7 +79,7 @@ import { UserProfile } from "../../interface/UserProfile";
       };
     
       fetchActors();
-      fetchCinemas();
+   
       setSelectedDate(getCurrentDate());
     }, []);
   
@@ -95,9 +95,9 @@ import { UserProfile } from "../../interface/UserProfile";
               .sort((a, b) => b.cinemaCount - a.cinemaCount);
   
           const locationWithMostCinemas = sortedLocations[0];
-          if (locationWithMostCinemas) {
-              setSelectedCity(locationWithMostCinemas.id);
-          }
+          
+              setSelectedCity(locationWithMostCinemas?.id);
+          
       }
   }, [cinemas, locations]);
   
@@ -114,9 +114,9 @@ import { UserProfile } from "../../interface/UserProfile";
   
         const locationWithMostCinemas = sortedLocations[0];
 
-        setSelectedCity(locationWithMostCinemas.id);
+        setSelectedCity(locationWithMostCinemas?.id);
      
-     
+        
       }
     }, [cinemas, locations]);
   
@@ -151,23 +151,49 @@ import { UserProfile } from "../../interface/UserProfile";
       const fetchMoviesForSelectedCinemaAndDate = async () => {
         if (selectedCinema && selectedDate) {
           try {
-            const cinemaResponse = await instance.get(`/filterByDate`, {
-              params: {
-                cinema_id: selectedCinema,
-                showtime_date: selectedDate,
-              },
-            });
-  
-            const cinemaMovies = cinemaResponse.data?.data || [];
+            let response;
+            if (userRole === "admin") {
+              // Admin has access to the full list
+              response = await instance.get(`/admin/filterByDate`, {
+                params: {
+                  cinema_id: selectedCinema,
+                  showtime_date: selectedDate,
+                },
+              });
+            } else if (userRole === "staff") {
+              // Staff has limited access, for example to a specific endpoint
+              response = await instance.get(`/staff/filterByDate`, {
+                params: {
+                  cinema_id: selectedCinema,
+                  showtime_date: selectedDate,
+                },
+              });
+            } else if (userRole === "manager") {
+              // Manager also has a specific endpoint
+              response = await instance.get(`/manager/filterByDate`, {
+                params: {
+                  cinema_id: selectedCinema,
+                  showtime_date: selectedDate,
+                },
+              });
+            } else {
+              // If the user role is unknown, don't fetch movies
+              console.error("Unauthorized role");
+              return;
+            }
+    
+            const cinemaMovies = response.data?.data || [];
             setMovies(cinemaMovies);
           } catch (error) {
             setMovies([]);
+            console.error("Error fetching movies:", error);
           }
         }
       };
-  
+    
       fetchMoviesForSelectedCinemaAndDate();
-    }, [selectedCinema, selectedDate]);
+    }, [selectedCinema, selectedDate, userRole]);
+    
   
     const selectedCinemaDetails = cinemas.find(
       (cinema) => cinema.id === selectedCinema

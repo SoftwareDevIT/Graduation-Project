@@ -114,7 +114,7 @@ const RoleAndUserManagement = () => {
     console.log("Permissions to Update:", permissionsToUpdate); // Debugging line
   
     try {
-      const response = await instance.post(`/admin/roles/${roleId}/permissions`, {
+      const response = await instance.post(`/roles/${roleId}/permissions`, {
         permissions: permissionsToUpdate,
       });
       console.log("API Response:", response); // Debugging line

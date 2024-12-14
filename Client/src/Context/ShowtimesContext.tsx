@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useContext, ReactNode } from 'react';
+import React, { createContext, useReducer, useContext, ReactNode, useState, useEffect } from 'react';
 import instance from '../server';
 import { Showtime } from '../interface/Showtimes';
 import { Cinema } from '../interface/Cinema';
@@ -64,7 +64,17 @@ const showtimeReducer = (state: ShowtimeState, action: ShowtimeAction): Showtime
 
 export const ShowtimeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [state, dispatch] = useReducer(showtimeReducer, initialState);
-
+    const [userRole, setUserRole] = useState<string>("");
+    useEffect(() => {
+      // Lấy thông tin từ localStorage
+      const userData = JSON.parse(localStorage.getItem("user_profile") || "{}");
+      const roles = userData.roles || [];
+      console.log("data role:", roles);
+      // Lấy vai trò đầu tiên (nếu có)
+      if (roles.length > 0) {
+        setUserRole(roles[0].name); // Gán vai trò (ví dụ: "staff", "admin")
+      }
+    }, []);
     const addOrUpdateShowtime = async (data: Showtime | Showtime[], id?: string) => {
         try {
             if (Array.isArray(data)) {

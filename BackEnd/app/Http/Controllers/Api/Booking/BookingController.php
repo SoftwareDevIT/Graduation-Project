@@ -395,6 +395,7 @@ class BookingController extends Controller
     {
 
         $seats = $request->input('seats'); // Ghế người dùng chọn
+        $userId =  Auth::id();
         // $roomId = $request->input('roomId'); // Lấy roomId từ client (dưới dạng POST)
 
         if (is_array($seats) && count($seats) > 10) {
@@ -402,12 +403,18 @@ class BookingController extends Controller
         }
 
         // Broadcast sự kiện ghế đã chọn
-        broadcast(new SeatSelected($seats, Auth::id(), $roomId));
-        Log::info('Broadcasted SeatSelected event successfully', [
-            'seats' => $seats,
-            'userId' => Auth::id(),
-            'roomId' => $roomId
-        ]);
-        return $this->success($seats, 'Selected seats successfully.');
+        broadcast(new SeatSelected($seats,$userId, $roomId));
+      
+        return response()->json(
+            [
+                'status'=>true,
+                'message'=>'Seats successfully',
+                'data'=>[
+                    'seats'=>$seats,
+                    'roomId'=>$roomId,
+                    'userId'=>$userId
+                ]
+            ]
+        );
     }
 }

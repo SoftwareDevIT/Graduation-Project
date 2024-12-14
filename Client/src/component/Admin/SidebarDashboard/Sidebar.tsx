@@ -75,7 +75,7 @@ const Sidebar: React.FC = () => {
               </li>
             </>
           )}
-          {userRole == "admin || manager"  && (
+          {userRole == "manager"  && (
             <li>
               <span onClick={() => toggleMenu("cinema")}>
                 <FaBuilding style={{ marginRight: "-80px" }} /> Hệ thống rạp{" "}
@@ -160,7 +160,7 @@ const Sidebar: React.FC = () => {
             )}
             <ul className={openMenu["services"] ? "submenu open" : "submenu"}>
               {/* Nếu userRole là "staff", chỉ hiển thị mục Quản lý đơn hàng */}
-              {userRole == "staff" && (
+              {userRole == "staff || manager" && (
                 <li>
                   <NavLink
                     to={"/admin/orders"}
