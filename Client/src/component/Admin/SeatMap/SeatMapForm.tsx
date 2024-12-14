@@ -40,7 +40,7 @@ const SeatMapForm = () => {
 
   useEffect(() => {
     if (id) {
-      instance.get(`/seat-maps/${id}`).then(({ data }) => {
+      instance.get(`/manager/seat-maps/${id}`).then(({ data }) => {
         setSeatMap(data);
         Object.keys(data).forEach((key) => {
           setValue(key as keyof SeatMapAdmin, data[key]);
@@ -270,11 +270,11 @@ const SeatMapForm = () => {
       };
   
       if (id) {
-        await instance.put(`/seat-maps/${id}`, seatMapData);
+        await instance.put(`/manager/seat-maps/${id}`, seatMapData);
         notification.success({ message: "Bản đồ chỗ ngồi đã được cập nhật thành công!" });
         nav('/admin/seat-maps')
       } else {
-        const res = await instance.post(`/seat-maps`, seatMapData);
+        const res = await instance.post(`/manager/seat-maps`, seatMapData);
         notification.success({ message: "Bản đồ chỗ ngồi đã được thêm thành công!" });
         navigate(`/admin/seat-maps/edit/${res.data.id}`);
       }
@@ -299,8 +299,7 @@ const SeatMapForm = () => {
         {errors.name && (
             <span className="text-danger">{errors.name.message}</span>
           )}
-        </div>
-
+        </div>  
         {/* Description */}
         <div className="mb-3">
           <label className="form-label">Mô tả</label>

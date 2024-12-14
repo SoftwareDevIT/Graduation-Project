@@ -63,7 +63,7 @@ const DirectorForm = () => {
     const fetchDirector = async () => {
       if (id) {
         try {
-          const { data } = await instance.get(`/director/${id}`);
+          const { data } = await instance.get(`/manager/director/${id}`);
           reset(data.data); // Reset the form with the fetched data
           setExistingPhoto(data.data.photo);
         } catch (error) {
@@ -102,14 +102,14 @@ const DirectorForm = () => {
 
     try {
       if (id) {
-        await instance.post(`/director/${id}`, formData, {
+        await instance.post(`/manager/director/${id}`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
         notification.success({
           message: "Cập nhật đạo diễn thành công!",
         });
       } else {
-        await instance.post("/director", formData, {
+        await instance.post("/manager/director", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
         notification.success({

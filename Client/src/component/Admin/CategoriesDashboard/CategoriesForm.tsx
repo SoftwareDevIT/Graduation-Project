@@ -34,7 +34,7 @@ const CategoriesForm = () => {
     const fetchCategory = async () => {
       if (isEditMode) {
         try {
-          const response = await instance.get(`/movie-category/${id}`);
+          const response = await instance.get(`/manager/movie-category/${id}`);
           const fetchedCategory = response.data.data;
           setCategory(fetchedCategory);
           reset(fetchedCategory);
