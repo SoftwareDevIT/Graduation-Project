@@ -45,9 +45,7 @@ const OrderCheckout = () => {
     const handleCancel = () => {
         setIsModalVisible(false);
     };
-    const handleOk = () => {
-        setIsModalVisible(false);
-    };
+  
     useEffect(() => {
         if (userProfile) {
             setAvailablePoints(userProfile.points);
