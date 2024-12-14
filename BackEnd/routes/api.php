@@ -182,7 +182,9 @@ Route::middleware(['auth:sanctum', 'role:manager'])->prefix('manager')->group(fu
 
     // Ticket Printing
     Route::post('printTicket', [OrderController::class, 'printTicket']); // Print ticket and change status
-
+    Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
+    Route::get('/dashboard', [DashboardAdminController::class, 'dashboard']);
+    
     //checkin ghế barcode
     Route::post('checkInSeat/{code}', [CheckInTicketController::class, 'checkInSeat']);
     Route::post('checkInBooking/{code}', [CheckInTicketController::class, 'checkInBooking']);
@@ -195,7 +197,7 @@ Route::middleware(['auth:sanctum', 'role:staff'])->prefix('staff')->group(functi
     Route::post('checkInSeat/{code}', [CheckInTicketController::class, 'checkInSeat']);
     Route::post('checkInBooking/{code}', [CheckInTicketController::class, 'checkInBooking']);
 });
-Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
+
 
 // Các tuyến đường dành riêng cho phim
 Route::get('/movie/search/{movie_name}', [MovieController::class, 'search']);                       // Tìm kiếm phim theo tên
