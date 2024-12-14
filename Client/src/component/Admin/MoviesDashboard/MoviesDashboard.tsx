@@ -97,8 +97,6 @@ const columns = [
         render: (movie: Movie) => (
             <div style={{ textAlign: 'left' }}>
                 <Switch 
-                    checked={movie.active} 
-                    onChange={(checked) => toggleStatus(movie.id, checked)} 
                     checkedChildren="On" 
                     unCheckedChildren="Off" 
                 />
@@ -128,6 +126,7 @@ const columns = [
     },
 ];
 const toggleStatus = async (id: number, checked: boolean) => {
+
     try {
         await instance.patch(`/manager/movies/${id}`, { active: checked });
         dispatch({
@@ -147,6 +146,7 @@ const toggleStatus = async (id: number, checked: boolean) => {
             placement: 'topRight',
         });
     }
+
 };
 
         

@@ -25,7 +25,8 @@ const Login = () => {
   const onSubmit: SubmitHandler<LoginSchema> = async (data) => {
     try {
       const response = await instance.post("/login", data);
-      if (response.status === 200 && response.data.data.token) {
+      console.log("data login:",response)
+      if (response.status === 200 ) {
         const { token, profile } = response.data.data;
         localStorage.setItem("token", token);
         localStorage.setItem("user_id", profile.id);
