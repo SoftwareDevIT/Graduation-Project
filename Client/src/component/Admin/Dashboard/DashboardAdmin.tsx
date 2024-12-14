@@ -56,7 +56,19 @@ const [dailyData, setDailyData] = useState({});
 const [monthlyData, setMonthlyData] = useState({});
 const [movieRevenue, setMovieRevenue] = useState<Movie[]>([]);
 
+const [userRole, setUserRole] = useState<string>("");
 
+  // Fetch user role from localStorage
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("user_profile") || "{}");
+    const roles = userData.roles || [];
+    console.log("data role:", roles);
+    if (roles.length > 0) {
+      setUserRole(roles[0].name);
+    } else {
+      setUserRole("unknown"); // Gán giá trị mặc định khi không có vai trò
+    }
+  }, []);
 
 useEffect(() => {
   const fetchDashboardData = async () => {
@@ -71,17 +83,46 @@ useEffect(() => {
       const cinemasResponse = await instance.get("/cinema");
       setCinemas(cinemasResponse.data.data);
 
-      const dashboardResponse = await instance.get("/admin/dashboard", {
-        params: {
-          cinema_id: selectedCinema,
-          status: selectedStatus,
-          start_date: formattedStartDate,
-          end_date: formattedEndDate,
-          day: formattedDate,
-          month: formattedMonth,
-          year: formattedYear
-        }
-      });
+      
+      let dashboardResponse;
+      if (userRole === "admin") {
+        dashboardResponse = await instance.get("/admin/dashboard", {
+          params: {
+            cinema_id: selectedCinema,
+            status: selectedStatus,
+            start_date: formattedStartDate,
+            end_date: formattedEndDate,
+            day: formattedDate,
+            month: formattedMonth,
+            year: formattedYear
+          }
+        });
+      } else if (userRole === "manager") {
+        dashboardResponse = await instance.get("/manager/dashboard", {
+          params: {
+            cinema_id: selectedCinema,
+            status: selectedStatus,
+            start_date: formattedStartDate,
+            end_date: formattedEndDate,
+            day: formattedDate,
+            month: formattedMonth,
+            year: formattedYear
+          }
+        });
+      } else {
+        // Default or public endpoint
+        dashboardResponse = await instance.get("/dashboard", {
+          params: {
+            cinema_id: selectedCinema,
+            status: selectedStatus,
+            start_date: formattedStartDate,
+            end_date: formattedEndDate,
+            day: formattedDate,
+            month: formattedMonth,
+            year: formattedYear
+          }
+        });
+      }
 
       console.log("API response:", dashboardResponse.data);
 

@@ -62,7 +62,7 @@ const Sidebar: React.FC = () => {
           </Link>
         </div>
         <ul>
-          {userRole === "admin" && (
+          {(userRole === "manager" || userRole === "admin")  && (
             <>
               <li>
                 <NavLink
@@ -75,7 +75,7 @@ const Sidebar: React.FC = () => {
               </li>
             </>
           )}
-          {userRole == "admin || manager"  && (
+          {(userRole === "manager" || userRole === "admin")  && (
             <li>
               <span onClick={() => toggleMenu("cinema")}>
                 <FaBuilding style={{ marginRight: "-80px" }} /> Hệ thống rạp{" "}
@@ -152,7 +152,7 @@ const Sidebar: React.FC = () => {
             </li>
           )}
           <li>
-            {userRole == "staff || manager" && (
+            {(userRole === "manager" || userRole === "staff") && (
               <span onClick={() => toggleMenu("services")}>
                 <FaGift style={{ marginRight: "-50px" }} /> Dịch vụ và ưu đãi{" "}
                 {openMenu["services"] ? <FaChevronDown /> : <FaChevronRight />}
@@ -226,20 +226,21 @@ const Sidebar: React.FC = () => {
               </ul>
             </li>
           )}
-          {userRole == "admin" && (
-            <>
+          {(userRole === "manager" || userRole === "admin")  && (
+         
               <li>
                 <NavLink to="/admin/user">
                   <FaUserShield /> Quản lý người dùng
                 </NavLink>
               </li>
-
+            )}
+              {( userRole === "admin")  && (
               <li>
                 <NavLink to="/admin/website-settings">
                   <FaCogs /> Cấu hình website
                 </NavLink>
               </li>
-            </>
+     
           )}
         </ul>
       </div>
