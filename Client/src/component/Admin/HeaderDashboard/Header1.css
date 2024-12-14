@@ -3,7 +3,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #edf3f5;
+    background-color: rgb(236, 242, 242);
     padding: 15px 30px;
     color: #004d40; /* Màu xanh đậm cho chữ */
 }

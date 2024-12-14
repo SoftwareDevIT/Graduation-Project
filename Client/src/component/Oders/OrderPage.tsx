@@ -74,9 +74,9 @@ const OrderPage: React.FC = () => {
   useEffect(() => {
     const fetchCombos = async () => {
       try {
-        const response = await instance.get("/combo");
-        setCombos(response.data.data);
-        setComboQuantities(new Array(response.data.data.length).fill(0));
+        const response = await instance.get(`/showtimes/${showtimeId}`);
+        setCombos(response.data.data.cinema_combos);
+        setComboQuantities(new Array(response.data.data.cinema_combos.length).fill(0));
       } catch (error) {
         console.error("Error fetching combos:", error);
       }

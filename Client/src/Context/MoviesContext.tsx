@@ -58,7 +58,7 @@ export const MovieProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   // Hàm lấy danh sách phim
   const fetchMovies = useCallback(async () => {
     try {
-      const response = await instance.get("/movies");
+      const response = await instance.get("/manager/movies");
       if (response.data && response.data.data) {
         dispatch({ type: "SET_MOVIES", payload: response.data.data.original });
         // console.log("du lieu phim:", response.data.data.original );
@@ -110,10 +110,10 @@ export const MovieProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
     try {
       const response = id
-        ? await instance.post(`/movies/${id}`, formData, {
+        ? await instance.post(`/manager/movies/${id}`, formData, {
             headers: { "Content-Type": "multipart/form-data" },
           })
-        : await instance.post("/movies", formData, {
+        : await instance.post("/manager/movies", formData, {
             headers: { "Content-Type": "multipart/form-data" },
           });
 

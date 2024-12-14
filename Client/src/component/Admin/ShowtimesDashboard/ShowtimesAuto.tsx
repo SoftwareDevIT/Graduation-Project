@@ -32,10 +32,10 @@ const ShowtimeAuto = () => {
     useEffect(() => {
         const fetchMoviesAndRooms = async () => {
             try {
-                const movieResponse = await instance.get("/movies");
+                const movieResponse = await instance.get("/manager/movies");
                 setMovies(movieResponse.data.data.original);
 
-                const roomResponse = await instance.get("/room");
+                const roomResponse = await instance.get("/manager/room");
                 setRooms(roomResponse.data.data);
             } catch (error) {
                 console.error("Lỗi khi lấy dữ liệu phim và phòng:", error);
@@ -74,7 +74,7 @@ const ShowtimeAuto = () => {
         e.preventDefault();
 
         try {
-            const response = await instance.post('/showtimePayload', {
+            const response = await instance.post('/manager/showtimePayload', {
                 room_id: formData.room_id,
                 movie_id: formData.movie_id,
                 date: formData.date,

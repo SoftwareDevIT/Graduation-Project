@@ -440,11 +440,11 @@ li.city.selected {
     display: block !important;
     border: none !important;
     margin-top: 20px;
-    width: 650px !important;
+    width: 715px !important;
     font-size: 14px;
     padding: 8px;
     background-size: 11px;
-    width: 714px !important ;
+    width: 717px !important ;
     border: 1px solid gray  !important;
    
   }
@@ -525,7 +525,7 @@ li.city.selected {
     display: block !important;
     border: none !important;
     margin-top: 20px;
-   width: 340px !important;
+   width: 380px !important;
      
       
     
@@ -627,7 +627,10 @@ right: 15px;
 }
 .city-selects {
   width: 100%;
-  width: 384px !important;
+
+  width: 716px ;
+  width: 384px ;
+
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;

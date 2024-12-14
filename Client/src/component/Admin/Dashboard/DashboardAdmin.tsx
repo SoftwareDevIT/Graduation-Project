@@ -21,7 +21,7 @@ import dayjs, { Dayjs } from "dayjs"; // Import dayjs for date handling
 import { Cinema } from "../../../interface/Cinema";
 
 import * as XLSX from "xlsx"; // Import XLSX for Excel export
-import { Link } from "react-router-dom";
+
 import { Movie } from "../../../interface/Movie";
 ChartJS.register(
   Title,
@@ -46,7 +46,7 @@ const DashboardAdmin = () => {
   const [selectedMonth, setSelectedMonth] = useState<Dayjs | null>(null); 
   const [selectedYear, setSelectedYear] = useState<Dayjs | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(5);
   const { Option } = Select;
   const { RangePicker } = DatePicker;
   const [dayRevenue, setDayRevenue] = useState<any>(null);
@@ -55,6 +55,10 @@ const [yearRevenue, setYearRevenue] = useState<any>(null);
 const [dailyData, setDailyData] = useState({});
 const [monthlyData, setMonthlyData] = useState({});
 const [movieRevenue, setMovieRevenue] = useState<Movie[]>([]);
+const [seatChartData, setSeatChartData] = useState({});
+const [movieRevenuePage, setMovieRevenuePage] = useState(1);
+  const [movieRevenuePageSize, setMovieRevenuePageSize] = useState(5);
+
 
 
 
@@ -71,7 +75,7 @@ useEffect(() => {
       const cinemasResponse = await instance.get("/cinema");
       setCinemas(cinemasResponse.data.data);
 
-      const dashboardResponse = await instance.get("/dashboard", {
+      const dashboardResponse = await instance.get("/admin/dashboard", {
         params: {
           cinema_id: selectedCinema,
           status: selectedStatus,
@@ -84,20 +88,22 @@ useEffect(() => {
       });
 
       console.log("API response:", dashboardResponse.data);
+      
 
 
-      // setTotalRevenue(dashboardResponse.data.chart.total_amount);
       setBookings(dashboardResponse.data.booking_revenue);
       setMovieRevenue(dashboardResponse.data.movie_revenue);
-      // setBookings(dashboardResponse.data.data);
-      // setMovieRevenue(dashboardResponse.data.movie);
+      setSeatChartData(dashboardResponse.data.chart_seats || {});
+    
+      
       setDailyData(dashboardResponse.data.daily_revenue_chart);
         setMonthlyData(dashboardResponse.data.monthly_revenue_chart);
       
-      // Set day, month, and year revenue data
+
       setDayRevenue(dashboardResponse.data.day_revenue);
       setMonthRevenue(dashboardResponse.data.month_revenue);
       setYearRevenue(dashboardResponse.data.year_revenue);
+      
       
 
     } catch (error) {
@@ -133,6 +139,37 @@ useEffect(() => {
 
   const monthlyLabels = Object.keys(monthlyData).map((month) => `Tháng ${month}`);
   const monthlyValues = Object.values(monthlyData);
+
+  const seatLabels = Object.keys(seatChartData);
+  const seatRatios = Object.values(seatChartData).map((seat: any) => seat.ratio);
+  const seatColors = ["#FF6384", "#36A2EB", "#FFCE56"];
+
+  const doughnutData = {
+    labels: seatLabels,
+    datasets: [
+      {
+        data: seatRatios,
+        backgroundColor: seatColors,
+        borderColor: seatColors,
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const doughnutOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top" as const,
+      },
+      tooltip: {
+        callbacks: {
+          label: (context: any) =>
+            `${context.label}: ${context.raw}%`,
+        },
+      },
+    },
+  };
   
   const dailyChartData = {
     labels: dailyLabels,
@@ -328,7 +365,7 @@ useEffect(() => {
         <div className="charts-container">
           <div className="quarterly-revenue">
             <h3>Doanh Thu Theo Ngày</h3>
-            <div className="area-chart">
+            <div className="area-chart" >
             <Line data={dailyChartData} options={{
                         responsive: true,
                         plugins: {
@@ -367,7 +404,7 @@ useEffect(() => {
 
           <div className="quarterly-revenue">
   <h3>Doanh Thu Theo Tháng</h3>
-  <div className="bar-chart">
+  <div className="bar-chart" style={{ width: '100%', height: '250px' }}>
   <Bar data={monthlyChartData} options={{
                             responsive: true,
                             maintainAspectRatio: false,
@@ -398,28 +435,27 @@ useEffect(() => {
                         }} />
   </div>
 </div>
-
-
         </div>
-
         {/* Thêm bảng vào dưới biểu đồ */}
         <div className="recent-container">
-  <div className="recent-orders">
-    <h3>Đơn hàng gần đây</h3>
-    <div style={{ overflowX: 'auto' }}>
-      <table>
-        <thead>
-          <tr>
-            <th>Mã Đơn Hàng</th>
-            <th>Phim</th>
-            <th>Tổng Tiền</th>
-            <th>Trạng Thái</th>
-            <th>Ngày Đặt</th>
-          </tr>
-        </thead>
-        <tbody>
-          {bookings.length > 0 ? (
-            bookings.map((booking: any) => (
+        <div className="recent-orders">
+  <h3>Đơn hàng gần đây</h3>
+  <div style={{ overflowX: 'auto' }}>
+    <table>
+      <thead>
+        <tr>
+          <th>Mã Đơn Hàng</th>
+          <th>Phim</th>
+          <th>Tổng Tiền</th>
+          <th>Trạng Thái</th>
+          <th>Ngày Đặt</th>
+        </tr>
+      </thead>
+      <tbody>
+        {bookings.length > 0 ? (
+          bookings
+            .slice((currentPage - 1) * pageSize, currentPage * pageSize) // Hiển thị danh sách con
+            .map((booking: any) => (
               <tr key={booking.booking_id}>
                 <td>{booking.booking_code}</td>
                 <td>{booking.showtime.movie.movie_name}</td>
@@ -428,92 +464,85 @@ useEffect(() => {
                 <td>{booking.created_at}</td>
               </tr>
             ))
-          ) : (
-            <tr>
-              <td colSpan={5} className="text-center">
-                Không có đơn hàng nào.
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-    </div>
-
-    {/* Phân trang */}
-    <div style={{ marginTop: '20px', textAlign: 'center' }}>
-      <Pagination
-        current={currentPage}
-        pageSize={pageSize}
-        total={bookings.length}
-        onChange={(page, pageSize) => {
-          setCurrentPage(page);
-          setPageSize(pageSize);
-        }}
-      />
-    </div>
+        ) : (
+          <tr>
+            <td colSpan={5} className="text-center">
+              Không có đơn hàng nào.
+            </td>
+          </tr>
+        )}
+      </tbody>
+    </table>
   </div>
 
-  {/* Biểu đồ tròn nằm bên phải bảng */}
-  <div className="chart-container1">
-    <h3>Tỷ lệ chọn ghế</h3>
-    <Doughnut
-      data={{
-        labels: ['Thanh toán thành công', 'Đã in vé'],
-        datasets: [
-          {
-            label: 'Doanh Thu',
-            data: [12000, 8000],
-            backgroundColor: ['#4caf50', '#ff9800'],
-            borderColor: ['#4caf50', '#ff9800'],
-            borderWidth: 1,
-          },
-        ],
-      }}
-      options={{
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'top',
-          },
-          tooltip: {
-            callbacks: {
-              label: (context) => `${context.label}: ${context.raw}₫`,
-            },
-          },
-        },
+  {/* Phân trang */}
+  <div className="d-flex justify-content-center mt-4">
+    <Pagination
+      current={currentPage}
+      pageSize={pageSize}
+      total={bookings.length}
+      onChange={(page, pageSize) => {
+        setCurrentPage(page);
+        setPageSize(pageSize);
       }}
     />
   </div>
 </div>
+
+
+  {/* Biểu đồ tròn nằm bên phải bảng */}
+
+  <div className="chart-container1">
+    <h3>Tỷ lệ chọn ghế</h3>
+    <Doughnut data={doughnutData} options={doughnutOptions} />
+  </div>
+</div>
 <div className="recent-orders">
-          <h3>Doanh thu theo phim</h3>
-          <table>
-            <thead>
-              <tr>
+        <h3>Doanh thu theo phim</h3>
+        <table>
+          <thead>
+            <tr>
               <th>Ảnh Phim</th>
-            <th>Tên Phim</th>
-            <th>Doanh Thu Của Phim</th>
-            <th>Tổng Suất Chiếu</th>
-              </tr>
-            </thead>
-            <tbody>
-            {movieRevenue.map((movie) => (
-            <tr key={movie.movie_id}>
-              <td>
-                <img
-                  src={movie.movie_image}
-                  alt={movie.movie_name}
-                  width="100"
-                />
-              </td>
-              <td>{movie.movie_name}</td>
-              <td>{movie.total_revenue.toLocaleString()}₫</td>
-              <td>{movie.showtime_count}</td>
+              <th>Tên Phim</th>
+              <th>Doanh Thu Của Phim</th>
+              <th>Tổng Suất Chiếu</th>
             </tr>
-          ))}
-            </tbody>
-          </table>
+          </thead>
+          <tbody>
+            {movieRevenue
+              .slice(
+                (movieRevenuePage - 1) * movieRevenuePageSize,
+                movieRevenuePage * movieRevenuePageSize
+              )
+              .map((movie) => (
+                <tr key={movie.movie_id}>
+                  <td>
+                    <img
+                      src={movie.movie_image}
+                      alt={movie.movie_name}
+                      width="100"
+                    />
+                  </td>
+                  <td>{movie.movie_name}</td>
+                  <td>{movie.total_revenue.toLocaleString()}₫</td>
+                  <td>{movie.showtime_count}</td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+        <div className="d-flex justify-content-center mt-4">
+          <Pagination
+            current={movieRevenuePage}
+            pageSize={movieRevenuePageSize}
+            total={movieRevenue.length}
+            onChange={(page, pageSize) => {
+              setMovieRevenuePage(page);
+              setMovieRevenuePageSize(pageSize);
+            }}
+          />
         </div>
+      </div>
+        
       </div>
     </div>
   );

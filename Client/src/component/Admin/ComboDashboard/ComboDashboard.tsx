@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { EditOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons'; // Ant Design icons
-import { notification, Table, Pagination, Input, Button, Popconfirm } from 'antd'; // Import Ant Design components
+import { notification, Table, Pagination, Input, Button, Popconfirm, Switch } from 'antd'; // Import Ant Design components
 import { useComboContext } from '../../../Context/ComboContext';
 import instance from '../../../server';
+import { Movie } from '../../../interface/Movie';
 
 const ComboDashboard: React.FC = () => {
     const { state, deleteCombo } = useComboContext();
@@ -16,7 +17,7 @@ const ComboDashboard: React.FC = () => {
     useEffect(() => {
         const fetchCombos = async () => {
             try {
-                await instance.get('/combo');
+                await instance.get('/manager/combo');
             } catch (err) {
                 notification.error({
                     message: 'Lỗi',
@@ -94,6 +95,20 @@ const ComboDashboard: React.FC = () => {
             key: 'created_at',
             className: 'text-center',
             render: (text: any) => new Date(text).toLocaleDateString(),
+        },
+        {
+            title: 'Trạng Thái ',
+            key: 'action',
+            className: 'text-center',
+            render: (movie: Movie) => (
+                <div style={{ textAlign: 'left' }}>
+                    <Switch 
+                        checkedChildren="On" 
+                        unCheckedChildren="Off" 
+                    />
+                </div>
+            ),
+          
         },
         {
             title: 'Hành Động',

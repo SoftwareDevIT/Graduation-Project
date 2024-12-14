@@ -30,7 +30,7 @@ const MethodForm = () => {
     const fetchMethod = async () => {
       if (id) {
         try {
-          const { data } = await instance.get(`/method/${id}`);
+          const { data } = await instance.get(`/admin/method/${id}`);
           if (data) {
             reset(data.data); // Reset form data sau khi lấy thành công
           }
@@ -46,7 +46,7 @@ const MethodForm = () => {
   const handleFormSubmit = async (data: MethodFormData) => {
     try {
       if (id) {
-        await instance.put(`/method/${id}`, data);
+        await instance.put(`/admin/method/${id}`, data);
         notification.success({
           message: 'Cập nhật phương thức thành công!',
         });

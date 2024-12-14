@@ -19,7 +19,7 @@ const MoviesDashboard: React.FC = () => {
     useEffect(() => {
         const fetchMovies = async () => {
             try {
-                const movieResponse = await instance.get('/movies');
+                const movieResponse = await instance.get('/manager/movies');
                 dispatch({ type: 'SET_MOVIES', payload: movieResponse.data.data.original });
             } catch (error) {
                 console.error('Lỗi khi lấy dữ liệu phim:', error);
@@ -34,7 +34,7 @@ const MoviesDashboard: React.FC = () => {
     const deleteMovie = async (id: number) => {
         if (window.confirm('Bạn có chắc chắn muốn xóa phim này không?')) {
             try {
-                await instance.delete(`/movies/${id}`);
+                await instance.delete(`/manager/movies/${id}`);
                 dispatch({ type: 'DELETE_MOVIE', payload: id });
                 notification.success({
                     message: 'Xóa Phim',
@@ -97,8 +97,6 @@ const columns = [
         render: (movie: Movie) => (
             <div style={{ textAlign: 'left' }}>
                 <Switch 
-                    checked={movie.active} 
-                    onChange={(checked) => toggleStatus(movie.id, checked)} 
                     checkedChildren="On" 
                     unCheckedChildren="Off" 
                 />
@@ -128,8 +126,9 @@ const columns = [
     },
 ];
 const toggleStatus = async (id: number, checked: boolean) => {
+
     try {
-        await instance.patch(`/movies/${id}`, { active: checked });
+        await instance.patch(`/manager/movies/${id}`, { active: checked });
         dispatch({
             type: 'UPDATE_MOVIE_STATUS',
             payload: { id, active: checked },
@@ -147,6 +146,7 @@ const toggleStatus = async (id: number, checked: boolean) => {
             placement: 'topRight',
         });
     }
+
 };
 
         
