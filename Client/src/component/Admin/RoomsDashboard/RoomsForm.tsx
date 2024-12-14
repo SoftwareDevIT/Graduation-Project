@@ -105,7 +105,9 @@ const RoomsForm: React.FC = () => {
           {errors.room_name && <div className="invalid-feedback">{errors.room_name.message}</div>}
         </div>
 
+
         {/* Rạp */}
+
 
         {/* Kiểu Bố trí Ghế */}
         <div className="mb-3">

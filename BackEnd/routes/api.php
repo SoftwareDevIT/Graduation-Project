@@ -116,8 +116,8 @@ Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(functi
     Route::get('total-revenue-cinema-by-date/{cinema_id}/{start_date}/{end_date}', [RevenueController::class, 'totalRevenueByCinemaBetweenDates']); // Revenue by cinema and date range
 
     // Dashboard and Filters
-    Route::get('filter-dashboard', [FilterOfDashBoarchController::class, 'filterOfDashBoarch']); // Filter dashboard data
-    Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']); // Dashboard page
+    // Route::get('filter-dashboard', [FilterOfDashBoarchController::class, 'filterOfDashBoarch']); // Filter dashboard data
+    Route::get('/dashboard', [DashboardAdminController::class, 'dashboard']); // Dashboard page
 
     // Website Settings
     Route::post('/website-settings', [WebsiteSettingController::class, 'index']); // List Website Settings
@@ -171,7 +171,7 @@ Route::middleware(['auth:sanctum', 'role:manager'])->prefix('manager')->group(fu
 
     // Dashboard and Filters
     Route::get('filter-dashboard', [FilterOfDashBoarchController::class, 'filterOfDashBoarch']); // Filter dashboard data
-    Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']); // Dashboard page
+    Route::get('/dashboard', [DashboardAdminController::class, 'dashboard']); // Dashboard page
 
     // status
     Route::post('movieStatus/{id}', [MovieController::class, 'status']);
