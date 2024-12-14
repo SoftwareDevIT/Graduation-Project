@@ -627,7 +627,10 @@ right: 15px;
 }
 .city-selects {
   width: 100%;
+
+  width: 716px ;
   width: 384px ;
+
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;

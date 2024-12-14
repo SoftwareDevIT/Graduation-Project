@@ -84,6 +84,7 @@ const Sidebar: React.FC = () => {
             </Link>
           </div>
         <ul>
+
           <li><NavLink to={'/admin/dashboard'} className={({ isActive }) => (isActive ? 'active' : '')}><FaTachometerAlt />Bảng điều khiển</NavLink></li>
 
           <li>
@@ -97,6 +98,117 @@ const Sidebar: React.FC = () => {
               <li><NavLink to={'/admin/rank'} onClick={handleLinkClick} className={({ isActive }) => (isActive ? 'active' : '')}><FaMedal />Quản lí hạng</NavLink></li>
             </ul>
           </li>
+
+          {userRole === "admin" && (
+            <>
+              <li>
+                <NavLink
+                  to={"/admin/dashboard"}
+                  className={({ isActive }) => (isActive ? "active" : "")}
+                >
+                  <FaTachometerAlt />
+                  Bảng điều khiển
+                </NavLink>
+              </li>
+            </>
+          )}
+          {userRole == "admin || manager"  && (
+            <li>
+              <span onClick={() => toggleMenu("cinema")}>
+                <FaBuilding style={{ marginRight: "-80px" }} /> Hệ thống rạp{" "}
+                {openMenu["cinema"] ? <FaChevronDown /> : <FaChevronRight />}
+              </span>
+              <ul className={openMenu["cinema"] ? "submenu open" : "submenu"}>
+                <li>
+                  <NavLink
+                    to={"/admin/cinemas"}
+                    onClick={handleLinkClick}
+                    className={({ isActive }) => (isActive ? "active" : "")}
+                  >
+                    <FaTheaterMasks /> Quản lí rạp chiếu phim
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to={"/admin/rooms"}
+                    onClick={handleLinkClick}
+                    className={({ isActive }) => (isActive ? "active" : "")}
+                  >
+                    <FaIndustry /> Quản lí phòng rạp
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to={"/admin/seat-maps"}
+                    onClick={handleLinkClick}
+                    className={({ isActive }) => (isActive ? "active" : "")}
+                  >
+                    <FaChair />
+                    Sơ đồ ghế
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to={"/admin/rank"}
+                    onClick={handleLinkClick}
+                    className={({ isActive }) => (isActive ? "active" : "")}
+                  >
+                    <FaMedal />
+                    Quản lí hạng
+                  </NavLink>
+                </li>
+              </ul>
+            </li>
+          )}
+          {userRole == "manager" && (
+            <li>
+              <span onClick={() => toggleMenu("movies")}>
+                <FaPlayCircle /> Phim và suất chiếu{" "}
+                {openMenu["movies"] ? <FaChevronDown /> : <FaChevronRight />}
+              </span>
+              <ul className={openMenu["movies"] ? "submenu open" : "submenu"}>
+                <li>
+                  <NavLink
+                    to={"/admin/movies"}
+                    onClick={handleLinkClick}
+                    className={({ isActive }) => (isActive ? "active" : "")}
+                  >
+                    <FaFilm /> Quản lí phim
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to={"/admin/showtimes"}
+                    onClick={handleLinkClick}
+                    className={({ isActive }) => (isActive ? "active" : "")}
+                  >
+                    <FaCalendarAlt /> Quản lí xuất chiếu
+                  </NavLink>
+                </li>
+              </ul>
+            </li>
+          )}
+          <li>
+            {userRole == "staff || manager" && (
+              <span onClick={() => toggleMenu("services")}>
+                <FaGift style={{ marginRight: "-50px" }} /> Dịch vụ và ưu đãi{" "}
+                {openMenu["services"] ? <FaChevronDown /> : <FaChevronRight />}
+              </span>
+            )}
+            <ul className={openMenu["services"] ? "submenu open" : "submenu"}>
+              {/* Nếu userRole là "staff", chỉ hiển thị mục Quản lý đơn hàng */}
+              {userRole == "staff || manager" && (
+                <li>
+                  <NavLink
+                    to={"/admin/orders"}
+                    onClick={handleLinkClick}
+                    className={({ isActive }) => (isActive ? "active" : "")}
+                  >
+                    <FaTag /> Quản lí đơn hàng
+                  </NavLink>
+                </li>
+              )}
+
 
           <li>
           <span onClick={() => toggleMenu('movies')}>
