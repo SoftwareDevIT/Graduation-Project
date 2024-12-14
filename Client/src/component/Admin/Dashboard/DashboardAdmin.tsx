@@ -234,14 +234,7 @@ useEffect(() => {
         <Option value="Đã in vé">Đã in vé</Option>
       </Select>
     </Form.Item>
-    {/* <Form.Item label="">
-              <RangePicker
-                format="YYYY-MM-DD"
-                value={selectedDateRange}
-                onChange={(dates) => setSelectedDateRange(dates)}
-                style={{ width: 240 }}
-              />
-            </Form.Item> */}
+  
             <Form.Item label="">
       <Button type="primary" onClick={exportToExcel} block style={{ width: 300 }}>
         Export to Excel
@@ -365,6 +358,14 @@ useEffect(() => {
         <div className="charts-container">
           <div className="quarterly-revenue">
             <h3>Doanh Thu Theo Ngày</h3>
+            <Form.Item label="">
+              <RangePicker
+                format="YYYY-MM-DD"
+                value={selectedDateRange}
+                onChange={(dates) => setSelectedDateRange(dates)}
+                style={{ width: 240 }}
+              />
+            </Form.Item>
             <div className="area-chart" >
             <Line data={dailyChartData} options={{
                         responsive: true,

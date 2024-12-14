@@ -219,7 +219,7 @@ function App() {
         <Route path="/admin/showtimes/add" element={<PrivateRoute allowedRoles={['admin','manager','staff']}><ShowtimesFormManager /></PrivateRoute>} />
         <Route path="/admin/showtimesauto/add" element={<PrivateRoute allowedRoles={['admin','manager','staff']}><ShowtimesAuto /></PrivateRoute>} />
         <Route path="/admin/showtimes/edit/:id" element={<PrivateRoute allowedRoles={['admin','manager','staff']}><ShowtimesFormManager /></PrivateRoute>} />
-        <Route path="/admin/orders" element={<PrivateRoute allowedRoles={['staff','manager']}><OrdersManager /></PrivateRoute>} />
+        <Route path="/admin/orders" element={<PrivateRoute allowedRoles={['admin','staff','manager']}><OrdersManager /></PrivateRoute>} />
         <Route path="/admin/ordersdetail/:id" element={<PrivateRoute allowedRoles={['admin','manager','staff']}><OrdersDetailManager /></PrivateRoute>} />
         <Route path="/admin/orders/edit/:id" element={<PrivateRoute allowedRoles={['admin','manager','staff']}><OrdersFormManager /></PrivateRoute>} />
         <Route path="/admin/seat-maps" element={<PrivateRoute allowedRoles={['admin','manager','staff']}><SeatMapManager /></PrivateRoute>} />
