@@ -130,6 +130,7 @@ import MyMapComponent from "./component/GG map/Ggmap";
 import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
 import OrderHistoryApp from "./component/PersonalPage/MovieTicket";
 import BookingManager from "./component/TicketandSeat/BookingManager";
+import MovieStatistics from "./component/Admin/MovieStatistics/MovieStatistics";
 
 function App() {
 
@@ -175,6 +176,7 @@ function App() {
             </PrivateRoute>
           } />
         <Route path="/Personal" element={<PrivateRoute><Personal /></PrivateRoute>} />
+       
  
         <Route path="/ticketcinema" element={ <PrivateRoute><OrderHistoryApp/></PrivateRoute>} />
         <Route path="/ChangePassword" element={ <PrivateRoute><ChangePassword /></PrivateRoute>} />
@@ -191,6 +193,7 @@ function App() {
         <Route path="/seat" element={<CinemaSeatSelection />} />
         <Route path="/resetPassword" element={<ResetPassword />} />
         <Route path="/earlymovie" element={<EarlyMovie />} />
+       
        
         
 
@@ -245,13 +248,20 @@ function App() {
         <Route path="/admin/combo" element={<PrivateRoute allowedRoles={['manager']}><ComboManager /></PrivateRoute>} />
         <Route path="/admin/combo/add" element={<PrivateRoute allowedRoles={['manager']}><ComboFormManager /></PrivateRoute>} />
         <Route path="/admin/combo/edit/:id" element={<PrivateRoute allowedRoles={['manager']}><ComboFormManager /></PrivateRoute>} />
+
+        <Route path="/admin/cinemas" element={<PrivateRoute allowedRoles={['manager','admin']}><CinemasManager /></PrivateRoute>} />
+        <Route path="/admin/cinemas/add" element={<PrivateRoute allowedRoles={['manager','admin']}><CinemasFormManager /></PrivateRoute>} />
+        <Route path="/admin/cinemas/edit/:id" element={<PrivateRoute allowedRoles={['manager','admin']}><CinemasFormManager /></PrivateRoute>} />
+        <Route path="/admin/rooms" element={<PrivateRoute allowedRoles={['manager','admin']}><RoomsManager/></PrivateRoute>} />
+
         <Route path="/admin/cinemas" element={<PrivateRoute allowedRoles={['admin','manager']}><CinemasManager /></PrivateRoute>} />
         <Route path="/admin/cinemas/add" element={<PrivateRoute allowedRoles={['admin','manager']}><CinemasFormManager /></PrivateRoute>} />
         <Route path="/admin/cinemas/edit/:id" element={<PrivateRoute allowedRoles={['admin','manager']}><CinemasFormManager /></PrivateRoute>} />
         <Route path="/admin/rooms" element={<PrivateRoute allowedRoles={['manager']}><RoomsManager/></PrivateRoute>} />
+
         <Route path="/admin/rooms/add" element={<PrivateRoute allowedRoles={['manager']}><RoomsFormManager/></PrivateRoute>} />
         <Route path="/admin/rooms/edit/:id" element={<PrivateRoute allowedRoles={['manager']}><RoomsFormManager/></PrivateRoute>} />
-        <Route path="/admin/movies" element={<PrivateRoute allowedRoles={['manager']}><MoviesManager /></PrivateRoute>} />
+        <Route path="/admin/movies" element={<PrivateRoute allowedRoles={['manager','admin']}><MoviesManager /></PrivateRoute>} />
         <Route path="/admin/movies/add" element={<PrivateRoute allowedRoles={['manager']}><MoviesManagerForm /></PrivateRoute>} />
         <Route path="/admin/movies/edit/:id" element={<PrivateRoute allowedRoles={['manager']}><MoviesAddManager /></PrivateRoute>} />
         {/* <Route path="/admin/schedules" element={<PrivateRoute allowedRoles={['admin','manager','staff']}><SchedulesManager /></PrivateRoute>} />  */}

@@ -172,6 +172,7 @@ Route::middleware(['auth:sanctum', 'role:manager'])->prefix('manager')->group(fu
     // Dashboard and Filters
     Route::get('filter-dashboard', [FilterOfDashBoarchController::class, 'filterOfDashBoarch']); // Filter dashboard data
     Route::get('/dashboard', [DashboardAdminController::class, 'dashboard']); // Dashboard page
+    Route::get('/dashboard', [DashboardAdminController::class, 'dashboard']); // Dashboard page
 
     // status
     Route::post('movieStatus/{id}', [MovieController::class, 'status']);
