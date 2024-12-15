@@ -172,6 +172,8 @@ Route::middleware(['auth:sanctum', 'role:manager'])->prefix('manager')->group(fu
     // Dashboard and Filters
     Route::get('filter-dashboard', [FilterOfDashBoarchController::class, 'filterOfDashBoarch']); // Filter dashboard data
     Route::get('/dashboard', [DashboardAdminController::class, 'dashboard']); // Dashboard page
+    Route::get('/dashboardMovie', [DashboardAdminController::class, 'dashboardAdmin']); // Dashboard Movie
+
 
     // status
     Route::post('movieStatus/{id}', [MovieController::class, 'status']);
@@ -182,7 +184,9 @@ Route::middleware(['auth:sanctum', 'role:manager'])->prefix('manager')->group(fu
 
     // Ticket Printing
     Route::post('printTicket', [OrderController::class, 'printTicket']); // Print ticket and change status
-
+    Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
+    Route::get('/dashboard', [DashboardAdminController::class, 'dashboard']);
+    
     //checkin ghế barcode
     Route::post('checkInSeat/{code}', [CheckInTicketController::class, 'checkInSeat']);
     Route::post('checkInBooking/{code}', [CheckInTicketController::class, 'checkInBooking']);
