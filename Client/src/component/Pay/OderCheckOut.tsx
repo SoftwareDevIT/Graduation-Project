@@ -38,13 +38,14 @@ const OrderCheckout = () => {
     const showModal = () => {
         setIsModalVisible(true);
     };
-   
+    const handleOk = () => {
+        setIsModalVisible(false);
+      };
+  
     const handleCancel = () => {
         setIsModalVisible(false);
     };
-    const handleOk = () => {
-        setIsModalVisible(false);
-    };
+
     useEffect(() => {
         if (userProfile) {
             setAvailablePoints(userProfile.points);

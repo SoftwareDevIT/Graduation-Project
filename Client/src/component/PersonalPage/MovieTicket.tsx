@@ -12,6 +12,7 @@ import instance from "../../server";
 import moment from 'moment';
 import Header from "../Header/Hearder";
 import Footer from "../Footer/Footer";
+import { Combo } from "../../interface/Combo";
 
 
 const { Title, Text } = Typography;
@@ -35,6 +36,7 @@ interface Order {
   showtime: Showtime;
   seats: Seat[];
   amount: number;
+  combo:Combo[];
 }
 
 const OrderHistoryApp: React.FC = () => {
@@ -43,7 +45,12 @@ const OrderHistoryApp: React.FC = () => {
   const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [selectedDate, setSelectedDate] = useState<string>("");
-
+  const formatCurrency = (amount: number): string => {
+    return new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" })
+      .format(amount)
+      .replace("₫", "VND"); // Thay "₫" bằng "VND"
+  };
+  
   useEffect(() => {
     instance
       .get("/order") // Endpoint API
@@ -59,10 +66,11 @@ const OrderHistoryApp: React.FC = () => {
           },
           seats: order.seats,
           amount: order.amount,
-          combo:order.combos
+          combo:order.combo
         }));
         setOrders(mappedOrders);
         setFilteredOrders(mappedOrders); // Show all orders initially
+        console.log(mappedOrders)
       })
       .catch((error) => {
         console.error("Error fetching orders:", error);
@@ -125,10 +133,10 @@ const OrderHistoryApp: React.FC = () => {
   return (
     <>
       <Header />
-      <div style={{ padding: "30px", maxWidth: "1200px", margin: "0 auto", background: "#f8f9fa", borderRadius: "10px" }}>
+      <div style={{ padding: "30px", maxWidth: "1200px", margin: "0 auto", background: "#f8f9fa", borderRadius: "10px" , marginTop:"20px" }}>
         {!selectedOrder ? (
           <div>
-            <Title level={2} style={{ textAlign: "center", marginBottom: "20px", color: "#1890ff" }}>
+            <Title level={2} style={{ textAlign: "center", marginBottom: "20px", }}>
               Lịch Sử Mua Hàng
             </Title>
   
@@ -167,12 +175,12 @@ const OrderHistoryApp: React.FC = () => {
                         width={120}
                         style={{ borderRadius: "10px" }}
                       />
-                    </Col>
+                      </Col>
                     <Col xs={24} sm={18} className="order-info">
                       <Space direction="vertical" style={{ width: "100%" }}>
                         <Title level={4} style={{ margin: 0, fontWeight: 600 }}>
                           {order.showtime.movie.movie_name}
-                        </Title>
+                          </Title>
                         <Text>
                           <EnvironmentOutlined style={{ marginRight: "8px", color: "#1890ff" }} />
                           <b>Phòng chiếu :</b> {order.showtime.room.room_name}
@@ -185,8 +193,10 @@ const OrderHistoryApp: React.FC = () => {
                           <TeamOutlined style={{ marginRight: "8px", color: "#52c41a" }} />
                           <b>Ghế:</b> {order.seats.map((s) => s.seat_name).join(", ")}
                         </Text>
+                        
                         <Text style={{ fontWeight: 600 }}>
-                          <b>Tổng:</b> {order.amount} VND
+                        <b>Tổng:</b> {formatCurrency(order.amount)}
+
                         </Text>
                       </Space>
                     </Col>
@@ -214,97 +224,109 @@ const OrderHistoryApp: React.FC = () => {
           </div>
         ) : (
           <div>
-            <Button
-              type="default"
-              icon={<ArrowLeftOutlined />}
-              onClick={handleBackToOrders}
-              style={{
-                marginBottom: "20px",
-                fontSize: "16px",
-                borderRadius: "5px",
-                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-              }}
-            >
-              Back to Orders
-            </Button>
-            <Card
-              style={{
-                marginTop: "20px",
-                borderRadius: "10px",
-                padding: "20px",
-                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                background: "#ffffff",
-              }}
-            >
-              <Row gutter={24}>
-                <Col xs={24} sm={8} style={{ textAlign: "center" }}>
-                  <Image
-                    src={selectedOrder.showtime.movie.poster}
-                    alt="Movie Poster"
-                    width={180}
-                    style={{
-                      margin: "0 auto 20px",
-                      borderRadius: "10px",
-                      boxShadow: "0 2px 6px rgba(0, 0, 0, 0.2)",
-                    }}
-                  />
-                  <Button
-                    type="primary"
-                    icon={<DownloadOutlined />}
-                    onClick={handleDownloadTicket}
-                    style={{
-                      marginTop: "10px",
-                      padding: "8px 20px",
-                      fontSize: "16px",
-                      borderRadius: "5px",
-                      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                    }}
-                  >
-                    Download Ticket
-                  </Button>
-                </Col>
-  
-                <Col xs={24} sm={16}>
-                  <Space direction="vertical" size="large" style={{ width: "100%" }}>
+
+          <Button
+            type="default"
+            icon={<ArrowLeftOutlined />}
+            onClick={handleBackToOrders}
+            style={{
+              marginBottom: "20px",
+              fontSize: "16px",
+              borderRadius: "5px",
+              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+            }}
+          >
+            Back to Orders
+          </Button>
+          <Card
+            style={{
+              marginTop: "20px",
+              borderRadius: "10px",
+              padding: "20px",
+              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+              background: "#ffffff",
+            }}
+          >
+            <Row gutter={24}>
+              <Col xs={24} sm={8} style={{ textAlign: "center" }}>
+                <Image
+                  src={selectedOrder.showtime.movie.poster}
+                  alt="Movie Poster"
+                  width={180}
+                  style={{margin: "0 auto 20px",
+                    borderRadius: "10px",
+                    boxShadow: "0 2px 6px rgba(0, 0, 0, 0.2)",
+                  }}
+                />
+                <Button
+                  type="primary"
+                  icon={<DownloadOutlined />}
+                  onClick={handleDownloadTicket}
+                  style={{
+                    marginTop: "10px",
+                    padding: "8px 20px",
+                    fontSize: "16px",
+                    borderRadius: "5px",
+                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                  }}
+                >
+                  Download Ticket
+                </Button>
+              </Col>
+        
+              <Col xs={24} sm={16}>
+                <Row gutter={[16, 16]}>
+                  <Col xs={24} sm={16}>
+                    <Space direction="vertical" size="large" style={{ width: "100%" }}>
                     <Text style={{ fontSize: "16px" }}>
-                      <CalendarOutlined style={{ marginRight: "10px", color: "#faad14" }} />
-                      <b>Thời gian:</b> {selectedOrder.showtime.showtime_date}{" "}
-                      {selectedOrder.showtime.showtime_start}
-                    </Text>
-  
-                    <Text style={{ fontSize: "16px" }}>
-                      <TeamOutlined style={{ marginRight: "10px", color: "#52c41a" }} />
-                      <b>Ghế:</b> {selectedOrder.seats.map((s) => s.seat_name).join(", ")}
-                    </Text>
-                  
-  
-                    <Text style={{ fontSize: "16px" }}>
-                      <EnvironmentOutlined style={{ marginRight: "10px", color: "#1890ff" }} />
-                      <b>Phòng:</b> {selectedOrder.showtime.room.room_name}
-                    </Text>
-  
-                    <Text style={{ fontSize: "16px" }}>
-                      <b>Mã Code:</b>
-                      <Text code>{selectedOrder.booking_code}</Text>
-                    </Text>
-  
-                    <div style={{ textAlign: "center", marginTop: "20px" }}>
-                      <Image
-                        src={selectedOrder.qrcode}
-                        alt="QR Code"
-                        width={120}
-                        style={{
-                          margin: "0 auto",
-                          borderRadius: "10px",
-                          boxShadow: "0 2px 6px rgba(0, 0, 0, 0.2)",
-                        }}
-                      />
-                    </div>
-                  </Space>
-                </Col>
-              </Row>  
-            </Card>
-          </div>
+                        <EnvironmentOutlined style={{ marginRight: "10px", color: "#1890ff" }} />
+                        <b>Phòng:</b> {selectedOrder.showtime.room.room_name}
+                      </Text>
+                      <Text style={{ fontSize: "16px" }}>
+                        <CalendarOutlined style={{ marginRight: "10px", color: "#faad14" }} />
+                        <b>Thời gian:</b> {selectedOrder.showtime.showtime_date}{" "}
+                        {selectedOrder.showtime.showtime_start}
+                      </Text>
+        
+                      <Text style={{ fontSize: "16px" }}>
+                        <TeamOutlined style={{ marginRight: "10px", color: "#52c41a" }} />
+                        <b>Ghế:</b> {selectedOrder.seats.map((s) => s.seat_name).join(", ")}
+                      </Text>
+                      <Text style={{ fontSize: "16px" }}>
+  <b>Combo:</b>{" "}
+  {selectedOrder.combo && selectedOrder.combo.length > 0
+    ? selectedOrder.combo.map((c: any) => `${c.combo_name}`).join(", ")
+    : "Không có combo"}
+</Text>
+
+                     
+        
+                    
+
+                    </Space>
+                  </Col>
+        
+                  <Col xs={24} sm={8} style={{ textAlign: "center" }}>
+                    <Image
+                      src={selectedOrder.qrcode}
+                     
+                      alt="QR Code"
+                      width={120}
+                      style={{
+                        margin: "0 auto",
+                        borderRadius: "10px",
+                        boxShadow: "0 2px 6px rgba(0, 0, 0, 0.2)",
+                      }}
+                    />
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+          </Card>
+        </div>
+        
+
+
         )}
       </div>
       <Footer/>

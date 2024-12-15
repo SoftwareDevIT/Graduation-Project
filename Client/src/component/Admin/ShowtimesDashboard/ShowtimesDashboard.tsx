@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useShowtimeContext } from '../../../Context/ShowtimesContext';
 import instance from '../../../server';
 import { Movie } from '../../../interface/Movie';
-import { notification, Table, Button, Input, Pagination } from 'antd';
+import { notification, Table, Button, Input, Pagination, Switch } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
 const ShowtimesDashboard: React.FC = () => {
@@ -119,6 +119,19 @@ const ShowtimesDashboard: React.FC = () => {
             dataIndex: 'price',
             key: 'price',
             render: (price: number) => formatCurrency(price),
+        },
+        {
+            title: 'Trạng Thái',
+            key: 'actions',
+            render: (movie: Movie) => (
+                <div style={{ textAlign: 'left' }}>
+                    <Switch 
+                        checkedChildren="On" 
+                        unCheckedChildren="Off" 
+                    />
+                </div>
+            ),
+            className: 'text-left',
         },
         {
             title: 'Hành động',
