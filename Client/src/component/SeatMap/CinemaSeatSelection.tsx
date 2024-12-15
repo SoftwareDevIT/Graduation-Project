@@ -601,17 +601,17 @@ const CinemaSeatSelection: React.FC = () => {
                 </p>
               </div>
               <div className="price-box1">
-                <div className="price">
-                  Tổng đơn hàng
-                  <br />{" "}
-                  <span>
-                    {totalPrice.toLocaleString("en-US", {
-                      minimumFractionDigits: 1,
-                      maximumFractionDigits: 1,
-                    })}{" "}
-                    đ
-                  </span>
-                </div>
+              <div className="price">
+  Tổng đơn hàng
+  <br />
+  <span>
+    {totalPrice.toLocaleString("vi-VN", {
+      minimumFractionDigits: 0, // No extra decimal places if not needed
+      maximumFractionDigits: 3, // Show up to 3 decimal places
+    })} VNĐ
+  </span>
+</div>
+
               </div>
               <div className="actionst1">
                 <button className="back-btn1">←</button>

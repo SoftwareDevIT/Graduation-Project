@@ -177,9 +177,12 @@ import { useCinemaContext } from "../../Context/CinemasContext";
                 },
               });
             } else {
-              // If the user role is unknown, don't fetch movies
-              console.error("Unauthorized role");
-              return;
+              response = await instance.get(`/filterByDate`, {
+                params: {
+                  cinema_id: selectedCinema,
+                  showtime_date: selectedDate,
+                },
+              });
             }
     
             const cinemaMovies = response.data?.data || [];
