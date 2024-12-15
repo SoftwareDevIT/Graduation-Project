@@ -41,8 +41,9 @@ class DatabaseSeeder extends Seeder
             FavoriteSeeder::class,
             // SeatLayoutSeeder::class,
             // MovieInCinema::class,
-            // ShowtimeSeeder::class,
             // CategorySeatSeeder::class,
+
+            // ShowtimeSeeder::class,
             // BookingSeeder::class,
             WebsiteSettingsSeeder::class,
             VorcherSeeder::class,
