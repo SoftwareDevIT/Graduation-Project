@@ -15,109 +15,13 @@ use Illuminate\Support\Facades\Log;
 class DashboardAdminService
 {
 
-    public function filterofbooking(?string $status, ?int $idCinema, ?string $startDate, ?string $endDate, ?string $month, ?string $year, ?string $day)
+    public function filterOfBooking(?string $status, ?int $idCinema, ?string $startDate, ?string $endDate, ?string $month, ?string $year, ?string $day)
     {
         $query = Booking::query()->with('showtime.movie');
 
-        // Lọc theo trạng thái
-        if (!is_null($status)) {
-            $query->where('status', $status);
-        }
+        $this->applyFilters($query, $status, $idCinema, $startDate, $endDate, $month, $year, $day);
 
-        // Lọc theo ID rạp, nếu không có thì lấy tất cả rạp
-        if (!is_null($idCinema)) {
-            $query->whereHas('showtime.room.cinema', function ($subQuery) use ($idCinema) {
-                $subQuery->where('id', $idCinema);
-            });
-        }
-
-        // Lọc theo khoảng thời gian
-        if (!is_null($startDate) && !is_null($endDate)) {
-            try {
-
-                $start = Carbon::parse($startDate)->startOfDay();
-                $end = Carbon::parse($endDate)->endOfDay();
-                if ($start->lessThanOrEqualTo($end)) {
-                    $query->whereBetween('created_at', [$start, $end]);
-                } else {
-                    Log::error('Ngày bắt đầu lớn hơn ngày kết thúc');
-                }
-            } catch (Exception $e) {
-                Log::error('Lỗi: ' . $e->getMessage());
-            }
-        }
-
-        // Lọc theo tháng
-        if (!is_null($month)) {
-            try {
-                $carbonDate = Carbon::createFromFormat('Y-m', $month);
-                $query->whereYear('created_at', $carbonDate->year)
-                    ->whereMonth('created_at', $carbonDate->month);
-            } catch (Exception $e) {
-                Log::error('Lỗi định dạng: ' . $e->getMessage());
-                return collect([]);
-            }
-        }
-
-        // Lọc theo năm
-        if (!is_null($year)) {
-            $query->whereYear('created_at', $year);
-        }
-
-        // Lọc theo ngày
-        if (!is_null($day)) {
-            try {
-                $formattedDate = Carbon::createFromFormat('Y-m-d', $day);
-                $query->whereDate('created_at', $formattedDate);
-            } catch (Exception $e) {
-                Log::error('Lỗi định dạng: ' . $e->getMessage());
-            }
-        }
-
-        $result = $query->get();
-
-        $movies = Booking::select('showtimes.movie_id', DB::raw('SUM(booking.amount) as total_amount'), DB::raw('COUNT(*) as booking_count'))
-            ->join('showtimes', 'booking.showtime_id', '=', 'showtimes.id')
-            ->where(function ($query) use ($status, $idCinema, $startDate, $endDate, $month, $year, $day) {
-                if (!is_null($status)) {
-                    $query->where('booking.status', $status);
-                }
-                if (!is_null($idCinema)) {
-                    $query->whereHas('showtime.room.cinema', function ($subQuery) use ($idCinema) {
-                        $subQuery->where('id', $idCinema);
-                    });
-                }
-                if (!is_null($startDate) && !is_null($endDate)) {
-                    $start = Carbon::parse($startDate)->startOfDay();
-                    $end = Carbon::parse($endDate)->endOfDay();
-                    $query->whereBetween('booking.created_at', [$start, $end]);
-                }
-                if (!is_null($month)) {
-                    try {
-                        $carbonDate = Carbon::createFromFormat('Y-m', $month);
-                        $query->whereYear('booking.created_at', $carbonDate->year)
-                            ->whereMonth('booking.created_at', $carbonDate->month);
-                    } catch (Exception $e) {
-                        Log::error('Lỗi định dạng: ' . $e->getMessage());
-                    }
-                }
-                if (!is_null($year)) {
-                    $query->whereYear('booking.created_at', $year);
-                }
-                if (!is_null($day)) {
-                    try {
-                        $formattedDate = Carbon::createFromFormat('Y-m-d', $day);
-                        $query->whereDate('booking.created_at', $formattedDate);
-                    } catch (Exception $e) {
-                        Log::error('Lỗi định dạng: ' . $e->getMessage());
-                    }
-                }
-            })
-            ->groupBy('showtimes.movie_id')
-            ->get();
-
-
-        $mappedResult = $result->map(function ($item) {
+        $filteredData = $query->get()->map(function ($item) {
             return [
                 'booking_id' => $item->id,
                 'user_name' => $item->user->user_name ?? 'N/A',
@@ -131,22 +35,63 @@ class DashboardAdminService
             ];
         });
 
-        $movieData = $movies->map(function ($item) {
-
-            $movie = Movie::find($item->movie_id);
-
-            return [
-                'movie_name' => $movie->movie_name ?? 'N/A',
-                'total_amount' => $item->total_amount,
-                'booking_count' => $item->booking_count,
-            ];
-        });
+        // Tính tổng số tiền và vé theo phim
+        $movieData = $this->getMovieData($status, $idCinema, $startDate, $endDate, $month, $year, $day);
 
         return [
-            'filtered_data' => $mappedResult,
+            'filtered_data' => $filteredData,
             'data_movie' => $movieData
         ];
     }
+
+    private function getMovieData($status, $idCinema, $startDate, $endDate, $month, $year, $day)
+{
+    $movies = Booking::select('showtimes.movie_id', DB::raw('SUM(booking.amount) as total_amount'), DB::raw('COUNT(*) as booking_count'))
+        ->join('showtimes', 'booking.showtime_id', '=', 'showtimes.id')
+        ->when($idCinema, function ($query) use ($idCinema) {
+            $query->whereHas('showtime.room.cinema', function ($subQuery) use ($idCinema) {
+                $subQuery->where('id', $idCinema);
+            });
+        })
+        ->where(function ($query) use ($status, $startDate, $endDate, $month, $year, $day) {
+            $this->applyFilters($query, $status, null, $startDate, $endDate, $month, $year, $day);
+        })
+        ->groupBy('showtimes.movie_id')
+        ->get();
+
+    return $movies->map(function ($movie) use ($idCinema) {
+        $cinemas = Booking::select(
+            'room.cinema_id',
+            'cinema.cinema_name',
+            DB::raw('SUM(booking.amount) as total_amount'),
+            DB::raw('COUNT(*) as ticket_count'),
+            DB::raw('MIN(booking.created_at) as last_booking_date') // Lấy ngày đặt vé mới nhất
+        )
+            ->join('showtimes', 'booking.showtime_id', '=', 'showtimes.id')
+            ->join('room', 'showtimes.room_id', '=', 'room.id')
+            ->join('cinema', 'room.cinema_id', '=', 'cinema.id')
+            ->where('showtimes.movie_id', $movie->movie_id)
+            ->groupBy('room.cinema_id', 'cinema.cinema_name') // Nhóm theo cinema_id và cinema_name
+            ->get()
+            ->map(function ($cinema) {
+                return [
+                    'cinema_name' => $cinema->cinema_name,
+                    'total_amount' => $cinema->total_amount,
+                    'ticket_count' => $cinema->ticket_count,
+                    'last_booking_date' => $cinema->last_booking_date, // Thêm trường last_booking_date
+                ];
+            });
+
+        $movieDetails = Movie::find($movie->movie_id);
+
+        return [
+            'movie_name' => $movieDetails->movie_name ?? 'N/A',
+            'total_amount' => $movie->total_amount,
+            'booking_count' => $movie->booking_count,
+            'cinemas' => $cinemas,
+        ];
+    });
+}
 
     public function totaldashboard($data)
     {
@@ -414,4 +359,52 @@ class DashboardAdminService
             ];
         })->values();
     }
+
+    private function applyFilters($query, $status, $idCinema, $startDate, $endDate, $month, $year, $day)
+    {
+        if (!is_null($status)) {
+            $query->where('booking.status', $status);
+        }
+    
+        if (!is_null($idCinema)) {
+            $query->whereHas('showtime.room.cinema', function ($subQuery) use ($idCinema) {
+                $subQuery->where('id', $idCinema);
+            });
+        }
+    
+        if (!is_null($startDate) && !is_null($endDate)) {
+            try {
+                $start = Carbon::parse($startDate)->startOfDay();
+                $end = Carbon::parse($endDate)->endOfDay();
+                $query->whereBetween('booking.created_at', [$start, $end]);
+            } catch (Exception $e) {
+                Log::error('Lỗi khoảng thời gian: ' . $e->getMessage());
+            }
+        }
+    
+        if (!is_null($month)) {
+            try {
+                $carbonDate = Carbon::createFromFormat('Y-m', $month);
+                $query->whereYear('booking.created_at', $carbonDate->year)
+                    ->whereMonth('booking.created_at', $carbonDate->month);
+            } catch (Exception $e) {
+                Log::error('Lỗi định dạng tháng: ' . $e->getMessage());
+            }
+        }
+    
+        if (!is_null($year)) {
+            $query->whereYear('booking.created_at', $year);
+        }
+    
+        if (!is_null($day)) {
+            try {
+                $formattedDate = Carbon::createFromFormat('Y-m-d', $day);
+                $query->whereDate('booking.created_at', $formattedDate);
+            } catch (Exception $e) {
+                Log::error('Lỗi định dạng ngày: ' . $e->getMessage());
+            }
+        }
+    }
+
+   
 }
