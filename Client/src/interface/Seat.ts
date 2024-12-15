@@ -10,4 +10,6 @@
     status: number;
     linkedSeat?: string;
     isSelected?: boolean; 
+    isMainProcessed?: boolean;
+    isDisabled?: boolean; 
   }

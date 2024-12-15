@@ -15,7 +15,7 @@ const PayMethodDashboard = () => {
     useEffect(() => {
         const fetchPayMethods = async () => {
             try {
-                const response = await instance.get('/method');
+                const response = await instance.get('/admin/method');
                 setPayMethods(response.data.data);
             } catch (error) {
                 console.error('Error fetching payment methods:', error);
@@ -34,7 +34,7 @@ const PayMethodDashboard = () => {
         if (!isConfirmed) return;
 
         try {
-            await instance.delete(`/method/${id}`);
+            await instance.delete(`/admin/method/${id}`);
             setPayMethods((prevMethods) => prevMethods.filter((method) => method.id !== id));
             notification.success({
                 message: 'Thành công',

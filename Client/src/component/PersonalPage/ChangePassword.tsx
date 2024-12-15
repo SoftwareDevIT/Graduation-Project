@@ -106,7 +106,7 @@ const ChangePassword: React.FC = () => {
                     <div className="account-nav-item">
     <span className="account-nav-title">
       <NavLink 
-        to="/test" 
+        to="/point" 
         className={({ isActive }) => isActive ? 'active-link' : ''}>
         Tích Điểm
       </NavLink>

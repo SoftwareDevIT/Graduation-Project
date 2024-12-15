@@ -22,8 +22,8 @@ class DatabaseSeeder extends Seeder
 
             LocationSeeder::class,
             CinemaSeeder::class,
-            // SeatMapSeeder::class,
-            // RoomSeeder::class,
+            SeatMapSeeder::class,
+            RoomSeeder::class,
             PayMethodSeeder::class,
             ComboSeeder::class,
             ActorSeeder::class,
@@ -39,7 +39,7 @@ class DatabaseSeeder extends Seeder
             CategoryInMovieSeeder::class,
             RatingSeeder::class,
             FavoriteSeeder::class,
-            // SeatLayoutSeeder::class,
+            SeatLayoutSeeder::class,
             // MovieInCinema::class,
             // CategorySeatSeeder::class,
 

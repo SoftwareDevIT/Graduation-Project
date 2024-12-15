@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Header1.css';
-import { FaBell, FaCog, FaUserCircle } from 'react-icons/fa';
+import { FaBell, FaCog, FaUserCircle, FaCamera } from 'react-icons/fa';
+import { Modal } from 'antd';
 import { User } from '../../../interface/User';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 
@@ -8,10 +9,12 @@ const Header = () => {
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [user, setUser] = useState<User | null>(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isCameraOn, setIsCameraOn] = useState(false);
+    const [videoStream, setVideoStream] = useState<MediaStream | null>(null);
+    const [isModalVisible, setIsModalVisible] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
 
-    // Fetch user data from localStorage when the component mounts
     useEffect(() => {
         const storedUser = localStorage.getItem('user_profile');
         if (storedUser) {
@@ -31,7 +34,28 @@ const Header = () => {
         setIsProfileOpen(!isProfileOpen);
     };
 
-    // Extract the current page name from the path
+    const toggleCamera = async () => {
+        if (isCameraOn) {
+            // Turn off the camera
+            if (videoStream) {
+                videoStream.getTracks().forEach(track => track.stop());
+                setVideoStream(null);
+            }
+            setIsCameraOn(false);
+            setIsModalVisible(false);
+        } else {
+            // Turn on the camera
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                setVideoStream(stream);
+                setIsCameraOn(true);
+                setIsModalVisible(true);
+            } catch (error) {
+                console.error("Error accessing camera:", error);
+            }
+        }
+    };
+
     const getPageName = () => {
         const path = location.pathname;
         const pageName = path.split('/').pop();
@@ -80,12 +104,17 @@ const Header = () => {
             <h1>{getPageName()}</h1>
             <div className="header-actions">
                 <div className="icons-container">
+                    <div className="icon" onClick={toggleCamera}>
+                        <FaCamera style={{ color: isCameraOn ? 'green' : '#004d40' }} />
+                    </div>
                     <div className="icon">
                         <FaBell />
                         <span className="notification-badge">3</span>
                     </div>
                     <div className="icon">
-                       <Link to={'/admin/website-settings'} style={{color: "#004d40"}} > <FaCog /></Link>
+                        <Link to={'/admin/website-settings'} style={{color: "#004d40"}} >
+                            <FaCog />
+                        </Link>
                     </div>
                     <div className="icon profile-pic" onClick={toggleProfile}>
                         <FaUserCircle />
@@ -108,6 +137,31 @@ const Header = () => {
                     </div>
                 </div>
             </div>
+            <Modal
+                title="Camera"
+                visible={isModalVisible}
+                onCancel={() => {
+                    toggleCamera();
+                }}
+                footer={null}
+                centered
+                width="30%"
+              
+                
+            >
+                {isCameraOn && videoStream && (
+                    <video
+                        autoPlay
+                        playsInline
+                        ref={video => {
+                            if (video && !video.srcObject) {
+                                video.srcObject = videoStream;
+                            }
+                        }}
+                        style={{ width: '100%', height: 'auto', borderRadius: '10px' }}
+                    />
+                )}
+            </Modal>
         </div>
     );
 };

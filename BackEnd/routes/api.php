@@ -92,9 +92,6 @@ Route::group([], function () {
     Route::get('/filterByDateByMovie', [FilterByDateController::class, 'filterByDateByMovie']);
 });
 
-
-
-// Admin: Full access to all features
 Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(function () {
     // CRUD Routes
     Route::apiResource('cinema', CinemaController::class); // CRUD rạp
@@ -119,8 +116,8 @@ Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(functi
     Route::get('total-revenue-cinema-by-date/{cinema_id}/{start_date}/{end_date}', [RevenueController::class, 'totalRevenueByCinemaBetweenDates']); // Revenue by cinema and date range
 
     // Dashboard and Filters
-    Route::get('filter-dashboard', [FilterOfDashBoarchController::class, 'filterOfDashBoarch']); // Filter dashboard data
-    Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']); // Dashboard page
+    // Route::get('filter-dashboard', [FilterOfDashBoarchController::class, 'filterOfDashBoarch']); // Filter dashboard data
+    Route::get('/dashboard', [DashboardAdminController::class, 'dashboard']); // Dashboard page
 
     // Website Settings
     Route::post('/website-settings', [WebsiteSettingController::class, 'index']); // List Website Settings
@@ -162,6 +159,9 @@ Route::middleware(['auth:sanctum', 'role:manager'])->prefix('manager')->group(fu
     Route::apiResource('news_category', NewCategoryController::class);
     Route::apiResource('news', NewController::class);
 
+    Route::get('/filterByDate', [FilterByDateController::class, 'filterByDate']);
+    Route::get('/filterByDateByMovie', [FilterByDateController::class, 'filterByDateByMovie']);
+
     //Phân quyền
     Route::apiResource('roles', RoleController::class);
     Route::post('/roles/{role}/permissions', [RoleController::class, 'syncPermissions'])->name('roles.permissions.sync'); // Gán quyền cho vai trò
@@ -171,7 +171,7 @@ Route::middleware(['auth:sanctum', 'role:manager'])->prefix('manager')->group(fu
 
     // Dashboard and Filters
     Route::get('filter-dashboard', [FilterOfDashBoarchController::class, 'filterOfDashBoarch']); // Filter dashboard data
-    Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']); // Dashboard page
+    Route::get('/dashboard', [DashboardAdminController::class, 'dashboard']); // Dashboard page
 
     // status
     Route::post('movieStatus/{id}', [MovieController::class, 'status']);
@@ -189,6 +189,9 @@ Route::middleware(['auth:sanctum', 'role:manager'])->prefix('manager')->group(fu
 });
 
 Route::middleware(['auth:sanctum', 'role:staff'])->prefix('staff')->group(function () {
+
+    Route::get('/filterByDate', [FilterByDateController::class, 'filterByDate']);
+    Route::get('/filterByDateByMovie', [FilterByDateController::class, 'filterByDateByMovie']);
     // Ticket Printing
     Route::post('printTicket', [OrderController::class, 'printTicket']); // in vé và thay đổi trạng thái
     //checkin ghế barcode

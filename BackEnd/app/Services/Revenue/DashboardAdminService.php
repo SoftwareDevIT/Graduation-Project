@@ -375,7 +375,7 @@ class DashboardAdminService
     {
         $bookingIds = $bookings->pluck('id')->toArray();
         Log::info($bookingIds);
-        $seats = Booking::with('seats') 
+        $seats = Booking::with('seats')
             ->whereIn('id', $bookingIds)
             ->get()
             ->flatMap(function ($booking) {
@@ -398,5 +398,20 @@ class DashboardAdminService
         Log::info($seatRatios);
 
         return $seatRatios;
+    }
+
+    public function cinemarevenue($bookings)
+    {
+        return $bookings->groupBy(function ($booking) {
+            return $booking->showtime->room->cinema->id;
+        })->map(function ($groupedBookings, $cinemaId) {
+            $cinemaName = $groupedBookings->first()->showtime->room->cinema->cinema_name;
+
+            return [
+                'cinema_id' => $cinemaId,
+                'cinema_name' => $cinemaName,
+                'total_revenue' => $groupedBookings->sum('amount'),
+            ];
+        })->values();
     }
 }
