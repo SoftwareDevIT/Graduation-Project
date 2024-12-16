@@ -112,6 +112,8 @@
         <div class="header">
             <a href="http://localhost:5173" target="_blank">
                 <img src="https://imgur.com/Pd2gDuC.png" alt="logo">
+            </a>
+            <a href="http://localhost:5173" target="_blank">
                 <h1>FlickHive</h1>
             </a>
         </div>
@@ -120,7 +122,7 @@
             <h2>Vui lòng đưa mã số này đến quầy vé FlickHive để nhận vé!</h2>
         </div>
         <div class="info">
-            <p><span>Mã vé:</span><span>{{$booking->code}}</span></p>
+            <p><span>Mã vé:</span><span>{{$booking->booking_code}}</span></p>
             <p><span>Tên phim:</span><span>{{$booking->showtime->movie->movie_name}}</span></p>
             <p><span>Rạp:</span><span>{{$booking->showtime->room->cinema->cinema_name}}</span></p>
             <p><span>Phòng chiếu:</span><span>{{$booking->showtime->room->room_name}}</span></p>
