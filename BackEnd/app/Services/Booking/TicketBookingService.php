@@ -183,7 +183,8 @@ class TicketBookingService
         $currentDate = now()->format('Ymd');
         $bookingCount = Booking::whereDate('created_at', now()->toDateString())->count() + 1;
         $bookingNumber = str_pad($bookingCount, 3, '0', STR_PAD_LEFT);
-        $bookingCode = '#' . $sortName . $currentDate . '-' . $bookingNumber;
+        // $bookingCode = '#' . $sortName . $currentDate . '-' . $bookingNumber;
+        $bookingCode = $currentDate .  $bookingNumber;
         return $bookingCode;
     }
 
