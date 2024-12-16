@@ -21,8 +21,6 @@ class RoomService
         } elseif ($user->hasRole('manager')) {
             // Manager hoặc Staff: chỉ lấy rạp theo cinema_id của họ
 
-            $query->where('cinenma_id', $user->cinema_id);
-
             $query->where('cinema_id', $user->cinema_id);
 
         } else {
