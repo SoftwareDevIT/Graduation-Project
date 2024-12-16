@@ -116,7 +116,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(functi
     Route::get('total-revenue-cinema-by-date/{cinema_id}/{start_date}/{end_date}', [RevenueController::class, 'totalRevenueByCinemaBetweenDates']); // Revenue by cinema and date range
 
     // Dashboard and Filters
-    // Route::get('filter-dashboard', [FilterOfDashBoarchController::class, 'filterOfDashBoarch']); // Filter dashboard data
+    Route::get('filter-dashboard', [FilterOfDashBoarchController::class, 'filterOfDashBoarch']); // Filter dashboard data
     Route::get('/dashboard', [DashboardAdminController::class, 'dashboard']); // Dashboard page
 
     // Website Settings
@@ -173,6 +173,9 @@ Route::middleware(['auth:sanctum', 'role:manager'])->prefix('manager')->group(fu
     Route::get('filter-dashboard', [FilterOfDashBoarchController::class, 'filterOfDashBoarch']); // Filter dashboard data
     Route::get('/dashboard', [DashboardAdminController::class, 'dashboard']); // Dashboard page
 
+    Route::get('/dashboardMovie', [DashboardAdminController::class, 'dashboardAdmin']); // Dashboard Movie
+
+
     // status
     Route::post('movieStatus/{id}', [MovieController::class, 'status']);
     Route::post('showtimeStatus/{id}', [ShowtimeController::class, 'status']);
@@ -182,7 +185,9 @@ Route::middleware(['auth:sanctum', 'role:manager'])->prefix('manager')->group(fu
 
     // Ticket Printing
     Route::post('printTicket', [OrderController::class, 'printTicket']); // Print ticket and change status
-
+    Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
+    Route::get('/dashboard', [DashboardAdminController::class, 'dashboard']);
+    
     //checkin ghế barcode
     Route::post('checkInSeat/{code}', [CheckInTicketController::class, 'checkInSeat']);
     Route::post('checkInBooking/{code}', [CheckInTicketController::class, 'checkInBooking']);
