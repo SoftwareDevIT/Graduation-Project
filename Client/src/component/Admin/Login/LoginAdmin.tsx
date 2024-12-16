@@ -44,7 +44,14 @@ const AdminLogin = () => {
             instance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     
             openNotificationWithIcon("success", "Đăng nhập thành công", "Bạn đã đăng nhập thành công.");
-            navigate("/admin/dashboard");
+            if(userRole === "admin"){
+              navigate("/admin/dashboard");
+            }else if(userRole === "manager"){
+              navigate("/admin/actor");
+            }else if(userRole === "staff"){
+              navigate("/admin/orders");
+            }
+            
           } else {
             openNotificationWithIcon("error", "Lỗi", "Đăng nhập không thành công.");
           }
@@ -55,7 +62,7 @@ const AdminLogin = () => {
             } else if (error.response.status === 403) {
               openNotificationWithIcon("error", "Lỗi đăng nhập", "Tài khoản chưa được kích hoạt, vui lòng kiểm tra email.");
             } else if (error.response.status === 404) {
-              openNotificationWithIcon("error", "Lỗi đăng nhập", "Tài khoản không tồn tại.");
+openNotificationWithIcon("error", "Lỗi đăng nhập", "Tài khoản không tồn tại.");
             } else {
               openNotificationWithIcon("error", "Lỗi", "Đã xảy ra lỗi. Vui lòng thử lại sau.");
             }

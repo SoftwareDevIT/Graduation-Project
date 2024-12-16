@@ -84,7 +84,7 @@ class RankService
         $discountValue = $pointsToUse;
         $finalPrice = $totalPrice - $discountValue;
 
-        
+
         // Tính số điểm mới nhận được dựa vào phần trăm cấp bậc
         // $rank = $user->rank;
         // $pointsEarned = $totalPrice * ($rank->percent_discount / 100);

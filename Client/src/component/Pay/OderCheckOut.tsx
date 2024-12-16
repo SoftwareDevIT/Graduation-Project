@@ -426,7 +426,7 @@ const OrderCheckout = () => {
   {discount && (
   <div className="order-discount d-flex justify-content-between">
     <span className="total-title">Giảm giá:</span>
-    <span className="total-title"> -{discount.toLocaleString('vi-VN')} đ</span>
+    <span className="total-title5"> -{discount.toLocaleString('vi-VN')} đ</span>
   </div>
   )}
   <div className="order-final d-flex justify-content-between">

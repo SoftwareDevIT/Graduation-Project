@@ -6,6 +6,7 @@ use App\Models\Movie;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Traits\AuthorizesInService;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class MovieService.
@@ -13,10 +14,39 @@ use App\Traits\AuthorizesInService;
 class MovieService
 {
     use AuthorizesInService;
+    protected function filterByRole($query)
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            // Người chưa đăng nhập chỉ thấy các suất chiếu có `status = 1`
+            $query->where('status', 1);
+        } elseif ($user->hasRole('manager') || $user->hasRole('admin')) {
+            // Admin và Manager xem tất cả
+            // No filtering required
+        } else {
+            // Người dùng thông thường chỉ thấy `status = 1`
+            $query->where('status', 1);
+        }
+
+        return $query;
+    }
+
     public function index()
     {
+        // Base query with relationships and counts
+        $query = Movie::with([
+            'actor',
+            'director',
+            'movie_category',
+            'movieInCinemas.cinema'
+        ])->withCount('favorites')->orderBy('created_at', 'desc');
 
-        $movies = Movie::with(['actor', 'director', 'movie_category', 'movieInCinemas'])->withCount('favorites')->orderBy('created_at', 'desc')->get();
+        // Apply role-based filtering
+        $query = $this->filterByRole($query);
+
+        // Execute the query and transform the results
+        $movies = $query->get();
 
         $formattedMovies = $movies->map(function ($movie) {
             return array_merge(
@@ -35,6 +65,7 @@ class MovieService
 
         return response()->json($formattedMovies);
     }
+
 
 
     public function store(array $data)
