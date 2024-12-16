@@ -317,7 +317,7 @@ color: #727575;
     width: 80%;
   }
 .mapseat{
-  margin-left: 100px;
+  margin-left: 115px !important;
 }
   .seat-map-box {
     margin-left: 0;
@@ -508,6 +508,9 @@ color: #727575;
   }
 }
 @media (max-width: 768px) {
+  .mapseat{
+    margin-left: 80px;
+  }
   .container-map {
     margin-left: 0;
     padding: 0;
