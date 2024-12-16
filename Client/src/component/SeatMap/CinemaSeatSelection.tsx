@@ -119,6 +119,7 @@ const CinemaSeatSelection: React.FC = () => {
               });
             };
             
+            
             channel.listen("SeatSelected", (eventData: any) => {
               const { seats, userId } = eventData;
               console.log("Raw seats data received:", eventData);
@@ -151,20 +152,35 @@ const CinemaSeatSelection: React.FC = () => {
   }, [showtimeId, selectedSeats,echoInstance ]);
   const updateSeatsSelection = (selectedSeats: string[], userId: number) => {
     setSeatData((prevSeatData) => {
-      if (!prevSeatData || !prevSeatData.seat_structure || prevSeatData.seat_structure.length === 0) {
+      if (!prevSeatData || !prevSeatData.seat_structure) {
         console.error("Seat structure is not available or empty!");
         return prevSeatData;
       }
   
-      // Map qua seat_structure để cập nhật trạng thái của ghế
+      const currentUserId = parseInt(localStorage.getItem("user_id") || "0", 10);
+  
+      // Duyệt qua toàn bộ ghế và chỉ cập nhật trạng thái ghế trong selectedSeats
       const updatedSeats = prevSeatData.seat_structure.map((seat) => {
         const seatKey = `${seat.row}-${seat.column}`;
+  
+        // Nếu ghế có trong danh sách selectedSeats
+        if (selectedSeats.includes(seatKey)) {
+          return {
+            ...seat,
+            isSelected: true,
+            isDisabled: userId !== currentUserId, // Disable nếu không phải user hiện tại
+          };
+        }
+  
+        // Nếu ghế không nằm trong selectedSeats, giữ nguyên trạng thái trước đó
         return {
           ...seat,
-          isSelected: selectedSeats.includes(seatKey),
-          isDisabled: selectedSeats.includes(seatKey) && userId !== parseInt(localStorage.getItem("user_id") || "0", 10),
+          isSelected: seat.isSelected || false,
+          isDisabled: seat.isDisabled || false,
         };
       });
+  
+      console.log("Updated seat structure:", updatedSeats);
   
       return {
         ...prevSeatData,
@@ -172,6 +188,11 @@ const CinemaSeatSelection: React.FC = () => {
       };
     });
   };
+  
+  
+  
+  
+  
   
   
   
