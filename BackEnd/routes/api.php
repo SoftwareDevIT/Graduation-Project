@@ -131,7 +131,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(functi
     Route::post('comboStatus/{id}', [ComboController::class, 'status']);
     Route::post('userStatus/{id}', [RoleController::class, 'status']);
 });
-
+Route::post('/website-settings', [WebsiteSettingController::class, 'index']); // List Website Settings
 // Manager: Limited access to their assigned cinemas and related data
 Route::middleware(['auth:sanctum', 'role:manager'])->prefix('manager')->group(function () {
     // Seat Map Management
@@ -171,6 +171,7 @@ Route::middleware(['auth:sanctum', 'role:manager'])->prefix('manager')->group(fu
 
     // Dashboard and Filters
     Route::get('filter-dashboard', [FilterOfDashBoarchController::class, 'filterOfDashBoarch']); // Filter dashboard data
+    Route::get('/dashboard', [DashboardAdminController::class, 'dashboard']); // Dashboard page
     Route::get('/dashboard', [DashboardAdminController::class, 'dashboard']); // Dashboard page
 
     // status
