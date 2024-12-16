@@ -101,35 +101,24 @@ const CinemaSeatSelection: React.FC = () => {
 
         // Khởi tạo Echo và lắng nghe sự kiện realtime
         const setupRealtime = async () => {
-          const echo = await initializeEcho();
+          const echo = await initializeEcho(); // Khởi tạo Pusher hoặc WebSocket
           console.log("Connected to Pusher!", echo);
+        
           if (echo) {
-            setEchoInstance(echo);
-            setStatus("Connected to Pusher!");
-            const roomId = response.data.data.room.id;
-            // Kết nối với channel tương ứng
-            const channel = echo.private(`seats-${roomId}`);
-            console.log("Connected to channel:", channel);
-            // Lắng nghe sự kiện SeatSelected
-            const normalizeSeats = (seats: string[]): string[] => {
-              return seats.map((seat) => {
-                // Tách chuỗi ghế và giữ lại phần cuối cùng sau dấu "-"
-                const parts = seat.split("-");
-                return `${parts[parts.length - 2]}-${parts[parts.length - 1]}`;
-              });
-            };
-            
-            
+            const roomId = response.data.data.room.id; // Lấy ID phòng chiếu
+            const channel = echo.private(`seats-${roomId}`); // Kênh riêng biệt cho phòng chiếu
+        
+            // Lắng nghe sự kiện SeatSelected từ server
             channel.listen("SeatSelected", (eventData: any) => {
               const { seats, userId } = eventData;
-              console.log("Raw seats data received:", eventData);
-              updateSeatsSelection(seats, userId);
+              console.log("Received seats:", seats);
+              updateSeatsSelection(seats, userId); // Cập nhật ghế khi có sự thay đổi
             });
-            
           } else {
-            setStatus("Failed to connect.");
+            console.log("Failed to connect.");
           }
         };
+        
 
         if (!echoInstance) {
           setupRealtime();
@@ -175,8 +164,8 @@ const CinemaSeatSelection: React.FC = () => {
         // Nếu ghế không nằm trong selectedSeats, giữ nguyên trạng thái trước đó
         return {
           ...seat,
-          isSelected: seat.isSelected || false,
-          isDisabled: seat.isDisabled || false,
+          isSelected: seat.isSelected || false, // Giữ trạng thái ghế trước đó
+          isDisabled: seat.isDisabled || false, // Giữ trạng thái ghế trước đó
         };
       });
   
@@ -192,12 +181,6 @@ const CinemaSeatSelection: React.FC = () => {
   
   
   
-  
-  
-  
-  
-  
-
   const { seat_structure, matrix_row, matrix_column } = seatData;
 
   // Tạo mảng các hàng (A, B, C, ...) dựa trên số lượng hàng
