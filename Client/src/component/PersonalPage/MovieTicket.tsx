@@ -111,8 +111,6 @@ const OrderHistoryApp: React.FC = () => {
               value={selectedDate ? moment(selectedDate, "YYYY-MM-DD") : null}
               format="YYYY-MM-DD"
             />
-
-            {/* Hiển thị loading skeleton khi đang tải */}
             {loading ? (
               <Skeleton height={100} count={5} style={{ marginBottom: "20px" }} />
             ) : filteredOrders.length === 0 ? (
