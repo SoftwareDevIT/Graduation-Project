@@ -55,7 +55,7 @@ Route::post('password/verify-otp', [ForgotPasswordController::class, 'verifyOtp'
 Route::post('password/reset', [ForgotPasswordController::class, 'forgotPassword']);                 // Đặt lại mật khẩu
 Route::get('/verify-account/{userId}', [AccountVerificationController::class, 'verify'])->name('verify'); // verify account
 Route::post('/resetPassword', [ResetPasswordController::class, 'resetPassword'])->middleware('auth:sanctum');
-Route::post('/website-settings', [WebsiteSettingController::class, 'index']); // List Website Settings
+
 
 // Các tuyến có thể truy cập được cho người dùng được xác thực
 Route::middleware(['auth:sanctum', 'web'])->group(function () {
@@ -91,6 +91,7 @@ Route::group([], function () {
     Route::get('/cinema/{id}/room', [RoomController::class, 'getRoomByCinema']);
     Route::get('/filterByDate', [FilterByDateController::class, 'filterByDate']);
     Route::get('/filterByDateByMovie', [FilterByDateController::class, 'filterByDateByMovie']);
+    Route::post('/website-settings', [WebsiteSettingController::class, 'index']); // List Website Settings
 });
 
 Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(function () {
@@ -187,8 +188,8 @@ Route::middleware(['auth:sanctum', 'role:manager'])->prefix('manager')->group(fu
 
     // Ticket Printing
     Route::post('printTicket', [OrderController::class, 'printTicket']); // Print ticket and change status
-    Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
-    Route::get('/dashboard', [DashboardAdminController::class, 'dashboard']);
+    // Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
+    Route::get('/dashboard', [DashboardAdminController::class, 'dashboard']); // Dashboard page
 
     //checkin ghế barcode
     Route::post('checkInSeat/{code}', [CheckInTicketController::class, 'checkInSeat']);
