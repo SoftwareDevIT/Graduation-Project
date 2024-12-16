@@ -64,24 +64,22 @@ import { useCinemaContext } from "../../Context/CinemasContext";
       }
     }, []);
     
+ 
     useEffect(() => {
-   
-    
-    
-      const fetchActors = async () => {
+      const fetchData = async () => {
+        setLoading(true);
         try {
           const response = await instance.get("/actor");
           setActors(response.data.data || []);
         } catch (error) {
-          console.error("không có dữ liệu:", error);
           setActors([]);
         }
+        setLoading(false);
       };
-    
-      fetchActors();
-   
+      fetchData();
       setSelectedDate(getCurrentDate());
     }, []);
+    
   
     useEffect(() => {
       if (cinemas.length > 0 && locations.length > 0) {
@@ -220,8 +218,8 @@ import { useCinemaContext } from "../../Context/CinemasContext";
     }
   
     // If the user is an admin, only show the first location and first cinema
-const displayLocations = isAdmin ? filteredLocations.slice(0, 1) : filteredLocations;
-    const displayCinemas = isAdmin && selectedCity ? cinemas.filter(cinema => cinema.location_id === selectedCity).slice(0, 1) : filteredCinemas;
+const displayLocations = filteredLocations;
+    const displayCinemas =filteredCinemas;
     return (
       <div className="div-content">
         <h2 className="titles">Mua vé theo rạp</h2>

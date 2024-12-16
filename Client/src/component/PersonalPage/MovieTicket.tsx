@@ -110,8 +110,6 @@ const OrderHistoryApp: React.FC = () => {
               value={selectedDate ? moment(selectedDate, "YYYY-MM-DD") : null}
               format="YYYY-MM-DD"
             />
-
-            {/* Hiển thị loading skeleton khi đang tải */}
             {loading ? (
               <Skeleton height={100} count={5} style={{ marginBottom: "20px" }} />
             ) : filteredOrders.length === 0 ? (
@@ -187,107 +185,6 @@ const OrderHistoryApp: React.FC = () => {
           </div>
         ) : (
           <div>
-
-
-          <Button
-            type="default"
-            icon={<ArrowLeftOutlined />}
-            onClick={handleBackToOrders}
-            style={{
-              marginBottom: "20px",
-              fontSize: "16px",
-              borderRadius: "5px",
-              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-            }}
-          >
-            Back to Orders
-          </Button>
-          <Card
-            style={{
-              marginTop: "20px",
-              borderRadius: "10px",
-              padding: "20px",
-              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-              background: "#ffffff",
-            }}
-          >
-            <Row gutter={24}>
-              <Col xs={24} sm={8} style={{ textAlign: "center" }}>
-                <Image
-                  src={selectedOrder.showtime.movie.poster}
-                  alt="Movie Poster"
-                  width={180}
-                  style={{
-                    margin: "0 auto 20px",
-                    borderRadius: "10px",
-                    boxShadow: "0 2px 6px rgba(0, 0, 0, 0.2)",
-                  }}
-                />
-                <Button
-                  type="primary"
-                  icon={<DownloadOutlined />}
-                  onClick={handleDownloadTicket}
-                  style={{
-                    marginTop: "10px",
-                    padding: "8px 20px",
-                    fontSize: "16px",
-                    borderRadius: "5px",
-                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                  }}
-                >
-                  Download Ticket
-                </Button>
-              </Col>
-        
-              <Col xs={24} sm={16}>
-                <Row gutter={[16, 16]}>
-                  <Col xs={24} sm={16}>
-                    <Space direction="vertical" size="large" style={{ width: "100%" }}>
-                      <Text style={{ fontSize: "16px" }}>
-                        <CalendarOutlined style={{ marginRight: "10px", color: "#faad14" }} />
-                        <b>Thời gian:</b> {selectedOrder.showtime.showtime_date}{" "}
-                        {selectedOrder.showtime.showtime_start}
-                      </Text>
-        
-                      <Text style={{ fontSize: "16px" }}>
-                        <TeamOutlined style={{ marginRight: "10px", color: "#52c41a" }} />
-                        <b>Ghế:</b> {selectedOrder.seats.map((s) => s.seat_name).join(", ")}
-                      </Text>
-        
-                      <Text style={{ fontSize: "16px" }}>
-                        <EnvironmentOutlined style={{ marginRight: "10px", color: "#1890ff" }} />
-                        <b>Phòng:</b> {selectedOrder.showtime.room.room_name}
-                      </Text>
-        
-                      <Text style={{ fontSize: "16px" }}>
-                        <b>Mã đặt vé:</b>
-                        <Text code>{selectedOrder.booking_code}</Text>
-                      </Text>
-                    </Space>
-                  </Col>
-        
-                  <Col xs={24} sm={8} style={{ textAlign: "center" }}>
-                    <Image
-                      src={selectedOrder.qrcode}
-                     
-                      alt="QR Code"
-                      width={120}
-                      style={{
-                        margin: "0 auto",
-                        borderRadius: "10px",
-                        boxShadow: "0 2px 6px rgba(0, 0, 0, 0.2)",
-                      }}
-                    />
-                  </Col>
-                </Row>
-              </Col>
-            </Row>
-          </Card>
-        </div>
-        
-
-
-
             <Button
               type="default"
               icon={<ArrowLeftOutlined />}
@@ -366,7 +263,6 @@ const OrderHistoryApp: React.FC = () => {
               </Row>
             </Card>
           </div>
-
         )}
       </div>
       <Footer />
