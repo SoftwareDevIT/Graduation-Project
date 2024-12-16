@@ -9,24 +9,16 @@ import {
   ArrowLeftOutlined,
 } from "@ant-design/icons";
 import instance from "../../server";
-import moment from 'moment';
+import moment from "moment";
 import Header from "../Header/Hearder";
 import Footer from "../Footer/Footer";
-
+import { Combo } from "../../interface/Combo";
+import { Showtime } from "../../interface/Showtimes";
+import { Seat } from "../../interface/Seat";
+import Skeleton from "react-loading-skeleton"; // Import Skeleton
+import "react-loading-skeleton/dist/skeleton.css"; // Import CSS for Skeleton
 
 const { Title, Text } = Typography;
-
-interface Showtime {
-  id: number;
-  room: { room_name: string };
-  movie: { movie_name: string; poster: string };
-  showtime_date: string;
-  showtime_start: string;
-}
-
-interface Seat {
-  seat_name: string;
-}
 
 interface Order {
   id: number;
@@ -35,6 +27,7 @@ interface Order {
   showtime: Showtime;
   seats: Seat[];
   amount: number;
+  combos: Combo[];
 }
 
 const OrderHistoryApp: React.FC = () => {
@@ -43,8 +36,16 @@ const OrderHistoryApp: React.FC = () => {
   const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [selectedDate, setSelectedDate] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true); // State for loading status
+
+  const formatCurrency = (amount: number): string => {
+    return new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" })
+      .format(amount)
+      .replace("₫", "VND"); // Thay "₫" bằng "VND"
+  };
 
   useEffect(() => {
+    setLoading(true); // Start loading
     instance
       .get("/order") // Endpoint API
       .then((response) => {
@@ -59,20 +60,24 @@ const OrderHistoryApp: React.FC = () => {
           },
           seats: order.seats,
           amount: order.amount,
-          combo:order.combos
+          combos: order.combos,
         }));
         setOrders(mappedOrders);
         setFilteredOrders(mappedOrders); // Show all orders initially
+        setLoading(false); // Stop loading
+        console.log(response.data.data);
       })
       .catch((error) => {
         console.error("Error fetching orders:", error);
+        setLoading(false); // Stop loading on error
       });
   }, []);
+
   const handleDateFilter = (date: moment.Moment | null, dateString: string | string[]) => {
     const filterDate = Array.isArray(dateString) ? dateString[0] : dateString;
-  
+
     setSelectedDate(filterDate); // Gán giá trị vào state (selectedDate có kiểu string)
-  
+
     if (filterDate) {
       const filtered = orders.filter(
         (order) => order.showtime.showtime_date === filterDate
@@ -83,55 +88,22 @@ const OrderHistoryApp: React.FC = () => {
     }
   };
 
-  // Hàm tải PDF
-  const handleDownloadTicket = () => {
-    if (!selectedOrder) return;
-
-    const doc = new jsPDF();
-    doc.setFont("Helvetica", "normal");
-
-    // Header
-    doc.setFontSize(20);
-    doc.text("Vé Phim", 105, 20, { align: "center" });
-    doc.setFontSize(14);
-    doc.text(selectedOrder.showtime.movie.movie_name, 105, 30, { align: "center" });
-    // QR Code
-    doc.addImage(selectedOrder.qrcode, "JPEG", 80, 40, 50, 50);
-
-    // Details
-    doc.setFontSize(12);
-    doc.text(`Mã: ${selectedOrder.qrcode}`, 20, 100);
-    doc.text(`Phòng: ${selectedOrder.showtime.room.room_name}`, 20, 110);
-    doc.text(`Thời gian: ${selectedOrder.showtime.showtime_date} ${selectedOrder.showtime.showtime_start}`, 20, 120);
-    doc.text(`Ghế: ${selectedOrder.seats.map((s) => s.seat_name).join(", ")}`, 20, 130);
-    doc.text(`Tổng: ${selectedOrder.amount} VND`, 20, 140);
-
-    // Footer
-    doc.setFontSize(10);
-    doc.text("Thank you for booking with us!", 105, 280, { align: "center" });
-
-    // Download the PDF
-    doc.save(`Ticket_${selectedOrder.booking_code}.pdf`);
-  };
-
-  // Hàm quay lại trang Order History
   const handleBackToOrders = () => {
     setSelectedOrder(null);
   };
 
-  // Hàm phân trang, chỉ hiển thị 5 đơn hàng
   const ordersToDisplay = filteredOrders.slice((currentPage - 1) * 5, currentPage * 5);
 
   return (
     <>
       <Header />
-      <div style={{ padding: "30px", maxWidth: "1200px", margin: "0 auto", background: "#f8f9fa", borderRadius: "10px" , marginTop:"20px" }}>
+      <div style={{ padding: "30px", maxWidth: "1200px", margin: "0 auto", background: "#f8f9fa", borderRadius: "10px", marginTop: "20px" }}>
         {!selectedOrder ? (
           <div>
-            <Title level={2} style={{ textAlign: "center", marginBottom: "20px", }}>
+            <Title level={2} style={{ textAlign: "center", marginBottom: "20px" }}>
               Lịch Sử Mua Hàng
             </Title>
-  
+
             {/* Lọc theo ngày */}
             <DatePicker
               style={{ marginBottom: "20px", width: "100%" }}
@@ -139,9 +111,11 @@ const OrderHistoryApp: React.FC = () => {
               value={selectedDate ? moment(selectedDate, "YYYY-MM-DD") : null}
               format="YYYY-MM-DD"
             />
-  
-            {/* Nếu không có đơn hàng, hiển thị thông báo */}
-            {filteredOrders.length === 0 ? (
+
+            {/* Hiển thị loading skeleton khi đang tải */}
+            {loading ? (
+              <Skeleton height={100} count={5} style={{ marginBottom: "20px" }} />
+            ) : filteredOrders.length === 0 ? (
               <div style={{ textAlign: "center", color: "#1890ff", fontSize: "18px", marginTop: "20px" }}>
                 Bạn chưa có đơn hàng nào
               </div>
@@ -162,7 +136,7 @@ const OrderHistoryApp: React.FC = () => {
                   <Row gutter={16} align="middle" justify="space-between">
                     <Col xs={24} sm={6} style={{ textAlign: "center" }}>
                       <Image
-                        src={order.showtime.movie.poster}
+                        src={order.showtime.movie.poster || undefined}
                         alt={order.showtime.movie.movie_name}
                         width={120}
                         style={{ borderRadius: "10px" }}
@@ -186,7 +160,7 @@ const OrderHistoryApp: React.FC = () => {
                           <b>Ghế:</b> {order.seats.map((s) => s.seat_name).join(", ")}
                         </Text>
                         <Text style={{ fontWeight: 600 }}>
-                          <b>Tổng:</b> {order.amount} VND
+                          <b>Tổng:</b> {formatCurrency(order.amount)}
                         </Text>
                       </Space>
                     </Col>
@@ -194,7 +168,7 @@ const OrderHistoryApp: React.FC = () => {
                 </Card>
               ))
             )}
-  
+
             {/* Phân trang */}
             <div style={{ textAlign: "center", marginTop: "20px" }}>
               <Button
@@ -214,6 +188,7 @@ const OrderHistoryApp: React.FC = () => {
           </div>
         ) : (
           <div>
+
 
           <Button
             type="default"
@@ -313,12 +288,91 @@ const OrderHistoryApp: React.FC = () => {
         
 
 
+
+            <Button
+              type="default"
+              icon={<ArrowLeftOutlined />}
+              onClick={handleBackToOrders}
+              style={{
+                marginBottom: "20px",
+                fontSize: "16px",
+                borderRadius: "5px",
+                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+              }}
+            >
+              Back to Orders
+            </Button>
+            <Card
+              style={{
+                marginTop: "20px",
+                borderRadius: "10px",
+                padding: "20px",
+                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                background: "#ffffff",
+              }}
+            >
+              <Row gutter={24}>
+                <Col xs={24} sm={8} style={{ textAlign: "center" }}>
+                  <Image
+                    src={selectedOrder.showtime.movie.poster || undefined}
+                    alt="Movie Poster"
+                    width={180}
+                    style={{
+                      margin: "0 auto 20px",
+                      borderRadius: "10px",
+                      boxShadow: "0 2px 6px rgba(0, 0, 0, 0.2)",
+                    }}
+                  />
+                </Col>
+
+                <Col xs={24} sm={16}>
+                  <Row gutter={[16, 16]}>
+                    <Col xs={24} sm={16}>
+                      <Space direction="vertical" size="large" style={{ width: "100%" }}>
+                        <Text style={{ fontSize: "16px" }}>
+                          <EnvironmentOutlined style={{ marginRight: "10px", color: "#1890ff" }} />
+                          <b>Phòng:</b> {selectedOrder.showtime.room.room_name}
+                        </Text>
+                        <Text style={{ fontSize: "16px" }}>
+                          <CalendarOutlined style={{ marginRight: "10px", color: "#faad14" }} />
+                          <b>Thời gian:</b> {selectedOrder.showtime.showtime_date} {selectedOrder.showtime.showtime_start}
+                        </Text>
+
+                        <Text style={{ fontSize: "16px" }}>
+                          <TeamOutlined style={{ marginRight: "10px", color: "#52c41a" }} />
+                          <b>Ghế:</b> {selectedOrder.seats.map((s) => s.seat_name).join(", ")}
+                        </Text>
+                        <Text style={{ fontSize: "16px" }}>
+                          <b>Combo:</b> {selectedOrder.combos && selectedOrder.combos.length > 0
+                            ? selectedOrder.combos.map((c: any) => `${c.combo_name}`).join(", ")
+                            : "Không có combo"}
+                        </Text>
+                      </Space>
+                    </Col>
+
+                    <Col xs={24} sm={8} style={{ textAlign: "center" }}>
+                      <Image
+                        src={selectedOrder.qrcode}
+                        alt="QR Code"
+                        width={120}
+                        style={{
+                          margin: "0 auto",
+                          borderRadius: "10px",
+                          boxShadow: "0 2px 6px rgba(0, 0, 0, 0.2)",
+                        }}
+                      />
+                    </Col>
+                  </Row>
+                </Col>
+              </Row>
+            </Card>
+          </div>
+
         )}
       </div>
-      <Footer/>
+      <Footer />
     </>
   );
-  
 };
 
 export default OrderHistoryApp;

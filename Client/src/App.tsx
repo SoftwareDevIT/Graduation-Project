@@ -159,7 +159,7 @@ function App() {
      
         <Route path="/*" element={<NotFound />} />
         <Route path="/movieticket" element={<MovieTicket/>} />
-        <Route path="/pointaccumulation" element={<Pointaccumulation/>} />
+        <Route path="/Pointaccumulation" element={<Pointaccumulation/>} />
 
 
         <Route path="/filmnews" element={<FilmNews/>} />
