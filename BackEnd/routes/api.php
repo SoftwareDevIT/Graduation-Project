@@ -253,4 +253,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('apply-promotion', [PromotionController::class, 'applyPromotion']); // dùng vourcher
 });
 Route::get('/vnpay-return', [BookingController::class, 'vnPayReturn']);
-Route::get('/env-config', [ConfigController::class, 'envConfig']);
+// Route::get('/env-config', [ConfigController::class, 'envConfig']);
+
+
+
+Route::get('dashboard/Movie', [DashboardAdminController::class, 'dashboardMovie']);
