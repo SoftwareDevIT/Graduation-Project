@@ -39,7 +39,7 @@ class DatabaseSeeder extends Seeder
             CategoryInMovieSeeder::class,
             RatingSeeder::class,
             FavoriteSeeder::class,
-            SeatLayoutSeeder::class,
+            // SeatLayoutSeeder::class,
             // MovieInCinema::class,
             // CategorySeatSeeder::class,
 
