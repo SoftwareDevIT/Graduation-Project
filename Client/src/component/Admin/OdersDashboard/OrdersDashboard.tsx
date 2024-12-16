@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Table, Button, Select, Input, DatePicker, Card, Space, notification } from "antd";
 import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPrint } from "@fortawesome/free-solid-svg-icons";
-import instance from "../../../server";
-import { Booking } from "../../../interface/Booking";
+
+
 import { CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import dayjs from "dayjs";
 import './OrdersDashboard.css'
 import Search from "antd/es/input/Search";
+import instance from "../../../server";
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;

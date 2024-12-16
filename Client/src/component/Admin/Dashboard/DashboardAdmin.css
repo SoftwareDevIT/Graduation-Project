@@ -68,7 +68,8 @@
 }
 .summary-filter{
     position: relative;
-    left: 95px;
+    margin-top: 25px;
+    left: 150px;
     bottom: 55px;
 }
 
@@ -86,9 +87,7 @@
     margin-top: 5px;
   
   }
-.previous_revenue p{
-  
-}
+
   
   .summary-change i {
     margin-right: 5px; /* Thêm khoảng cách giữa mũi tên và tỷ lệ */
@@ -323,4 +322,3 @@
           margin-bottom: 20px;
         }
       }
-      

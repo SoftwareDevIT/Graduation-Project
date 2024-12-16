@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useContext, ReactNode } from 'react';
+import React, { createContext, useReducer, useContext, ReactNode, useState, useEffect } from 'react';
 import instance from '../server'; // Adjust the path as needed
 import { NewsItem } from '../interface/NewsItem'; // Use your NewsItem interface
 
@@ -44,15 +44,34 @@ const postReducer = (state: PostState, action: PostAction): PostState => {
 
 export const PostProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(postReducer, initialState);
+  const [userRole, setUserRole] = useState<string>("");
 
+  // Fetch user role from localStorage
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("user_profile") || "{}");
+    const roles = userData.roles || [];
+    console.log("data role:", roles);
+    if (roles.length > 0) {
+      setUserRole(roles[0].name);
+    } else {
+      setUserRole("unknown"); // Gán giá trị mặc định khi không có vai trò
+    }
+  }, []);
   const fetchPosts = async () => {
     try {
-      const response = await instance.get('/manager/news'); // Ensure this endpoint is correct
+      let response;
+      if (userRole === "manager") {
+        response = await instance.get('/manager/news');
+      } else {
+        response = await instance.get('/news');
+      }
+      
       dispatch({ type: 'SET_POSTS', payload: response.data.data });
     } catch (error) {
       console.error('Error fetching posts:', error);
     }
   };
+
 
   const addOrUpdatePost = async (
     data: { title: string; news_category_id: number; content: string; status: string; thumnail?: File; banner?: File },

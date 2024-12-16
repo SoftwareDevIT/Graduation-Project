@@ -164,7 +164,7 @@ class RankService
         PointHistory::create([
             'user_id' => $user->id,
             'points_earned' => $pointsEarned,
-            'type' => 'earned',
+            'type' => 'Tích điểm',
         ]);
     }
 }

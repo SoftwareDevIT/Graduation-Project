@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useContext, ReactNode, useEffect, useCallback } from "react";
+import React, { createContext, useReducer, useContext, ReactNode, useEffect, useCallback, useState } from "react";
 import { notification } from "antd"; // Import Ant Design's notification
 import instance from "../server"; // Đảm bảo đường dẫn đúng
 import { Movie } from "../interface/Movie"; // Đảm bảo đường dẫn đúng
@@ -55,10 +55,27 @@ const movieReducer = (state: MovieState, action: MovieAction): MovieState => {
 export const MovieProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(movieReducer, initialState);
 
-  // Hàm lấy danh sách phim
+  const [userRole, setUserRole] = useState<string>("");
+
+  // Fetch user role from localStorage
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("user_profile") || "{}");
+    const roles = userData.roles || [];
+    console.log("data role:", roles);
+    if (roles.length > 0) {
+      setUserRole(roles[0].name);
+    } else {
+      setUserRole("unknown"); // Gán giá trị mặc định khi không có vai trò
+    }
+  }, []);
   const fetchMovies = useCallback(async () => {
     try {
-      const response = await instance.get("/manager/movies");
+      let response;
+      if (userRole === "manager") {
+        response = await instance.get('/manager/movies');
+      } else {
+        response = await instance.get('/movies');
+      }
       if (response.data && response.data.data) {
         dispatch({ type: "SET_MOVIES", payload: response.data.data.original });
         // console.log("du lieu phim:", response.data.data.original );
