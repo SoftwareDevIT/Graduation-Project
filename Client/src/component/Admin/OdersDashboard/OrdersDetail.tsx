@@ -142,7 +142,6 @@ const OrderDetail = () => {
         <div style="page-break-after: always; border: 1px solid #e0e0e0; margin-bottom: 30px; padding: 20px; background-color: #f9f9f9;">
           <h1 style="text-align: center; color: #444; font-size: 24px; font-weight: bold;">Vé Xem Phim</h1>
           <div style="margin-bottom: 20px; text-align: center;">
-            <img src="https://example.com/logo.png" alt="Logo" style="width: 150px; margin-bottom: 10px;" />
             <p><strong>CÔNG TY TNHH FLICKHIVE</strong></p>
             <p>Địa chỉ: Trịnh Văn Bô - Bắc Từ Liêm - Hà Nội</p>
             <p>Mã số thuế: 0315367026</p>
@@ -172,7 +171,7 @@ const OrderDetail = () => {
       <div style="border: 1px solid #e0e0e0; margin-bottom: 50px; padding: 20px; background-color: #f9f9f9;">
         <h1 style="text-align: center; color: #444; font-size: 24px; font-weight: bold;">Hóa Đơn Combo</h1>
         <div style="margin-bottom: 20px; text-align: center;">
-          <img src="https://example.com/logo.png" alt="Logo" style="width: 150px; margin-bottom: 10px;" />
+         
           <p><strong>CÔNG TY TNHH FLICKHIVE</strong></p>
           <p>Địa chỉ: Trịnh Văn Bô - Bắc Từ Liêm - Hà Nội</p>
           <p>Mã số thuế: 0315367026</p>
@@ -293,8 +292,8 @@ const OrderDetail = () => {
             <tbody>
               <tr>
                 <td>
+                  <h5>{orderDetails.showtime.movie.movie_name}</h5>
                   <img src={orderDetails.showtime.movie.poster ?? ''} alt="Movie Thumbnail" />
-                  <span>{orderDetails.showtime.movie.movie_name}</span>
                 </td>
                 <td>
                   <p>{orderDetails.showtime.room.room_name}</p>
@@ -328,6 +327,18 @@ const OrderDetail = () => {
               </tr>
             </tbody>
           </table>
+          <div className='barcode-seat'>
+          {orderDetails.seats.length > 0 ? (
+    orderDetails.seats.map((seats, index) => (
+      <div key={index}>
+        <p></p>
+        <p>Ghế: {seats.seat_name} ~ <img src={seats.barcode} alt="" /></p>
+      </div>
+    ))
+  ) : (
+    <p>Không có ghế nào</p>
+  )}
+          </div>
           <div className="tongtien">
   <p><strong>Tiền Vé:</strong> {formatCurrency(orderDetails.showtime.price * orderDetails.seats.length)} VNĐ</p><br />
   

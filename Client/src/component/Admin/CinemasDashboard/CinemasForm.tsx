@@ -37,7 +37,6 @@ const CinemaForm = () => {
   });
 
   const [locations, setLocations] = useState<Location[]>([]);
-  const [movies, setMovies] = useState<Movie[]>([]);
   const [selectedMovies, setSelectedMovies] = useState<string[]>([]);
   const [cinema, setCinema] = useState<Cinema | null>(null);
 
@@ -64,18 +63,10 @@ const CinemaForm = () => {
       }
     };
 
-    const fetchMovies = async () => {
-      try {
-        const { data } = await instance.get(`/movies`);
-        setMovies(data.data.original);
-      } catch (error) {
-        console.error("Lỗi khi tải phim:", error);
-      }
-    };
+  
 
     fetchLocations();
     fetchCinema();
-    fetchMovies();
   }, [id, isEditMode, reset]);
 
   const handleFormSubmit = async (data: Cinema) => {
@@ -103,22 +94,6 @@ const CinemaForm = () => {
     }
   };
 
-  const handleAddMoviesToCinema = async () => {
-    try {
-      const moviePayload = selectedMovies.map(movieId => ({ movie_id: movieId }));
-      await instance.post(`/add-movie-in-cinema/${id}`, { movie_in_cinema: moviePayload });
-      notification.success({
-        message: "Thêm phim vào rạp thành công!",
-        description:"Đã thêm phim mới vào rạp"
-      });
-      nav('/admin/cinemas');
-    } catch (error) {
-      console.error("Lỗi khi thêm phim vào rạp:", error);
-      notification.error({
-        message: "Thêm phim vào rạp thất bại",
-      });
-    }
-  };
 
   return (
     <div className="container mt-5">

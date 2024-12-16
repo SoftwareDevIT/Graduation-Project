@@ -130,6 +130,8 @@ import MyMapComponent from "./component/GG map/Ggmap";
 import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
 import OrderHistoryApp from "./component/PersonalPage/MovieTicket";
 import BookingManager from "./component/TicketandSeat/BookingManager";
+import MovieStatistics from "./component/Admin/MovieStatistics/MovieStatistics";
+import MovieStatisticsManager from "./Page/Admin/MovieStatistics/MovieStatisticsManager";
 
 function App() {
 
@@ -192,6 +194,7 @@ function App() {
         <Route path="/seat" element={<CinemaSeatSelection />} />
         <Route path="/resetPassword" element={<ResetPassword />} />
         <Route path="/earlymovie" element={<EarlyMovie />} />
+       
        
         
 
@@ -264,7 +267,10 @@ function App() {
         <Route path="/admin/movies/edit/:id" element={<PrivateRoute allowedRoles={['manager']}><MoviesAddManager /></PrivateRoute>} />
         <Route path="/admin/schedules" element={<PrivateRoute allowedRoles={['admin','manager','staff']}><SchedulesManager /></PrivateRoute>} /> 
         <Route path="/admin/revenuebycinema" element={<PrivateRoute allowedRoles={['admin','manager','staff']}><RevenueByCinemaManager /></PrivateRoute>} />
+        <Route path="/admin/moviestatistics" element={<PrivateRoute allowedRoles={['admin','manager']}><MovieStatisticsManager/></PrivateRoute>} />
         <Route path="/admin/revenuebymovie" element={<PrivateRoute allowedRoles={['admin','manager','staff']}><RevenueByMoviesManager /></PrivateRoute>} />
+
+        <Route path="/admin/movistatistics" element={<MovieStatistics />} />
       </Routes>
       </QueryClientProvider>
     </>

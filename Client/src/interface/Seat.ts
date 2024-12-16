@@ -12,4 +12,5 @@
     isSelected?: boolean; 
     isMainProcessed?: boolean;
     isDisabled?: boolean; 
+    barcode: string;
   }

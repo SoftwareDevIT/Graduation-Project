@@ -164,6 +164,7 @@ Route::middleware(['auth:sanctum', 'role:manager'])->prefix('manager')->group(fu
     Route::get('/filterByDateByMovie', [FilterByDateController::class, 'filterByDateByMovie']);
 
     //Phân quyền
+    Route::get('/all-user', [AuthController::class, 'allUser']);
     Route::apiResource('roles', RoleController::class);
     Route::post('/roles/{role}/permissions', [RoleController::class, 'syncPermissions'])->name('roles.permissions.sync'); // Gán quyền cho vai trò
     Route::post('/roles/{user}/users', [RoleController::class, 'syncRoles'])->name('users.roles.sync'); // gán vai trò cho người dùng
