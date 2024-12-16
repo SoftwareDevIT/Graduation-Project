@@ -275,14 +275,14 @@ useEffect(() => {
         <Option value="Đã in vé">Đã in vé</Option>
       </Select>
     </Form.Item>
-    {/* <Form.Item label="">
+    <Form.Item label="">
               <RangePicker
                 format="YYYY-MM-DD"
                 value={selectedDateRange}
                 onChange={(dates) => setSelectedDateRange(dates)}
                 style={{ width: 240 }}
               />
-            </Form.Item> */}
+            </Form.Item>
             <Form.Item label="">
       <Button type="primary" onClick={exportToExcel} block style={{ width: 300 }}>
         Export to Excel

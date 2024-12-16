@@ -68,7 +68,8 @@
 }
 .summary-filter{
     position: relative;
-    left: 95px;
+    margin-top: 25px;
+    left: 150px;
     bottom: 55px;
 }
 

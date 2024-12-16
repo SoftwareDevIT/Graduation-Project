@@ -56,6 +56,7 @@ Route::post('password/reset', [ForgotPasswordController::class, 'forgotPassword'
 Route::get('/verify-account/{userId}', [AccountVerificationController::class, 'verify'])->name('verify'); // verify account
 Route::post('/resetPassword', [ResetPasswordController::class, 'resetPassword'])->middleware('auth:sanctum');
 
+
 // Các tuyến có thể truy cập được cho người dùng được xác thực
 Route::middleware(['auth:sanctum', 'web'])->group(function () {
     Route::post('favorites/{movie_id}', [FavoriteController::class, 'store']);                 // Thêm phim yêu thích
@@ -90,6 +91,7 @@ Route::group([], function () {
     Route::get('/cinema/{id}/room', [RoomController::class, 'getRoomByCinema']);
     Route::get('/filterByDate', [FilterByDateController::class, 'filterByDate']);
     Route::get('/filterByDateByMovie', [FilterByDateController::class, 'filterByDateByMovie']);
+    Route::post('/website-settings', [WebsiteSettingController::class, 'index']); // List Website Settings
 });
 
 Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(function () {
@@ -131,7 +133,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(functi
     Route::post('comboStatus/{id}', [ComboController::class, 'status']);
     Route::post('userStatus/{id}', [RoleController::class, 'status']);
 });
-
+Route::post('/website-settings', [WebsiteSettingController::class, 'index']); // List Website Settings
 // Manager: Limited access to their assigned cinemas and related data
 Route::middleware(['auth:sanctum', 'role:manager'])->prefix('manager')->group(function () {
     // Seat Map Management
@@ -163,6 +165,7 @@ Route::middleware(['auth:sanctum', 'role:manager'])->prefix('manager')->group(fu
     Route::get('/filterByDateByMovie', [FilterByDateController::class, 'filterByDateByMovie']);
 
     //Phân quyền
+    Route::get('/all-user', [AuthController::class, 'allUser']);
     Route::apiResource('roles', RoleController::class);
     Route::post('/roles/{role}/permissions', [RoleController::class, 'syncPermissions'])->name('roles.permissions.sync'); // Gán quyền cho vai trò
     Route::post('/roles/{user}/users', [RoleController::class, 'syncRoles'])->name('users.roles.sync'); // gán vai trò cho người dùng
@@ -171,6 +174,7 @@ Route::middleware(['auth:sanctum', 'role:manager'])->prefix('manager')->group(fu
 
     // Dashboard and Filters
     Route::get('filter-dashboard', [FilterOfDashBoarchController::class, 'filterOfDashBoarch']); // Filter dashboard data
+    Route::get('/dashboard', [DashboardAdminController::class, 'dashboard']); // Dashboard page
     Route::get('/dashboard', [DashboardAdminController::class, 'dashboard']); // Dashboard page
 
     Route::get('/dashboardMovie', [DashboardAdminController::class, 'dashboardAdmin']); // Dashboard Movie
@@ -185,16 +189,16 @@ Route::middleware(['auth:sanctum', 'role:manager'])->prefix('manager')->group(fu
 
     // Ticket Printing
     Route::post('printTicket', [OrderController::class, 'printTicket']); // Print ticket and change status
-    Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
-    Route::get('/dashboard', [DashboardAdminController::class, 'dashboard']);
-    
+    // Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
+    Route::get('/dashboard', [DashboardAdminController::class, 'dashboard']); // Dashboard page
+
     //checkin ghế barcode
     Route::post('checkInSeat/{code}', [CheckInTicketController::class, 'checkInSeat']);
     Route::post('checkInBooking/{code}', [CheckInTicketController::class, 'checkInBooking']);
 });
 
 Route::middleware(['auth:sanctum', 'role:staff'])->prefix('staff')->group(function () {
-
+    Route::apiResource('cinema', CinemaController::class); // CRUD rạp
     Route::get('/filterByDate', [FilterByDateController::class, 'filterByDate']);
     Route::get('/filterByDateByMovie', [FilterByDateController::class, 'filterByDateByMovie']);
     // Ticket Printing

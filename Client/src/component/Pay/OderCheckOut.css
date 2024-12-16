@@ -103,7 +103,7 @@ padding-left: 10px;
 }
 
 .voucher-input {
-  width: 80%;
+  width: 79%;
   padding: 8px;
   margin-right: 10px;
   border: 1px solid #ccc;
@@ -165,7 +165,7 @@ padding-left: 10px;
 }
 
 .khung-diem-poly thead th {
-  color: #fff;
+  color: #065275;
   text-align: left;
   padding: 15px 10px;
   font-size: 16px;
@@ -181,15 +181,13 @@ padding-left: 10px;
 }
 
 .khung-diem-poly tbody td {
-
+text-align:left;
   padding: 15px 10px;
   font-size: 14px;
   color: #333;
 }
 
-.khung-diem-poly tbody tr:hover {
-  background-color: #f5f5f5;
-}
+
 
 .khung-diem-poly input[type="number"] {
   width: 100%;
@@ -200,7 +198,7 @@ padding-left: 10px;
 }
 
 .khung-diem-poly button {
-
+position: absolute;
   background-color:#45a049;
   color: #fff;
   border: none;
@@ -208,6 +206,8 @@ padding-left: 10px;
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
+  margin-top: -20px;
+ margin-left: 20px;
 }
 
 .khung-diem-poly button:hover {
@@ -230,19 +230,27 @@ padding-left: 10px;
 }
 .total-title {
   font-weight: 700;
-  color: #333;
+  color: #e74c3c;
+}
+.total-title5 {
+  margin-top: 15px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #e74c3c ;
+  margin-right: 30px;
 }
 .total-price {
   margin-right: 30px;
-  font-size: 24px;
+  font-size: 22px;
   color: #e74c3c;
   font-weight: bold;
 }
 .total-titlee{
+  margin-top: 15px;
   font-weight: 600;
   color:#e74c3c;
 margin-right: 30px;
-  font-size: 24px;
+  font-size: 22px;
 }
 
 
