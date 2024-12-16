@@ -145,13 +145,13 @@ const OrderCheckout = () => {
         }
     };
     const handleRemoveVoucher = () => {
-        setVoucherCode(""); // Xóa mã voucher
-        setDiscount(null); // Đặt lại giảm giá về null
-        setFinalPrice(totalPrice); // Quay lại giá trị ban đầu
-        setVoucherApplied(false); // Đánh dấu voucher chưa được áp dụng
+        setVoucherCode(""); 
+        setDiscount(null); 
+        setFinalPrice(totalPrice);
+        setVoucherApplied(false); 
     };
     // State for payment method
-    const [pay_method_id, setPaymentMethod] = useState<number | null>(null); // Khởi tạo pay_method_id với null
+    const [pay_method_id, setPaymentMethod] = useState(1);
     const [timeLeft, setTimeLeft] = useState(300);
     useEffect(() => {
         const timer = setInterval(() => {
@@ -426,7 +426,7 @@ const OrderCheckout = () => {
   {discount && (
   <div className="order-discount d-flex justify-content-between">
     <span className="total-title">Giảm giá:</span>
-    <span className="total-title"> -{discount.toLocaleString('vi-VN')} đ</span>
+    <span className="total-title5"> -{discount.toLocaleString('vi-VN')} đ</span>
   </div>
   )}
   <div className="order-final d-flex justify-content-between">

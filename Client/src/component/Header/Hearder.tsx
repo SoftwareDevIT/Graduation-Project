@@ -337,6 +337,7 @@ const Header = () => {
                     <Link to="/Personal">Trang cá nhân</Link>
                     <Link to="/profile">Quản lý tài khoản</Link>
                     <Link to="/ticketcinema">Vé phim</Link>
+                    <Link to="/pointaccumulation">Tích Điểm</Link>
                     <div onClick={handleLogout}>Đăng xuất</div>
                   </div>
                 )}

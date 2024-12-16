@@ -21,7 +21,7 @@ export const NewsProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const fetchNews = async () => {
       setIsLoading(true);
       try {
-        const response = await instance.get('/manager/news');
+        const response = await instance.get('/news');
         const allNews = response.data.data || [];
         setNewsData(allNews); // Lưu toàn bộ dữ liệu tin tức
         setReviewsData(allNews.slice(-5)); // Lấy 5 tin cuối cùng cho phần review

@@ -102,7 +102,7 @@
         hr {
             border: 0;
             height: 3px;
-            background-color: #333; /* Darker color */
+background-color: #333; /* Darker color */
             margin: 15px 0; /* Space above and below the hr */
         }
     </style>
