@@ -19,6 +19,7 @@ import { PostProvider } from './Context/PostContext.tsx'
 import { ShowtimeProvider } from './Context/ShowtimesContext.tsx'
 import { NewsProvider } from './Context/NewsContext.tsx'
 import { UserProvider } from './Context/UserContext.tsx'
+import { ModalProvider } from './Context/ModalContext.tsx'
 
 
 
@@ -44,7 +45,9 @@ createRoot(document.getElementById('root')!).render(
          
                 <CountryProvider>
                 <UserProvider>
+                <ModalProvider>
     <App />
+    </ModalProvider>
     </UserProvider>
     </CountryProvider>
     </NewsProvider>

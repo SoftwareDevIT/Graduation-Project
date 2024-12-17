@@ -388,7 +388,7 @@ class BookingController extends Controller
     public  function dispatchResetSeatsJob(array $seatIds): void
     {
         // Dispatch một job với toàn bộ các ID ghế đã được tạo
-        ResetSeats::dispatch($seatIds)->delay(now()->addMinutes(5));
+        ResetSeats::dispatch($seatIds)->delay(now()->addMinutes(1));
     }
 
     public function selectedSeats(Request $request, $roomId)
