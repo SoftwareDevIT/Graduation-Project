@@ -42,6 +42,8 @@ const CinemaSeatSelection: React.FC = () => {
   const [selectedSeats, setSelectedSeats] = useState<Map<string, number[]>>(
     new Map()
   );
+  const [userSeatsMap, setUserSeatsMap] = useState<Map<number, Set<string>>>(new Map());
+
   const [loading, setLoading] = useState(true); // Add loading state
   const [reservedSeats, setReservedSeats] = useState<Set<string>>(new Set());
   const [showtimeData, setShowtimeData] = useState<Showtime>();
@@ -56,127 +58,139 @@ const CinemaSeatSelection: React.FC = () => {
   const [echoInstance, setEchoInstance] = useState<Echo<"pusher"> | null>(null);
 
   const [status, setStatus] = useState("Initializing...");
-
   useEffect(() => {
     const fetchRoomAndSeats = async () => {
       try {
-        // Fetching the showtime data
         const response = await instance.get(`/showtimes/${showtimeId}`);
         const seatLayoutData = response.data.data;
-       
-        const seatStructure =
-          response.data?.data?.room?.seat_map?.seat_structure;
-        
-      
+  
+        const seatStructure = seatLayoutData?.room?.seat_map?.seat_structure;
+  
         setShowtimeData(seatLayoutData);
-
-        
+  
         setSeatData({
           seat_structure: seatStructure,
-          matrix_row: response.data?.data?.room.seat_map?.matrix_row || 0,
-          matrix_column: response.data?.data?.room.seat_map?.matrix_column || 0,
+          matrix_row: seatLayoutData?.room?.seat_map?.matrix_row || 0,
+          matrix_column: seatLayoutData?.room?.seat_map?.matrix_column || 0,
         });
-       
-        try {
-          const seatResponse = await instance.get(`/seat/${showtimeId}`);
-          const seatDataseat = seatResponse.data;
-    
-          const reservedSeatSet: Set<string> = new Set();
-
-          seatDataseat.data.forEach((seat: any) => {
-            if (seat.seat_type === "Standard") {
-              reservedSeatSet.add(seat.seat_name);
-            }
-          });
-
-       
-          setReservedSeats(reservedSeatSet);
-          setLoading(false);
-        } catch (seatError) {
-          console.error("Error fetching seat data", seatError);
-
-          setReservedSeats(new Set<string>());
-          setLoading(false);
-        }
-
-        // Khởi tạo Echo và lắng nghe sự kiện realtime
-        const setupRealtime = async () => {
-          const echo = await initializeEcho(); // Khởi tạo Pusher hoặc WebSocket
-          console.log("Connected to Pusher!", echo);
-        
-          if (echo) {
-            const roomId = response.data.data.room.id; // Lấy ID phòng chiếu
-            const channel = echo.private(`seats-${roomId}`); // Kênh riêng biệt cho phòng chiếu
-        
-            // Lắng nghe sự kiện SeatSelected từ server
-            channel.listen("SeatSelected", (eventData: any) => {
-              const { seats, userId } = eventData;
-              console.log("Received seats:", seats);
-              updateSeatsSelection(seats, userId); // Cập nhật ghế khi có sự thay đổi
-            });
-          } else {
-            console.log("Failed to connect.");
+  
+        const seatResponse = await instance.get(`/seat/${showtimeId}`);
+        const reservedSeatSet: Set<string> = new Set();
+  
+        seatResponse.data.data.forEach((seat: any) => {
+          if (seat.seat_type === "Standard") {
+            reservedSeatSet.add(seat.seat_name);
           }
-        };
-        
-
-        if (!echoInstance) {
-          setupRealtime();
-        }
-
-        // Cleanup khi component bị unmount
-        return () => {
-          if (echoInstance) {
-            echoInstance.disconnect();
-          }
-        };
+        });
+  
+        setReservedSeats(reservedSeatSet);
+        setLoading(false);
+  
+        return seatLayoutData?.room?.id; // Trả về roomId
       } catch (error) {
-        console.error("Error fetching room data", error);
+        console.error("Error fetching room or seat data", error);
         setError("Không thể tải dữ liệu, vui lòng thử lại!");
         setLoading(false);
+        return null;
       }
     };
-
-    fetchRoomAndSeats();
-  }, [showtimeId, selectedSeats,echoInstance ]);
-  const updateSeatsSelection = (selectedSeats: string[], userId: number) => {
-    setSeatData((prevSeatData) => {
-      if (!prevSeatData || !prevSeatData.seat_structure) {
-        console.error("Seat structure is not available or empty!");
-        return prevSeatData;
-      }
   
-      const currentUserId = parseInt(localStorage.getItem("user_id") || "0", 10);
+    const setupRealtime = async (roomId: string) => {
+      try {
+        const echo = await initializeEcho();
+        console.log("Connected to Pusher!", echo);
   
-      // Duyệt qua toàn bộ ghế và chỉ cập nhật trạng thái ghế trong selectedSeats
-      const updatedSeats = prevSeatData.seat_structure.map((seat) => {
-        const seatKey = `${seat.row}-${seat.column}`;
+        if (echo) {
+          const channel = echo.private(`seats-${roomId}`); // Dùng roomId đã truyền vào
+          console.log("Connected to channel:", channel);
   
-        // Nếu ghế có trong danh sách selectedSeats
-        if (selectedSeats.includes(seatKey)) {
-          return {
-            ...seat,
-            isSelected: true,
-            isDisabled: userId !== currentUserId, // Disable nếu không phải user hiện tại
-          };
+          // Lắng nghe sự kiện SeatSelected
+          channel.listen("SeatSelected", (eventData: any) => {
+            const { seats, userId } = eventData;
+            console.log("Received seats:", seats);
+            updateSeatsSelection(seats, userId);
+          });
         }
+      } catch (error) {
+        console.error("Failed to setup realtime connection:", error);
+      }
+    };
   
-        // Nếu ghế không nằm trong selectedSeats, giữ nguyên trạng thái trước đó
-        return {
-          ...seat,
-          isSelected: seat.isSelected || false, // Giữ trạng thái ghế trước đó
-          isDisabled: seat.isDisabled || false, // Giữ trạng thái ghế trước đó
-        };
+    fetchRoomAndSeats()
+      .then((roomId) => {
+        console.log("Fetched roomId:", roomId);
+        if (roomId && !echoInstance) {
+          setupRealtime(roomId); // Truyền roomId vào hàm setupRealtime
+        }
+      })
+      .catch((error) => {
+        console.error("Error initializing data", error);
       });
   
-      console.log("Updated seat structure:", updatedSeats);
-  
-      return {
-        ...prevSeatData,
-        seat_structure: updatedSeats,
-      };
+    // Cleanup khi component unmount hoặc dependencies thay đổi
+    return () => {
+      if (echoInstance) {
+        echoInstance.disconnect();
+        setEchoInstance(null);
+      }
+    };
+  }, [showtimeId, echoInstance]);
+  const updateSeatsSelection = (selectedSeats: string[], userId: number) => {
+    setUserSeatsMap((prevMap) => {
+        const updatedMap = new Map(prevMap);
+
+        // Cập nhật ghế được chọn của userId hiện tại
+        updatedMap.set(userId, new Set(selectedSeats));
+
+        // Gộp tất cả các trạng thái từ updatedMap
+        const allSelectedSeats = new Map<string, { isSelected: boolean; userId: number }>();
+
+        updatedMap.forEach((seats, id) => {
+            seats.forEach((seat) => {
+                allSelectedSeats.set(seat, {
+                    isSelected: true,
+                    userId: id,
+                });
+            });
+        });
+
+        // Cập nhật seat_structure với trạng thái gộp
+        setSeatData((prevSeatData) => {
+            if (!prevSeatData || !prevSeatData.seat_structure) {
+                console.error("Seat structure is not available or empty!");
+                return prevSeatData;
+            }
+
+            const updatedSeatStructure = prevSeatData.seat_structure.map((seat) => {
+                const seatKey = `${seat.row}-${seat.column}`;
+                const seatStatus = allSelectedSeats.get(seatKey);
+
+                if (seatStatus) {
+                    return {
+                        ...seat,
+                        isSelected: seatStatus.isSelected,
+                        isDisabled: seatStatus.userId !== parseInt(localStorage.getItem("user_id") || "0", 10),
+                    };
+                } else {
+                    return {
+                        ...seat,
+                        isSelected: false,
+                        isDisabled: false,
+                    };
+                }
+            });
+
+            return {
+                ...prevSeatData,
+                seat_structure: updatedSeatStructure,
+            };
+        });
+
+        return updatedMap;
     });
-  };
+};
+
+
   
   
   
