@@ -194,8 +194,8 @@ Route::middleware(['auth:sanctum', 'role:manager'])->prefix('manager')->group(fu
     Route::get('/dashboard', [DashboardAdminController::class, 'dashboard']); // Dashboard page
 
     //checkin ghế barcode
-    Route::post('checkInSeat/{code}', [CheckInTicketController::class, 'checkInSeat']);
-    Route::post('checkInBooking/{code}', [CheckInTicketController::class, 'checkInBooking']);
+    Route::post('checkInSeat', [CheckInTicketController::class, 'checkInSeat']);
+    Route::post('checkInBooking', [CheckInTicketController::class, 'checkInBooking']);
 });
 
 Route::middleware(['auth:sanctum', 'role:staff'])->prefix('staff')->group(function () {
@@ -207,7 +207,7 @@ Route::middleware(['auth:sanctum', 'role:staff'])->prefix('staff')->group(functi
     Route::apiResource('order', OrderController::class);
     //checkin ghế barcode
     Route::post('checkInSeat', [CheckInTicketController::class, 'checkInSeat']);
-    Route::post('checkInBooking/{code}', [CheckInTicketController::class, 'checkInBooking']);
+    Route::post('checkInBooking', [CheckInTicketController::class, 'checkInBooking']);
 });
 
 

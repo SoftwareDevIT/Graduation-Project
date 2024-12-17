@@ -1,11 +1,9 @@
-import axios from 'axios'; // Import Axios
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Header1.css';
 import { FaBell, FaCog, FaUserCircle, FaCamera } from 'react-icons/fa';
 import { Modal } from 'antd';
 import { User } from '../../../interface/User';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { BrowserMultiFormatReader } from '@zxing/library';
 
 const Header = () => {
     const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -14,36 +12,31 @@ const Header = () => {
     const [isCameraOn, setIsCameraOn] = useState(false);
     const [videoStream, setVideoStream] = useState<MediaStream | null>(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [barcodeData, setBarcodeData] = useState<string | null>(null);
-    const videoRef = useRef<HTMLVideoElement | null>(null);
-    const barcodeReader = useRef(new BrowserMultiFormatReader());
     const navigate = useNavigate();
     const location = useLocation();
 
-    // Hàm gọi API để check-in
-    const checkInSeat = async (barcode: string) => {
-        try {
-            const response = await axios.post('/api/checkInSeat', { barcode });
-            console.log("Check-in thành công:", response.data);
-
-            // Hiển thị thông báo thành công
-            alert(`Check-in thành công: ${response.data.message || 'OK'}`);
-        } catch (error: any) {
-            console.error("Lỗi khi check-in:", error);
-            alert(`Lỗi khi check-in: ${error.response?.data?.message || 'Có lỗi xảy ra'}`);
+    useEffect(() => {
+        const storedUser = localStorage.getItem('user_profile');
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
         }
+    }, []);
+
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user_id");
+        localStorage.removeItem("user_profile");
+        setIsLoggedIn(false);
+        navigate('/');
     };
 
-    const handleBarcodeScan = (result: string) => {
-        setBarcodeData(result); // Cập nhật dữ liệu quét được
-        console.log("Barcode Data:", result); 
-
-        // Gửi dãy số đến API để check-in
-        checkInSeat(result);
+    const toggleProfile = () => {
+        setIsProfileOpen(!isProfileOpen);
     };
 
     const toggleCamera = async () => {
         if (isCameraOn) {
+            // Turn off the camera
             if (videoStream) {
                 videoStream.getTracks().forEach(track => track.stop());
                 setVideoStream(null);
@@ -51,6 +44,7 @@ const Header = () => {
             setIsCameraOn(false);
             setIsModalVisible(false);
         } else {
+            // Turn on the camera
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true });
                 setVideoStream(stream);
@@ -62,65 +56,110 @@ const Header = () => {
         }
     };
 
-    useEffect(() => {
-        if (videoRef.current && videoStream) {
-            videoRef.current.srcObject = videoStream;
+    const getPageName = () => {
+        const path = location.pathname;
+        const pageName = path.split('/').pop();
+        switch(pageName) {
+            case 'dashboard':
+                return 'Bảng Điều Khiển Admin';
+            case 'user':
+                return 'Quản Lí Người Dùng';
+            case 'showtimes':
+                return 'Quản Lí Suất Chiếu';
+            case 'orders':
+                return 'Quản Lí Đơn Hàng';
+            case 'posts':
+                return 'Quản Lí Bài Viết';
+            case 'categories':
+                return 'Quản Lí Thể Loại';
+            case 'countries':
+                return 'Quản Lí Khu Vực';
+            case 'combo':
+                return 'Quản Lí Combo Nước';
+            case 'cinemas':
+                return 'Quản Lí Rạp Chiếu Phim';
+            case 'movies':
+                return 'Quản Lí Phim';
+            case 'rooms':
+                return 'Quản Lí Phòng Rạp';
+            case 'RevenueByCinema':
+                return 'Doanh Thu Theo Rạp';
+            case 'RevenueByMovie':
+                return 'Doanh Thu Theo Phim';
+            case 'actor':
+                return 'Quản Lí Diễn Viên'
+            case 'director':
+                return 'Quản Lí Đạo Diễn'
+            case 'method':
+                return 'Phương Thức Thanh Toán'
+            case 'promotions':
+                return 'Mã Giảm Giá'
+            default:
+                return 'Welcome';
         }
-    }, [videoStream]);
-
-    useEffect(() => {
-        if (isCameraOn && videoStream) {
-            const videoElement = videoRef.current;
-            if (videoElement) {
-                barcodeReader.current.decodeFromVideoDevice('', videoElement, (result, error) => {
-                    if (result) {
-                        handleBarcodeScan(result.getText());
-                    }
-                    if (error) {
-                        console.error(error);
-                    }
-                });
-            }
-        } else {
-            barcodeReader.current.reset();
-        }
-    }, [isCameraOn, videoStream]);
+    };
 
     return (
         <div className="header1">
-            <h1>Header</h1>
+            <h1>{getPageName()}</h1>
             <div className="header-actions">
                 <div className="icons-container">
                     <div className="icon" onClick={toggleCamera}>
                         <FaCamera style={{ color: isCameraOn ? 'green' : '#004d40' }} />
+                    </div>
+                    <div className="icon">
+                        <FaBell />
+                        <span className="notification-badge">3</span>
+                    </div>
+                    <div className="icon">
+                        <Link to={'/admin/website-settings'} style={{color: "#004d40"}} >
+                            <FaCog />
+                        </Link>
+                    </div>
+                    <div className="icon profile-pic" onClick={toggleProfile}>
+                        <FaUserCircle />
+                        {isProfileOpen && user && (
+                            <div className="profile-dropdown">
+                                <div className="profile-info">
+                                    <img 
+                                        src={user.avatar || "https://via.placeholder.com/80"} 
+                                        alt="User Avatar" 
+                                        className="profile-avatar"
+                                    />
+                                    <div className="profile-details">
+                                        <p className="profile-name">{user.fullname || user.user_name}</p>
+                                        <p className="profile-email">{user.email}</p>
+                                    </div>
+                                </div>
+                                <button className="logout-button" onClick={handleLogout}>Đăng xuất</button>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
             <Modal
                 title="Camera"
                 visible={isModalVisible}
-                onCancel={() => toggleCamera()}
+                onCancel={() => {
+                    toggleCamera();
+                }}
                 footer={null}
                 centered
-                width="50%"
+                width="30%"
+              
+                
             >
                 {isCameraOn && videoStream && (
                     <video
-                        ref={videoRef}
                         autoPlay
                         playsInline
-                        style={{
-                            width: '100%',
-                            height: 'auto',
-                            borderRadius: '10px',
-                            objectFit: 'cover',
+                        ref={video => {
+                            if (video && !video.srcObject) {
+                                video.srcObject = videoStream;
+                            }
                         }}
+                        style={{ width: '100%', height: 'auto', borderRadius: '10px' }}
                     />
-                )}
-                {barcodeData && (
-                    <div className="barcode-result">
-                        <p>Quét Mã Thành Công: {barcodeData}</p>
-                    </div>
                 )}
             </Modal>
         </div>

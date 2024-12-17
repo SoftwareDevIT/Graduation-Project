@@ -49,7 +49,7 @@ class RoleController extends Controller
         // // Validate dữ liệu
         $validated = $request->validate([
             'roles' => 'array|required',
-            'cinema_id' => 'required|exists:cinema,id',
+            'cinema_id' => 'exists:cinema,id',
         ]);
 
         // // Gán roles cho user
