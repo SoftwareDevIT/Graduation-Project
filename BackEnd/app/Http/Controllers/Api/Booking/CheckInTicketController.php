@@ -39,25 +39,20 @@ class CheckInTicketController extends Controller
 
         // Check if the ticket exists
         if (!$ticket) {
-            return $this->notFound('Không tìm thấy vé', 404);
+            return $this->notFound('Không tìm hóa đơnđơn', 404);
         }
 
-        // Check if the ticket has already been used
-        if ($ticket->status == 'Đã in vé') {
-            return $this->error('Vé đã qua sử dụng', 400);
-        }
-
-        // Update the status to "Đã in vé"
-        // $ticket->status = 'Đã in vé';
-        // $ticket->save();
-        // Redirect to the order detail page
+        // // Check if the ticket has already been used
+        // if ($ticket->status == 'Đã in vé') {
+        //     return $this->error('Hóa đơn này đã ', 400);
+        // }
         return $this->redirectOrderDetail($ticket->id);
+        // return ("http://localhost:5173/admin/orders/$ticket->id");
     }
 
     public function redirectOrderDetail($id)
     {
         // Redirect to the React frontend with the correct ID
-        return redirect("http://localhost:5173/$id");
+        return redirect("http://localhost:5173/admin/ordersdetail/$id");
     }
-
 }

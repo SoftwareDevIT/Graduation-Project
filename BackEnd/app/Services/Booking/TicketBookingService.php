@@ -136,8 +136,13 @@ class TicketBookingService
     public function bookings(Request $request)
     {
         $booking_code = $this->generateBookingCode($request);
+
+
+        // Lưu đường dẫn của ảnh mã vạch vào cơ sở dữ liệu (URL từ ImgBB)
+        $booking = Booking::create($request->validated() + ['user_id' => Auth::user()->id] + ['booking_code' => $booking_code]);
+        $qrcode = $this->generateQrCode($booking);
         $generator = new BarcodeGeneratorPNG();
-        $barcode = $generator->getBarcode($booking_code, BarcodeGenerator::TYPE_CODE_128);
+        $barcode = $generator->getBarcode($booking->id, BarcodeGenerator::TYPE_CODE_128);
 
         // Tạo tên file duy nhất cho mã vạch (dựa vào booking ID)
         $fileName = 'barcode_' . $booking_code . '.png';
@@ -148,10 +153,6 @@ class TicketBookingService
         // Đưa đường dẫn đến mã vạch vào phương thức uploadImage
         $filePath = storage_path('app/public/barcodes/' . $fileName);
         $imageUrl = $this->uploadImage($filePath); // Gửi ảnh lên ImgBB
-
-        // Lưu đường dẫn của ảnh mã vạch vào cơ sở dữ liệu (URL từ ImgBB)
-        $booking = Booking::create($request->validated() + ['user_id' => Auth::user()->id] + ['booking_code' => $booking_code]);
-        $qrcode = $this->generateQrCode($booking);
         $booking->barcode = $imageUrl;
         $booking->qrcode = $qrcode;
         $booking->save();
