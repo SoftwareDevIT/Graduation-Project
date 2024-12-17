@@ -17,8 +17,8 @@ const OrderDetail = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
   const [newStatus, setNewStatus] = useState<string>(orderDetails?.status || ''); // State for new status
-  const [isPrintable, setIsPrintable] = useState<boolean>(false); 
-  
+  const [isPrintable, setIsPrintable] = useState<boolean>(false);
+
 
   useEffect(() => {
     const fetchOrderDetails = async () => {
@@ -27,7 +27,7 @@ const OrderDetail = () => {
         setOrderDetails(response.data.data);
 
 
-        console.log("datacombo",response.data.data
+        console.log("datacombo", response.data.data
         )
 
         setNewStatus(response.data.data.status); // Initialize status from the fetched data
@@ -37,7 +37,7 @@ const OrderDetail = () => {
         setLoading(false);
       }
     };
-    
+
 
     fetchOrderDetails();
   }, [id]);
@@ -64,7 +64,7 @@ const OrderDetail = () => {
       });
     }
   };
-  
+
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
@@ -86,7 +86,7 @@ const OrderDetail = () => {
       });
       return;
     }
-  
+
     // Mở cửa sổ in
     const invoiceWindow = window.open("", "_blank");
     if (!invoiceWindow) {
@@ -97,9 +97,9 @@ const OrderDetail = () => {
       return;
     }
     const totalComboPrice = orderDetails.combos
-  ? orderDetails.combos.reduce((total, combo) => total + combo.price, 0)
-  : 0;
-  
+      ? orderDetails.combos.reduce((total, combo) => total + combo.price, 0)
+      : 0;
+
     const invoiceDetails = orderDetails.seats
       .map(
         (seat, index) => `
@@ -134,7 +134,7 @@ const OrderDetail = () => {
         </div>`
       )
       .join("");
-  
+
     // Tạo nội dung cho hóa đơn ghế
     const invoiceSeats = orderDetails.seats
       .map(
@@ -163,11 +163,11 @@ const OrderDetail = () => {
         </div>`
       )
       .join("");
-  
+
     // Tạo nội dung hóa đơn Combo với ngắt trang trước
 
     const invoiceCombos = orderDetails.combos && orderDetails.combos.length > 0
-    ? `
+      ? `
       <div style="border: 1px solid #e0e0e0; margin-bottom: 50px; padding: 20px; background-color: #f9f9f9;">
         <h1 style="text-align: center; color: #444; font-size: 24px; font-weight: bold;">Hóa Đơn Combo</h1>
         <div style="margin-bottom: 20px; text-align: center;">
@@ -180,13 +180,13 @@ const OrderDetail = () => {
         <p><strong>Mã Đơn Hàng:</strong> ${orderDetails.booking_code}</p>
         <ul>
           ${orderDetails.combos
-            .map(
-              (combo) => `
+        .map(
+          (combo) => `
               <li>
                 <strong>Combo:</strong> ${combo.combo_name} - <strong>Giá Combo:</strong> ${formatCurrency(combo.price)} VNĐ
               </li>`
-            )
-            .join("")}
+        )
+        .join("")}
         </ul>
         <p><strong>Tổng Tiền Combo:</strong> ${formatCurrency(totalComboPrice)} VNĐ</p>
         <hr />
@@ -195,10 +195,10 @@ const OrderDetail = () => {
           <p style="font-style: italic; color: #777;">Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!</p>
         </div>
       </div>`
-    : "<p>Không có combo trong đơn hàng.</p>";
-  
+      : "<p>Không có combo trong đơn hàng.</p>";
 
-  
+
+
     // Gộp tất cả hóa đơn vào một trang
     const invoiceContent = `
       <html>
@@ -218,20 +218,20 @@ const OrderDetail = () => {
       </body>
       </html>
     `;
-  
+
     invoiceWindow.document.write(invoiceContent);
     invoiceWindow.document.close();
     invoiceWindow.print(); // Kích hoạt in
-  
+
     // Cập nhật trạng thái đơn hàng thành "Đã in vé" sau khi in vé
     handleUpdateStatus("Đã in vé");
     setIsPrintable(false);
-     
-  };
-  
-  
 
-  
+  };
+
+
+
+
 
   const getStatusStyle = (status: any) => {
     switch (status) {
@@ -267,12 +267,12 @@ const OrderDetail = () => {
         };
     }
   };
-  
+
   const formatCurrency = (amount: any) => {
     return amount.toLocaleString('vi-VN');
   }
   const { className, icon } = getStatusStyle(orderDetails.status);
-  
+
 
   return (
     <div className="order-detail">
@@ -297,63 +297,70 @@ const OrderDetail = () => {
                 </td>
                 <td>
                   <p>{orderDetails.showtime.room.room_name}</p>
-                  <p>{orderDetails.showtime.showtime_date}</p>
+                  <p>
+                    {new Intl.DateTimeFormat('vi-VN', {
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: 'numeric',
+                    }).format(new Date(orderDetails.showtime.showtime_date))}
+                  </p>
+
                   <p>{orderDetails.showtime.showtime_start} ~ {orderDetails.showtime.showtime_end}</p>
                 </td>
                 <td>
-  {orderDetails.combos?.length > 0 ? (
-    orderDetails.combos.map((combos, index) => (
-      <div key={index}>
-        <p><strong>{combos.combo_name}</strong></p>
-        <p>({formatCurrency(combos.price)} VNĐ)</p>
-      </div>
-    ))
-  ) : (
-    <p>Không có combo nào</p>
-  )}
-</td>
+                  {orderDetails.combos?.length > 0 ? (
+                    orderDetails.combos.map((combos, index) => (
+                      <div key={index}>
+                        <p><strong>{combos.combo_name}</strong></p>
+                        <p>({formatCurrency(combos.price)} VNĐ)</p>
+                      </div>
+                    ))
+                  ) : (
+                    <p>Không có combo nào</p>
+                  )}
+                </td>
 
-<td>
-  {orderDetails.seats.length > 0 ? (
-    orderDetails.seats.map((seats, index) => (
-      <div key={index}>
-        <p>{seats.seat_name}</p>
-      </div>
-    ))
-  ) : (
-    <p>Không có combo nào</p>
-  )}
-</td>
+                <td>
+                  {orderDetails.seats.length > 0 ? (
+                    orderDetails.seats.map((seats, index) => (
+                      <div key={index}>
+                        <p>{seats.seat_name}</p>
+                      </div>
+                    ))
+                  ) : (
+                    <p>Không có combo nào</p>
+                  )}
+                </td>
               </tr>
             </tbody>
           </table>
           <div className='barcode-seat'>
-          {orderDetails.seats.length > 0 ? (
-    orderDetails.seats.map((seats, index) => (
-      <div key={index}>
-        <p></p>
-        <p>Ghế: {seats.seat_name} ~ <img src={seats.barcode} alt="" /></p>
-      </div>
-    ))
-  ) : (
-    <p>Không có ghế nào</p>
-  )}
+            {orderDetails.seats.length > 0 ? (
+              orderDetails.seats.map((seats, index) => (
+                <div key={index}>
+                  <p></p>
+                  <p>Ghế: {seats.seat_name} ~ <img src={seats.barcode} alt="" /></p>
+                </div>
+              ))
+            ) : (
+              <p>Không có ghế nào</p>
+            )}
           </div>
           <div className="tongtien">
-  <p><strong>Tiền Vé:</strong> {formatCurrency(orderDetails.showtime.price * orderDetails.seats.length)} VNĐ</p><br />
-  
-  {orderDetails.combos?.length > 0 ? (
-    <>
-      {/* Tính tổng giá của tất cả các combo */}
-      <p><strong>Giá Combos:</strong> {formatCurrency(orderDetails.combos.reduce((total, combo) => total + combo.price, 0))} VNĐ</p><br />
-    </>
-  ) : (
-    <p>Không có combo nào</p>
-  )}
-  
-  {/* Tổng tiền sẽ cộng tất cả tiền vé và tiền combo */}
-  <p><strong>Tổng tiền: {formatCurrency(orderDetails.amount)} VNĐ</strong></p>
-</div>
+            <p><strong>Tiền Vé:</strong> {formatCurrency(orderDetails.showtime.price * orderDetails.seats.length)} VNĐ</p><br />
+
+            {orderDetails.combos?.length > 0 ? (
+              <>
+                {/* Tính tổng giá của tất cả các combo */}
+                <p><strong>Giá Combos:</strong> {formatCurrency(orderDetails.combos.reduce((total, combo) => total + combo.price, 0))} VNĐ</p><br />
+              </>
+            ) : (
+              <p>Không có combo nào</p>
+            )}
+
+            {/* Tổng tiền sẽ cộng tất cả tiền vé và tiền combo */}
+            <p><strong>Tổng tiền: {formatCurrency(orderDetails.amount)} VNĐ</strong></p>
+          </div>
 
 
         </div>
@@ -364,26 +371,26 @@ const OrderDetail = () => {
             <div className="trangthaive">
               <h3>Trạng thái vé</h3>
               <Select
-        value={newStatus}
-        onChange={handleUpdateStatus}
-        disabled={newStatus === 'Đã in vé'}
-        suffixIcon={null} // Ẩn mũi tên dropdown
-        style={{
-          width: '200px', // Adjust width as needed
-          marginTop: '-8px',
-          marginLeft: '5px',
-          border: 'none', // Hide the border
-          padding: '0',   // Remove padding for a text-like appearance
-          background: 'transparent', // Make background transparent
-          cursor: 'pointer', // Indicate it's clickable
-        }}
-      >
-        <Option value="Thanh toán thành công">Thanh Toán Thành Công</Option>
-        <Option value="Thanh toán thất bại">Thanh Toán Thất Bại</Option>
-        <Option value="Đang xử lý">Đang Xử Lý</Option>
-        <Option value="Đã hủy">Đã Hủy</Option>
-        <Option value="Đã in vé">Đã in vé</Option>
-      </Select>
+                value={newStatus}
+                onChange={handleUpdateStatus}
+                disabled={newStatus === 'Đã in vé'}
+                suffixIcon={null} // Ẩn mũi tên dropdown
+                style={{
+                  width: '200px', // Adjust width as needed
+                  marginTop: '-8px',
+                  marginLeft: '5px',
+                  border: 'none', // Hide the border
+                  padding: '0',   // Remove padding for a text-like appearance
+                  background: 'transparent', // Make background transparent
+                  cursor: 'pointer', // Indicate it's clickable
+                }}
+              >
+                <Option value="Thanh toán thành công">Thanh Toán Thành Công</Option>
+                <Option value="Thanh toán thất bại">Thanh Toán Thất Bại</Option>
+                <Option value="Đang xử lý">Đang Xử Lý</Option>
+                <Option value="Đã hủy">Đã Hủy</Option>
+                <Option value="Đã in vé">Đã in vé</Option>
+              </Select>
             </div>
 
             <div className="ticket-content">

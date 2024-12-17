@@ -6,6 +6,7 @@ import { formatDistanceToNow } from 'date-fns'; // Add date-fns library
 import { useUserContext } from '../../Context/UserContext'; // Import the context
 import Header from '../Header/Hearder';
 import { Link } from 'react-router-dom';
+import { vi } from 'date-fns/locale';
 
 const Personal: React.FC = () => {
   const { userProfile, avatar, setUserProfile, handleUpdateProfile, handleAvatarUpload } = useUserContext();
@@ -21,7 +22,7 @@ const Personal: React.FC = () => {
 
       // Add favorite movie activities to the activity list
       const newActivities = movies.map((movie: Movie) => {
-        const timeAgo = formatDistanceToNow(new Date(movie.created_at), { addSuffix: true });
+        const timeAgo = formatDistanceToNow(new Date(movie.created_at), { addSuffix: true, locale: vi });
         return `${userProfile.user_name} đã yêu thích phim: ${movie.movie_name} - ${timeAgo}`;
       });
       setActivities(newActivities);
@@ -53,61 +54,61 @@ const Personal: React.FC = () => {
             </div>
           </div>
 
-   
 
 
-          </div>
-          <div className="moveslike">
-            <h3>Phim tui thích</h3>
-            <div className='phimyeuthich-container'>
-              <div className="phimyeuthich ">
-                {favoriteMovies.length > 0 ? (
-                  favoriteMovies.map((movie) => {
-                    return (
-                      <div className="item-phim " key={movie.id}>
-                       <div className="img">
-           <Link to={`/movie-detail/${movie.slug}`}> <img src={movie.poster || undefined} alt={movie.movie_name} /></Link>
-          </div>
-                        <div className="movie-title">
-            <h5>{movie.movie_name}</h5>
-          </div>
+
+        </div>
+        <div className="moveslike">
+          <h3>Phim tui thích</h3>
+          <div className='phimyeuthich-container'>
+            <div className="phimyeuthich ">
+              {favoriteMovies.length > 0 ? (
+                favoriteMovies.map((movie) => {
+                  return (
+                    <div className="item-phim " key={movie.id}>
+                      <div className="img">
+                        <Link to={`/movie-detail/${movie.slug}`}> <img src={movie.poster || undefined} alt={movie.movie_name} /></Link>
                       </div>
-                    );
-                  })
-                ) : (
-                  <div className="col-12 text-center">Chưa có phim yêu thích nào.</div>
-                )}
-              </div>
-            </div>
-          </div>
-
-          <div className='activities'>
-            <h4 className='text-center'>Hoạt động gần đây</h4>
-            <div className="activity-list">
-              {visibleActivities.length > 0 ? (
-                visibleActivities.map((activity, index) => (
-                  <div className="activity-item" key={index}>
-                    <div className="activity-info">
-                      <span className="activity-dot">•</span>
-                      <span className="activity-text">
-                        {activity}
-                      </span>
+                      <div className="movie-title">
+                        <h5>{movie.movie_name}</h5>
+                      </div>
                     </div>
-                    {/* <span className="activity-time">{activity}</span> */}
-                  </div>
-                ))
+                  );
+                })
               ) : (
-                <div className="col-12 text-center">Chưa có hoạt động nào.</div>
-              )}
-              {!showAllActivities && activities.length > 3 && (
-                <div className="see-more" onClick={handleSeeMore}>
-                  Xem thêm
-                </div>
+                <div className="col-12 text-center">Chưa có phim yêu thích nào.</div>
               )}
             </div>
           </div>
         </div>
-      
+
+        <div className='activities'>
+          <h4 className='text-center'>Hoạt động gần đây</h4>
+          <div className="activity-list">
+            {visibleActivities.length > 0 ? (
+              visibleActivities.map((activity, index) => (
+                <div className="activity-item" key={index}>
+                  <div className="activity-info">
+                    <span className="activity-dot">•</span>
+                    <span className="activity-text">
+                      {activity}
+                    </span>
+                  </div>
+                  {/* <span className="activity-time">{activity}</span> */}
+                </div>
+              ))
+            ) : (
+              <div className="col-12 text-center">Chưa có hoạt động nào.</div>
+            )}
+            {!showAllActivities && activities.length > 3 && (
+              <div className="see-more" onClick={handleSeeMore}>
+                Xem thêm
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
       <Footer />
     </>
   );

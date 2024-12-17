@@ -41,7 +41,7 @@ class ShowtimeService
     {
         return Showtime::create($data);
     }
-    
+
     public function generateShowtimes(array $data): array
     {
         $openingTime = Carbon::createFromFormat('H:i', $data['opening_time']);
@@ -77,7 +77,7 @@ class ShowtimeService
 
     public function delete(int $id): ?bool
     {
-        $showtime = $this->filterByRole(Showtime::where('id', $id))->firstOrFail();
+        $showtime = $this->filterByRole(Showtime::where('id', $id)->where('status', 0))->firstOrFail();
         return $showtime->delete();
     }
 
