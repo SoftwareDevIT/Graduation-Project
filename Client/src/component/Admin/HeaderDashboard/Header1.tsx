@@ -82,7 +82,7 @@ const Header = () => {
 
                     const { status, message, data } = response.data.data;
 
-                    if (status) {
+                    if (status===200) {
                         // Hiển thị thông báo thành công
                         Modal.success({
                             title: 'Check-in Thành Công',
@@ -100,7 +100,7 @@ const Header = () => {
                     } else {
                         // Hiển thị thông báo thất bại
                         Modal.error({
-                            title: 'Check-in Thất Bại',
+                            title: 'Check-in thành công',
                             content: message,
                         });
                     }
