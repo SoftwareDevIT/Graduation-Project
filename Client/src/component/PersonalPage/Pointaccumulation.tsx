@@ -176,7 +176,7 @@ const filteredTransactions = pointHistories
   mục
 </label>
 
-                <input type="text" placeholder="Tìm kiếm..." onChange={handleSearchChange} />
+                
               </div>
 
               <Table

@@ -37,34 +37,38 @@ const EarlyMovie: React.FC = () => {
           <h2>Chiếu sớm</h2>
           <p>Danh sách các phim hiện đang chiếu rạp trên toàn quốc. Xem lịch chiếu phim, giá vé tiện lợi, đặt vé nhanh chỉ với 1 bước!</p>
         </div>
-
-        {movies.map((movie) => (
-          <div className="movie-card-content" key={movie.movie.id}>
-            <div className="movie-card-poster">
-              <img src={movie.movie.poster} alt={movie.movie.movie_name} />
+ {/* Kiểm tra nếu movies rỗng */}
+ {movies.length === 0 ? (
+    <p className="no-movies-message">Không có phim chiếu sớm nào.</p>
+  ) : (
+    movies.map((movie) => (
+      <div className="movie-card-content" key={movie.movie.id}>
+        <div className="movie-card-poster">
+          <img src={movie.movie.poster} alt={movie.movie.movie_name} />
+        </div>
+        <div className="movie-card-info">
+          <h3>{movie.movie.movie_name}</h3>
+          <p className="movie-genre">{movie.movie.movie_name} - Comedy, Action, Adventure</p>
+          <p className="movie-description">{stripHtml(movie.movie.description)}</p>
+          <div className="movie-details1">
+            <div className="movie-info1">
+              <span className="duration1"><i className="fas fa-clock"></i> {movie.movie.duration} phút</span>
+              <span className="rating1"><i className="fas fa-user-plus"></i> {movie.movie.age_limit}</span>
             </div>
-            <div className="movie-card-info">
-              <h3>{movie.movie.movie_name}</h3>
-              <p className="movie-genre">{movie.movie.movie_name} - Comedy, Action, Adventure</p>
-              <p className="movie-description">{stripHtml(movie.movie.description)}</p>
-              <div className="movie-details1">
-                <div className="movie-info1">
-                  <span className="duration1"><i className="fas fa-clock"></i> {movie.movie.duration} phút</span>
-                  <span className="rating1"><i className="fas fa-user-plus"></i> {movie.movie.age_limit}</span>
-                </div>
-                <div className="movie-dates1">
-                  Khởi chiếu: {movie.movie.release_date} · Chiếu sớm: {movie.movie.showtimes[0]?.showtime_date}
-                </div>
-              </div>
-              <div className="movie-actions">
-                <button className="btn-info"><Link to={`/movie-detail/${movie.movie.slug}`}>Thông tin phim</Link></button>
-                <button className="btn-trailer" onClick={() => showTrailer(movie)}>Trailer</button> {/* Thêm sự kiện onClick */}
-                <Link to={`/buy-now/${movie.movie.slug}`} className='btn-buy'>Mua vé</Link>
-              </div>
+            <div className="movie-dates1">
+              Khởi chiếu: {movie.movie.release_date} · Chiếu sớm: {movie.movie.showtimes[0]?.showtime_date}
             </div>
           </div>
-        ))}
-        
+          <div className="movie-actions">
+            <button className="btn-info"><Link to={`/movie-detail/${movie.movie.slug}`}>Thông tin phim</Link></button>
+            <button className="btn-trailer" onClick={() => showTrailer(movie)}>Trailer</button>
+            <Link to={`/buy-now/${movie.movie.slug}`} className='btn-buy'>Mua vé</Link>
+          </div>
+        </div>
+      </div>
+    ))
+  )}
+</div>
         {selectedMovie && (
           <Modal
             title={selectedMovie.movie.movie_name || "Trailer"} // Tiêu đề modal là tên phim
@@ -85,7 +89,7 @@ const EarlyMovie: React.FC = () => {
             ></iframe>
           </Modal>
         )}
-      </div>
+     
       <Footer />
     </>
   );

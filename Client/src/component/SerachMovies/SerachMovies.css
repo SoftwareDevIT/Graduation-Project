@@ -29,7 +29,12 @@ text-align: center;
     height: 176px;
     
 }
-
+.timkiemphim2{
+ 
+    height: 100px;
+    text-align: center;
+    font-size: 20px ;
+}
 .move-itemone h4{
     font-size: 15px;
 padding-top: 6px;

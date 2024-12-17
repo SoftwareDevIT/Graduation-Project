@@ -1,12 +1,39 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Input, Button, Upload, Avatar, notification } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import { LikeOutlined, UploadOutlined } from "@ant-design/icons";
 import Footer from "../Footer/Footer";
 import Header from "../Header/Hearder";
 import { useUserContext } from "../../Context/UserContext";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+import { Movie } from "../../interface/Movie";
+import { formatDistanceToNow } from "date-fns";
 
-const Profile: React.FC = () => {
+const TicketMovie: React.FC = () => {
+  
+  const [favoriteMovies, setFavoriteMovies] = useState<Movie[]>([]);
+  const [activities, setActivities] = useState<string[]>([]); // Store recent activities
+  const [visibleActivities, setVisibleActivities] = useState<string[]>([]); // Activities to show
+  const [showAllActivities, setShowAllActivities] = useState(false); // Show all activities state
+
+  useEffect(() => {
+    if (userProfile) {
+      const movies = userProfile.favorite_movies || [];
+      setFavoriteMovies(movies);
+
+      // Add favorite movie activities to the activity list
+      const newActivities = movies.map((movie: Movie) => {
+        const timeAgo = formatDistanceToNow(new Date(movie.created_at), { addSuffix: true });
+        return `${userProfile.user_name} đã yêu thích phim: ${movie.movie_name} - ${timeAgo}`;
+      });
+      setActivities(newActivities);
+      setVisibleActivities(newActivities.slice(0, 3)); // Display the first 3 activities
+    }
+  }, );
+
+  const handleSeeMore = () => {
+    setShowAllActivities(true);
+    setVisibleActivities(activities); // Show all activities
+  };
   const {
     userProfile,
     avatar,
@@ -59,12 +86,12 @@ const Profile: React.FC = () => {
     </span>
   </div>
   <div className="account-nav-item">
-      <span className="account-nav-title">
-        <NavLink 
-          to="/ticketmovie" 
-          className={({ isActive }) => isActive ? 'active-link' : ''}>
-          Tủ phim
-        </NavLink>
+    <span className="account-nav-title">
+      <NavLink 
+        to="/ticketmovie" 
+        className={({ isActive }) => isActive ? 'active-link' : ''}>
+        Tủ phim
+      </NavLink>
     </span>
   </div>
   <div className="account-nav-item">
@@ -101,56 +128,36 @@ const Profile: React.FC = () => {
           </div>
 
           <div className="divider"></div>
-          <div className="profile-container">
-            <Form
-              layout="vertical"
-              onFinish={handleUpdateProfile}
-              className="profile-form"
-            >
-              <Form.Item label="Tên tài khoản">
-                <Input value={userProfile?.user_name || ""} readOnly disabled />
-              </Form.Item>
-              <Form.Item label="Email">
-                <Input value={userProfile?.email || ""} readOnly disabled />
-              </Form.Item>
-              <Form.Item label="Họ và tên">
-                <Input
-                  value={userProfile?.fullname || ""}
-                  onChange={(e) =>
-                    setUserProfile({
-                      ...userProfile,
-                      fullname: e.target.value,
-                    })
-                  }
-                />
-              </Form.Item>
-              <Form.Item label="Số điện thoại">
-                <Input
-                  value={userProfile?.phone || ""}
-                  onChange={(e) =>
-                    setUserProfile({
-                      ...userProfile,
-                      phone: e.target.value,
-                    })
-                  }
-                />
-              </Form.Item>
-              <Form.Item label="Ảnh đại diện">
-                <Upload
-                  accept="image/*"
-                  showUploadList={false}
-                  beforeUpload={handleAvatarUpload}
-                >
-                  <Button icon={<UploadOutlined />}>Chọn ảnh</Button>
-                </Upload>
-              </Form.Item>
-              <Form.Item>
-                <Button type="primary" htmlType="submit">
-                  Cập nhật
-                </Button>
-              </Form.Item>
-            </Form>
+          <div className='phimyeuthich-container'>
+              <div className="phimyeuthich ">
+                {favoriteMovies.length > 0 ? (
+                  favoriteMovies.map((movie) => {
+                    return (
+                      <div className="item-phim " key={movie.id}>
+                       <div className="img">
+           <Link to={`/movie-detail/${movie.slug}`}> <img src={movie.poster || undefined} alt={movie.movie_name} /></Link>
           </div>
+            
+          <span className="rating-2">
+<LikeOutlined  className="icon-likee-2"
+    style={{
+    position:"relative",
+    right:"5px",
+      color: "#28a745",           
+      background: "none",        
+      fontSize: "16px"            
+    }} 
+  />
+  {typeof movie.rating === 'number' ? (movie.rating * 10).toFixed(0) : 0}%
+</span>   
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div className="col-12 text-center">Chưa có phim yêu thích nào.</div>
+                )}
+              </div>
+            </div>
         </div>
       </div>
 
@@ -159,4 +166,4 @@ const Profile: React.FC = () => {
   );
 };
 
-export default Profile;
+export default TicketMovie;
