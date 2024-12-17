@@ -84,7 +84,7 @@ class RankService
         $discountValue = $pointsToUse;
         $finalPrice = $totalPrice - $discountValue;
 
-        
+
         // Tính số điểm mới nhận được dựa vào phần trăm cấp bậc
         // $rank = $user->rank;
         // $pointsEarned = $totalPrice * ($rank->percent_discount / 100);
@@ -164,7 +164,7 @@ class RankService
         PointHistory::create([
             'user_id' => $user->id,
             'points_earned' => $pointsEarned,
-            'type' => 'earned',
+            'type' => 'Tích điểm',
         ]);
     }
 }

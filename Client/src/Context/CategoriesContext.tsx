@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useContext, useEffect } from 'react';
+import React, { createContext, useReducer, useContext, useEffect, useState } from 'react';
 import instance from '../server';
 import { MovieCategory } from '../interface/MovieCategory';
 
@@ -51,10 +51,25 @@ const categoryReducer = (state: CategoryState, action: Action): CategoryState =>
 // Create a provider component
 export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(categoryReducer, { categories: [], loading: true });
-
+  const [userRole, setUserRole] = useState<string>("");
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("user_profile") || "{}");
+    const roles = userData.roles || [];
+    console.log("data role:", roles);
+    if (roles.length > 0) {
+      setUserRole(roles[0].name);
+    } else {
+      setUserRole("unknown"); // Gán giá trị mặc định khi không có vai trò
+    }
+  }, []);
   const fetchCategories = async () => {
     try {
-      const response = await instance.get('/manager/movie-category');
+      let response;
+      if (userRole === "manager") {
+        response = await instance.get('/manager/movie-category');
+      } else {
+        response = await instance.get('/movie-category');
+      }
       dispatch({ type: 'SET_CATEGORIES', payload: response.data.data }); // Assuming response.data contains the categories
     } catch (error) {
       console.error('Failed to fetch categories:', error);

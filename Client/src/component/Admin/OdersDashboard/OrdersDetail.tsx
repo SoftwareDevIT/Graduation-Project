@@ -157,7 +157,7 @@ const OrderDetail = () => {
           <p><strong>Tổng Tiền:</strong> ${formatCurrency(orderDetails.showtime.price)} VNĐ</p>
           <hr />
           <div style="text-align: center; margin-top: 20px;">
-            <strong><img src="${orderDetails.barcode}" alt="Barcode" style="width: 200px; display: block; margin: 0 auto;" /></strong>
+            <strong><img src="${seat.barcode}" alt="Barcode" style="width: 200px; display: block; margin: 0 auto;" /></strong>
             <p style="font-style: italic; color: #777;">Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!</p>
           </div>
         </div>`

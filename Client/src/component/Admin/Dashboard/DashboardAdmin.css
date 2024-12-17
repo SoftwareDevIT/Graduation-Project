@@ -69,7 +69,8 @@
 
 .summary-filter{
     position: relative;
-    left: 95px;
+    margin-top: 25px;
+    left: 94px;
     bottom: 55px;
 }
 .summary-filter1{
