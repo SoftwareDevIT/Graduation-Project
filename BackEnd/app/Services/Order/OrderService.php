@@ -12,52 +12,52 @@ class OrderService
 {
     // use Illuminate\Support\Facades\Auth;
 
-protected function filterByRole($query)
-{
-    $user = Auth::user();
+    protected function filterByRole($query)
+    {
+        $user = Auth::user();
 
-    if (!$user) {
-        // Người chưa đăng nhập: chỉ lấy rạp có status = 1
-        $query->where('status', 1);
-    } elseif ($user->hasRole('admin')) {
-        // Admin: không lọc gì thêm, lấy tất cả rạp
+        if (!$user) {
+            // Người chưa đăng nhập: chỉ lấy rạp có status = 1
+            $query->where('status', 1);
+        } elseif ($user->hasRole('admin')) {
+            // Admin: không lọc gì thêm, lấy tất cả rạp
+            return $query;
+        } elseif ($user->hasAnyRole(['manager', 'staff'])) {
+            // Manager hoặc Staff: chỉ lấy các phòng chiếu thuộc cinema_id của họ
+            $query->whereHas('showtime.room', function ($q) use ($user) {
+                $q->where('cinema_id', $user->cinema_id);
+            });
+        } else {
+            // Các vai trò khác (không phải admin/manager/staff): chỉ lấy rạp có status = 1
+            $query->where('user_id', Auth::user()->id);
+        }
+
         return $query;
-    } elseif ($user->hasAnyRole(['manager', 'staff'])) {
-        // Manager hoặc Staff: chỉ lấy các phòng chiếu thuộc cinema_id của họ
-        $query->whereHas('showtime.room', function ($q) use ($user) {
-            $q->where('cinema_id', $user->cinema_id);
-        });
-    } else {
-        // Các vai trò khác (không phải admin/manager/staff): chỉ lấy rạp có status = 1
-        $query->where('status', 1);
     }
 
-    return $query;
-}
+    public function index()
+    {
+        $query = Booking::with(['showtime.movie', 'showtime.room', 'user', 'payMethod', 'seats', 'combos'])
+            ->orderByDesc('created_at');
 
-public function index()
-{
-    $query = Booking::with(['showtime.movie', 'showtime.room', 'user', 'payMethod', 'seats', 'combos'])
-        ->orderByDesc('created_at');
+        // Áp dụng bộ lọc theo vai trò
+        $query = $this->filterByRole($query);
 
-    // Áp dụng bộ lọc theo vai trò
-    $query = $this->filterByRole($query);
+        return $query->get();
+    }
 
-    return $query->get();
-}
+    public function show($id)
+    {
+        $query = Booking::with(['showtime.movie', 'showtime.room', 'user', 'payMethod', 'seats', 'combos']);
 
-public function show($id)
-{
-    $query = Booking::with(['showtime.movie', 'showtime.room', 'user', 'payMethod', 'seats', 'combos']);
+        // Áp dụng bộ lọc theo vai trò
+        $query = $this->filterByRole($query);
 
-    // Áp dụng bộ lọc theo vai trò
-    $query = $this->filterByRole($query);
+        // Tìm đơn hàng theo ID
+        $order = $query->findOrFail($id);
 
-    // Tìm đơn hàng theo ID
-    $order = $query->findOrFail($id);
-
-    return $order;
-}
+        return $order;
+    }
 
     public function destroy($id)
     {
