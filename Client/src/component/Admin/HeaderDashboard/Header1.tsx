@@ -125,6 +125,7 @@ const Header = () => {
     return (
         <div className="header1">
             <h1>{getPageName()}</h1>
+            <h1>{getPageName()}</h1>
             <div className="header-actions">
                 <div className="icons-container">
                     <div className="icon" onClick={toggleCamera}>
@@ -163,14 +164,17 @@ const Header = () => {
             <Modal
                 title="Camera"
                 visible={isModalVisible}
-                onCancel={() => toggleCamera()}
+                onCancel={() => {
+                    toggleCamera();
+                }}
                 footer={null}
                 centered
-                width="50%"
+                width="30%"
+              
+                
             >
                 {isCameraOn && videoStream && (
                     <video
-                        ref={videoRef}
                         autoPlay
                         playsInline
                         style={{

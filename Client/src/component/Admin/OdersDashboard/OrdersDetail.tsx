@@ -304,7 +304,7 @@ const OrderDetail = () => {
   {orderDetails.combos?.length > 0 ? (
     orderDetails.combos.map((combos, index) => (
       <div key={index}>
-        <p><strong>{combos.combo_name} x {combos.volume}</strong></p>
+        <p><strong>{combos.combo_name}</strong></p>
         <p>({formatCurrency(combos.price)} VNĐ)</p>
       </div>
     ))
