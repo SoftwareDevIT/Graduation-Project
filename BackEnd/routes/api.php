@@ -212,6 +212,8 @@ Route::middleware(['auth:sanctum', 'role:staff'])->prefix('staff')->group(functi
     Route::post('checkInSeat', [CheckInTicketController::class, 'checkInSeat']);
     Route::post('checkInBooking', [CheckInTicketController::class, 'checkInBooking']);
 });
+
+Route::post('checkInSeat', [CheckInTicketController::class, 'checkInSeat']);
 Route::post('checkInBooking', [CheckInTicketController::class, 'checkInBooking']);
 
 // Các tuyến đường dành riêng cho phim

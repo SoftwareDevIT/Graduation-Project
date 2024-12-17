@@ -157,6 +157,14 @@ const Header = () => {
     };
 
 
+
+
+    useEffect(() => {
+if (videoRef.current && videoStream) {
+            videoRef.current.srcObject = videoStream;
+        }
+    }, [videoStream]);
+
     useEffect(() => {
         if (barcodeData) navigate(barcodeData.replace(/^http:\/\/localhost:5173/, ""));
     }, [barcodeData, navigate]);
@@ -228,7 +236,7 @@ const Header = () => {
             </div>
             <Modal
                 title="Camera"
-                visible={isModalVisible}
+visible={isModalVisible}
                 onCancel={() => {
                     toggleCamera();
                 }}

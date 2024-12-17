@@ -23,9 +23,6 @@ import {
   FaBullhorn,
   FaPlayCircle,
   FaBuilding,
-  FaReceipt,
-  FaVideo,
-  FaUserTie,
 } from "react-icons/fa";
 import "./Sidebar.css";
 
@@ -85,7 +82,6 @@ const Sidebar: React.FC = () => {
                 {openMenu["cinema"] ? <FaChevronDown /> : <FaChevronRight />}
               </span>
               <ul className={openMenu["cinema"] ? "submenu open" : "submenu"}>
-              {(userRole === "admin")  && (
                 <li>
                   <NavLink
                     to={"/admin/cinemas"}
@@ -95,12 +91,11 @@ const Sidebar: React.FC = () => {
                     <FaTheaterMasks /> Quản lí rạp chiếu phim
                   </NavLink>
                 </li>
-              )}
                 <li>
                   <NavLink
                     to={"/admin/rooms"}
                     onClick={handleLinkClick}
-                    className={({ isActive }) => (isActive ? "active" : "")}
+className={({ isActive }) => (isActive ? "active" : "")}
                   >
                     <FaIndustry /> Quản lí phòng rạp
                   </NavLink>
@@ -115,7 +110,6 @@ const Sidebar: React.FC = () => {
                     Sơ đồ ghế
                   </NavLink>
                 </li>
-                {(userRole === "admin")  && (
                 <li>
                   <NavLink
                     to={"/admin/rank"}
@@ -126,7 +120,6 @@ const Sidebar: React.FC = () => {
                     Quản lí hạng
                   </NavLink>
                 </li>
-                )}
               </ul>
             </li>
           )}
@@ -158,34 +151,6 @@ const Sidebar: React.FC = () => {
               </ul>
             </li>
           )}
-          {(userRole === "manager")  && (
-            <li>
-              <span onClick={() => toggleMenu("actor")}>
-                <FaTheaterMasks /> Đạo diễn & Diễn viên{""}
-                {openMenu["actor"] ? <FaChevronDown /> : <FaChevronRight />}
-              </span>
-              <ul className={openMenu["actor"] ? "submenu open" : "submenu"}>
-                <li>
-                  <NavLink
-                    to={"/admin/director"}
-                    onClick={handleLinkClick}
-                    className={({ isActive }) => (isActive ? "active" : "")}
-                  >
-                  <FaVideo /> Quản lí đạo diễn
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to={"/admin/actor"}
-                    onClick={handleLinkClick}
-                    className={({ isActive }) => (isActive ? "active" : "")}
-                  >
-                    <FaUserTie /> Quản lí diễn viên
-                  </NavLink>
-                </li>
-              </ul>
-            </li>
-          )}
           <li>
             {(userRole === "manager" || userRole === "staff") && (
               <span onClick={() => toggleMenu("services")}>
@@ -194,9 +159,8 @@ const Sidebar: React.FC = () => {
               </span>
             )}
             <ul className={openMenu["services"] ? "submenu open" : "submenu"}>
-           
               {/* Nếu userRole là "staff", chỉ hiển thị mục Quản lý đơn hàng */}
-              {(userRole === "manager" || userRole === "admin")  && (
+              {userRole == "staff || manager" && (
                 <li>
                   <NavLink
                     to={"/admin/orders"}
@@ -207,7 +171,7 @@ const Sidebar: React.FC = () => {
                   </NavLink>
                 </li>
               )}
-              {/* Nếu không phải staff, hiển thị các mục khác */}
+{/* Nếu không phải staff, hiển thị các mục khác */}
               {userRole == "manager" && (
                 <>
                   <li>
