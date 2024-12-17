@@ -61,9 +61,51 @@ const Header = () => {
     };
 
     const handleBarcodeScan = (result: string) => {
-        setBarcodeData(result);  // Cập nhật dữ liệu quét được
-        console.log("Barcode Data:", result);  // In dữ liệu ra console
+        setBarcodeData(result); // Cập nhật dữ liệu quét được
+    
+        // Phân biệt URL và số
+        const isUrl = result.startsWith("http://") || result.startsWith("https://");
+        if (isUrl) {
+            navigate(result.replace(/^http:\/\/localhost:5173/, ""));
+        } else if (/^\d+$/.test(result)) { // Kiểm tra xem chuỗi chỉ chứa số
+            // Gọi API `checkInSeat`
+            fetch('/api/manager/checkInSeat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ ticketNumber: result }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Check-in result:", data);
+                    if (data.success) {
+                        Modal.success({
+                            title: 'Check-in thành công',
+                            content: `Thông tin vé: ${JSON.stringify(data.details)}`,
+                        });
+                    } else {
+                        Modal.error({
+                            title: 'Check-in thất bại',
+                            content: data.message || 'Vé không hợp lệ!',
+                        });
+                    }
+                })
+                .catch(error => {
+                    // console.error("Error during check-in:", error);
+                    Modal.error({
+                        title: 'Lỗi',
+                        content: 'Có lỗi xảy ra khi check-in vé!',
+                    });
+                });
+        } else {
+            Modal.warning({
+                title: 'Dữ liệu không hợp lệ',
+                content: 'Vui lòng quét lại mã hợp lệ.',
+            });
+        }
     };
+    
 
     const getPageName = () => {
         const path = location.pathname;
@@ -85,6 +127,13 @@ const Header = () => {
         if (barcodeData) navigate(barcodeData.replace(/^http:\/\/localhost:5173/, ""));
     }, [barcodeData, navigate]);
 
+    // useEffect(() => {
+    //     return () => {
+    //         barcodeReader.current.reset();
+    //     };
+    // }, []);
+
+
     useEffect(() => {
         // Bắt đầu quét mã vạch khi camera bật
         if (isCameraOn && videoStream) {
@@ -95,7 +144,7 @@ const Header = () => {
                         handleBarcodeScan(result.getText());  // Quét thành công
                     }
                     if (error) {
-                        console.error(error);
+                        // console.error(error);
                     }
                 });
             }
@@ -103,6 +152,7 @@ const Header = () => {
             barcodeReader.current.reset(); // Dừng quét khi camera tắt
         }
     }, [isCameraOn, videoStream]);
+    console.log("Video Stream:", videoStream);
 
     return (
         <div className="header1">
@@ -168,7 +218,6 @@ const Header = () => {
                 {barcodeData && (
                     <div className="barcode-result">
                         <p>Quét Mã Thành Công: <a href={barcodeData}>{barcodeData}</a></p>
-
                     </div>
                 )}
             </Modal>

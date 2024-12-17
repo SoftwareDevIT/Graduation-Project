@@ -339,7 +339,7 @@ const OrderDetail = () => {
               orderDetails.seats.map((seats, index) => (
                 <div key={index}>
                   <p></p>
-                  <p>Ghế: {seats.seat_name} ~ <img src={seats.barcode} alt="" /></p>
+                  <p>Ghế: {seats.seat_name} ~ <img style={{width:'25%'}} src={seats.barcode} alt="" /></p>
                 </div>
               ))
             ) : (
