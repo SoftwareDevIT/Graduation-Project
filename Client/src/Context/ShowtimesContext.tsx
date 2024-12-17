@@ -57,6 +57,16 @@ const showtimeReducer = (state: ShowtimeState, action: ShowtimeAction): Showtime
                     showtime.id === action.payload.id ? { ...showtime, ...action.payload } : showtime
                 ),
             };
+            case 'UPDATE_SHOWTIME_STATUS':
+    return {
+        ...state,
+        showtimes: state.showtimes.map((showtime) =>
+            showtime.id === action.payload.id
+                ? { ...showtime, status: action.payload.status }
+                : showtime
+        ),
+    };
+
         default:
             return state;
     }

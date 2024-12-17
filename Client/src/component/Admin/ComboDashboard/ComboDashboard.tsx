@@ -56,7 +56,28 @@ const ComboDashboard: React.FC = () => {
             });
         }
     };
-
+    const handleStatusChange = async (id: number, currentStatus: boolean) => {
+        try {
+            const response = await instance.post(`/manager/comboStatus/${id}`, {
+                status: !currentStatus, // Đảo ngược trạng thái hiện tại
+            });
+    
+            if (response.status === 200) {
+                notification.success({
+                    message: 'Thành Công',
+                    description: `Trạng thái combo đã được cập nhật thành công!`,
+                });
+            } else {
+                throw new Error('Cập nhật thất bại');
+            }
+        } catch (err) {
+            notification.error({
+                message: 'Lỗi',
+                description: 'Không thể cập nhật trạng thái combo',
+            });
+        }
+    };
+    
     const columns = [
         {
             title: 'ID',
@@ -97,19 +118,21 @@ const ComboDashboard: React.FC = () => {
             render: (text: any) => new Date(text).toLocaleDateString(),
         },
         {
-            title: 'Trạng Thái ',
-            key: 'action',
+            title: 'Trạng Thái',
+            key: 'status',
             className: 'text-center',
-            render: (movie: Movie) => (
-                <div style={{ textAlign: 'left' }}>
-                    <Switch 
-                        checkedChildren="On" 
-                        unCheckedChildren="Off" 
+            render: (combo: any) => (
+                <div style={{ textAlign: 'center' }}>
+                    <Switch
+                        checked={combo.status} // Trạng thái hiện tại của combo
+                        checkedChildren="On"
+                        unCheckedChildren="Off"
+                        onChange={() => handleStatusChange(combo.id, combo.status)}
                     />
                 </div>
             ),
-          
         },
+        
         {
             title: 'Hành Động',
             key: 'action',

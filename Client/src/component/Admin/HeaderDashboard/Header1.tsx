@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Header1.css';
 import { FaBell, FaCog, FaUserCircle, FaCamera } from 'react-icons/fa';
 import { Modal } from 'antd';
 import { User } from '../../../interface/User';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { BrowserMultiFormatReader } from '@zxing/library';  // Import thư viện quét mã vạch
 
 const Header = () => {
     const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -13,9 +12,6 @@ const Header = () => {
     const [isCameraOn, setIsCameraOn] = useState(false);
     const [videoStream, setVideoStream] = useState<MediaStream | null>(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [barcodeData, setBarcodeData] = useState<string | null>(null);  // Lưu dữ liệu quét được
-    const videoRef = useRef<HTMLVideoElement | null>(null);  // ref để điều khiển video
-    const barcodeReader = useRef(new BrowserMultiFormatReader()); // Khởi tạo đối tượng quét mã vạch
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -40,7 +36,7 @@ const Header = () => {
 
     const toggleCamera = async () => {
         if (isCameraOn) {
-            // Tắt camera
+            // Turn off the camera
             if (videoStream) {
                 videoStream.getTracks().forEach(track => track.stop());
                 setVideoStream(null);
@@ -48,7 +44,7 @@ const Header = () => {
             setIsCameraOn(false);
             setIsModalVisible(false);
         } else {
-            // Bật camera
+            // Turn on the camera
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true });
                 setVideoStream(stream);
@@ -60,46 +56,48 @@ const Header = () => {
         }
     };
 
-    const handleBarcodeScan = (result: string) => {
-        setBarcodeData(result);  // Cập nhật dữ liệu quét được
-        console.log("Barcode Data:", result);  // In dữ liệu ra console
-    };
-
     const getPageName = () => {
         const path = location.pathname;
         const pageName = path.split('/').pop();
         switch(pageName) {
-            case 'dashboard': return 'Bảng Điều Khiển Admin';
-            case 'user': return 'Quản Lí Người Dùng';
-            // Các trường hợp khác...
-            default: return 'Welcome';
+            case 'dashboard':
+                return 'Bảng Điều Khiển Admin';
+            case 'user':
+                return 'Quản Lí Người Dùng';
+            case 'showtimes':
+                return 'Quản Lí Suất Chiếu';
+            case 'orders':
+                return 'Quản Lí Đơn Hàng';
+            case 'posts':
+                return 'Quản Lí Bài Viết';
+            case 'categories':
+                return 'Quản Lí Thể Loại';
+            case 'countries':
+                return 'Quản Lí Khu Vực';
+            case 'combo':
+                return 'Quản Lí Combo Nước';
+            case 'cinemas':
+                return 'Quản Lí Rạp Chiếu Phim';
+            case 'movies':
+                return 'Quản Lí Phim';
+            case 'rooms':
+                return 'Quản Lí Phòng Rạp';
+            case 'RevenueByCinema':
+                return 'Doanh Thu Theo Rạp';
+            case 'RevenueByMovie':
+                return 'Doanh Thu Theo Phim';
+            case 'actor':
+                return 'Quản Lí Diễn Viên'
+            case 'director':
+                return 'Quản Lí Đạo Diễn'
+            case 'method':
+                return 'Phương Thức Thanh Toán'
+            case 'promotions':
+                return 'Mã Giảm Giá'
+            default:
+                return 'Welcome';
         }
     };
-
-    useEffect(() => {
-        if (videoRef.current && videoStream) {
-            videoRef.current.srcObject = videoStream;
-        }
-    }, [videoStream]);
-
-    useEffect(() => {
-        // Bắt đầu quét mã vạch khi camera bật
-        if (isCameraOn && videoStream) {
-            const videoElement = videoRef.current;
-            if (videoElement) {
-                barcodeReader.current.decodeFromVideoDevice('', videoElement, (result, error) => {
-                    if (result) {
-                        handleBarcodeScan(result.getText());  // Quét thành công
-                    }
-                    if (error) {
-                        console.error(error);
-                    }
-                });
-            }
-        } else {
-            barcodeReader.current.reset(); // Dừng quét khi camera tắt
-        }
-    }, [isCameraOn, videoStream]);
 
     return (
         <div className="header1">
@@ -147,25 +145,21 @@ const Header = () => {
                 }}
                 footer={null}
                 centered
-                width="50%"
+                width="30%"
+              
+                
             >
                 {isCameraOn && videoStream && (
                     <video
-                        ref={videoRef}  // Sử dụng ref để gán video stream
                         autoPlay
                         playsInline
-                        style={{
-                            width: '100%',
-                            height: 'auto',
-                            borderRadius: '10px',
-                            objectFit: 'cover',  // Đảm bảo video không bị méo
+                        ref={video => {
+                            if (video && !video.srcObject) {
+                                video.srcObject = videoStream;
+                            }
                         }}
+                        style={{ width: '100%', height: 'auto', borderRadius: '10px' }}
                     />
-                )}
-                {barcodeData && (
-                    <div className="barcode-result">
-                        <p>Quét Mã Thành Công: {barcodeData}</p>
-                    </div>
                 )}
             </Modal>
         </div>

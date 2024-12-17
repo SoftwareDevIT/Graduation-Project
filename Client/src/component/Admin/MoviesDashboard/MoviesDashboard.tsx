@@ -58,7 +58,32 @@ const MoviesDashboard: React.FC = () => {
           ) 
         : [];
 
-       
+        const updateMovieStatus = async (id: number, currentStatus: boolean) => {
+            try {
+                const newStatus = !currentStatus; // Đảo trạng thái hiện tại
+                await instance.post(`/manager/movieStatus/${id}`, { status: newStatus ? 1 : 0 });
+        
+                // Cập nhật trạng thái trên giao diện
+                dispatch({
+                    type: 'UPDATE_MOVIE_STATUS',
+                    payload: { id, status: newStatus ? 1 : 0 },
+                });
+        
+                notification.success({
+                    message: 'Cập Nhật Trạng Thái',
+                    description: `Phim đã được ${newStatus ? 'hiện' : 'ẩn'}.`,
+                    placement: 'topRight',
+                });
+            } catch (error) {
+                console.error('Lỗi khi cập nhật trạng thái phim:', error);
+                notification.error({
+                    message: 'Lỗi',
+                    description: 'Không thể cập nhật trạng thái phim.',
+                    placement: 'topRight',
+                });
+            }
+        };
+        
 const columns = [
     {
         title: 'ID',
@@ -96,14 +121,17 @@ const columns = [
         key: 'status',
         render: (movie: Movie) => (
             <div style={{ textAlign: 'left' }}>
-                <Switch 
-                    checkedChildren="On" 
-                    unCheckedChildren="Off" 
+                <Switch
+                    checkedChildren="On"
+                    unCheckedChildren="Off"
+                    checked={movie.status === 1} // Kiểm tra trạng thái hiện tại
+                    onChange={() => updateMovieStatus(movie.id, movie.status === 1)}
                 />
             </div>
         ),
         className: 'text-left',
     },
+    
     {
         title: 'Hành Động',
         key: 'action',
@@ -125,29 +153,6 @@ const columns = [
         className: 'text-center`',
     },
 ];
-const toggleStatus = async (id: number, checked: boolean) => {
-
-    try {
-        await instance.patch(`/manager/movies/${id}`, { active: checked });
-        dispatch({
-            type: 'UPDATE_MOVIE_STATUS',
-            payload: { id, active: checked },
-        });
-        notification.success({
-            message: 'Cập nhật trạng thái',
-            description: `Trạng thái phim đã được thay đổi.`,
-            placement: 'topRight',
-        });
-    } catch (error) {
-        console.error('Lỗi khi cập nhật trạng thái phim:', error);
-        notification.error({
-            message: 'Lỗi',
-            description: 'Không thể cập nhật trạng thái phim.',
-            placement: 'topRight',
-        });
-    }
-
-};
 
         
 
