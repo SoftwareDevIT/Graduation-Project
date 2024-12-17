@@ -72,7 +72,6 @@ const OrderHistoryApp: React.FC = () => {
         setLoading(false); // Stop loading on error
       });
   }, []);
-
   const handleDateFilter = (date: moment.Moment | null, dateString: string | string[]) => {
     const filterDate = Array.isArray(dateString) ? dateString[0] : dateString;
 

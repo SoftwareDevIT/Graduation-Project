@@ -19,13 +19,14 @@ class ResetSeats implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $seatIds;
-
+    public $userId;
     /**
      * Nhận vào đối tượng ghế cần reset.
      */
-    public function __construct(array $seatIds)
+    public function __construct(array $seatIds,$userId)
     {
         $this->seatIds = $seatIds;
+        $this->userId = $userId;
     }
 
     public function handle()
@@ -52,7 +53,7 @@ class ResetSeats implements ShouldQueue
         // Sau khi đã thu thập tất cả ghế hợp lệ, chỉ dispatch event một lần
         if (!empty($validSeatIds)) {
             Log::info('Broadcasting seat reset event for seats with IDs: ' . implode(', ', $validSeatIds));
-            event(new SeatReset($validSeatIds));  // Dispatch event chỉ một lần cho tất cả các seatId hợp lệ
+            event(new SeatReset($validSeatIds,$this->userId));  // Dispatch event chỉ một lần cho tất cả các seatId hợp lệ
         } else {
             Log::info('No seats to reset, event not broadcasted.');
         }
