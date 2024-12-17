@@ -267,7 +267,7 @@ class MovieController extends Controller
             $currentDate = now();
             $movies = Movie::whereHas('showtimes', function ($query) use ($currentDate) {
                 $query->whereColumn('showtimes.showtime_date', '<', 'movies.release_date')
-                ->where('showtimes.showtime_date', '>=', $currentDate);;
+                ->where('showtimes.showtime_date', '>=', $currentDate);
             })->with(['showtimes' => function ($query) {
                 $query->orderBy('showtime_date', 'asc');
             }])
