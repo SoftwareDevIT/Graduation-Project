@@ -188,6 +188,8 @@ Route::middleware(['auth:sanctum', 'role:manager'])->prefix('manager')->group(fu
     Route::post('newStatus/{id}', [NewCategoryController::class, 'status']);
     Route::post('comboStatus/{id}', [ComboController::class, 'status']);
     Route::post('userStatus/{id}', [RoleController::class, 'status']);
+    Route::post('roomStatus/{id}', [RoomController::class, 'status']);
+    Route::post('seatMapStatus/{id}', [SeatMapController::class, 'status']);
     // Ticket Printing
     Route::post('printTicket', [OrderController::class, 'printTicket']); // Print ticket and change status
     // Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
