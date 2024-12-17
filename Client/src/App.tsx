@@ -131,6 +131,7 @@ import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
 import OrderHistoryApp from "./component/PersonalPage/MovieTicket";
 import BookingManager from "./component/TicketandSeat/BookingManager";
 import MovieStatistics from "./component/Admin/MovieStatistics/MovieStatistics";
+import CinemaInfo from "./component/Cinema/CinemaInfo";
 
 function App() {
 
@@ -166,6 +167,8 @@ function App() {
         <Route path="/video" element={<Video />} />
         <Route path="/sp" element={<SupportCenter />} />
         <Route path="/postdetail/:slug" element={<PostDetail />} />
+
+        <Route path="/cinemainfo" element={<CinemaInfo/>} />
 
 
 

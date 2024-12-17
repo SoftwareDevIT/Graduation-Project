@@ -153,7 +153,7 @@ const OrderHistoryApp: React.FC = () => {
                           <b>Thời gian:</b> {order.showtime.showtime_date} {order.showtime.showtime_start}
                         </Text>
                         <Text>
-                          <TeamOutlined style={{ marginRight: "8px", color: "#52c41a" }} />
+                        <TeamOutlined style={{ marginRight: "8px", color: "#52c41a" }} />
                           <b>Ghế:</b> {order.seats.map((s) => s.seat_name).join(", ")}
                         </Text>
                         <Text style={{ fontWeight: 600 }}>
@@ -230,7 +230,7 @@ const OrderHistoryApp: React.FC = () => {
                           <b>Phòng:</b> {selectedOrder.showtime.room.room_name}
                         </Text>
                         <Text style={{ fontSize: "16px" }}>
-                          <CalendarOutlined style={{ marginRight: "10px", color: "#faad14" }} />
+                        <CalendarOutlined style={{ marginRight: "10px", color: "#faad14" }} />
                           <b>Thời gian:</b> {selectedOrder.showtime.showtime_date} {selectedOrder.showtime.showtime_start}
                         </Text>
 
