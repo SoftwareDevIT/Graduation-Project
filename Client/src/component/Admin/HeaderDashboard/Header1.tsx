@@ -77,7 +77,7 @@ const Header = () => {
     };
 
     useEffect(() => {
-        if (videoRef.current && videoStream) {
+if (videoRef.current && videoStream) {
             videoRef.current.srcObject = videoStream;
         }
     }, [videoStream]);
@@ -95,7 +95,7 @@ const Header = () => {
                         handleBarcodeScan(result.getText());  // Quét thành công
                     }
                     if (error) {
-                        console.error(error);
+                        // console.error(error);
                     }
                 });
             }
@@ -144,7 +144,7 @@ const Header = () => {
             </div>
             <Modal
                 title="Camera"
-                visible={isModalVisible}
+visible={isModalVisible}
                 onCancel={() => {
                     toggleCamera();
                 }}
