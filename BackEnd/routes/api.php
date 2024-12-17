@@ -132,6 +132,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(functi
     Route::post('newStatus/{id}', [NewCategoryController::class, 'status']);
     Route::post('comboStatus/{id}', [ComboController::class, 'status']);
     Route::post('userStatus/{id}', [RoleController::class, 'status']);
+    Route::get('dashboard/Movie', [DashboardAdminController::class, 'dashboardMovie']);
 });
 Route::post('/website-settings', [WebsiteSettingController::class, 'index']); // List Website Settings
 // Manager: Limited access to their assigned cinemas and related data
@@ -195,6 +196,7 @@ Route::middleware(['auth:sanctum', 'role:manager'])->prefix('manager')->group(fu
     //checkin ghế barcode
     Route::post('checkInSeat', [CheckInTicketController::class, 'checkInSeat']);
     Route::post('checkInBooking', [CheckInTicketController::class, 'checkInBooking']);
+    Route::get('dashboard/Movie', [DashboardAdminController::class, 'dashboardMovie']);
 });
 
 Route::middleware(['auth:sanctum', 'role:staff'])->prefix('staff')->group(function () {
@@ -259,4 +261,3 @@ Route::get('/env-config', [ConfigController::class, 'envConfig']);
 
 
 
-Route::get('dashboard/Movie', [DashboardAdminController::class, 'dashboardMovie']);
