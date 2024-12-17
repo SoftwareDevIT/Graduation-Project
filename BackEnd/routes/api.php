@@ -148,6 +148,7 @@ Route::middleware(['auth:sanctum', 'role:manager'])->prefix('manager')->group(fu
 
     // Movies, Rooms, and Showtimes
     Route::apiResource('movies', MovieController::class); // Manage movies
+    Route::apiResource('order', OrderController::class);
     Route::apiResource('room', RoomController::class); // Manage rooms
     Route::apiResource('showtimes', ShowtimeController::class); // Manage showtimes
     Route::post('showtimePayload', [ShowtimeController::class, 'storeWithTimeRange']); // Add showtimes automatically
@@ -203,6 +204,7 @@ Route::middleware(['auth:sanctum', 'role:staff'])->prefix('staff')->group(functi
     Route::get('/filterByDateByMovie', [FilterByDateController::class, 'filterByDateByMovie']);
     // Ticket Printing
     Route::post('printTicket', [OrderController::class, 'printTicket']); // in vé và thay đổi trạng thái
+    Route::apiResource('order', OrderController::class);
     //checkin ghế barcode
     Route::post('checkInSeat', [CheckInTicketController::class, 'checkInSeat']);
     Route::post('checkInBooking', [CheckInTicketController::class, 'checkInBooking']);

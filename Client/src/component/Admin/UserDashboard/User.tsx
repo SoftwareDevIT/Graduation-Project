@@ -12,20 +12,43 @@ const UserDashboard: React.FC = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(0);
     const { Search } = Input;
+    const [userRole, setUserRole] = useState<string>("");
+
+  // Fetch user role from localStorage
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("user_profile") || "{}");
+    const roles = userData.roles || [];
+    console.log("data role:", roles);
+    if (roles.length > 0) {
+      setUserRole(roles[0].name);
+    } else {
+      setUserRole("unknown"); // Gán giá trị mặc định khi không có vai trò
+    }
+  }, []);
 
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await instance.get(`/manager/all-user?page=${currentPage}`);
+                let response;
+                if (userRole === "admin") {
+                  response = await instance.get('/admin/all-user');
+                } else if (userRole === "manager") {
+                  response = await instance.get('/manager/all-user');
+                } else {
+                  response = await instance.get('/cinema');
+                }
                 setUsers(response.data.data);
                 setTotalPages(response.data.last_page);
             } catch (err) {
                 setError('Lỗi khi tải người dùng');
             }
         };
+        if (userRole !== "") {
+            fetchUsers();
+          }
 
-        fetchUsers();
-    }, [currentPage]);
+        
+    }, [currentPage,userRole]);
 
     // Filter users based on search term
     const filteredUsers = users.filter(user =>
