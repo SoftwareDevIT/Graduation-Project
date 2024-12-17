@@ -101,7 +101,7 @@ const PromotionForm = () => {
         });
       } else {
         // Create new promotion
-        await instance.post("/promotions", data);
+        await instance.post("/manager/promotions", data);
         notification.success({
           message: "Thêm khuyến mãi thành công!",
         });

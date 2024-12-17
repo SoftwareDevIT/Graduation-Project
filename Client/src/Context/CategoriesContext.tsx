@@ -55,7 +55,7 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("user_profile") || "{}");
     const roles = userData.roles || [];
-    console.log("data role:", roles);
+   
     if (roles.length > 0) {
       setUserRole(roles[0].name);
     } else {

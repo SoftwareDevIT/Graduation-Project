@@ -14,16 +14,45 @@ const OrdersDashboard: React.FC = () => {
     pageSize: 5,
     total: 0,
   });
+  const [userRole, setUserRole] = useState<string>("");
 
+  // Fetch user role from localStorage
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("user_profile") || "{}");
+    const roles = userData.roles || [];
+   
+    if (roles.length > 0) {
+      setUserRole(roles[0].name);
+    } else {
+      setUserRole("unknown"); // Gán giá trị mặc định khi không có vai trò
+    }
+  }, []);
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const response = await instance.get(`/order`, {
-          params: {
-            page: pagination.current,
-            pageSize: pagination.pageSize,
-          },
-        });
+        let response;
+        if (userRole === "manager") {
+          response = await await instance.get(`/manager/order`, {
+            params: {
+              page: pagination.current,
+              pageSize: pagination.pageSize,
+            },
+          });
+        } else if (userRole === "staff") {
+          response = await instance.get(`/staff/order`, {
+            params: {
+              page: pagination.current,
+              pageSize: pagination.pageSize,
+            },
+          });
+        }else {
+          response = await await instance.get(`/order`, {
+            params: {
+              page: pagination.current,
+              pageSize: pagination.pageSize,
+            },
+          });
+        }
         setBookings(response.data.data);
         setPagination((prev) => ({
           ...prev,
@@ -36,9 +65,11 @@ const OrdersDashboard: React.FC = () => {
         });
       }
     };
-
-    fetchBookings();
-  }, [pagination.current, pagination.pageSize]);
+    if (userRole !== "") {
+      fetchBookings();
+    }
+    
+  }, [pagination.current, pagination.pageSize,userRole]);
 
   const getStatusStyle = (status: any) => {
     switch (status) {
