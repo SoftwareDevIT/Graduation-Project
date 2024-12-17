@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { Link, NavLink } from "react-router-dom";
 import {
   FaTachometerAlt,
   FaChartLine,
@@ -23,47 +23,22 @@ import {
   FaBullhorn,
   FaPlayCircle,
   FaBuilding,
-  FaReceipt,
-  FaVideo,
-  FaUserTie,
 } from "react-icons/fa";
 import "./Sidebar.css";
 
 const Sidebar: React.FC = () => {
   const [openMenu, setOpenMenu] = useState<{ [key: string]: boolean }>({});
+  const [userRole, setUserRole] = useState<string>("");
   useEffect(() => {
-    const path = location.pathname;
-
-    // Xác định các menu con liên quan
-    const updatedMenuState: { [key: string]: boolean } = {};
-    if (
-      path.startsWith('/admin/cinemas') ||
-      path.startsWith('/admin/rooms') ||
-      path.startsWith('/admin/seat-maps') ||
-      path.startsWith('/admin/rank')
-    ) {
-      updatedMenuState['cinema'] = true;
+    // Lấy thông tin từ localStorage
+    const userData = JSON.parse(localStorage.getItem("user_profile") || "{}");
+    const roles = userData.roles || [];
+    console.log("data role:", roles);
+    // Lấy vai trò đầu tiên (nếu có)
+    if (roles.length > 0) {
+      setUserRole(roles[0].name); // Gán vai trò (ví dụ: "staff", "admin")
     }
-    if (
-      path.startsWith('/admin/movies') ||
-      path.startsWith('/admin/showtimes')
-    ) {
-      updatedMenuState['movies'] = true;
-    }
-    if (
-      path.startsWith('/admin/combo') ||
-      path.startsWith('/admin/promotions') ||
-      path.startsWith('/admin/method') ||
-      path.startsWith('/admin/orders')
-    ) {
-      updatedMenuState['services'] = true;
-    }
-    if (path.startsWith('/admin/posts')) {
-      updatedMenuState['content'] = true;
-    }
-
-    setOpenMenu(updatedMenuState);
-  }, [location.pathname]);
+  }, []);
 
   const toggleMenu = (menuKey: string) => {
     setOpenMenu((prev) => ({
@@ -80,12 +55,12 @@ const Sidebar: React.FC = () => {
   return (
     <div className="container-wrapper">
       <div className="sidebar">
-      <div className="header-logoo col-lg-1 col-md-4 col-sm-4 col-4 ">
-            <Link to={"/"}>
-              {" "}
-              <span className="logo-first-letter1">F</span>lickHive
-            </Link>
-          </div>
+        <div className="header-logoo col-lg-1 col-md-4 col-sm-4 col-4 ">
+          <Link to={"/"}>
+            {" "}
+            <span className="logo-first-letter1">F</span>lickHive
+          </Link>
+        </div>
         <ul>
           {(userRole === "manager" || userRole === "admin")  && (
             <>
@@ -107,7 +82,6 @@ const Sidebar: React.FC = () => {
                 {openMenu["cinema"] ? <FaChevronDown /> : <FaChevronRight />}
               </span>
               <ul className={openMenu["cinema"] ? "submenu open" : "submenu"}>
-              {(userRole === "admin")  && (
                 <li>
                   <NavLink
                     to={"/admin/cinemas"}
@@ -117,12 +91,11 @@ const Sidebar: React.FC = () => {
                     <FaTheaterMasks /> Quản lí rạp chiếu phim
                   </NavLink>
                 </li>
-              )}
                 <li>
                   <NavLink
                     to={"/admin/rooms"}
                     onClick={handleLinkClick}
-                    className={({ isActive }) => (isActive ? "active" : "")}
+className={({ isActive }) => (isActive ? "active" : "")}
                   >
                     <FaIndustry /> Quản lí phòng rạp
                   </NavLink>
@@ -137,7 +110,6 @@ const Sidebar: React.FC = () => {
                     Sơ đồ ghế
                   </NavLink>
                 </li>
-                {(userRole === "admin")  && (
                 <li>
                   <NavLink
                     to={"/admin/rank"}
@@ -148,7 +120,6 @@ const Sidebar: React.FC = () => {
                     Quản lí hạng
                   </NavLink>
                 </li>
-                )}
               </ul>
             </li>
           )}
@@ -180,34 +151,6 @@ const Sidebar: React.FC = () => {
               </ul>
             </li>
           )}
-          {(userRole === "manager")  && (
-            <li>
-              <span onClick={() => toggleMenu("actor")}>
-                <FaTheaterMasks /> Đạo diễn & Diễn viên{""}
-                {openMenu["actor"] ? <FaChevronDown /> : <FaChevronRight />}
-              </span>
-              <ul className={openMenu["actor"] ? "submenu open" : "submenu"}>
-                <li>
-                  <NavLink
-                    to={"/admin/director"}
-                    onClick={handleLinkClick}
-                    className={({ isActive }) => (isActive ? "active" : "")}
-                  >
-                  <FaVideo /> Quản lí đạo diễn
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to={"/admin/actor"}
-                    onClick={handleLinkClick}
-                    className={({ isActive }) => (isActive ? "active" : "")}
-                  >
-                    <FaUserTie /> Quản lí diễn viên
-                  </NavLink>
-                </li>
-              </ul>
-            </li>
-          )}
           <li>
             {(userRole === "manager" || userRole === "staff") && (
               <span onClick={() => toggleMenu("services")}>
@@ -216,9 +159,8 @@ const Sidebar: React.FC = () => {
               </span>
             )}
             <ul className={openMenu["services"] ? "submenu open" : "submenu"}>
-           
               {/* Nếu userRole là "staff", chỉ hiển thị mục Quản lý đơn hàng */}
-              {(userRole === "manager" || userRole === "admin")  && (
+              {userRole == "staff || manager" && (
                 <li>
                   <NavLink
                     to={"/admin/orders"}
@@ -229,7 +171,7 @@ const Sidebar: React.FC = () => {
                   </NavLink>
                 </li>
               )}
-              {/* Nếu không phải staff, hiển thị các mục khác */}
+{/* Nếu không phải staff, hiển thị các mục khác */}
               {userRole == "manager" && (
                 <>
                   <li>
@@ -264,27 +206,41 @@ const Sidebar: React.FC = () => {
             </ul>
           </li>
 
-          <li>
-          <span onClick={() => toggleMenu('content')}>
-  <FaBullhorn style={{ marginRight:"-110px"}}/> Nội dung  {openMenu['content'] ? <FaChevronDown /> : <FaChevronRight />}
-</span>
-            <ul className={openMenu['content'] ? 'submenu open' : 'submenu'}>
-              <li><NavLink to={'/admin/posts'} onClick={handleLinkClick} className={({ isActive }) => (isActive ? 'active' : '')}><FaNewspaper /> Quản lí bài viết</NavLink></li>
-              
-            </ul>
-          </li>
-
-          <li>
-            <NavLink to="/admin/user">
-              <FaUserShield /> Quản lý người dùng
-            </NavLink>
-          </li>
-
-          <li>
-            <NavLink to="/admin/website-settings">
-              <FaCogs /> Cấu hình website
-            </NavLink>
-          </li>
+          {userRole == "manager" && (
+            <li>
+              <span onClick={() => toggleMenu("content")}>
+                <FaBullhorn style={{ marginRight: "-110px" }} /> Nội dung{" "}
+                {openMenu["content"] ? <FaChevronDown /> : <FaChevronRight />}
+              </span>
+              <ul className={openMenu["content"] ? "submenu open" : "submenu"}>
+                <li>
+                  <NavLink
+                    to={"/admin/posts"}
+                    onClick={handleLinkClick}
+                    className={({ isActive }) => (isActive ? "active" : "")}
+                  >
+                    <FaNewspaper /> Quản lí bài viết
+                  </NavLink>
+                </li>
+              </ul>
+            </li>
+          )}
+          {(userRole === "manager" || userRole === "admin")  && (
+         
+              <li>
+                <NavLink to="/admin/user">
+                  <FaUserShield /> Quản lý người dùng
+                </NavLink>
+              </li>
+            )}
+              {( userRole === "admin")  && (
+              <li>
+                <NavLink to="/admin/website-settings">
+                  <FaCogs /> Cấu hình website
+                </NavLink>
+              </li>
+     
+          )}
         </ul>
       </div>
     </div>
