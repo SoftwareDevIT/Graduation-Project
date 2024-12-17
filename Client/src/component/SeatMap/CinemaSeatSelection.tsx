@@ -58,6 +58,57 @@ const CinemaSeatSelection: React.FC = () => {
   const [echoInstance, setEchoInstance] = useState<Echo<"pusher"> | null>(null);
 
   const [status, setStatus] = useState("Initializing...");
+
+
+  const setupRealtime2 = async () => {
+    try {
+      const echo = await initializeEcho();
+      console.log("kết nối thành công ", echo);
+      const userId = localStorage.getItem("user_id");
+   
+      if (!userId) {
+        console.error("User ID is not available in local storage.");
+        return;
+      }
+   
+      if (echo) {
+        const channel = echo.private(`seats-${userId}`);  // Kênh cho userId
+        console.log("ok:", channel);
+   
+        // Lắng nghe sự kiện SeatReset
+        channel.listen("SeatReset", (eventData: any) => {
+          console.log("Realtime data received:", eventData);  // Kiểm tra log xem sự kiện có đến không
+   
+          const { seats, message } = eventData;
+   
+          // Gọi hàm hiển thị modal khi nhận sự kiện
+          showModal({
+            title: "Thông báo",
+            content: `${message}. Ghế bị reset: ${seats.join(", ")}`,
+          });
+        });
+      }
+    } catch (error) {
+      console.error("Failed to setup realtime connection:", error);
+    }
+  };
+  
+
+  // Hàm hiển thị modal
+  const showModal = ({ title, content }: { title: string; content: string }) => {
+    Modal.info({
+      title: title,
+      content: (
+        <div>
+          <p>{content}</p>  {/* Nội dung thông báo */}
+        </div>
+      ),
+      onOk() {
+        console.log("Modal closed.");
+      },
+    });
+  };
+
   useEffect(() => {
     const fetchRoomAndSeats = async () => {
       try {
@@ -86,7 +137,7 @@ const CinemaSeatSelection: React.FC = () => {
         setReservedSeats(reservedSeatSet);
         setLoading(false);
   
-        return seatLayoutData?.room?.id; // Trả về roomId
+        return seatLayoutData?.room_id;
       } catch (error) {
         console.error("Error fetching room or seat data", error);
         setError("Không thể tải dữ liệu, vui lòng thử lại!");
@@ -95,11 +146,15 @@ const CinemaSeatSelection: React.FC = () => {
       }
     };
   
+    
     const setupRealtime = async (roomId: string) => {
       try {
         const echo = await initializeEcho();
         console.log("Connected to Pusher!", echo);
-  
+        if (!roomId) {
+          console.error("Room ID is missing!");
+          return;
+        }
         if (echo) {
           const channel = echo.private(`seats-${roomId}`); // Dùng roomId đã truyền vào
           console.log("Connected to channel:", channel);
@@ -126,7 +181,12 @@ const CinemaSeatSelection: React.FC = () => {
       .catch((error) => {
         console.error("Error initializing data", error);
       });
+      
+      const initializeRealtime = async () => {
+        await setupRealtime2();  // Gọi hàm setupRealtime2
+      };
   
+      initializeRealtime();
     // Cleanup khi component unmount hoặc dependencies thay đổi
     return () => {
       if (echoInstance) {
