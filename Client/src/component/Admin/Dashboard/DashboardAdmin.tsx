@@ -308,7 +308,7 @@ useEffect(() => {
                 allowClear
                 value={selectedCinema}
                 onChange={(value) => setSelectedCinema(value)}
-                style={{ width: 300 }}
+                style={{ width: 700}}
               >
                 <Option value="">Tất cả</Option>
                 {cinemas.map((cinema) => (
@@ -331,11 +331,7 @@ useEffect(() => {
       </Select>
     </Form.Item>
   
-            <Form.Item label="">
-      <Button type="primary" onClick={exportToExcel} block style={{ width: 300 }}>
-        Export to Excel
-      </Button>
-    </Form.Item>
+            
           </Space>
     </Form>
     <div className="summary">
@@ -529,7 +525,14 @@ useEffect(() => {
         {/* Thêm bảng vào dưới biểu đồ */}
         <div className="recent-container">
         <div className="recent-orders">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
   <h3>Đơn hàng gần đây</h3>
+  <Form.Item label="">
+      <Button type="primary" onClick={exportToExcel} block style={{ width: 300 }}>
+        Export to Excel
+      </Button>
+    </Form.Item>
+    </div>
   <div style={{ overflowX: 'auto' }}>
     <table>
       <thead>
@@ -618,7 +621,7 @@ useEffect(() => {
                   <td>{movie.total_revenue.toLocaleString()}₫</td>
                   <td>{movie.showtime_count}</td>
                   <td>
-                    <Link to={'/admin/moviestatistics'} className="btn btn-primary">Chi Tiết</Link>
+                    <Link to={`/admin/moviestatistics/${movie.movie_id}`} className="btn btn-primary">Chi Tiết</Link>
                   </td>
                 </tr>
               ))}

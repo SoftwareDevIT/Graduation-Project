@@ -58,7 +58,7 @@ class RoomService
 
     public function delete(int $id): ?bool
     {
-        $room = $this->filterByRole(Room::where('id', $id))->firstOrFail();
+        $room = $this->filterByRole(Room::where('id', $id)->where('status',0))->firstOrFail();
         return $room->delete();
     }
 

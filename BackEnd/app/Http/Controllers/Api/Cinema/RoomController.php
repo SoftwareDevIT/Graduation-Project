@@ -47,6 +47,7 @@ class RoomController extends Controller
     //         return $e->getMessage();
     //     }
     // }
+
     public function getRoomByCinema($id)
     {
         try {
@@ -104,5 +105,4 @@ class RoomController extends Controller
             return $e->getMessage();
         }
     }
-
 }

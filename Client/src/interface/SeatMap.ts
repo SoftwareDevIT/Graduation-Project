@@ -12,4 +12,5 @@ import { SeatAdmin } from "./SeatAdmin";
     seat_structure: SeatAdmin[] | null;
     created_at: string;
     updated_at: string;
+    status: boolean;
   }

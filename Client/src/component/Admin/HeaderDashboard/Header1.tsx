@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './Header1.css';
 import { FaBell, FaCog, FaUserCircle, FaCamera } from 'react-icons/fa';
 import { Modal } from 'antd';
 import { User } from '../../../interface/User';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { BrowserMultiFormatReader } from '@zxing/library';  // Import thư viện quét mã vạch
+import axios from 'axios';
 
 const Header = () => {
     const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -12,8 +14,13 @@ const Header = () => {
     const [isCameraOn, setIsCameraOn] = useState(false);
     const [videoStream, setVideoStream] = useState<MediaStream | null>(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [barcodeData, setBarcodeData] = useState<string | null>(null);  // Lưu dữ liệu quét được
+    const videoRef = useRef<HTMLVideoElement | null>(null);  // ref để điều khiển video
+    const barcodeReader = useRef(new BrowserMultiFormatReader()); // Khởi tạo đối tượng quét mã vạch
     const navigate = useNavigate();
     const location = useLocation();
+    const [checkInData, setCheckInData] = useState<any>(null);
+
 
     useEffect(() => {
         const storedUser = localStorage.getItem('user_profile');
@@ -21,7 +28,20 @@ const Header = () => {
             setUser(JSON.parse(storedUser));
         }
     }, []);
+    const checkInSeat = async (barcode: string) => {
+        try {
+            const response = await axios.post('/api/manager/checkInSeat', { barcode });
+            console.log("Check-in thành công:", response.data);
 
+            setCheckInData(response.data.data); // Lưu dữ liệu vào state
+
+            // Hiển thị thông báo thành công
+            alert(response.data.message || 'Check-in thành công');
+        } catch (error: any) {
+            console.error("Lỗi khi check-in:", error);
+            alert(`Lỗi khi check-in: ${error.response?.data?.message || 'Có lỗi xảy ra'}`);
+        }
+    };
     const handleLogout = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("user_id");
@@ -36,7 +56,7 @@ const Header = () => {
 
     const toggleCamera = async () => {
         if (isCameraOn) {
-            // Turn off the camera
+            // Tắt camera
             if (videoStream) {
                 videoStream.getTracks().forEach(track => track.stop());
                 setVideoStream(null);
@@ -44,7 +64,7 @@ const Header = () => {
             setIsCameraOn(false);
             setIsModalVisible(false);
         } else {
-            // Turn on the camera
+            // Bật camera
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true });
                 setVideoStream(stream);
@@ -56,48 +76,51 @@ const Header = () => {
         }
     };
 
+    const handleBarcodeScan = (result: string) => {
+        setBarcodeData(result);  // Cập nhật dữ liệu quét được
+        console.log("Barcode Data:", result);  // In dữ liệu ra console
+    };
+
     const getPageName = () => {
         const path = location.pathname;
         const pageName = path.split('/').pop();
-        switch(pageName) {
-            case 'dashboard':
-                return 'Bảng Điều Khiển Admin';
-            case 'user':
-                return 'Quản Lí Người Dùng';
-            case 'showtimes':
-                return 'Quản Lí Suất Chiếu';
-            case 'orders':
-                return 'Quản Lí Đơn Hàng';
-            case 'posts':
-                return 'Quản Lí Bài Viết';
-            case 'categories':
-                return 'Quản Lí Thể Loại';
-            case 'countries':
-                return 'Quản Lí Khu Vực';
-            case 'combo':
-                return 'Quản Lí Combo Nước';
-            case 'cinemas':
-                return 'Quản Lí Rạp Chiếu Phim';
-            case 'movies':
-                return 'Quản Lí Phim';
-            case 'rooms':
-                return 'Quản Lí Phòng Rạp';
-            case 'RevenueByCinema':
-                return 'Doanh Thu Theo Rạp';
-            case 'RevenueByMovie':
-                return 'Doanh Thu Theo Phim';
-            case 'actor':
-                return 'Quản Lí Diễn Viên'
-            case 'director':
-                return 'Quản Lí Đạo Diễn'
-            case 'method':
-                return 'Phương Thức Thanh Toán'
-            case 'promotions':
-                return 'Mã Giảm Giá'
-            default:
-                return 'Welcome';
+        switch (pageName) {
+            case 'dashboard': return 'Bảng Điều Khiển Admin';
+            case 'user': return 'Quản Lí Người Dùng';
+            // Các trường hợp khác...
+            default: return 'Welcome';
         }
     };
+
+
+    useEffect(() => {
+        if (barcodeData) navigate(barcodeData.replace(/^http:\/\/localhost:5173/, ""));
+    }, [barcodeData, navigate]);
+
+    useEffect(() => {
+        if (videoRef.current && videoStream) {
+            videoRef.current.srcObject = videoStream;
+        }
+    }, [videoStream]);
+
+    useEffect(() => {
+        // Bắt đầu quét mã vạch khi camera bật
+        if (isCameraOn && videoStream) {
+            const videoElement = videoRef.current;
+            if (videoElement) {
+                barcodeReader.current.decodeFromVideoDevice('', videoElement, (result, error) => {
+                    if (result) {
+                        handleBarcodeScan(result.getText());  // Quét thành công
+                    }
+                    if (error) {
+                        console.error(error);
+                    }
+                });
+            }
+        } else {
+            barcodeReader.current.reset(); // Dừng quét khi camera tắt
+        }
+    }, [isCameraOn, videoStream]);
 
     return (
         <div className="header1">
@@ -112,7 +135,7 @@ const Header = () => {
                         <span className="notification-badge">3</span>
                     </div>
                     <div className="icon">
-                        <Link to={'/admin/website-settings'} style={{color: "#004d40"}} >
+                        <Link to={'/admin/website-settings'} style={{ color: "#004d40" }} >
                             <FaCog />
                         </Link>
                     </div>
@@ -121,9 +144,9 @@ const Header = () => {
                         {isProfileOpen && user && (
                             <div className="profile-dropdown">
                                 <div className="profile-info">
-                                    <img 
-                                        src={user.avatar || "https://via.placeholder.com/80"} 
-                                        alt="User Avatar" 
+                                    <img
+                                        src={user.avatar || "https://via.placeholder.com/80"}
+                                        alt="User Avatar"
                                         className="profile-avatar"
                                     />
                                     <div className="profile-details">
@@ -153,15 +176,37 @@ const Header = () => {
                     <video
                         autoPlay
                         playsInline
-                        ref={video => {
-                            if (video && !video.srcObject) {
-                                video.srcObject = videoStream;
-                            }
+                        style={{
+                            width: '100%',
+                            height: 'auto',
+                            borderRadius: '10px',
+                            objectFit: 'cover',
                         }}
-                        style={{ width: '100%', height: 'auto', borderRadius: '10px' }}
                     />
                 )}
+                {barcodeData && (
+                    <div className="barcode-result">
+                        <p>Quét Mã Thành Công: <a href={barcodeData}>{barcodeData}</a></p>
+
+                    </div>
+                )}
+                {checkInData && (
+                    <div className="checkin-info" style={{ marginTop: '20px' }}>
+                        <h3 style={{ color: '#004d40' }}>Thông Tin Check-in</h3>
+                        <p><strong>Mã Check-in:</strong> {checkInData.code}</p>
+                        <p><strong>Tên Ghế:</strong> {checkInData.seat_name}</p>
+                        <p><strong>Loại Ghế:</strong> {checkInData.seat_type}</p>
+                        <p><strong>Phòng Chiếu:</strong> {checkInData.room_id}</p>
+                        <p><strong>Trạng Thái:</strong> {checkInData.status}</p>
+                        <img
+                            src={checkInData.barcode}
+                            alt="Barcode"
+                            style={{ marginTop: '10px', width: '150px', height: 'auto' }}
+                        />
+                    </div>
+                )}
             </Modal>
+
         </div>
     );
 };

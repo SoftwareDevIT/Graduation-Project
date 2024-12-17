@@ -10,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button, notification } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
+import { Movie } from '../../../interface/Movie';
 
 // Schema validation
 const showtimeSchema = z.object({
@@ -24,7 +25,7 @@ const showtimeSchema = z.object({
       today.setHours(0, 0, 0, 0); // Reset giờ phút giây để chỉ so sánh ngày
       return selectedDate >= today;
     }, 'Ngày chiếu không được nhỏ hơn ngày hiện tại'),
-    showtime_start: z
+  showtime_start: z
     .string()
     .min(1, 'Vui lòng chọn giờ bắt đầu')
     .regex(/^\d{2}:\d{2}$/, 'Giờ bắt đầu phải có định dạng HH:mm'),
@@ -46,10 +47,6 @@ const ShowtimesForm: React.FC = () => {
   // State variables
   const [moviesList, setMoviesList] = useState<any[]>([]);
   const [roomsList, setRoomsList] = useState<Room[]>([]);
-  const [showtimesList, setShowtimesList] = useState<Showtime[]>(() => {
-    const savedShowtimes = localStorage.getItem('showtimesList');
-    return savedShowtimes ? JSON.parse(savedShowtimes) : [];
-  });
 
   // Fetch initial data
   useEffect(() => {
@@ -62,7 +59,7 @@ const ShowtimesForm: React.FC = () => {
       if (id) {
         const response = await instance.get(`/manager/showtimes/${id}`);
         const showtimeData = response.data.data;
-
+        
         // Populate form fields for edit mode
         reset({
           movie_id: showtimeData.movie_id,
@@ -73,18 +70,15 @@ const ShowtimesForm: React.FC = () => {
         });
       }
     };
-    fetchRooms(); // Lấy danh sách phòng
+    
+    fetchRooms(); // Fetch rooms list
     fetchMovies();
     fetchShowtime();
   }, [id, reset]);
 
-  useEffect(() => {
-    localStorage.setItem('showtimesList', JSON.stringify(showtimesList));
-  }, [showtimesList]);
-
-  // Fetch rooms by movie
+  // Fetch rooms
   const fetchRooms = async () => {
-    const response = await instance.get('/manager/room'); // Lấy danh sách phòng từ API
+    const response = await instance.get('/manager/room');
     setRoomsList(response.data.data);
   };
 
@@ -96,60 +90,27 @@ const ShowtimesForm: React.FC = () => {
     };
   
     if (!id) {
-      setShowtimesList((prevList) => [...prevList, formattedData]);
+      await addOrUpdateShowtime(formattedData); // Add new showtime
+      notification.success({
+        message: 'Thêm Suất Chiếu Thành Công!',
+        description: 'Suất chiếu mới đã được thêm vào danh sách.',
+      });
     } else {
-      await addOrUpdateShowtime(formattedData, id);
+      await addOrUpdateShowtime(formattedData, id); // Update existing showtime
       notification.success({
         message: 'Cập nhật Suất Chiếu Thành Công!',
         description: 'Suất chiếu đã được cập nhật vào danh sách.',
       });
-      navigate('/admin/showtimes');
     }
   
     reset();
-  };
-  
-
-  // Delete a showtime
-  const handleDelete = (index: number) => {
-    const newShowtimesList = [...showtimesList];
-    newShowtimesList.splice(index, 1);
-    setShowtimesList(newShowtimesList);
-    notification.success({
-      message: 'Xóa Suất Chiếu Thành Công!',
-      description: 'Suất chiếu đã được xóa khỏi danh sách.',
-    });
-  };
-
-  // Submit all showtimes in bulk
-  const handleSubmitAll = async () => {
-    if (
-      showtimesList.length === 0 ||
-      showtimesList.some(
-        (item) =>
-          !item.movie_id || !item.room_id || !item.showtime_date || !item.showtime_start
-      )
-    ) {
-      notification.error({
-        message: 'Lỗi khi gửi tất cả Showtime',
-        description: 'Vui lòng điền đầy đủ thông tin cho tất cả các suất chiếu.',
-      });
-      return;
-    }
-    localStorage.setItem('showtimesList', JSON.stringify([]));
-    await addOrUpdateShowtime(showtimesList);
-    notification.success({
-      message: 'Gửi Tất Cả Suất Chiếu Thành Công!',
-      description: 'Suất chiếu mới đã được thêm vào danh sách.',
-    });
-
     navigate('/admin/showtimes');
   };
 
   return (
     <div className="container mt-5">
       <h2 className="text-center mb-4">{id ? 'Cập nhật Suất Chiếu' : 'Thêm Suất Chiếu'}</h2>
-      <form onSubmit={handleSubmit(onSubmit)} className="shadow p-4 rounded bg-light" >
+      <form onSubmit={handleSubmit(onSubmit)} className="shadow p-4 rounded bg-light">
         <div className="mb-3">
           <Link to="/admin/showtimesauto/add">
             <Button type="primary" icon={<PlusCircleOutlined />}>
@@ -212,58 +173,12 @@ const ShowtimesForm: React.FC = () => {
               Cập nhật Showtime
             </button>
           ) : (
-            <>
-              <button type="submit" className="btn btn-primary w-30">
-                Thêm Showtime
-              </button>
-      <button
-  type="button"
-  onClick={handleSubmitAll}
-  className="btn btn-secondary w-30 mt-2"
-  style={{marginLeft: "800px"}}
->
-  Gửi tất cả Suất Chiếu
-</button>
-
-            </>
+            <button type="submit" className="btn btn-primary w-30">
+              Thêm Showtime
+            </button>
           )}
         </div>
       </form>
-
-      <div className="showtimes-list mt-5">
-        <h3>Danh Sách Suất Chiếu</h3>
-        <table className="table table-bordered">
-          <thead>
-            <tr>
-              <th>Phim</th>
-              <th>Phòng</th>
-              <th>Ngày Chiếu</th>
-              <th>Giờ Bắt Đầu</th>
-              <th>Giá</th>
-              <th>Hành Động</th>
-            </tr>
-          </thead>
-          <tbody>
-            {showtimesList.map((showtime, index) => (
-              <tr key={index}>
-                <td>{showtime.movie_id}</td>
-                <td>{showtime.room_id}</td>
-                <td>{showtime.showtime_date}</td>
-                <td>{showtime.showtime_start}</td>
-                <td>{showtime.price}</td>
-                <td>
-                  <button
-                    className="btn btn-danger"
-                    onClick={() => handleDelete(index)}
-                  >
-                    Xóa
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
     </div>
   );
 };

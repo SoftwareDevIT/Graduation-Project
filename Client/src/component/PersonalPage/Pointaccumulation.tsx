@@ -122,7 +122,7 @@ const filteredTransactions = pointHistories
   <div className="account-nav-item">
     <span className="account-nav-title">
       <NavLink 
-        to="/point" 
+        to="/Pointaccumulation" 
         className={({ isActive }) => isActive ? 'active-link' : ''}>
         Tích Điểm
       </NavLink>

@@ -18,7 +18,7 @@ const OrdersDashboard: React.FC = () => {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const response = await instance.get(`/order`, {
+        const response = await instance.get(`/manager/order`, {
           params: {
             page: pagination.current,
             pageSize: pagination.pageSize,

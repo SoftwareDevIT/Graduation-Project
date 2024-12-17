@@ -97,4 +97,30 @@ class DashboardAdminController extends Controller
             'movie_revenue' => $movieRevenue,
         ], 200);
     }
+
+    public function dashboardMovie(Request $request){
+
+        $movie_id = $request->query('movie_id');
+        if (empty($movie_id)) {
+            return $this->error('Vui lòng cung cấp movie_id');
+        }
+
+        $status = $request->query('status');
+        $cinema_id = $request->query('cinema_id');
+        $start_date = $request->query('start_date');
+        $end_date = $request->query('end_date');
+        
+        $movieRevenue = $this->dashboardAdminService->dashboardMovie($movie_id, $status, $cinema_id, $start_date, $end_date);
+        $daychart = $this->dashboardAdminService->daymoviechart($movieRevenue, $start_date, $end_date);
+        $cinema_movie_chart = $this->dashboardAdminService->cinemamoviechart($movieRevenue);
+
+        $listmovie = $this->dashboardAdminService->listmovie($movieRevenue);
+        return response()->json([
+            'status' => true,
+            'message' => 'Success',
+            'day_chart_movie' => $daychart,
+            'cinema_movie_chart' => $cinema_movie_chart,
+            'movie_dashboarch' => $listmovie,
+        ], 200);
+    }
 }
