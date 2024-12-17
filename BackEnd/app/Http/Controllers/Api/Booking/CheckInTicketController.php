@@ -22,6 +22,7 @@ class CheckInTicketController extends Controller
         }
         // Cập nhật trạng thái check-in
         $ticket->is_checked_in = true;
+        $ticket->save();
         return $this->success($ticket, 'Checkin thành công', 200);
     }
     public function checkInBooking(Request $request)
