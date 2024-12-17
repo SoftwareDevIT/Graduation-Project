@@ -3,6 +3,7 @@ import { Roles } from '../../../interface/Roles';
 import { User } from '../../../interface/User';
 import { Permission } from '../../../interface/Permissions';
 import instance from '../../../server';
+import { Pagination } from 'antd';
 
 const RoleAndUserManagement = () => {
   const [roles, setRoles] = useState<Roles[]>([]);
@@ -11,12 +12,14 @@ const RoleAndUserManagement = () => {
   const [newRoleName, setNewRoleName] = useState('');
   const [selectedPermissions, setSelectedPermissions] = useState<{ [key: string]: string[] }>({});
   const [userRole, setUserRole] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(5);
 
   // Fetch user role from localStorage
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("user_profile") || "{}");
     const roles = userData.roles || [];
-    console.log("data role:", roles);
+    
     if (roles.length > 0) {
       setUserRole(roles[0].name);
     } else {
@@ -153,7 +156,7 @@ const RoleAndUserManagement = () => {
       return { id: permission?.id, name: permissionName };
     });
   
-    console.log("Permissions to Update:", permissionsToUpdate); // Debugging line
+   
   
     try {
       let response;
@@ -170,7 +173,7 @@ const RoleAndUserManagement = () => {
           permissions: permissionsToUpdate,
         });;
       }
-      console.log("API Response:", response); // Debugging line
+      
       if (response.data.status) {
         alert('Cập nhật quyền thành công!');
       } else {
@@ -307,7 +310,7 @@ const RoleAndUserManagement = () => {
             </tr>
           </thead>
           <tbody>
-  {users.map((user) => (
+  {users.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((user) => (
     <tr key={user.id}>
       <td style={{ padding: '10px', border: '1px solid #ddd' }}>{user.user_name}</td>
       <td style={{ padding: '10px', border: '1px solid #ddd' }}>
@@ -338,6 +341,17 @@ const RoleAndUserManagement = () => {
 </tbody>
 
         </table>
+        <div className="d-flex justify-content-center mt-4">
+    <Pagination
+      current={currentPage}
+      pageSize={pageSize}
+      total={users.length}
+      onChange={(page, pageSize) => {
+        setCurrentPage(page);
+        setPageSize(pageSize);
+      }}
+    />
+  </div>
       </div>
     </div>
   );

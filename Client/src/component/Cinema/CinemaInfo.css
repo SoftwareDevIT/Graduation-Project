@@ -1,0 +1,156 @@
+.rap-container {
+    background-color: #f8f9fb;
+    padding: 20px;
+    border-radius: 8px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .rap-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    margin-left: 190px;
+  }
+  
+  .rap-logo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-right: 15px;
+  }
+  
+  .rap-chi-tiet {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .rap-ten {
+    font-size: 24px;
+    margin: 0;
+    color: #222;
+  }
+  
+  .rap-dia-chi {
+    font-size: 14px;
+    color: #555;
+    margin: 5px 0;
+  }
+  
+  .rap-hanh-dong {
+    display: flex;
+    gap: 15px;
+    font-size: 13px;
+    color: #007bff;
+    cursor: pointer;
+  }
+  
+  .hanh-dong-item:hover {
+    text-decoration: underline;
+  }
+  
+  .rap-mo-ta {
+    font-size: 14px;
+    color: #333;
+    line-height: 1.5;
+    margin-left: 190px;
+  }
+
+  
+  .ngay-item {
+    text-align: center;
+    cursor: pointer;
+  }
+  
+  .ngay-item.hoat-dong {
+    background-color: #007bff;
+    color: white;
+    border-radius: 8px;
+  }
+  
+  .lich-phim {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .phim-item {
+    width: 735px;
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-top: 20px;
+    margin-left: 190px;
+  }
+  
+  .phim-anh {
+    width: 80px;
+    height: 120px;
+    object-fit: cover;
+    margin-right: 20px;
+  }
+  
+  .phim-chi-tiet {
+    flex: 1;
+  }
+  
+  .phim-chi-tiet h3 {
+    font-size: 16px;
+    color: #333;
+  }
+  
+  .phim-phu {
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .phim-thoi-gian {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .thoi-gian-item {
+    display: flex;
+    flex-direction: column;
+    width: 70px;
+    height: 50px;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #d1d1d1;
+    border-radius: 6px;
+    background-color: #f5f5f5;
+  }
+  
+  .thoi-gian-item:hover {
+    background-color: #c6ced1;
+    color: white;
+  }
+  
+  .gio {
+    color: #333;
+    font-size: 14px;
+  
+  }
+  
+  .gia {
+    font-size: 12px;
+    color: #666;
+  }
+  .gio:hover {
+   color: white;
+  }
+  .thong-baooo {
+    background-color: #fbc02d; /* Màu vàng như hình */
+    color: #2c3e50; /* Màu chữ xám đậm */
+    font-size: 14px;
+    border-radius: 8px;
+    padding: 10px 15px;
+    margin-top: 15px; /* Khoảng cách với calendar */
+    text-align: left;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    width: 735px;
+    margin-left: 190px;
+  }
+  

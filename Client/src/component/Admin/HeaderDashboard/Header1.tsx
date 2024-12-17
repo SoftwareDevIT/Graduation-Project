@@ -75,50 +75,45 @@ const Header = () => {
             navigate(result.replace(/^http:\/\/localhost:5173/, ""));
             setIsProcessing(false); // Xử lý xong
         } else if (/^\d+$/.test(result)) {
-            instance
-                .post('/manager/checkInSeat', { code: result })
-                .then(response => {
-                    console.log("Server Response:", response.data.data);
-
-                    const { status, message, data } = response.data.data;
-
-                    if (status===200) {
-                        // Hiển thị thông báo thành công
-                        Modal.success({
-                            title: 'Check-in Thành Công',
-                            content: (
-                                <div>
-                                    <p><strong>Thông báo:</strong> {message}</p>
-                                    <p><strong>Mã ghế:</strong> {data.seat_name}</p>
-                                </div>
-                            ),
-                        });
-
-                        // Tắt camera tự động sau khi check-in thành công
-                        toggleCamera();
-
-                    } else {
-                        // Hiển thị thông báo thất bại
-                        Modal.error({
-                            title: 'Check-in thành công',
-                            content: message,
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error("Request Error:", error);
-
-                    const errorMessage =
-                        error.response?.data?.data.message || 'Có lỗi xảy ra khi check-in!';
-
-                    Modal.error({
-                        title: 'Lỗi',
-                        content: errorMessage,
-                    });
-                })
-                .finally(() => {
-                    setIsProcessing(false); // Hoàn tất xử lý
+            instance.post('/manager/checkInSeat', { code: result })
+            .then(response => {
+            console.log("Full Response:", response);
+        if (response.status === 200) {
+            const { status, message, data } = response.data;
+            if (status) {
+                Modal.success({
+                    title: 'Check-in Thành Công',
+                    content: (
+                        <div>
+                            <p><strong>Thông báo:</strong> {message}</p>
+                            <p><strong>Tên ghế:</strong> {data.seat_name}</p>
+                        </div>
+                    ),
                 });
+                toggleCamera();
+            } else {
+                Modal.error({
+                    title: 'Check-in Thất Bại',
+                    content: message,
+                });
+            }
+        } else {
+            throw new Error("Invalid response status");
+        }
+    })
+    .catch(error => {
+        console.error("Request Error:", error);
+        const errorMessage =
+            error.response?.data?.message || 'Có lỗi xảy ra khi check-in!';
+        Modal.error({
+            title: 'Lỗi',
+            content: errorMessage,
+        });
+    })
+    .finally(() => {
+        setIsProcessing(false);
+    });
+
         } else {
             Modal.warning({
                 title: 'Dữ liệu không hợp lệ',
@@ -161,6 +156,14 @@ const Header = () => {
         }
     };
 
+
+
+
+    useEffect(() => {
+if (videoRef.current && videoStream) {
+            videoRef.current.srcObject = videoStream;
+        }
+    }, [videoStream]);
 
     useEffect(() => {
         if (barcodeData) navigate(barcodeData.replace(/^http:\/\/localhost:5173/, ""));
@@ -233,7 +236,7 @@ const Header = () => {
             </div>
             <Modal
                 title="Camera"
-                visible={isModalVisible}
+visible={isModalVisible}
                 onCancel={() => {
                     toggleCamera();
                 }}
