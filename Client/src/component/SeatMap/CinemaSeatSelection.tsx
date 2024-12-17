@@ -125,16 +125,16 @@ const CinemaSeatSelection: React.FC = () => {
           matrix_column: seatLayoutData?.room?.seat_map?.matrix_column || 0,
         });
   
-        const seatResponse = await instance.get(`/seat/${showtimeId}`);
-        const reservedSeatSet: Set<string> = new Set();
+        // const seatResponse = await instance.get(`/seat/${showtimeId}`);
+        // const reservedSeatSet: Set<string> = new Set();
   
-        seatResponse.data.data.forEach((seat: any) => {
-          if (seat.seat_type === "Standard") {
-            reservedSeatSet.add(seat.seat_name);
-          }
-        });
+        // seatResponse.data.data.forEach((seat: any) => {
+        //   if (seat.seat_type === "Standard") {
+        //     reservedSeatSet.add(seat.seat_name);
+        //   }
+        // });
   
-        setReservedSeats(reservedSeatSet);
+        // setReservedSeats(reservedSeatSet);
         setLoading(false);
   
         return seatLayoutData?.room_id;
