@@ -5,7 +5,6 @@ import { Modal } from 'antd';
 import { User } from '../../../interface/User';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { BrowserMultiFormatReader } from '@zxing/library';  // Import thư viện quét mã vạch
-import axios from 'axios';
 
 const Header = () => {
     const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -19,8 +18,6 @@ const Header = () => {
     const barcodeReader = useRef(new BrowserMultiFormatReader()); // Khởi tạo đối tượng quét mã vạch
     const navigate = useNavigate();
     const location = useLocation();
-    const [checkInData, setCheckInData] = useState<any>(null);
-
 
     useEffect(() => {
         const storedUser = localStorage.getItem('user_profile');
@@ -28,20 +25,7 @@ const Header = () => {
             setUser(JSON.parse(storedUser));
         }
     }, []);
-    const checkInSeat = async (barcode: string) => {
-        try {
-            const response = await axios.post('/api/manager/checkInSeat', { barcode });
-            console.log("Check-in thành công:", response.data);
 
-            setCheckInData(response.data.data); // Lưu dữ liệu vào state
-
-            // Hiển thị thông báo thành công
-            alert(response.data.message || 'Check-in thành công');
-        } catch (error: any) {
-            console.error("Lỗi khi check-in:", error);
-            alert(`Lỗi khi check-in: ${error.response?.data?.message || 'Có lỗi xảy ra'}`);
-        }
-    };
     const handleLogout = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("user_id");
@@ -92,16 +76,14 @@ const Header = () => {
         }
     };
 
-
-    useEffect(() => {
-        if (barcodeData) navigate(barcodeData.replace(/^http:\/\/localhost:5173/, ""));
-    }, [barcodeData, navigate]);
-
     useEffect(() => {
         if (videoRef.current && videoStream) {
             videoRef.current.srcObject = videoStream;
         }
     }, [videoStream]);
+    useEffect(() => {
+        if (barcodeData) navigate(barcodeData.replace(/^http:\/\/localhost:5173/, ""));
+    }, [barcodeData, navigate]);
 
     useEffect(() => {
         // Bắt đầu quét mã vạch khi camera bật
@@ -124,7 +106,6 @@ const Header = () => {
 
     return (
         <div className="header1">
-            <h1>{getPageName()}</h1>
             <h1>{getPageName()}</h1>
             <div className="header-actions">
                 <div className="icons-container">
@@ -169,19 +150,18 @@ const Header = () => {
                 }}
                 footer={null}
                 centered
-                width="30%"
-              
-                
+                width="50%"
             >
                 {isCameraOn && videoStream && (
                     <video
+                        ref={videoRef}  // Sử dụng ref để gán video stream
                         autoPlay
                         playsInline
                         style={{
                             width: '100%',
                             height: 'auto',
                             borderRadius: '10px',
-                            objectFit: 'cover',
+                            objectFit: 'cover',  // Đảm bảo video không bị méo
                         }}
                     />
                 )}
@@ -191,23 +171,7 @@ const Header = () => {
 
                     </div>
                 )}
-                {checkInData && (
-                    <div className="checkin-info" style={{ marginTop: '20px' }}>
-                        <h3 style={{ color: '#004d40' }}>Thông Tin Check-in</h3>
-                        <p><strong>Mã Check-in:</strong> {checkInData.code}</p>
-                        <p><strong>Tên Ghế:</strong> {checkInData.seat_name}</p>
-                        <p><strong>Loại Ghế:</strong> {checkInData.seat_type}</p>
-                        <p><strong>Phòng Chiếu:</strong> {checkInData.room_id}</p>
-                        <p><strong>Trạng Thái:</strong> {checkInData.status}</p>
-                        <img
-                            src={checkInData.barcode}
-                            alt="Barcode"
-                            style={{ marginTop: '10px', width: '150px', height: 'auto' }}
-                        />
-                    </div>
-                )}
             </Modal>
-
         </div>
     );
 };
