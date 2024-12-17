@@ -46,13 +46,13 @@ class RoleController extends Controller
             }
         }
 
-        // Validate dữ liệu
+        // // Validate dữ liệu
         $validated = $request->validate([
             'roles' => 'array|required',
-            'cinema_id' => 'required_if:roles,manager|exists:cinema,id',
+            'cinema_id' => 'exists:cinema,id',
         ]);
 
-        // Gán roles cho user
+        // // Gán roles cho user
         $user->syncRoles($request->roles);
 
         // Nếu user được gán vai trò Manager, gán cinema_id

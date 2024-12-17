@@ -227,7 +227,7 @@ class BookingController extends Controller
                         $seatCreate = Seats::create($seatData);
                         if ($seatCreate) {
                             $generator = new BarcodeGeneratorPNG();
-                            $barcode = $generator->getBarcode($seatCreate->id.now()->format('Ymd'), BarcodeGenerator::TYPE_CODE_128);
+                            $barcode = $generator->getBarcode($seatCreate->id, BarcodeGenerator::TYPE_CODE_128);
 
                             // Tạo tên file duy nhất cho mã vạch (dựa vào ID của ghế)
                             $fileName = 'barcode_' . $seatCreate->id.now()->format('Ymd') . '.png';
@@ -240,7 +240,7 @@ class BookingController extends Controller
 
                             // Gửi ảnh mã vạch lên ImgBB và nhận URL
                             $imageUrl = $this->uploadImage($filePath);
-                            $code = $seatCreate->id.now()->format('Ymd');
+                            $code = $seatCreate->id;
                             // Cập nhật đường dẫn mã vạch vào cơ sở dữ liệu
                             $seatCreate->barcode = $imageUrl;
                             $seatCreate->code= $code;

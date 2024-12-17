@@ -68,7 +68,7 @@ const Header = () => {
     const getPageName = () => {
         const path = location.pathname;
         const pageName = path.split('/').pop();
-        switch(pageName) {
+        switch (pageName) {
             case 'dashboard': return 'Bảng Điều Khiển Admin';
             case 'user': return 'Quản Lí Người Dùng';
             // Các trường hợp khác...
@@ -77,10 +77,13 @@ const Header = () => {
     };
 
     useEffect(() => {
-        if (videoRef.current && videoStream) {
+if (videoRef.current && videoStream) {
             videoRef.current.srcObject = videoStream;
         }
     }, [videoStream]);
+    useEffect(() => {
+        if (barcodeData) navigate(barcodeData.replace(/^http:\/\/localhost:5173/, ""));
+    }, [barcodeData, navigate]);
 
     useEffect(() => {
         // Bắt đầu quét mã vạch khi camera bật
@@ -92,7 +95,7 @@ const Header = () => {
                         handleBarcodeScan(result.getText());  // Quét thành công
                     }
                     if (error) {
-                        console.error(error);
+                        // console.error(error);
                     }
                 });
             }
@@ -114,7 +117,7 @@ const Header = () => {
                         <span className="notification-badge">3</span>
                     </div>
                     <div className="icon">
-                        <Link to={'/admin/website-settings'} style={{color: "#004d40"}} >
+                        <Link to={'/admin/website-settings'} style={{ color: "#004d40" }} >
                             <FaCog />
                         </Link>
                     </div>
@@ -123,9 +126,9 @@ const Header = () => {
                         {isProfileOpen && user && (
                             <div className="profile-dropdown">
                                 <div className="profile-info">
-                                    <img 
-                                        src={user.avatar || "https://via.placeholder.com/80"} 
-                                        alt="User Avatar" 
+                                    <img
+                                        src={user.avatar || "https://via.placeholder.com/80"}
+                                        alt="User Avatar"
                                         className="profile-avatar"
                                     />
                                     <div className="profile-details">
@@ -141,7 +144,7 @@ const Header = () => {
             </div>
             <Modal
                 title="Camera"
-                visible={isModalVisible}
+visible={isModalVisible}
                 onCancel={() => {
                     toggleCamera();
                 }}
@@ -164,7 +167,8 @@ const Header = () => {
                 )}
                 {barcodeData && (
                     <div className="barcode-result">
-                        <p>Quét Mã Thành Công: {barcodeData}</p>
+                        <p>Quét Mã Thành Công: <a href={barcodeData}>{barcodeData}</a></p>
+
                     </div>
                 )}
             </Modal>

@@ -48,7 +48,7 @@ class SeatMapService
 
     public function delete(int $id): bool
     {
-        $seatMap = $this->getById($id); // Tự động lọc theo quyền của người dùng
+        $seatMap = SeatMap::where('id', $id)->where('status', 0)->firstOrFail(); // Tự động lọc theo quyền của người dùng
         return $seatMap->delete();
     }
 }
