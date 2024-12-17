@@ -17,7 +17,7 @@ class CheckInTicketController extends Controller
         ]);
         $ticket = Seats::where('code', $request->code)->first();
         if (!$ticket) {
-            return $this->notFound('Không tìm thấy vé', 400);
+            return $this->notFound('Không tìm thấy vé', 404);
         }
         if ($ticket->is_checked_in) {
             return $this->error('Vé đã qua sử dụng', 400);

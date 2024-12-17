@@ -75,7 +75,7 @@ const [userRole, setUserRole] = useState<string>("");
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("user_profile") || "{}");
     const roles = userData.roles || [];
-    console.log("data role:", roles);
+    
     if (roles.length > 0) {
       setUserRole(roles[0].name);
     } else {
@@ -337,7 +337,7 @@ useEffect(() => {
     <div className="summary">
   <div className="summary-card">
     <div className="summary-card-header">
-      <h3>Doanh Thu</h3>
+      <h2>Doanh Thu</h2>
       <div className="summary-filter">
       <Form.Item label="">
               <DatePicker
@@ -373,7 +373,7 @@ useEffect(() => {
 
   <div className="summary-card">
     <div className="summary-card-header">
-      <h3>Doanh Thu</h3>
+      <h3 >Doanh Thu (Tháng:{selectedDate ? selectedDate.format('MM') : ''}) </h3>
       <div className="summary-filter3">
      
       </div>
@@ -402,7 +402,7 @@ useEffect(() => {
 
   <div className="summary-card">
     <div className="summary-card-header">
-      <h3>Doanh Thu</h3>
+      <h3>Doanh Thu (Năm:{selectedDate ? selectedDate.format('YYYY') : ''})</h3>
       <div className="summary-filter1">
       </div>
     </div>
@@ -428,9 +428,13 @@ useEffect(() => {
   </div>
   </div>
 </div>
-<Box sx={{ width: 1100, height: 400}}>
-          <Bar data={dataRevenue} options={optionsRevenue} />
-        </Box>
+<div className="charts-container">
+  {selectedCinema === null && (
+    <Box sx={{ width: 1100, height: 400 }}>
+      <Bar data={dataRevenue} options={optionsRevenue} />
+    </Box>
+  )}
+</div>
         <div className="charts-container">
           <div className="quarterly-revenue">
             <h3>Doanh Thu Theo Ngày</h3>

@@ -4,7 +4,7 @@ import { EditOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons'; 
 import { notification, Table, Pagination, Input, Button, Popconfirm, Switch } from 'antd'; // Import Ant Design components
 import { useComboContext } from '../../../Context/ComboContext';
 import instance from '../../../server';
-import { Movie } from '../../../interface/Movie';
+
 
 const ComboDashboard: React.FC = () => {
     const { state, deleteCombo } = useComboContext();
@@ -14,20 +14,7 @@ const ComboDashboard: React.FC = () => {
     const combosPerPage = 5;
     const { Search } = Input;
 
-    useEffect(() => {
-        const fetchCombos = async () => {
-            try {
-                await instance.get('/manager/combo');
-            } catch (err) {
-                notification.error({
-                    message: 'Lỗi',
-                    description: 'Không thể tải các combo',
-                });
-            }
-        };
 
-        fetchCombos();
-    }, []);
 
     const filteredCombos = combos.filter(combo =>
         combo.combo_name.toLowerCase().includes(searchTerm.toLowerCase())

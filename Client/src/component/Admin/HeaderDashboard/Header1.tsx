@@ -5,7 +5,7 @@ import { Modal } from 'antd';
 import { User } from '../../../interface/User';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { BrowserMultiFormatReader } from '@zxing/library';  // Import thư viện quét mã vạch
-import axios from 'axios';
+import instance from '../../../server';
 
 const Header = () => {
     const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -19,8 +19,8 @@ const Header = () => {
     const barcodeReader = useRef(new BrowserMultiFormatReader()); // Khởi tạo đối tượng quét mã vạch
     const navigate = useNavigate();
     const location = useLocation();
-    const [checkInData, setCheckInData] = useState<any>(null);
-
+    const [lastScannedCode, setLastScannedCode] = useState<string | null>(null); // Lưu mã đã quét gần nhất
+    const [isProcessing, setIsProcessing] = useState(false); // Trạng thái ngăn gọi API liên tục
 
     useEffect(() => {
         const storedUser = localStorage.getItem('user_profile');
@@ -28,20 +28,7 @@ const Header = () => {
             setUser(JSON.parse(storedUser));
         }
     }, []);
-    const checkInSeat = async (barcode: string) => {
-        try {
-            const response = await axios.post('/api/manager/checkInSeat', { barcode });
-            console.log("Check-in thành công:", response.data);
 
-            setCheckInData(response.data.data); // Lưu dữ liệu vào state
-
-            // Hiển thị thông báo thành công
-            alert(response.data.message || 'Check-in thành công');
-        } catch (error: any) {
-            console.error("Lỗi khi check-in:", error);
-            alert(`Lỗi khi check-in: ${error.response?.data?.message || 'Có lỗi xảy ra'}`);
-        }
-    };
     const handleLogout = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("user_id");
@@ -77,9 +64,86 @@ const Header = () => {
     };
 
     const handleBarcodeScan = (result: string) => {
-        setBarcodeData(result);  // Cập nhật dữ liệu quét được
-        console.log("Barcode Data:", result);  // In dữ liệu ra console
+        if (isProcessing) return; // Ngăn gọi API nếu đang xử lý
+        if (lastScannedCode === result) return; // Nếu mã giống mã trước đó, không gọi API
+
+        setLastScannedCode(result); // Lưu mã vạch đã quét
+        setIsProcessing(true); // Bắt đầu xử lý API
+
+        const isUrl = result.startsWith("http://") || result.startsWith("https://");
+        if (isUrl) {
+            navigate(result.replace(/^http:\/\/localhost:5173/, ""));
+            setIsProcessing(false); // Xử lý xong
+        } else if (/^\d+$/.test(result)) {
+            instance.post('/manager/checkInSeat', { code: result })
+            .then(response => {
+            console.log("Full Response:", response);
+        if (response.status === 200) {
+            const { status, message, data } = response.data;
+            if (status) {
+                Modal.success({
+                    title: 'Check-in Thành Công',
+                    content: (
+                        <div>
+                            <p><strong>Thông báo:</strong> {message}</p>
+                            <p><strong>Tên ghế:</strong> {data.seat_name}</p>
+                        </div>
+                    ),
+                });
+                toggleCamera();
+            } else {
+                Modal.error({
+                    title: 'Check-in Thất Bại',
+                    content: message,
+                });
+            }
+        } else {
+            throw new Error("Invalid response status");
+        }
+    })
+    .catch(error => {
+        console.error("Request Error:", error);
+        const errorMessage =
+            error.response?.data?.message || 'Có lỗi xảy ra khi check-in!';
+        Modal.error({
+            title: 'Lỗi',
+            content: errorMessage,
+        });
+    })
+    .finally(() => {
+        setIsProcessing(false);
+    });
+
+        } else {
+            Modal.warning({
+                title: 'Dữ liệu không hợp lệ',
+                content: 'Vui lòng quét lại mã hợp lệ.',
+            });
+            setIsProcessing(false); // Hoàn tất xử lý
+        }
     };
+
+
+    useEffect(() => {
+        if (isCameraOn && videoStream) {
+            const videoElement = videoRef.current;
+            if (videoElement) {
+                barcodeReader.current.decodeFromVideoDevice('', videoElement, (result, error) => {
+                    if (result) {
+                        handleBarcodeScan(result.getText());
+                    }
+                    if (error && error.name !== 'NotFoundException') {
+                        // console.error("Barcode scanning error:", error);
+                    }
+                });
+            }
+        } else {
+            barcodeReader.current.reset(); // Dừng quét khi camera tắt
+        }
+    }, []);
+
+
+
 
     const getPageName = () => {
         const path = location.pathname;
@@ -98,10 +162,11 @@ const Header = () => {
     }, [barcodeData, navigate]);
 
     useEffect(() => {
-        if (videoRef.current && videoStream) {
-            videoRef.current.srcObject = videoStream;
-        }
-    }, [videoStream]);
+        return () => {
+            barcodeReader.current.reset();
+        };
+    }, []);
+
 
     useEffect(() => {
         // Bắt đầu quét mã vạch khi camera bật
@@ -113,7 +178,7 @@ const Header = () => {
                         handleBarcodeScan(result.getText());  // Quét thành công
                     }
                     if (error) {
-                        console.error(error);
+                        // console.error(error);
                     }
                 });
             }
@@ -121,6 +186,7 @@ const Header = () => {
             barcodeReader.current.reset(); // Dừng quét khi camera tắt
         }
     }, [isCameraOn, videoStream]);
+    // console.log("Video Stream:", videoStream);
 
     return (
         <div className="header1">
@@ -168,45 +234,27 @@ const Header = () => {
                 }}
                 footer={null}
                 centered
-                width="30%"
-              
-                
+                width="50%"
             >
                 {isCameraOn && videoStream && (
                     <video
+                        ref={videoRef}  // Sử dụng ref để gán video stream
                         autoPlay
                         playsInline
                         style={{
                             width: '100%',
                             height: 'auto',
                             borderRadius: '10px',
-                            objectFit: 'cover',
+                            objectFit: 'cover',  // Đảm bảo video không bị méo
                         }}
                     />
                 )}
                 {barcodeData && (
                     <div className="barcode-result">
                         <p>Quét Mã Thành Công: <a href={barcodeData}>{barcodeData}</a></p>
-
-                    </div>
-                )}
-                {checkInData && (
-                    <div className="checkin-info" style={{ marginTop: '20px' }}>
-                        <h3 style={{ color: '#004d40' }}>Thông Tin Check-in</h3>
-                        <p><strong>Mã Check-in:</strong> {checkInData.code}</p>
-                        <p><strong>Tên Ghế:</strong> {checkInData.seat_name}</p>
-                        <p><strong>Loại Ghế:</strong> {checkInData.seat_type}</p>
-                        <p><strong>Phòng Chiếu:</strong> {checkInData.room_id}</p>
-                        <p><strong>Trạng Thái:</strong> {checkInData.status}</p>
-                        <img
-                            src={checkInData.barcode}
-                            alt="Barcode"
-                            style={{ marginTop: '10px', width: '150px', height: 'auto' }}
-                        />
                     </div>
                 )}
             </Modal>
-
         </div>
     );
 };

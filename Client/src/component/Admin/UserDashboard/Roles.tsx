@@ -19,7 +19,7 @@ const RoleAndUserManagement = () => {
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("user_profile") || "{}");
     const roles = userData.roles || [];
-    console.log("data role:", roles);
+    
     if (roles.length > 0) {
       setUserRole(roles[0].name);
     } else {
@@ -156,7 +156,7 @@ const RoleAndUserManagement = () => {
       return { id: permission?.id, name: permissionName };
     });
   
-    console.log("Permissions to Update:", permissionsToUpdate); // Debugging line
+   
   
     try {
       let response;
@@ -173,7 +173,7 @@ const RoleAndUserManagement = () => {
           permissions: permissionsToUpdate,
         });;
       }
-      console.log("API Response:", response); // Debugging line
+      
       if (response.data.status) {
         alert('Cập nhật quyền thành công!');
       } else {

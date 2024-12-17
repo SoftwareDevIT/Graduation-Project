@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
  */
 class OrderService
 {
+    // use Illuminate\Support\Facades\Auth;
+
     protected function filterByRole($query)
     {
         $user = Auth::user();
@@ -21,11 +23,13 @@ class OrderService
             // Admin: không lọc gì thêm, lấy tất cả rạp
             return $query;
         } elseif ($user->hasAnyRole(['manager', 'staff'])) {
-            // Manager hoặc Staff: chỉ lấy rạp theo cinema_id của họ
-            $query->where('cinema_id', $user->cinema_id);
+            // Manager hoặc Staff: chỉ lấy các phòng chiếu thuộc cinema_id của họ
+            $query->whereHas('showtime.room', function ($q) use ($user) {
+                $q->where('cinema_id', $user->cinema_id);
+            });
         } else {
             // Các vai trò khác (không phải admin/manager/staff): chỉ lấy rạp có status = 1
-            $query->where('status', 1);
+            $query->where('user_id', Auth::user()->id);
         }
 
         return $query;
