@@ -187,7 +187,6 @@ Route::middleware(['auth:sanctum', 'role:manager'])->prefix('manager')->group(fu
     Route::post('newStatus/{id}', [NewCategoryController::class, 'status']);
     Route::post('comboStatus/{id}', [ComboController::class, 'status']);
     Route::post('userStatus/{id}', [RoleController::class, 'status']);
-
     // Ticket Printing
     Route::post('printTicket', [OrderController::class, 'printTicket']); // Print ticket and change status
     // Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
@@ -228,12 +227,12 @@ Route::get('ratings/{movie}', [RatingController::class, 'show']);               
 Route::get('rating', [RatingController::class, 'index']);                                            // Xem all dánh giá
 Route::get('filterMoviePopular', [MovieController::class, 'moviePopular']);                          // Lọc bài viết liên quan tới phim
 
-Route::apiResource('order', OrderController::class);
+
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/slectMovieAndSeats', [BookingController::class, 'slectMovieAndSeats']);
     Route::post('/selectCombo', [BookingController::class, 'selectCombos']);
-
+    Route::apiResource('order', OrderController::class);
     //Bokking=======================
     Route::post('selectSeats', [BookingController::class, 'selectSeats']);
     Route::post('/book-ticket', [BookingController::class, 'bookTicket']);
