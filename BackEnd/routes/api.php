@@ -207,7 +207,8 @@ Route::middleware(['auth:sanctum', 'role:staff'])->prefix('staff')->group(functi
     Route::post('checkInSeat/{code}', [CheckInTicketController::class, 'checkInSeat']);
     Route::post('checkInBooking/{code}', [CheckInTicketController::class, 'checkInBooking']);
 });
-
+Route::post('checkInSeat', [CheckInTicketController::class, 'checkInSeat']);
+Route::post('checkInBooking', [CheckInTicketController::class, 'checkInBooking']);
 
 // Các tuyến đường dành riêng cho phim
 Route::get('/movie/search/{movie_name}', [MovieController::class, 'search']);                       // Tìm kiếm phim theo tên
@@ -254,3 +255,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 });
 Route::get('/vnpay-return', [BookingController::class, 'vnPayReturn']);
 Route::get('/env-config', [ConfigController::class, 'envConfig']);
+
+
+
+
+Route::get('dashboard/Movie', [DashboardAdminController::class, 'dashboardMovie']);
