@@ -143,7 +143,7 @@ function Video() {
 
             <Modal
   title={movie?.movie_name || "Trailer"} // Nếu không có tên phim, hiển thị tiêu đề mặc định
-  visible={isTrailerVisible}
+  open={isTrailerVisible}
   onCancel={() => setIsTrailerVisible(false)}
   footer={null}
   centered // Modal xuất hiện giữa màn hình

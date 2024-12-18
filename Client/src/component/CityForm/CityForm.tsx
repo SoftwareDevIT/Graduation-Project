@@ -31,7 +31,7 @@ const CityForm: React.FC<CityFormProps> = ({ isVisible, onClose }) => {
   }, [isVisible, fetchCountries]);
 
   const handleCityClick = (id: string) => {
-    navigate(`/cinema/${id}`);
+    navigate(`/cinemalist/${id}`);
   };
 
   // Filter cities based on the search input
