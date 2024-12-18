@@ -74,20 +74,22 @@
   }
   
   .phim-item {
-    width: 735px;
-    display: flex;
-    align-items: center;
-    padding: 15px;
-    background-color: #ffffff;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    margin-top: 20px;
-    margin-left: 190px;
+    width: 100%; /* Thay vì chiều rộng cố định */
+  max-width: 735px; /* Giữ giới hạn chiều rộng tối đa */
+  display: flex;
+  flex-wrap: wrap; /* Đảm bảo xuống dòng khi nội dung dài */
+  align-items: center;
+  padding: 15px;
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  margin-top: 20px;
+  margin-left: 190px;
   }
   
   .phim-anh {
-    width: 80px;
-    height: 120px;
+    width: 100px;
+    height: 140px;
     object-fit: cover;
     margin-right: 20px;
   }
@@ -99,16 +101,21 @@
   .phim-chi-tiet h3 {
     font-size: 16px;
     color: #333;
+    font-weight:600;
   }
   
   .phim-phu {
     font-size: 14px;
     color: #666;
   }
-  
+  .phim-ngon-ngu{
+    margin-top: -10px;
+  }
   .phim-thoi-gian {
     display: flex;
-    gap: 10px;
+  gap: 10px;
+  flex-wrap: wrap; /* Cho phép xuống dòng khi chiều rộng bị giới hạn */
+  max-width: 100%; 
   }
   
   .thoi-gian-item {

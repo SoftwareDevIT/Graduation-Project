@@ -5,6 +5,7 @@ import instance from "../../server";
 import { Movie } from "../../interface/Movie";
 import Header from '../Header/Hearder';
 import { Link } from 'react-router-dom';
+import MovieBanner from '../Banner/MovieBanner';
 
 const UpcomingMovies: React.FC = () => {
   const [movies, setMovies] = useState<Movie[]>([]); // Khởi tạo mặc định là mảng rỗng
@@ -73,10 +74,14 @@ const UpcomingMovies: React.FC = () => {
               ) : (
                 <p className='Nodata'>Không có phim sắp chiếu.</p>
               )}
+               
             </div>
           </div>
+          
         </div>
+        
       </div>
+      {!loading && movies.length === 0 && <MovieBanner />}
       <Footer />
     </>
   );

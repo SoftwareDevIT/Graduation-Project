@@ -59,12 +59,12 @@ const Profile: React.FC = () => {
     </span>
   </div>
   <div className="account-nav-item">
-    <span className="account-nav-title">
-      <NavLink 
-        to="/Personal" 
-        className={({ isActive }) => isActive ? 'active-link' : ''}>
-        Tủ phim
-      </NavLink>
+      <span className="account-nav-title">
+        <NavLink 
+          to="/ticketmovie" 
+          className={({ isActive }) => isActive ? 'active-link' : ''}>
+          Tủ phim
+        </NavLink>
     </span>
   </div>
   <div className="account-nav-item">
