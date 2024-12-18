@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { useShowtimeContext } from '../../../Context/ShowtimesContext';
 import instance from '../../../server';
 import { Movie } from '../../../interface/Movie';
-import { notification, Table, Button, Input, Pagination, Switch } from 'antd';
-import { PlusOutlined, EditOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { notification, Table, Button, Input, Pagination, Switch, Select } from 'antd';
+import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 const ShowtimesDashboard: React.FC = () => {
     const { state, dispatch } = useShowtimeContext();
@@ -13,7 +13,11 @@ const ShowtimesDashboard: React.FC = () => {
     const [movies, setMovies] = useState<Movie[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
+    const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
+
     const { Search } = Input;
+    const { Option } = Select;
+
     // Fetch showtimes và movies từ API
     useEffect(() => {
         const fetchShowtimes = async () => {
@@ -46,11 +50,13 @@ const ShowtimesDashboard: React.FC = () => {
         fetchMovies();
     }, [dispatch, currentPage]);
 
-    // Lọc showtimes theo tên phim
-    const filteredShowtimes = showtimes.filter((showtime) =>
-        showtime.movie && showtime.movie.movie_name && showtime.movie.movie_name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    
+    // Lọc showtimes theo tên phim, phòng, và khung giờ
+    const filteredShowtimes = showtimes.filter((showtime) => {
+        const movieNameMatch = showtime.movie && showtime.movie.movie_name.toLowerCase().includes(searchTerm.toLowerCase());
+        const roomMatch = selectedRoom ? showtime.room.room_name === selectedRoom : true;
+        
+        return movieNameMatch && roomMatch ;
+    });
 
     // Xử lý xóa showtime
     const deleteShowtime = async (id: number) => {
@@ -81,6 +87,7 @@ const ShowtimesDashboard: React.FC = () => {
             currency: 'VND',
         }).format(amount);
     };
+
     const handleStatusChange = async (id: number, currentStatus: boolean) => {
         try {
             const newStatus = !currentStatus; // Đảo ngược trạng thái hiện tại
@@ -104,7 +111,6 @@ const ShowtimesDashboard: React.FC = () => {
             });
         }
     };
-    
 
     if (error) {
         return <div className="alert alert-danger">{error}</div>;
@@ -159,7 +165,6 @@ const ShowtimesDashboard: React.FC = () => {
             ),
             className: 'text-left',
         },
-        
         {
             title: 'Hành động',
             key: 'actions',
@@ -186,13 +191,28 @@ const ShowtimesDashboard: React.FC = () => {
                         Thêm Suất Chiếu
                     </Button>
                 </Link>
-                <Search
+                <div style={{ display: 'flex', gap: '10px' }}>
+                    <Select
+                        placeholder="Chọn Phòng"
+                        value={selectedRoom}
+                        onChange={setSelectedRoom}
+                        style={{ width: 150 }}
+                    >
+                        <Option value="">Tất cả phòng</Option>
+                        {showtimes.map(showtime => (
+                            <Option key={showtime.room.room_name} value={showtime.room.room_name}>
+                                {showtime.room.room_name}
+                            </Option>
+                        ))}
+                    </Select>
+                    <Search
                     placeholder="Tìm kiếm theo tên phim"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     style={{ width: 300 }}
                     allowClear
                 />
+                </div>
             </div>
             <Table
                 columns={columns}

@@ -166,7 +166,9 @@ const OrderPage: React.FC = () => {
   <div className="price-box2">
     <div className="price">
     <span className="tongdonhangg">  Tổng đơn hàng</span>
-      <br /> <span>{totalPrice.toLocaleString()} đ</span>
+      <br /> <span>
+  {totalPrice.toLocaleString("vi-VN")} VND
+</span>
     </div>
   </div>
 

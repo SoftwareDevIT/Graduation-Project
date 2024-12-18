@@ -8,6 +8,19 @@ import { useParams } from "react-router-dom";
 import { formatDistanceToNow } from 'date-fns';
 import { vi } from 'date-fns/locale';  // Import tiếng Việt từ date-fns
 
+// Skeleton Loading Component
+const SkeletonLoading = () => (
+  <div className="skeleton-rating-container">
+    {[...Array(3)].map((_, index) => (
+      <div className="skeleton-comment" key={index}>
+        <div className="skeleton-avatar" />
+        <div className="skeleton-text" />
+        <div className="skeleton-meta" />
+      </div>
+    ))}
+  </div>
+);
+
 const DanhGia: React.FC = () => {
   const { slug } = useParams(); // Sử dụng slug từ URL
   const { state } = useMovieContext(); // Lấy dữ liệu từ MovieContext
@@ -55,7 +68,7 @@ const DanhGia: React.FC = () => {
       <div className="community-section">
         <h3>Cộng đồng</h3>
         {loading ? (
-          <p>Đang tải đánh giá...</p> // Thông báo khi dữ liệu đang tải
+          <SkeletonLoading /> // Hiển thị loading skeleton khi đang tải
         ) : error ? (
           <p>{error}</p> // Hiển thị lỗi nếu có
         ) : ratings.length > 0 ? (

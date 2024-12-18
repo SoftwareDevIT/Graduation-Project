@@ -7,7 +7,7 @@ import { Movie } from "../../interface/Movie";
 import { useNavigate } from "react-router-dom"; 
 import dayjs from "dayjs";
 import { useCountryContext } from "../../Context/CountriesContext";
-import { Spin } from 'antd';  // Import Spin từ Ant Design
+import { Skeleton, Spin } from 'antd';  // Import Spin từ Ant Design
 import { UserProfile } from "../../interface/UserProfile";
 import { useCinemaContext } from "../../Context/CinemasContext";
 
@@ -145,6 +145,7 @@ import { useCinemaContext } from "../../Context/CinemasContext";
     useEffect(() => {
       const fetchMoviesForSelectedCinemaAndDate = async () => {
         if (selectedCinema && selectedDate) {
+          setLoading(true);
           try {
             let response;
             if (userRole === "admin") {
@@ -186,6 +187,7 @@ import { useCinemaContext } from "../../Context/CinemasContext";
             setMovies([]);
             console.error("Error fetching movies:", error);
           }
+          setLoading(false);
         }
       };
     
@@ -197,23 +199,8 @@ import { useCinemaContext } from "../../Context/CinemasContext";
       (cinema) => cinema.id === selectedCinema
     );
   
-    // Kiểm tra xem có dữ liệu khu vực hay không, nếu chưa có thì hiển thị loading
-    if (loading) {
-      return (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "50vh",
-            backgroundColor: "#f9f9f9",
-          }}
-        >
-          <Spin tip="Đang Tải Dữ Liệu Khu Vực..." size="large" />
-        </div>
-      );
-    }
   
+    
     // If the user is an admin, only show the first location and first cinema
 const displayLocations = filteredLocations;
     const displayCinemas =filteredCinemas;
@@ -225,7 +212,15 @@ const displayLocations = filteredLocations;
             <h3 className="khuvuc">Khu vực</h3>
             <ul className="list-tp">
               <div className="list">
-                {displayLocations.map((location) => (
+              {loading
+                ? Array.from({ length: 5 }).map((_, index) => (
+                    <Skeleton.Button
+                      key={index}
+                      active
+                      style={{ width: "100%", marginBottom: 10 }}
+                    />
+                  ))
+                :displayLocations.map((location) => (
                   <li
                     key={location.id}
                     className={`city ${selectedCity === location.id ? "selected" : ""}`}
@@ -259,7 +254,15 @@ const displayLocations = filteredLocations;
             <h3 className="khuvuc">Rạp</h3>
             <ul className="list-tp">
               <div className="list">
-                {displayCinemas.map((cinema) => (
+              {loading
+                ? Array.from({ length: 5 }).map((_, index) => (
+                    <Skeleton.Button
+                      key={index}
+                      active
+                      style={{ width: "100%", marginBottom: 10 }}
+                    />
+                  ))
+                :displayCinemas.map((cinema) => (
                   <li
                     key={cinema.id}
                     className={`cinema ${selectedCinema === cinema.id ? "selected" : ""}`}
@@ -301,8 +304,17 @@ const displayLocations = filteredLocations;
                 </div>
               ))}
             </div>
-  
-            {movies.length > 0 ? (
+            {loading ? (
+            Array.from({ length: 3 }).map((_, index) => (
+              <Skeleton
+                key={index}
+                active
+                avatar
+                paragraph={{ rows: 3 }}
+                style={{ marginBottom: 20 }}
+              />
+            ))
+          ) : movies.length > 0 ? (
               <div className="movies">
                 {movies.map((movieData) => {
                   const movie = movieData;

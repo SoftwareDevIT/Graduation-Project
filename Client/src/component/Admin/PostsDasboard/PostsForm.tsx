@@ -184,9 +184,8 @@ const PostsForm: React.FC = () => {
               setValue('content', data); // Use setValue to update content
             }}
           />
-          {errors.content && <span className="text-danger">{errors.content.message}</span>}
+           {errors.content && <span className="text-danger">{errors.content.message}</span>}
         </div>
-
         <button type="submit" className="btn btn-primary w-20">
           {id ? 'Cập nhật bài viết' : 'Thêm bài viết'}
         </button>
