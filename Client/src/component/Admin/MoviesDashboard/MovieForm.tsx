@@ -14,31 +14,31 @@ import { Select,notification } from 'antd';
 // Zod schema for form validation
 const movieSchema = z.object({
   movie_name: z.string().min(1, 'Tên phim là bắt buộc'),
-  movie_category_id: z.array(z.number()).min(1, 'Chọn ít nhất một danh mục phim'),
-  actor_id: z.array(z.number()).min(1, 'Chọn ít nhất một diễn viên'),
-  director_id: z.array(z.number()).min(1, 'Chọn ít nhất một đạo diễn'),
+  movie_category_id: z.array(z.number()).min(1, 'Chọn ít nhất một danh mục phim').max(3, 'Chọn tối đa 3 danh mục phim'),
+  actor_id: z.array(z.number()).min(1, 'Chọn ít nhất một diễn viên').max(5, 'Chọn tối đa 5 diễn viên'),
+  director_id: z.array(z.number()).min(1, 'Chọn ít nhất một đạo diễn').max(2, 'Chọn tối đa 2 đạo diễn'),
   release_date: z
     .string()
     .refine((date) => moment(date, 'YYYY-MM-DD', true).isValid(), 'Ngày phát hành không hợp lệ'),
-    // .refine((date) => moment(date).isSameOrAfter(moment(), 'day'), 'Ngày phát hành không được bé hơn ngày hiện tại'),
   age_limit: z
     .number()
     .int()
     .min(5, 'Giới hạn độ tuổi tối thiểu là 5')
     .max(18, 'Giới hạn độ tuổi tối đa là 18'),
-  description: z.string().min(10, 'Mô tả phải có ít nhất 10 ký tự').max(5000,'Mô tả tối đa 500 ký tự'),
+  description: z.string().min(10, 'Mô tả phải có ít nhất 10 ký tự').max(5000, 'Mô tả tối đa 500 ký tự'),
   duration: z
-  .string()
-  .min(1, 'Thời lượng là bắt buộc')
-  .refine((duration) => {
-    const durationInMinutes = parseInt(duration, 10);
-    return !isNaN(durationInMinutes) && durationInMinutes > 0 && durationInMinutes <= 180;
-  }, 'Thời lượng phim phải là số dương và không quá 180 phút'),
+    .string()
+    .min(1, 'Thời lượng là bắt buộc')
+    .refine((duration) => {
+      const durationInMinutes = parseInt(duration, 10);
+      return !isNaN(durationInMinutes) && durationInMinutes > 0 && durationInMinutes <= 180;
+    }, 'Thời lượng phim phải là số dương và không quá 180 phút'),
   posterFile: z.any().optional(),
-  thumbnailFile: z.any().optional(), // Optional thumbnail
-  country: z.string().min(1,'Tên quốc gia là bắt buộc'),
-  trailer: z.string().url("Link Trailer phải là URL hợp lệ.").optional(),
+  thumbnailFile: z.any().optional(),
+  country: z.string().min(1, 'Tên quốc gia là bắt buộc'),
+  trailer: z.string().url('Link Trailer phải là URL hợp lệ.').optional(),
 });
+
 
 type MovieFormValues = z.infer<typeof movieSchema>;
 
@@ -170,7 +170,8 @@ posterFile: posterFile instanceof File ? posterFile : undefined,  // Only includ
         </div>
 
         {/* Movie Categories */}
-        <div className="mb-3">
+       {/* Movie Categories */}
+<div className="mb-3">
   <label className="form-label">Danh mục phim</label>
   <Controller
     name="movie_category_id"
@@ -187,15 +188,15 @@ posterFile: posterFile instanceof File ? posterFile : undefined,  // Only includ
           value: category.id,
         }))}
         onChange={(value) => field.onChange(value)}
+        maxTagCount={3}  // Limit to 3 selections
       />
     )}
   />
   {errors.movie_category_id && <p className="text-danger">{errors.movie_category_id.message}</p>}
 </div>
 
-
-        {/* Actors */}
-        <div className="mb-3">
+{/* Actors */}
+<div className="mb-3">
   <label className="form-label">Diễn viên</label>
   <Controller
     name="actor_id"
@@ -212,14 +213,15 @@ posterFile: posterFile instanceof File ? posterFile : undefined,  // Only includ
           value: actor.id,
         }))}
         onChange={(value) => field.onChange(value)}
+        maxTagCount={5}  // Limit to 5 selections
       />
     )}
   />
   {errors.actor_id && <p className="text-danger">{errors.actor_id.message}</p>}
 </div>
 
-        {/* Directors */}
-        <div className="mb-3">
+{/* Directors */}
+<div className="mb-3">
   <label className="form-label">Đạo diễn</label>
   <Controller
     name="director_id"
@@ -236,11 +238,13 @@ posterFile: posterFile instanceof File ? posterFile : undefined,  // Only includ
           value: director.id,
         }))}
         onChange={(value) => field.onChange(value)}
+        maxTagCount={2}  // Limit to 2 selections
       />
     )}
   />
   {errors.director_id && <p className="text-danger">{errors.director_id.message}</p>}
 </div>
+
 
 
         {/* Release Date */}

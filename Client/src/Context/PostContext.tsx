@@ -37,6 +37,15 @@ const postReducer = (state: PostState, action: PostAction): PostState => {
           post.id === action.payload.id ? { ...post, ...action.payload } : post
         ),
       };
+      case 'UPDATE_POST_STATUS':
+        return {
+          ...state,
+          posts: state.posts.map((posts) =>
+            posts.id === action.payload.id
+              ? { ...posts, status: action.payload.status }
+              : posts
+          ),
+        };
     default:
       return state;
   }
@@ -137,6 +146,7 @@ export const PostProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       console.error('Error deleting post:', error);
     }
   };
+  
 
   // Gọi fetchPosts khi provider mount
   React.useEffect(() => {
