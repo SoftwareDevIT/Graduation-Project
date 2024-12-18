@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom"; // Thêm useNavigate để điều hướng
+import { useLocation, useNavigate } from "react-router-dom"; // Thêm useNavigate để điều hướng
 import Header from "../Header/Hearder";
 import Footer from "../Footer/Footer";
 import Headerticket from "../Headerticket/Headerticket";
 import "./CinemaSeatSelection.css";
 import instance from "../../server";
-import { Room } from "../../interface/Room";
 import { message, Spin } from "antd";
 import { Modal } from "antd";
 import { Movie } from "../../interface/Movie";
@@ -57,7 +56,9 @@ const CinemaSeatSelection: React.FC = () => {
 
   const [echoInstance, setEchoInstance] = useState<Echo<"pusher"> | null>(null);
 
-  const [status, setStatus] = useState("Initializing...");
+
+
+
 
 
   const setupRealtime2 = async () => {
@@ -154,10 +155,16 @@ const CinemaSeatSelection: React.FC = () => {
     };
   
     
+  
+    
     const setupRealtime = async (roomId: string) => {
       try {
         const echo = await initializeEcho();
         console.log("Connected to Pusher!", echo);
+        if (!roomId) {
+          console.error("Room ID is missing!");
+          return;
+        }
         if (!roomId) {
           console.error("Room ID is missing!");
           return;
@@ -190,11 +197,11 @@ const CinemaSeatSelection: React.FC = () => {
       });
       
       const initializeRealtime = async () => {
-        await setupRealtime2();  // Gọi hàm setupRealtime2
+        await setupRealtime2();  
       };
   
       initializeRealtime();
-    // Cleanup khi component unmount hoặc dependencies thay đổi
+    
     return () => {
       if (echoInstance) {
         echoInstance.disconnect();

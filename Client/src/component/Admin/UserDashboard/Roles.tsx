@@ -3,6 +3,7 @@ import { Roles } from '../../../interface/Roles';
 import { User } from '../../../interface/User';
 import { Permission } from '../../../interface/Permissions';
 import instance from '../../../server';
+import { Pagination } from 'antd';
 
 const RoleAndUserManagement = () => {
   const [roles, setRoles] = useState<Roles[]>([]);
@@ -10,11 +11,32 @@ const RoleAndUserManagement = () => {
   const [permissions, setPermissions] = useState<Permission[]>([]);
   const [newRoleName, setNewRoleName] = useState('');
   const [selectedPermissions, setSelectedPermissions] = useState<{ [key: string]: string[] }>({});
+  const [userRole, setUserRole] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(5);
 
+  // Fetch user role from localStorage
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("user_profile") || "{}");
+    const roles = userData.roles || [];
+    
+    if (roles.length > 0) {
+      setUserRole(roles[0].name);
+    } else {
+      setUserRole("unknown"); // Gán giá trị mặc định khi không có vai trò
+    }
+  }, []);
   useEffect(() => {
     const fetchRolesAndUsers = async () => {
       try {
-        const response = await instance.get('/manager/roles');
+        let response;
+      if (userRole === "admin") {
+        response = await  instance.get('/admin/roles');
+      } else if (userRole === "manager") {
+        response = await  instance.get('/manager/roles');
+      }else {
+        response = await instance.get('/roles');
+      }
         if (response.data.status) {
           setRoles(response.data.data.roles);
           setUsers(response.data.data.users);
@@ -26,8 +48,11 @@ const RoleAndUserManagement = () => {
         console.error('Error fetching roles and users:', error);
       }
     };
-    fetchRolesAndUsers();
-  }, []);
+   
+    if (userRole !== "") {
+      fetchRolesAndUsers();
+    }
+  }, [userRole]);
 
   const handleCreateRole = async () => {
     if (!newRoleName) {
@@ -35,7 +60,14 @@ const RoleAndUserManagement = () => {
       return;
     }
     try {
-      const response = await instance.post('/manager/roles', { name: newRoleName });
+      let response;
+      if (userRole === "admin") {
+        response = await  instance.post('/admin/roles', { name: newRoleName });
+      } else if (userRole === "manager") {
+        response = await  instance.post('/manager/roles', { name: newRoleName });
+      }else {
+        response = await instance.post('/roles', { name: newRoleName });
+      }
       if (response.data.status) {
         setRoles((prevRoles) => [...prevRoles, response.data.data.roles]);
         setNewRoleName('');
@@ -49,7 +81,14 @@ const RoleAndUserManagement = () => {
 
   const handleDeleteRole = async (roleId: string) => {
     try {
-      const response = await instance.delete(`/manager/roles/${roleId}`);
+      let response;
+      if (userRole === "admin") {
+        response = await  instance.delete(`/admin/roles/${roleId}`);
+      } else if (userRole === "manager") {
+        response = await  instance.delete(`/manager/roles/${roleId}`);
+      }else {
+        response = await instance.delete(`/roles/${roleId}`);
+      }
       if (response.data.status) {
         setRoles((prevRoles) => prevRoles.filter((role) => role.id !== roleId));
       } else {
@@ -62,7 +101,7 @@ const RoleAndUserManagement = () => {
   const handleAssignRoles = async (userId: number, selectedRoles: string[]) => {
     // Kiểm tra xem vai trò có phải là "manager" hoặc "staff" không
     const selectedRoleNames = selectedRoles.map(role => role.toLowerCase());
-    const isManagerOrStaff = selectedRoleNames.includes('manager');
+    const isManagerOrStaff = selectedRoleNames.includes('manager') || selectedRoleNames.includes('staff');
   
     // Nếu người dùng chọn "manager" hoặc "staff", yêu cầu nhập cinema_id
     let cinemaId: string | null = null;
@@ -86,8 +125,14 @@ const RoleAndUserManagement = () => {
       }
   
       // Gửi yêu cầu API để đồng bộ vai trò
-      const response = await instance.post(`/manager/roles/${userId}/users`, requestPayload);
-  
+      let response;
+      if (userRole === "admin") {
+        response = await  instance.post(`/admin/roles/${userId}/users`, requestPayload);
+      } else if (userRole === "manager") {
+        response = await  instance.post(`/manager/roles/${userId}/users`, requestPayload);
+      }else {
+        response = await instance.post(`/roles/${userId}/users`, requestPayload);
+      }
       if (response.data.status) {
         alert('Cập nhật quyền thành công!');
         // Cập nhật vai trò của người dùng trong giao diện
@@ -111,13 +156,24 @@ const RoleAndUserManagement = () => {
       return { id: permission?.id, name: permissionName };
     });
   
-    console.log("Permissions to Update:", permissionsToUpdate); // Debugging line
+   
   
     try {
-      const response = await instance.post(`/manager/roles/${roleId}/permissions`, {
-        permissions: permissionsToUpdate,
-      });
-      console.log("API Response:", response); // Debugging line
+      let response;
+      if (userRole === "admin") {
+        response = await instance.post(`/admin/roles/${roleId}/permissions`, {
+          permissions: permissionsToUpdate,
+        });;
+      } else if (userRole === "manager") {
+        response = await instance.post(`/manager/roles/${roleId}/permissions`, {
+          permissions: permissionsToUpdate,
+        });;
+      }else {
+        response = await instance.post(`/roles/${roleId}/permissions`, {
+          permissions: permissionsToUpdate,
+        });;
+      }
+      
       if (response.data.status) {
         alert('Cập nhật quyền thành công!');
       } else {
@@ -254,7 +310,7 @@ const RoleAndUserManagement = () => {
             </tr>
           </thead>
           <tbody>
-  {users.map((user) => (
+  {users.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((user) => (
     <tr key={user.id}>
       <td style={{ padding: '10px', border: '1px solid #ddd' }}>{user.user_name}</td>
       <td style={{ padding: '10px', border: '1px solid #ddd' }}>
@@ -285,6 +341,17 @@ const RoleAndUserManagement = () => {
 </tbody>
 
         </table>
+        <div className="d-flex justify-content-center mt-4">
+    <Pagination
+      current={currentPage}
+      pageSize={pageSize}
+      total={users.length}
+      onChange={(page, pageSize) => {
+        setCurrentPage(page);
+        setPageSize(pageSize);
+      }}
+    />
+  </div>
       </div>
     </div>
   );

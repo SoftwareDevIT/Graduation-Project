@@ -200,7 +200,7 @@ class BookingController extends Controller
     //     }
     // }
 
-    public function saveSeats($seats)
+    public function saveSeats($seats,$userId)
     {
         if (is_array($seats)) {
             try {
@@ -227,7 +227,7 @@ class BookingController extends Controller
                         $seatCreate = Seats::create($seatData);
                         if ($seatCreate) {
                             $generator = new BarcodeGeneratorPNG();
-                            $barcode = $generator->getBarcode($seatCreate->id.now()->format('Ymd'), BarcodeGenerator::TYPE_CODE_128);
+                            $barcode = $generator->getBarcode($seatCreate->id, BarcodeGenerator::TYPE_CODE_128);
 
                             // Tạo tên file duy nhất cho mã vạch (dựa vào ID của ghế)
                             $fileName = 'barcode_' . $seatCreate->id.now()->format('Ymd') . '.png';
@@ -239,10 +239,10 @@ class BookingController extends Controller
                             $filePath = storage_path('app/public/barcodes/' . $fileName);
 
                             // Gửi ảnh mã vạch lên ImgBB và nhận URL
-                            $imageUrl = $this->uploadImage($filePath);
-                            $code = $seatCreate->id.now()->format('Ymd');
+                            // $imageUrl = $this->uploadImage($filePath);
+                            $code = $seatCreate->id;
                             // Cập nhật đường dẫn mã vạch vào cơ sở dữ liệu
-                            $seatCreate->barcode = $imageUrl;
+                            // $seatCreate->barcode = $imageUrl;
                             $seatCreate->code= $code;
                             $seatCreate->save();
                             $seatDataList[] = $seatCreate;
@@ -266,7 +266,7 @@ class BookingController extends Controller
 
                 // Gửi job cho tất cả ghế đã tạo
                 if (!empty($seatDataList)) {
-                    $this->dispatchResetSeatsJob($seatDataList);
+                    $this->dispatchResetSeatsJob($seatDataList,$userId);
                     // Lưu thông tin ghế vào session
                     Session::put('seats', $seatDataList);
                     Log::info('Seats Session: ' . json_encode(session('seats')));
@@ -293,7 +293,7 @@ class BookingController extends Controller
         $seats = $request->input('seats'); // Ghế người dùng chọn
         $totalSeatsInRows = $request->input('totalSeatsInRows'); // Tổng số ghế trong từng hàng
         $showtime_id = $request->input('showtimeId');
-        Log::info("totalSeatsInRows: " . json_encode($totalSeatsInRows));
+        $userId = Auth::id();
 
         if (empty($seats)) {
             return response()->json(['status' => false, 'message' => 'Please select at least one seat.'], 400);
@@ -307,7 +307,7 @@ class BookingController extends Controller
             return $gapIssue; // Trả về lỗi nếu có khoảng trống
         }
 
-        $saveSeats = $this->saveSeats($seats);
+        $saveSeats = $this->saveSeats($seats,$userId);
         if ($saveSeats) {
             return $saveSeats;
         }
@@ -385,10 +385,11 @@ class BookingController extends Controller
         return $totalSeatsInRows[$row] ?? 0; // Trả về số ghế tối đa trong hàng, nếu không tìm thấy trả về 0
     }
 
-    public  function dispatchResetSeatsJob(array $seatIds): void
+
+    public  function dispatchResetSeatsJob(array $seatIds,$userId): void
     {
         // Dispatch một job với toàn bộ các ID ghế đã được tạo
-        ResetSeats::dispatch($seatIds)->delay(now()->addMinutes(1));
+        ResetSeats::dispatch($seatIds,$userId)->delay(now()->addMinutes(1));
     }
 
     public function selectedSeats(Request $request, $roomId)
@@ -404,7 +405,7 @@ class BookingController extends Controller
 
         // Broadcast sự kiện ghế đã chọn
         broadcast(new SeatSelected($seats,$userId, $roomId));
-      
+
         return response()->json(
             [
                 'status'=>true,

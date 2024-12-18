@@ -62,17 +62,30 @@
 
     font-size: 1.5rem;
     color: #333;
-   margin-right: 160px;
+   margin-right: 10px;
     font-weight: bold;
     padding-top: -10px;
 }
+.summary-card-header h2 {
+  font-size: 1.9rem;
+  color: #006064;
+ margin-right: 160px;
+  font-weight: bold;
+  padding-top: -10px;
+}
+
 .summary-filter{
     position: relative;
     margin-top: 25px;
-    left: 150px;
-    bottom: 55px;
+    left: 94px;
+    bottom: 60px;
 }
-
+.summary-filter1{
+  margin-top: 75px;
+}
+.summary-filter3{
+  margin-top: 75px;
+}
 .summary-number {
     font-size: 2rem;
     font-weight: bold;
@@ -80,12 +93,18 @@
     margin-bottom: 10px;
     
 }
+.summaryaccount{
+  margin-right: 120px;
+}
+.previous_revenue{
+  margin-right: 120px;
+}
 
 .summary-change {
     font-size: 16px;
     align-items: center;
     margin-top: 5px;
-  
+    margin-right: 120px;
   }
 
   

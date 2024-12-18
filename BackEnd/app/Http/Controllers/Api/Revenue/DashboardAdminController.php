@@ -100,7 +100,7 @@ class DashboardAdminController extends Controller
 
     public function dashboardMovie(Request $request){
 
-        $movie_id = $request->input('movie_id');
+        $movie_id = $request->query('movie_id');
         if (empty($movie_id)) {
             return $this->error('Vui lòng cung cấp movie_id');
         }

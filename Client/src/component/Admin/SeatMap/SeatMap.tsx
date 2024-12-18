@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { EditOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons'; // Ant Design icons
-import { notification, Table, Pagination, Input, Button, Popconfirm } from 'antd'; // Import Ant Design components
+import { notification, Table, Pagination, Input, Button, Popconfirm, Switch } from 'antd'; // Import Ant Design components
 import instance from '../../../server';
 import { SeatMapAdmin } from '../../../interface/SeatMap';
 
@@ -63,6 +63,28 @@ const SeatMap = () => {
     );
 
     const handlePageChange = (page: number) => setCurrentPage(page);
+    const handleToggleStatus = async (id: number, currentStatus: boolean) => {
+        try {
+            await instance.post(`/manager/seatMapStatus/${id}`, { status: !currentStatus });
+            setSeatLayouts((prevLayouts) =>
+                prevLayouts.map((layout) =>
+                    layout.id === id ? { ...layout, status: !currentStatus } : layout
+                )
+            );
+            notification.success({
+                message: 'Cập nhật trạng thái Layout ghế thành công!',
+                description: `Layout ghế đã được ${!currentStatus ? 'hiện' : 'ẩn'}.`,
+                placement: 'topRight',
+              });
+        } catch (error) {
+            console.error('Error updating seat map status:', error);
+            notification.error({
+                message: 'Lỗi',
+                description: 'Không thể cập nhật trạng thái!',
+                placement: 'topRight',
+            });
+        }
+    };
 
     const columns = [
         {
@@ -112,6 +134,21 @@ const SeatMap = () => {
             dataIndex: 'row_couple_seat',
             key: 'row_couple_seat',
             className: 'text-center',
+        },
+         {
+            title: 'Trạng Thái',
+            key: 'status',
+            className: 'text-center',
+            render: (combo: any, seatLayout: SeatMapAdmin) => (
+                <div style={{ textAlign: 'center' }}>
+                    <Switch
+                        checked={seatLayout.status}
+                        onChange={() => handleToggleStatus(seatLayout.id, seatLayout.status)}
+                        checkedChildren="On"
+                        unCheckedChildren="Off"
+                    />
+                </div>
+            ),
         },
         {
             title: 'Hành Động',
