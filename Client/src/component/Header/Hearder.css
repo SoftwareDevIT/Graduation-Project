@@ -191,8 +191,8 @@ bottom: 10px;
 }
 
 .header-right input[type="text"]:focus {
-  border-color: #e50914;
-  box-shadow: 0 0 8px rgba(229, 9, 20, 0.3);
+
+  box-shadow: 0 0 8px rgba(226, 151, 155, 0.3);
   outline: none;
 }
 
@@ -203,9 +203,7 @@ bottom: 10px;
   transition: transform 0.3s ease;
 }
 
-.header-right .icon:hover {
-  transform: scale(1.1);
-}
+
 
 /* Dropdown Styles */
 .dropdown1 {
