@@ -39,8 +39,13 @@ class SeatReset implements ShouldBroadcast
         Log::info("broadcastWith");
         return [
 
+
             'userId'=> $this->userId,
             'seats' => $this->validSeatIds,
+
+            'userId' => $this->userId,
+            'seats' => $this->validSeatIds,  // Trả về mảng các seat ID
+
 
             'userId' => $this->userId,
             'seats' => $this->validSeatIds,  // Trả về mảng các seat ID

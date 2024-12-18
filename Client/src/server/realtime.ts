@@ -25,7 +25,7 @@ export default async function initializeEcho() {
         ? parseInt(import.meta.env.VITE_PUSHER_PORT)
         : undefined,
       enabledTransports: ["ws", "wss"],
-      authEndpoint: "http://localhost:8000/broadcasting/auth", // Endpoint xác thực
+      authEndpoint: "http://127.0.0.1:8000/broadcasting/auth", // Endpoint xác thực
       auth: {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`, // Thêm token nếu cần
