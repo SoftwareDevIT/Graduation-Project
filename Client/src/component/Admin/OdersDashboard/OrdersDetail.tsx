@@ -43,10 +43,6 @@ const OrderDetail = () => {
           response = await instance.get(`/order/${id}`);
         }
         setOrderDetails(response.data.data);
-
-
-       
-
         setNewStatus(response.data.data.status); // Initialize status from the fetched data
       } catch (err) {
         setError('Failed to load order details');
@@ -121,7 +117,7 @@ const OrderDetail = () => {
     const invoiceDetails = orderDetails.seats
       .map(
         (seat, index) => `
-        <div style="page-break-after: always; border: 1px solid #e0e0e0; margin-bottom: 30px; padding: 20px; background-color: #f9f9f9;">
+        <div style=" border: 1px solid #e0e0e0; margin-bottom: 30px; padding: 20px; background-color: #f9f9f9;">
           <h1 style="text-align: center; color: #444; font-size: 24px; font-weight: bold;">Hóa Đơn Chi Tiết</h1>
           <div style="margin-bottom: 20px; text-align: center;">
             <img src="https://example.com/logo.png" alt="Logo" style="width: 150px; margin-bottom: 10px;" />
