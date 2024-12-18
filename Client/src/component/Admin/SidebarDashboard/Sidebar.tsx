@@ -160,7 +160,7 @@ className={({ isActive }) => (isActive ? "active" : "")}
             )}
             <ul className={openMenu["services"] ? "submenu open" : "submenu"}>
               {/* Nếu userRole là "staff", chỉ hiển thị mục Quản lý đơn hàng */}
-              {userRole == "staff || manager" && (
+              {(userRole === "manager" || userRole === "staff") && (
                 <li>
                   <NavLink
                     to={"/admin/orders"}

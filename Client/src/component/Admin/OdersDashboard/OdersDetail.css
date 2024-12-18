@@ -25,13 +25,7 @@
 
 .order-main {
     margin-right: 20px;
-
     width: 700px;
-    background-color: #c3c3c3;
-
-width: 700px;
-    background-color: rgb(95, 92, 92);
-
     padding: 15px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -44,7 +38,7 @@ width: 700px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.trangthaive {}
+
 
 .trangthaive h3 {
     padding-left: 5px;
@@ -55,32 +49,44 @@ width: 700px;
 
 .order-table {
     border-collapse: collapse;
-    margin-top: 15px;
+    width: 100%; /* Đảm bảo bảng chiếm hết chiều rộng */
+    margin-top: 20px; /* Tăng khoảng cách phía trên */
+    background-color: #ffffff; /* Màu nền trắng */
+    border-radius: 8px; /* Bo góc bảng */
+    overflow: hidden; /* Ẩn góc thừa của bo */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Bóng đổ nhẹ */
 }
 
 .order-table th,
 .order-table td {
-    padding: 8px;
+    padding: 12px; /* Tăng khoảng cách bên trong */
     text-align: left;
-    border: 1px solid #ddd;
+    border-bottom: 1px solid #ddd; /* Chỉ có đường viền dưới */
 }
 
 .order-table th {
-    background-color: #95c8e4;
+    background-color: #2d6a4f; /* Màu xanh đậm */
+    color: #ffffff; /* Màu chữ trắng */
     font-weight: bold;
-    width: 12px;
+    text-transform: uppercase; /* Chữ in hoa */
 }
 
 .order-table td {
-    background-color: #ecf0f1;
-    /* Màu nền sáng */
+    background-color: #f8f9fa; /* Màu nền sáng nhẹ */
+    color: #333; /* Màu chữ tối */
+}
+
+.order-table tr:nth-child(even) td {
+    background-color: #e9ecef; /* Màu nền khác cho hàng chẵn */
 }
 
 .order-table img {
-    width: 90px;
-    height: 120px;
+    width: 100px; /* Giữ kích thước hình ảnh */
+    height: 130px;
     object-fit: cover;
+    border-radius: 4px; /* Bo góc ảnh */
 }
+
 
 
 /* Phần cột phải - Sidebar */

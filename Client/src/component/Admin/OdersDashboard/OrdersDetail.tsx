@@ -326,7 +326,7 @@ const OrderDetail = () => {
                 <th>Phim</th>
                 <th>Suất chiếu</th>
                 <th>Combo</th>
-                <th>Vé</th>
+                <th>Ghế</th>
               </tr>
             </thead>
             <tbody>

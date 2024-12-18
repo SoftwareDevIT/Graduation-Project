@@ -161,3 +161,103 @@
     margin-left: 190px;
   }
   
+  /* Mobile First Design */
+
+/* iPad Mini (768px trở xuống) */
+@media screen and (max-width: 768px) {
+    .rap-container {
+      padding: 10px;
+    }
+  
+    .rap-header {
+      flex-direction: column;
+      align-items: center;
+      margin-left: 0;
+      text-align: center;
+    }
+  
+    .rap-logo {
+      margin-bottom: 10px;
+    }
+  
+    .rap-mo-ta {
+      margin-left: 0;
+      text-align: center;
+      font-size: 12px;
+    }
+  
+    .lich-phim {
+      gap: 10px;
+    }
+  
+    .phim-item {
+      margin-left: 0;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+  
+    .phim-anh {
+      margin-right: 0;
+      margin-bottom: 10px;
+    }
+  
+    .phim-thoi-gian {
+      justify-content: center;
+    }
+  
+    .thong-baooo {
+      width: 100%;
+      margin-left: 0;
+      text-align: center;
+    }
+  }
+  
+  /* Điện thoại (576px trở xuống) */
+  @media screen and (max-width: 576px) {
+    .rap-header {
+      gap: 15px;
+    }
+  
+    .calendar-custom {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+  
+    .date-custom {
+      width: 70px;
+      font-size: 12px;
+      padding: 5px;
+    }
+  
+    .thoi-gian-item {
+      width: 60px;
+      height: 40px;
+      font-size: 12px;
+    }
+  
+    .phim-item {
+      padding: 10px;
+    }
+  
+    .phim-anh {
+      width: 80px;
+      height: 120px;
+    }
+  
+    .phim-chi-tiet h3 {
+      font-size: 14px;
+    }
+  
+    .phim-phu {
+      font-size: 12px;
+    }
+  
+    .thong-baooo {
+      font-size: 12px;
+      padding: 8px 10px;
+    }
+  }
+  
