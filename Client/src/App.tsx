@@ -89,7 +89,7 @@ import OrderPage from "./component/Oders/OrderPage";
 import OrdersFormManager from "./Page/Admin/Orders/OrdersForm";
 
 import PageTitleUpdater from "./component/PageTitleUpdater/PageTitleUpdater";
-import TicketCinema from "./component/PersonalPage/TicketCinema";
+
 
 import SeatMapManager from "./Page/Admin/SeatMap/SeatMapManager";
 

@@ -25,4 +25,5 @@ export interface Movie {
     director: Director[];
     movie_in_cinemas: Cinema[];
     [key: string]: any; // Có thể thêm các thuộc tính khác từ API nếu cần
+   
 }

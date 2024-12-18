@@ -140,7 +140,8 @@ const filteredTransactions = pointHistories
             <div className="points-summary">
               <div className="points-header">
                 <h3>Số tiền đã chi tiêu</h3>
-                <span className="total-amount">{totalAmount} VND</span>
+                <span className="total-amount">{totalAmount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</span>
+
               </div>
               <div className="points-bar">
                 <div
@@ -176,7 +177,7 @@ const filteredTransactions = pointHistories
   mục
 </label>
 
-                <input type="text" placeholder="Tìm kiếm..." onChange={handleSearchChange} />
+                
               </div>
 
               <Table
