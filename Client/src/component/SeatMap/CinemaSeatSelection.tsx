@@ -125,18 +125,25 @@ const CinemaSeatSelection: React.FC = () => {
           matrix_column: seatLayoutData?.room?.seat_map?.matrix_column || 0,
         });
   
-        const seatResponse = await instance.get(`/seat/${showtimeId}`);
-        const reservedSeatSet: Set<string> = new Set();
-  
-        seatResponse.data.data.forEach((seat: any) => {
-          if (seat.seat_type === "Standard") {
-            reservedSeatSet.add(seat.seat_name);
+        try {
+          const seatResponse = await instance.get(`/seat/${showtimeId}`);
+          const reservedSeatSet: Set<string> = new Set();
+        
+          if (Array.isArray(seatResponse.data?.data)) {
+            seatResponse.data.data.forEach((seat: any) => {
+              if (seat.seat_type === "Standard") {
+                reservedSeatSet.add(seat.seat_name);
+              }
+            });
           }
-        });
-  
-        setReservedSeats(reservedSeatSet);
-        setLoading(false);
-  
+        
+          setReservedSeats(reservedSeatSet);
+        } catch (error) {
+          console.error("Error fetching seat data:", error);
+          setReservedSeats(new Set()); // Trả về Set rỗng nếu có lỗi
+        } finally {
+          setLoading(false); // Đảm bảo loading dừng lại dù có lỗi hay không
+        }
         return seatLayoutData?.room_id;
       } catch (error) {
         console.error("Error fetching room or seat data", error);

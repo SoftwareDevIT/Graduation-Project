@@ -87,8 +87,13 @@ const LichChieuUpdated: React.FC = () => {
               },
             });
           } else {
-            console.error("Unauthorized role");
-            return;
+            response = await instance.get(`/filterByDateByMovie`, {
+              params: {
+                location_id: selectedLocation,
+                showtime_date: selectedDate,
+                movie_id: movie.id,
+              },
+            });
           }
   
           const cinemaData = response.data?.data || [];
