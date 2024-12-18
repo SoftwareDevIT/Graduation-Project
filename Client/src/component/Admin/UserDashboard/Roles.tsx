@@ -14,7 +14,10 @@ const RoleAndUserManagement = () => {
   const [userRole, setUserRole] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
-
+  const [searchTerm, setSearchTerm] = useState('');
+  const filteredUsers = users.filter((user) =>
+    user.user_name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
   // Fetch user role from localStorage
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("user_profile") || "{}");
@@ -300,6 +303,23 @@ const RoleAndUserManagement = () => {
         </table>
       </div>
       <h2>Quản lý người dùng</h2>
+      <div style={{ marginBottom: '20px' }}>
+        <input
+          type="text"
+          placeholder="Tìm kiếm theo tên người dùng"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={{
+            width: '100%',
+            padding: '8px',
+            marginBottom: '10px',
+            borderRadius: '5px',
+            border: '1px solid #ccc',
+            backgroundColor: '#f9f9f9',
+            color: '#000',
+          }}
+        />
+      </div>
       <div>
         <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
           <thead>
@@ -309,7 +329,7 @@ const RoleAndUserManagement = () => {
             </tr>
           </thead>
           <tbody>
-  {users.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((user) => (
+          {filteredUsers.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((user) => (
     <tr key={user.id}>
       <td style={{ padding: '10px', border: '1px solid #ddd' }}>{user.user_name}</td>
       <td style={{ padding: '10px', border: '1px solid #ddd' }}>

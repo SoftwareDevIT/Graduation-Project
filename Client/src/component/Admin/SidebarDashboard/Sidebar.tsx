@@ -154,7 +154,7 @@ className={({ isActive }) => (isActive ? "active" : "")}
             </li>
           )}
           <li>
-            {(userRole === "manager" || userRole === "staff") && (
+            {(userRole === "manager" || userRole === "staff" || userRole === "admin") && (
               <span onClick={() => toggleMenu("services")}>
                 <FaGift style={{ marginRight: "-50px" }} /> Dịch vụ và ưu đãi{" "}
                 {openMenu["services"] ? <FaChevronDown /> : <FaChevronRight />}
@@ -173,9 +173,8 @@ className={({ isActive }) => (isActive ? "active" : "")}
                   </NavLink>
                 </li>
               )}
-{/* Nếu không phải staff, hiển thị các mục khác */}
-              {userRole == "manager" && (
                 <>
+                {(userRole === "manager") && (
                   <li>
                     <NavLink
                       to={"/admin/combo"}
@@ -185,6 +184,8 @@ className={({ isActive }) => (isActive ? "active" : "")}
                       <FaCogs /> Quản lí combo nước
                     </NavLink>
                   </li>
+                )}
+                 {(userRole === "manager") && (
                   <li>
                     <NavLink
                       to={"/admin/promotions"}
@@ -194,17 +195,19 @@ className={({ isActive }) => (isActive ? "active" : "")}
                       <FaTicketAlt /> Mã giảm giá
                     </NavLink>
                   </li>
-                  <li>
-                    <NavLink
-                      to={"/admin/method"}
-                      onClick={handleLinkClick}
-                      className={({ isActive }) => (isActive ? "active" : "")}
-                    >
-                      <FaCreditCard /> Phương thức thanh toán
-                    </NavLink>
-                  </li>
+                 )}
+                  {userRole === "admin" && (
+          <li>
+            <NavLink
+              to={"/admin/method"}
+              onClick={handleLinkClick}
+              className={({ isActive }) => (isActive ? "active" : "")}
+            >
+              <FaCreditCard /> Phương thức thanh toán
+            </NavLink>
+          </li>
+        )}
                 </>
-              )}
             </ul>
           </li>
 

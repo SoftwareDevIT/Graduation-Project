@@ -12,17 +12,43 @@ use App\Models\User;
 
 class RoleController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $currentUser = $request->user();
+        $loggedInUserId = $currentUser->id;
+
         $roles = Role::all();
-        $users = ModelsUser::all();
         $permissions = Permission::all();
+
+        if ($currentUser->hasRole('admin')) {
+            // Nếu là admin, hiển thị tất cả trừ tài khoản đang đăng nhập
+            $users = ModelsUser::where('id', '!=', $loggedInUserId)->get();
+
+        } elseif ($currentUser->hasRole('manager')) {
+            // Nếu là manager, hiển thị tài khoản cùng cinema_id và các tài khoản không gán cinema.
+            $users = ModelsUser::where('id', '!=', $loggedInUserId)
+                ->where(function ($query) use ($currentUser) {
+                    $query->where('cinema_id', $currentUser->cinema_id)
+                        ->orWhereNull('cinema_id');
+                })
+                ->whereDoesntHave('roles', function ($q) {
+                    $q->where('name', 'admin');  // Loại bỏ các tài khoản có quyền admin
+                })
+                ->get();
+
+        } else {
+            // Người dùng thường (role user)
+            $users = ModelsUser::where('id', '!=', $loggedInUserId)->get();
+        }
+
         return $this->success([
             'roles' => $roles,
             'users' => $users,
             'permissions' => $permissions
         ]);
     }
+
+
     public function show($id)
     {
         $userWithRoles = User::with('roles')->findOrFail($id);
@@ -38,37 +64,46 @@ class RoleController extends Controller
 
         // Kiểm tra quyền của người dùng hiện tại
         if ($currentUser->hasRole('manager')) {
-            // Người dùng Manager chỉ được gắn vai trò Staff
-            if (!empty(array_diff($request->roles, ['staff']))) {
+            // Người dùng Manager chỉ được gán vai trò Staff hoặc Manager
+            if (!empty(array_diff($request->roles, ['staff', 'manager']))) {
                 return response()->json([
-                    'message' => 'Bạn chỉ được phép gán vai trò "nhân viên".'
+                    'message' => 'Bạn chỉ được phép gán vai trò "nhân viên" và "quản lý".'
                 ], 403);
             }
         }
 
-        // // Validate dữ liệu
+        // Validate dữ liệu
         $validated = $request->validate([
             'roles' => 'array|required',
-            'cinema_id' => 'exists:cinema,id',
+            'cinema_id' => 'nullable|exists:cinema,id',
         ]);
 
-        // // Gán roles cho user
-        $user->syncRoles($request->roles);
+        // Gán roles cho user
+        $user->syncRoles($validated['roles']);
 
-        // Nếu user được gán vai trò Manager, gán cinema_id
-        if (in_array('manager', $request->roles)) {
-            $user->cinema_id = $request->cinema_id;
-            $user->save();
-        } else {
-            // Xóa cinema_id nếu vai trò không còn là Manager
-            $user->cinema_id = null;
-            $user->save();
+        // Xử lý cinema_id dựa trên vai trò và quyền của user hiện tại
+        if ($currentUser->hasRole('manager')) {
+            // Manager chỉ có thể gán quyền staff/manager và cinema_id của chính họ
+            $user->cinema_id = $currentUser->cinema_id;
+        } elseif ($currentUser->hasRole('admin')) {
+            // Admin có thể gán quyền và cinema_id từ request
+            $user->cinema_id = $validated['cinema_id'];
         }
 
+        // Nếu vai trò không phải staff hoặc manager, xóa cinema_id
+        if (!in_array('manager', $validated['roles']) && !in_array('staff', $validated['roles'])) {
+            $user->cinema_id = null;
+        }
+
+        // Lưu lại thông tin người dùng
+        $user->save();
+
         return response()->json([
-            'message' => 'Vai trò và điện ảnh được giao thành công.'
+            'message' => 'Vai trò và điện ảnh được gán thành công.'
         ], 200);
     }
+
+
 
 
 

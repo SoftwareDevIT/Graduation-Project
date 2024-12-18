@@ -38,8 +38,18 @@ class SeatReset implements ShouldBroadcast
         // Kênh được format là 'seats-{userId}' e.g. 'seats-1'
         Log::info("broadcastWith");
         return [
+
+
+            'userId'=> $this->userId,
+            'seats' => $this->validSeatIds,
+
             'userId' => $this->userId,
             'seats' => $this->validSeatIds,  // Trả về mảng các seat ID
+
+
+            'userId' => $this->userId,
+            'seats' => $this->validSeatIds,  // Trả về mảng các seat ID
+
             'message' => 'Seats have been reset',
         ];
     }
