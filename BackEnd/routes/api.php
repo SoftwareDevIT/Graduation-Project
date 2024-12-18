@@ -198,8 +198,10 @@ Route::middleware(['auth:sanctum', 'role:manager'])->prefix('manager')->group(fu
     //checkin ghế barcode
     Route::post('checkInSeat', [CheckInTicketController::class, 'checkInSeat']);
     Route::post('checkInBooking', [CheckInTicketController::class, 'checkInBooking']);
-    Route::get('dashboard/Movie', [DashboardAdminController::class, 'dashboardMovie']);
+    
 });
+
+Route::get('dashboard/Movie', [DashboardAdminController::class, 'dashboardMovie']);
 
 Route::middleware(['auth:sanctum', 'role:staff'])->prefix('staff')->group(function () {
     Route::apiResource('cinema', CinemaController::class); // CRUD rạp
