@@ -294,14 +294,16 @@ const Header = () => {
             </Link>
           </div>
           <div className="header-right col-lg-5 col-md-4 col-sm-4 col-4 ">
-            <form onSubmit={handleSearchSubmit}>
-              <input
-                type="text"
-                placeholder="Từ khóa tìm kiếm..."
-                value={searchTerm}
-                onChange={handleSearch}
-              />
-            </form>
+          <div className="input-container">
+  <i className="icon bi bi-search"></i> {/* Đây là icon Bootstrap */}
+  <input
+    type="text"
+    placeholder="Từ khóa tìm kiếm..."
+    value={searchTerm}
+    onChange={handleSearch}
+  />
+</div>
+
             <Link to="/map" className="icon-link">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

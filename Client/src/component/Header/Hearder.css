@@ -285,6 +285,26 @@ bottom: 10px;
 .dropdown:hover .dropdown-content {
   display: block;
 }
+ 
+/* CSS thêm icon */
+.input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-container input {
+  width: 100%;
+ 
+}
+
+.input-container .icon {
+  position: absolute;
+  right: 1px; /* Khoảng cách từ icon tới mép trái */
+  font-size: 16px;
+  color: #555; /* Màu của icon */
+}
+
 @media (max-width: 1122px) {
   .fas{
     display: none !important;
