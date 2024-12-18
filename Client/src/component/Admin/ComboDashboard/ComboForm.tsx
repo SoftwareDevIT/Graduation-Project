@@ -13,11 +13,11 @@ const comboSchema = z.object({
   combo_name: z.string().min(1, "Tên combo là bắt buộc."),
   descripton: z.string().min(1, "Mô tả là bắt buộc.").max(500,'Mô tả tối đa 500 ký tự'),
   price: z
-    .number()
-    .min(0, "Giá phải lớn hơn hoặc bằng 0.")
-    .max(10000000, "Giá không được vượt quá 10 triệu."),
+        .number({ invalid_type_error: "Giá phải là số." })
+        .min(0, "Giá phải lớn hơn hoặc bằng 0.")
+        .max(10000000, "Giá không được vượt quá 10 triệu."),
   volume: z
-    .number()
+    .number({ invalid_type_error: "Giá phải là số." })
     .min(0, "Số lượng phải lớn hơn hoặc bằng 0.")
     .max(1000, "Số lượng không được vượt quá 1000."),
 });

@@ -18,7 +18,7 @@ const cinemaSchema = z.object({
     .max(10, "Số điện thoại tối đã 10 chữ số.")
     .regex(/^[0-9]+$/, "Số điện thoại phải là số."),
   cinema_address: z.string().min(1, "Địa chỉ rạp là bắt buộc."),
-  location_id: z.number().min(1,"ID vị trí là bắt buộc."),
+  location_id: z.number({ invalid_type_error: "Vui lòng chọn vị trí." }).min(1,"ID vị trí là bắt buộc."),
 });
 
 const CinemaForm = () => {

@@ -11,11 +11,11 @@ import './SeatMap.css'
 const seatMapSchema = z.object({
   name: z.string().min(1, "Tên sơ đồ chỗ ngồi là bắt buộc").max(255, "Tên sơ đồ quá dài"),
   description: z.string().min(1, "Mô tả là bắt buộc").max(500, "Mô tả quá dài"),
-  matrix_row: z.number().min(12, "Số hàng phải từ 12 trở lên").max(15, "Số hàng không vượt quá 15"),
-  matrix_column: z.number().min(12, "Số cột phải từ 12 trở lên").max(15, "Số cột không vượt quá 15"),
-  row_regular_seat: z.number().min(1, "Số hàng ghế thường phải lớn hơn hoặc bằng 1"),
-  row_vip_seat: z.number().min(1, "Số hàng ghế VIP phải lớn hơn hoặc bằng 1"),
-  row_couple_seat: z.number().min(0, "Số hàng ghế đôi không thể nhỏ hơn 0"),
+  matrix_row: z.number({ invalid_type_error: "Vui lòng nhập số hàng" }).min(12, "Số hàng phải từ 12 trở lên").max(15, "Số hàng không vượt quá 15"),
+  matrix_column: z.number({ invalid_type_error: "Vui lòng nhập số cột" }).min(12, "Số cột phải từ 12 trở lên").max(15, "Số cột không vượt quá 15"),
+  row_regular_seat: z.number({ invalid_type_error: "Vui lòng nhập số hàng ghế thường" }).min(1, "Số hàng ghế thường phải lớn hơn hoặc bằng 1"),
+  row_vip_seat: z.number({ invalid_type_error: "Vui lòng nhập số hàng ghế VIP" }).min(1, "Số hàng ghế VIP phải lớn hơn hoặc bằng 1"),
+  row_couple_seat: z.number({ invalid_type_error: "Vui lòng nhập số hàng ghế đôi" }).min(0, "Số hàng ghế đôi không thể nhỏ hơn 0"),
   seat_structure: z.array(z.object({
     label: z.string(),
     linkedSeat: z.string().nullable(),
