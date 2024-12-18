@@ -13,7 +13,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 // Define the Zod schema for validation
 const postSchema = z.object({
   title: z.string().min(1, 'Tiêu đề là bắt buộc').max(100,'Tiêu đề tối đa 100 ký tự'), // Title is required
-  news_category_id: z.number().min(1, 'Chọn một danh mục'), // Category is required
+  news_category_id: z.number({ invalid_type_error: "Vui lòng chọn danh mục" }).min(1, 'Chọn một danh mục'), // Category is required
   content: z.string().min(1, 'Nội dung là bắt buộc').max(10000,'Nội dung tối đa 10000 ký tự'), // Content is required
 });
 

@@ -3,7 +3,7 @@ import { Roles } from '../../../interface/Roles';
 import { User } from '../../../interface/User';
 import { Permission } from '../../../interface/Permissions';
 import instance from '../../../server';
-import { notification, Pagination } from 'antd';
+import { Pagination } from 'antd';
 
 const RoleAndUserManagement = () => {
   const [roles, setRoles] = useState<Roles[]>([]);
@@ -59,9 +59,7 @@ const RoleAndUserManagement = () => {
 
   const handleCreateRole = async () => {
     if (!newRoleName) {
-      notification.error({
-        message: 'Tên vai trò không thể trống!',
-      });
+      alert('Tên vai trò không thể trống!');
       return;
     }
     try {
@@ -76,28 +74,12 @@ const RoleAndUserManagement = () => {
       if (response.data.status) {
         setRoles((prevRoles) => [...prevRoles, response.data.data.roles]);
         setNewRoleName('');
-        notification.success({
-          message: 'Tạo vai trò thành công!',
-        });
       } else {
-        notification.error({
-          message: 'Tạo vai trò thất bại',
-          description: response.data.message,
-        });
+        console.error('Failed to create role:', response.data.message);
       }
-    } catch (error: unknown) {
-      console.error('Error assigning roles:', error);
-    if (error instanceof Error) {
-      notification.error({
-        message: 'Lỗi khi cấp quyền',
-        description: error.message,
-      });
-    } else {
-      notification.error({
-        message: 'Lỗi không xác định',
-      });
+    } catch (error) {
+      console.error('Error creating role:', error);
     }
-  }
   };
 
   const handleDeleteRole = async (roleId: string) => {
@@ -121,7 +103,7 @@ const RoleAndUserManagement = () => {
   };
   const handleAssignRoles = async (userId: number, selectedRoles: string[]) => {
     const selectedRoleNames = selectedRoles.map(role => role.toLowerCase());
-    const isManagerOrStaff = selectedRoleNames.includes('admin');
+    const isManagerOrStaff = selectedRoleNames.includes('manager') || selectedRoleNames.includes('staff');
   
     // Nếu người dùng chọn "manager" hoặc "staff", yêu cầu nhập cinema_id
     let cinemaId: string | null = null;
@@ -154,9 +136,7 @@ const RoleAndUserManagement = () => {
         response = await instance.post(`/roles/${userId}/users`, requestPayload);
       }
       if (response.data.status) {
-        notification.success({
-          message: 'Cập nhật quyền thành công!',
-        });
+        alert('Cập nhật quyền thành công!');
         // Cập nhật vai trò của người dùng trong giao diện
         setUsers((prevUsers) =>
           prevUsers.map((user) =>
@@ -164,23 +144,10 @@ const RoleAndUserManagement = () => {
           )
         );
       } else {
-        notification.error({
-          message: 'Cập nhật quyền thất bại',
-          description: response.data.message,
-        });
+        console.error('Cập nhật quyền thất bại:', response.data.message);
       }
     } catch (error) {
-      console.error('Error assigning roles:', error);
-    if (error instanceof Error) {
-      notification.error({
-        message: 'Lỗi khi cấp quyền',
-        description: error.message,
-      });
-    } else {
-      notification.error({
-        message: 'Lỗi không xác định',
-      });
-    }
+      console.error('Lỗi khi cấp quyền:', error);
     }
   };
   
@@ -362,7 +329,7 @@ const RoleAndUserManagement = () => {
             </tr>
           </thead>
           <tbody>
-          {filteredUsers.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((user) => (
+    {filteredUsers.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((user) => (
     <tr key={user.id}>
       <td style={{ padding: '10px', border: '1px solid #ddd' }}>{user.user_name}</td>
       <td style={{ padding: '10px', border: '1px solid #ddd' }}>

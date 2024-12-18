@@ -68,13 +68,7 @@ export const PostProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   }, []);
   const fetchPosts = async () => {
     try {
-      let response;
-      if (userRole === "manager") {
-        response = await instance.get('/manager/news');
-      } else {
-        response = await instance.get('/news');
-      }
-      
+      const response = await instance.get('/manager/news'); // Ensure this endpoint is correct
       dispatch({ type: 'SET_POSTS', payload: response.data.data });
     } catch (error) {
       console.error('Error fetching posts:', error);
