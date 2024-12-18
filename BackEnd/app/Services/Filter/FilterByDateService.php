@@ -32,15 +32,17 @@ class FilterByDateService
 
         if ($user && $user->hasRole('admin')) {
             // Admin: Có thể xem tất cả
-            $movies = Movie::whereHas('showtimes', function ($query) use ($date) {
-                $query->where('showtime_date', $date);
-            })->with(['showtimes' => function ($query) use ($date) {
-                $query->where('showtime_date', $date);
-            }])->get();
+            $movies = Movie::where('status', 1)
+            ->whereHas('showtimes', function ($query) use ($date) {
+                    $query->where('showtime_date', $date);
+                })->with(['showtimes' => function ($query) use ($date) {
+                    $query->where('showtime_date', $date);
+                }])->get();
         } elseif ($user && $user->hasRole('manager')) {
             // Manager: Chỉ xem trong cinema_id của họ
             $cinemaId = $user->cinema_id;
-            $movies = Movie::whereHas('showtimes', function ($query) use ($date, $cinemaId) {
+            $movies = Movie::where('status', 1)
+            ->whereHas('showtimes', function ($query) use ($date, $cinemaId) {
                 $query->where('showtime_date', $date)
                     ->whereHas('room', function ($query) use ($cinemaId) {
                         $query->where('cinema_id', $cinemaId);
@@ -50,7 +52,8 @@ class FilterByDateService
             }])->get();
         } else {
             // Người dùng đã đăng nhập hoặc chưa đăng nhập: Chỉ xem các showtime có trạng thái active
-            $movies = Movie::whereHas('showtimes', function ($query) use ($date, $cinemaId) {
+            $movies = Movie::where('status', 1)
+            ->whereHas('showtimes', function ($query) use ($date, $cinemaId) {
                 $query->where('showtime_date', $date)->where('status', 1);
 
                 if ($cinemaId) {
@@ -63,7 +66,7 @@ class FilterByDateService
             }])->get();
         }
 
-        
+
         if ($movies->isEmpty()) {
             return response()->json([
                 'status' => false,
@@ -95,7 +98,6 @@ class FilterByDateService
                     ->with(['rooms.showtimes' => function ($query) use ($date) {
                         $query->where('showtime_date', $date);
                     }]);
-
             } elseif ($user->hasRole('manager')) {
                 // Manager: Hiển thị các suất chiếu của rạp thuộc quyền quản lý
                 $query->where('id', $user->cinema_id)
@@ -117,7 +119,6 @@ class FilterByDateService
                     ->with(['rooms.showtimes' => function ($query) use ($date) {
                         $query->where('showtime_date', $date)->where('status', 1);
                     }]);
-                   
             }
         } else {
             // Người chưa đăng nhập: Chỉ hiện suất chiếu có status = 1
@@ -130,12 +131,10 @@ class FilterByDateService
                 ->with(['rooms.showtimes' => function ($query) use ($date) {
                     $query->where('showtime_date', $date)->where('status', 1);
                 }]);
-                
-
-            }
+        }
 
         $results = $query->get();
-       // Xử lý ánh xạ kết quả
+        // Xử lý ánh xạ kết quả
         $filteredResults = $results->map(function ($cinema) {
             return [
                 'cinema_name' => $cinema->cinema_name,
@@ -157,5 +156,4 @@ class FilterByDateService
 
         return $filteredResults;
     }
-
 }
