@@ -42,7 +42,7 @@ const PostsForm: React.FC = () => {
         if (id) {
           const postResponse = await instance.get(`/manager/news/${id}`);
           const postData = postResponse.data.data;
-          console.log(postData);
+          // console.log(postData);
 
           // Set old images if available
           setOldThumbnail(postData.thumnail);

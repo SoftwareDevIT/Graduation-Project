@@ -10,6 +10,7 @@ const ShowtimeAuto = () => {
     const [formData, setFormData] = useState<Showtime>({
         movie: {} as Movie,
         id: 0,
+        showtime_id:0,
         movie_id: 0,
         cinema_id: 0,
         showtime_date: '',
@@ -83,7 +84,7 @@ const ShowtimeAuto = () => {
                 duration: formData.duration,
                 price: formData.price
             });
-            console.log("Thêm showtime thành công:", response.data);
+            // console.log("Thêm showtime thành công:", response.data);
             notification.success({
                 message: 'Thêm ShowTime thành công',
                 description: 'Showtime đã được thêm thành công.'

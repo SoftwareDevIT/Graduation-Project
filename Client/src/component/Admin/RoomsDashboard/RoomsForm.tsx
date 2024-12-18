@@ -53,7 +53,7 @@ const RoomsForm: React.FC = () => {
   }, [id, reset]);
 
   const onSubmit: SubmitHandler<Room> = async (data) => {
-    console.log('Submitted Data:', data);
+    // console.log('Submitted Data:', data);
     if (!data.room_name || !data.seat_map_id) {
       notification.error({
         message: 'Thông báo',

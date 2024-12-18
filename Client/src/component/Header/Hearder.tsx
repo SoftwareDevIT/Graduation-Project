@@ -28,7 +28,7 @@ const Header = () => {
 
   const [isFormVisible, setIsFormVisible] = useState(false); // Trạng thái hiển thị form
   const toggleFormVisibility = () => {
-    console.log('Toggle form visibility');
+    // console.log('Toggle form visibility');
     setIsFormVisible(!isFormVisible);
   };
   
@@ -61,7 +61,7 @@ const Header = () => {
     if (selectedLocation !== null) {
       instance.get(`/cinema-by-location/${selectedLocation}`).then((response) => {
         setCinemas(response.data.data);
-        console.log(response.data);
+        // console.log(response.data);
 
       });
     }
@@ -77,7 +77,7 @@ const Header = () => {
       // Access the points value (convert to number if needed)
       const points = parseInt(userProfileObj.points, 10); // Convert points to an integer
       
-      console.log(points); // Log points value
+ 
   
       // Check if points are greater than 1000 to trigger the voucher fetch
       if (points > 999999 && user_id) {
@@ -183,27 +183,28 @@ const Header = () => {
   >
     Rạp{" "}
     <span className="arrow">
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 16 16"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M4 6L8 10L12 6"
-          stroke="#555"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
+    <svg
+  width="16"
+  height="16"
+  viewBox="0 0 16 16"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    d="M4 6L8 10L12 6"
+    stroke="#555"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  />
+</svg>
+
     </span>
   </a>
 </div>
 <Modal
       title="Tìm Rạp"
-      visible={isModalVisible}
+      open={isModalVisible}
       onCancel={handleCloseModal}
       footer={null}
       style={{ maxWidth: '500px', margin: '0 auto' }} // Căn giữa modal
