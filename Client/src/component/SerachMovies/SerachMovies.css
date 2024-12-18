@@ -19,8 +19,8 @@
 
 
 .movelikeone h3{
-text-align: center;
-    margin-top: 10px;
+margin-left: 585px;
+    margin-top: 20px;
     font-weight: 600;
     font-size: 1.25rem;
 }
@@ -29,7 +29,12 @@ text-align: center;
     height: 176px;
     
 }
-
+.timkiemphim2{
+ 
+    height: 100px;
+    text-align: center;
+    font-size: 20px ;
+}
 .move-itemone h4{
     font-size: 15px;
 padding-top: 6px;
