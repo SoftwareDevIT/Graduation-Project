@@ -6,6 +6,7 @@ import instance from "../../server";
 import "./OrderPage.css";
 import { Combo } from "../../interface/Combo";
 import Header from "../Header/Hearder";
+import { useRealtime } from "../../Context/RealtimeContext";
 
 export interface LocationState {
   movieName: string;
@@ -37,7 +38,7 @@ const OrderPage: React.FC = () => {
   const [comboQuantities, setComboQuantities] = useState<number[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const navigate = useNavigate();
-
+  const { setupRealtime } = useRealtime();
   const handleContinue = () => {
     const selectedCombos = comboQuantities
       .map((quantity, index) => {
@@ -81,9 +82,9 @@ const OrderPage: React.FC = () => {
         console.error("Error fetching combos:", error);
       }
     };
-
+    setupRealtime();
     fetchCombos();
-  }, []);
+  }, [setupRealtime]);
 
   const handleQuantityChange = (index: number, delta: number): void => {
     const newQuantities = [...comboQuantities];

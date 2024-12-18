@@ -20,6 +20,7 @@ export interface Movie {
     like: number | null;
     status: number; // Số nguyên từ API trả về (1: Show, 0: Hidden)
     actor: Actor[];
+    cinema:Cinema[];
     movie_category: MovieCategory[]; // Mảng các đối tượng danh mục phim chứa category_name
     director: Director[];
     movie_in_cinemas: Cinema[];

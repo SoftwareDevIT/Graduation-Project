@@ -1,114 +1,130 @@
 /* Cấu trúc chính của trang OrderDetail */
+
 .order-detail {
     font-family: Arial, sans-serif;
     margin: 20px auto;
     background-color: #f7f9fc;
     border-radius: 8px;
     padding: 20px;
-   /* Giới hạn chiều rộng tối đa */
-  }
-  
-  .order-detail h2 {
+    /* Giới hạn chiều rộng tối đa */
+}
+
+.order-detail h2 {
     color: #2c3e50;
     text-align: center;
     font-size: 24px;
     margin-bottom: 15px;
     color: #333;
-  }
-  
-  .order-content {
+}
+
+.order-content {
     display: flex;
     justify-content: space-between;
     gap: 15px;
-  }
-  
-  .order-main {
+}
+
+.order-main {
     margin-right: 20px;
+
+    width: 700px;
+    background-color: #c3c3c3;
+
 width: 700px;
     background-color: rgb(95, 92, 92);
+
     padding: 15px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .order-sidebar {
+}
+
+.order-sidebar {
     background-color: white;
     padding: 15px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  .trangthaive{
- 
-  
-  }
-  .trangthaive h3{
+}
+
+.trangthaive {}
+
+.trangthaive h3 {
     padding-left: 5px;
-    
-  }
-  /* Tạo kiểu cho bảng thông tin đơn hàng */
-  .order-table {
+}
+
+
+/* Tạo kiểu cho bảng thông tin đơn hàng */
+
+.order-table {
     border-collapse: collapse;
     margin-top: 15px;
-  }
-  
-  .order-table th, .order-table td {
+}
+
+.order-table th,
+.order-table td {
     padding: 8px;
     text-align: left;
     border: 1px solid #ddd;
-  }
-  
-  .order-table th {
+}
+
+.order-table th {
     background-color: #95c8e4;
     font-weight: bold;
     width: 12px;
-  }
-  .order-table td {
-    background-color: #ecf0f1;  /* Màu nền sáng */
-  }
-  .order-table img {
+}
+
+.order-table td {
+    background-color: #ecf0f1;
+    /* Màu nền sáng */
+}
+
+.order-table img {
     width: 90px;
     height: 120px;
     object-fit: cover;
-  }
-  
-  /* Phần cột phải - Sidebar */
-  .ticket-status {
+}
+
+
+/* Phần cột phải - Sidebar */
+
+.ticket-status {
     margin-left: 10px;
- width: 340px;
+    width: 340px;
     text-align: center;
     background-color: #f0f0f0;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .ticket-status h3 {
+}
+
+.ticket-status h3 {
     font-size: 18px;
     color: #333;
     margin-bottom: 10px;
-  }
-  .ticket-content {
+}
+
+.ticket-content {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-top: 10px;
-  }
-  
-  .ticket-content img {
+}
+
+.ticket-content img {
     width: 150px;
-    margin-bottom: 10px; /* Khoảng cách giữa hình ảnh và nút */
-  }
-  
-  .ticket-content Button {
-    margin-top: 10px; /* Điều chỉnh khoảng cách nếu cần */
-  }
-  
-  .ticket-status p {
+    margin-bottom: 10px;
+    /* Khoảng cách giữa hình ảnh và nút */
+}
+
+.ticket-content Button {
+    margin-top: 10px;
+    /* Điều chỉnh khoảng cách nếu cần */
+}
+
+.ticket-status p {
     font-size: 16px;
     color: #333;
     margin-bottom: 10px;
-  }
-  
-  .ticket-status .ant-btn {
+}
+
+.ticket-status .ant-btn {
     margin-left: 20px;
     background-color: #0c8460;
     color: white;
@@ -118,133 +134,151 @@ width: 700px;
     cursor: pointer;
     border-radius: 5px;
     transition: background-color 0.3s ease;
-  }
-  
-  .ticket-status .ant-btn:hover {
+}
+
+.ticket-status .ant-btn:hover {
     background-color: #004c99;
-  }
-  .tongtien {
-   
+}
+
+.tongtien {
     margin-top: 20px;
     float: right;
     padding-top: 10px;
     font-family: 'Arial', sans-serif;
-    
-  }
-  
-  .tongtien p {
+}
+
+.tongtien p {
     margin: 5px 0;
     font-size: 17px;
     color: #333;
-  }
-  
-  .tongtien p strong {
+}
+
+.tongtien p strong {
     font-weight: bold;
     color: #000;
-  }
-  
-  .tongtien div {
+}
+
+.tongtien div {
     margin-top: 5px;
-  }
-  
-  .tongtien .tongtien-title {
+}
+
+.tongtien .tongtien-title {
     font-size: 16px;
     font-weight: bold;
     margin-bottom: 10px;
-  }
-  
-  .tongtien .combos {
+}
+
+.tongtien .combos {
     margin-left: 10px;
     font-size: 14px;
-  }
-  
-  /* Kiểu cho các trạng thái của vé */
-  .ticket-status {
+}
+
+
+/* Kiểu cho các trạng thái của vé */
+
+.ticket-status {
     margin-left: 4px;
-  }
-  .status-pain {
+}
+
+.status-pain {
     color: green;
-  }
-  
-  .status-confirmed {
+}
+
+.status-confirmed {
     color: orange;
-  }
-  
-  .status-pending {
+}
+
+.status-pending {
     color: blue;
-  }
-  
-  .status-default {
+}
+
+.status-default {
     color: gray;
-  }
-  .user-info {
-    background-color: #f9f9f9; /* Màu nền nhạt */
+}
+
+.user-info {
+    background-color: #f9f9f9;
+    /* Màu nền nhạt */
     padding: 20px;
-    border-radius: 10px; /* Bo góc mềm mại */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Bóng đổ nhẹ */
-    text-align: center; /* Căn giữa nội dung */
-   
-    width: 340px; /* Giới hạn chiều rộng tối đa */
-    margin: 0 auto; /* Căn giữa trong container */
-  }
-  
-  .user-info h3 {
+    border-radius: 10px;
+    /* Bo góc mềm mại */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Bóng đổ nhẹ */
+    text-align: center;
+    /* Căn giữa nội dung */
+    width: 340px;
+    /* Giới hạn chiều rộng tối đa */
+    margin: 0 auto;
+    /* Căn giữa trong container */
+}
+
+.user-info h3 {
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 15px;
-  }
-  
-  .user-info img {
-    width: 100px; /* Kích thước avatar */
+}
+
+.user-info img {
+    width: 100px;
+    /* Kích thước avatar */
     height: 100px;
-    border-radius: 50%; /* Bo tròn hình ảnh */
+    border-radius: 50%;
+    /* Bo tròn hình ảnh */
     object-fit: cover;
     margin-bottom: 15px;
-  }
-  
-  .user-info p {
+}
+
+.user-info p {
     font-size: 16px;
     margin: 5px 0;
-    color: #555; /* Màu chữ xám nhạt */
-  }
-  .payment-info {
+    color: #555;
+    /* Màu chữ xám nhạt */
+}
+
+.payment-info {
     margin-left: 10px;
     width: 340px;
-    background-color: #fff; /* Màu nền trắng */
+    background-color: #fff;
+    /* Màu nền trắng */
     padding: 20px;
-    border-radius: 10px; /* Bo góc mềm mại */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Bóng đổ nhẹ */
-    margin-top: 10px; /* Khoảng cách giữa các phần */
-  }
-  
-  .payment-info h3 {
+    border-radius: 10px;
+    /* Bo góc mềm mại */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Bóng đổ nhẹ */
+    margin-top: 10px;
+    /* Khoảng cách giữa các phần */
+}
+
+.payment-info h3 {
     font-size: 20px;
     font-weight: bold;
-    color: #333; /* Màu chữ đậm cho tiêu đề */
+    color: #333;
+    /* Màu chữ đậm cho tiêu đề */
     margin-bottom: 15px;
-  }
-  
-  .payment-info p {
+}
+
+.payment-info p {
     font-size: 16px;
     margin: 5px 0;
-    color: #555; /* Màu chữ xám nhạt */
-  }
-  
-  .payment-info p:last-child {
-    font-weight: bold; /* Đậm cho phần tổng tiền */
-    color: #d9534f; /* Màu đỏ cho phần tổng tiền */
-  }
-  
+    color: #555;
+    /* Màu chữ xám nhạt */
+}
 
-  @media (max-width: 768px) {
+.payment-info p:last-child {
+    font-weight: bold;
+    /* Đậm cho phần tổng tiền */
+    color: #d9534f;
+    /* Màu đỏ cho phần tổng tiền */
+}
+
+@media (max-width: 768px) {
     .order-content {
-      flex-direction: column;
-      gap: 10px;
+        flex-direction: column;
+        gap: 10px;
     }
-  
-    .order-main, .order-sidebar {
-      flex: 1 1 100%;
-      margin-bottom: 20px;
+    .order-main,
+    .order-sidebar {
+        flex: 1 1 100%;
+        margin-bottom: 20px;
     }
-  }
-  
+}

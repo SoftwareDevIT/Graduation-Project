@@ -71,7 +71,7 @@ export const MovieProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("user_profile") || "{}");
     const roles = userData.roles || [];
-    console.log("data role:", roles);
+  
     if (roles.length > 0) {
       setUserRole(roles[0].name);
     } else {

@@ -239,10 +239,10 @@ class BookingController extends Controller
                             $filePath = storage_path('app/public/barcodes/' . $fileName);
 
                             // Gửi ảnh mã vạch lên ImgBB và nhận URL
-                            $imageUrl = $this->uploadImage($filePath);
+                            // $imageUrl = $this->uploadImage($filePath);
                             $code = $seatCreate->id;
                             // Cập nhật đường dẫn mã vạch vào cơ sở dữ liệu
-                            $seatCreate->barcode = $imageUrl;
+                            // $seatCreate->barcode = $imageUrl;
                             $seatCreate->code= $code;
                             $seatCreate->save();
                             $seatDataList[] = $seatCreate;
@@ -278,8 +278,8 @@ class BookingController extends Controller
                     'data' => $seatDataList
                 ]);
             } catch (\Exception $e) {
-                // Nếu xảy ra lỗi ngoài mong muốn, thực hiện rollback toàn bộ transaction
                 DB::rollBack();
+                Log::error('Error processing seats: ' . $e->getMessage());
                 return response()->json(['status' => false, 'message' => 'An error occurred while processing seats.'], 500);
             }
         }
