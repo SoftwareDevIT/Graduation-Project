@@ -97,7 +97,7 @@ const Sidebar: React.FC = () => {
                     onClick={handleLinkClick}
 className={({ isActive }) => (isActive ? "active" : "")}
                   >
-                    <FaIndustry /> Quản lí phòng rạp
+<FaIndustry /> Quản lí phòng rạp
                   </NavLink>
                 </li>
                 <li>
@@ -174,7 +174,7 @@ className={({ isActive }) => (isActive ? "active" : "")}
                 </li>
               )}
                 <>
-                {(userRole === "manager") && (
+{(userRole === "manager") && (
                   <li>
                     <NavLink
                       to={"/admin/combo"}
