@@ -19,6 +19,7 @@ use App\Services\Ranks\RankService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -42,25 +43,25 @@ class BookingController extends Controller
     }
 
 
-    public function bookTicket(TicketBookingRequest $request)
+    public function bookTicket(Request $request)
     {
         try {
+            Cache::put('transaction_data', [
+                'transaction' => $request->all(),
+                'user_id' => Auth::user()->id
+            ], 300);
             $data = $this->ticketBookingService->bookingTicket($request);
 
             if ($data instanceof JsonResponse) {
                 return $data;  // Trả về URL thanh toán hoặc lỗi nếu có
             }
+            $paymentURL = $this->ticketBookingService->processPayment($request);
 
-            if (session()->get('booking')) {
-                $paymentURL = $this->ticketBookingService->processPayment($request);
-
-                return response()->json([
-                    'status' => true,
-                    'message' => 'Đặt vé thành công',
-                    'Url' => $paymentURL
-                ]);
-            }
-            return $this->error('Đặt vé thất bại', 500);
+            return response()->json([
+                'status' => true,
+                'message' => 'Đặt vé thành công',
+                'Url' => $paymentURL
+            ]);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
@@ -69,33 +70,27 @@ class BookingController extends Controller
         }
     }
 
+
     public function vnpayReturn(Request $request)
     {
         $data = $request->only(['vnp_TxnRef', 'vnp_ResponseCode']);
+        $dataBooking = Cache::get('transaction_data');
+        $transaction = $dataBooking['transaction'];
+        $userId = $dataBooking['user_id'];
+        $dataBo = [
+            'showtime_id' => $transaction['showtime_id'],
+            'amount' => $transaction['amount'],
+            'pay_method_id' => $transaction['pay_method_id'],
+            'cinemaId' => $transaction['cinemaId'],
+            'user_id' => $userId
+        ];
+        $request = new Request($dataBo);
 
         if ($data['vnp_ResponseCode'] == "00") {
-            // Tìm booking theo ID
-            $booking = Booking::where('id', $data['vnp_TxnRef'])->first();
+            $booking = $this->ticketBookingService->bookTicket($request);
 
-            // Cập nhật trạng thái đặt vé
             $booking->status = 'Thanh toán thành công';
 
-            // Tạo mã vạch dưới dạng PNG
-            // $generator = new BarcodeGeneratorPNG();
-            // $barcode = $generator->getBarcode($booking->id, BarcodeGenerator::TYPE_CODE_128);
-
-            // // Tạo tên file duy nhất cho mã vạch (dựa vào booking ID)
-            // $fileName = 'barcode_' . $booking->id . '.png';
-
-            // // Lưu mã vạch vào thư mục 'public/barcodes'
-            // Storage::put('public/barcodes/' . $fileName, $barcode);
-
-            // // Đưa đường dẫn đến mã vạch vào phương thức uploadImage
-            // $filePath = storage_path('app/public/barcodes/' . $fileName);
-            // $imageUrl = $this->uploadImage($filePath); // Gửi ảnh lên ImgBB
-
-            // // Lưu đường dẫn của ảnh mã vạch vào cơ sở dữ liệu (URL từ ImgBB)
-            // $booking->barcode = $imageUrl;
             $booking->save();
 
             $this->rankService->points($booking);
@@ -114,93 +109,9 @@ class BookingController extends Controller
         return redirect('http://localhost:5173/ticketcinema')->with('error', 'Payment failed');
     }
 
-    // public function selectSeats(Request $request)
-    // {
-    //     $seats = $request->input('seats');
-    //     $existingSeats = [];
-    //     $seatDataList = [];
-    //     if (is_array($seats) && count($seats) > 10) {
-    //         return response()->json(['status' => false, 'message' => 'You can only select up to 10 seats.'], 400);
-    //     }
-
-    //     if (!$seats) {
-    //         return response()->json(['status' => false, 'message' => 'Please select at least one seat.'], 400);
-    //     }
-    //     if (is_array($seats)) {
-    //         foreach ($seats as $seatData) {
-    //             // Kiểm tra xem ghế đã tồn tại
-    //             $seat = Seats::where('seat_name', $seatData['seat_name'])
-    //                 ->where('seat_row', $seatData['seat_row'])
-    //                 ->where('seat_column', $seatData['seat_column'])
-    //                 ->where('room_id', $seatData['room_id'])
-    //                 ->first();
-
-    //             if ($seat) {
-    //                 // Lưu ghế đã tồn tại vào danh sách lỗi
-    //                 $existingSeats[] = $seat->toArray();
-    //             } else {
-    //                 // Tạo ghế mới
-    //                 $seatCreate = Seats::create($seatData);
-
-    //                 if ($seatCreate) {
-    //                     $seatDataList[] = $seatCreate;
-    //                     $seatCreate->reserveForUser();
-    //                 } else {
-    //                     return response()->json(['status' => false, 'message' => 'Failed to create seat.'], 500);
-    //                 }
-    //             }
-    //         }
-
-    //         // Nếu có ghế đã tồn tại, trả về danh sách các ghế đó
-    //         if (!empty($existingSeats)) {
-    //             return response()->json(['status' => false, 'message' => 'Some seats already exist.', 'data' => $existingSeats], 400);
-    //         }
-
-    //         // Nếu tạo ghế thành công, dispatch job cho tất cả ghế đã tạo
-    //         if (!empty($seatDataList)) {
-    //             $this->dispatchResetSeatsJob($seatDataList);
-    //             // Lưu thông tin ghế vào session
-    //             Session::put('seats', $seatDataList);
-    //             Log::info('Seats Session: ' . json_encode(session('seats')));
-    //         }
-
-    //         return response()->json([
-    //             'status' => true,
-    //             'message' => 'Selected seats successfully.',
-    //             'data' => $seatDataList
-    //         ]);
-    //     }
-    // }
 
 
-    // public function selectSeats(Request $request)
-    // {
-    //     $seats = $request->input('seats'); // Ghế người dùng chọn
-
-    //     // Kiểm tra nếu không có ghế được chọn
-    //     if (empty($seats)) {
-    //         return response()->json(['status' => false, 'message' => 'Please select at least one seat.'], 400);
-    //     }
-    //     if (is_array($seats) && count($seats) > 10) {
-    //         return response()->json(['status' => false, 'message' => 'You can only select up to 10 seats.'], 400);
-    //     }
-
-    //     if (!$seats) {
-    //         return response()->json(['status' => false, 'message' => 'Please select at least one seat.'], 400);
-    //     }
-    //     // Sắp xếp các ghế đã chọn theo `seat_name` (theo tên ghế)
-    //     $gapIssue = $this->hasGapIssue($seats);
-    //     if ($gapIssue) {
-    //         return $gapIssue;  // Trả về lỗi nếu có khoảng trống
-    //     }
-    //     // Nếu không có lỗi, tiếp tục xử lý ghế đã chọn
-    //     $saveSeats = $this->saveSeats($seats);
-    //     if ($saveSeats) {
-    //         return $saveSeats;
-    //     }
-    // }
-
-    public function saveSeats($seats,$userId)
+    public function saveSeats($seats, $userId)
     {
         if (is_array($seats)) {
             try {
@@ -227,10 +138,10 @@ class BookingController extends Controller
                         $seatCreate = Seats::create($seatData);
                         if ($seatCreate) {
                             $generator = new BarcodeGeneratorPNG();
-                            $barcode = $generator->getBarcode($seatCreate->id, BarcodeGenerator::TYPE_CODE_128);
+                            $barcode = $generator->getBarcode($seatCreate->id . now()->format('Ymd'), BarcodeGenerator::TYPE_CODE_128);
 
                             // Tạo tên file duy nhất cho mã vạch (dựa vào ID của ghế)
-                            $fileName = 'barcode_' . $seatCreate->id.now()->format('Ymd') . '.png';
+                            $fileName = 'barcode_' . $seatCreate->id . now()->format('Ymd') . '.png';
 
                             // Lưu mã vạch vào thư mục 'public/barcodes'
                             Storage::put('public/barcodes/' . $fileName, $barcode);
@@ -240,10 +151,10 @@ class BookingController extends Controller
 
                             // Gửi ảnh mã vạch lên ImgBB và nhận URL
                             $imageUrl = $this->uploadImage($filePath);
-                            $code = $seatCreate->id;
+                            $code = $seatCreate->id . now()->format('Ymd');
                             // Cập nhật đường dẫn mã vạch vào cơ sở dữ liệu
                             $seatCreate->barcode = $imageUrl;
-                            $seatCreate->code= $code;
+                            $seatCreate->code = $code;
                             $seatCreate->save();
                             $seatDataList[] = $seatCreate;
                             $seatCreate->reserveForUser();
@@ -266,10 +177,9 @@ class BookingController extends Controller
 
                 // Gửi job cho tất cả ghế đã tạo
                 if (!empty($seatDataList)) {
-                    $this->dispatchResetSeatsJob($seatDataList,$userId);
+                    $this->dispatchResetSeatsJob($seatDataList, $userId);
                     // Lưu thông tin ghế vào session
-                    Session::put('seats', $seatDataList);
-                    Log::info('Seats Session: ' . json_encode(session('seats')));
+                    Cache::put('seats', $seatDataList, 300);
                 }
 
                 return response()->json([
@@ -278,8 +188,8 @@ class BookingController extends Controller
                     'data' => $seatDataList
                 ]);
             } catch (\Exception $e) {
+                // Nếu xảy ra lỗi ngoài mong muốn, thực hiện rollback toàn bộ transaction
                 DB::rollBack();
-                Log::error('Error processing seats: ' . $e->getMessage());
                 return response()->json(['status' => false, 'message' => 'An error occurred while processing seats.'], 500);
             }
         }
@@ -291,6 +201,7 @@ class BookingController extends Controller
     public function selectSeats(Request $request)
     {
         $seats = $request->input('seats'); // Ghế người dùng chọn
+
         $totalSeatsInRows = $request->input('totalSeatsInRows'); // Tổng số ghế trong từng hàng
         $showtime_id = $request->input('showtimeId');
         $userId = Auth::id();
@@ -307,7 +218,7 @@ class BookingController extends Controller
             return $gapIssue; // Trả về lỗi nếu có khoảng trống
         }
 
-        $saveSeats = $this->saveSeats($seats,$userId);
+        $saveSeats = $this->saveSeats($seats, $userId);
         if ($saveSeats) {
             return $saveSeats;
         }
@@ -386,10 +297,10 @@ class BookingController extends Controller
     }
 
 
-    public  function dispatchResetSeatsJob(array $seatIds,$userId): void
+    public  function dispatchResetSeatsJob(array $seatIds, $userId): void
     {
         // Dispatch một job với toàn bộ các ID ghế đã được tạo
-        ResetSeats::dispatch($seatIds,$userId)->delay(now()->addMinutes(1));
+        ResetSeats::dispatch($seatIds, $userId)->delay(now()->addMinutes(5));
     }
 
     public function selectedSeats(Request $request, $roomId)
@@ -404,16 +315,16 @@ class BookingController extends Controller
         }
 
         // Broadcast sự kiện ghế đã chọn
-        broadcast(new SeatSelected($seats,$userId, $roomId));
+        broadcast(new SeatSelected($seats, $userId, $roomId));
 
         return response()->json(
             [
-                'status'=>true,
-                'message'=>'Seats successfully',
-                'data'=>[
-                    'seats'=>$seats,
-                    'roomId'=>$roomId,
-                    'userId'=>$userId
+                'status' => true,
+                'message' => 'Seats successfully',
+                'data' => [
+                    'seats' => $seats,
+                    'roomId' => $roomId,
+                    'userId' => $userId
                 ]
             ]
         );

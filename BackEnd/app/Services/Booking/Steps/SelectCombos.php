@@ -6,6 +6,7 @@ use App\Models\Combo;
 use App\Services\Booking\Handlers\AbstractBookingStep;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
@@ -37,8 +38,8 @@ class SelectCombos extends AbstractBookingStep
 
         if (!empty($combos)) {
             // Lưu thông tin combos và số lượng vào session
-            Session::put('combos', $combos);
-            Log::info('Combos: ' . json_encode(session('combos')));
+            Cache::put('combos', $combos, 300);
+            Log::info('danh sach combos duoc luu tru tam thoi tai cache : ' . json_encode(Cache::get('combos')));
         }
 
         // return response()->json(
