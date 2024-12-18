@@ -111,7 +111,7 @@ class BookingController extends Controller
         }
 
         // Xử lý khi mã phản hồi không phải '00'
-        return redirect('http://localhost:5173/ticketcinema')->with('error', 'Payment failed');
+        return redirect('http://localhost:5173/payment-success')->with('error', 'Payment failed');
     }
 
     // public function selectSeats(Request $request)

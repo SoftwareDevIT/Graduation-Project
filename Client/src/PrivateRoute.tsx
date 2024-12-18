@@ -21,10 +21,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, allowedRoles }) =
   const userProfile: UserProfile | null = JSON.parse(localStorage.getItem("user_profile") || "null");
   const userRoles = userProfile?.roles || []; // Lấy danh sách vai trò nếu có
 
-  // console.log(userRoles);
-  // console.log(userProfile);
-
-  // Kiểm tra xem người dùng có đăng nhập không
+ 
   if (!userProfile) {
     // Nếu không có người dùng, điều hướng đến trang đăng nhập
     return <Navigate to="/login" />;

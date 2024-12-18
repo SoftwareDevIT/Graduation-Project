@@ -74,9 +74,14 @@ export const ComboProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   }, []);
 const fetchCombos = async () => {
+
  
   try {
     if (userRole === "manager") {
+
+  if (userRole === "manager") {
+  try {
+
     const { data } = await instance.get('/manager/combo', {
     });
     dispatch({ type: 'SET_COMBOS', payload: data.data });
@@ -84,6 +89,8 @@ const fetchCombos = async () => {
   } catch (error) {
     console.error('Failed to fetch combos:', error);
   }
+
+}
 
 };
 

@@ -18,6 +18,26 @@
   text-align: center;
   margin-top:-40px; 
 }
+.movie-skeletons {
+  display: flex;
+  gap: 20px;  /* Spacing between skeletons */
+  flex-wrap: wrap; /* Wrap skeletons to the next line if there's not enough space */
+}
+
+.skeleton-card {
+  width: 150px;  /* Adjust width as needed */
+}
+
+
+
+.phim-hinh {
+  width: 100%;
+  height: auto;
+}
+
+.filter-select {
+  margin-right: 20px;
+}
 .Nodata {
   display: inline-block; /* Cho phép áp dụng padding và margin */
   color: #fff; /* Màu chữ trắng */
