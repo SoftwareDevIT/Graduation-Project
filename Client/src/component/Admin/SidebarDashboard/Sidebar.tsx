@@ -91,6 +91,7 @@ const Sidebar: React.FC = () => {
                     <FaTheaterMasks /> Quản lí rạp chiếu phim
                   </NavLink>
                 </li>
+                {(userRole === "manager") && (
                 <li>
                   <NavLink
                     to={"/admin/rooms"}
@@ -100,6 +101,8 @@ className={({ isActive }) => (isActive ? "active" : "")}
                     <FaIndustry /> Quản lí phòng rạp
                   </NavLink>
                 </li>
+                )}
+                {(userRole === "manager") && (
                 <li>
                   <NavLink
                     to={"/admin/seat-maps"}
@@ -110,6 +113,7 @@ className={({ isActive }) => (isActive ? "active" : "")}
                     Sơ đồ ghế
                   </NavLink>
                 </li>
+                )}
                 {(userRole === "admin")  && (
                 <li>
                   <NavLink
