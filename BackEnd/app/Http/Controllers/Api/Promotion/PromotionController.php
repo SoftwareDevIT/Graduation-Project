@@ -91,7 +91,6 @@ class PromotionController extends Controller
         // Tìm mã khuyến mãi
         $promotion = Promotion::where('code', $validated['code'])->first();
 
-        // Kiểm tra mã khuyến mãi có tồn tại không
         if (!$promotion) {
             return response()->json(['message' => 'Mã khuyến mãi không tồn tại.'], 404);
         }
@@ -99,6 +98,21 @@ class PromotionController extends Controller
         // Kiểm tra mã có hiệu lực
         if (!$promotion->is_active || now()->lt($promotion->valid_from) || now()->gt($promotion->valid_to)) {
             return response()->json(['message' => 'Mã khuyến mãi không hợp lệ hoặc đã hết hạn.'], 400);
+        }
+
+        // Lấy user hiện tại
+        $user = $request->user();
+
+        // Kiểm tra lượt sử dụng của user
+        $userPromotion = DB::table('promotion_user')
+            ->where('promotion_id', $promotion->id)
+            ->where('user_id', $user->id)
+            ->first();
+
+        $usageCount = $userPromotion ? $userPromotion->usage_count : 0;
+
+        if ($usageCount >= 2) { // Giới hạn 2 lần
+            return response()->json(['message' => 'Bạn đã sử dụng hết lượt cho mã khuyến mãi này.'], 400);
         }
 
         // Kiểm tra giá trị tối thiểu để áp dụng
@@ -115,6 +129,22 @@ class PromotionController extends Controller
             $discount = min($discount, $promotion->max_discount);
         }
 
+        // Cập nhật số lượt sử dụng
+        if ($userPromotion) {
+            DB::table('promotion_user')
+                ->where('promotion_id', $promotion->id)
+                ->where('user_id', $user->id)
+                ->increment('usage_count');
+        } else {
+            DB::table('promotion_user')->insert([
+                'promotion_id' => $promotion->id,
+                'user_id' => $user->id,
+                'usage_count' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
         return response()->json([
             'message' => 'Áp dụng mã khuyến mãi thành công.',
             'discount' => $discount,
@@ -125,24 +155,21 @@ class PromotionController extends Controller
     public function getUserVouchers(Request $request)
     {
         // Lấy user_id từ request hoặc auth (tùy vào cách quản lý đăng nhập)
-        $userId = $request->user()->id;
+        $user = $request->user();
 
-        // Tính tổng amount của người dùng trong bảng bookings
-        $totalAmount = Booking::where('user_id', $userId)
-            ->sum('amount');
-
-        // Kiểm tra nếu tổng amount lớn hơn 2 triệu
-        if ($totalAmount < 10000) {
-            return response()->json([
-                'message' => 'Bạn cần chi tiêu hơn 1 triệu để nhận voucher.'
-            ], 400);
-        }
-
-        // Lấy danh sách voucher phù hợp
-        $vouchers = Promotion::whereBetween('discount_percentage', [0, 100])
-            ->where('is_active', true)
+        $vouchers = Promotion::where('is_active', true)
             ->whereDate('valid_to', '>=', now())
-            ->get();
+            ->get()
+            ->filter(function ($promotion) use ($user) {
+                $userPromotion = DB::table('promotion_user')
+                    ->where('promotion_id', $promotion->id)
+                    ->where('user_id', $user->id)
+                    ->first();
+
+                $usageCount = $userPromotion ? $userPromotion->usage_count : 0;
+
+                return $usageCount < 2; // Chỉ hiển thị nếu user chưa dùng hết lượt
+            });
 
         return response()->json([
             'message' => 'Danh sách voucher dành cho bạn.',
