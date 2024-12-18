@@ -7,6 +7,7 @@ use App\Models\Movie;
 use App\Models\MovieInCinema;
 use App\Models\Showtime;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class FilterByDateService
 {
@@ -62,6 +63,15 @@ class FilterByDateService
             }])->get();
         }
 
+        
+        if ($movies->isEmpty()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Success',
+                'data' => $movies,
+            ], 200);
+        }
+
         return $movies;
     }
 
@@ -71,6 +81,7 @@ class FilterByDateService
         $user = Auth::user(); // Lấy thông tin người dùng (có thể là null)
 
         $query = Cinema::query();
+
 
         // Logic phân quyền
         if ($user) {
@@ -84,6 +95,7 @@ class FilterByDateService
                     ->with(['rooms.showtimes' => function ($query) use ($date) {
                         $query->where('showtime_date', $date);
                     }]);
+
             } elseif ($user->hasRole('manager')) {
                 // Manager: Hiển thị các suất chiếu của rạp thuộc quyền quản lý
                 $query->where('id', $user->cinema_id)
@@ -105,6 +117,7 @@ class FilterByDateService
                     ->with(['rooms.showtimes' => function ($query) use ($date) {
                         $query->where('showtime_date', $date)->where('status', 1);
                     }]);
+                   
             }
         } else {
             // Người chưa đăng nhập: Chỉ hiện suất chiếu có status = 1
@@ -117,11 +130,12 @@ class FilterByDateService
                 ->with(['rooms.showtimes' => function ($query) use ($date) {
                     $query->where('showtime_date', $date)->where('status', 1);
                 }]);
-        }
+                
+
+            }
 
         $results = $query->get();
-
-        // Xử lý ánh xạ kết quả
+       // Xử lý ánh xạ kết quả
         $filteredResults = $results->map(function ($cinema) {
             return [
                 'cinema_name' => $cinema->cinema_name,

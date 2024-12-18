@@ -101,7 +101,12 @@ const Header = () => {
     const locationId = e.target.value;
     setSelectedLocation(locationId);
   };
-    
+  
+  const handleCinemaClick = (cinemaId: number | undefined) => {
+    navigate(`/cinema/${cinemaId}`); // Chuyển hướng tới trang rạp và truyền cinemaId
+    console.log("idrap:",cinemaId)
+  };
+  
 
   return (
     <header className="header">
@@ -215,7 +220,7 @@ const Header = () => {
 
       <div className="cinemas-list">
         {cinemas.map((cinema) => (
-          <a key={cinema.id} href="#" onClick={() => navigate(`/buy-ticket`)} >
+          <a key={cinema.id}  onClick={() => handleCinemaClick(cinema.id)}  >
             {cinema.cinema_name}
           </a>
         ))}

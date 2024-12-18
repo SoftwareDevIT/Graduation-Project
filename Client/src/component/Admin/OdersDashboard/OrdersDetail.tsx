@@ -18,17 +18,34 @@ const OrderDetail = () => {
   const [error, setError] = useState<string>('');
   const [newStatus, setNewStatus] = useState<string>(orderDetails?.status || ''); // State for new status
   const [isPrintable, setIsPrintable] = useState<boolean>(false);
+  const [userRole, setUserRole] = useState<string>("");
 
+  // Fetch user role from localStorage
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("user_profile") || "{}");
+    const roles = userData.roles || [];
+    if (roles.length > 0) {
+      setUserRole(roles[0].name);
+    } else {
+      setUserRole("unknown"); // Gán giá trị mặc định khi không có vai trò
+    }
+  }, []);
 
   useEffect(() => {
     const fetchOrderDetails = async () => {
       try {
-        const response = await instance.get(`/order/${id}`); // Fetch the order details using the booking_id
+        let response;
+        if (userRole === "manager") {
+          response = await instance.get(`/manager/order/${id}`);
+        } else if (userRole === "staff") {
+          response = await instance.get(`/staff/order/${id}`);
+        }else {
+          response = await instance.get(`/order/${id}`);
+        }
         setOrderDetails(response.data.data);
 
 
-        console.log("datacombo", response.data.data
-        )
+       
 
         setNewStatus(response.data.data.status); // Initialize status from the fetched data
       } catch (err) {
@@ -38,9 +55,11 @@ const OrderDetail = () => {
       }
     };
 
-
-    fetchOrderDetails();
-  }, [id]);
+    if (userRole !== "") {
+      fetchOrderDetails();
+    }
+    
+  }, [id,userRole]);
 
   useEffect(() => {
     if (orderDetails?.status === 'Thanh toán thành công' && orderDetails.seats?.length > 0) {
@@ -48,10 +67,17 @@ const OrderDetail = () => {
     } else {
       setIsPrintable(false);
     }
-  }, [orderDetails]);
+  }, [orderDetails?.status]);
   const handleUpdateStatus = async (status: string) => {
     try {
-      await instance.put(`/order/${id}`, { status }); // PUT request to update status
+      let response;
+      if (userRole === "manager") {
+        response = await instance.put(`/manager/order/${id}`, { status });
+      } else if (userRole === "staff") {
+        response = await instance.put(`/staff/order/${id}`, { status });
+      }else {
+        response = await instance.put(`/order/${id}`, { status });
+      }
       // Cập nhật lại trạng thái mới ngay lập tức trong state để giao diện tự động thay đổi
       setNewStatus(status)
       notification.success({
@@ -88,14 +114,6 @@ const OrderDetail = () => {
     }
 
     // Mở cửa sổ in
-    const invoiceWindow = window.open("", "_blank");
-    if (!invoiceWindow) {
-      notification.error({
-        message: "Lỗi",
-        description: "Không thể mở cửa sổ in hóa đơn.",
-      });
-      return;
-    }
     const totalComboPrice = orderDetails.combos
       ? orderDetails.combos.reduce((total, combo) => total + combo.price, 0)
       : 0;
@@ -219,9 +237,31 @@ const OrderDetail = () => {
       </html>
     `;
 
-    invoiceWindow.document.write(invoiceContent);
-    invoiceWindow.document.close();
-    invoiceWindow.print(); // Kích hoạt in
+    const iframe = document.createElement('iframe');
+  iframe.style.position = 'absolute';
+  iframe.style.width = '0';
+  iframe.style.height = '0';
+  iframe.style.border = 'none';
+  document.body.appendChild(iframe);
+
+  // Kiểm tra contentWindow và thực hiện in
+  const iframeWindow = iframe.contentWindow;
+  if (iframeWindow) {
+    const doc = iframeWindow.document;
+    doc.open();
+    doc.write(invoiceContent);
+    doc.close();
+    
+    // In hóa đơn từ iframe
+    iframeWindow.print();
+  } else {
+    notification.error({
+      message: "Lỗi",
+      description: "Không thể in hóa đơn, iframe không khả dụng.",
+    });
+  }
+
+  
 
     // Cập nhật trạng thái đơn hàng thành "Đã in vé" sau khi in vé
     handleUpdateStatus("Đã in vé");
@@ -339,7 +379,7 @@ const OrderDetail = () => {
               orderDetails.seats.map((seats, index) => (
                 <div key={index}>
                   <p></p>
-                  <p>Ghế: {seats.seat_name} ~ <img src={seats.barcode} alt="" /></p>
+                  <p>Ghế: {seats.seat_name} ~ <img style={{width:'25%'}} src={seats.barcode} alt="" /></p>
                 </div>
               ))
             ) : (

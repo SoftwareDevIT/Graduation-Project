@@ -2,8 +2,10 @@
 import { Cinema } from "./Cinema";
 import { Movie } from "./Movie";
 import { Room } from "./Room";
+
 import { Seat } from "./Seat";
 import { SeatMap } from "./SeatMapp";
+
 export interface Showtime {
     movie: Movie; 
     id: number;
@@ -21,7 +23,6 @@ export interface Showtime {
     price: number;
     room_id:number;
     room : Room;
-
     showtime_id:string;
     
    

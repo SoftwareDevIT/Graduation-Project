@@ -5,6 +5,7 @@ import { Modal } from 'antd';
 import { User } from '../../../interface/User';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { BrowserMultiFormatReader } from '@zxing/library';  // Import thư viện quét mã vạch
+import instance from '../../../server';
 
 const Header = () => {
     const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -18,6 +19,8 @@ const Header = () => {
     const barcodeReader = useRef(new BrowserMultiFormatReader()); // Khởi tạo đối tượng quét mã vạch
     const navigate = useNavigate();
     const location = useLocation();
+    const [lastScannedCode, setLastScannedCode] = useState<string | null>(null); // Lưu mã đã quét gần nhất
+    const [isProcessing, setIsProcessing] = useState(false); // Trạng thái ngăn gọi API liên tục
 
     useEffect(() => {
         const storedUser = localStorage.getItem('user_profile');
@@ -61,9 +64,86 @@ const Header = () => {
     };
 
     const handleBarcodeScan = (result: string) => {
-        setBarcodeData(result);  // Cập nhật dữ liệu quét được
-        console.log("Barcode Data:", result);  // In dữ liệu ra console
+        if (isProcessing) return; // Ngăn gọi API nếu đang xử lý
+        if (lastScannedCode === result) return; // Nếu mã giống mã trước đó, không gọi API
+
+        setLastScannedCode(result); // Lưu mã vạch đã quét
+        setIsProcessing(true); // Bắt đầu xử lý API
+
+        const isUrl = result.startsWith("http://") || result.startsWith("https://");
+        if (isUrl) {
+            navigate(result.replace(/^http:\/\/localhost:5173/, ""));
+            setIsProcessing(false); // Xử lý xong
+        } else if (/^\d+$/.test(result)) {
+            instance.post('/manager/checkInSeat', { code: result })
+                .then(response => {
+                    console.log("Full Response:", response);
+                    if (response.status === 200) {
+                        const { status, message, data } = response.data;
+                        if (status) {
+                            Modal.success({
+                                title: 'Check-in Thành Công',
+                                content: (
+                                    <div>
+                                        <p><strong>Thông báo:</strong> {message}</p>
+                                        <p><strong>Tên ghế:</strong> {data.seat_name}</p>
+                                    </div>
+                                ),
+                            });
+                            toggleCamera();
+                        } else {
+                            Modal.error({
+                                title: 'Check-in Thất Bại',
+                                content: message,
+                            });
+                        }
+                    } else {
+                        throw new Error("Invalid response status");
+                    }
+                })
+                .catch(error => {
+                    console.error("Request Error:", error);
+                    const errorMessage =
+                        error.response?.data?.message || 'Có lỗi xảy ra khi check-in!';
+                    Modal.error({
+                        title: 'Lỗi',
+                        content: errorMessage,
+                    });
+                })
+                .finally(() => {
+                    setIsProcessing(false);
+                });
+
+        } else {
+            Modal.warning({
+                title: 'Dữ liệu không hợp lệ',
+                content: 'Vui lòng quét lại mã hợp lệ.',
+            });
+            setIsProcessing(false); // Hoàn tất xử lý
+        }
     };
+
+
+    useEffect(() => {
+        if (isCameraOn && videoStream) {
+            const videoElement = videoRef.current;
+            if (videoElement) {
+                barcodeReader.current.decodeFromVideoDevice('', videoElement, (result, error) => {
+                    if (result) {
+                        handleBarcodeScan(result.getText());
+                    }
+                    if (error && error.name !== 'NotFoundException') {
+                        // console.error("Barcode scanning error:", error);
+                    }
+                });
+            }
+        } else {
+            barcodeReader.current.reset(); // Dừng quét khi camera tắt
+        }
+    }, []);
+
+
+
 
     const getPageName = () => {
         const path = location.pathname;
@@ -76,14 +156,25 @@ const Header = () => {
         }
     };
 
+
+
+
     useEffect(() => {
-if (videoRef.current && videoStream) {
+        if (videoRef.current && videoStream) {
             videoRef.current.srcObject = videoStream;
         }
     }, [videoStream]);
+
     useEffect(() => {
         if (barcodeData) navigate(barcodeData.replace(/^http:\/\/localhost:5173/, ""));
     }, [barcodeData, navigate]);
+
+    useEffect(() => {
+        return () => {
+            barcodeReader.current.reset();
+        };
+    }, []);
+
 
     useEffect(() => {
         // Bắt đầu quét mã vạch khi camera bật
@@ -103,6 +194,7 @@ if (videoRef.current && videoStream) {
             barcodeReader.current.reset(); // Dừng quét khi camera tắt
         }
     }, [isCameraOn, videoStream]);
+    // console.log("Video Stream:", videoStream);
 
     return (
         <div className="header1">
@@ -144,7 +236,7 @@ if (videoRef.current && videoStream) {
             </div>
             <Modal
                 title="Camera"
-visible={isModalVisible}
+                visible={isModalVisible}
                 onCancel={() => {
                     toggleCamera();
                 }}
@@ -168,7 +260,6 @@ visible={isModalVisible}
                 {barcodeData && (
                     <div className="barcode-result">
                         <p>Quét Mã Thành Công: <a href={barcodeData}>{barcodeData}</a></p>
-
                     </div>
                 )}
             </Modal>

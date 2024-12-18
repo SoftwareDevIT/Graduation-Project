@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Filter;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cinema;
 use App\Models\Movie;
 use App\Models\Showtime;
 use App\Services\Filter\FilterByDateService;
@@ -20,8 +21,8 @@ class FilterByDateController extends Controller
     }
     public function filterByDate(Request $request)
     {
-        $date = $request->input('showtime_date');
-        $cinemaId = $request->input('cinema_id');
+        $date = $request->showtime_date;
+        $cinemaId = $request->cinema_id;
 
         if (empty($date) || $date == '0') {
             $date = Carbon::today()->toDateString();
@@ -29,11 +30,14 @@ class FilterByDateController extends Controller
 
         $movies = $this->filterByDateService->filterByDate($date, $cinemaId);
 
-        if ($movies->isEmpty()) {
-            return $this->error('Không có phim của ngày hôm nay');
-        }
-
-        return $this->success($movies);
+        $cinema = Cinema::where('id',$cinemaId)->with('location')->get();
+        
+        return response()->json([
+            'status' => true,
+            'message' => 'Success',
+            'data' => $movies,
+            'cinema' => $cinema
+        ], 200);
     }
 
     public function filterByDateByMovie(Request $request)

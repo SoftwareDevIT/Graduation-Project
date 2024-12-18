@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Form, Input, Button, Upload, Avatar, notification } from "antd";
+import React from "react";
+import { Form, Input, Button, Upload, Avatar } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import Footer from "../Footer/Footer";
 import Header from "../Header/Hearder";

@@ -75,7 +75,7 @@ const [userRole, setUserRole] = useState<string>("");
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("user_profile") || "{}");
     const roles = userData.roles || [];
-    console.log("data role:", roles);
+    
     if (roles.length > 0) {
       setUserRole(roles[0].name);
     } else {
@@ -308,7 +308,7 @@ useEffect(() => {
                 allowClear
                 value={selectedCinema}
                 onChange={(value) => setSelectedCinema(value)}
-                style={{ width: 300 }}
+                style={{ width: 700}}
               >
                 <Option value="">Tất cả</Option>
                 {cinemas.map((cinema) => (
@@ -331,17 +331,13 @@ useEffect(() => {
       </Select>
     </Form.Item>
   
-            <Form.Item label="">
-      <Button type="primary" onClick={exportToExcel} block style={{ width: 300 }}>
-        Export to Excel
-      </Button>
-    </Form.Item>
+            
           </Space>
     </Form>
     <div className="summary">
   <div className="summary-card">
     <div className="summary-card-header">
-      <h3>Doanh Thu</h3>
+      <h2>Doanh Thu</h2>
       <div className="summary-filter">
       <Form.Item label="">
               <DatePicker
@@ -377,7 +373,7 @@ useEffect(() => {
 
   <div className="summary-card">
     <div className="summary-card-header">
-      <h3>Doanh Thu</h3>
+      <h3 >Doanh Thu (Tháng:{selectedDate ? selectedDate.format('MM') : ''}) </h3>
       <div className="summary-filter3">
      
       </div>
@@ -406,7 +402,7 @@ useEffect(() => {
 
   <div className="summary-card">
     <div className="summary-card-header">
-      <h3>Doanh Thu</h3>
+      <h3>Doanh Thu (Năm:{selectedDate ? selectedDate.format('YYYY') : ''})</h3>
       <div className="summary-filter1">
       </div>
     </div>
@@ -432,9 +428,13 @@ useEffect(() => {
   </div>
   </div>
 </div>
-<Box sx={{ width: 1100, height: 400}}>
-          <Bar data={dataRevenue} options={optionsRevenue} />
-        </Box>
+<div className="charts-container">
+  {selectedCinema === null && (
+    <Box sx={{ width: 1100, height: 400 }}>
+      <Bar data={dataRevenue} options={optionsRevenue} />
+    </Box>
+  )}
+</div>
         <div className="charts-container">
           <div className="quarterly-revenue">
             <h3>Doanh Thu Theo Ngày</h3>
@@ -529,7 +529,14 @@ useEffect(() => {
         {/* Thêm bảng vào dưới biểu đồ */}
         <div className="recent-container">
         <div className="recent-orders">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
   <h3>Đơn hàng gần đây</h3>
+  <Form.Item label="">
+      <Button type="primary" onClick={exportToExcel} block style={{ width: 300 }}>
+        Export to Excel
+      </Button>
+    </Form.Item>
+    </div>
   <div style={{ overflowX: 'auto' }}>
     <table>
       <thead>
@@ -618,7 +625,7 @@ useEffect(() => {
                   <td>{movie.total_revenue.toLocaleString()}₫</td>
                   <td>{movie.showtime_count}</td>
                   <td>
-                    <Link to={'/admin/moviestatistics'} className="btn btn-primary">Chi Tiết</Link>
+                    <Link to={`/admin/moviestatistics/${movie.movie_id}`} className="btn btn-primary">Chi Tiết</Link>
                   </td>
                 </tr>
               ))}

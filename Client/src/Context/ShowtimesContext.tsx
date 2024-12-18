@@ -79,7 +79,7 @@ export const ShowtimeProvider: React.FC<{ children: ReactNode }> = ({ children }
       // Lấy thông tin từ localStorage
       const userData = JSON.parse(localStorage.getItem("user_profile") || "{}");
       const roles = userData.roles || [];
-      console.log("data role:", roles);
+      
       // Lấy vai trò đầu tiên (nếu có)
       if (roles.length > 0) {
         setUserRole(roles[0].name); // Gán vai trò (ví dụ: "staff", "admin")
