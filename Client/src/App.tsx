@@ -133,6 +133,7 @@ import BookingManager from "./component/TicketandSeat/BookingManager";
 import MovieStatistics from "./component/Admin/MovieStatistics/MovieStatistics";
 import MovieStatisticsManager from "./Page/Admin/MovieStatistics/MovieStatisticsManager";
 import CinemaInfo from "./component/Cinema/CinemaInfo";
+import ThongTinRap from "./component/Cinema/CinemaInfo";
 
 function App() {
 
@@ -148,6 +149,7 @@ function App() {
 
         <Route path="/community" element={<Community/>} />
         <Route path="/seat" element={<CinemaSeatSelection/>} />
+        <Route path="/cinema/:cinemaId" element={<ThongTinRap/>} />
 
 
 

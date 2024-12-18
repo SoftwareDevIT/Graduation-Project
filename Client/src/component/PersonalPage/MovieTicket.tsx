@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Card, Button, Typography, Image, Space, Row, Col, DatePicker } from "antd";
-import { jsPDF } from "jspdf";
+
 import {
   CalendarOutlined,
   EnvironmentOutlined,
   TeamOutlined,
-  DownloadOutlined,
   ArrowLeftOutlined,
 } from "@ant-design/icons";
 import instance from "../../server";
