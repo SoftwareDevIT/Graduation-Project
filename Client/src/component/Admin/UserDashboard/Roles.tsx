@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Roles } from '../../../interface/Roles';
 import { User } from '../../../interface/User';
 import { Permission } from '../../../interface/Permissions';
@@ -17,7 +17,10 @@ const RoleAndUserManagement = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const filteredUsers = users.filter((user) =>
     user.user_name.toLowerCase().includes(searchTerm.toLowerCase())
+
   );
+  const rolesRef = useRef<Roles[]>([])
+ 
   // Fetch user role from localStorage
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("user_profile") || "{}");
@@ -29,33 +32,35 @@ const RoleAndUserManagement = () => {
       setUserRole("unknown"); // Gán giá trị mặc định khi không có vai trò
     }
   }, []);
-  useEffect(() => {
-    const fetchRolesAndUsers = async () => {
-      try {
-        let response;
+  const fetchRolesAndUsers = async () => {
+    try {
+      let response;
       if (userRole === "admin") {
-        response = await  instance.get('/admin/roles');
+        response = await instance.get('/admin/roles');
       } else if (userRole === "manager") {
-        response = await  instance.get('/manager/roles');
-      }else {
+        response = await instance.get('/manager/roles');
+      } else {
         response = await instance.get('/roles');
       }
-        if (response.data.status) {
-          setRoles(response.data.data.roles);
-          setUsers(response.data.data.users);
-          setPermissions(response.data.data.permissions);
-        } else {
-          console.error('Failed to fetch data:', response.data.message);
-        }
-      } catch (error) {
-        console.error('Error fetching roles and users:', error);
+      if (response.data.message === "Success") {
+        setRoles(response.data.data.roles);
+        setUsers(response.data.data.users);
+        setPermissions(response.data.data.permissions);
       }
-    };
-   
-    if (userRole !== "") {
-      fetchRolesAndUsers();
+    } catch (error) {
+      console.error('Error fetching roles:', error);
     }
-  }, [userRole]);
+  };
+  useEffect(() => {
+    if (
+      !rolesRef.current.length || // Chỉ gọi API lần đầu
+      JSON.stringify(rolesRef.current) !== JSON.stringify(roles) // Gọi API nếu roles thay đổi
+    ) {
+      fetchRolesAndUsers();
+      rolesRef.current = roles; // Cập nhật ref sau khi gọi API
+    }
+  }, [userRole, roles]);
+  
 
   const handleCreateRole = async () => {
     if (!newRoleName) {
@@ -272,15 +277,15 @@ const RoleAndUserManagement = () => {
           </thead>
           <tbody>
             {roles.map((role) => (
-              <tr key={role.id}>
-                <td style={{ padding: '10px', border: '1px solid #ddd' }}>{role.name}</td>
+              <tr key={role?.id}>
+                <td style={{ padding: '10px', border: '1px solid #ddd' }}>{role?.name}</td>
                 <td style={{ padding: '10px', border: '1px solid #ddd' }}>
                   <select
                     multiple
-                    value={selectedPermissions[role.id] || []}
+                    value={selectedPermissions[role?.id] || []}
                     onChange={(e) =>
                       handlePermissionChange(
-                        role.id,
+                        role?.id,
                         Array.from(e.target.selectedOptions, (option) => option.value)
                       )
                     }
@@ -294,8 +299,8 @@ const RoleAndUserManagement = () => {
                     }}
                   >
                     {permissions.map((permission) => (
-                      <option key={permission.id} value={permission.name}>
-                        {permission.name}
+                      <option key={permission?.id} value={permission?.name}>
+                        {permission?.name}
                       </option>
                     ))}
                   </select>
@@ -368,7 +373,7 @@ const RoleAndUserManagement = () => {
       <td style={{ padding: '10px', border: '1px solid #ddd' }}>
         <select
           multiple
-          value={user.role_id}  // Giữ trạng thái của các vai trò hiện tại của người dùng
+          value={user?.role_id}  // Giữ trạng thái của các vai trò hiện tại của người dùng
           onChange={(e) => {
             const selectedRoles = Array.from(e.target.selectedOptions, option => option.value);
             handleAssignRoles(user.id, selectedRoles); // Cấp quyền khi chọn vai trò
@@ -383,7 +388,7 @@ const RoleAndUserManagement = () => {
           }}
         >
           {roles.map((role) => (
-            <option key={role.id} value={role.name}>{role.name}</option>
+            <option key={role?.id} value={role?.name}>{role?.name}</option>
           ))}
         </select>
       </td>
