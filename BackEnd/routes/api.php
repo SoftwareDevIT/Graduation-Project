@@ -129,7 +129,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(functi
     //status
     Route::post('movieStatus/{id}', [MovieController::class, 'status']);
     Route::post('showtimeStatus/{id}', [ShowtimeController::class, 'status']);
-    Route::post('newStatus/{id}', [NewCategoryController::class, 'status']);
+    Route::post('newStatus/{id}', [NewController::class, 'status']);
     Route::post('comboStatus/{id}', [ComboController::class, 'status']);
     Route::post('userStatus/{id}', [RoleController::class, 'status']);
     Route::get('dashboard/Movie', [DashboardAdminController::class, 'dashboardMovie']);
@@ -185,7 +185,7 @@ Route::middleware(['auth:sanctum', 'role:manager'])->prefix('manager')->group(fu
     // status
     Route::post('movieStatus/{id}', [MovieController::class, 'status']);
     Route::post('showtimeStatus/{id}', [ShowtimeController::class, 'status']);
-    Route::post('newStatus/{id}', [NewCategoryController::class, 'status']);
+    Route::post('newStatus/{id}', [NewController::class, 'status']);
     Route::post('comboStatus/{id}', [ComboController::class, 'status']);
     Route::post('userStatus/{id}', [RoleController::class, 'status']);
     Route::post('roomStatus/{id}', [RoomController::class, 'status']);
@@ -198,8 +198,10 @@ Route::middleware(['auth:sanctum', 'role:manager'])->prefix('manager')->group(fu
     //checkin ghế barcode
     Route::post('checkInSeat', [CheckInTicketController::class, 'checkInSeat']);
     Route::post('checkInBooking', [CheckInTicketController::class, 'checkInBooking']);
-    Route::get('dashboard/Movie', [DashboardAdminController::class, 'dashboardMovie']);
+    
 });
+
+Route::get('dashboard/Movie', [DashboardAdminController::class, 'dashboardMovie']);
 
 Route::middleware(['auth:sanctum', 'role:staff'])->prefix('staff')->group(function () {
     Route::apiResource('cinema', CinemaController::class); // CRUD rạp
@@ -261,7 +263,3 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 });
 Route::get('/vnpay-return', [BookingController::class, 'vnPayReturn']);
 Route::get('/env-config', [ConfigController::class, 'envConfig']);
-
-
-
-
