@@ -21,6 +21,7 @@ const Header = () => {
   const locations = state.countries;
   const navigate = useNavigate();
   const [searchKeyword, setSearchKeyword] = useState(""); 
+ 
 
 
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -31,7 +32,6 @@ const Header = () => {
   const handleOpenModal = () => {
     setIsModalVisible(true);
   };
-  
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchKeyword(e.target.value); // Lưu từ khóa
   };
@@ -39,7 +39,6 @@ const Header = () => {
   const filteredCinemas = cinemas.filter((cinema) =>
     cinema.cinema_name.toLowerCase().includes(searchKeyword.toLowerCase())
   );
-  
   // Hàm xử lý khi người dùng đóng Modal
   const handleCloseModal = () => {
     setIsModalVisible(false);
@@ -57,7 +56,7 @@ const Header = () => {
     if (selectedLocation !== null) {
       instance.get(`/cinema-by-location/${selectedLocation}`).then((response) => {
         setCinemas(response.data.data);
-        console.log("data-rap",response.data.data);
+        // console.log(setCinemas);
 
       });
     }
@@ -109,12 +108,10 @@ const Header = () => {
     const locationId = e.target.value;
     setSelectedLocation(locationId);
   };
-  
   const handleCinemaClick = (cinemaId: number | undefined) => {
     navigate(`/cinema/${cinemaId}`); // Chuyển hướng tới trang rạp và truyền cinemaId
-    console.log("idrap:",cinemaId)
+ 
   };
-  
 
   return (
     <header className="header">
@@ -191,8 +188,8 @@ const Header = () => {
     >
       <div className="timkiemrap">
         <input
-value={searchKeyword}
-onChange={handleSearchChange} // Gọi hàm cập nhật từ khóa
+        value={searchKeyword}
+        onChange={handleSearchChange}
           type="text"
           placeholder="Tìm rạp tại"
           style={{
@@ -224,7 +221,6 @@ onChange={handleSearchChange} // Gọi hàm cập nhật từ khóa
             <option key={location.id} value={location.id}>
               {location.location_name}
             </option>
-
           ))}
         </select>
       </div>
@@ -361,7 +357,6 @@ onChange={handleSearchChange} // Gọi hàm cập nhật từ khóa
                     <Link to="/Personal">Trang cá nhân</Link>
                     <Link to="/profile">Quản lý tài khoản</Link>
                     <Link to="/ticketcinema">Vé phim</Link>
-                    <Link to="/pointaccumulation">Tích Điểm</Link>
                     <div onClick={handleLogout}>Đăng xuất</div>
                   </div>
                 )}

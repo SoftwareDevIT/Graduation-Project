@@ -14,7 +14,7 @@ export interface NewsItem {
     thumnail: string;
     banner:string;
     content: string ;
-    status: 'Show' | 'Hidden';
+    status: number;
     user_id: number;
     created_at: string;
     updated_at: string;

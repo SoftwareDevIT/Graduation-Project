@@ -9,28 +9,28 @@ import { zodResolver } from "@hookform/resolvers/zod"; // Import zodResolver
 
 // Define Zod schema
 const promotionSchema = z.object({
-    code: z.string().min(1, "Mã khuyến mãi là bắt buộc"),
-    discount_percentage: z
-      .number()
-      .min(0, "Giảm giá phải lớn hơn hoặc bằng 0")
-      .max(100, "Giảm giá không thể vượt quá 100%"),
-    max_discount: z.number().min(0, "Giảm giá tối đa phải lớn hơn hoặc bằng 0"),
-    min_purchase: z.number().min(0, "Giá trị mua tối thiểu phải lớn hơn hoặc bằng 0"),
-    valid_from: z
-      .string()
-      .refine((val) => !!Date.parse(val), "Ngày bắt đầu không hợp lệ")
-      .refine((val) => new Date(val) >= new Date(), "Ngày bắt đầu không được bé hơn ngày hiện tại"),
-    valid_to: z
-      .string()
-      .refine((val) => !!Date.parse(val), "Ngày kết thúc không hợp lệ")
-      .refine((val) => new Date(val) >= new Date(), "Ngày kết thúc không được bé hơn ngày hiện tại"),
-    is_active: z
-      .union([z.literal("1"), z.literal("0"), z.number().int()])
-      .transform((val) => {
-        if (val === "1" || val === 1) return true;
-        return false;
-      }),
-  });
+  code: z.string().min(1, "Mã khuyến mãi là bắt buộc"),
+  discount_percentage: z
+    .number()
+    .min(0, "Giảm giá phải lớn hơn hoặc bằng 0")
+    .max(100, "Giảm giá không thể vượt quá 100%"),
+  max_discount: z.number().min(0, "Giảm giá tối đa phải lớn hơn hoặc bằng 0"),
+  min_purchase: z.number().min(0, "Giá trị mua tối thiểu phải lớn hơn hoặc bằng 0"),
+  valid_from: z
+    .string()
+    .refine((val) => !!Date.parse(val), "Ngày bắt đầu không hợp lệ"),
+  valid_to: z
+    .string()
+    .refine((val) => !!Date.parse(val), "Ngày kết thúc không hợp lệ")
+    .refine((val) => new Date(val) >= new Date(), "Ngày kết thúc không được bé hơn ngày hiện tại"),
+  is_active: z
+    .union([z.literal("1"), z.literal("0"), z.number().int()])
+    .transform((val) => {
+      if (val === "1" || val === 1) return true;
+      return false;
+    }),
+});
+
 
 type PromotionFormData = z.infer<typeof promotionSchema>;
 

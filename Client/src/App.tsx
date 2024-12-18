@@ -133,6 +133,8 @@ import MovieStatistics from "./component/Admin/MovieStatistics/MovieStatistics";
 import MovieStatisticsManager from "./Page/Admin/MovieStatistics/MovieStatisticsManager";
 import CinemaInfo from "./component/Cinema/CinemaInfo";
 import ThongTinRap from "./component/Cinema/CinemaInfo";
+import CityForm from "./component/CityForm/CityForm";
+import CinemaList from "./component/Area/CinemaList";
 import PaymentSuccess from "./component/PersonalPage/PaymentSuccess";
 
 function App() {
@@ -148,7 +150,11 @@ function App() {
         <Route path="/pay" element={ <PrivateRoute><OrderCheckout /></PrivateRoute> } />
 
         <Route path="/community" element={<Community/>} />
+        <Route path="/cityform" element={<CityForm isVisible={false} onClose={function (): void {
+            throw new Error("Function not implemented.");
+          } }/>} />
         <Route path="/seat" element={<CinemaSeatSelection/>} />
+        <Route path="/cinemalist" element={<CinemaList/>} />
         <Route path="/cinema/:cinemaId" element={<ThongTinRap/>} />
 
         <Route path="/payment-success" element={<PaymentSuccess  />} />

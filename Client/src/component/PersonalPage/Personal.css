@@ -5,6 +5,7 @@
 }
 .acounntone{
 display: flex;
+box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Bóng đổ nhẹ */
 }
 .avatas{
   border-color: #fff;
@@ -21,6 +22,7 @@ display: flex;
 .cover{
   border-radius: 8px;
 }
+
 .nameacount{
 
   padding-left: 20px;
@@ -69,15 +71,25 @@ font-weight: 500;
 }
 
 .phimyeuthich-container {
-  width: 500px; /* Điều chỉnh để phù hợp với banner */
+  width: 900px;
+/* Điều chỉnh để phù hợp với banner */
   margin: 0 auto;
   padding: 20px;
 }
 
 .phimyeuthich {
+  text-align: center;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Kích thước nhỏ hơn */
-  gap: 15px; /* Điều chỉnh khoảng cách giữa các mục */
+  grid-template-columns: repeat(5, 1fr); /* Hiển thị 4 cột phim trên mỗi hàng */
+  gap: 15px; /* Khoảng cách giữa các mục */
+  padding: 0 10px; /* Lề ngang */
+}
+
+.item-phim .img img {
+  
+  /* Tự động điều chỉnh kích thước theo khung */
+  height: 200px; /* Chiều cao ảnh thu nhỏ */
+  object-fit: cover;
 }
 
 .item-phim {
@@ -85,36 +97,37 @@ font-weight: 500;
   flex-direction: column;
   align-items: center;
   background-color: #fff;
-  border-radius: 8px; /* Nhỏ hơn để phù hợp kích thước */
+  border-radius: 8px;
   overflow: hidden;
-  margin: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  padding: 10px; /* Giảm padding */
-}
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
-.item-phim .img img {
-  width: 100px; /* Thu nhỏ kích thước ảnh */
-  height: 150px;
-  border-radius: 5px; /* Giảm độ bo tròn */
-  object-fit: cover;
 }
-
-.movie-title {
+.rating-2{
+  margin-top: 10px;
+}
+.movie-title1 {
+  display: inline-block; 
   margin-top: 8px;
-  font-size: 12px !important; /* Thu nhỏ font chữ */
-  text-align: center;
+  font-size: 12px; /* Thu nhỏ font chữ */
+  max-width: 100%;
   font-weight: 500; /* Nhẹ hơn để cân đối */
+  white-space: nowrap; /* Ngăn văn bản xuống dòng */
+  overflow: hidden; /* Ẩn phần văn bản bị tràn */
+  text-overflow: ellipsis; /* Hiển thị dấu ba chấm */
+  min-width: 0;
 }
+
 
 
 .moveslike{
   margin-top: 16px;
 }
 .moveslike h3{
+  margin-top: 20px;
   margin-bottom: 16px;
-  font-size: 1.25rem;
-  font-weight: 600;
+  font-size: 26px;
+  font-weight: 500;
   color: rgb(18, 38, 63);
 
 }

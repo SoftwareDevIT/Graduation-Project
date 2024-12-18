@@ -18,22 +18,19 @@ const CinemasDashboard: React.FC = () => {
     const [allMovies, setAllMovies] = useState<Movie[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const cinemasPerPage = 5;
+    const [userRole, setUserRole] = useState<string>("");
+  useEffect(() => {
+    // Lấy thông tin từ localStorage
+    const userData = JSON.parse(localStorage.getItem("user_profile") || "{}");
+    const roles = userData.roles || [];
+   
+    // Lấy vai trò đầu tiên (nếu có)
+    if (roles.length > 0) {
+      setUserRole(roles[0].name); // Gán vai trò (ví dụ: "staff", "admin")
+    }
+  }, []);
 
-    useEffect(() => {
-        const fetchAllMovies = async () => {
-            try {
-                const response = await instance.get('/movies');
-                setAllMovies(response.data.data.original);
-            } catch (error) {
-                notification.error({
-                    message: 'Lỗi',
-                    description: 'Lỗi khi lấy danh sách phim.',
-                });
-            }
-        };
-
-        fetchAllMovies();
-    }, []);
+ 
 
     const filteredCinemas = cinemas.filter((cinema) =>
         cinema.cinema_name &&
@@ -45,43 +42,6 @@ const CinemasDashboard: React.FC = () => {
         (currentPage - 1) * cinemasPerPage,
         currentPage * cinemasPerPage
     );
-
-    const handleDeleteCinema = async (id: number) => {
-        try {
-            await instance.delete(`/cinema/${id}`);
-            dispatch({ type: 'DELETE_CINEMA', payload: id });
-            notification.success({
-                message: 'Thành công',
-                description: 'Xóa rạp thành công!',
-            });
-        } catch (error) {
-            notification.error({
-                message: 'Lỗi',
-                description: 'Lỗi khi xóa rạp.',
-            });
-        }
-    };
-
-    const fetchMoviesForCinema = async (cinemaId: number) => {
-        try {
-            const response = await instance.get(`/show-movie-in-cinema/${cinemaId}`);
-            const moviesInCinema = response.data.data.map((movie: MovieInCinema) => {
-                const movieDetails = allMovies.find((m) => m.id === movie.movie_id);
-                return {
-                    ...movie,
-                    movie_name: movieDetails ? movieDetails.movie_name : 'Phim không xác định',
-                };
-            });
-            setSelectedCinemaMovies(moviesInCinema);
-        } catch (error) {
-            notification.error({message: 'Lỗi',
-                description: 'Lỗi khi lấy phim của rạp.',
-            });
-        }
-    };
-
-
-
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
         setExpandedCinemaId(null);
@@ -131,11 +91,13 @@ const CinemasDashboard: React.FC = () => {
     return (
         <div className="container mt-5">
             <div className="mb-4 d-flex justify-content-between align-items-center">
-                <Link to="/admin/cinemas/add">
-                <Button type="primary" icon={<PlusOutlined />} size="large">
-                        Thêm Rạp
-                    </Button>
-                </Link>
+                {userRole === 'admin' && (
+                    <Link to="/admin/cinemas/add">
+                        <Button type="primary" icon={<PlusOutlined />} size="large">
+                            Thêm Rạp
+                        </Button>
+                    </Link>
+                )}
                 <Search
                     placeholder="Tìm kiếm theo tên"
                     value={searchTerm}
