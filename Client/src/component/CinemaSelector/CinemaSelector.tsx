@@ -24,10 +24,6 @@ import { useCinemaContext } from "../../Context/CinemasContext";
     const [filteredCinemas, setFilteredCinemas] = useState<Cinema[]>([]);
     const [loading, setLoading] = useState<boolean>(false);  
   
-    const userProfilea: UserProfile | null = JSON.parse(localStorage.getItem("user_profile") || "null");
-    const userRoles = userProfilea?.roles || [];
-    const isAdmin = userRoles.length > 0 && userRoles[0]?.name === "staff";
-  
     const navigate = useNavigate();
     
     // Lấy danh sách vị trí từ CountryContext
@@ -43,7 +39,8 @@ import { useCinemaContext } from "../../Context/CinemasContext";
       const day = String(today.getDate()).padStart(2, "0");
       return `${year}-${month}-${day}`;
     };
-  
+ 
+    
     const generateDateList = (): string[] => {
       return Array.from({ length: 7 }, (_, i) =>
         dayjs().add(i, "day").format("YYYY-MM-DD")
@@ -239,7 +236,7 @@ const displayLocations = filteredLocations;
                   </li>
                 ))}
               </div>
-              {!isAdmin && (
+             
                 <select
                   className="city-selects"
                   value={selectedCity ?? ""}
@@ -254,7 +251,7 @@ const displayLocations = filteredLocations;
                     </option>
                   ))}
                 </select>
-              )}
+             
             </ul>
           </div>
   
@@ -272,7 +269,7 @@ const displayLocations = filteredLocations;
                   </li>
                 ))}
               </div>
-              {!isAdmin && (
+             
                 <select
                   className="city-selects"
                   value={selectedCinema ?? ""}
@@ -287,7 +284,7 @@ const displayLocations = filteredLocations;
                     </option>
                   ))}
                 </select>
-              )}
+            
             </ul>
           </div>
   

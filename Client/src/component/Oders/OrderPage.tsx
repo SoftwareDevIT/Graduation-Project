@@ -31,7 +31,7 @@ const OrderPage: React.FC = () => {
     roomId,
     cinemaId,
   } = (location.state as LocationState) || {};
-
+  
  
   const [combos, setCombos] = useState<Combo[]>([]);
   const [totalPrice, setTotalPrice] = useState<number>(initialTotalPrice || 0);
@@ -68,7 +68,7 @@ const OrderPage: React.FC = () => {
         selectedCombos, // Pass the selected combos to the next page
       },
     });
-    console.log(cinemaName);
+    console.log("bjasfjaf",showtimeId);
     
   };
 
@@ -77,6 +77,7 @@ const OrderPage: React.FC = () => {
       try {
         const response = await instance.get(`/showtimes/${showtimeId}`);
         setCombos(response.data.data.cinema_combos);
+
         setComboQuantities(new Array(response.data.data.cinema_combos.length).fill(0));
       } catch (error) {
         console.error("Error fetching combos:", error);

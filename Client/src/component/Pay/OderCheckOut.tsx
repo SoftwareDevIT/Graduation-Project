@@ -23,6 +23,8 @@ const OrderCheckout = () => {
     const [voucherApplied, setVoucherApplied] = useState<boolean>(false); // Trạng thái kiểm tra voucher đã áp dụng hay chưa
     const [isVoucherVisible, setIsVoucherVisible] = useState<boolean>(false);
     const [isTableVisible, setIsTableVisible] = useState(false);
+    const [discountFromPoints, setDiscountFromPoints] = useState(0); // Số tiền giảm giá từ điểm
+
     const { userProfile, avatar, setUserProfile } = useUserContext(); // Use context to get user data
     const [pointsToUse, setPointsToUse] = useState(""); // Số điểm nhập
     const userProfilea: UserProfile | null = JSON.parse(localStorage.getItem("user_profile") || "null");
@@ -30,6 +32,7 @@ const OrderCheckout = () => {
     const isAdmin = userRoles.length > 0 && userRoles[0]?.name === "staff";
     const [isModalVisible, setIsModalVisible] = useState(false);
    
+
     const [isPointsUsed, setIsPointsUsed] = useState(false); // Flag to track if points have been used
     const [availablePoints, setAvailablePoints] = useState(userProfile?.points || 0); // Available points
     const toggleTableVisibility = () => {
@@ -69,13 +72,14 @@ const OrderCheckout = () => {
     } = (location.state as LocationState) || {};
 
     // Log selectedSeats to verify data
-    // console.log(seats);
+    console.log("showtimeId",cinemaId);
     // console.log(selectedCombos); // Check if combos are passed correctly
     const handleApplyVoucher = async () => {
         if (!voucherCode) {
             message.warning("Vui lòng nhập mã voucher.");
             return;
         }
+     
         try {
             const response = await instance.post("/apply-promotion", {
                 code: voucherCode,
@@ -83,14 +87,14 @@ const OrderCheckout = () => {
             });
     
             if (response.data) {
-                const { message: successMessage, discount, final_price } = response.data;
+                const { message: successMessage,discount: voucherDiscount, final_price } = response.data;
                 message.success(successMessage);
-                setDiscount(discount);
+                setDiscount((prevDiscount) => prevDiscount + voucherDiscount);
                 setFinalPrice(final_price);
                 setVoucherApplied(true); // Đánh dấu là voucher đã được áp dụng
             }
         } catch (error) {
-            message.error("Không thể áp dụng mã khuyến mãi. Vui lòng kiểm tra lại.");
+            message.error("Mã khuyến mại không hợp lệ vui lòng kiểm tra lại");
             console.error("Error applying voucher:", error);
         }
     };
@@ -114,7 +118,12 @@ const OrderCheckout = () => {
             message.warning("Bạn không có đủ điểm để sử dụng.");
             return;
         }
-    
+        Modal.confirm({
+            title: "Chỉ có thể sử dụng điểm một lần",
+            content: "Bạn chỉ có thể sử dụng điểm một lần duy nhất. Vui lòng chọn số điểm tốt nhất!",
+            okText: "Xác nhận",
+            cancelText: "Hủy",
+            onOk: async () => {
         try {
             const response = await instance.post("/use-points", {
                 points_to_use: points, // Sử dụng giá trị đã chuyển đổi
@@ -122,18 +131,18 @@ const OrderCheckout = () => {
             });
     
             if (response.status === 200 && response.data) {
-                const { message: successMessage, discount_value, final_price } = response.data;
+                const { message: successMessage, discount_value: pointsDiscount, final_price } = response.data;
     
                 // Hiển thị thông báo thành công
                 message.success(successMessage);
     
                 // Cập nhật tổng tiền và giảm giá
-                setDiscount(discount_value); // Nếu API trả về số tiền quy đổi từ điểm
+                setDiscount((prevDiscount) => prevDiscount + pointsDiscount);
                 setFinalPrice(final_price); // Cập nhật lại tổng tiền sau khi trừ điểm
     
                 // Cập nhật lại số điểm còn lại
                 setAvailablePoints((prevPoints) => prevPoints - points);
-    
+                setDiscountFromPoints(0);
                 // Đánh dấu là điểm đã được sử dụng
                 setIsPointsUsed(true);
             } else {
@@ -143,6 +152,8 @@ const OrderCheckout = () => {
             console.error("Lỗi khi sử dụng điểm:", error);
             message.error("Có lỗi xảy ra, vui lòng thử lại!");
         }
+    },
+});
     };
     const handleRemoveVoucher = () => {
         setVoucherCode(""); 

@@ -113,15 +113,27 @@ import SeatMapFormManager from "./Page/Admin/SeatMap/SeatMapForm";
 
 import Community from "./component/Community/Community";
 
+
 import Pointaccumulation from "./component/PersonalPage/Pointaccumulation";
+
+
+
+
+
+
+
+
+
+
 
 import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
 import OrderHistoryApp from "./component/PersonalPage/MovieTicket";
-
+import BookingManager from "./component/TicketandSeat/BookingManager";
 import MovieStatistics from "./component/Admin/MovieStatistics/MovieStatistics";
 import MovieStatisticsManager from "./Page/Admin/MovieStatistics/MovieStatisticsManager";
 import CinemaInfo from "./component/Cinema/CinemaInfo";
 import ThongTinRap from "./component/Cinema/CinemaInfo";
+import PaymentSuccess from "./component/PersonalPage/PaymentSuccess";
 
 function App() {
 
@@ -139,6 +151,7 @@ function App() {
         <Route path="/seat" element={<CinemaSeatSelection/>} />
         <Route path="/cinema/:cinemaId" element={<ThongTinRap/>} />
 
+        <Route path="/payment-success" element={<PaymentSuccess  />} />
 
 
         <Route path="/movie-detail/:slug" element={<ContentMovie />} />
@@ -170,19 +183,13 @@ function App() {
             </PrivateRoute>
           } />
         <Route path="/Personal" element={<PrivateRoute><Personal /></PrivateRoute>} />
+       
+ 
         <Route path="/ticketcinema" element={ <PrivateRoute><OrderHistoryApp/></PrivateRoute>} />
         <Route path="/ChangePassword" element={ <PrivateRoute><ChangePassword /></PrivateRoute>} />
-        <Route path="/register"
-        element={
-          <PrivateRoute>
-            <RegisterCinema /> 
-          </PrivateRoute>
-        } />
-        <Route path="/login" element={
-            <PrivateRoute>
-              <LoginCinema /> 
-            </PrivateRoute>
-          } />
+        <Route path="/register" element={<RegisterCinema />} />
+        
+        <Route path="/login" element={<LoginCinema />} />
         <Route path="/movieshowing" element={<MovieShowing/>} />
         <Route path="/deponsit" element={<Deponsit/>} />
         <Route path="/forgetpass" element={<ForgetPass/>} />

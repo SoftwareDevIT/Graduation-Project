@@ -23,7 +23,26 @@
   font-size: 24px;
   color: #1890ff;
 }
-
+.diachirap{
+  font-size: 13px;
+  display: block;
+  white-space: nowrap; /* Prevent wrapping to a new line */
+  overflow: hidden; /* Hide overflowed text */
+  text-overflow: ellipsis; /* Add ellipses for overflowed text */
+}
+.item-cinema:hover{
+  cursor: pointer;
+}
+.cinemabox-4{
+  display: flex;
+  border-bottom: 1px solid rgb(169, 152, 152);
+}
+.logo-cinema{
+  font-size: 12px;
+  width: 25px;
+  height: 25px;
+  margin-right: 10px;
+}
 .notification-dropdown {
   position: absolute;
   top: 30px;

@@ -23,7 +23,7 @@ const Personal: React.FC = () => {
       // Add favorite movie activities to the activity list
       const newActivities = movies.map((movie: Movie) => {
         const timeAgo = formatDistanceToNow(new Date(movie.created_at), { addSuffix: true, locale: vi });
-        return `${userProfile.user_name} đã yêu thích phim: ${movie.movie_name} - ${timeAgo}`;
+        return `${userProfile.user_name} đã yêu thích phim : ${movie.movie_name} - ${timeAgo}`;
       });
       setActivities(newActivities);
       setVisibleActivities(newActivities.slice(0, 3)); // Display the first 3 activities

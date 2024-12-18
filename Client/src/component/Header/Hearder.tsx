@@ -20,7 +20,7 @@ const Header = () => {
   const { state } = useCountryContext();
   const locations = state.countries;
   const navigate = useNavigate();
- 
+  const [searchKeyword, setSearchKeyword] = useState(""); 
 
 
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -31,6 +31,14 @@ const Header = () => {
   const handleOpenModal = () => {
     setIsModalVisible(true);
   };
+  
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchKeyword(e.target.value); // Lưu từ khóa
+  };
+  
+  const filteredCinemas = cinemas.filter((cinema) =>
+    cinema.cinema_name.toLowerCase().includes(searchKeyword.toLowerCase())
+  );
   
   // Hàm xử lý khi người dùng đóng Modal
   const handleCloseModal = () => {
@@ -49,7 +57,7 @@ const Header = () => {
     if (selectedLocation !== null) {
       instance.get(`/cinema-by-location/${selectedLocation}`).then((response) => {
         setCinemas(response.data.data);
-        // console.log(setCinemas);
+        console.log("data-rap",response.data.data);
 
       });
     }
@@ -183,10 +191,13 @@ const Header = () => {
     >
       <div className="timkiemrap">
         <input
+value={searchKeyword}
+onChange={handleSearchChange} // Gọi hàm cập nhật từ khóa
           type="text"
           placeholder="Tìm rạp tại"
           style={{
             width: '100%',
+            height:"35px",
             padding: '8px',
             marginBottom: '12px',
             fontSize: '14px',
@@ -213,17 +224,25 @@ const Header = () => {
             <option key={location.id} value={location.id}>
               {location.location_name}
             </option>
+
           ))}
         </select>
       </div>
 
 
       <div className="cinemas-list">
-        {cinemas.map((cinema) => (
-          <a key={cinema.id}  onClick={() => handleCinemaClick(cinema.id)}  >
-            {cinema.cinema_name}
-          </a>
-        ))}
+      {filteredCinemas.map((cinema) => (
+  <div className="cinemabox-4" key={cinema.id}>
+    <div className="item-cinema">
+      <img className="logo-cinema" src="../../../public/logo.jpg" alt="" />
+    </div>
+    <div className="item-cinema" onClick={() => handleCinemaClick(cinema.id)}>
+      {cinema.cinema_name}
+      <br />
+      <span className="diachirap">{cinema.cinema_address}</span>
+    </div>
+  </div>
+))}
       </div>
     </Modal>
 

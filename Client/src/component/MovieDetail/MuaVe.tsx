@@ -89,16 +89,18 @@ const MuaVe: React.FC = () => {
               },
             });
           } else {
-            console.error("Unauthorized role");
-            return;
+            response = await instance.get(`/filterByDateByMovie`, {
+              params: {
+                location_id: selectedLocation,
+                showtime_date: selectedDate,
+                movie_id: movie.id,
+              },
+            });
           }
   
           const cinemaData = response.data?.data || [];
           setCinemas(
-            cinemaData.map((item: any) => ({
-              ...item.cinema,
-              showtimes: item.showtimes,
-            }))
+            cinemaData
           );
         } catch (err) {
           console.error("Error fetching cinemas and showtimes:", err);
