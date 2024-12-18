@@ -10,10 +10,10 @@ import { Rank } from "../../../interface/Rank";
 const rankSchema = z.object({
   name: z.string().min(1, "Tên hạng là bắt buộc."),
   total_order_amount: z
-    .number()
+    .number({ invalid_type_error: "Vui lòng nhập tổng số lượng đơn hàng" })
     .min(0, "Số lượng đơn hàng tối thiểu không được âm."),
   percent_discount: z
-    .number()
+    .number({ invalid_type_error: "Vui lòng nhập phần trăm giảm giá" })
     .min(0, "Phần trăm giảm giá không được âm.")
     .max(100, "Phần trăm giảm giá không được vượt quá 100."),
 });
