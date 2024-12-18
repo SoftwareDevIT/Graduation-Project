@@ -18,6 +18,8 @@ const Personal: React.FC = () => {
     if (userProfile) {
       const movies = userProfile.favorite_movies || [];
       setFavoriteMovies(movies);
+
+      // Add favorite movie activities to the activity list
       const newActivities = movies.map((movie: Movie) => {
         const timeAgo = formatDistanceToNow(new Date(movie.created_at), { addSuffix: true });
         return `${userProfile.user_name} đã yêu thích phim: ${movie.movie_name} - ${timeAgo}`;
@@ -66,8 +68,8 @@ const Personal: React.FC = () => {
                        <div className="img">
            <Link to={`/movie-detail/${movie.slug}`}> <img src={movie.poster || undefined} alt={movie.movie_name} /></Link>
           </div>
-                        <div className="movie-title1">
-            <p>{movie.movie_name}</p>
+                        <div className="movie-title">
+            <h5>{movie.movie_name}</h5>
           </div>
                       </div>
                     );

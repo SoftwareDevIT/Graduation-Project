@@ -66,13 +66,19 @@
     font-weight: bold;
     padding-top: -10px;
 }
+
 .summary-filter{
     position: relative;
     margin-top: 25px;
-    left: 150px;
+    left: 94px;
     bottom: 55px;
 }
-
+.summary-filter1{
+  margin-top: 75px;
+}
+.summary-filter3{
+  margin-top: 75px;
+}
 .summary-number {
     font-size: 2rem;
     font-weight: bold;
@@ -80,12 +86,18 @@
     margin-bottom: 10px;
     
 }
+.summaryaccount{
+  margin-right: 120px;
+}
+.previous_revenue{
+  margin-right: 120px;
+}
 
 .summary-change {
     font-size: 16px;
     align-items: center;
     margin-top: 5px;
-  
+    margin-right: 120px;
   }
 
   

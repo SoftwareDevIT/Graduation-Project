@@ -142,7 +142,7 @@ const TicketMovie: React.FC = () => {
 <LikeOutlined  className="icon-likee-2"
     style={{
     position:"relative",
-    right:"5px",
+    right:"5px",    
       color: "#28a745",           
       background: "none",        
       fontSize: "16px"            

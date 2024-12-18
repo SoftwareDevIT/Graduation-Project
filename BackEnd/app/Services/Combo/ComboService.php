@@ -45,7 +45,7 @@ class ComboService
 
     public function delete(int $id): ?bool
     {
-        $combo = $this->filterByCinema(Combo::where('id', $id))->firstOrFail();
+        $combo = $this->filterByCinema(Combo::where('id', $id)->where('status', 0))->firstOrFail();
         return $combo->delete();
     }
 

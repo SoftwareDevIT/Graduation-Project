@@ -12,13 +12,19 @@ import { Movie } from '../interface/Movie';
     phone: string;
     avatar: string;
     favorite_movies: Movie[];  // Field for favorite movies
-   
+    favorites:Favorite[]
     rank_name: string;
     total_amount: number;
     rank: Rank;
     
 point_histories: PointHistory[];
     points: number; 
+  }
+  
+  interface Favorite {
+    created_at: string; // Thêm thuộc tính created_at
+    id:string;
+    movie_id:string;// Giả sử có thêm một thuộc tính movie_id để xác định phim yêu thích
   }
   
   interface Rank {

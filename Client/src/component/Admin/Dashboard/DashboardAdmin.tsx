@@ -23,6 +23,8 @@ import { Cinema } from "../../../interface/Cinema";
 import * as XLSX from "xlsx"; // Import XLSX for Excel export
 
 import { Movie } from "../../../interface/Movie";
+import { Link } from "react-router-dom";
+import { Box } from "@mui/material";
 ChartJS.register(
   Title,
   Tooltip,
@@ -35,6 +37,11 @@ ChartJS.register(
   BarElement// Add this line to register the BarElement
 );
 
+interface CinemaRevenue {
+  cinema_id: number;
+  cinema_name: string;
+  total_revenue: number;
+}
 
 const DashboardAdmin = () => {
   const [bookings, setBookings] = useState<any[]>([]); // Update this type to match your API response
@@ -57,7 +64,9 @@ const [monthlyData, setMonthlyData] = useState({});
 const [movieRevenue, setMovieRevenue] = useState<Movie[]>([]);
 const [seatChartData, setSeatChartData] = useState({});
 const [movieRevenuePage, setMovieRevenuePage] = useState(1);
-  const [movieRevenuePageSize, setMovieRevenuePageSize] = useState(5);
+const [movieRevenuePageSize, setMovieRevenuePageSize] = useState(5);
+const [cinemaChartRevenue, setCinemaChartRevenue] = useState<CinemaRevenue[]>([]);
+
 
 
 const [userRole, setUserRole] = useState<string>("");
@@ -73,7 +82,6 @@ const [userRole, setUserRole] = useState<string>("");
       setUserRole("unknown"); // Gán giá trị mặc định khi không có vai trò
     }
   }, []);
-
 useEffect(() => {
   const fetchDashboardData = async () => {
     try {
@@ -84,10 +92,15 @@ useEffect(() => {
       const formattedMonth = selectedMonth ? selectedMonth.format("YYYY-MM") : null;
       const formattedYear = selectedYear ? selectedYear.format("YYYY") : null;
 
-      const cinemasResponse = await instance.get("/cinema");
+      let cinemasResponse;
+      if (userRole === "admin") {
+        cinemasResponse = await instance.get('/admin/cinema');
+      }else if (userRole === "manager") {
+        cinemasResponse = await instance.get('/manager/cinema');
+      } else {
+        cinemasResponse = await instance.get('/cinema');
+      }
       setCinemas(cinemasResponse.data.data);
-
-      
       let dashboardResponse;
       if (userRole === "admin") {
         dashboardResponse = await instance.get("/admin/dashboard", {
@@ -101,8 +114,8 @@ useEffect(() => {
             year: formattedYear
           }
         });
-      } else if (userRole === "manager") {
-        dashboardResponse = await instance.get("/manager/dashboard", {
+      }else if (userRole === "manager") {
+        dashboardResponse =await instance.get("/manager/dashboard", {
           params: {
             cinema_id: selectedCinema,
             status: selectedStatus,
@@ -114,7 +127,6 @@ useEffect(() => {
           }
         });
       } else {
-        // Default or public endpoint
         dashboardResponse = await instance.get("/dashboard", {
           params: {
             cinema_id: selectedCinema,
@@ -127,6 +139,17 @@ useEffect(() => {
           }
         });
       }
+      // const dashboardResponse = await instance.get("/admin/dashboard", {
+      //   params: {
+      //     cinema_id: selectedCinema,
+      //     status: selectedStatus,
+      //     start_date: formattedStartDate,
+      //     end_date: formattedEndDate,
+      //     day: formattedDate,
+      //     month: formattedMonth,
+      //     year: formattedYear
+      //   }
+      // });
 
       console.log("API response:", dashboardResponse.data);
       
@@ -135,15 +158,12 @@ useEffect(() => {
       setBookings(dashboardResponse.data.booking_revenue);
       setMovieRevenue(dashboardResponse.data.movie_revenue);
       setSeatChartData(dashboardResponse.data.chart_seats || {});
-    
-      
       setDailyData(dashboardResponse.data.daily_revenue_chart);
-        setMonthlyData(dashboardResponse.data.monthly_revenue_chart);
-      
-
+      setMonthlyData(dashboardResponse.data.monthly_revenue_chart);
       setDayRevenue(dashboardResponse.data.day_revenue);
       setMonthRevenue(dashboardResponse.data.month_revenue);
       setYearRevenue(dashboardResponse.data.year_revenue);
+      setCinemaChartRevenue(dashboardResponse.data.cinema_chart_revenue);
       
       
 
@@ -152,8 +172,12 @@ useEffect(() => {
     }
   };
 
-  fetchDashboardData();
-}, [selectedCinema, selectedStatus, selectedDateRange, selectedDate, selectedMonth, selectedYear]);
+  if (userRole !== "") {
+    fetchDashboardData();
+  }
+  
+}, [selectedCinema, selectedStatus, selectedDateRange, selectedDate, selectedMonth, selectedYear,userRole]);
+
   // Thêm selectedCinema làm dependency
   const exportToExcel = () => {
     const formattedData = bookings.map((booking) => ({
@@ -236,6 +260,37 @@ useEffect(() => {
       },
     ],
   };
+  const dataRevenue = {
+    labels: cinemas.map((cinema) => cinema.cinema_name), // Get cinema names dynamically
+    datasets: [
+      {
+        label: "Doanh thu",
+        data: cinemas.map((cinema) => {
+          const cinemaRevenue = cinemaChartRevenue.find(
+            (revenue) => revenue.cinema_id === cinema.id
+          );
+          return cinemaRevenue ? cinemaRevenue.total_revenue : 0; // Set revenue, default to 0 if not found
+        }),
+        backgroundColor: "rgba(255, 99, 132, 0.6)",
+      },
+    ],
+  };
+  const optionsRevenue = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: "top" as const },
+      title: { display: true, text: "Doanh Thu Theo Rạp" },
+    },
+    scales: {
+      x: {
+        ticks: { maxRotation: 0, minRotation: 0 },
+        grid: { display: false },
+        
+      },
+      y: { grid: { display: true } },
+    },
+  };
   const selectedCinemaName = selectedCinema
   ? cinemas.find((cinema) => cinema.id === selectedCinema)?.cinema_name || "Rạp không xác định"
   : "Tất cả các rạp";
@@ -275,14 +330,7 @@ useEffect(() => {
         <Option value="Đã in vé">Đã in vé</Option>
       </Select>
     </Form.Item>
-    <Form.Item label="">
-              <RangePicker
-                format="YYYY-MM-DD"
-                value={selectedDateRange}
-                onChange={(dates) => setSelectedDateRange(dates)}
-                style={{ width: 240 }}
-              />
-            </Form.Item>
+  
             <Form.Item label="">
       <Button type="primary" onClick={exportToExcel} block style={{ width: 300 }}>
         Export to Excel
@@ -330,16 +378,8 @@ useEffect(() => {
   <div className="summary-card">
     <div className="summary-card-header">
       <h3>Doanh Thu</h3>
-      <div className="summary-filter">
-      <Form.Item label="">
-              <DatePicker
-                picker="month"
-                placeholder="Chọn tháng"
-                value={selectedMonth}
-                onChange={(date) => setSelectedMonth(date)}
-                style={{ width: 160 }}
-              />
-            </Form.Item>
+      <div className="summary-filter3">
+     
       </div>
     </div>
     <div className="summaryaccount">
@@ -367,16 +407,7 @@ useEffect(() => {
   <div className="summary-card">
     <div className="summary-card-header">
       <h3>Doanh Thu</h3>
-      <div className="summary-filter">
-      <Form.Item label="">
-              <DatePicker
-                picker="year"
-                placeholder="Chọn năm"
-                value={selectedYear}
-                onChange={(date) => setSelectedYear(date)}
-                style={{ width: 160 }}
-              />
-            </Form.Item>
+      <div className="summary-filter1">
       </div>
     </div>
     <div className="summaryaccount">
@@ -401,11 +432,20 @@ useEffect(() => {
   </div>
   </div>
 </div>
-
-
+<Box sx={{ width: 1100, height: 400}}>
+          <Bar data={dataRevenue} options={optionsRevenue} />
+        </Box>
         <div className="charts-container">
           <div className="quarterly-revenue">
             <h3>Doanh Thu Theo Ngày</h3>
+            <Form.Item label="">
+              <RangePicker
+                format="YYYY-MM-DD"
+                value={selectedDateRange}
+                onChange={(dates) => setSelectedDateRange(dates)}
+                style={{ width: 240 }}
+              />
+            </Form.Item>
             <div className="area-chart" >
             <Line data={dailyChartData} options={{
                         responsive: true,
@@ -446,6 +486,15 @@ useEffect(() => {
           <div className="quarterly-revenue">
   <h3>Doanh Thu Theo Tháng</h3>
   <div className="bar-chart" style={{ width: '100%', height: '250px' }}>
+  <Form.Item label="">
+              <DatePicker
+                picker="year"
+                placeholder="Chọn năm"
+                value={selectedYear}
+                onChange={(date) => setSelectedYear(date)}
+                style={{ width: 160 }}
+              />
+            </Form.Item>
   <Bar data={monthlyChartData} options={{
                             responsive: true,
                             maintainAspectRatio: false,
@@ -502,7 +551,7 @@ useEffect(() => {
                 <td>{booking.showtime.movie.movie_name}</td>
                 <td>{booking.amount}</td>
                 <td>{booking.status}</td>
-                <td>{booking.created_at}</td>
+                <td>{dayjs(booking.created_at).format("DD/MM/YYYY")}</td>
               </tr>
             ))
         ) : (
@@ -547,6 +596,7 @@ useEffect(() => {
               <th>Tên Phim</th>
               <th>Doanh Thu Của Phim</th>
               <th>Tổng Suất Chiếu</th>
+              <th>Hành Động</th>
             </tr>
           </thead>
           <tbody>
@@ -567,6 +617,9 @@ useEffect(() => {
                   <td>{movie.movie_name}</td>
                   <td>{movie.total_revenue.toLocaleString()}₫</td>
                   <td>{movie.showtime_count}</td>
+                  <td>
+                    <Link to={'/admin/moviestatistics'} className="btn btn-primary">Chi Tiết</Link>
+                  </td>
                 </tr>
               ))}
           </tbody>

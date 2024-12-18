@@ -80,15 +80,7 @@ const CinemasDashboard: React.FC = () => {
         }
     };
 
-    const handleCinemaClick = (cinemaId: number) => {
-        if (expandedCinemaId === cinemaId) {
-            setExpandedCinemaId(null);
-            setSelectedCinemaMovies([]);
-        } else {
-            fetchMoviesForCinema(cinemaId);
-            setExpandedCinemaId(cinemaId);
-        }
-    };
+
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
@@ -106,14 +98,7 @@ const CinemasDashboard: React.FC = () => {
             title: 'Tên Rạp',
             dataIndex: 'cinema_name',
             key: 'cinema_name',
-            render: (text: string, record: any) => (
-                <span
-                    style={{ color: '#1890ff', cursor: 'pointer' }}
-                    onClick={() => handleCinemaClick(record.id)}
-                >
-                    {text}
-                </span>
-            ),
+          
         },
         {
             title: 'Điện Thoại',
@@ -122,7 +107,7 @@ const CinemasDashboard: React.FC = () => {
         },
         {
             title: 'Vị Trí',
-            dataIndex: ['location', 'location_name'],
+            dataIndex: ['city'],
             key: 'location_name',
         },
         {
@@ -138,14 +123,6 @@ const CinemasDashboard: React.FC = () => {
                     <Link to={`/admin/cinemas/edit/${record.id}`}>
                     <Button type="primary" icon={<EditOutlined />} />
                     </Link>
-                    <Popconfirm
-                        title="Bạn có chắc chắn muốn xóa rạp này?"
-                        onConfirm={() => handleDeleteCinema(record.id)}
-                        okText="Xóa"
-                        cancelText="Hủy"
-                    >
-                         <Button danger icon={<DeleteOutlined />} />
-                    </Popconfirm>
                 </Space>
             ),
         },

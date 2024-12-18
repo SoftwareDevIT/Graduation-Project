@@ -13,7 +13,7 @@ export interface User {
     fullname?: string | null;     
        // varchar(255), optional
     coin?: number | null;            // double, optional
-    status: 'Normal' | 'Ban';        // enum
+    status: boolean | "Hoạt Động" | "Khóa";       // enum
     cinema_id: number
     role_id : number
                    // bigint(20) -> number

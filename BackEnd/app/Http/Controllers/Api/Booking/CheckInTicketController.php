@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api\Booking;
 
 use App\Http\Controllers\Controller;
+use App\Models\Booking;
 use App\Models\Seats;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class CheckInTicketController extends Controller
 {
@@ -27,19 +29,30 @@ class CheckInTicketController extends Controller
     }
     public function checkInBooking(Request $request)
     {
+        // Validate the booking code
         $request->validate([
             'booking_code' => 'required|string',
         ]);
-        $ticket = Seats::where('booking_code', $request->booking_code)->first();
+
+        // Find the booking by booking code
+        $ticket = Booking::where('booking_code', $request->booking_code)->first();
+
+        // Check if the ticket exists
         if (!$ticket) {
-            return $this->notFound('Không tìm thấy vé', 404);
+            return $this->notFound('Không tìm hóa đơnđơn', 404);
         }
-        if ($ticket->status == 'Đã in vé') {
-            return $this->error('Vé đã qua sử dụng', 400);
-        }
-        // Cập nhật trạng thái check-in
-        $ticket->status = 'Đã in vé';
-        $ticket->save();
-        return $this->success($ticket, 'Đã in vé', 200);
+
+        // // Check if the ticket has already been used
+        // if ($ticket->status == 'Đã in vé') {
+        //     return $this->error('Hóa đơn này đã ', 400);
+        // }
+        return $this->redirectOrderDetail($ticket->id);
+        // return ("http://localhost:5173/admin/orders/$ticket->id");
+    }
+
+    public function redirectOrderDetail($id)
+    {
+        // Redirect to the React frontend with the correct ID
+        return redirect("http://localhost:5173/admin/ordersdetail/$id");
     }
 }
