@@ -6,6 +6,8 @@ import { Movie } from "../../interface/Movie";
 import Header from '../Header/Hearder';
 import { Link } from 'react-router-dom';
 import MovieBanner from '../Banner/MovieBanner';
+import Skeleton from 'react-loading-skeleton';  // Import skeleton loader
+import 'react-loading-skeleton/dist/skeleton.css';  // Import skeleton CSS
 
 const UpcomingMovies: React.FC = () => {
   const [movies, setMovies] = useState<Movie[]>([]); // Khởi tạo mặc định là mảng rỗng
@@ -22,7 +24,7 @@ const UpcomingMovies: React.FC = () => {
       const response = await instance.get("/fillMovies/upcoming");
       const moviesData = response.data?.data?.[0]?.movies?.data || [];
    
-        setMovies(moviesData);
+      setMovies(moviesData);
       
     } catch (error) {
       console.error("Không thể tải phim sắp chiếu:", error);
@@ -46,7 +48,20 @@ const UpcomingMovies: React.FC = () => {
         <div className="container">
           <div className="titleg">
             <div className="danh-sach-phim">
-              {Array.isArray(movies) && movies.length > 0 ? (
+              {/* Check loading state to show skeleton or movies */}
+              {loading ? (
+                <div className="loading-skeleton">
+                  {Array.from({ length: 6 }).map((_, index) => (
+                    <div key={index} className="phim-card">
+                      <Skeleton height={250} width={200} />
+                      <div className="phim-thong-tin">
+                        <Skeleton width={150} height={20} />
+                        <Skeleton width={120} height={15} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : Array.isArray(movies) && movies.length > 0 ? (
                 movies.map((movie) => (
                   <div key={movie.id || movie.slug} className="phim-card">
                     <Link to={`/movie-detail/${movie.slug}`}>
@@ -67,19 +82,14 @@ const UpcomingMovies: React.FC = () => {
                     </div>
                   </div>
                 ))
-              ) : loading ? (
-                <p>Đang tải phim...</p>
               ) : error ? (
                 <p>{error}</p>
               ) : (
-                <p className='Nodata'>Không có phim sắp chiếu.</p>
+                <p className="Nodata">Không có phim sắp chiếu.</p>
               )}
-               
             </div>
           </div>
-          
         </div>
-        
       </div>
       {!loading && movies.length === 0 && <MovieBanner />}
       <Footer />

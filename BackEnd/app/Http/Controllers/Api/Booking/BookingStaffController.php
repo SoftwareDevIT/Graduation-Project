@@ -116,11 +116,7 @@ class BookingStaffController extends Controller
         $booking->save();
         $this->rankService->points($booking);
         session()->flush();
-        return response()->json([
-            'status' => true,
-            'message' => 'Xây dựng thanh cong',
-            'booking' => $booking
-        ]);
+        return redirect('http://localhost:5173/admin/ordersdetail/'.$id);
     }
 
 

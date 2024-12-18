@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons'; // Ant Design icons
-import { notification, Table, Pagination, Input, Button, Popconfirm, Switch } from 'antd'; // Ant Design components
+import { notification, Table, Pagination, Input, Button, Switch } from 'antd';
 import instance from '../../../server';
 import { User } from '../../../interface/User';
 
@@ -10,43 +9,47 @@ const UserDashboard: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const [totalPages, setTotalPages] = useState<number>(0);
+    const [totalItems, setTotalItems] = useState<number>(0);
+    const [pageSize] = useState<number>(10); // Số lượng bản ghi trên mỗi trang
     const { Search } = Input;
     const [userRole, setUserRole] = useState<string>("");
 
-  // Fetch user role from localStorage
-  useEffect(() => {
-    const userData = JSON.parse(localStorage.getItem("user_profile") || "{}");
-    const roles = userData.roles || [];
-    
-    if (roles.length > 0) {
-      setUserRole(roles[0].name);
-    } else {
-      setUserRole("unknown"); // Gán giá trị mặc định khi không có vai trò
-    }
-  }, []);
+    // Fetch user role from localStorage
+    useEffect(() => {
+        const userData = JSON.parse(localStorage.getItem("user_profile") || "{}");
+        const roles = userData.roles || [];
 
+        if (roles.length > 0) {
+            setUserRole(roles[0].name);
+        } else {
+            setUserRole("unknown");
+        }
+    }, []);
+
+    // Fetch users from API
     useEffect(() => {
         const fetchUsers = async () => {
             try {
                 let response;
                 if (userRole === "admin") {
-                  response = await instance.get('/admin/all-user');
+                    response = await instance.get(`/admin/all-user?page=${currentPage}`);
                 } else if (userRole === "manager") {
-                  response = await instance.get('/manager/all-user');
+                    response = await instance.get(`/manager/all-user?page=${currentPage}`);
                 } else {
-                  response = await instance.get('/all-user');
+                    response = await instance.get(`/all-user?page=${currentPage}`);
                 }
+
                 setUsers(response.data.data);
-                setTotalPages(response.data.last_page);
+                setCurrentPage(response.data.current_page);
+                setTotalItems(response.data.total); // Tổng số bản ghi
             } catch (err) {
                 setError('Lỗi khi tải người dùng');
             }
         };
+
         if (userRole !== "") {
             fetchUsers();
-          }
-
+        }
     }, [currentPage, userRole]);
 
     // Filter users based on search term
@@ -59,29 +62,17 @@ const UserDashboard: React.FC = () => {
         setCurrentPage(page);
     };
 
-    // Handle delete action
-    const handleDelete = (id: number) => {
-        // Your delete logic here (API request, etc.)
-        notification.success({
-            message: 'Thành Công',
-            description: 'Người dùng đã được xóa thành công!',
-            placement: 'topRight',
-        });
-    };
-
     // Handle status change
     const handleStatusChange = async (id: number, status: boolean) => {
         try {
-            // Call the API to change user status
             await instance.post(`/manager/userStatus/${id}`, { status: !status });
-            // Update the user status in the local state
             const updatedUsers = users.map(user =>
                 user.id === id ? { ...user, status: !status } : user
             );
             setUsers(updatedUsers);
             notification.success({
                 message: 'Cập Nhật Thành Công',
-                description: `Trạng thái tài khoản đã được cập nhật!`,
+                description: 'Trạng thái tài khoản đã được cập nhật!',
                 placement: 'topRight',
             });
         } catch (err) {
@@ -177,11 +168,11 @@ const UserDashboard: React.FC = () => {
             <div className="d-flex justify-content-center mt-4">
                 <Pagination
                     current={currentPage}
-                    total={totalPages * 10}
-                    pageSize={7}
-                    onChange={(page) => setCurrentPage(page)}
+                    total={totalItems}
+                    pageSize={pageSize}
+                    onChange={handlePageChange}
                     showSizeChanger={false}
-                    showQuickJumper
+                   
                 />
             </div>
         </div>

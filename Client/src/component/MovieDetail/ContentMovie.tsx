@@ -153,7 +153,7 @@ export const ContentMovie = (props: Props) => {
                                     />
                                     {/* {post.user_id} • */}
                                     <div className="post-info">
-                                        <a href="#" className="post-title"><Link to={`/postdetail/${post.slug}`}>{post.title}</Link></a>
+                                       <Link className="post-title" to={`/postdetail/${post.slug}`}>{post.title}</Link>
                                         <p className="post-meta"><span className="post-meta-span">Đánh giá phim</span>    {formatTimeAgo(post.created_at)}</p>
                                         <p className="post-meta-2">{stripHtml(post.content.slice(0, 150))}...</p> {/* Display a truncated version of the content */}
                                     </div>

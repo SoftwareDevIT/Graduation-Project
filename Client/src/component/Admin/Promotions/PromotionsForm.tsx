@@ -11,11 +11,11 @@ import { zodResolver } from "@hookform/resolvers/zod"; // Import zodResolver
 const promotionSchema = z.object({
   code: z.string().min(1, "Mã khuyến mãi là bắt buộc"),
   discount_percentage: z
-    .number()
+    .number({ invalid_type_error: "Vui lòng nhập % giảm giá" })
     .min(0, "Giảm giá phải lớn hơn hoặc bằng 0")
     .max(100, "Giảm giá không thể vượt quá 100%"),
-  max_discount: z.number().min(0, "Giảm giá tối đa phải lớn hơn hoặc bằng 0"),
-  min_purchase: z.number().min(0, "Giá trị mua tối thiểu phải lớn hơn hoặc bằng 0"),
+  max_discount: z.number({ invalid_type_error: "Vui lòng nhập giảm giá tối đa" }).min(0, "Giảm giá tối đa phải lớn hơn hoặc bằng 0"),
+  min_purchase: z.number({ invalid_type_error: "Vui lòng nhập giá trị tối thiểu" }).min(0, "Giá trị mua tối thiểu phải lớn hơn hoặc bằng 0"),
   valid_from: z
     .string()
     .refine((val) => !!Date.parse(val), "Ngày bắt đầu không hợp lệ"),

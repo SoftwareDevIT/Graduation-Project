@@ -24,6 +24,21 @@
 .movie-card-header p {
   font-size: 16px;
 }
+/* Add custom styles for the skeleton loader */
+.loading-skeleton {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.loading-skeleton .phim-card {
+  width: 200px;
+  margin-bottom: 20px;
+}
+
+.loading-skeleton .react-loading-skeleton {
+  margin-bottom: 10px;
+}
 
 .movie-card-content {
   display: flex;
