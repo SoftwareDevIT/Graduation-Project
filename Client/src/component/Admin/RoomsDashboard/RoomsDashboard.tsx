@@ -4,6 +4,8 @@ import { EditOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import { notification, Table, Pagination, Input, Button, Popconfirm, Switch } from 'antd';
 import instance from '../../../server';
 import { Room } from '../../../interface/Room';
+import 'antd/dist/reset.css';
+
 
 const RoomDashboard: React.FC = () => {
   const [rooms, setRooms] = useState<Room[]>([]);
@@ -38,8 +40,7 @@ const RoomDashboard: React.FC = () => {
   const handlePageChange = (page: number) => setCurrentPage(page);
 
   const handleDelete = async (id: number) => {
-    const confirmDelete = window.confirm("Bạn có chắc chắn muốn xóa phòng này?");
-    if (confirmDelete) {
+    
       try {
         await instance.delete(`/manager/room/${id}`);
         setRooms(rooms.filter((room) => room.id !== id));
@@ -56,7 +57,7 @@ const RoomDashboard: React.FC = () => {
           placement: 'topRight',
         });
       }
-    }
+    
   };
   const handleStatusChange = async (id: number, currentStatus: boolean) => {
     try {
@@ -135,6 +136,7 @@ const RoomDashboard: React.FC = () => {
             onConfirm={() => handleDelete(room.id)}
             okText="Có"
             cancelText="Không"
+        
           >
             <Button danger icon={<DeleteOutlined />} />
 </Popconfirm>

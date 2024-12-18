@@ -23,6 +23,8 @@ import {
   FaBullhorn,
   FaPlayCircle,
   FaBuilding,
+  FaUserTie,
+  FaVideo,
 } from "react-icons/fa";
 import "./Sidebar.css";
 
@@ -153,6 +155,14 @@ const Sidebar: React.FC = () => {
                   >
                     <FaCalendarAlt /> Quản lí xuất chiếu
                   </NavLink>
+                </li>
+                <li>
+                <NavLink to={'/admin/actor'} className={({ isActive }) => (isActive ? 'active' : '')}>
+                <FaUserTie /> Quản lí diễn viên</NavLink>
+                </li>
+                <li>
+                <NavLink to={'/admin/director'} className={({ isActive }) => (isActive ? 'active' : '')}>
+                <FaVideo/> Quản lí đạo diễn</NavLink>
                 </li>
               </ul>
             </li>
