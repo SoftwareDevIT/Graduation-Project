@@ -99,9 +99,8 @@ const RoleAndUserManagement = () => {
     }
   };
   const handleAssignRoles = async (userId: number, selectedRoles: string[]) => {
-    // Kiểm tra xem vai trò có phải là "manager" hoặc "staff" không
     const selectedRoleNames = selectedRoles.map(role => role.toLowerCase());
-    const isManagerOrStaff = selectedRoleNames.includes('manager') || selectedRoleNames.includes('staff');
+    const isManagerOrStaff = selectedRoleNames.includes('admin');
   
     // Nếu người dùng chọn "manager" hoặc "staff", yêu cầu nhập cinema_id
     let cinemaId: string | null = null;

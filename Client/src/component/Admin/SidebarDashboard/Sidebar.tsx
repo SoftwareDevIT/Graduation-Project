@@ -110,6 +110,7 @@ className={({ isActive }) => (isActive ? "active" : "")}
                     Sơ đồ ghế
                   </NavLink>
                 </li>
+                {(userRole === "admin")  && (
                 <li>
                   <NavLink
                     to={"/admin/rank"}
@@ -120,6 +121,7 @@ className={({ isActive }) => (isActive ? "active" : "")}
                     Quản lí hạng
                   </NavLink>
                 </li>
+                )}
               </ul>
             </li>
           )}
@@ -160,7 +162,7 @@ className={({ isActive }) => (isActive ? "active" : "")}
             )}
             <ul className={openMenu["services"] ? "submenu open" : "submenu"}>
               {/* Nếu userRole là "staff", chỉ hiển thị mục Quản lý đơn hàng */}
-              {userRole == "staff || manager" && (
+              {(userRole === "manager" || userRole === "staff") && (
                 <li>
                   <NavLink
                     to={"/admin/orders"}

@@ -496,4 +496,8 @@ class DashboardAdminService
         return $filteredList;
     }
     //===============================================================================
+    public function getMovieNameById($movie_id)
+{
+    return Movie::find($movie_id)->movie_name ?? 'Không rõ'; 
+}
 }
