@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Card, Button, Typography, Image, Space, Row, Col, DatePicker } from "antd";
-
 import {
   CalendarOutlined,
   EnvironmentOutlined,
   TeamOutlined,
   ArrowLeftOutlined,
+  TagOutlined,
+  CreditCardOutlined,
+  BarcodeOutlined,
+  FieldTimeOutlined,
 } from "@ant-design/icons";
 import instance from "../../server";
 import moment from "moment";
@@ -27,6 +30,10 @@ interface Order {
   seats: Seat[];
   amount: number;
   combos: Combo[];
+  pay_method: {
+    pay_method_name: string;
+  };
+  status: string;
 }
 
 const OrderHistoryApp: React.FC = () => {
@@ -60,6 +67,8 @@ const OrderHistoryApp: React.FC = () => {
           seats: order.seats,
           amount: order.amount,
           combos: order.combos,
+          pay_method: order.pay_method,
+          status: order.status,
         }));
         setOrders(mappedOrders);
         setFilteredOrders(mappedOrders); // Show all orders initially
@@ -71,6 +80,7 @@ const OrderHistoryApp: React.FC = () => {
         setLoading(false); // Stop loading on error
       });
   }, []);
+
   const handleDateFilter = (date: moment.Moment | null, dateString: string | string[]) => {
     const filterDate = Array.isArray(dateString) ? dateString[0] : dateString;
 
@@ -137,12 +147,12 @@ const OrderHistoryApp: React.FC = () => {
                         width={120}
                         style={{ borderRadius: "10px" }}
                       />
-                      </Col>
+                    </Col>
                     <Col xs={24} sm={18} className="order-info">
                       <Space direction="vertical" style={{ width: "100%" }}>
                         <Title level={4} style={{ margin: 0, fontWeight: 600 }}>
                           {order.showtime.movie.movie_name}
-                          </Title>
+                        </Title>
                         <Text>
                           <EnvironmentOutlined style={{ marginRight: "8px", color: "#1890ff" }} />
                           <b>Phòng chiếu :</b> {order.showtime.room.room_name}
@@ -152,10 +162,9 @@ const OrderHistoryApp: React.FC = () => {
                           <b>Thời gian:</b> {order.showtime.showtime_date} {order.showtime.showtime_start}
                         </Text>
                         <Text>
-                        <TeamOutlined style={{ marginRight: "8px", color: "#52c41a" }} />
+                          <TeamOutlined style={{ marginRight: "8px", color: "#52c41a" }} />
                           <b>Ghế:</b> {order.seats.map((s) => s.seat_name).join(", ")}
                         </Text>
-                        
                         <Text style={{ fontWeight: 600 }}>
                           <b>Tổng:</b> {formatCurrency(order.amount)}
                         </Text>
@@ -225,24 +234,38 @@ const OrderHistoryApp: React.FC = () => {
                   <Row gutter={[16, 16]}>
                     <Col xs={24} sm={16}>
                       <Space direction="vertical" size="large" style={{ width: "100%" }}>
-                        <Text style={{ fontSize: "16px" }}>
-                          <EnvironmentOutlined style={{ marginRight: "10px", color: "#1890ff" }} />
-                          <b>Phòng:</b> {selectedOrder.showtime.room.room_name}
-                        </Text>
-                        <Text style={{ fontSize: "16px" }}>
-                        <CalendarOutlined style={{ marginRight: "10px", color: "#faad14" }} />
-                          <b>Thời gian:</b> {selectedOrder.showtime.showtime_date} {selectedOrder.showtime.showtime_start}
-                        </Text>
+                      <Text style={{ fontSize: "16px" }}>
+  <EnvironmentOutlined style={{ marginRight: "10px", color: "#1890ff" }} />
+  <b>Phòng:</b> {selectedOrder.showtime.room.room_name}
+</Text>
+<Text style={{ fontSize: "16px" }}>
+  <CalendarOutlined style={{ marginRight: "10px", color: "#faad14" }} />
+  <b>Thời gian:</b> {selectedOrder.showtime.showtime_date} {selectedOrder.showtime.showtime_start}
+</Text>
+<Text style={{ fontSize: "16px" }}>
+  <TeamOutlined style={{ marginRight: "10px", color: "#52c41a" }} />
+  <b>Ghế:</b> {selectedOrder.seats.map((s) => s.seat_name).join(", ")}
+</Text>
+<Text style={{ fontSize: "16px" }}>
+  <TagOutlined style={{ marginRight: "10px", color: "#d48806" }} />
+  <b>Combo:</b>{" "}
+  {selectedOrder.combos && selectedOrder.combos.length > 0
+    ? selectedOrder.combos.map((c: any) => `${c.combo_name}`).join(", ")
+    : "Không có combo"}
+</Text>
+<Text style={{ fontSize: "16px" }}>
+  <BarcodeOutlined style={{ marginRight: "10px", color: "#722ed1" }} />
+  <b>Mã đơn hàng:</b> {selectedOrder.booking_code}
+</Text>
+<Text style={{ fontSize: "16px" }}>
+  <CreditCardOutlined style={{ marginRight: "10px", color: "#13c2c2" }} />
+  <b>Phương thức thanh toán:</b> {selectedOrder.pay_method.pay_method_name}
+</Text>
+<Text style={{ fontSize: "16px" }}>
+  <FieldTimeOutlined style={{ marginRight: "10px", color: "#fa541c" }} />
+  <b>Trạng thái:</b> {selectedOrder.status}
+</Text>
 
-                        <Text style={{ fontSize: "16px" }}>
-                          <TeamOutlined style={{ marginRight: "10px", color: "#52c41a" }} />
-                          <b>Ghế:</b> {selectedOrder.seats.map((s) => s.seat_name).join(", ")}
-                        </Text>
-                        <Text style={{ fontSize: "16px" }}>
-                          <b>Combo:</b> {selectedOrder.combos && selectedOrder.combos.length > 0
-                            ? selectedOrder.combos.map((c: any) => `${c.combo_name}`).join(", ")
-                            : "Không có combo"}
-                        </Text>
                       </Space>
                     </Col>
 

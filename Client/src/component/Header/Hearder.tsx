@@ -7,7 +7,6 @@ import instance from "../../server";
 import { useCountryContext } from "../../Context/CountriesContext";
 import { Modal } from "antd"; 
 import { Voucher } from "../../interface/Vouchers";
-import CityForm from "../CityForm/CityForm";
 
 const Header = () => {
   const [isHeaderLeftVisible, setHeaderLeftVisible] = useState(false);
@@ -21,6 +20,7 @@ const Header = () => {
   const { state } = useCountryContext();
   const locations = state.countries;
   const navigate = useNavigate();
+  const [searchKeyword, setSearchKeyword] = useState(""); 
  
 
 
@@ -32,7 +32,13 @@ const Header = () => {
   const handleOpenModal = () => {
     setIsModalVisible(true);
   };
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchKeyword(e.target.value); // Lưu từ khóa
+  };
   
+  const filteredCinemas = cinemas.filter((cinema) =>
+    cinema.cinema_name.toLowerCase().includes(searchKeyword.toLowerCase())
+  );
   // Hàm xử lý khi người dùng đóng Modal
   const handleCloseModal = () => {
     setIsModalVisible(false);
@@ -102,19 +108,10 @@ const Header = () => {
     const locationId = e.target.value;
     setSelectedLocation(locationId);
   };
-  
   const handleCinemaClick = (cinemaId: number | undefined) => {
     navigate(`/cinema/${cinemaId}`); // Chuyển hướng tới trang rạp và truyền cinemaId
-    console.log("idrap:",cinemaId)
+ 
   };
-  const [isFormVisible, setIsFormVisible] = useState(false); // Trạng thái hiển thị form
-
-  const toggleFormVisibility = () => {
-    console.log('Toggle form visibility');
-    setIsFormVisible(!isFormVisible);
-  };
-  
-  
 
   return (
     <header className="header">
@@ -191,10 +188,13 @@ const Header = () => {
     >
       <div className="timkiemrap">
         <input
+        value={searchKeyword}
+        onChange={handleSearchChange}
           type="text"
           placeholder="Tìm rạp tại"
           style={{
             width: '100%',
+            height:"35px",
             padding: '8px',
             marginBottom: '12px',
             fontSize: '14px',
@@ -227,11 +227,18 @@ const Header = () => {
 
 
       <div className="cinemas-list">
-        {cinemas.map((cinema) => (
-          <a key={cinema.id}  onClick={() => handleCinemaClick(cinema.id)}  >
-            {cinema.cinema_name}
-          </a>
-        ))}
+      {filteredCinemas.map((cinema) => (
+  <div className="cinemabox-4" key={cinema.id}>
+    <div className="item-cinema">
+      <img className="logo-cinema" src="../../../public/logo.jpg" alt="" />
+    </div>
+    <div className="item-cinema" onClick={() => handleCinemaClick(cinema.id)}>
+      {cinema.cinema_name}
+      <br />
+      <span className="diachirap">{cinema.cinema_address}</span>
+    </div>
+  </div>
+))}
       </div>
     </Modal>
 
@@ -302,33 +309,27 @@ const Header = () => {
             </Link>
           </div>
           <div className="header-right col-lg-5 col-md-4 col-sm-4 col-4 ">
-          <div className="input-container">
-  <i className="icon bi bi-search"></i> {/* Đây là icon Bootstrap */}
-  <input
-    type="text"
-    placeholder="Từ khóa tìm kiếm..."
-    value={searchTerm}
-    onChange={handleSearch}
-  />
-</div>
-
-            {/* Biểu tượng để hiển thị CityForm */}
-      <Link to="#" onClick={toggleFormVisibility} className="icon-link">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="25"
-          height="25"
-          fill="currentColor"
-          className="bi bi-geo-alt"
-          viewBox="0 0 16 16"
-        >
-          <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10" />
-          <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
-        </svg>
-      </Link>
-
-      {/* Hiển thị form nếu isFormVisible là true */}
-      {isFormVisible && <CityForm isVisible={isFormVisible} onClose={toggleFormVisibility} />}
+            <form onSubmit={handleSearchSubmit}>
+              <input
+                type="text"
+                placeholder="Từ khóa tìm kiếm..."
+                value={searchTerm}
+                onChange={handleSearch}
+              />
+            </form>
+            <Link to="/map" className="icon-link">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="25"
+                height="25"
+                fill="currentColor"
+                className="bi bi-geo-alt"
+                viewBox="0 0 16 16"
+              >
+                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10" />
+                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+              </svg>
+            </Link>
             <Link to="/sp" className="icon-link">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -356,7 +357,6 @@ const Header = () => {
                     <Link to="/Personal">Trang cá nhân</Link>
                     <Link to="/profile">Quản lý tài khoản</Link>
                     <Link to="/ticketcinema">Vé phim</Link>
-                    <Link to="/pointaccumulation">Tích Điểm</Link>
                     <div onClick={handleLogout}>Đăng xuất</div>
                   </div>
                 )}

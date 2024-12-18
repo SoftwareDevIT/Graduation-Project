@@ -24,6 +24,7 @@ const LichChieuUpdated: React.FC = () => {
   ); // Default: Current Date
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
+  
 
   const movie = movieState.movies.find((movie) => movie.slug === slug);
   const [userRole, setUserRole] = useState<string>("");
@@ -97,11 +98,9 @@ const LichChieuUpdated: React.FC = () => {
           }
   
           const cinemaData = response.data?.data || [];
+          
           setCinemas(
-            cinemaData.map((item: any) => ({
-              ...item.cinema,
-              showtimes: item.showtimes,
-            }))
+            cinemaData
           );
         } catch (err) {
           console.error("Error fetching cinemas and showtimes:", err);
@@ -181,7 +180,7 @@ const LichChieuUpdated: React.FC = () => {
                       />
                     </div>
                     <div className="cinema-info">
-                      <p className="cinema-name">{cinema.cinema_name}</p>
+                      <p className="cinema-name">{cinema.cinema_name }</p>
                       <p className="cinema-branches">{cinema.showtimes.length} suất chiếu</p>
                     </div>
                   </div>
@@ -212,11 +211,12 @@ const LichChieuUpdated: React.FC = () => {
                   cinemaName: cinema.cinema_name,
                   showtime: showtime.showtime_start,
                   showtimeId: showtime.showtime_id,
-                  cinemaId: cinema.id,
+                  cinemaId:cinema.id,
                   roomId: showtime.room_id,
                   price: showtime.price,
                 },
               });
+             
             }
           }}
           style={{

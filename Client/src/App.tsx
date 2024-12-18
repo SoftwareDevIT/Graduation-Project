@@ -125,7 +125,6 @@ import Pointaccumulation from "./component/PersonalPage/Pointaccumulation";
 
 
 
-import MyMapComponent from "./component/GG map/Ggmap";
 
 import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
 import OrderHistoryApp from "./component/PersonalPage/MovieTicket";
@@ -136,6 +135,7 @@ import CinemaInfo from "./component/Cinema/CinemaInfo";
 import ThongTinRap from "./component/Cinema/CinemaInfo";
 import CityForm from "./component/CityForm/CityForm";
 import CinemaList from "./component/Area/CinemaList";
+import PaymentSuccess from "./component/PersonalPage/PaymentSuccess";
 
 function App() {
 
@@ -157,6 +157,7 @@ function App() {
         <Route path="/cinemalist" element={<CinemaList/>} />
         <Route path="/cinema/:cinemaId" element={<ThongTinRap/>} />
 
+        <Route path="/payment-success" element={<PaymentSuccess  />} />
 
 
         <Route path="/movie-detail/:slug" element={<ContentMovie />} />
@@ -193,6 +194,7 @@ function App() {
         <Route path="/ticketcinema" element={ <PrivateRoute><OrderHistoryApp/></PrivateRoute>} />
         <Route path="/ChangePassword" element={ <PrivateRoute><ChangePassword /></PrivateRoute>} />
         <Route path="/register" element={<RegisterCinema />} />
+        
         <Route path="/login" element={<LoginCinema />} />
         <Route path="/movieshowing" element={<MovieShowing/>} />
         <Route path="/deponsit" element={<Deponsit/>} />
