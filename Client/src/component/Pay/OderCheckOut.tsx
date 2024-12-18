@@ -258,8 +258,14 @@ const OrderCheckout = () => {
             if (response.data) {
                 if (isAdmin) {
                     const bookingInfo = response.data.booking[0]; // Truy xuất phần tử đầu tiên của mảng booking
-                    
-                    // Hiển thị modal cho admin với thông tin đơn hàng
+                
+                    // Hàm định dạng số tiền
+                    const formatCurrency = (value:any) => {
+                        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' })
+                            .format(value)
+                            .replace('₫', 'VNĐ'); // Thay '₫' bằng 'VNĐ' nếu cần
+                    };
+                
                     Modal.success({
                         title: 'Đặt vé thành công!',
                         content: (
@@ -269,16 +275,34 @@ const OrderCheckout = () => {
                                 <p><strong>Tên khách hàng:</strong> {bookingInfo.user_name}</p>
                                 <p><strong>Email:</strong> {bookingInfo.email}</p>
                                 <p><strong>Số ghế:</strong> {seats.map((seat: any) => seat.seat_name).join(', ')}</p>
-                                <p><strong>Tổng tiền:</strong> {finalPrice || totalPrice} VNĐ</p>
+                                <p>
+                                    <strong>Tổng tiền:</strong> {formatCurrency(finalPrice || totalPrice)}
+                                </p>
                             </div>
                         ),
                         okText: 'Xác nhận đơn hàng',
-                        onOk: () => {
-                            // Chuyển hướng về trang chi tiết đơn hàng của admin
-                            window.location.href = `/admin/ordersdetail/${bookingInfo.booking_id}`;
+                        cancelText: 'Hủy',
+                        onOk: async () => {
+                            try {
+                                await instance.post('confirmBooking-staff', {
+                                    id: bookingInfo.booking_id,
+                                });
+                            } catch (error) {
+                                Modal.error({
+                                    title: 'Lỗi xác nhận đơn hàng',
+                                    content: 'Không thể xác nhận đơn hàng. Vui lòng thử lại sau!',
+                                });
+                            }
+                        },
+                        onCancel: () => {
+                            Modal.info({
+                                title: 'Hủy xác nhận',
+                                content: 'Bạn đã hủy xác nhận đơn hàng.',
+                            });
                         },
                     });
-                } else {
+                }
+                else {
                     const redirectUrl = response.data.Url.original.url;
                     window.location.href = redirectUrl;  // Chuyển hướng về trang thanh toán nếu là người dùng
                 }
@@ -492,12 +516,9 @@ const OrderCheckout = () => {
 ) : (
     // User-specific content
     <div className="form-container">
-    <h3>Thông tin cá nhân</h3>
+    <h3>Thông tin khách hàng</h3>
     <form>
-        <div className="form-group">
-            <label htmlFor="fullname">Họ và tên</label>
-            <input type="text" id="fullname" placeholder="Nhập họ và tên" required />
-        </div>
+  
         <div className="form-group">
             <label htmlFor="email">Email</label>
             <input
@@ -509,14 +530,7 @@ const OrderCheckout = () => {
                 onChange={e => setEmail(e.target.value)} // Cập nhật email khi thay đổi
             />
         </div>
-        <div className="form-group">
-            <label htmlFor="phone">Số điện thoại</label>
-            <input type="tel" id="phone" placeholder="Nhập số điện thoại" required />
-        </div>
-        <div className="nhom-form nhom-checkbox">
-            <input type="checkbox" id="tao-tai-khoan" />
-            <label htmlFor="tao-tai-khoan">Tạo tài khoản với email và số điện thoại này.</label>
-        </div>
+      
     </form>
 </div>
 
@@ -528,7 +542,10 @@ const OrderCheckout = () => {
                     <div className="checkout-details">
                         <div className="order-info">
                             <span className="total-title">Tổng đơn hàng</span>
-                            <h2 className="total-price"> {(finalPrice || totalPrice)?.toLocaleString('vi-VN')} đ</h2>
+                            <h2 className="total-price">
+  {(finalPrice || totalPrice)?.toLocaleString('vi-VN')} VND
+</h2>
+
                         </div>
                         <div className="time-info">
                             <span className="time-title">Thời gian giữ ghế</span>
