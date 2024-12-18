@@ -61,25 +61,42 @@ const Header = () => {
     if (selectedLocation !== null) {
       instance.get(`/cinema-by-location/${selectedLocation}`).then((response) => {
         setCinemas(response.data.data);
-        // console.log(setCinemas);
+        console.log(response.data);
 
       });
     }
   }, [selectedLocation]);
   useEffect(() => {
-    // Gọi API khi component mount
-    instance.get('/vouchers')
-        .then(response => {
-            // Set dữ liệu voucher vào state
+    const user_profile = localStorage.getItem("user_profile");
+    const user_id = localStorage.getItem("user_id");
+  
+    if (user_profile) {
+      // Parse the stored JSON string into an object
+      const userProfileObj = JSON.parse(user_profile);
+  
+      // Access the points value (convert to number if needed)
+      const points = parseInt(userProfileObj.points, 10); // Convert points to an integer
+      
+      console.log(points); // Log points value
+  
+      // Check if points are greater than 1000 to trigger the voucher fetch
+      if (points > 999999 && user_id) {
+        instance.get('/vouchers')
+          .then(response => {
             setVouchers(response.data.vouchers);
-            
-        })
-        .catch(error => {
-          console.log("Error fetching vouchers:", error.response?.data || error.message);
-       
-        });
-}, []);
-
+          })
+          .catch(error => {
+            console.log("Error fetching vouchers:", error.response?.data || error.message);
+          });
+      }
+  
+      // Check if points are greater than 100000 for special logic
+     
+    } else {
+      console.log("User profile not found.");
+    }
+  }, []);
+  
 
   const toggleHeaderLeft = () => {
     setHeaderLeftVisible((prev) => !prev);

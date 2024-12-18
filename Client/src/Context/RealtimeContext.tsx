@@ -32,7 +32,7 @@ export const RealtimeProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         channel.listen("SeatReset", (eventData: any) => {
           console.log("Realtime data received:", eventData);
 
-          const { seats, message } = eventData;
+          const {message } = eventData;
 
           // Hiển thị modal
           showModal({

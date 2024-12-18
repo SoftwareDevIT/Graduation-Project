@@ -157,6 +157,7 @@ function App() {
         <Route path="/cinema/:cinemaId" element={<ThongTinRap/>} />
 
         <Route path="/payment-success" element={<PaymentSuccess  />} />
+        <Route path="/location-cinema" element={<PaymentSuccess  />} />
 
         <Route path="/cityform" element={<CityForm isVisible={false} onClose={function (): void {
             throw new Error("Function not implemented.");
@@ -184,7 +185,7 @@ function App() {
         <Route path="/cityform" element={<CityForm isVisible={false} onClose={function (): void {
             throw new Error("Function not implemented.");
           } }/>} />
-            <Route path="/cinemalist" element={<CinemaList/>} />
+            <Route path="/f/:id" element={<CinemaList/>} />
 
         <Route path="/movie/search/:movie_name" element={<SerachMovies />} />
         <Route path="/profile" element={

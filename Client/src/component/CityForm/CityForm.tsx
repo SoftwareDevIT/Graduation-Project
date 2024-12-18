@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './CityForm.css';
+import { useNavigate } from 'react-router-dom';
+import { useCountryContext } from '../../Context/CountriesContext';
+
 
 interface CityFormProps {
   isVisible: boolean;
@@ -8,24 +11,32 @@ interface CityFormProps {
 
 const CityForm: React.FC<CityFormProps> = ({ isVisible, onClose }) => {
   const [search, setSearch] = useState('');
+  const { state, fetchCountries } = useCountryContext(); // Get state and fetchCountries function from context
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  const cities = [
-    { name: 'Tp. Hồ Chí Minh', theaters: 59 },
-    { name: 'Hà Nội', theaters: 41 },
-    { name: 'Đà Nẵng', theaters: 9 },
-    { name: 'Đồng Nai', theaters: 8 },
-    { name: 'Bình Dương', theaters: 8 },
-    { name: 'Bà Rịa - Vũng Tàu', theaters: 8 },
-    { name: 'Khánh Hòa', theaters: 6 },
-    { name: 'Cần Thơ', theaters: 5 },
-    { name: 'Thừa Thiên - Huế', theaters: 5 },
-    { name: 'Lâm Đồng', theaters: 5 },
-    { name: 'Quảng Ninh', theaters: 4 },
-  ];
+  // Fetch data when the component becomes visible
+  useEffect(() => {
+    if (isVisible) {
+      setLoading(true);
+      try {
+        fetchCountries(); // Trigger fetch from context (already fetches data in useEffect of context provider)
+      } catch (err) {
+        setError('Có lỗi xảy ra khi tải dữ liệu.');
+      } finally {
+        setLoading(false);
+      }
+    }
+  }, [isVisible, fetchCountries]);
 
-  // Lọc danh sách tỉnh/thành phố
-  const filteredCities = cities.filter((city) =>
-    city.name.toLowerCase().includes(search.toLowerCase())
+  const handleCityClick = (id: string) => {
+    navigate(`/cinema/${id}`);
+  };
+
+  // Filter cities based on the search input
+  const filteredCities = state.countries.filter((city:any) =>
+    city.location_name.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -53,14 +64,24 @@ const CityForm: React.FC<CityFormProps> = ({ isVisible, onClose }) => {
               <i className="fas fa-search search-icon"></i>
             </div>
 
+            {/* Trạng thái tải dữ liệu */}
+            {loading && <p>Đang tải dữ liệu...</p>}
+            {error && <p className="error-message">{error}</p>}
+
             {/* Danh sách các tỉnh/thành phố */}
             <ul className="city-list">
-              {filteredCities.map((city, index) => (
+              {filteredCities.map((city:any, index:any) => (
                 <li key={index} className="city-item">
-                  <div className="city-name">{city.name}</div>
-                  <div className="city-theaters">{city.theaters} rạp</div>
+                  <div
+                    className="city-name"
+                    onClick={() => handleCityClick(city.id)} // Điều hướng khi bấm vào tên
+                  >
+                    {city.location_name}
+                  </div>
+                  <div className="city-theaters">{city.cinema_count} rạp</div>
                 </li>
               ))}
+              {filteredCities.length === 0 && <p>Không tìm thấy kết quả.</p>}
             </ul>
           </div>
         </div>

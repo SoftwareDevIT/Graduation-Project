@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useContext, useEffect } from 'react';
+import React, { createContext, useReducer, useContext, useEffect, useState } from 'react';
 import { Combo } from '../interface/Combo';
 import instance from '../server';
 
@@ -26,6 +26,7 @@ const ComboContext = createContext<{
 
 // Reducer function
 const comboReducer = (state: ComboState, action: Action): ComboState => {
+  
   switch (action.type) {
     case 'SET_COMBOS':
       return { ...state, combos: action.payload };
@@ -61,17 +62,27 @@ const comboReducer = (state: ComboState, action: Action): ComboState => {
 // Provider component
 export const ComboProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(comboReducer, { combos: [] });
-
-const fetchCombos = async () => {
-  try {
+  const [userRole, setUserRole] = useState<string>("");
+ useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("user_profile") || "{}");
+    const roles = userData.roles || [];
    
-
+    if (roles.length > 0) {
+      setUserRole(roles[0].name);
+    } else {
+      setUserRole("unknown"); // Gán giá trị mặc định khi không có vai trò
+    }
+  }, []);
+const fetchCombos = async () => {
+  if (userRole === "manager") {
+  try {
     const { data } = await instance.get('/manager/combo', {
     });
     dispatch({ type: 'SET_COMBOS', payload: data.data });
   } catch (error) {
     console.error('Failed to fetch combos:', error);
   }
+}
 };
 
 
