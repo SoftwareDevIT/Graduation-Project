@@ -441,7 +441,7 @@ class DashboardAdminService
         }
         $startDate = Carbon::parse($startDate);
         $endDate = Carbon::parse($endDate);
-    
+        
         Log::info("Start Date: " . $startDate->toDateString());
         Log::info("End Date: " . $endDate->toDateString());
     
@@ -496,6 +496,9 @@ class DashboardAdminService
         return $filteredList;
     }
     //===============================================================================
+
+
+
     public function getMovieNameById($movie_id)
 {
     return Movie::find($movie_id)->movie_name ?? 'Không rõ'; 

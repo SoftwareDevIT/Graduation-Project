@@ -154,7 +154,9 @@ const RoleAndUserManagement = () => {
         response = await instance.post(`/roles/${userId}/users`, requestPayload);
       }
       if (response.data.status) {
-        alert('Cập nhật quyền thành công!');
+        notification.success({
+          message: 'Cập nhật quyền thành công!',
+        });
         // Cập nhật vai trò của người dùng trong giao diện
         setUsers((prevUsers) =>
           prevUsers.map((user) =>
@@ -162,10 +164,23 @@ const RoleAndUserManagement = () => {
           )
         );
       } else {
-        console.error('Cập nhật quyền thất bại:', response.data.message);
+        notification.error({
+          message: 'Cập nhật quyền thất bại',
+          description: response.data.message,
+        });
       }
     } catch (error) {
-      console.error('Lỗi khi cấp quyền:', error);
+      console.error('Error assigning roles:', error);
+    if (error instanceof Error) {
+      notification.error({
+        message: 'Lỗi khi cấp quyền',
+        description: error.message,
+      });
+    } else {
+      notification.error({
+        message: 'Lỗi không xác định',
+      });
+    }
     }
   };
   
