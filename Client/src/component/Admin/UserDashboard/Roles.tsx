@@ -3,7 +3,7 @@ import { Roles } from '../../../interface/Roles';
 import { User } from '../../../interface/User';
 import { Permission } from '../../../interface/Permissions';
 import instance from '../../../server';
-import { Pagination } from 'antd';
+import { notification, Pagination } from 'antd';
 
 const RoleAndUserManagement = () => {
   const [roles, setRoles] = useState<Roles[]>([]);
@@ -59,7 +59,9 @@ const RoleAndUserManagement = () => {
 
   const handleCreateRole = async () => {
     if (!newRoleName) {
-      alert('Tên vai trò không thể trống!');
+      notification.error({
+        message: 'Tên vai trò không thể trống!',
+      });
       return;
     }
     try {
@@ -74,12 +76,28 @@ const RoleAndUserManagement = () => {
       if (response.data.status) {
         setRoles((prevRoles) => [...prevRoles, response.data.data.roles]);
         setNewRoleName('');
+        notification.success({
+          message: 'Tạo vai trò thành công!',
+        });
       } else {
-        console.error('Failed to create role:', response.data.message);
+        notification.error({
+          message: 'Tạo vai trò thất bại',
+          description: response.data.message,
+        });
       }
-    } catch (error) {
-      console.error('Error creating role:', error);
+    } catch (error: unknown) {
+      console.error('Error assigning roles:', error);
+    if (error instanceof Error) {
+      notification.error({
+        message: 'Lỗi khi cấp quyền',
+        description: error.message,
+      });
+    } else {
+      notification.error({
+        message: 'Lỗi không xác định',
+      });
     }
+  }
   };
 
   const handleDeleteRole = async (roleId: string) => {
@@ -136,7 +154,9 @@ const RoleAndUserManagement = () => {
         response = await instance.post(`/roles/${userId}/users`, requestPayload);
       }
       if (response.data.status) {
-        alert('Cập nhật quyền thành công!');
+        notification.success({
+          message: 'Cập nhật quyền thành công!',
+        });
         // Cập nhật vai trò của người dùng trong giao diện
         setUsers((prevUsers) =>
           prevUsers.map((user) =>
@@ -144,10 +164,23 @@ const RoleAndUserManagement = () => {
           )
         );
       } else {
-        console.error('Cập nhật quyền thất bại:', response.data.message);
+        notification.error({
+          message: 'Cập nhật quyền thất bại',
+          description: response.data.message,
+        });
       }
     } catch (error) {
-      console.error('Lỗi khi cấp quyền:', error);
+      console.error('Error assigning roles:', error);
+    if (error instanceof Error) {
+      notification.error({
+        message: 'Lỗi khi cấp quyền',
+        description: error.message,
+      });
+    } else {
+      notification.error({
+        message: 'Lỗi không xác định',
+      });
+    }
     }
   };
   
