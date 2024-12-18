@@ -33,7 +33,7 @@ const Sidebar: React.FC = () => {
     // Lấy thông tin từ localStorage
     const userData = JSON.parse(localStorage.getItem("user_profile") || "{}");
     const roles = userData.roles || [];
-   
+
     // Lấy vai trò đầu tiên (nếu có)
     if (roles.length > 0) {
       setUserRole(roles[0].name); // Gán vai trò (ví dụ: "staff", "admin")
@@ -62,7 +62,7 @@ const Sidebar: React.FC = () => {
           </Link>
         </div>
         <ul>
-          {(userRole === "manager" || userRole === "admin")  && (
+          {(userRole === "manager" || userRole === "admin") && (
             <>
               <li>
                 <NavLink
@@ -75,7 +75,7 @@ const Sidebar: React.FC = () => {
               </li>
             </>
           )}
-          {(userRole === "manager" || userRole === "admin")  && (
+          {(userRole === "manager" || userRole === "admin") && (
             <li>
               <span onClick={() => toggleMenu("cinema")}>
                 <FaBuilding style={{ marginRight: "-80px" }} /> Hệ thống rạp{" "}
@@ -95,9 +95,9 @@ const Sidebar: React.FC = () => {
                   <NavLink
                     to={"/admin/rooms"}
                     onClick={handleLinkClick}
-className={({ isActive }) => (isActive ? "active" : "")}
+                    className={({ isActive }) => (isActive ? "active" : "")}
                   >
-<FaIndustry /> Quản lí phòng rạp
+                    <FaIndustry /> Quản lí phòng rạp
                   </NavLink>
                 </li>
                 <li>
@@ -110,17 +110,17 @@ className={({ isActive }) => (isActive ? "active" : "")}
                     Sơ đồ ghế
                   </NavLink>
                 </li>
-                {(userRole === "admin")  && (
-                <li>
-                  <NavLink
-                    to={"/admin/rank"}
-                    onClick={handleLinkClick}
-                    className={({ isActive }) => (isActive ? "active" : "")}
-                  >
-                    <FaMedal />
-                    Quản lí hạng
-                  </NavLink>
-                </li>
+                {(userRole === "admin") && (
+                  <li>
+                    <NavLink
+                      to={"/admin/rank"}
+                      onClick={handleLinkClick}
+                      className={({ isActive }) => (isActive ? "active" : "")}
+                    >
+                      <FaMedal />
+                      Quản lí hạng
+                    </NavLink>
+                  </li>
                 )}
               </ul>
             </li>
@@ -173,8 +173,8 @@ className={({ isActive }) => (isActive ? "active" : "")}
                   </NavLink>
                 </li>
               )}
-                <>
-{(userRole === "manager") && (
+              <>
+                {(userRole === "manager") && (
                   <li>
                     <NavLink
                       to={"/admin/combo"}
@@ -185,7 +185,7 @@ className={({ isActive }) => (isActive ? "active" : "")}
                     </NavLink>
                   </li>
                 )}
-                 {(userRole === "manager") && (
+                {(userRole === "manager") && (
                   <li>
                     <NavLink
                       to={"/admin/promotions"}
@@ -195,19 +195,19 @@ className={({ isActive }) => (isActive ? "active" : "")}
                       <FaTicketAlt /> Mã giảm giá
                     </NavLink>
                   </li>
-                 )}
-                  {userRole === "admin" && (
-          <li>
-            <NavLink
-              to={"/admin/method"}
-              onClick={handleLinkClick}
-              className={({ isActive }) => (isActive ? "active" : "")}
-            >
-              <FaCreditCard /> Phương thức thanh toán
-            </NavLink>
-          </li>
-        )}
-                </>
+                )}
+                {userRole === "admin" && (
+                  <li>
+                    <NavLink
+                      to={"/admin/method"}
+                      onClick={handleLinkClick}
+                      className={({ isActive }) => (isActive ? "active" : "")}
+                    >
+                      <FaCreditCard /> Phương thức thanh toán
+                    </NavLink>
+                  </li>
+                )}
+              </>
             </ul>
           </li>
 
@@ -230,21 +230,21 @@ className={({ isActive }) => (isActive ? "active" : "")}
               </ul>
             </li>
           )}
-          {(userRole === "manager" || userRole === "admin")  && (
-         
-              <li>
-                <NavLink to="/admin/user">
-                  <FaUserShield /> Quản lý người dùng
-                </NavLink>
-              </li>
-            )}
-              {( userRole === "admin")  && (
-              <li>
-                <NavLink to="/admin/website-settings">
-                  <FaCogs /> Cấu hình website
-                </NavLink>
-              </li>
-     
+          {(userRole === "manager" || userRole === "admin") && (
+
+            <li>
+              <NavLink to="/admin/user">
+                <FaUserShield /> Quản lý người dùng
+              </NavLink>
+            </li>
+          )}
+          {(userRole === "admin") && (
+            <li>
+              <NavLink to="/admin/website-settings">
+                <FaCogs /> Cấu hình website
+              </NavLink>
+            </li>
+
           )}
         </ul>
       </div>
