@@ -25,6 +25,11 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, allowedRoles }) =
   // console.log(userProfile);
 
   // Kiểm tra xem người dùng có đăng nhập không
+    
+  if (userProfile) {
+    // Nếu không có người dùng, điều hướng đến trang đăng nhập
+    return <Navigate to="/" />;
+  }
   if (!userProfile) {
     // Nếu không có người dùng, điều hướng đến trang đăng nhập
     return <Navigate to="/login" />;

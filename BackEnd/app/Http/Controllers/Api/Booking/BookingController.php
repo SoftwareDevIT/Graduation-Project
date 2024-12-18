@@ -239,10 +239,10 @@ class BookingController extends Controller
                             $filePath = storage_path('app/public/barcodes/' . $fileName);
 
                             // Gửi ảnh mã vạch lên ImgBB và nhận URL
-                            // $imageUrl = $this->uploadImage($filePath);
+                            $imageUrl = $this->uploadImage($filePath);
                             $code = $seatCreate->id;
                             // Cập nhật đường dẫn mã vạch vào cơ sở dữ liệu
-                            // $seatCreate->barcode = $imageUrl;
+                            $seatCreate->barcode = $imageUrl;
                             $seatCreate->code= $code;
                             $seatCreate->save();
                             $seatDataList[] = $seatCreate;
