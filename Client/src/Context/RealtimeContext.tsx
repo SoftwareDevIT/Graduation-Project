@@ -1,7 +1,8 @@
-import React, { createContext, useContext} from "react";
+import React, { createContext, useContext } from "react";
 import { Modal } from "antd";
 import initializeEcho from "../server/realtime";
-
+import { useNavigate } from "react-router-dom";
+import './RealtimeContext.css'
 
 interface RealtimeContextProps {
   setupRealtime: () => void;
@@ -10,6 +11,8 @@ interface RealtimeContextProps {
 const RealtimeContext = createContext<RealtimeContextProps | undefined>(undefined);
 
 export const RealtimeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const navigate = useNavigate();
+
   const setupRealtime = async () => {
     try {
       const echo = await initializeEcho();
@@ -22,19 +25,19 @@ export const RealtimeProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       }
 
       if (echo) {
-        const channel = echo.private(`seats-${userId}`);
+        const channel = echo.private(`seats${userId}`);
         console.log("Connected to channel:", channel);
 
         // Lắng nghe sự kiện SeatReset
         channel.listen("SeatReset", (eventData: any) => {
           console.log("Realtime data received:", eventData);
 
-          const { seats, message } = eventData;
+          const {message } = eventData;
 
           // Hiển thị modal
           showModal({
             title: "Thông báo",
-            content: `${message}. Ghế bị reset: ${seats.join(", ")}`,
+            content: `${message}`,
           });
         });
       }
@@ -51,8 +54,18 @@ export const RealtimeProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           <p>{content}</p>
         </div>
       ),
+      okText: "Quay về trang chủ", // Thay đổi nút OK thành Quay về trang chủ
       onOk() {
-        console.log("Modal closed.");
+        // Điều hướng về trang chủ khi nhấn "Quay về trang chủ"
+        navigate("/", { replace: true });
+      },
+      width: 600, // Tùy chỉnh chiều rộng modal
+      bodyStyle: {
+        fontSize: "16px",
+        padding: "20px",
+      },
+      maskStyle: {
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
       },
     });
   };

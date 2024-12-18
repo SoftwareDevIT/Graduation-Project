@@ -3,6 +3,7 @@ import instance from '../server';
 import { Showtime } from '../interface/Showtimes';
 import { Cinema } from '../interface/Cinema';
 import { Room } from '../interface/Room';
+import { notification } from 'antd';
 
 interface ShowtimeState {
     showtimes: Showtime[];
@@ -87,25 +88,50 @@ export const ShowtimeProvider: React.FC<{ children: ReactNode }> = ({ children }
     }, []);
     const addOrUpdateShowtime = async (data: Showtime | Showtime[], id?: string) => {
         try {
+            let response;
+            
             if (Array.isArray(data)) {
                 const responses = await Promise.all(data.map(async (showtime) => {
                     const response = await instance.post('/manager/showtimes', showtime);
-                    return response.data.data;
+                    if (response.status === 200) {
+                        return response.data.data;
+                    } else {
+                        throw new Error('Failed to add showtime');
+                    }
                 }));
                 dispatch({ type: 'ADD_SHOWTIMES', payload: responses });
+             
             } else {
-                const response = id
-                    ? await instance.put(`/manager/showtimes/${id}`, data)
-                    : await instance.post('/manager/showtimes', data);
-
                 if (id) {
-                    dispatch({ type: 'UPDATE_SHOWTIME', payload: response.data });
+                    response = await instance.put(`/manager/showtimes/${id}`, data);
+                    if (response.status === 200) {
+                        dispatch({ type: 'UPDATE_SHOWTIME', payload: response.data });
+                        notification.success({
+                            message: 'Cập nhật Suất Chiếu Thành Công!',
+                            description: 'Suất chiếu đã được cập nhật vào danh sách.',
+                          });
+                    } else {
+                        throw new Error('Failed to update showtime');
+                    }
                 } else {
-                    dispatch({ type: 'ADD_SHOWTIME', payload: response.data.data });
+                    response = await instance.post('/manager/showtimes', data);
+                    if (response.status === 200) {
+                        dispatch({ type: 'ADD_SHOWTIME', payload: response.data.data });
+                        notification.success({
+                            message: 'Thêm Suất Chiếu Thành Công!',
+                            description: 'Suất chiếu mới đã được thêm vào danh sách.',
+                          });
+                    } else {
+                        throw new Error('Failed to add showtime');
+                    }
                 }
             }
         } catch (error) {
             console.error('Error submitting showtime:', error);
+            notification.error({
+                message: 'Lỗi Trùng Suất Chiếu',
+                description: 'Phạm vi thời gian được chọn chồng chéo với các thời gian hiển thị hiện có cho căn phòng này.',
+              });
         }
     };
 

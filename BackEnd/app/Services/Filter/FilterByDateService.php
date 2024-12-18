@@ -137,6 +137,7 @@ class FilterByDateService
         // Xử lý ánh xạ kết quả
         $filteredResults = $results->map(function ($cinema) {
             return [
+                'id' => $cinema->id,
                 'cinema_name' => $cinema->cinema_name,
                 'cinema_address' => $cinema->cinema_address,
                 'image' => $cinema->image,

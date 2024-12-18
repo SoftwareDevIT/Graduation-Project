@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { ClipLoader } from 'react-spinners'; 
 import { Link } from 'react-router-dom';
 import Footer from "../Footer/Footer";
 import Header from "../Header/Hearder";

@@ -19,6 +19,49 @@
   margin-bottom: 0;
   
 }
+.skeleton-container {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.skeleton-header {
+    width: 100%;
+    height: 30px;
+    background-color: #e0e0e0;
+    margin-bottom: 20px;
+}
+
+.skeleton-post-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.skeleton-post {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.skeleton-image {
+    width: 120px;
+    height: 80px;
+    background-color: #e0e0e0;
+    margin-right: 20px;
+}
+
+.skeleton-text {
+    width: 200px;
+    height: 20px;
+    background-color: #e0e0e0;
+    margin-bottom: 10px;
+}
+
+.skeleton-meta {
+    width: 150px;
+    height: 15px;
+    background-color: #e0e0e0;
+}
+
 .title-2 h3{
     padding-left: 30px;
     font-size: 15px;
