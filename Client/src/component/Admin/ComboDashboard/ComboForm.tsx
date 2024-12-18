@@ -105,7 +105,7 @@ const ComboForm = () => {
         <div className="mb-3">
           <label htmlFor="price" className="form-label">Giá</label>
           <input
-            type="number"
+            type="text"
             className={`form-control ${errors.price ? "is-invalid" : ""}`}
             {...register("price", { valueAsNumber: true })}
           />

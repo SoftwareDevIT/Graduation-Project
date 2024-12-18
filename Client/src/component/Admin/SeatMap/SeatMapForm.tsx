@@ -25,6 +25,27 @@ const seatMapSchema = z.object({
     status: z.number(),
     is_double: z.number()
   })).optional()
+}).superRefine((data, ctx) => {
+  const totalSeats = data.row_regular_seat + data.row_vip_seat + data.row_couple_seat;
+
+  if (totalSeats !== data.matrix_row) {
+    // Gắn lỗi vào từng trường với `code: "custom"`
+    ctx.addIssue({
+      code: "custom", // Loại lỗi
+      path: ["row_regular_seat"],
+      message: "Tổng số hàng ghế (Thường + VIP + Đôi) phải bằng số hàng đã nhập",
+    });
+    ctx.addIssue({
+      code: "custom",
+      path: ["row_vip_seat"],
+      message: "Tổng số hàng ghế (Thường + VIP + Đôi) phải bằng số hàng đã nhập",
+    });
+    ctx.addIssue({
+      code: "custom",
+      path: ["row_couple_seat"],
+      message: "Tổng số hàng ghế (Thường + VIP + Đôi) phải bằng số hàng đã nhập",
+    });
+  }
 });
 const SeatMapForm = () => {
   const { id } = useParams<{ id: string }>();
@@ -32,11 +53,14 @@ const SeatMapForm = () => {
   const [seatMap, setSeatMap] = useState<SeatMapAdmin | null>(null);
   const [seatMatrix, setSeatMatrix] = useState<any[][]>([]);
   const [seatStructure, setSeatStructure] = useState<any[]>([]);
-  const [selectedSeats, setSelectedSeats] = useState<any[]>([]);
   const { handleSubmit, register, setValue, formState: { errors } } = useForm<Partial<SeatMapAdmin>>({
     resolver: zodResolver(seatMapSchema)
   });
   const nav = useNavigate()
+  const [isSeatMapVisible, setIsSeatMapVisible] = useState(false);  // Thêm trạng thái để theo dõi việc hiển thị sơ đồ ghế
+
+
+
 
   useEffect(() => {
     if (id) {
@@ -276,8 +300,10 @@ const SeatMapForm = () => {
       } else {
         const res = await instance.post(`/manager/seat-maps`, seatMapData);
         notification.success({ message: "Bản đồ chỗ ngồi đã được thêm thành công!" });
+        setIsSeatMapVisible(true);
         navigate(`/admin/seat-maps/edit/${res.data.id}`);
       }
+      
     } catch (error) {
       notification.error({ message: "Error submitting data." });
     }
@@ -287,8 +313,11 @@ const SeatMapForm = () => {
 
   return (
     <div className="container mt-5">
+      
       <form onSubmit={handleSubmit(onSubmit)} className="shadow p-4 rounded bg-light" >
         <h1 className="text-center mb-4">{id ? "Thêm Ghế" : "Thêm Sơ Đồ Ghế"}</h1>
+        {!isSeatMapVisible && (
+          <>
         {/* Name */}
         <div className="mb-3">
           <label className="form-label">Tên Sơ Đồ</label>
@@ -343,13 +372,13 @@ const SeatMapForm = () => {
         <div className="mb-3">
           <label className="form-label">Số Hàng Ghế Thường</label>
           <input
-            type="number"
-            {...register("row_regular_seat",{valueAsNumber: true})}
-            className={`form-control ${errors.row_regular_seat ? "is-invalid" : ""}`}
-          />
-          {errors.row_regular_seat && (
-            <span className="text-danger">{errors.row_regular_seat.message}</span>
-          )}
+    type="number"
+    {...register("row_regular_seat", { valueAsNumber: true })}
+    className={`form-control ${errors.row_regular_seat ? "is-invalid" : ""}`}
+  />
+  {errors.row_regular_seat && (
+    <span className="text-danger">{errors.row_regular_seat.message}</span>
+  )}
         </div>
 
         {/* Row VIP Seat */}
@@ -357,8 +386,8 @@ const SeatMapForm = () => {
           <label className="form-label">Số Hàng Ghế VIP</label>
           <input
             type="number"
-            {...register("row_vip_seat",{valueAsNumber: true})}
-            className={`form-control ${errors.row_vip_seat ? "is-invalid" : ""}`}
+            {...register("row_vip_seat", { valueAsNumber: true })}
+    className={`form-control ${errors.row_vip_seat ? "is-invalid" : ""}`}
           />
          {errors.row_vip_seat && (
             <span className="text-danger">{errors.row_vip_seat.message}</span>
@@ -370,17 +399,18 @@ const SeatMapForm = () => {
           <label className="form-label">Số Hàng Ghế Đôi</label>
           <input
             type="number"
-            {...register("row_couple_seat",{valueAsNumber: true})}
-            className={`form-control ${errors.row_couple_seat ? "is-invalid" : ""}`}
+            {...register("row_couple_seat", { valueAsNumber: true })}
+    className={`form-control ${errors.row_couple_seat ? "is-invalid" : ""}`}
           />
           {errors.row_couple_seat && (
             <span className="text-danger">{errors.row_couple_seat.message}</span>
           )}
         </div>
+        </>
+   )}
 
-        {/* Seat Matrix */}
-        {/* Seat Matrix */}
 {/* Seat Matrix */}
+{isSeatMapVisible && (
 <div className="mb-3">
   <h3 className="text-center">Ma Trận Ghế</h3>
 <div className="custom-seat-matrix">
@@ -402,30 +432,38 @@ const SeatMapForm = () => {
         ))}
 
         {/* Hai nút bên phải mỗi hàng ghế */}
+       
         <div className="custom-seat-row-buttons">
-          <Button
-            type="primary"
-            icon={<PlusOutlined />}
-            size="large"
-            className="custom-seat-row-button"
-            onClick={() => handleRowSelect(rowIndex, true)}
-            style={{ marginLeft: "12px" }}
-          >
-          </Button>
-          <Button
-            danger
-            icon={<DeleteOutlined />}
-            className="custom-seat-row-button"
-            onClick={() => handleRowSelect(rowIndex, false)} // Thêm logic cho nút "Delete"
-            style={{ marginLeft: "12px", width: "40px", height: "40px" }}
-          >
-          </Button>
-        </div>
+        <Button
+          type="primary"
+          icon={<PlusOutlined />}
+          size="large"
+          className="custom-seat-row-button"
+          onClick={() => handleRowSelect(rowIndex, true)}
+          style={{
+            marginLeft: "12px",
+            visibility: row.some(seat => seat?.type === "couple") ? "hidden" : "visible",
+          }}
+        />
+        <Button
+          danger
+          icon={<DeleteOutlined />}
+          className="custom-seat-row-button"
+          onClick={() => handleRowSelect(rowIndex, false)}
+          style={{
+            marginLeft: "12px",
+            width: "40px",
+            height: "40px",
+            visibility: row.some(seat => seat?.type === "couple") ? "hidden" : "visible",
+          }}
+        />
+      </div>
       </div>
     ))}
 </div>
 
 </div>
+ )}
 <button type="submit" className="btn btn-primary w-100">
   {id ? "Cập nhật" : "Thêm"}
 </button>

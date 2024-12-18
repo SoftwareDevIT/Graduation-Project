@@ -497,6 +497,8 @@ class DashboardAdminService
     }
     //===============================================================================
 
+
+
     public function getMovieNameById($movie_id)
 {
     return Movie::find($movie_id)->movie_name ?? 'Không rõ'; 

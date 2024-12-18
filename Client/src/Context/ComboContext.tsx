@@ -7,7 +7,8 @@ type Action =
   | { type: 'SET_COMBOS'; payload: Combo[] }
   | { type: 'ADD_COMBO'; payload: Combo }
   | { type: 'UPDATE_COMBO'; payload: Combo }
-  | { type: 'DELETE_COMBO'; payload: number };
+  | { type: 'DELETE_COMBO'; payload: number }
+  | { type: 'UPDATE_COMBO_STATUS'; payload: { id: number; status: boolean }}
 
 // Define the initial state type
 interface ComboState {
@@ -42,6 +43,16 @@ const comboReducer = (state: ComboState, action: Action): ComboState => {
         ...state,
         combos: state.combos.filter(combo => combo.id !== action.payload),
       };
+      case 'UPDATE_COMBO_STATUS':
+        return {
+          ...state,
+          combos: state.combos.map(combo =>
+            combo.id === action.payload.id
+              ? { ...combo, status: action.payload.status ? 1 : 0 } // Chuyển boolean về dạng số nếu cần
+              : combo
+          ),
+        };
+
     default:
       return state;
   }
