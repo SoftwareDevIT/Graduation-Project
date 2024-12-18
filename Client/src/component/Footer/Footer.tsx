@@ -7,16 +7,16 @@ const Footer = () => {
         <div className="footer-left">
             <img src="../../../public/logo.jpg" alt="Company Logo" className="company-logo-ct" />
             <div className="company-info">
-            <p><strong>CÔNG TY TNHH FLICKHIVE</strong></p>
+            <p><strong>CÔNG TY MOVIE CINEMA FLICKHIVE</strong></p>
                 <p>Số ĐKKD: 0315367026 · Nơi cấp: Sở kế hoạch và đầu tư Tp. Hà Nội</p>
-                <p>Đăng ký lần đầu ngày 01/11/2018</p>
+                <p>Đăng ký lần đầu ngày 15/09/2024</p>
                 <p>Địa chỉ: Trịnh Văn Bô - Bắc Từ Liêm - Hà Nội</p>
                 <div className="footer-links">
-                    <a href="#">Về chúng tôi</a> · 
-                    <a href="#">Chính sách bảo mật</a> · 
-                    <a href="#">Hỗ trợ</a> · 
-                    <a href="#">Liên hệ</a> · 
-                    <span>v8.1</span>
+                    <a href="#">Về chúng tôi</a>  
+                    <a href="#">Chính sách bảo mật</a> 
+                    <a href="#">Hỗ trợ</a> 
+                    <a href="#">Liên hệ</a> 
+                
                 </div>
             </div>
         </div>
