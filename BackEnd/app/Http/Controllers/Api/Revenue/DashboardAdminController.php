@@ -115,12 +115,15 @@ class DashboardAdminController extends Controller
         $cinema_movie_chart = $this->dashboardAdminService->cinemamoviechart($movieRevenue);
 
         $listmovie = $this->dashboardAdminService->listmovie($movieRevenue);
+        $movie_name = $this->dashboardAdminService->getMovieNameById($movie_id);
         return response()->json([
             'status' => true,
             'message' => 'Success',
+            'movie_name' => $movie_name,
             'day_chart_movie' => $daychart,
             'cinema_movie_chart' => $cinema_movie_chart,
             'movie_dashboarch' => $listmovie,
+          
         ], 200);
     }
 }
