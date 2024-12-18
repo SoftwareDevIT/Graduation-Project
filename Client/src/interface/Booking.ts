@@ -27,7 +27,7 @@ export interface Booking {
   barcode: string
   seats: Seat[]
   booking_code: string
-
+  created_at: string
 
 
 
