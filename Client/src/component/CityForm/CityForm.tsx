@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './CityForm.css';
 
 interface CityFormProps {
@@ -8,22 +9,37 @@ interface CityFormProps {
 
 const CityForm: React.FC<CityFormProps> = ({ isVisible, onClose }) => {
   const [search, setSearch] = useState('');
+  const [cities, setCities] = useState<{ name: string; theaters: number }[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const cities = [
-    { name: 'Tp. Hồ Chí Minh', theaters: 59 },
-    { name: 'Hà Nội', theaters: 41 },
-    { name: 'Đà Nẵng', theaters: 9 },
-    { name: 'Đồng Nai', theaters: 8 },
-    { name: 'Bình Dương', theaters: 8 },
-    { name: 'Bà Rịa - Vũng Tàu', theaters: 8 },
-    { name: 'Khánh Hòa', theaters: 6 },
-    { name: 'Cần Thơ', theaters: 5 },
-    { name: 'Thừa Thiên - Huế', theaters: 5 },
-    { name: 'Lâm Đồng', theaters: 5 },
-    { name: 'Quảng Ninh', theaters: 4 },
-  ];
+  useEffect(() => {
+    const fetchCities = async () => {
+      setLoading(true);
+      setError('');
+      try {
+        const response = await axios.get('location');
+        if (response.data.status && response.data.data) {
+          const cityData = response.data.data.map((item: any) => ({
+            name: item.location_name,
+            theaters: item.cinema_count,
+          }));
+          setCities(cityData);
+        } else {
+          setError('Không có dữ liệu.');
+        }
+      } catch (err) {
+        setError('Có lỗi xảy ra khi tải dữ liệu.');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  // Lọc danh sách tỉnh/thành phố
+    if (isVisible) {
+      fetchCities();
+    }
+  }, [isVisible]);
+
   const filteredCities = cities.filter((city) =>
     city.name.toLowerCase().includes(search.toLowerCase())
   );
@@ -53,15 +69,22 @@ const CityForm: React.FC<CityFormProps> = ({ isVisible, onClose }) => {
               <i className="fas fa-search search-icon"></i>
             </div>
 
+            {/* Trạng thái tải dữ liệu */}
+            {loading && <p>Đang tải dữ liệu...</p>}
+            {error && <p className="error-message">{error}</p>}
+
             {/* Danh sách các tỉnh/thành phố */}
-            <ul className="city-list">
-              {filteredCities.map((city, index) => (
-                <li key={index} className="city-item">
-                  <div className="city-name">{city.name}</div>
-                  <div className="city-theaters">{city.theaters} rạp</div>
-                </li>
-              ))}
-            </ul>
+            {!loading && !error && (
+              <ul className="city-list">
+                {filteredCities.map((city, index) => (
+                  <li key={index} className="city-item">
+                    <div className="city-name">{city.name}</div>
+                    <div className="city-theaters">{city.theaters} rạp</div>
+                  </li>
+                ))}
+                {filteredCities.length === 0 && <p>Không tìm thấy kết quả.</p>}
+              </ul>
+            )}
           </div>
         </div>
       )}
