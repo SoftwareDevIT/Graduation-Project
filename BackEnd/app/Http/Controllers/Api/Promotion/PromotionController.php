@@ -132,14 +132,14 @@ class PromotionController extends Controller
             ->sum('amount');
 
         // Kiểm tra nếu tổng amount lớn hơn 2 triệu
-        if ($totalAmount < 1000000) {
+        if ($totalAmount < 10000) {
             return response()->json([
                 'message' => 'Bạn cần chi tiêu hơn 1 triệu để nhận voucher.'
             ], 400);
         }
 
         // Lấy danh sách voucher phù hợp
-        $vouchers = Promotion::whereBetween('discount_percentage', [5, 100])
+        $vouchers = Promotion::whereBetween('discount_percentage', [0, 100])
             ->where('is_active', true)
             ->whereDate('valid_to', '>=', now())
             ->get();
