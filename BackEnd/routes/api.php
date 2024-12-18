@@ -257,5 +257,4 @@ Route::get('/env-config', [ConfigController::class, 'envConfig']);
 
 
 
-
 Route::get('dashboard/Movie', [DashboardAdminController::class, 'dashboardMovie']);
