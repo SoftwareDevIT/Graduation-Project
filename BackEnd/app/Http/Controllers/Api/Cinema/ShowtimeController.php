@@ -58,29 +58,6 @@ class ShowtimeController extends Controller
     }
 
 
-
-    public function store(StoreShowtimeRequest $request)
-    {
-        // Retrieve the validated data from the request
-        $showtimeData = $request->validated();
-
-        // Check if the incoming data is an array of arrays (multiple showtimes)
-        if ($this->isMultiDimensionalArray($showtimeData)) {
-            $createdShowtimes = [];
-
-            foreach ($showtimeData as $singleShowtimeData) {
-                // Store each showtime in the database and add to the result array
-                $createdShowtimes[] = $this->showtimeService->store($singleShowtimeData);
-            }
-
-            return $this->success($createdShowtimes, 'Multiple showtimes created successfully.');
-        } else {
-            // Handle a single showtime
-            $createdShowtime = $this->showtimeService->store($showtimeData);
-            return $this->success($createdShowtime, 'Single showtime created successfully.');
-        }
-    }
-
     /**
      * Helper function to check if an array is multidimensional.
      *
@@ -128,6 +105,127 @@ class ShowtimeController extends Controller
             return $e->getMessage();
         }
     }
+    // public function store(StoreShowtimeRequest $request)
+    // {
+    //     // Retrieve the validated data from the request
+    //     $showtimeData = $request->validated();
+
+    //     // Check if the incoming data is an array of arrays (multiple showtimes)
+    //     if ($this->isMultiDimensionalArray($showtimeData)) {
+    //         $createdShowtimes = [];
+
+    //         foreach ($showtimeData as $singleShowtimeData) {
+    //             // Store each showtime in the database and add to the result array
+    //             $createdShowtimes[] = $this->showtimeService->store($singleShowtimeData);
+    //         }
+
+    //         return $this->success($createdShowtimes, 'Multiple showtimes created successfully.');
+    //     } else {
+    //         // Handle a single showtime
+    //         $createdShowtime = $this->showtimeService->store($showtimeData);
+    //         return $this->success($createdShowtime, 'Single showtime created successfully.');
+    //     }
+    // }
+
+    public function store(StoreShowtimeRequest $request)
+    {
+        $showtimeData = $request->validated();
+
+        if ($this->isMultiDimensionalArray($showtimeData)) {
+            $createdShowtimes = [];
+
+            foreach ($showtimeData as $singleShowtimeData) {
+                // Fetch the movie to get the duration
+                $movie = Movie::find($singleShowtimeData['movie_id']);
+                if (!$movie) {
+                    return $this->error('Bộ phim liên quan đến bộ phim được cung cấp không tồn tại.', 404);
+                }
+
+                $singleShowtimeData['showtime_start'] = $singleShowtimeData['showtime_date'] . ' ' . $singleShowtimeData['showtime_start'];
+                $singleShowtimeData['showtime_end'] = Carbon::parse($singleShowtimeData['showtime_start'])->addMinutes($movie->duration)->format('Y-m-d H:i:s');
+
+                // Check for conflicting showtimes
+                $existingShowtimes = Showtime::where('room_id', $singleShowtimeData['room_id'])
+                    ->where('showtime_date', $singleShowtimeData['showtime_date'])
+                    ->where(function ($query) use ($singleShowtimeData) {
+                        $query->whereBetween('showtime_start', [
+                            $singleShowtimeData['showtime_start'],
+                            $singleShowtimeData['showtime_end'],
+                        ])
+                            ->orWhereBetween('showtime_end', [
+                                $singleShowtimeData['showtime_start'],
+                                $singleShowtimeData['showtime_end'],
+                            ]);
+                    })
+                    ->get();
+
+                if ($existingShowtimes->isNotEmpty()) {
+                    return $this->errorShowtime(
+                        'Phạm vi thời gian được chọn chồng chéo với các thời gian hiển thị hiện có cho căn phòng này.',
+                        [
+                            'existing_showtimes' => $existingShowtimes,
+                        ],
+                        409
+                    );
+                }
+
+                $createdShowtimes[] = $this->showtimeService->store($singleShowtimeData);
+            }
+
+            return $this->success($createdShowtimes, 'Nhiều màn trình diễn đã tạo ra thành công.');
+        } else {
+            // Fetch the movie to get the duration
+            $movie = Movie::find($showtimeData['movie_id']);
+            if (!$movie) {
+                return $this->error('Bộ phim liên quan đến bộ phim được cung cấp không tồn tại.', 404);
+            }
+
+            $showtimeData['showtime_start'] = $showtimeData['showtime_date'] . ' ' . $showtimeData['showtime_start'];
+            $showtimeData['showtime_end'] = Carbon::parse($showtimeData['showtime_start'])->addMinutes($movie->duration)->format('Y-m-d H:i:s');
+
+            // Check for conflicting showtimes
+            $existingShowtimes = Showtime::where('room_id', $showtimeData['room_id'])
+                ->where('showtime_date', $showtimeData['showtime_date'])
+                ->where(function ($query) use ($showtimeData) {
+                    $query->whereBetween('showtime_start', [
+                        $showtimeData['showtime_start'],
+                        $showtimeData['showtime_end'],
+                    ])
+                        ->orWhereBetween('showtime_end', [
+                            $showtimeData['showtime_start'],
+                            $showtimeData['showtime_end'],
+                        ]);
+                })
+                ->get();
+
+            if ($existingShowtimes->isNotEmpty()) {
+                return $this->errorShowtime(
+                    'Phạm vi thời gian được chọn chồng chéo với các thời gian hiển thị hiện có cho căn phòng này.',
+                    [
+                        'existing_showtimes' => $existingShowtimes,
+                    ],
+                    409
+                );
+            }
+
+            $createdShowtime = $this->showtimeService->store($showtimeData);
+            return $this->success($createdShowtime, 'Showtime duy nhất tạo ra thành công.');
+        }
+    }
+
+    public function errorShowtime(string $message, array $data = [], int $status = 400)
+    {
+        return response()->json([
+            'message' => $message,
+            'data' => $data,
+        ], $status);
+    }
+
+
+
+
+
+
 
     public function storeWithTimeRange(Request $request)
     {
@@ -150,7 +248,7 @@ class ShowtimeController extends Controller
             // Fetch the movie to get the duration
             $movie = Movie::find($data['movie_id']);
             if (!$movie) {
-                return $this->error('The movie associated with the provided movie_id does not exist.');
+                return $this->error('Bộ phim liên quan đến bộ phim được cung cấp không tồn tại.', 404);
             }
             $data['duration'] = $movie->duration;
 
@@ -159,30 +257,35 @@ class ShowtimeController extends Controller
                 ->where('showtime_date', $data['date'])
                 ->where(function ($query) use ($data) {
                     $query->whereBetween('showtime_start', [
-                        $data['opening_time'],
-                        Carbon::parse($data['closing_time'])->format('H:i:s')
+                        $data['date'] . ' ' . $data['opening_time'],
+                        $data['date'] . ' ' . $data['closing_time'],
                     ])
                         ->orWhereBetween('showtime_end', [
-                            Carbon::parse($data['opening_time'])->format('H:i:s'),
-                            Carbon::parse($data['closing_time'])->format('H:i:s')
+                            $data['date'] . ' ' . $data['opening_time'],
+                            $data['date'] . ' ' . $data['closing_time'],
                         ]);
                 })
                 ->get();
 
             if ($existingShowtimes->isNotEmpty()) {
-                return $this->error('The selected time range overlaps with existing showtimes for this room.', [
-                    'existing_showtimes' => $existingShowtimes,
-                ]);
+                return $this->errorShowtime(
+                    'Phạm vi thời gian được chọn chồng chéo với các thời gian hiển thị hiện có cho căn phòng này.',
+                    [
+                        'existing_showtimes' => $existingShowtimes,
+                    ],
+                    409
+                );
             }
 
             // Generate showtimes using the service
             $createdShowtimes = $this->showtimeService->generateShowtimes($data);
 
-            return $this->success($createdShowtimes, 'Showtimes created successfully.');
+            return $this->success($createdShowtimes, 'Showtimes tạo ra thành công.');
         } catch (Exception $e) {
             return $this->error($e->getMessage());
         }
     }
+
 
     public function status(int $id)
     {

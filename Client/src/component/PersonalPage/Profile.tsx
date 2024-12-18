@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Form, Input, Button, Upload, Avatar, notification } from "antd";
+import React from "react";
+import { Form, Input, Button, Upload, Avatar } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import Footer from "../Footer/Footer";
 import Header from "../Header/Hearder";
@@ -88,7 +88,7 @@ const Profile: React.FC = () => {
   <div className="account-nav-item">
     <span className="account-nav-title">
       <NavLink 
-        to="/point" 
+        to="/Pointaccumulation" 
         className={({ isActive }) => isActive ? 'active-link' : ''}>
         Tích Điểm
       </NavLink>

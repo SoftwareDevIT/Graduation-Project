@@ -132,6 +132,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(functi
     Route::post('newStatus/{id}', [NewCategoryController::class, 'status']);
     Route::post('comboStatus/{id}', [ComboController::class, 'status']);
     Route::post('userStatus/{id}', [RoleController::class, 'status']);
+    Route::get('dashboard/Movie', [DashboardAdminController::class, 'dashboardMovie']);
 });
 Route::post('/website-settings', [WebsiteSettingController::class, 'index']); // List Website Settings
 // Manager: Limited access to their assigned cinemas and related data
@@ -148,6 +149,7 @@ Route::middleware(['auth:sanctum', 'role:manager'])->prefix('manager')->group(fu
 
     // Movies, Rooms, and Showtimes
     Route::apiResource('movies', MovieController::class); // Manage movies
+    Route::apiResource('order', OrderController::class);
     Route::apiResource('room', RoomController::class); // Manage rooms
     Route::apiResource('showtimes', ShowtimeController::class); // Manage showtimes
     Route::post('showtimePayload', [ShowtimeController::class, 'storeWithTimeRange']); // Add showtimes automatically
@@ -186,15 +188,17 @@ Route::middleware(['auth:sanctum', 'role:manager'])->prefix('manager')->group(fu
     Route::post('newStatus/{id}', [NewCategoryController::class, 'status']);
     Route::post('comboStatus/{id}', [ComboController::class, 'status']);
     Route::post('userStatus/{id}', [RoleController::class, 'status']);
-
+    Route::post('roomStatus/{id}', [RoomController::class, 'status']);
+    Route::post('seatMapStatus/{id}', [SeatMapController::class, 'status']);
     // Ticket Printing
     Route::post('printTicket', [OrderController::class, 'printTicket']); // Print ticket and change status
     // Route::get('/dashboard', [DashboardAdminController::class, 'dashboardAdmin']);
     Route::get('/dashboard', [DashboardAdminController::class, 'dashboard']); // Dashboard page
 
     //checkin ghế barcode
-    Route::post('checkInSeat/{code}', [CheckInTicketController::class, 'checkInSeat']);
-    Route::post('checkInBooking/{code}', [CheckInTicketController::class, 'checkInBooking']);
+    Route::post('checkInSeat', [CheckInTicketController::class, 'checkInSeat']);
+    Route::post('checkInBooking', [CheckInTicketController::class, 'checkInBooking']);
+    Route::get('dashboard/Movie', [DashboardAdminController::class, 'dashboardMovie']);
 });
 
 Route::middleware(['auth:sanctum', 'role:staff'])->prefix('staff')->group(function () {
@@ -203,11 +207,14 @@ Route::middleware(['auth:sanctum', 'role:staff'])->prefix('staff')->group(functi
     Route::get('/filterByDateByMovie', [FilterByDateController::class, 'filterByDateByMovie']);
     // Ticket Printing
     Route::post('printTicket', [OrderController::class, 'printTicket']); // in vé và thay đổi trạng thái
+    Route::apiResource('order', OrderController::class);
     //checkin ghế barcode
-    Route::post('checkInSeat/{code}', [CheckInTicketController::class, 'checkInSeat']);
-    Route::post('checkInBooking/{code}', [CheckInTicketController::class, 'checkInBooking']);
+    Route::post('checkInSeat', [CheckInTicketController::class, 'checkInSeat']);
+    Route::post('checkInBooking', [CheckInTicketController::class, 'checkInBooking']);
 });
 
+Route::post('checkInSeat', [CheckInTicketController::class, 'checkInSeat']);
+Route::post('checkInBooking', [CheckInTicketController::class, 'checkInBooking']);
 
 // Các tuyến đường dành riêng cho phim
 Route::get('/movie/search/{movie_name}', [MovieController::class, 'search']);                       // Tìm kiếm phim theo tên
@@ -226,12 +233,12 @@ Route::get('ratings/{movie}', [RatingController::class, 'show']);               
 Route::get('rating', [RatingController::class, 'index']);                                            // Xem all dánh giá
 Route::get('filterMoviePopular', [MovieController::class, 'moviePopular']);                          // Lọc bài viết liên quan tới phim
 
-Route::apiResource('order', OrderController::class);
+
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/slectMovieAndSeats', [BookingController::class, 'slectMovieAndSeats']);
     Route::post('/selectCombo', [BookingController::class, 'selectCombos']);
-
+    Route::apiResource('order', OrderController::class);
     //Bokking=======================
     Route::post('selectSeats', [BookingController::class, 'selectSeats']);
     Route::post('/book-ticket', [BookingController::class, 'bookTicket']);
@@ -257,4 +264,3 @@ Route::get('/env-config', [ConfigController::class, 'envConfig']);
 
 
 
-Route::get('dashboard/Movie', [DashboardAdminController::class, 'dashboardMovie']);

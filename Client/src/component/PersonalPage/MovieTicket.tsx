@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Card, Button, Typography, Image, Space, Row, Col, DatePicker } from "antd";
-import { jsPDF } from "jspdf";
+
 import {
   CalendarOutlined,
   EnvironmentOutlined,
   TeamOutlined,
-  DownloadOutlined,
   ArrowLeftOutlined,
 } from "@ant-design/icons";
 import instance from "../../server";
@@ -72,7 +71,6 @@ const OrderHistoryApp: React.FC = () => {
         setLoading(false); // Stop loading on error
       });
   }, []);
-
   const handleDateFilter = (date: moment.Moment | null, dateString: string | string[]) => {
     const filterDate = Array.isArray(dateString) ? dateString[0] : dateString;
 
@@ -139,12 +137,12 @@ const OrderHistoryApp: React.FC = () => {
                         width={120}
                         style={{ borderRadius: "10px" }}
                       />
-                    </Col>
+                      </Col>
                     <Col xs={24} sm={18} className="order-info">
                       <Space direction="vertical" style={{ width: "100%" }}>
                         <Title level={4} style={{ margin: 0, fontWeight: 600 }}>
                           {order.showtime.movie.movie_name}
-                        </Title>
+                          </Title>
                         <Text>
                           <EnvironmentOutlined style={{ marginRight: "8px", color: "#1890ff" }} />
                           <b>Phòng chiếu :</b> {order.showtime.room.room_name}
@@ -154,9 +152,10 @@ const OrderHistoryApp: React.FC = () => {
                           <b>Thời gian:</b> {order.showtime.showtime_date} {order.showtime.showtime_start}
                         </Text>
                         <Text>
-                          <TeamOutlined style={{ marginRight: "8px", color: "#52c41a" }} />
+                        <TeamOutlined style={{ marginRight: "8px", color: "#52c41a" }} />
                           <b>Ghế:</b> {order.seats.map((s) => s.seat_name).join(", ")}
                         </Text>
+                        
                         <Text style={{ fontWeight: 600 }}>
                           <b>Tổng:</b> {formatCurrency(order.amount)}
                         </Text>
@@ -231,7 +230,7 @@ const OrderHistoryApp: React.FC = () => {
                           <b>Phòng:</b> {selectedOrder.showtime.room.room_name}
                         </Text>
                         <Text style={{ fontSize: "16px" }}>
-                          <CalendarOutlined style={{ marginRight: "10px", color: "#faad14" }} />
+                        <CalendarOutlined style={{ marginRight: "10px", color: "#faad14" }} />
                           <b>Thời gian:</b> {selectedOrder.showtime.showtime_date} {selectedOrder.showtime.showtime_start}
                         </Text>
 

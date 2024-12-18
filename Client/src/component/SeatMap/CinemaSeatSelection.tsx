@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom"; // Thêm useNavigate để điều hướng
+import { useLocation, useNavigate } from "react-router-dom"; // Thêm useNavigate để điều hướng
 import Header from "../Header/Hearder";
 import Footer from "../Footer/Footer";
 import Headerticket from "../Headerticket/Headerticket";
 import "./CinemaSeatSelection.css";
 import instance from "../../server";
-import { Room } from "../../interface/Room";
 import { message, Spin } from "antd";
 import { Modal } from "antd";
 import { Movie } from "../../interface/Movie";
@@ -42,6 +41,8 @@ const CinemaSeatSelection: React.FC = () => {
   const [selectedSeats, setSelectedSeats] = useState<Map<string, number[]>>(
     new Map()
   );
+  const [userSeatsMap, setUserSeatsMap] = useState<Map<number, Set<string>>>(new Map());
+
   const [loading, setLoading] = useState(true); // Add loading state
   const [reservedSeats, setReservedSeats] = useState<Set<string>>(new Set());
   const [showtimeData, setShowtimeData] = useState<Showtime>();
@@ -55,149 +56,219 @@ const CinemaSeatSelection: React.FC = () => {
 
   const [echoInstance, setEchoInstance] = useState<Echo<"pusher"> | null>(null);
 
-  const [status, setStatus] = useState("Initializing...");
+
+
+
+
+
+  const setupRealtime2 = async () => {
+    try {
+      const echo = await initializeEcho();
+      console.log("kết nối thành công ", echo);
+      const userId = localStorage.getItem("user_id");
+   
+      if (!userId) {
+        console.error("User ID is not available in local storage.");
+        return;
+      }
+   
+      if (echo) {
+        const channel = echo.private(`seats-${userId}`);  // Kênh cho userId
+        console.log("ok:", channel);
+   
+        // Lắng nghe sự kiện SeatReset
+        channel.listen("SeatReset", (eventData: any) => {
+          console.log("Realtime data received:", eventData);  // Kiểm tra log xem sự kiện có đến không
+   
+          const { seats, message } = eventData;
+   
+          // Gọi hàm hiển thị modal khi nhận sự kiện
+          showModal({
+            title: "Thông báo",
+            content: `${message}. Ghế bị reset: ${seats.join(", ")}`,
+          });
+        });
+      }
+    } catch (error) {
+      console.error("Failed to setup realtime connection:", error);
+    }
+  };
+  
+
+  // Hàm hiển thị modal
+  const showModal = ({ title, content }: { title: string; content: string }) => {
+    Modal.info({
+      title: title,
+      content: (
+        <div>
+          <p>{content}</p>  {/* Nội dung thông báo */}
+        </div>
+      ),
+      onOk() {
+        console.log("Modal closed.");
+      },
+    });
+  };
 
   useEffect(() => {
     const fetchRoomAndSeats = async () => {
       try {
-        // Fetching the showtime data
         const response = await instance.get(`/showtimes/${showtimeId}`);
         const seatLayoutData = response.data.data;
-       
-        const seatStructure =
-          response.data?.data?.room?.seat_map?.seat_structure;
-        
-      
+  
+        const seatStructure = seatLayoutData?.room?.seat_map?.seat_structure;
+  
         setShowtimeData(seatLayoutData);
-
-        
+  
         setSeatData({
           seat_structure: seatStructure,
-          matrix_row: response.data?.data?.room.seat_map?.matrix_row || 0,
-          matrix_column: response.data?.data?.room.seat_map?.matrix_column || 0,
+          matrix_row: seatLayoutData?.room?.seat_map?.matrix_row || 0,
+          matrix_column: seatLayoutData?.room?.seat_map?.matrix_column || 0,
         });
-       
+  
         try {
           const seatResponse = await instance.get(`/seat/${showtimeId}`);
-          const seatDataseat = seatResponse.data;
-    
           const reservedSeatSet: Set<string> = new Set();
-
-          seatDataseat.data.forEach((seat: any) => {
-            if (seat.seat_type === "Standard") {
-              reservedSeatSet.add(seat.seat_name);
-            }
-          });
-
-       
-          setReservedSeats(reservedSeatSet);
-          setLoading(false);
-        } catch (seatError) {
-          console.error("Error fetching seat data", seatError);
-
-          setReservedSeats(new Set<string>());
-          setLoading(false);
-        }
-
-        // Khởi tạo Echo và lắng nghe sự kiện realtime
-        const setupRealtime = async () => {
-          const echo = await initializeEcho();
-          console.log("Connected to Pusher!", echo);
-          if (echo) {
-            setEchoInstance(echo);
-            setStatus("Connected to Pusher!");
-            const roomId = response.data.data.room.id;
-            // Kết nối với channel tương ứng
-            const channel = echo.private(`seats-${roomId}`);
-            console.log("Connected to channel:", channel);
-            // Lắng nghe sự kiện SeatSelected
-            const normalizeSeats = (seats: string[]): string[] => {
-              return seats.map((seat) => {
-                // Tách chuỗi ghế và giữ lại phần cuối cùng sau dấu "-"
-                const parts = seat.split("-");
-                return `${parts[parts.length - 2]}-${parts[parts.length - 1]}`;
-              });
-            };
-            
-            
-            channel.listen("SeatSelected", (eventData: any) => {
-              const { seats, userId } = eventData;
-              console.log("Raw seats data received:", eventData);
-              updateSeatsSelection(seats, userId);
+        
+          if (Array.isArray(seatResponse.data?.data)) {
+            seatResponse.data.data.forEach((seat: any) => {
+              if (seat.seat_type === "Standard") {
+                reservedSeatSet.add(seat.seat_name);
+              }
             });
-            
-          } else {
-            setStatus("Failed to connect.");
           }
-        };
-
-        if (!echoInstance) {
-          setupRealtime();
+        
+          setReservedSeats(reservedSeatSet);
+        } catch (error) {
+          console.error("Error fetching seat data:", error);
+          setReservedSeats(new Set()); // Trả về Set rỗng nếu có lỗi
+        } finally {
+          setLoading(false); // Đảm bảo loading dừng lại dù có lỗi hay không
         }
-
-        // Cleanup khi component bị unmount
-        return () => {
-          if (echoInstance) {
-            echoInstance.disconnect();
-          }
-        };
+        return seatLayoutData?.room_id;
       } catch (error) {
-        console.error("Error fetching room data", error);
+        console.error("Error fetching room or seat data", error);
         setError("Không thể tải dữ liệu, vui lòng thử lại!");
         setLoading(false);
+        return null;
       }
     };
-
-    fetchRoomAndSeats();
-  }, [showtimeId, selectedSeats,echoInstance ]);
-  const updateSeatsSelection = (selectedSeats: string[], userId: number) => {
-    setSeatData((prevSeatData) => {
-      if (!prevSeatData || !prevSeatData.seat_structure) {
-        console.error("Seat structure is not available or empty!");
-        return prevSeatData;
-      }
   
-      const currentUserId = parseInt(localStorage.getItem("user_id") || "0", 10);
+    
   
-      // Duyệt qua toàn bộ ghế và chỉ cập nhật trạng thái ghế trong selectedSeats
-      const updatedSeats = prevSeatData.seat_structure.map((seat) => {
-        const seatKey = `${seat.row}-${seat.column}`;
-  
-        // Nếu ghế có trong danh sách selectedSeats
-        if (selectedSeats.includes(seatKey)) {
-          return {
-            ...seat,
-            isSelected: true,
-            isDisabled: userId !== currentUserId, // Disable nếu không phải user hiện tại
-          };
+    
+    const setupRealtime = async (roomId: string) => {
+      try {
+        const echo = await initializeEcho();
+        console.log("Connected to Pusher!", echo);
+        if (!roomId) {
+          console.error("Room ID is missing!");
+          return;
         }
+        if (!roomId) {
+          console.error("Room ID is missing!");
+          return;
+        }
+        if (echo) {
+          const channel = echo.private(`seats-${roomId}`); // Dùng roomId đã truyền vào
+          console.log("Connected to channel:", channel);
   
-        // Nếu ghế không nằm trong selectedSeats, giữ nguyên trạng thái trước đó
-        return {
-          ...seat,
-          isSelected: seat.isSelected || false,
-          isDisabled: seat.isDisabled || false,
-        };
+          // Lắng nghe sự kiện SeatSelected
+          channel.listen("SeatSelected", (eventData: any) => {
+            const { seats, userId } = eventData;
+            console.log("Received seats:", seats);
+            updateSeatsSelection(seats, userId);
+          });
+        }
+      } catch (error) {
+        console.error("Failed to setup realtime connection:", error);
+      }
+    };
+  
+    fetchRoomAndSeats()
+      .then((roomId) => {
+        console.log("Fetched roomId:", roomId);
+        if (roomId && !echoInstance) {
+          setupRealtime(roomId); // Truyền roomId vào hàm setupRealtime
+        }
+      })
+      .catch((error) => {
+        console.error("Error initializing data", error);
       });
-  
-      console.log("Updated seat structure:", updatedSeats);
-  
-      return {
-        ...prevSeatData,
-        seat_structure: updatedSeats,
+      
+      const initializeRealtime = async () => {
+        await setupRealtime2();  
       };
-    });
-  };
   
-  
-  
-  
-  
-  
-  
-  
-  
+      initializeRealtime();
+    
+    return () => {
+      if (echoInstance) {
+        echoInstance.disconnect();
+        setEchoInstance(null);
+      }
+    };
+  }, [showtimeId, echoInstance]);
+  const updateSeatsSelection = (selectedSeats: string[], userId: number) => {
+    setUserSeatsMap((prevMap) => {
+        const updatedMap = new Map(prevMap);
 
+        // Cập nhật ghế được chọn của userId hiện tại
+        updatedMap.set(userId, new Set(selectedSeats));
+
+        // Gộp tất cả các trạng thái từ updatedMap
+        const allSelectedSeats = new Map<string, { isSelected: boolean; userId: number }>();
+
+        updatedMap.forEach((seats, id) => {
+            seats.forEach((seat) => {
+                allSelectedSeats.set(seat, {
+                    isSelected: true,
+                    userId: id,
+                });
+            });
+        });
+
+        // Cập nhật seat_structure với trạng thái gộp
+        setSeatData((prevSeatData) => {
+            if (!prevSeatData || !prevSeatData.seat_structure) {
+                console.error("Seat structure is not available or empty!");
+                return prevSeatData;
+            }
+
+            const updatedSeatStructure = prevSeatData.seat_structure.map((seat) => {
+                const seatKey = `${seat.row}-${seat.column}`;
+                const seatStatus = allSelectedSeats.get(seatKey);
+
+                if (seatStatus) {
+                    return {
+                        ...seat,
+                        isSelected: seatStatus.isSelected,
+                        isDisabled: seatStatus.userId !== parseInt(localStorage.getItem("user_id") || "0", 10),
+                    };
+                } else {
+                    return {
+                        ...seat,
+                        isSelected: false,
+                        isDisabled: false,
+                    };
+                }
+            });
+
+            return {
+                ...prevSeatData,
+                seat_structure: updatedSeatStructure,
+            };
+        });
+
+        return updatedMap;
+    });
+};
+
+
+  
+  
+  
+  
   const { seat_structure, matrix_row, matrix_column } = seatData;
 
   // Tạo mảng các hàng (A, B, C, ...) dựa trên số lượng hàng

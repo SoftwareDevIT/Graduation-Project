@@ -46,6 +46,16 @@ const movieReducer = (state: MovieState, action: MovieAction): MovieState => {
             : movie
         ),
       };
+      case 'UPDATE_MOVIE_STATUS':
+    return {
+        ...state,
+        movies: state.movies.map(movie =>
+            movie.id === action.payload.id
+                ? { ...movie, status: action.payload.status }
+                : movie
+        ),
+    };
+
     default:
       return state;
   }
@@ -61,7 +71,7 @@ export const MovieProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("user_profile") || "{}");
     const roles = userData.roles || [];
-    console.log("data role:", roles);
+  
     if (roles.length > 0) {
       setUserRole(roles[0].name);
     } else {

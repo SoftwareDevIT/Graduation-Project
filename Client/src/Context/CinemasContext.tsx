@@ -56,7 +56,7 @@ export const CinemaProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("user_profile") || "{}");
     const roles = userData.roles || [];
-    console.log("data role:", roles);
+   
     if (roles.length > 0) {
       setUserRole(roles[0].name);
     } else {
@@ -97,16 +97,14 @@ export const CinemaProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     try {
       let response;
       if (userRole === "admin") {
-        response = await instance.post('/admin/cinema');
-      } else if (userRole === "staff") {
-        response = await instance.post('/staff/cinema');
-      } else if (userRole === "manager") {
-        response = await instance.post('/manager/cinema');
+        response = await instance.post('/admin/cinema',cinema);
+      }else if (userRole === "manager") {
+        response = await instance.post('/manager/cinema',cinema);
       } else {
-        response = await instance.post('/cinema');
+        response = await instance.post('/cinema',cinema);
       }
 
-      dispatch({ type: 'ADD_CINEMA', payload: response.data });
+      dispatch({ type: 'ADD_CINEMA', payload: response.data});
       fetchCinemas();
     } catch (error) {
       console.error('Failed to add cinema:', error);

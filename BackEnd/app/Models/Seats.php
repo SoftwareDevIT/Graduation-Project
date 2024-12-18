@@ -28,7 +28,7 @@ class Seats extends Model
     public function reserveForUser()
     {
         // Đặt ghế và giữ trong thời gian (5 phút mặc định)
-        $this->reserved_until = now()->addMinutes(5);
+        $this->reserved_until = now()->addMinutes(1);
         $this->status = 'Reserved Until';
         $this->save();
     }

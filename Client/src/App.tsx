@@ -131,6 +131,9 @@ import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
 import OrderHistoryApp from "./component/PersonalPage/MovieTicket";
 import BookingManager from "./component/TicketandSeat/BookingManager";
 import MovieStatistics from "./component/Admin/MovieStatistics/MovieStatistics";
+import MovieStatisticsManager from "./Page/Admin/MovieStatistics/MovieStatisticsManager";
+import CinemaInfo from "./component/Cinema/CinemaInfo";
+import ThongTinRap from "./component/Cinema/CinemaInfo";
 
 function App() {
 
@@ -146,6 +149,7 @@ function App() {
 
         <Route path="/community" element={<Community/>} />
         <Route path="/seat" element={<CinemaSeatSelection/>} />
+        <Route path="/cinema/:cinemaId" element={<ThongTinRap/>} />
 
 
 
@@ -166,6 +170,8 @@ function App() {
         <Route path="/video" element={<Video />} />
         <Route path="/sp" element={<SupportCenter />} />
         <Route path="/postdetail/:slug" element={<PostDetail />} />
+
+        <Route path="/cinemainfo" element={<CinemaInfo/>} />
 
 
 
@@ -264,9 +270,12 @@ function App() {
         <Route path="/admin/movies" element={<PrivateRoute allowedRoles={['manager','admin']}><MoviesManager /></PrivateRoute>} />
         <Route path="/admin/movies/add" element={<PrivateRoute allowedRoles={['manager']}><MoviesManagerForm /></PrivateRoute>} />
         <Route path="/admin/movies/edit/:id" element={<PrivateRoute allowedRoles={['manager']}><MoviesAddManager /></PrivateRoute>} />
-        {/* <Route path="/admin/schedules" element={<PrivateRoute allowedRoles={['admin','manager','staff']}><SchedulesManager /></PrivateRoute>} />  */}
-        {/* <Route path="/admin/revenuebycinema" element={<PrivateRoute allowedRoles={['admin','manager','staff']}><RevenueByCinemaManager /></PrivateRoute>} />
-        <Route path="/admin/revenuebymovie" element={<PrivateRoute allowedRoles={['admin','manager','staff']}><RevenueByMoviesManager /></PrivateRoute>} /> */}
+        <Route path="/admin/schedules" element={<PrivateRoute allowedRoles={['admin','manager','staff']}><SchedulesManager /></PrivateRoute>} /> 
+        <Route path="/admin/revenuebycinema" element={<PrivateRoute allowedRoles={['admin','manager','staff']}><RevenueByCinemaManager /></PrivateRoute>} />
+        <Route path="/admin/moviestatistics/:movieId" element={<PrivateRoute allowedRoles={['admin','manager']}><MovieStatisticsManager/></PrivateRoute>} />
+        <Route path="/admin/revenuebymovie" element={<PrivateRoute allowedRoles={['admin','manager','staff']}><RevenueByMoviesManager /></PrivateRoute>} />
+
+        <Route path="/admin/movistatistics" element={<MovieStatistics />} />
       </Routes>
       </QueryClientProvider>
     </>

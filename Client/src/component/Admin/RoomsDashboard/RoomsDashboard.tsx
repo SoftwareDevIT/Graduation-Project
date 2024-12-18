@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { EditOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons';
-import { notification, Table, Pagination, Input, Button, Popconfirm } from 'antd';
+import { notification, Table, Pagination, Input, Button, Popconfirm, Switch } from 'antd';
 import instance from '../../../server';
 import { Room } from '../../../interface/Room';
 
@@ -58,6 +58,33 @@ const RoomDashboard: React.FC = () => {
       }
     }
   };
+  const handleStatusChange = async (id: number, currentStatus: boolean) => {
+    try {
+      // Make API call to change room status
+      await instance.post(`/manager/roomStatus/${id}`, { status: !currentStatus });
+
+      // Update room status locally after successful API call
+      setRooms((prevRooms) =>
+        prevRooms.map((room) =>
+          room.id === id ? { ...room, status: !currentStatus } : room
+        )
+      );
+
+      notification.success({
+        message: 'Cập nhật trạng thái phòng thành công!',
+        description: `Phòng đã được ${!currentStatus ? 'hiện' : 'ẩn'}.`,
+        placement: 'topRight',
+      });
+    } catch (error) {
+      console.error('Error updating room status:', error);
+      notification.error({
+        message: 'Lỗi!',
+        description: 'Không thể cập nhật trạng thái phòng. Vui lòng thử lại sau.',
+        placement: 'topRight',
+      });
+    }
+  };
+
 
   const columns = [
     {
@@ -78,6 +105,21 @@ const RoomDashboard: React.FC = () => {
       dataIndex: ['seatmap','name'],
       key: 'room_name',
       className: 'text-center',
+    },
+    {
+      title: 'Trạng Thái',
+      key: 'status',
+      className: 'text-center',
+      render: (text: any, room: Room) => (
+        <div style={{ textAlign: 'center' }}>
+          <Switch
+            checked={room.status}
+            checkedChildren="On"
+            unCheckedChildren="Off"
+            onChange={() => handleStatusChange(room.id, room.status)}
+          />
+        </div>
+      ),
     },
     {
       title: 'Hành Động',

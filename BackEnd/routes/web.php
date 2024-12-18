@@ -27,8 +27,8 @@ use App\Http\Controllers\RoleController;
 
 
 
-    Route::resource('roles', RoleController::class);
-    Route::post('roles/{role}/permissions', [RoleController::class, 'syncPermissions'])->name('roles.syncPermissions');
+    // Route::resource('roles', RoleController::class);
+    // Route::post('roles/{role}/permissions', [RoleController::class, 'syncPermissions'])->name('roles.syncPermissions');
 
 
 

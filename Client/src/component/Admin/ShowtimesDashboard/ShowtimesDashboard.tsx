@@ -81,6 +81,30 @@ const ShowtimesDashboard: React.FC = () => {
             currency: 'VND',
         }).format(amount);
     };
+    const handleStatusChange = async (id: number, currentStatus: boolean) => {
+        try {
+            const newStatus = !currentStatus; // Đảo ngược trạng thái hiện tại
+            await instance.post(`/manager/showtimeStatus/${id}`, { status: newStatus }); // Gửi API
+    
+            // Cập nhật trạng thái trong context
+            dispatch({
+                type: 'UPDATE_SHOWTIME_STATUS',
+                payload: { id, status: newStatus },
+            });
+    
+            // Thông báo thành công
+            notification.success({
+                message: 'Cập Nhật Thành Công',
+                description: `Trạng thái showtime đã được${newStatus ? 'Hiện' : 'Ẩn'}.`,
+            });
+        } catch (err) {
+            notification.error({
+                message: 'Lỗi Cập Nhật',
+                description: 'Không thể cập nhật trạng thái showtime. Vui lòng thử lại.',
+            });
+        }
+    };
+    
 
     if (error) {
         return <div className="alert alert-danger">{error}</div>;
@@ -122,17 +146,20 @@ const ShowtimesDashboard: React.FC = () => {
         },
         {
             title: 'Trạng Thái',
-            key: 'actions',
-            render: (movie: Movie) => (
+            key: 'status',
+            render: (_: any, record: any) => (
                 <div style={{ textAlign: 'left' }}>
-                    <Switch 
-                        checkedChildren="On" 
-                        unCheckedChildren="Off" 
+                    <Switch
+                        checked={record.status} // Trạng thái hiện tại từ API
+                        checkedChildren="On"
+                        unCheckedChildren="Off"
+                        onChange={() => handleStatusChange(record.id, record.status)} // Xử lý thay đổi
                     />
                 </div>
             ),
             className: 'text-left',
         },
+        
         {
             title: 'Hành động',
             key: 'actions',

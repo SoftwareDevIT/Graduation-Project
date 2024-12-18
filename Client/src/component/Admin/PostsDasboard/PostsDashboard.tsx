@@ -7,6 +7,7 @@ import { faTrash, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { Button, Input, notification } from 'antd';
+import { Switch } from 'antd';
 
 const PostsDashboard: React.FC = () => {
   const { state, deletePost } = usePostsContext();
@@ -73,6 +74,7 @@ const PostsDashboard: React.FC = () => {
 
     return pageNumbers;
   };
+  
 
   return (
     <div className="container mt-5">
@@ -106,14 +108,18 @@ const PostsDashboard: React.FC = () => {
                   <p className="text-muted small mt-auto mb-2">Thể loại: {post.news_category.news_category_name}</p>
                   <p className="text-muted small mt-auto mb-2">Lượt Xem: {post.views}</p>
                   <p className="text-muted small mb-3">Ngày xuất bản: {new Date(post.created_at).toLocaleDateString()}</p>
+                  <p><Switch
+    checkedChildren="On"
+    unCheckedChildren="Off"
+  /></p>
                   <div className="d-flex justify-content-between mt-auto">
-                    <Link to={`/admin/posts/edit/${post.id}`} className="btn btn-warning rounded-pill btn-sm px-3">
-                      <FontAwesomeIcon icon={faEdit} /> Chỉnh sửa
-                    </Link>
-                    <button className="btn btn-danger rounded-pill btn-sm px-3" onClick={() => handleDeletePost(post.id)}>
-                      <FontAwesomeIcon icon={faTrash} /> Xóa
-                    </button>
-                  </div>
+  <Link to={`/admin/posts/edit/${post.id}`} className="btn btn-warning rounded-pill btn-sm px-3">
+    <FontAwesomeIcon icon={faEdit} /> Chỉnh sửa
+  </Link>
+  <button className="btn btn-danger rounded-pill btn-sm px-3" onClick={() => handleDeletePost(post.id)}>
+    <FontAwesomeIcon icon={faTrash} /> Xóa
+  </button>
+</div>
                 </div>
               </div>
             </div>
