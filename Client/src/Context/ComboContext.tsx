@@ -97,8 +97,7 @@ const fetchCombos = async () => {
       console.error('Failed to add combo:', error);
     }
   };
-
-  const updateCombo = async (id: number, combo: Combo) => {
+const updateCombo = async (id: number, combo: Combo) => {
 try {
       const { data } = await instance.put(`/manager/combo/${id}`, combo);
       dispatch({ type: 'UPDATE_COMBO', payload: data.data });

@@ -189,6 +189,7 @@ const Header = () => {
                                 title: 'Check-in Thất Bại',
                                 content: message,
                             });
+                            toggleCamera();
                         }
                     } else {
                         throw new Error("Invalid response status");

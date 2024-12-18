@@ -7,6 +7,7 @@ use App\Http\Requests\Store\StoreLocationRequest;
 use Illuminate\Http\Request;
 use App\Services\Cinema\LocationService;
 use App\Http\Requests\update\UpdateLocationRequest;
+use App\Models\Location;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 

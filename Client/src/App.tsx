@@ -125,8 +125,6 @@ import Pointaccumulation from "./component/PersonalPage/Pointaccumulation";
 
 
 
-import MyMapComponent from "./component/GG map/Ggmap";
-
 import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
 import OrderHistoryApp from "./component/PersonalPage/MovieTicket";
 import BookingManager from "./component/TicketandSeat/BookingManager";
@@ -134,6 +132,9 @@ import MovieStatistics from "./component/Admin/MovieStatistics/MovieStatistics";
 import MovieStatisticsManager from "./Page/Admin/MovieStatistics/MovieStatisticsManager";
 import CinemaInfo from "./component/Cinema/CinemaInfo";
 import ThongTinRap from "./component/Cinema/CinemaInfo";
+import CityForm from "./component/CityForm/CityForm";
+import CinemaList from "./component/Area/CinemaList";
+import PaymentSuccess from "./component/PersonalPage/PaymentSuccess";
 
 function App() {
 
@@ -148,11 +149,19 @@ function App() {
         <Route path="/pay" element={ <PrivateRoute><OrderCheckout /></PrivateRoute> } />
 
         <Route path="/community" element={<Community/>} />
+        <Route path="/cityform" element={<CityForm isVisible={false} onClose={function (): void {
+            throw new Error("Function not implemented.");
+          } }/>} />
         <Route path="/seat" element={<CinemaSeatSelection/>} />
+        <Route path="/cinemalist" element={<CinemaList/>} />
         <Route path="/cinema/:cinemaId" element={<ThongTinRap/>} />
 
+        <Route path="/payment-success" element={<PaymentSuccess  />} />
+        <Route path="/location-cinema" element={<PaymentSuccess  />} />
 
-
+        <Route path="/cityform" element={<CityForm isVisible={false} onClose={function (): void {
+            throw new Error("Function not implemented.");
+          } }/>} />
         <Route path="/movie-detail/:slug" element={<ContentMovie />} />
         <Route path="/schedule/:slug" element={<LichChieu />} />
         <Route path="/reviews/:slug" element={<DanhGia />} />
@@ -173,7 +182,10 @@ function App() {
 
         <Route path="/cinemainfo" element={<CinemaInfo/>} />
 
-
+        <Route path="/cityform" element={<CityForm isVisible={false} onClose={function (): void {
+            throw new Error("Function not implemented.");
+          } }/>} />
+            <Route path="/f/:id" element={<CinemaList/>} />
 
         <Route path="/movie/search/:movie_name" element={<SerachMovies />} />
         <Route path="/profile" element={
@@ -187,6 +199,7 @@ function App() {
         <Route path="/ticketcinema" element={ <PrivateRoute><OrderHistoryApp/></PrivateRoute>} />
         <Route path="/ChangePassword" element={ <PrivateRoute><ChangePassword /></PrivateRoute>} />
         <Route path="/register" element={<RegisterCinema />} />
+        
         <Route path="/login" element={<LoginCinema />} />
         <Route path="/movieshowing" element={<MovieShowing/>} />
         <Route path="/deponsit" element={<Deponsit/>} />
