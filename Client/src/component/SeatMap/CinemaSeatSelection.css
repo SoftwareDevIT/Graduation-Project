@@ -509,7 +509,7 @@ color: #727575;
 }
 @media (max-width: 768px) {
   .mapseat{
-    margin-left: 80px;
+    margin-left: 30px;
   }
   .container-map {
     margin-left: 0;
