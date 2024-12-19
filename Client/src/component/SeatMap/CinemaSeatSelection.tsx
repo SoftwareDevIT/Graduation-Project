@@ -12,6 +12,7 @@ import initializeEcho from "../../server/realtime";
 import Echo from "laravel-echo";
 import { Cinema } from "../../interface/Cinema";
 import { SeatMap } from "../../interface/SeatMapp";
+import AgeWarningModal from "./AgeWarningModal";
 
 interface Showtime {
   id: number;
@@ -461,12 +462,13 @@ const CinemaSeatSelection: React.FC = () => {
   if (error) {
     return <div>{error}</div>;
   }
+  
 
   return (
     <>
       <Header />
       <Headerticket />
-
+      <AgeWarningModal />
       <div className="box-map">
         <div className="container container-map">
           <div className="seat-info-box">

@@ -133,6 +133,7 @@
   .thoi-gian-item:hover {
     background-color: #c6ced1;
     color: white;
+    cursor: pointer;
   }
   
   .gio {
