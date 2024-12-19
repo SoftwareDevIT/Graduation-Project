@@ -109,9 +109,93 @@ class BookingController extends Controller
         return redirect('http://localhost:5173/payment-success')->with('error', 'Thanh Toán Không thành công.');
     }
 
+    // public function selectSeats(Request $request)
+    // {
+    //     $seats = $request->input('seats');
+    //     $existingSeats = [];
+    //     $seatDataList = [];
+    //     if (is_array($seats) && count($seats) > 10) {
+    //         return response()->json(['status' => false, 'message' => 'You can only select up to 10 seats.'], 400);
+    //     }
+
+    //     if (!$seats) {
+    //         return response()->json(['status' => false, 'message' => 'Please select at least one seat.'], 400);
+    //     }
+    //     if (is_array($seats)) {
+    //         foreach ($seats as $seatData) {
+    //             // Kiểm tra xem ghế đã tồn tại
+    //             $seat = Seats::where('seat_name', $seatData['seat_name'])
+    //                 ->where('seat_row', $seatData['seat_row'])
+    //                 ->where('seat_column', $seatData['seat_column'])
+    //                 ->where('room_id', $seatData['room_id'])
+    //                 ->first();
+
+    //             if ($seat) {
+    //                 // Lưu ghế đã tồn tại vào danh sách lỗi
+    //                 $existingSeats[] = $seat->toArray();
+    //             } else {
+    //                 // Tạo ghế mới
+    //                 $seatCreate = Seats::create($seatData);
+
+    //                 if ($seatCreate) {
+    //                     $seatDataList[] = $seatCreate;
+    //                     $seatCreate->reserveForUser();
+    //                 } else {
+    //                     return response()->json(['status' => false, 'message' => 'Failed to create seat.'], 500);
+    //                 }
+    //             }
+    //         }
+
+    //         // Nếu có ghế đã tồn tại, trả về danh sách các ghế đó
+    //         if (!empty($existingSeats)) {
+    //             return response()->json(['status' => false, 'message' => 'Some seats already exist.', 'data' => $existingSeats], 400);
+    //         }
+
+    //         // Nếu tạo ghế thành công, dispatch job cho tất cả ghế đã tạo
+    //         if (!empty($seatDataList)) {
+    //             $this->dispatchResetSeatsJob($seatDataList);
+    //             // Lưu thông tin ghế vào session
+    //             Session::put('seats', $seatDataList);
+    //             Log::info('Seats Session: ' . json_encode(session('seats')));
+    //         }
+
+    //         return response()->json([
+    //             'status' => true,
+    //             'message' => 'Selected seats successfully.',
+    //             'data' => $seatDataList
+    //         ]);
+    //     }
+    // }
 
 
-    public function saveSeats($seats, $userId)
+    // public function selectSeats(Request $request)
+    // {
+    //     $seats = $request->input('seats'); // Ghế người dùng chọn
+
+    //     // Kiểm tra nếu không có ghế được chọn
+    //     if (empty($seats)) {
+    //         return response()->json(['status' => false, 'message' => 'Please select at least one seat.'], 400);
+    //     }
+    //     if (is_array($seats) && count($seats) > 10) {
+    //         return response()->json(['status' => false, 'message' => 'You can only select up to 10 seats.'], 400);
+    //     }
+
+    //     if (!$seats) {
+    //         return response()->json(['status' => false, 'message' => 'Please select at least one seat.'], 400);
+    //     }
+    //     // Sắp xếp các ghế đã chọn theo `seat_name` (theo tên ghế)
+    //     $gapIssue = $this->hasGapIssue($seats);
+    //     if ($gapIssue) {
+    //         return $gapIssue;  // Trả về lỗi nếu có khoảng trống
+    //     }
+    //     // Nếu không có lỗi, tiếp tục xử lý ghế đã chọn
+    //     $saveSeats = $this->saveSeats($seats);
+    //     if ($saveSeats) {
+    //         return $saveSeats;
+    //     }
+    // }
+
+    public function saveSeats($seats,$userId)
     {
         if (is_array($seats)) {
             try {
@@ -190,8 +274,10 @@ class BookingController extends Controller
             } catch (\Exception $e) {
                 // Nếu xảy ra lỗi ngoài mong muốn, thực hiện rollback toàn bộ transaction
                 DB::rollBack();
+                
                 Log::error('Error processing seats: ' . $e->getMessage());
-                return response()->json(['status' => false, 'message' => 'An error occurred while processing seats.'], 500);
+                return response()->json(['status' => false, 'message' => 'Đã xảy ra lỗi khi xử lý chỗ ngồi.'], 500);
+
             }
         }
 
