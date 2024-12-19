@@ -65,18 +65,6 @@ const ShowtimeAuto = () => {
 
     const onSubmit = async (data: FormData) => {
         try {
-
-            const response = await instance.post('/manager/showtimePayload', {
-                room_id: formData.room_id,
-                movie_id: formData.movie_id,
-                date: formData.date,
-                opening_time: formData.opening_time,
-                closing_time: formData.closing_time,
-                duration: formData.duration,
-                price: formData.price
-            });
-            // console.log("Thêm showtime thành công:", response.data);
-
             const response = await instance.post("/manager/showtimePayload", data);
             console.log("Thêm showtime thành công:", response.data);
 
