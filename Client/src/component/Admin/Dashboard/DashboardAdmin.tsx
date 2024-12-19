@@ -329,7 +329,7 @@ labels: monthlyLabels,
                 allowClear
                 value={selectedCinema}
                 onChange={(value) => setSelectedCinema(value)}
-                style={{ width: 700}}
+                style={{ width: 670}}
                 disabled={userRole === "manager"}
               >
                 <Option value="">Tất cả</Option>
