@@ -64,7 +64,7 @@ class ShowtimeService
                 'status' => '1',
             ]);
         }
-
+        // $openingTime->addMinutes(20);
         return $showtimes;
     }
 
