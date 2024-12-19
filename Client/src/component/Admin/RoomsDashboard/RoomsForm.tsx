@@ -12,8 +12,7 @@ import { notification } from 'antd';
 // Zod schema validation
 const roomSchema = z.object({
   room_name: z.string().min(1, 'Tên phòng không được bỏ trống'),
-
-  seat_map_id: z.number().min(1, 'Vui lòng chọn kiểu bố trí ghế'),
+  seat_map_id: z.number({ invalid_type_error: "Vui lòng chọn kiểu bố trí ghế" }).min(1, 'Vui lòng chọn kiểu bố trí ghế'),
 });
 
 const RoomsForm: React.FC = () => {

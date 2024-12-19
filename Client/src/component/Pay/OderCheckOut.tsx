@@ -87,10 +87,10 @@ const OrderCheckout = () => {
             });
     
             if (response.data) {
-                const { message: successMessage,discount: voucherDiscount, final_price } = response.data;
+                const { message: successMessage,discount: voucherDiscount, final_price:acount } = response.data;
                 message.success(successMessage);
                 setDiscount((prevDiscount) => prevDiscount + voucherDiscount);
-                setFinalPrice(final_price);
+                setFinalPrice((prevDiscountacount)=>prevDiscountacount+acount);
                 setVoucherApplied(true); // Đánh dấu là voucher đã được áp dụng
             }
         } catch (error) {
@@ -131,14 +131,14 @@ const OrderCheckout = () => {
             });
     
             if (response.status === 200 && response.data) {
-                const { message: successMessage, discount_value: pointsDiscount, final_price } = response.data;
+                const { message: successMessage, discount_value: pointsDiscount, final_price:acount } = response.data;
     
                 // Hiển thị thông báo thành công
                 message.success(successMessage);
     
                 // Cập nhật tổng tiền và giảm giá
                 setDiscount((prevDiscount) => prevDiscount + pointsDiscount);
-                setFinalPrice(final_price); // Cập nhật lại tổng tiền sau khi trừ điểm
+                setFinalPrice((prevDiscountacount)=>prevDiscountacount+acount);
     
                 // Cập nhật lại số điểm còn lại
                 setAvailablePoints((prevPoints) => prevPoints - points);
@@ -471,13 +471,7 @@ const OrderCheckout = () => {
     </span>
   </div>
 </div>
-
-
-
                     </div>
-
-                
-
                     {!  isAdmin ? (
     // Admin-specific content
     <div className="payment-methods">
@@ -485,7 +479,7 @@ const OrderCheckout = () => {
         <ul>
             <li onClick={() => setPaymentMethod(1)}>
                 <img src="https://vinadesign.vn/uploads/images/2023/05/vnpay-logo-vinadesign-25-12-57-55.jpg" alt="VN Pay" className="payment-icon" />
-                VN Pay {pay_method_id === 1 && <FontAwesomeIcon icon={faCheckCircle} className="check-icon" />}
+                VN Pay {pay_method_id === 1 && <FontAwesomeIcon icon={faCheckCircle} className="check-icon-1" />}
             </li>
             <li onClick={() => setPaymentMethod(2)}>
                 <img src="https://developers.momo.vn/v3/assets/images/primary-momo-ddd662b09e94d85fac69e24431f87365.png" alt="MoMo" className="payment-icon" />

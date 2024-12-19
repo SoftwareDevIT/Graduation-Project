@@ -149,9 +149,7 @@ function App() {
         <Route path="/pay" element={ <PrivateRoute><OrderCheckout /></PrivateRoute> } />
 
         <Route path="/community" element={<Community/>} />
-        <Route path="/cityform" element={<CityForm isVisible={false} onClose={function (): void {
-            throw new Error("Function not implemented.");
-          } }/>} />
+        
         <Route path="/seat" element={<CinemaSeatSelection/>} />
         <Route path="/cinemalist" element={<CinemaList/>} />
         <Route path="/cinema/:cinemaId" element={<ThongTinRap/>} />

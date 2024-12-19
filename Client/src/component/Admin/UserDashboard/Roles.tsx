@@ -3,7 +3,7 @@ import { Roles } from '../../../interface/Roles';
 import { User } from '../../../interface/User';
 import { Permission } from '../../../interface/Permissions';
 import instance from '../../../server';
-import { notification, Pagination } from 'antd';
+import { Modal, notification, Pagination } from 'antd';
 
 const RoleAndUserManagement = () => {
   const [roles, setRoles] = useState<Roles[]>([]);
@@ -79,7 +79,7 @@ const RoleAndUserManagement = () => {
         response = await instance.post('/roles', { name: newRoleName });
       }
       if (response.data.status) {
-        setRoles((prevRoles) => [...prevRoles, response.data.data.roles]);
+setRoles((prevRoles) => [...prevRoles, response.data.data.roles]);
         setNewRoleName('');
         notification.success({
           message: 'Tạo vai trò thành công!',
@@ -116,7 +116,21 @@ const RoleAndUserManagement = () => {
         response = await instance.delete(`/roles/${roleId}`);
       }
       if (response.data.status) {
-        setRoles((prevRoles) => prevRoles.filter((role) => role.id !== roleId));
+        Modal.confirm({
+          title: 'Xác nhận xóa',
+          content: 'Bạn có chắc chắn muốn xóa vai trò này không?',
+          okText: 'Xóa',
+          cancelText: 'Hủy',
+          onOk: () => {
+            // Thực hiện xóa vai trò
+            response.data.status && notification.success({
+              message: 'Xóa Vai Trò Thành Công!',
+            });
+            setRoles((prevRoles) => prevRoles.filter((role) => role.id !== roleId));
+          },
+        });
+      
+        
       } else {
         console.error('Failed to delete role:', response.data.message);
       }
@@ -126,15 +140,19 @@ const RoleAndUserManagement = () => {
   };
   const handleAssignRoles = async (userId: number, selectedRoles: string[]) => {
     const selectedRoleNames = selectedRoles.map(role => role.toLowerCase());
-    const isManagerOrStaff = selectedRoleNames.includes('admin');
+    const isManagerOrStaff = selectedRoleNames.includes('manager') || selectedRoleNames.includes('staff') ;
   
     // Nếu người dùng chọn "manager" hoặc "staff", yêu cầu nhập cinema_id
     let cinemaId: string | null = null;
     if (isManagerOrStaff) {
-      cinemaId = prompt("Please enter Cinema ID:");
+      cinemaId = prompt("Vui lòng nhập Cinema ID:");
       if (!cinemaId) {
-        alert("Cinema ID is required for manager or staff roles!");
-        return;  // Dừng lại nếu không có cinema_id
+        Modal.warning({
+          title: 'Thông báo',
+          content: 'Cinema ID là bắt buộc đối với vai trò Quản lý hoặc Nhân viên!',
+          okText: 'Đã hiểu',
+        });
+        return; // Dừng lại nếu không có cinema_id
       }
     }
   
@@ -158,14 +176,14 @@ const RoleAndUserManagement = () => {
       }else {
         response = await instance.post(`/roles/${userId}/users`, requestPayload);
       }
-      if (response.data.status) {
+      if (response.data.message) {
         notification.success({
           message: 'Cập nhật quyền thành công!',
         });
         // Cập nhật vai trò của người dùng trong giao diện
         setUsers((prevUsers) =>
           prevUsers.map((user) =>
-            user.id === userId ? { ...user, roles: selectedRoles } : user
+user.id === userId ? { ...user, roles: selectedRoles } : user
           )
         );
       } else {
@@ -214,8 +232,10 @@ const RoleAndUserManagement = () => {
         });;
       }
       
-      if (response.data.status) {
-        alert('Cập nhật quyền thành công!');
+      if (response.data) {
+        notification.success({
+          message: 'Cập nhật quyền thành công!',
+        });
       } else {
         console.error('Failed to update permissions:', response.data.message);
       }
@@ -267,7 +287,7 @@ const RoleAndUserManagement = () => {
         </button>
 
         <h3 style={{ marginTop: '20px' }}>Vai trò hiện có</h3>
-        <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
+<table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
           <thead>
             <tr>
               <th style={{ padding: '10px', border: '1px solid #ddd' }}>Tên vai trò</th>
@@ -344,7 +364,7 @@ const RoleAndUserManagement = () => {
       <div style={{ marginBottom: '20px' }}>
         <input
           type="text"
-          placeholder="Tìm kiếm theo tên người dùng"
+placeholder="Tìm kiếm theo tên người dùng"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           style={{

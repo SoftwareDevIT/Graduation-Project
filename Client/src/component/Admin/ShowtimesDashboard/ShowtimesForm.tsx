@@ -14,8 +14,8 @@ import { Movie } from '../../../interface/Movie';
 
 // Schema validation
 const showtimeSchema = z.object({
-  movie_id: z.number().min(1, 'Vui lòng chọn phim'),
-  room_id: z.number().min(1, 'Vui lòng chọn phòng'),
+  movie_id: z.number({ invalid_type_error: "Vui lòng chọn phim" }).min(1, 'Vui lòng chọn phim'),
+  room_id: z.number({ invalid_type_error: "Vui lòng chọn phòng" }).min(1, 'Vui lòng chọn phòng'),
   showtime_date: z
     .string()
     .min(1, 'Vui lòng chọn ngày chiếu')
@@ -30,7 +30,7 @@ const showtimeSchema = z.object({
     .min(1, 'Vui lòng chọn giờ bắt đầu')
     .regex(/^\d{2}:\d{2}$/, 'Giờ bắt đầu phải có định dạng HH:mm'),
   price: z
-    .number()
+    .number({ invalid_type_error: "Giá phải là số" })
     .min(0, 'Giá phải lớn hơn hoặc bằng 0')
     .max(500000, 'Giá không được vượt quá 500,000 VNĐ')
     .optional(),
@@ -91,16 +91,10 @@ const ShowtimesForm: React.FC = () => {
   
     if (!id) {
       await addOrUpdateShowtime(formattedData); // Add new showtime
-      notification.success({
-        message: 'Thêm Suất Chiếu Thành Công!',
-        description: 'Suất chiếu mới đã được thêm vào danh sách.',
-      });
+      
     } else {
       await addOrUpdateShowtime(formattedData, id); // Update existing showtime
-      notification.success({
-        message: 'Cập nhật Suất Chiếu Thành Công!',
-        description: 'Suất chiếu đã được cập nhật vào danh sách.',
-      });
+     
     }
   
     reset();

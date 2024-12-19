@@ -107,7 +107,7 @@ class BookingController extends Controller
             session()->flush();
 
             // Chuyển hướng về trang yêu cầu
-            return redirect('http://localhost:5173/ticketcinema');
+            return redirect('http://localhost:5173/payment-success');
         }
 
         // Xử lý khi mã phản hồi không phải '00'

@@ -21,6 +21,19 @@ const Header = () => {
     const location = useLocation();
     const [lastScannedCode, setLastScannedCode] = useState<string | null>(null); // Lưu mã đã quét gần nhất
     const [isProcessing, setIsProcessing] = useState(false); // Trạng thái ngăn gọi API liên tục
+    const [userRole, setUserRole] = useState<string>("");
+
+    // Fetch user role from localStorage
+    useEffect(() => {
+      const userData = JSON.parse(localStorage.getItem("user_profile") || "{}");
+      const roles = userData.roles || [];
+     
+      if (roles.length > 0) {
+        setUserRole(roles[0].name);
+      } else {
+        setUserRole("unknown"); // Gán giá trị mặc định khi không có vai trò
+      }
+    }, []);
 
     useEffect(() => {
         const storedUser = localStorage.getItem('user_profile');
@@ -75,7 +88,8 @@ const Header = () => {
             navigate(result.replace(/^http:\/\/localhost:5173/, ""));
             setIsProcessing(false); // Xử lý xong
         } else if (/^\d+$/.test(result)) {
-            instance.post('/manager/checkInSeat', { code: result })
+            if (userRole === "manager") {
+                instance.post('/manager/checkInSeat', { code: result })
                 .then(response => {
                     // console.log("Full Response:", response);
                     if (response.status === 200) {
@@ -113,7 +127,87 @@ const Header = () => {
                 .finally(() => {
                     setIsProcessing(false);
                 });
-
+              } else if (userRole === "staff") {
+                instance.post('/staff/checkInSeat', { code: result })
+                .then(response => {
+                    console.log("Full Response:", response);
+                    if (response.status === 200) {
+                        const { status, message, data } = response.data;
+                        if (status) {
+                            Modal.success({
+                                title: 'Check-in Thành Công',
+                                content: (
+                                    <div>
+                                        <p><strong>Thông báo:</strong> {message}</p>
+                                        <p><strong>Tên ghế:</strong> {data.seat_name}</p>
+                                    </div>
+                                ),
+                            });
+                            toggleCamera();
+                        } else {
+                            Modal.error({
+                                title: 'Check-in Thất Bại',
+                                content: message,
+                            });
+                            toggleCamera(); 
+                        }
+                    } else {
+                        throw new Error("Invalid response status");
+                    }
+                })
+                .catch(error => {
+                    console.error("Request Error:", error);
+                    const errorMessage =
+                        error.response?.data?.message || 'Có lỗi xảy ra khi check-in!';
+                    Modal.error({
+                        title: 'Lỗi',
+                        content: errorMessage,
+                    });
+                })
+                .finally(() => {
+                    setIsProcessing(false);
+                });
+              }else {
+                instance.post('/checkInSeat', { code: result })
+                .then(response => {
+                    console.log("Full Response:", response);
+                    if (response.status === 200) {
+                        const { status, message, data } = response.data;
+                        if (status) {
+                            Modal.success({
+                                title: 'Check-in Thành Công',
+                                content: (
+                                    <div>
+                                        <p><strong>Thông báo:</strong> {message}</p>
+                                        <p><strong>Tên ghế:</strong> {data.seat_name}</p>
+                                    </div>
+                                ),
+                            });
+                            toggleCamera();
+                        } else {
+                            Modal.error({
+                                title: 'Check-in Thất Bại',
+                                content: message,
+                            });
+                            toggleCamera();
+                        }
+                    } else {
+                        throw new Error("Invalid response status");
+                    }
+                })
+                .catch(error => {
+                    console.error("Request Error:", error);
+                    const errorMessage =
+                        error.response?.data?.message || 'Có lỗi xảy ra khi check-in!';
+                    Modal.error({
+                        title: 'Lỗi',
+                        content: errorMessage,
+                    });
+                })
+                .finally(() => {
+                    setIsProcessing(false);
+                });
+              }
         } else {
             Modal.warning({
                 title: 'Dữ liệu không hợp lệ',

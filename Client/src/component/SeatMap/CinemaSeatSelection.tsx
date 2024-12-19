@@ -618,7 +618,8 @@ const CinemaSeatSelection: React.FC = () => {
                   Rạp:<span> {showtimeData?.room.cinema.cinema_name}</span>
                 </p>
                 <p>
-                  Suất: <span> {showtime}</span>
+                  Suất: <span>{showtime.split(":").slice(0, 2).join(":")}</span>
+
                 </p>
                 <p>
                   Phòng chiếu: <span>{showtimeData?.room.room_name}</span>
