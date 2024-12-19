@@ -91,7 +91,7 @@ const Header = () => {
             if (userRole === "manager") {
                 instance.post('/manager/checkInSeat', { code: result })
                 .then(response => {
-                    console.log("Full Response:", response);
+                    // console.log("Full Response:", response);
                     if (response.status === 200) {
                         const { status, message, data } = response.data;
                         if (status) {
@@ -189,6 +189,7 @@ const Header = () => {
                                 title: 'Check-in Thất Bại',
                                 content: message,
                             });
+                            toggleCamera();
                         }
                     } else {
                         throw new Error("Invalid response status");

@@ -8,20 +8,28 @@ import { useNavigate } from "react-router-dom";
 
 import { Movie } from "../../../interface/Movie";
 import { Room } from "../../../interface/Room";
-
+const today = new Date();
+today.setHours(0, 0, 0, 0);
 // Schema validation using Zod
 const showtimeSchema = z.object({
     movie_id: z.number({ invalid_type_error: "Vui lòng chọn phim." }).min(1, { message: "Vui lòng chọn phim." }),
     room_id: z.number({ invalid_type_error: "Vui lòng chọn phòng." }).min(1, { message: "Vui lòng chọn phòng." }),
-    date: z.string().nonempty({ message: "Ngày không được để trống." }),
+    date: z
+        .string()
+        .nonempty({ message: "Ngày không được để trống." })
+        .refine(
+            (date) => new Date(date) >= today,
+            { message: "Ngày không được bé hơn ngày hiện tại." }
+        ),
     opening_time: z.string().nonempty({ message: "Thời gian mở cửa không được để trống." }),
     closing_time: z.string().nonempty({ message: "Thời gian đóng cửa không được để trống." }),
-    price: z.number({ invalid_type_error: "Vui lòng nhập giá tiền." }).min(1, { message: "Giá phải lớn hơn 0." }),
+    price: z.number({ invalid_type_error: "Vui lòng nhập giá tiền." }).min(1, { message: "Giá phải lớn hơn 0." }).max(1000000,{message:"Giá tối đa 1 triệu"}),
 });
 
 type FormData = z.infer<typeof showtimeSchema>;
 
 const ShowtimeAuto = () => {
+
     const nav = useNavigate();
     const [movies, setMovies] = useState<Movie[]>([]);
     const [rooms, setRooms] = useState<Room[]>([]);
@@ -57,8 +65,21 @@ const ShowtimeAuto = () => {
 
     const onSubmit = async (data: FormData) => {
         try {
+
+            const response = await instance.post('/manager/showtimePayload', {
+                room_id: formData.room_id,
+                movie_id: formData.movie_id,
+                date: formData.date,
+                opening_time: formData.opening_time,
+                closing_time: formData.closing_time,
+                duration: formData.duration,
+                price: formData.price
+            });
+            // console.log("Thêm showtime thành công:", response.data);
+
             const response = await instance.post("/manager/showtimePayload", data);
             console.log("Thêm showtime thành công:", response.data);
+
             notification.success({
                 message: "Thêm ShowTime thành công",
                 description: "Showtime đã được thêm thành công.",

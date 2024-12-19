@@ -16,7 +16,7 @@ export const RealtimeProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const setupRealtime = async () => {
     try {
       const echo = await initializeEcho();
-      console.log("Kết nối thành công với Echo:", echo);
+      // console.log("Kết nối thành công với Echo:", echo);
       const userId = localStorage.getItem("user_id");
 
       if (!userId) {
@@ -26,7 +26,7 @@ export const RealtimeProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
       if (echo) {
         const channel = echo.private(`seats${userId}`);
-        console.log("Connected to channel:", channel);
+        // console.log("Connected to channel:", channel);
 
         // Lắng nghe sự kiện SeatReset
         channel.listen("SeatReset", (eventData: any) => {

@@ -24,7 +24,7 @@ const CinemaList: React.FC = () => {
         .get(`/cinema-by-location/${id}`)
         .then((response) => {
           setCinemas(response.data.data);
-          console.log(response.data);
+          // console.log(response.data);
         })
         .catch(() => setError('Không thể tải dữ liệu rạp chiếu.'))
         .finally(() => setLoading(false));

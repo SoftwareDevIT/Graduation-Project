@@ -17,7 +17,7 @@ const MyMapComponent = () => {
   // Hàm xử lý khi Google Maps API tải xong
   const handleApiLoaded = () => {
     setIsApiLoaded(true);  // API đã tải xong, cập nhật trạng thái
-    console.log("Google Maps API đã tải xong");
+    // console.log("Google Maps API đã tải xong");
   };
 
   const handleError = (error:any) => {

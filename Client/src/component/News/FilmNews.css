@@ -112,6 +112,9 @@ font-weight: 600px;
     font-size: 17px;
     font-weight: bold;
 }
+.noidung h4:hover{
+    cursor: pointer;
+}
 
 .noidung p {
     margin: 5px 0 0 0;
