@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Roles } from '../../../interface/Roles';
 import { User } from '../../../interface/User';
 import { Permission } from '../../../interface/Permissions';
 import instance from '../../../server';
-import { Pagination } from 'antd';
+import { Modal, notification, Pagination } from 'antd';
 
 const RoleAndUserManagement = () => {
   const [roles, setRoles] = useState<Roles[]>([]);
@@ -14,7 +14,13 @@ const RoleAndUserManagement = () => {
   const [userRole, setUserRole] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
+  const [searchTerm, setSearchTerm] = useState('');
+  const filteredUsers = users.filter((user) =>
+    user.user_name.toLowerCase().includes(searchTerm.toLowerCase())
 
+  );
+  const rolesRef = useRef<Roles[]>([])
+ 
   // Fetch user role from localStorage
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("user_profile") || "{}");
@@ -26,37 +32,41 @@ const RoleAndUserManagement = () => {
       setUserRole("unknown"); // Gán giá trị mặc định khi không có vai trò
     }
   }, []);
-  useEffect(() => {
-    const fetchRolesAndUsers = async () => {
-      try {
-        let response;
+  const fetchRolesAndUsers = async () => {
+    try {
+      let response;
       if (userRole === "admin") {
-        response = await  instance.get('/admin/roles');
+        response = await instance.get('/admin/roles');
       } else if (userRole === "manager") {
-        response = await  instance.get('/manager/roles');
-      }else {
+        response = await instance.get('/manager/roles');
+      } else {
         response = await instance.get('/roles');
       }
-        if (response.data.status) {
-          setRoles(response.data.data.roles);
-          setUsers(response.data.data.users);
-          setPermissions(response.data.data.permissions);
-        } else {
-          console.error('Failed to fetch data:', response.data.message);
-        }
-      } catch (error) {
-        console.error('Error fetching roles and users:', error);
+      if (response.data.message === "Success") {
+        setRoles(response.data.data.roles);
+        setUsers(response.data.data.users);
+        setPermissions(response.data.data.permissions);
       }
-    };
-   
-    if (userRole !== "") {
-      fetchRolesAndUsers();
+    } catch (error) {
+      console.error('Error fetching roles:', error);
     }
-  }, [userRole]);
+  };
+  useEffect(() => {
+    if (
+      !rolesRef.current.length || // Chỉ gọi API lần đầu
+      JSON.stringify(rolesRef.current) !== JSON.stringify(roles) // Gọi API nếu roles thay đổi
+    ) {
+      fetchRolesAndUsers();
+      rolesRef.current = roles; // Cập nhật ref sau khi gọi API
+    }
+  }, [userRole, roles]);
+  
 
   const handleCreateRole = async () => {
     if (!newRoleName) {
-      alert('Tên vai trò không thể trống!');
+      notification.error({
+        message: 'Tên vai trò không thể trống!',
+      });
       return;
     }
     try {
@@ -69,14 +79,30 @@ const RoleAndUserManagement = () => {
         response = await instance.post('/roles', { name: newRoleName });
       }
       if (response.data.status) {
-        setRoles((prevRoles) => [...prevRoles, response.data.data.roles]);
+setRoles((prevRoles) => [...prevRoles, response.data.data.roles]);
         setNewRoleName('');
+        notification.success({
+          message: 'Tạo vai trò thành công!',
+        });
       } else {
-        console.error('Failed to create role:', response.data.message);
+        notification.error({
+          message: 'Tạo vai trò thất bại',
+          description: response.data.message,
+        });
       }
-    } catch (error) {
-      console.error('Error creating role:', error);
+    } catch (error: unknown) {
+      console.error('Error assigning roles:', error);
+    if (error instanceof Error) {
+      notification.error({
+        message: 'Lỗi khi cấp quyền',
+        description: error.message,
+      });
+    } else {
+      notification.error({
+        message: 'Lỗi không xác định',
+      });
     }
+  }
   };
 
   const handleDeleteRole = async (roleId: string) => {
@@ -90,7 +116,21 @@ const RoleAndUserManagement = () => {
         response = await instance.delete(`/roles/${roleId}`);
       }
       if (response.data.status) {
-        setRoles((prevRoles) => prevRoles.filter((role) => role.id !== roleId));
+        Modal.confirm({
+          title: 'Xác nhận xóa',
+          content: 'Bạn có chắc chắn muốn xóa vai trò này không?',
+          okText: 'Xóa',
+          cancelText: 'Hủy',
+          onOk: () => {
+            // Thực hiện xóa vai trò
+            response.data.status && notification.success({
+              message: 'Xóa Vai Trò Thành Công!',
+            });
+            setRoles((prevRoles) => prevRoles.filter((role) => role.id !== roleId));
+          },
+        });
+      
+        
       } else {
         console.error('Failed to delete role:', response.data.message);
       }
@@ -99,17 +139,20 @@ const RoleAndUserManagement = () => {
     }
   };
   const handleAssignRoles = async (userId: number, selectedRoles: string[]) => {
-    // Kiểm tra xem vai trò có phải là "manager" hoặc "staff" không
     const selectedRoleNames = selectedRoles.map(role => role.toLowerCase());
-    const isManagerOrStaff = selectedRoleNames.includes('manager') || selectedRoleNames.includes('staff');
+    const isManagerOrStaff = selectedRoleNames.includes('manager') || selectedRoleNames.includes('staff') ;
   
     // Nếu người dùng chọn "manager" hoặc "staff", yêu cầu nhập cinema_id
     let cinemaId: string | null = null;
     if (isManagerOrStaff) {
-      cinemaId = prompt("Please enter Cinema ID:");
+      cinemaId = prompt("Vui lòng nhập Cinema ID:");
       if (!cinemaId) {
-        alert("Cinema ID is required for manager or staff roles!");
-        return;  // Dừng lại nếu không có cinema_id
+        Modal.warning({
+          title: 'Thông báo',
+          content: 'Cinema ID là bắt buộc đối với vai trò Quản lý hoặc Nhân viên!',
+          okText: 'Đã hiểu',
+        });
+        return; // Dừng lại nếu không có cinema_id
       }
     }
   
@@ -133,19 +176,34 @@ const RoleAndUserManagement = () => {
       }else {
         response = await instance.post(`/roles/${userId}/users`, requestPayload);
       }
-      if (response.data.status) {
-        alert('Cập nhật quyền thành công!');
+      if (response.data.message) {
+        notification.success({
+          message: 'Cập nhật quyền thành công!',
+        });
         // Cập nhật vai trò của người dùng trong giao diện
         setUsers((prevUsers) =>
           prevUsers.map((user) =>
-            user.id === userId ? { ...user, roles: selectedRoles } : user
+user.id === userId ? { ...user, roles: selectedRoles } : user
           )
         );
       } else {
-        console.error('Cập nhật quyền thất bại:', response.data.message);
+        notification.error({
+          message: 'Cập nhật quyền thất bại',
+          description: response.data.message,
+        });
       }
     } catch (error) {
-      console.error('Lỗi khi cấp quyền:', error);
+      console.error('Error assigning roles:', error);
+    if (error instanceof Error) {
+      notification.error({
+        message: 'Lỗi khi cấp quyền',
+        description: error.message,
+      });
+    } else {
+      notification.error({
+        message: 'Lỗi không xác định',
+      });
+    }
     }
   };
   
@@ -174,8 +232,10 @@ const RoleAndUserManagement = () => {
         });;
       }
       
-      if (response.data.status) {
-        alert('Cập nhật quyền thành công!');
+      if (response.data) {
+        notification.success({
+          message: 'Cập nhật quyền thành công!',
+        });
       } else {
         console.error('Failed to update permissions:', response.data.message);
       }
@@ -227,7 +287,7 @@ const RoleAndUserManagement = () => {
         </button>
 
         <h3 style={{ marginTop: '20px' }}>Vai trò hiện có</h3>
-        <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
+<table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
           <thead>
             <tr>
               <th style={{ padding: '10px', border: '1px solid #ddd' }}>Tên vai trò</th>
@@ -237,15 +297,15 @@ const RoleAndUserManagement = () => {
           </thead>
           <tbody>
             {roles.map((role) => (
-              <tr key={role.id}>
-                <td style={{ padding: '10px', border: '1px solid #ddd' }}>{role.name}</td>
+              <tr key={role?.id}>
+                <td style={{ padding: '10px', border: '1px solid #ddd' }}>{role?.name}</td>
                 <td style={{ padding: '10px', border: '1px solid #ddd' }}>
                   <select
                     multiple
-                    value={selectedPermissions[role.id] || []}
+                    value={selectedPermissions[role?.id] || []}
                     onChange={(e) =>
                       handlePermissionChange(
-                        role.id,
+                        role?.id,
                         Array.from(e.target.selectedOptions, (option) => option.value)
                       )
                     }
@@ -259,8 +319,8 @@ const RoleAndUserManagement = () => {
                     }}
                   >
                     {permissions.map((permission) => (
-                      <option key={permission.id} value={permission.name}>
-                        {permission.name}
+                      <option key={permission?.id} value={permission?.name}>
+                        {permission?.name}
                       </option>
                     ))}
                   </select>
@@ -301,6 +361,23 @@ const RoleAndUserManagement = () => {
         </table>
       </div>
       <h2>Quản lý người dùng</h2>
+      <div style={{ marginBottom: '20px' }}>
+        <input
+          type="text"
+placeholder="Tìm kiếm theo tên người dùng"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={{
+            width: '100%',
+            padding: '8px',
+            marginBottom: '10px',
+            borderRadius: '5px',
+            border: '1px solid #ccc',
+            backgroundColor: '#f9f9f9',
+            color: '#000',
+          }}
+        />
+      </div>
       <div>
         <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
           <thead>
@@ -310,13 +387,13 @@ const RoleAndUserManagement = () => {
             </tr>
           </thead>
           <tbody>
-  {users.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((user) => (
+          {filteredUsers.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((user) => (
     <tr key={user.id}>
       <td style={{ padding: '10px', border: '1px solid #ddd' }}>{user.user_name}</td>
       <td style={{ padding: '10px', border: '1px solid #ddd' }}>
         <select
           multiple
-          value={user.role_id}  // Giữ trạng thái của các vai trò hiện tại của người dùng
+          value={user?.role_id}  // Giữ trạng thái của các vai trò hiện tại của người dùng
           onChange={(e) => {
             const selectedRoles = Array.from(e.target.selectedOptions, option => option.value);
             handleAssignRoles(user.id, selectedRoles); // Cấp quyền khi chọn vai trò
@@ -331,7 +408,7 @@ const RoleAndUserManagement = () => {
           }}
         >
           {roles.map((role) => (
-            <option key={role.id} value={role.name}>{role.name}</option>
+            <option key={role?.id} value={role?.name}>{role?.name}</option>
           ))}
         </select>
       </td>

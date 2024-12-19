@@ -40,6 +40,7 @@ const MovieStatistics = () => {
   const [dateRange, setDateRange] = useState<[string, string]>(["", ""]);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(7);
+  const [movieName, setMovieName] = useState<string>(""); // State for movie name
   const [userRole, setUserRole] = useState<string>("");
 
   // Fetch user role from localStorage
@@ -74,6 +75,7 @@ const MovieStatistics = () => {
           } else {
             response = await instance.get("/dashboard/Movie",{params});
           }
+          setMovieName(response.data.movie_name);
           setMovieData(response.data.day_chart_movie); // Dữ liệu từ API
           setDashboardData(response.data.movie_dashboarch); 
           setCinemaChartData(response.data.cinema_movie_chart); 
@@ -105,7 +107,8 @@ const MovieStatistics = () => {
     maintainAspectRatio: false,
     plugins: {
         legend: { position: "top" as const }, 
-      title: { display: true, text: "Doanh Thu Của Phim Theo Ngày" },
+      title: {  display: true, 
+        text: movieName ? `Phim ${movieName} ` : "Doanh Thu Của Phim Theo Ngày" },
     },
     scales: {
       x: {
@@ -121,7 +124,8 @@ const MovieStatistics = () => {
     maintainAspectRatio: false,
     plugins: {
         legend: { position: "top" as const },
-      title: { display: true, text: "Doanh Thu Của Rạp Theo Phim" },
+      title: { display: true, 
+        text: movieName ? `Phim ${movieName} ` : "Doanh Thu Của Rạp Theo Phim"  },
     },
     scales: {
       x: {

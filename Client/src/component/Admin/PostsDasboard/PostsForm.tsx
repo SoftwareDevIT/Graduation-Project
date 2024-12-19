@@ -13,7 +13,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 // Define the Zod schema for validation
 const postSchema = z.object({
   title: z.string().min(1, 'Tiêu đề là bắt buộc').max(100,'Tiêu đề tối đa 100 ký tự'), // Title is required
-  news_category_id: z.number().min(1, 'Chọn một danh mục'), // Category is required
+  news_category_id: z.number({ invalid_type_error: "Vui lòng chọn danh mục" }).min(1, 'Chọn một danh mục'), // Category is required
   content: z.string().min(1, 'Nội dung là bắt buộc').max(10000,'Nội dung tối đa 10000 ký tự'), // Content is required
 });
 
@@ -42,7 +42,7 @@ const PostsForm: React.FC = () => {
         if (id) {
           const postResponse = await instance.get(`/manager/news/${id}`);
           const postData = postResponse.data.data;
-          console.log(postData);
+          // console.log(postData);
 
           // Set old images if available
           setOldThumbnail(postData.thumnail);
@@ -184,9 +184,8 @@ const PostsForm: React.FC = () => {
               setValue('content', data); // Use setValue to update content
             }}
           />
-          {errors.content && <span className="text-danger">{errors.content.message}</span>}
+           {errors.content && <span className="text-danger">{errors.content.message}</span>}
         </div>
-
         <button type="submit" className="btn btn-primary w-20">
           {id ? 'Cập nhật bài viết' : 'Thêm bài viết'}
         </button>

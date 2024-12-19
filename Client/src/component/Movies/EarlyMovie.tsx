@@ -7,6 +7,8 @@ import { Modal } from 'antd';
 import { Link } from 'react-router-dom';
 import { stripHtml } from '../../assets/Font/quillConfig';
 import MovieBanner from '../Banner/MovieBanner';
+import Skeleton from 'react-loading-skeleton';  // Import skeleton loader
+import 'react-loading-skeleton/dist/skeleton.css';  // Import skeleton CSS
 
 const EarlyMovie: React.FC = () => {
   const [movies, setMovies] = useState<any[]>([]);
@@ -46,9 +48,14 @@ const EarlyMovie: React.FC = () => {
             Danh sách các phim hiện đang chiếu rạp trên toàn quốc. Xem lịch chiếu phim, giá vé tiện lợi, đặt vé nhanh chỉ với 1 bước!
           </p>
         </div>
+        
         {/* Kiểm tra trạng thái loading */}
         {loading ? (
-          <p className="loading-message">Đang tải danh sách phim...</p>
+          <div className="loading-content">
+            <Skeleton height={300} width={200} />
+            <Skeleton height={20} width={150} />
+            <Skeleton height={50} count={3} />
+          </div>
         ) : (
           <>
             {/* Kiểm tra nếu movies rỗng */}
@@ -98,11 +105,12 @@ const EarlyMovie: React.FC = () => {
           </>
         )}
       </div>
+
       {/* Modal hiển thị Trailer */}
       {selectedMovie && (
         <Modal
           title={selectedMovie.movie.movie_name || "Trailer"} // Tiêu đề modal là tên phim
-          visible={isTrailerVisible}
+          open={isTrailerVisible}
           onCancel={() => setIsTrailerVisible(false)} // Đóng modal khi nhấn ngoài modal
           footer={null}
           centered
@@ -119,6 +127,7 @@ const EarlyMovie: React.FC = () => {
           ></iframe>
         </Modal>
       )}
+
       <Footer />
     </>
   );

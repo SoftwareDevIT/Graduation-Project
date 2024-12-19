@@ -23,6 +23,8 @@ import {
   FaBullhorn,
   FaPlayCircle,
   FaBuilding,
+  FaUserTie,
+  FaVideo,
 } from "react-icons/fa";
 import "./Sidebar.css";
 
@@ -33,7 +35,7 @@ const Sidebar: React.FC = () => {
     // Lấy thông tin từ localStorage
     const userData = JSON.parse(localStorage.getItem("user_profile") || "{}");
     const roles = userData.roles || [];
-   
+
     // Lấy vai trò đầu tiên (nếu có)
     if (roles.length > 0) {
       setUserRole(roles[0].name); // Gán vai trò (ví dụ: "staff", "admin")
@@ -62,7 +64,7 @@ const Sidebar: React.FC = () => {
           </Link>
         </div>
         <ul>
-          {(userRole === "manager" || userRole === "admin")  && (
+          {(userRole === "manager" || userRole === "admin") && (
             <>
               <li>
                 <NavLink
@@ -75,7 +77,7 @@ const Sidebar: React.FC = () => {
               </li>
             </>
           )}
-          {(userRole === "manager" || userRole === "admin")  && (
+          {(userRole === "manager" || userRole === "admin") && (
             <li>
               <span onClick={() => toggleMenu("cinema")}>
                 <FaBuilding style={{ marginRight: "-80px" }} /> Hệ thống rạp{" "}
@@ -91,15 +93,18 @@ const Sidebar: React.FC = () => {
                     <FaTheaterMasks /> Quản lí rạp chiếu phim
                   </NavLink>
                 </li>
+                {(userRole === "manager") && (
                 <li>
                   <NavLink
                     to={"/admin/rooms"}
                     onClick={handleLinkClick}
-className={({ isActive }) => (isActive ? "active" : "")}
+                    className={({ isActive }) => (isActive ? "active" : "")}
                   >
                     <FaIndustry /> Quản lí phòng rạp
                   </NavLink>
                 </li>
+                )}
+                {(userRole === "manager") && (
                 <li>
                   <NavLink
                     to={"/admin/seat-maps"}
@@ -110,6 +115,8 @@ className={({ isActive }) => (isActive ? "active" : "")}
                     Sơ đồ ghế
                   </NavLink>
                 </li>
+                )}
+                {(userRole === "admin")  && (
                 <li>
                   <NavLink
                     to={"/admin/rank"}
@@ -120,6 +127,7 @@ className={({ isActive }) => (isActive ? "active" : "")}
                     Quản lí hạng
                   </NavLink>
                 </li>
+                )}
               </ul>
             </li>
           )}
@@ -148,11 +156,19 @@ className={({ isActive }) => (isActive ? "active" : "")}
                     <FaCalendarAlt /> Quản lí xuất chiếu
                   </NavLink>
                 </li>
+                <li>
+                <NavLink to={'/admin/actor'} className={({ isActive }) => (isActive ? 'active' : '')}>
+                <FaUserTie /> Quản lí diễn viên</NavLink>
+                </li>
+                <li>
+                <NavLink to={'/admin/director'} className={({ isActive }) => (isActive ? 'active' : '')}>
+                <FaVideo/> Quản lí đạo diễn</NavLink>
+                </li>
               </ul>
             </li>
           )}
           <li>
-            {(userRole === "manager" || userRole === "staff") && (
+            {(userRole === "manager" || userRole === "staff" || userRole === "admin") && (
               <span onClick={() => toggleMenu("services")}>
                 <FaGift style={{ marginRight: "-50px" }} /> Dịch vụ và ưu đãi{" "}
                 {openMenu["services"] ? <FaChevronDown /> : <FaChevronRight />}
@@ -160,7 +176,7 @@ className={({ isActive }) => (isActive ? "active" : "")}
             )}
             <ul className={openMenu["services"] ? "submenu open" : "submenu"}>
               {/* Nếu userRole là "staff", chỉ hiển thị mục Quản lý đơn hàng */}
-              {userRole == "staff || manager" && (
+              {(userRole === "manager" || userRole === "staff") && (
                 <li>
                   <NavLink
                     to={"/admin/orders"}
@@ -171,9 +187,8 @@ className={({ isActive }) => (isActive ? "active" : "")}
                   </NavLink>
                 </li>
               )}
-{/* Nếu không phải staff, hiển thị các mục khác */}
-              {userRole == "manager" && (
-                <>
+              <>
+                {(userRole === "manager") && (
                   <li>
                     <NavLink
                       to={"/admin/combo"}
@@ -183,6 +198,8 @@ className={({ isActive }) => (isActive ? "active" : "")}
                       <FaCogs /> Quản lí combo nước
                     </NavLink>
                   </li>
+                )}
+                {(userRole === "manager") && (
                   <li>
                     <NavLink
                       to={"/admin/promotions"}
@@ -192,6 +209,8 @@ className={({ isActive }) => (isActive ? "active" : "")}
                       <FaTicketAlt /> Mã giảm giá
                     </NavLink>
                   </li>
+                )}
+                {userRole === "admin" && (
                   <li>
                     <NavLink
                       to={"/admin/method"}
@@ -201,8 +220,8 @@ className={({ isActive }) => (isActive ? "active" : "")}
                       <FaCreditCard /> Phương thức thanh toán
                     </NavLink>
                   </li>
-                </>
-              )}
+                )}
+              </>
             </ul>
           </li>
 
@@ -225,21 +244,21 @@ className={({ isActive }) => (isActive ? "active" : "")}
               </ul>
             </li>
           )}
-          {(userRole === "manager" || userRole === "admin")  && (
-         
-              <li>
-                <NavLink to="/admin/user">
-                  <FaUserShield /> Quản lý người dùng
-                </NavLink>
-              </li>
-            )}
-              {( userRole === "admin")  && (
-              <li>
-                <NavLink to="/admin/website-settings">
-                  <FaCogs /> Cấu hình website
-                </NavLink>
-              </li>
-     
+          {(userRole === "manager" || userRole === "admin") && (
+
+            <li>
+              <NavLink to="/admin/user">
+                <FaUserShield /> Quản lý người dùng
+              </NavLink>
+            </li>
+          )}
+          {(userRole === "admin") && (
+            <li>
+              <NavLink to="/admin/website-settings">
+                <FaCogs /> Cấu hình website
+              </NavLink>
+            </li>
+
           )}
         </ul>
       </div>

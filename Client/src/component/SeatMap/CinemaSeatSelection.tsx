@@ -23,6 +23,8 @@ interface Showtime {
     room_name: string;
     cinema: Cinema;
     seat_map: SeatMap;
+    cinema_id:string;
+
   };
   showtime_date: string;
   showtime_start: string;
@@ -55,60 +57,6 @@ const CinemaSeatSelection: React.FC = () => {
   const [error, setError] = useState("");
 
   const [echoInstance, setEchoInstance] = useState<Echo<"pusher"> | null>(null);
-
-
-
-
-
-
-  const setupRealtime2 = async () => {
-    try {
-      const echo = await initializeEcho();
-      console.log("kết nối thành công ", echo);
-      const userId = localStorage.getItem("user_id");
-   
-      if (!userId) {
-        console.error("User ID is not available in local storage.");
-        return;
-      }
-   
-      if (echo) {
-        const channel = echo.private(`seats-${userId}`);  // Kênh cho userId
-        console.log("ok:", channel);
-   
-        // Lắng nghe sự kiện SeatReset
-        channel.listen("SeatReset", (eventData: any) => {
-          console.log("Realtime data received:", eventData);  // Kiểm tra log xem sự kiện có đến không
-   
-          const { seats, message } = eventData;
-   
-          // Gọi hàm hiển thị modal khi nhận sự kiện
-          showModal({
-            title: "Thông báo",
-            content: `${message}. Ghế bị reset: ${seats.join(", ")}`,
-          });
-        });
-      }
-    } catch (error) {
-      console.error("Failed to setup realtime connection:", error);
-    }
-  };
-  
-
-  // Hàm hiển thị modal
-  const showModal = ({ title, content }: { title: string; content: string }) => {
-    Modal.info({
-      title: title,
-      content: (
-        <div>
-          <p>{content}</p>  {/* Nội dung thông báo */}
-        </div>
-      ),
-      onOk() {
-        console.log("Modal closed.");
-      },
-    });
-  };
 
   useEffect(() => {
     const fetchRoomAndSeats = async () => {
@@ -160,7 +108,7 @@ const CinemaSeatSelection: React.FC = () => {
     const setupRealtime = async (roomId: string) => {
       try {
         const echo = await initializeEcho();
-        console.log("Connected to Pusher!", echo);
+        // console.log("Connected to Pusher!", echo);
         if (!roomId) {
           console.error("Room ID is missing!");
           return;
@@ -171,7 +119,7 @@ const CinemaSeatSelection: React.FC = () => {
         }
         if (echo) {
           const channel = echo.private(`seats-${roomId}`); // Dùng roomId đã truyền vào
-          console.log("Connected to channel:", channel);
+          // console.log("Connected to channel:", channel);
   
           // Lắng nghe sự kiện SeatSelected
           channel.listen("SeatSelected", (eventData: any) => {
@@ -187,7 +135,7 @@ const CinemaSeatSelection: React.FC = () => {
   
     fetchRoomAndSeats()
       .then((roomId) => {
-        console.log("Fetched roomId:", roomId);
+        // console.log("Fetched roomId:", roomId);
         if (roomId && !echoInstance) {
           setupRealtime(roomId); // Truyền roomId vào hàm setupRealtime
         }
@@ -195,12 +143,6 @@ const CinemaSeatSelection: React.FC = () => {
       .catch((error) => {
         console.error("Error initializing data", error);
       });
-      
-      const initializeRealtime = async () => {
-        await setupRealtime2();  
-      };
-  
-      initializeRealtime();
     
     return () => {
       if (echoInstance) {
@@ -444,46 +386,52 @@ const CinemaSeatSelection: React.FC = () => {
       } else {
         console.error("Error: API call successful but status is not 200");
       }
-    } catch (error: any) {
-      if (error.response) {
-        // Kiểm tra mã lỗi
-        if (error.response.status === 401) {
-          message.warning("Vui lòng đăng nhập để tiếp tục.");
-          navigate("/login"); // Chuyển đến trang đăng nhập
-        } else if (error.response.status === 402) {
-          const backendMessage = error.response.data?.message;
-          const missingSeat = error.response.data?.data?.missing_seats;
-
-          if (
-            backendMessage ===
-              "Please select consecutive seats without gaps." ||
-            "Please select consecutive seats up to the last seat of the row."
-          ) {
-            Modal.error({
-              title: "Lỗi chọn ghế",
-              content: `Vui lòng không để trống ghế ${
-                missingSeat || "Không xác định"
-              }`,
-              icon: null,
-              className: "custom-error-modal",
-            });
-          }
-        } else if (error.response.status === 400) {
+      }  catch (error: any) {
+        if (error.response) {
+          // Lấy thông báo lỗi từ backend
+          const backendMessage = error.response.data?.message || "Đã xảy ra lỗi không xác định.";
+      
+          // Kiểm tra các mã lỗi cụ thể nếu cần
+          if (error.response.status === 401) {
+            message.warning("Vui lòng đăng nhập để tiếp tục.");
+            navigate("/login"); // Chuyển đến trang đăng nhập
+          } else if (error.response.status === 402) {
+            const missingSeat = error.response.data?.data?.missing_seats;
+      
+            // Nếu thông báo lỗi liên quan đến ghế
+            if (
+              backendMessage ===
+                "Please select consecutive seats without gaps." ||
+              backendMessage === "Please select consecutive seats up to the last seat of the row."
+            ) {
+              Modal.error({
+                title: "Lỗi chọn ghế",
+                content: `Vui lòng không để trống ghế ${
+                  missingSeat || "Không xác định"
+                }`,
+                icon: null,
+                className: "custom-error-modal",
+              });
+              return; // Dừng ở đây để không hiển thị modal mặc định
+            }
+          } 
+      
+          // Hiển thị thông báo lỗi mặc định từ backend
           Modal.error({
-            title: "Ghế đã được đặt",
-            content: "Ghế của bạn đã được chọn trước vui lòng chọn ghế khác ",
+            title: "Lỗi",
+            content: backendMessage, // Sử dụng thông báo từ backend
             icon: null,
             className: "custom-error-modal",
           });
+        } else {
+          // Trường hợp không có phản hồi từ server
+          Modal.error({
+            title: "Lỗi kết nối",
+            content: "Không thể kết nối tới máy chủ, vui lòng kiểm tra lại kết nối.",
+          });
         }
-      } else {
-        Modal.error({
-          title: "Lỗi kết nối",
-          content:
-            "Không thể kết nối tới máy chủ, vui lòng kiểm tra lại kết nối.",
-        });
       }
-    }
+      
   };
 
   if (loading) {

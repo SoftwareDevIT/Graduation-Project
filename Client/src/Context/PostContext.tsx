@@ -37,6 +37,15 @@ const postReducer = (state: PostState, action: PostAction): PostState => {
           post.id === action.payload.id ? { ...post, ...action.payload } : post
         ),
       };
+      case 'UPDATE_POST_STATUS':
+        return {
+          ...state,
+          posts: state.posts.map((posts) =>
+            posts.id === action.payload.id
+              ? { ...posts, status: action.payload.status }
+              : posts
+          ),
+        };
     default:
       return state;
   }
@@ -59,13 +68,7 @@ export const PostProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   }, []);
   const fetchPosts = async () => {
     try {
-      let response;
-      if (userRole === "manager") {
-        response = await instance.get('/manager/news');
-      } else {
-        response = await instance.get('/news');
-      }
-      
+      const response = await instance.get('/manager/news'); // Ensure this endpoint is correct
       dispatch({ type: 'SET_POSTS', payload: response.data.data });
     } catch (error) {
       console.error('Error fetching posts:', error);
@@ -137,6 +140,7 @@ export const PostProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       console.error('Error deleting post:', error);
     }
   };
+  
 
   // Gọi fetchPosts khi provider mount
   React.useEffect(() => {

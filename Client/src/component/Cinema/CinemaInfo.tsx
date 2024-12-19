@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import instance from '../../server';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Footer from '../Footer/Footer';
 import Header from '../Header/Hearder';
 import './CinemaInfo.css';
@@ -12,6 +12,7 @@ const ThongTinRap = () => {
   const [movies, setMovies] = useState<any[]>([]); // Store movies data
   const [cinema, setCinema] = useState<any>(null); // Store cinema data
 
+    const navigate = useNavigate();
   const { cinemaId } = useParams();
 
   useEffect(() => {
@@ -27,7 +28,7 @@ const ThongTinRap = () => {
 
         // Extract cinema and movies
         const cinemaData = response.data?.cinema?.[0];
-        console.log(response.data?.cinema)
+        // console.log(response.data?.cinema)
         const moviesData = response.data?.data;
 
         setCinema(cinemaData);
@@ -65,7 +66,7 @@ const ThongTinRap = () => {
           <>
             <div className="rap-header">
               <img
-                src={cinema.image || 'https://via.placeholder.com/60'}
+                src='../../../public/logo.jpg'
                 alt="Cinema Logo"
                 className="rap-logo"
               />
@@ -133,7 +134,16 @@ const ThongTinRap = () => {
                       <div key={i} className="thoi-gian-item">
                      
                      <span className="gio"> {showtime.showtime_start.substring(0, 5)}</span>
-                        <span className="gia">{showtime.price / 1000}K</span>
+                        <span className="gia"  onClick={() =>
+                                navigate("/seat", {
+                                  state: {
+                                    movieName: movie.movie_name,
+                                    showtime: showtime.showtime_start,
+                                    showtimeId: showtime.id,
+                                    price: showtime.price,
+                                  },
+                                })
+                              }>{showtime.price / 1000}K</span>
                       </div>
                     ))}
                   </div>

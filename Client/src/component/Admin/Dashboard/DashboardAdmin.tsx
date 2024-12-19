@@ -151,7 +151,7 @@ useEffect(() => {
       //   }
       // });
 
-      console.log("API response:", dashboardResponse.data);
+      // console.log("API response:", dashboardResponse.data);
       
 
 

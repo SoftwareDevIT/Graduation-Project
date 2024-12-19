@@ -8,6 +8,7 @@ import { SeatMap } from "./SeatMapp";
 
 export interface Showtime {
     movie: Movie; 
+    
     id: number;
     movie_id: number;
     cinema_id: number;
@@ -23,7 +24,7 @@ export interface Showtime {
     price: number;
     room_id:number;
     room : Room;
-    showtime_id:string;
+    showtime_id:number;
     
    
     

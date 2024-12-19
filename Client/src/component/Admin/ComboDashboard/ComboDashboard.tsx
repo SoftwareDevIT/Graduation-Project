@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { EditOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons'; // Ant Design icons
 import { notification, Table, Pagination, Input, Button, Popconfirm, Switch } from 'antd'; // Import Ant Design components
-import { useComboContext } from '../../../Context/ComboContext';
+
 import instance from '../../../server';
 
 
 const ComboDashboard: React.FC = () => {
-    const { state, deleteCombo } = useComboContext();
+    const { state, deleteCombo, dispatch } = useComboContext();
     const { combos } = state;
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [searchTerm, setSearchTerm] = useState<string>('');
@@ -16,7 +16,7 @@ const ComboDashboard: React.FC = () => {
 
 
 
-    const filteredCombos = combos.filter(combo =>
+    const filteredCombos = combos.filter((combo:any) =>
         combo.combo_name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
@@ -48,11 +48,16 @@ const ComboDashboard: React.FC = () => {
             const response = await instance.post(`/manager/comboStatus/${id}`, {
                 status: !currentStatus, // Đảo ngược trạng thái hiện tại
             });
-    
             if (response.status === 200) {
                 notification.success({
                     message: 'Thành Công',
-                    description: `Trạng thái combo đã được cập nhật thành công!`,
+                    description: 'Trạng thái combo đã được cập nhật thành công!',
+                });
+    
+                // Cập nhật trạng thái trong state hoặc context
+                dispatch({
+                    type: 'UPDATE_COMBO_STATUS',
+                    payload: { id, status: !currentStatus },
                 });
             } else {
                 throw new Error('Cập nhật thất bại');
@@ -64,6 +69,7 @@ const ComboDashboard: React.FC = () => {
             });
         }
     };
+    
     
     const columns = [
         {
@@ -111,10 +117,10 @@ const ComboDashboard: React.FC = () => {
             render: (combo: any) => (
                 <div style={{ textAlign: 'center' }}>
                     <Switch
-                        checked={combo.status} // Trạng thái hiện tại của combo
+                        checked={combo.status ===1} // Trạng thái hiện tại của combo
                         checkedChildren="On"
                         unCheckedChildren="Off"
-                        onChange={() => handleStatusChange(combo.id, combo.status)}
+                        onChange={() => handleStatusChange(combo.id, combo.status===1)}
                     />
                 </div>
             ),
@@ -189,3 +195,7 @@ const ComboDashboard: React.FC = () => {
 };
 
 export default ComboDashboard;
+function useComboContext(): { state: any; deleteCombo: any; dispatch: any; } {
+    throw new Error('Function not implemented.');
+}
+

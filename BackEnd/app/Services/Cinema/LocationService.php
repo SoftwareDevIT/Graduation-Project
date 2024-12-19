@@ -16,8 +16,7 @@ class LocationService
 
     public function index(): Collection
     {
-
-        return Location::orderByDesc('created_at')->get();
+        return Location::withCount('cinema')->orderByDesc('created_at')->get();
     }
 
 
