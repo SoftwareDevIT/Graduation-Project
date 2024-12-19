@@ -74,14 +74,9 @@ export const ComboProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   }, []);
 const fetchCombos = async () => {
-
  
   try {
     if (userRole === "manager") {
-
-  if (userRole === "manager") {
-  try {
-
     const { data } = await instance.get('/manager/combo', {
     });
     dispatch({ type: 'SET_COMBOS', payload: data.data });
@@ -89,8 +84,6 @@ const fetchCombos = async () => {
   } catch (error) {
     console.error('Failed to fetch combos:', error);
   }
-
-}
 
 };
 
@@ -104,8 +97,7 @@ const fetchCombos = async () => {
       console.error('Failed to add combo:', error);
     }
   };
-
-  const updateCombo = async (id: number, combo: Combo) => {
+const updateCombo = async (id: number, combo: Combo) => {
 try {
       const { data } = await instance.put(`/manager/combo/${id}`, combo);
       dispatch({ type: 'UPDATE_COMBO', payload: data.data });
