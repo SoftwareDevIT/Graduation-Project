@@ -6,6 +6,7 @@ import { formatDistanceToNow } from 'date-fns'; // Add date-fns library
 import { useUserContext } from '../../Context/UserContext'; // Import the context
 import Header from '../Header/Hearder';
 import { Link } from 'react-router-dom';
+import { vi } from 'date-fns/locale'; // Import ngôn ngữ tiếng Việt
 
 const Personal: React.FC = () => {
   const { userProfile, avatar, setUserProfile, handleUpdateProfile, handleAvatarUpload } = useUserContext();
@@ -21,9 +22,8 @@ const Personal: React.FC = () => {
 
       // Add favorite movie activities to the activity list
       const newActivities = movies.map((movie: Movie) => {
-        const timeAgo = formatDistanceToNow(new Date(movie.updated_at), { addSuffix: true });
+        const timeAgo = formatDistanceToNow(new Date(movie.updated_at), { addSuffix: true, locale: vi }); // Thêm locale tiếng Việt
         return `${userProfile.user_name} đã yêu thích phim: ${movie.movie_name} - ${timeAgo}`;
-
       });
       setActivities(newActivities);
       setVisibleActivities(newActivities.slice(0, 3)); // Display the first 3 activities
@@ -68,7 +68,7 @@ const Personal: React.FC = () => {
                       <div className="item-phim " key={movie.id}>
                        <div className="img">
            <Link to={`/movie-detail/${movie.slug}`}> <img src={movie.poster || undefined} alt={movie.movie_name} /></Link>
-          </div>
+</div>
                         <div className="movie-title">
             <h5>{movie.movie_name}</h5>
           </div>

@@ -329,7 +329,8 @@ labels: monthlyLabels,
                 allowClear
                 value={selectedCinema}
                 onChange={(value) => setSelectedCinema(value)}
-                style={{ width: 700}}
+                style={{ width: 670}}
+                disabled={userRole === "manager"}
               >
                 <Option value="">Tất cả</Option>
                 {cinemas.map((cinema) => (
@@ -364,7 +365,7 @@ labels: monthlyLabels,
               <DatePicker
 placeholder="Chọn ngày"
                 format="YYYY-MM-DD"
-                value={selectedDate}
+                value={selectedDate || dayjs()}
                 onChange={(date) => setSelectedDate(date)}
                 style={{ width: 160 }}
               />
@@ -394,7 +395,7 @@ placeholder="Chọn ngày"
 
   <div className="summary-card">
     <div className="summary-card-header">
-      <h3 >Doanh Thu (Tháng:{selectedDate ? selectedDate.format('MM') : ''}) </h3>
+      <h3 >Doanh Thu (Tháng:{selectedDate ? selectedDate.format('MM') : dayjs().format('MM')}) </h3>
       <div className="summary-filter3">
      
       </div>
@@ -423,7 +424,7 @@ placeholder="Chọn ngày"
 
   <div className="summary-card">
     <div className="summary-card-header">
-      <h3>Doanh Thu (Năm:{selectedDate ? selectedDate.format('YYYY') : ''})</h3>
+      <h3>Doanh Thu (Năm:{selectedDate ? selectedDate.format('YYYY') : dayjs().format('YYYY')})</h3>
       <div className="summary-filter1">
       </div>
     </div>

@@ -5,14 +5,14 @@ import Footer from "../Footer/Footer";
 import Headerticket from "../Headerticket/Headerticket";
 import "./CinemaSeatSelection.css";
 import instance from "../../server";
-import { message, notification, Spin } from "antd";
+import { Button, message, notification, Spin } from "antd";
 import { Modal } from "antd";
 import { Movie } from "../../interface/Movie";
 import initializeEcho from "../../server/realtime";
 import Echo from "laravel-echo";
 import { Cinema } from "../../interface/Cinema";
 import { SeatMap } from "../../interface/SeatMapp";
-import AgeWarningModal from "./AgeWarningModal";
+
 
 interface Showtime {
   id: number;
@@ -58,7 +58,15 @@ const CinemaSeatSelection: React.FC = () => {
   const [error, setError] = useState("");
 
   const [echoInstance, setEchoInstance] = useState<Echo<"pusher"> | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(true);
 
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  useEffect(() => {
+    setIsModalOpen(true);
+  }, []);
   useEffect(() => {
     const fetchRoomAndSeats = async () => {
       try {
@@ -265,7 +273,7 @@ const CinemaSeatSelection: React.FC = () => {
       if (selectedSeatsCount >= 8) {
         Modal.warning({
           title: "Chỉ cho phép đặt tối đa 8 ghế trong 1 lần đặt vé.",
-          content: "Vui lòng chọn lại, bạn chỉ có thể chọn tối đa 8 ghế.",
+          content: "Vui lòng chọn lại, bạn chỉ có thể chọn tối đa 8 ghế .",
           onOk() { },
         });
         return; // Không cho phép chọn thêm ghế
@@ -397,37 +405,37 @@ const CinemaSeatSelection: React.FC = () => {
       }
     } catch (error: any) {
       if (error.response) {
-        // Lấy thông báo lỗi từ backend
-        const backendMessage = error.response.data?.message || "Đã xảy ra lỗi không xác định.";
+        // Lấy thông tin từ phản hồi lỗi của backend
+        const { data, status } = error.response;
+        const backendMessage = data?.message || "Đã xảy ra lỗi không xác định.";
+        const missingSeats = data?.data?.missing_seats?.join(",") || "Không xác định";
 
-        // Kiểm tra các mã lỗi cụ thể nếu cần
-        if (error.response.status === 401) {
+        // Xử lý từng mã lỗi cụ thể
+        if (status === 401) {
           message.warning("Vui lòng đăng nhập để tiếp tục.");
-          navigate("/login"); // Chuyển đến trang đăng nhập
-        } else if (error.response.status === 402) {
-          const missingSeat = error.response.data?.data?.missing_seats;
-
-          // Nếu thông báo lỗi liên quan đến ghế
+          navigate("/login"); // Chuyển hướng tới trang đăng nhập
+        } else if (status === 402) {
+          // Kiểm tra lỗi liên quan đến ghế
           if (
             backendMessage ===
             "Please select consecutive seats without gaps." ||
-            backendMessage === "Please select consecutive seats up to the last seat of the row."
+            backendMessage ===
+            "Please select consecutive seats up to the last seat of the row."
           ) {
             Modal.error({
               title: "Lỗi chọn ghế",
-              content: `Vui lòng không để trống ghế ${missingSeat || "Không xác định"
-                }`,
+              content: `Vui lòng không để trống ghế: ${missingSeats}.`,
               icon: null,
               className: "custom-error-modal",
             });
-            return; // Dừng ở đây để không hiển thị modal mặc định
+            return; // Ngăn hiển thị modal lỗi mặc định
           }
         }
 
-        // Hiển thị thông báo lỗi mặc định từ backend
+        // Hiển thị modal lỗi mặc định cho các trường hợp khác
         Modal.error({
           title: "Lỗi",
-          content: backendMessage, // Sử dụng thông báo từ backend
+          content: `Vui lòng không để trống ghế: ${missingSeats}.` || backendMessage, // Thông báo từ backend
           icon: null,
           className: "custom-error-modal",
         });
@@ -439,6 +447,7 @@ const CinemaSeatSelection: React.FC = () => {
         });
       }
     }
+
 
   };
 
@@ -467,7 +476,7 @@ const CinemaSeatSelection: React.FC = () => {
     <>
       <Header />
       <Headerticket />
-      <AgeWarningModal />
+
       <div className="box-map">
         <div className="container container-map">
           <div className="seat-info-box">
@@ -488,7 +497,7 @@ const CinemaSeatSelection: React.FC = () => {
                       position: "relative",
                       display: "flex",
                       flexDirection: "column",
-                      right: "64px",
+                      right: "150px",
                     }}
                   >
                     {rows.map((row) => (
@@ -565,19 +574,17 @@ const CinemaSeatSelection: React.FC = () => {
                                 style={{
                                   width: "30px",
                                   height: "30px",
-                                  background: isDisabled
-                                    ? "repeating-linear-gradient(45deg, hsla(0, 0%, 60%, .4), hsla(0, 0%, 60%, .4) 10px, hsla(0, 0%, 60%, .6) 0, hsla(0, 0%, 60%, .6) 20px)"
-                                    : isSelected
-                                      ? "#00bfff" // Ghế đang chọn
-                                      : isReserved
-                                        ? "#999999" // Ghế đã đặt
-                                        : seatType === "VIP"
-                                          ? "gold" // Ghế VIP
-                                          : seatType === "Couple"
-                                            ? "linear-gradient(45deg, gray 50%, rgb(56, 53, 53) 50%)" // Ghế đôi
-                                            : isSeatEmpty
-                                              ? "white"
-                                              : "lightgray", // Ghế thông thường
+                                  background: isSelected
+                                    ? "#00bfff" // Ghế đang chọn
+                                    : isReserved
+                                      ? "#999999" // Ghế đã đặt
+                                      : seatType === "VIP"
+                                        ? "gold" // Ghế VIP
+                                        : seatType === "Couple"
+                                          ? "linear-gradient(45deg, gray 50%, rgb(56, 53, 53) 50%)" // Ghế đôi
+                                          : isSeatEmpty
+                                            ? "white"
+                                            : "lightgray", // Ghế thông thường
                                   display: "flex",
                                   justifyContent: "center",
                                   alignItems: "center",
@@ -681,6 +688,25 @@ const CinemaSeatSelection: React.FC = () => {
           </div>
         </div>
       </div>
+      <Modal
+        open={isModalOpen}
+        onOk={handleOk}
+        footer={[
+          <Button key="ok" type="primary" className="modal-button" onClick={handleOk}>
+            Tôi đã hiểu và đồng ý
+          </Button>,
+
+        ]}
+        className="custom-modal"
+        closable={false}
+      >
+        <p className="modal-text">
+          Theo quy định của cục điện ảnh, phim không dành cho khán giả{' '}
+          <strong>dưới {showtimeData?.movie.age_limit
+            ? showtimeData.movie.age_limit.toString().slice(1, 3)
+            : "N/A"} tuổi</strong>. Hãy cân nhắc trước khi tiếp tục.
+        </p>
+      </Modal>
       <Footer />
     </>
   );

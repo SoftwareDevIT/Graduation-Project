@@ -96,16 +96,14 @@ class Showtime extends Model
             }
         });
     }
+
+    public static function calculateShowtimesEnd($showtimeStart, $duration)
+    {
+        // Tính toán thời gian kết thúc dựa trên thời gian bắt đầu và thời lượng phim
+        return date('H:i:s', strtotime($showtimeStart) + ($duration * 60));
+    }
     public function cinema()
     {
         return $this->belongsTo(Cinema::class);
     }
-
-
-
-    public static function calculateShowtimesEnd($showtimeStart, $duration)
-{
-    // Tính toán thời gian kết thúc dựa trên thời gian bắt đầu và thời lượng phim
-    return date('H:i:s', strtotime($showtimeStart) + ($duration * 60));
-}
 }

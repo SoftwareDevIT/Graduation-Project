@@ -23,7 +23,7 @@ const showtimeSchema = z.object({
         ),
     opening_time: z.string().nonempty({ message: "Thời gian mở cửa không được để trống." }),
     closing_time: z.string().nonempty({ message: "Thời gian đóng cửa không được để trống." }),
-    price: z.number({ invalid_type_error: "Vui lòng nhập giá tiền." }).min(1, { message: "Giá phải lớn hơn 0." }).min(10000,'Giá tối thiểu là 10,000 VNĐ').max(500000,{message:"Giá tối đa 500,000 VNĐ"}),
+    price: z.number({ invalid_type_error: "Vui lòng nhập giá tiền." }).min(1, { message: "Giá phải lớn hơn 0." }).min(10000, 'Giá tối thiểu là 10,000 VNĐ').max(500000, { message: "Giá tối đa 500,000 VNĐ" }),
 });
 
 type FormData = z.infer<typeof showtimeSchema>;
@@ -75,7 +75,7 @@ const ShowtimeAuto = () => {
             console.error("Lỗi khi thêm showtime:", error);
             notification.error({
                 message: "Lỗi khi thêm Showtime",
-                description: "Có lỗi xảy ra khi thêm Showtime, vui lòng thử lại.",
+                description: "Suất chiếu bị trùng",
             });
         }
     };
