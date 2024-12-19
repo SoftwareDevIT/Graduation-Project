@@ -98,13 +98,13 @@ class BookingStaffController extends Controller
         if ($user) {
             return response()->json([
                 'status' => true,
-                'message' => 'User found.',
+                'message' => 'success.',
                 'user' => $user
             ]);
         } else {
             return response()->json([
                 'status' => false,
-                'message' => 'User not found.'
+                'message' => 'Không tìm thấy người dùng.'
             ]);
         }
     }

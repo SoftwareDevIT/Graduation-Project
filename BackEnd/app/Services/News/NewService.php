@@ -30,7 +30,8 @@ class NewService
     public function index(): Collection
     {
         $query = News::with(['user', 'newsCategory'])->orderByDesc('created_at');
-        return $this->filterByCinema($query)->get();
+        $post = $this->filterByCinema($query);
+        return $post->get();
     }
 
     public function store(array $data): News
@@ -58,7 +59,7 @@ class NewService
 
     public function show($identifier): News
     {
-        $query = News::with(['newsCategory', 'movie', 'user'])
+        $query = News::query()->with(['newsCategory', 'movie', 'user'])
             ->when(is_numeric($identifier), function ($q) use ($identifier) {
                 return $q->where('id', $identifier);
             }, function ($q) use ($identifier) {

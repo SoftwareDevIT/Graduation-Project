@@ -35,16 +35,16 @@ class LoginService
     public function login(array $credentials)
     {
         if (!Auth::attempt($credentials)) {
-            throw new \Exception('Unauthorized', 401);
+            throw new \Exception('không có quyền truy cập', 401);
         }
 
         $user = Auth::user();
 
         if (!$user) {
-            throw new \Exception('User not authenticated', 401);
+            throw new \Exception('Người dùng chưa được xác thực', 401);
         }
         if (!($user instanceof User)) {
-            throw new \Exception('Authenticated user is not an instance of User', 500);
+            throw new \Exception('Người dùng đã xác thực không phải là một trường hợp của Người dùng', 500);
         }
 
         return $user->createToken('authToken')->plainTextToken;

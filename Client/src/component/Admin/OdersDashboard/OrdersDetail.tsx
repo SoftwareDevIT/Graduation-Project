@@ -341,11 +341,12 @@ const OrderDetail = () => {
 
                   <p>{orderDetails.showtime.showtime_start} ~ {orderDetails.showtime.showtime_end}</p>
                 </td>
+                
                 <td>
                   {orderDetails.combos?.length > 0 ? (
                     orderDetails.combos.map((combos, index) => (
                       <div key={index}>
-                        <p><strong>{combos.combo_name}</strong></p>
+                        <p><strong>{combos.combo_name} x {combos.pivot.quantity}</strong></p>
                         <p>({formatCurrency(combos.price)} VNĐ)</p>
                       </div>
                     ))

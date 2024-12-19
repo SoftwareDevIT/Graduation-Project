@@ -7,6 +7,7 @@ import { Room } from "./Room";
 import { Combo } from "./Combo";
 
 import {Seat} from './Seat'
+import { Pivot } from "./Pivot";
 
 export interface Booking {
   id: string;
@@ -28,7 +29,4 @@ export interface Booking {
   seats: Seat[]
   booking_code: string
   created_at: string
-
-
-
 }
