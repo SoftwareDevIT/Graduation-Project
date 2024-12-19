@@ -16,6 +16,7 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
@@ -46,43 +47,17 @@ class TicketBookingService
         if ($result instanceof JsonResponse) {
             return $result;
         }
-        $booking = $this->bookTicket($req);
+        // $booking = $this->bookTicket($req);
         return $result;
     }
-    // public function selectMovieSeats(Request $request)
-    // {
-    //     $result = $this->selectMovieStep->handle($request);
-    //     if ($result instanceof JsonResponse) {
-    //         return $result;
-    //     }
-    //     //Xử lý đặt ghế
-    //     $result = $this->selectSeatsStep->handle($request);
-    //     session()->put('seatss', $result);
-    //     Log::info('Seats result: ' . json_encode($result));
-    //     if ($result instanceof JsonResponse) {
-    //         return $result;
-    //     }
-    //     return null;
-    // }
 
-
-    // public function selectCombos(Request $request)
-    // {
-    //     $result = $this->selectCombosStep->handle($request);
-    //     if ($result instanceof JsonResponse) {
-    //         return $result;
-    //     }
-    //     return null;
-    // }
     public function ticketBooking() {}
     public function bookTicket(Request $request)
     {
         Log::info('Booking request: ' . json_encode($request->all()));
         $bookTicket = $this->bookings($request);
-        session(['booking' => $bookTicket->id]);  // Lưu thông tin booking vào session
-        Log::info('Booking: ' . session('booking'));
         if ($bookTicket) {
-            $seats = $request->input('seats');
+            $seats = Cache::get('seats');
             $seatData = [];
             foreach ($seats as $seat) {
                 $seat = Seats::where('seat_name', $seat['seat_name'])
@@ -95,15 +70,17 @@ class TicketBookingService
             Session::put('seats', $seatData);
             $this->bookTicketSaveSession($request, $bookTicket);
         }
-        return response()->json(['message' => 'Đặt vé thành công', 'booking' => $bookTicket]);
+       return $bookTicket;
     }
 
 
     public function bookTicketSaveSession(Request $request, $booking)
     {
+        $combos = Cache::get('combos');
+        Log::info('danh sach combos duoc luu tru tam thoi bang Cache:'.json_encode($combos));
         // Kiểm tra xem session có chứa combos không
-        if (session()->has('combos') && session('combos')) {
-            foreach (session('combos') as $combo) {
+        if (!empty($combos))  {
+            foreach ($combos as $combo) {
                 // Liên kết combo với booking
                 $booking->combos()->attach($combo->id, ['quantity' => $combo->quantity ?? 1]);
 
@@ -121,8 +98,9 @@ class TicketBookingService
         }
 
         // Kiểm tra xem session có chứa seats không
-        if (session()->has('seats') && session('seats')) {
-            Log::info('Seats Session111: ' . json_encode(session('seats')));
+        $selectedSeats =  Cache::get('seats');
+        Log::info('ghe da chon va duoc luu tru tai Cache:' . json_encode($selectedSeats));
+        if (!empty($selectedSeats)) {
             $booking->seats()->sync(collect(session('seats'))->pluck('id'));
             $seatIds = collect(session('seats'))->pluck('id')->toArray();
             Seats::updateSeatsStatus($seatIds, 'booked');
@@ -136,17 +114,13 @@ class TicketBookingService
     public function bookings(Request $request)
     {
         $booking_code = $this->generateBookingCode($request);
-
-
         // Lưu đường dẫn của ảnh mã vạch vào cơ sở dữ liệu (URL từ ImgBB)
-        $booking = Booking::create($request->validated() + ['user_id' => Auth::user()->id] + ['booking_code' => $booking_code]);
+        $booking = Booking::create($request->all() + ['user_id' => request('user_id')] + ['booking_code' => $booking_code]);
         $qrcode = $this->generateQrCode($booking);
         $generator = new BarcodeGeneratorPNG();
         $barcode = $generator->getBarcode($booking->id, BarcodeGenerator::TYPE_CODE_128);
-
         // Tạo tên file duy nhất cho mã vạch (dựa vào booking ID)
         $fileName = 'barcode_' . $booking_code . '.png';
-
         // Lưu mã vạch vào thư mục 'public/barcodes'
         Storage::put('public/barcodes/' . $fileName, $barcode);
 
@@ -161,8 +135,7 @@ class TicketBookingService
 
     public function processPayment(Request $request)
     {
-        Log::info('Combos in session: ' . json_encode(session('combos')));
-        Log::info('Seats in session: ' . json_encode(session('seats')));
+
         if ($request->pay_method_id == 1) {
             $urlPayment = $this->processPaymentStep->vnpay($request);  // Gọi phương thức VNPAY
             return response()->json(['url' => $urlPayment]);

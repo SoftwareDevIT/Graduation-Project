@@ -8,6 +8,7 @@ use App\Services\Booking\Handlers\AbstractBookingStep;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
@@ -31,8 +32,8 @@ class SelectUser extends AbstractBookingStep
             $user = User::where('id', Auth::user()->id)->first();
         }
         
-        Session::put('userbooking', $user);
-        Log::info('User: ' . json_encode(session('userbooking')));
+        Cache::put('userbooking', $user);
+        Log::info('User: ' . Cache::get('userbooking'));
         return null;
     }
 }
