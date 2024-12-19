@@ -31,6 +31,7 @@ import "./Sidebar.css";
 const Sidebar: React.FC = () => {
   const [openMenu, setOpenMenu] = useState<{ [key: string]: boolean }>({});
   const [userRole, setUserRole] = useState<string>("");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   useEffect(() => {
     // Lấy thông tin từ localStorage
     const userData = JSON.parse(localStorage.getItem("user_profile") || "{}");
@@ -53,6 +54,9 @@ const Sidebar: React.FC = () => {
     // Ngừng sự kiện lan truyền để không đóng menu
     e.stopPropagation();
   };
+  const toggleSidebar = () => {
+    setIsSidebarOpen((prev) => !prev); // Thay đổi trạng thái sidebar
+  };
 
   return (
     <div className="container-wrapper">
@@ -63,6 +67,7 @@ const Sidebar: React.FC = () => {
             <span className="logo-first-letter1">F</span>lickHive
           </Link>
         </div>
+        
         <ul>
           {(userRole === "manager" || userRole === "admin") && (
             <>
