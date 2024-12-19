@@ -272,10 +272,7 @@ margin-right: 30px;
   margin-right: 10px;
   vertical-align: middle;
 }
-.check-icon {
-  margin-left: 8px; /* Adjust spacing as needed */
-  color: #28a745; /* Green color for the check mark */
-}
+
 .payment-methods li {
   margin-left: 23px;
 width: 670px;
@@ -466,6 +463,7 @@ width: 670px;
 .check-icon {
   margin-left: 8px; /* Adjust spacing as needed */
   color: #28a745; /* Green color for the check mark */
+  
 }
 
 .payment-methods li {
