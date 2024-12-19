@@ -20,6 +20,7 @@ use App\Services\Ranks\RankService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -46,15 +47,21 @@ class BookingStaffController extends Controller
     public function bookTicket(TicketBookingStaffRequest $request)
     {
         try {
+            Cache::put('transaction_data', [
+                'transaction' => $request->all(),
+                'user_id' => Auth::user()->id
+            ], 300);
             $data = $this->ticketBookingService->bookingTicket($request);
 
             if ($data instanceof JsonResponse) {
                 return $data;  // Trả về URL thanh toán hoặc lỗi nếu có
             }
 
-            if (session()->get('booking')) {
-                $this->bookTicketBarcode(session()->get('booking'));
-                $booking = $this->ticketBookingService->bookingmapdata(session()->get('booking'));
+            if (Cache::get('booking')) {
+                $bookingData = Cache::get('booking');
+                Log::info("id :".$bookingData);
+                $this->bookTicketBarcode($bookingData);
+                $booking = $this->ticketBookingService->bookingmapdata($bookingData);
                 return response()->json([
                     'status' => true,
                     'message' => 'Đặt vé thành công',
@@ -73,6 +80,7 @@ class BookingStaffController extends Controller
     public function bookTicketBarcode(int $id)
     {
         $booking = Booking::find($id);
+        Log::info("booking: ".$booking);
         $generator = new BarcodeGeneratorPNG();
             $barcode = $generator->getBarcode($booking->id, BarcodeGenerator::TYPE_CODE_128);
 
