@@ -256,6 +256,7 @@
 .movieCard {
   width: 90%; /* Tùy chỉnh kích thước theo ý muốn */
 }
+ 
 
 /* Media query cho màn hình máy tính bảng */
 @media (max-width: 768px) {
