@@ -33,9 +33,9 @@ class AccountVerificationController extends Controller
         $isVerified = $this->verificationService->verifyAccount($userId);
 
         if ($isVerified) {
-            return redirect()->to('http://localhost:5173/login')->with('success', 'Account verified successfully.');
+            return redirect()->to('http://localhost:5173/login')->with('success', 'Tài khoản đã được xác minh thành công.');
         }
-        return $this->error('Liên kết xác minh không hợp lệ.');
+        return redirect()->to('http://localhost:5173/login')->with('error', 'Tài khoản đã xác minh, vui lượng đăng nhập.');
 
     }
 }
