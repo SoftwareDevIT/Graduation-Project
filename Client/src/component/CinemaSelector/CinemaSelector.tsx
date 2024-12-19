@@ -145,7 +145,7 @@ import { useCinemaContext } from "../../Context/CinemasContext";
     useEffect(() => {
       const fetchMoviesForSelectedCinemaAndDate = async () => {
         if (selectedCinema && selectedDate) {
-          setLoading(true);
+       
           try {
             let response;
             if (userRole === "admin") {
@@ -187,7 +187,7 @@ import { useCinemaContext } from "../../Context/CinemasContext";
             setMovies([]);
             console.error("Error fetching movies:", error);
           }
-          setLoading(false);
+         
         }
       };
     
@@ -214,11 +214,14 @@ const displayLocations = filteredLocations;
               <div className="list">
               {loading
                 ? Array.from({ length: 5 }).map((_, index) => (
-                    <Skeleton.Button
-                      key={index}
-                      active
-                      style={{ width: "100%", marginBottom: 10 }}
-                    />
+                  <Skeleton
+                  active
+                  style={{
+                    width: "100%", // Chiều rộng thanh ngang
+                    height: 20,    // Chiều cao của thanh (tùy chỉnh)
+                    marginBottom: 10,
+                  }}
+                />
                   ))
                 :displayLocations.map((location) => (
                   <li
@@ -256,7 +259,7 @@ const displayLocations = filteredLocations;
               <div className="list">
               {loading
                 ? Array.from({ length: 5 }).map((_, index) => (
-                    <Skeleton.Button
+                    <Skeleton
                       key={index}
                       active
                       style={{ width: "100%", marginBottom: 10 }}
@@ -330,7 +333,7 @@ const displayLocations = filteredLocations;
                       <img src={movie.poster ?? undefined} alt={movie.movie_name} />
                       <div className="details">
                         <h4>{movie.movie_name}</h4>
-                        <p>Thời gian: {movie.duration}</p>
+                        <p>Thời gian: {movie.duration} phút</p>
                         <p>Giới hạn tuổi: {movie.age_limit}+</p>
                         <div className="showtimes-list">
                           {sortedShowtimes.map((showtime: any) => (
