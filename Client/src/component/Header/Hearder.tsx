@@ -8,6 +8,7 @@ import { useCountryContext } from "../../Context/CountriesContext";
 import { Modal } from "antd"; 
 import { Voucher } from "../../interface/Vouchers";
 import CityForm from "../CityForm/CityForm";
+import { useRealtime } from "../../Context/RealtimeContext";
 const Header = () => {
   const [isHeaderLeftVisible, setHeaderLeftVisible] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -21,7 +22,7 @@ const Header = () => {
   const locations = state.countries;
   const navigate = useNavigate();
   const [searchKeyword, setSearchKeyword] = useState(""); 
- 
+ const { setupRealtime } = useRealtime();
 
 
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -56,6 +57,7 @@ const Header = () => {
     if (user_id && token) {
       setIsLoggedIn(true); // Cập nhật trạng thái đăng nhập
     }
+    setupRealtime();
   }, []);
   useEffect(() => {
     if (selectedLocation !== null) {

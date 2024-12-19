@@ -180,6 +180,14 @@ const OrderCheckout = () => {
             },
         });
     };
+    
+    const handleRemoveVoucher = () => {
+        setVoucherCode(""); 
+        setDiscount(null); 
+        setFinalPrice(totalPrice);
+        setVoucherApplied(false); 
+    };
+    // State for payment method
     const [pay_method_id, setPaymentMethod] = useState(1);
     const [timeLeft, setTimeLeft] = useState(300);
     useEffect(() => {
