@@ -127,7 +127,7 @@ import Pointaccumulation from "./component/PersonalPage/Pointaccumulation";
 
 import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
 import OrderHistoryApp from "./component/PersonalPage/MovieTicket";
-import BookingManager from "./component/TicketandSeat/BookingManager";
+
 import MovieStatistics from "./component/Admin/MovieStatistics/MovieStatistics";
 import MovieStatisticsManager from "./Page/Admin/MovieStatistics/MovieStatisticsManager";
 import CinemaInfo from "./component/Cinema/CinemaInfo";

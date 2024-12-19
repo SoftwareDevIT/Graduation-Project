@@ -25,6 +25,7 @@ import * as XLSX from "xlsx"; // Import XLSX for Excel export
 import { Movie } from "../../../interface/Movie";
 import { Link } from "react-router-dom";
 import { Box } from "@mui/material";
+import Search from "antd/es/input/Search";
 ChartJS.register(
   Title,
   Tooltip,
@@ -82,6 +83,7 @@ const [userRole, setUserRole] = useState<string>("");
       setUserRole("unknown"); // Gán giá trị mặc định khi không có vai trò
     }
   }, []);
+  
 useEffect(() => {
   const fetchDashboardData = async () => {
     try {
@@ -99,6 +101,11 @@ useEffect(() => {
         cinemasResponse = await instance.get('/manager/cinema');
       } else {
         cinemasResponse = await instance.get('/cinema');
+      }
+      // Nếu là manager, tự động chọn rạp đầu tiên trong danh sách mà manager có quyền quản lý
+      if (userRole === "manager" && cinemasResponse.data.data.length > 0) {
+        const managerCinema = cinemasResponse.data.data[0]; // Lấy rạp đầu tiên
+        setSelectedCinema(managerCinema.id); // Đặt rạp cho manager
       }
       setCinemas(cinemasResponse.data.data);
       let dashboardResponse;
@@ -175,7 +182,6 @@ useEffect(() => {
   if (userRole !== "") {
     fetchDashboardData();
   }
-  
 }, [selectedCinema, selectedStatus, selectedDateRange, selectedDate, selectedMonth, selectedYear,userRole]);
 
   // Thêm selectedCinema làm dependency
@@ -532,7 +538,7 @@ useEffect(() => {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
   <h3>Đơn hàng gần đây</h3>
   <Form.Item label="">
-      <Button type="primary" onClick={exportToExcel} block style={{ width: 300 }}>
+      <Button type="primary" onClick={exportToExcel} block style={{ width: 150 }}>
         Export to Excel
       </Button>
     </Form.Item>
