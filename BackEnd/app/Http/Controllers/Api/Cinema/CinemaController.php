@@ -33,7 +33,7 @@ class CinemaController extends Controller
             $cinema = $this->cinemaService->get($id);
 
             if (!$cinema) {
-                return response()->json(['error' => 'Cinema not found'], 404);
+                return response()->json(['error' => 'Rạp không tồn tại'], 404);
             }
 
             return $this->success($cinema);
