@@ -15,7 +15,7 @@ import {
 } from "chart.js";
 import "@fortawesome/fontawesome-free/css/all.min.css"; // Import FontAwesome
 import instance from "../../../server";
-import { Button, DatePicker, Form, Pagination, Select, Space } from "antd";
+import { Button, DatePicker, Form, notification, Pagination, Select, Space } from "antd";
 
 import dayjs, { Dayjs } from "dayjs"; // Import dayjs for date handling
 import { Cinema } from "../../../interface/Cinema";
@@ -300,7 +300,22 @@ labels: monthlyLabels,
   const selectedCinemaName = selectedCinema
   ? cinemas.find((cinema) => cinema.id === selectedCinema)?.cinema_name || "Rạp không xác định"
   : "Tất cả các rạp";
-
+  const handleDateChange = (dates:any) => {
+    if (dates && dates.length === 2) {
+      const [startDate, endDate] = dates;
+      const diffInDays = (endDate - startDate) / (1000 * 3600 * 24); // Tính khoảng cách ngày
+  
+      if (diffInDays > 15) {
+        // Hiển thị thông báo lỗi
+        notification.warning({
+          message: 'Lỗi',
+          description: 'Khoảng cách giữa ngày bắt đầu và ngày kết thúc không được vượt quá 15 ngày.',
+        });
+        return; // Dừng lại nếu khoảng cách quá 15 ngày
+      }
+    }
+    setSelectedDateRange(dates); // Cập nhật giá trị ngày đã chọn nếu không có lỗi
+  };
   return (
     <div className="dashboard">
       <h1 className="dashboard-subtitle">{selectedCinemaName}</h1>
@@ -448,7 +463,7 @@ placeholder="Chọn ngày"
               <RangePicker
                 format="YYYY-MM-DD"
                 value={selectedDateRange}
-                onChange={(dates) => setSelectedDateRange(dates)}
+                onChange={handleDateChange}
                 style={{ width: 240 }}
               />
             </Form.Item>
