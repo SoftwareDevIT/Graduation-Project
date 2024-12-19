@@ -64,10 +64,6 @@ const ShowtimeAuto = () => {
 
     const onSubmit = async (data: FormData) => {
         try {
-
-            // console.log("Thêm showtime thành công:", response.data);
-
-
             const response = await instance.post("/manager/showtimePayload", data);
             console.log("Thêm showtime thành công:", response.data);
             notification.success({

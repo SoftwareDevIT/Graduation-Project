@@ -274,8 +274,10 @@ class BookingController extends Controller
             } catch (\Exception $e) {
                 // Nếu xảy ra lỗi ngoài mong muốn, thực hiện rollback toàn bộ transaction
                 DB::rollBack();
+                
                 Log::error('Error processing seats: ' . $e->getMessage());
                 return response()->json(['status' => false, 'message' => 'Đã xảy ra lỗi khi xử lý chỗ ngồi.'], 500);
+
             }
         }
 
@@ -405,7 +407,7 @@ class BookingController extends Controller
         return response()->json(
             [
                 'status'=>true,
-                'message'=>'Ghế ngồi thành công',
+                'message'=>'Seats successfully',
                 'data'=>[
                     'seats'=>$seats,
                     'roomId'=>$roomId,
