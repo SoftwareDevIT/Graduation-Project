@@ -267,8 +267,9 @@ class MovieController extends Controller
             $currentDate = Carbon::now();
 
             // Lấy danh sách phim có suất chiếu trước ngày phát hành
-            $movies = Movie::whereHas('showtimes', function ($query) {
-                $query->whereColumn('showtimes.showtime_date', '<', 'movies.release_date');
+            $movies = Movie::whereHas('showtimes', function ($query) use ($currentDate) {
+                $query->whereColumn('showtimes.showtime_date', '<', 'movies.release_date')
+                    ->where('showtimes.showtime_date', '>', $currentDate);
             })->with(['showtimes' => function ($query) {
                 $query->orderBy('showtime_date', 'asc');
             }])
@@ -278,23 +279,13 @@ class MovieController extends Controller
             $moviesWithMinShowtime = $movies->map(function ($movie) use ($currentDate) {
                 $showtimes = $movie->movieInCinemas->flatMap->showtimes;
 
-                // Kiểm tra nếu không có suất chiếu nào
-                // if ($showtimes->isEmpty()) {
-                //     return null; // Ẩn bộ phim này
-                // }
-
                 $minShowtime = $showtimes->min('showtime_date');
                 $maxShowtime = $showtimes->max('showtime_date');
-
-                // Kiểm tra nếu suất chiếu lớn nhất lớn hơn hoặc bằng ngày hiện tại
-                // if ($maxShowtime < $currentDate) {
-                //     return null; // Ẩn bộ phim này
-                // }
 
                 return [
                     'movie' => $movie,
                     'min_showtime_date' => $minShowtime,
-                'max' => $maxShowtime
+                    'max' => $maxShowtime
                 ];
             })->filter(); // Lọc các giá trị null
 
