@@ -41,7 +41,7 @@ class AuthController extends Controller
             $user = $this->loginService->get($id)->load(['favoriteMovies', 'rank', 'pointHistories','favorites']); // Tải rank ở đây
 
             if (!$user) {
-                return response()->json(['error' => 'User  not found'], 404);
+                return response()->json(['error' => 'Không Tồn tại Tài Khoản'], 404);
             }
 
             $totalAmount = Booking::where('user_id', $user->id)->sum('amount');
@@ -138,7 +138,7 @@ class AuthController extends Controller
             $user = $request->user();
             if ($user) {
                 $user->tokens()->delete();
-                return $this->success([], 'Logged out successfully.');
+                return $this->success([], 'Đăng Xuất Thành công.');
             } else {
                 return $this->error('Người dùng không được xác thực hoặc thiếu mã thông báo.');
             }

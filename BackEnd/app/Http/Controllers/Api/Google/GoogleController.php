@@ -93,7 +93,7 @@ class GoogleController extends Controller
 
         } catch (\Exception $exception) {
             return response()->json([
-                'message' => __('Google sign in failed'),
+                'message' => __('Đăng nhập google thất bại'),
                 'error' => $exception->getMessage()
             ], Response::HTTP_BAD_REQUEST);
         }

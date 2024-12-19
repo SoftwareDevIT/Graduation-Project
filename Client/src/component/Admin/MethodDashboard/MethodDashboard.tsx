@@ -85,14 +85,14 @@ const PayMethodDashboard = () => {
                     <Link to={`/admin/method/edit/${payMethod.id}`}>
                         <Button type="primary" icon={<EditOutlined />} />
                     </Link>
-                    <Popconfirm
+                    {/* <Popconfirm
                         title="Bạn có chắc chắn muốn xóa phương thức thanh toán này?"
                         onConfirm={() => handleDelete(payMethod.id)}
                         okText="Có"
                         cancelText="Không"
                     >
                         <Button danger icon={<DeleteOutlined />} />
-                    </Popconfirm>
+                    </Popconfirm> */}
                 </div>
             ),
         },

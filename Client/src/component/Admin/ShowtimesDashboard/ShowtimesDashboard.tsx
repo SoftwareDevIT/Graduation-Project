@@ -52,8 +52,8 @@ const ShowtimesDashboard: React.FC = () => {
 
     // Lọc showtimes theo tên phim, phòng, và khung giờ
     const filteredShowtimes = showtimes.filter((showtime) => {
-        const movieNameMatch = showtime.movie && showtime.movie.movie_name.toLowerCase().includes(searchTerm.toLowerCase());
-        const roomMatch = selectedRoom ? showtime.room.room_name === selectedRoom : true;
+        const movieNameMatch = showtime.movie && showtime.movie?.movie_name.toLowerCase().includes(searchTerm.toLowerCase());
+        const roomMatch = selectedRoom ? showtime.room?.room_name === selectedRoom : true;
         
         return movieNameMatch && roomMatch ;
     });

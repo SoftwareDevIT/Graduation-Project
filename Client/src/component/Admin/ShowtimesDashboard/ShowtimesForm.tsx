@@ -32,6 +32,7 @@ const showtimeSchema = z.object({
   price: z
     .number({ invalid_type_error: "Giá phải là số" })
     .min(0, 'Giá phải lớn hơn hoặc bằng 0')
+    .min(10000,'Giá tối thiểu là 10,000 VNĐ')
     .max(500000, 'Giá không được vượt quá 500,000 VNĐ')
     .optional(),
 });
