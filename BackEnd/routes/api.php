@@ -262,3 +262,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 });
 Route::get('/vnpay-return', [BookingController::class, 'vnPayReturn']);
 Route::get('/env-config', [ConfigController::class, 'envConfig']);
+
+
+
+

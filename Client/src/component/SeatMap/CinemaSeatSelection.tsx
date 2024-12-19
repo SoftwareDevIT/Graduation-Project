@@ -108,7 +108,7 @@ const CinemaSeatSelection: React.FC = () => {
     const setupRealtime = async (roomId: string) => {
       try {
         const echo = await initializeEcho();
-        console.log("Connected to Pusher!", echo);
+        // console.log("Connected to Pusher!", echo);
         if (!roomId) {
           console.error("Room ID is missing!");
           return;
@@ -119,7 +119,7 @@ const CinemaSeatSelection: React.FC = () => {
         }
         if (echo) {
           const channel = echo.private(`seats-${roomId}`); // Dùng roomId đã truyền vào
-          console.log("Connected to channel:", channel);
+          // console.log("Connected to channel:", channel);
   
           // Lắng nghe sự kiện SeatSelected
           channel.listen("SeatSelected", (eventData: any) => {
@@ -135,7 +135,7 @@ const CinemaSeatSelection: React.FC = () => {
   
     fetchRoomAndSeats()
       .then((roomId) => {
-        console.log("Fetched roomId:", roomId);
+        // console.log("Fetched roomId:", roomId);
         if (roomId && !echoInstance) {
           setupRealtime(roomId); // Truyền roomId vào hàm setupRealtime
         }
@@ -618,7 +618,8 @@ const CinemaSeatSelection: React.FC = () => {
                   Rạp:<span> {showtimeData?.room.cinema.cinema_name}</span>
                 </p>
                 <p>
-                  Suất: <span> {showtime}</span>
+                  Suất: <span>{showtime.split(":").slice(0, 2).join(":")}</span>
+
                 </p>
                 <p>
                   Phòng chiếu: <span>{showtimeData?.room.room_name}</span>

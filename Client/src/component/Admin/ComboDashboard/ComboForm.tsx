@@ -14,8 +14,9 @@ const comboSchema = z.object({
   descripton: z.string().min(1, "Mô tả là bắt buộc.").max(500,'Mô tả tối đa 500 ký tự'),
   price: z
         .number({ invalid_type_error: "Giá phải là số." })
-        .min(0, "Giá phải lớn hơn hoặc bằng 0.")
-        .max(10000000, "Giá không được vượt quá 10 triệu."),
+        .min(1, "Giá phải lớn hơn 0.")
+        .min(10000,'Giá tối thiểu là 10,000 VNĐ')
+        .max(10000000, "Giá không được vượt quá 10,000,000 VNĐ."),
   volume: z
     .number({ invalid_type_error: "Giá phải là số." })
     .min(1, "Số lượng phải lớn hơn 0.")

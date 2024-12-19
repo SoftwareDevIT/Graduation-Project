@@ -31,7 +31,7 @@ const MuaVe: React.FC = () => {
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("user_profile") || "{}");
     const roles = userData.roles || [];
-    console.log("data role:", roles);
+    // console.log("data role:", roles);
     if (roles.length > 0) {
       setUserRole(roles[0].name);
     } else {
@@ -104,7 +104,7 @@ const MuaVe: React.FC = () => {
           );
         } catch (err) {
           console.error("Error fetching cinemas and showtimes:", err);
-          setError("Không thể tải lịch chiếu cho phim này.");
+       
         }
       }
     };
@@ -138,115 +138,119 @@ const MuaVe: React.FC = () => {
   return (
     <>
       <MovieDetail />
-        <div className="lich-chieu-container">
-       <div className="calendar-container">
-         <div className="row-custom">
-           <select
-             className="city-select-custom"
-             value={selectedLocation}
-             onChange={(e) => setSelectedLocation(e.target.value)}
-           >
-             {countryState.countries.map((location) => (
-               <option key={location.id} value={location.id.toString()}>
-                 {location.location_name}
-               </option>
-             ))}
-           </select>
-         </div>
-         <div className="calendar-custom">
-           {generateWeekDays().map((day, index) => (
-             <div
-               key={index}
-               className={`date-custom ${selectedDate === day.date ? "active" : ""}`}
-               onClick={() => setSelectedDate(day.date)}
-             >
-               <span>{day.day}</span>
-               <small>{day.weekDay}</small>
-             </div>
-           ))}
-         </div>
-         <div className="cinema-list">
-           {error ? (
-             <p>{error}</p>
-           ) : (
-             cinemas.length > 0 ? (
-               cinemas.map((cinema, index) => (
-                 <React.Fragment key={index}>
-                   <div
-                     className={`cinema-item ${expandedIndex === index ? "active" : ""}`}
-                     onClick={() => toggleCinemas(index)}
-                   >
-                     <div className="cinema-logo">
-                       <img
-                         src="../../../public/logo.jpg"
-                         alt={cinema.cinema_name}
-                       />
-                     </div>
-                     <div className="cinema-info">
-                       <p className="cinema-name">{cinema.cinema_name}</p>
-                       <p className="cinema-branches">{cinema.showtimes.length} suất chiếu</p>
-                     </div>
-                   </div>
-                   {expandedIndex === index && (
-                     <div className="sub-cinema-list">
-                       <p>{cinema.cinema_address}</p>
-                       <div className="cinema-showtimes">
-                         {cinema.showtimes.length > 0 ? (
-                           cinema.showtimes
-                             .sort((a: Showtime, b: Showtime) => {
-                               const timeA = new Date(`${selectedDate}T${a.showtime_start}`).getTime();
-                               const timeB = new Date(`${selectedDate}T${b.showtime_start}`).getTime();
-                               return timeA - timeB;
-                             })
-                             .map((showtime: Showtime) => {
-                               const showtimeDateTime = new Date(`${selectedDate}T${showtime.showtime_start}`);
-                               const isPastShowtime = showtimeDateTime < new Date();
-                               
-                               return (
-                                 <span
-                                   key={showtime.id}
-                                   onClick={() => {
-                                     if (!isPastShowtime) {
-                                       navigate("/seat", {
-                                         state: {
-                                           movieName: movie?.movie_name,
-                                           cinemaName: cinema.cinema_name,
-                                           showtime: showtime.showtime_start,
-                                           showtimeId: showtime.showtime_id,
-                                           cinemaId:cinema.id,
-                                           roomId: showtime.room_id,
-                                           price: showtime.price,
-                                         },
-                                       });
-                                     }
-                                   }}
-                                   style={{
-                                     cursor: isPastShowtime ? "not-allowed" : "pointer",
-                                     color: isPastShowtime ? "gray" : "black",
-                                   }}
-                                 >
-                                   {showtime.showtime_start.slice(0, 5)} <br />
-                                   {`${showtime.price / 1000}k`}
-                                 </span>
-                               );
-                             })
-                         ) : (
-                           <p>Không có suất chiếu</p>
-                         )}
-                       </div>
-                     </div>
-                   )}
-                 </React.Fragment>
-               ))
-             ) : (
-               <div className="thong-baooo-1">
-                 <span>ℹ️ Không có lịch chiếu cho ngày hôm nay</span>
-               </div>
-             )
-           )}
-         </div>
-       </div>
-     </div>
+      <div className="lich-chieu-container">
+      <div className="calendar-container">
+        <div className="row-custom">
+          <select
+            className="city-select-custom"
+            value={selectedLocation}
+            onChange={(e) => setSelectedLocation(e.target.value)}
+          >
+            {countryState.countries.map((location) => (
+              <option key={location.id} value={location.id.toString()}>
+                {location.location_name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="calendar-custom">
+          {generateWeekDays().map((day, index) => (
+            <div
+              key={index}
+              className={`date-custom ${selectedDate === day.date ? "active" : ""}`}
+              onClick={() => setSelectedDate(day.date)}
+            >
+              <span>{day.day}</span>
+              <small>{day.weekDay}</small>
+            </div>
+          ))}
+        </div>
+        <div className="cinema-list">
+        {error ? (
+        <p>{error}</p>
+      ) : cinemas.length === 0 ? (
+        <div className="thong-baooo-1">
+          <span>ℹ️ Không có lịch chiếu cho ngày hôm nay</span>
+        </div>
+      ) : (
+            cinemas.length > 0 ? (
+              cinemas.map((cinema, index) => (
+                <React.Fragment key={index}>
+                  <div
+                    className={`cinema-item ${expandedIndex === index ? "active" : ""}`}
+                    onClick={() => toggleCinemas(index)}
+                  >
+                    <div className="cinema-logo">
+                      <img
+                        src="../../../public/logo.jpg"
+                        alt={cinema.cinema_name}
+                      />
+                    </div>
+                    <div className="cinema-info">
+                      <p className="cinema-name">{cinema.cinema_name}</p>
+                      <p className="cinema-branches">{cinema.showtimes.length} suất chiếu</p>
+                    </div>
+                  </div>
+                  {expandedIndex === index && (
+                    <div className="sub-cinema-list">
+                      <p>{cinema.cinema_address}</p>
+                      <div className="cinema-showtimes">
+                        {cinema.showtimes.length > 0 ? (
+                          cinema.showtimes
+                            .sort((a: Showtime, b: Showtime) => {
+                              const timeA = new Date(`${selectedDate}T${a.showtime_start}`).getTime();
+                              const timeB = new Date(`${selectedDate}T${b.showtime_start}`).getTime();
+                              return timeA - timeB;
+                            })
+                            .map((showtime: Showtime) => {
+                              const showtimeDateTime = new Date(`${selectedDate}T${showtime.showtime_start}`);
+                              const isPastShowtime = showtimeDateTime < new Date();
+                              
+                              return (
+                                <span
+                                  key={showtime.id}
+                                  onClick={() => {
+                                    if (!isPastShowtime) {
+                                      navigate("/seat", {
+                                        state: {
+                                          movieName: movie?.movie_name,
+                                          cinemaName: cinema.cinema_name,
+                                          showtime: showtime.showtime_start,
+                                          showtimeId: showtime.showtime_id,
+                                          cinemaId:cinema.id,
+                                          roomId: showtime.room_id,
+                                          price: showtime.price,
+                                        },
+                                      });
+                                    }
+                                  }}
+                                  style={{
+                                    cursor: isPastShowtime ? "not-allowed" : "pointer",
+                                    color: isPastShowtime ? "gray" : "black",
+                                  }}
+                                >
+                                  {showtime.showtime_start.slice(0, 5)} <br />
+                                  {`${showtime.price / 1000}k`}
+                                </span>
+                              );
+                            })
+                        ) : (
+                          <p>Không có suất chiếu</p>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </React.Fragment>
+              ))
+            ) : (
+              <div className="thong-baooo-1">
+                <span>ℹ️ Không có lịch chiếu cho ngày hôm nay</span>
+              </div>
+            )
+          )}
+        </div>
+      </div>
+    </div>
       <Footer />
     </>
   );

@@ -102,11 +102,11 @@ class BookingController extends Controller
             session()->flush();
 
             // Chuyển hướng về trang yêu cầu
-            return redirect('http://localhost:5173/ticketcinema');
+            return redirect('http://localhost:5173/payment-success');
         }
 
         // Xử lý khi mã phản hồi không phải '00'
-        return redirect('http://localhost:5173/payment-success')->with('error', 'Payment failed');
+        return redirect('http://localhost:5173/payment-success')->with('error', 'Thanh Toán Không thành công.');
     }
 
 
@@ -161,7 +161,7 @@ class BookingController extends Controller
                         } else {
                             // Nếu không thể tạo ghế, thực hiện rollback và trả về lỗi
                             DB::rollBack();
-                            return response()->json(['status' => false, 'message' => 'Failed to create seat.'], 500);
+                            return response()->json(['status' => false, 'message' => 'Không tạo được chỗ ngồi.'], 500);
                         }
                     }
                 }
@@ -169,7 +169,7 @@ class BookingController extends Controller
                 // Nếu có ghế đã tồn tại, thực hiện rollback transaction và trả về danh sách các ghế đã tồn tại
                 if (!empty($existingSeats)) {
                     DB::rollBack();
-                    return response()->json(['status' => false, 'message' => 'Some seats already exist.', 'data' => $existingSeats], 400);
+                    return response()->json(['status' => false, 'message' => 'Một số chỗ ngồi đã tồn tại.', 'data' => $existingSeats], 400);
                 }
 
                 // Nếu không có lỗi, commit transaction và tiếp tục xử lý
@@ -184,17 +184,18 @@ class BookingController extends Controller
 
                 return response()->json([
                     'status' => true,
-                    'message' => 'Selected seats successfully.',
+                    'message' => 'Đã chọn chỗ ngồi thành công.',
                     'data' => $seatDataList
                 ]);
             } catch (\Exception $e) {
                 // Nếu xảy ra lỗi ngoài mong muốn, thực hiện rollback toàn bộ transaction
                 DB::rollBack();
+                Log::error('Error processing seats: ' . $e->getMessage());
                 return response()->json(['status' => false, 'message' => 'An error occurred while processing seats.'], 500);
             }
         }
 
-        return response()->json(['status' => false, 'message' => 'Invalid data provided.'], 400);
+        return response()->json(['status' => false, 'message' => 'Dữ liệu được cung cấp không hợp lệ.'], 400);
     }
 
 
@@ -207,10 +208,10 @@ class BookingController extends Controller
         $userId = Auth::id();
 
         if (empty($seats)) {
-            return response()->json(['status' => false, 'message' => 'Please select at least one seat.'], 400);
+            return response()->json(['status' => false, 'message' => 'Vui lòng chọn ít nhất một chỗ ngồi.'], 400);
         }
         if (is_array($seats) && count($seats) > 10) {
-            return response()->json(['status' => false, 'message' => 'You can only select up to 10 seats.'], 400);
+            return response()->json(['status' => false, 'message' => 'Bạn chỉ có thể chọn tối đa 10 chỗ ngồi.'], 400);
         }
 
         $gapIssue = $this->hasGapIssue($seats, $totalSeatsInRows, $showtime_id);
@@ -281,7 +282,7 @@ class BookingController extends Controller
         if (!empty($missingSeats)) {
             return response()->json([
                 'status' => false,
-                'message' => 'Please select consecutive seats without gaps.',
+                'message' => 'Vui lòng chọn chỗ ngồi liên tiếp không có khoảng trống.',
                 'data' => [
                     'missing_seats' => $missingSeats, // Trả về danh sách các ghế bị thiếu theo hàng
                 ]
@@ -311,7 +312,7 @@ class BookingController extends Controller
         // $roomId = $request->input('roomId'); // Lấy roomId từ client (dưới dạng POST)
 
         if (is_array($seats) && count($seats) > 10) {
-            return $this->error('You can only select up to 10 seats.', 400);
+            return $this->error('Bạn chỉ có thể chọn tối đa 10 chỗ ngồi.', 400);
         }
 
         // Broadcast sự kiện ghế đã chọn
@@ -319,12 +320,12 @@ class BookingController extends Controller
 
         return response()->json(
             [
-                'status' => true,
-                'message' => 'Seats successfully',
-                'data' => [
-                    'seats' => $seats,
-                    'roomId' => $roomId,
-                    'userId' => $userId
+                'status'=>true,
+                'message'=>'Seats successfully',
+                'data'=>[
+                    'seats'=>$seats,
+                    'roomId'=>$roomId,
+                    'userId'=>$userId
                 ]
             ]
         );

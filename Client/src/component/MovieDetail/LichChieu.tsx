@@ -102,9 +102,9 @@ const LichChieuUpdated: React.FC = () => {
           setCinemas(
             cinemaData
           );
-        } catch (err) {
-          console.error("Error fetching cinemas and showtimes:", err);
-          setError("Không thể tải lịch chiếu cho phim này.");
+        } catch (error) {
+          console.error("Error fetching cinemas and showtimes:", error);
+          
         }
       }
     };
@@ -164,9 +164,13 @@ const LichChieuUpdated: React.FC = () => {
       ))}
     </div>
     <div className="cinema-list">
-      {error ? (
-        <p>{error}</p>
-      ) : (
+    {error ? (
+    <p>{error}</p>
+  ) : cinemas.length === 0 ? (
+    <div className="thong-baooo-1">
+      <span>ℹ️ Không có lịch chiếu cho ngày hôm nay</span>
+    </div>
+  ) : (
         cinemas.length > 0 ? (
           cinemas.map((cinema, index) => (
             <React.Fragment key={index}>

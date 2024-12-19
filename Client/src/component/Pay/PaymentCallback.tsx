@@ -18,7 +18,7 @@ const PaymentCallback = () => {
         if (bookingData) {
           try {
             const response = await instance.post('/book-ticket', JSON.parse(bookingData));
-            console.log('Đặt vé thành công:', response.data);
+            // console.log('Đặt vé thành công:', response.data);
 
             // Xóa dữ liệu trong localStorage sau khi đặt vé thành công
             localStorage.removeItem('bookingData');

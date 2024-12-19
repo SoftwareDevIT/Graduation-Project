@@ -91,20 +91,19 @@
     font-weight: bold;
     color: #27ae60; /* Xanh lá */
     margin-bottom: 10px;
-    
 }
 .summaryaccount{
   margin-right: 120px;
 }
 .previous_revenue{
-  margin-right: 120px;
+  margin-right: 85px;
 }
 
 .summary-change {
     font-size: 16px;
     align-items: center;
     margin-top: 5px;
-    margin-right: 120px;
+    margin-right: 100px;
   }
 
   

@@ -28,7 +28,7 @@ const MovieTicket = () => {
           if (response.data.status) {
             setUserProfile(response.data.data);
             setAvatar(response.data.data.avatar || 'https://cdn.moveek.com/bundles/ornweb/img/no-avatar.png');
-            console.log("phim da dat",response);
+            // console.log("phim da dat",response);
             
           }
         } catch (error) {
@@ -45,7 +45,7 @@ const MovieTicket = () => {
             
             setTickets(ticketData ? [ticketData] : []);
           }
-          console.log("ve",response);
+          // console.log("ve",response);
         } catch (error) {
           console.error('Error fetching tickets:', error);
         }

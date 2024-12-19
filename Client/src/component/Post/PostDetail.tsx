@@ -17,30 +17,32 @@ const PostDetail: React.FC = () => {
   const [article, setArticle] = useState<NewsItem | null>(null);
   const [relatedPosts, setRelatedPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     const fetchArticle = async () => {
       try {
         const response = await instance.get(`/news/${slug}`);
         setArticle(response.data.data);
-
+  
         // Fetch related posts
         const relatedResponse = await instance.get(
           `/filterNewByMovie/${response.data.data.movie.id}`
         );
         if (relatedResponse.data.status) {
-          setRelatedPosts(relatedResponse.data.data);
+          // Lấy 7 bài viết đầu tiên
+          const relatedData = relatedResponse.data.data.slice(0, 10); 
+          setRelatedPosts(relatedData);
         }
-        console.log(relatedResponse);
+        // console.log(relatedResponse);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }
     };
-
+  
     fetchArticle();
   }, [slug]);
+  
 
   const formattedDate = article && dayjs(article.created_at).format("DD/MM/YYYY ");
 
