@@ -53,7 +53,7 @@ const OrderCheckout = () => {
         if (userProfile) {
             setAvailablePoints(userProfile.points);
             setIsPointsUsed(false); // Reset usage flag if user profile changes
-            console.log("data",userProfile.points)
+            // console.log("data",userProfile.points)
         }
     }, [userProfile]);
 
@@ -72,7 +72,7 @@ const OrderCheckout = () => {
     } = (location.state as LocationState) || {};
 
     // Log selectedSeats to verify data
-    console.log("showtimeId",cinemaId);
+    // console.log("showtimeId",cinemaId);
     // console.log(selectedCombos); // Check if combos are passed correctly
     const handleApplyVoucher = async () => {
         if (!voucherCode) {
@@ -438,7 +438,7 @@ const OrderCheckout = () => {
     )}
  <Modal
                     title="Hướng Dẫn Quy Đổi Điểm"
-                    visible={isModalVisible}
+                    open={isModalVisible}
                     onOk={handleOk}
                     onCancel={handleCancel}
                     cancelButtonProps={{ style: { display: 'none' } }}

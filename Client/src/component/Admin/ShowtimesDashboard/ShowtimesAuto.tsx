@@ -29,6 +29,7 @@ const showtimeSchema = z.object({
 type FormData = z.infer<typeof showtimeSchema>;
 
 const ShowtimeAuto = () => {
+
     const nav = useNavigate();
     const [movies, setMovies] = useState<Movie[]>([]);
     const [rooms, setRooms] = useState<Room[]>([]);
@@ -64,8 +65,11 @@ const ShowtimeAuto = () => {
 
     const onSubmit = async (data: FormData) => {
         try {
+            // console.log("Thêm showtime thành công:", response.data);
+
             const response = await instance.post("/manager/showtimePayload", data);
             console.log("Thêm showtime thành công:", response.data);
+
             notification.success({
                 message: "Thêm ShowTime thành công",
                 description: "Showtime đã được thêm thành công.",

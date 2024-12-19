@@ -45,7 +45,7 @@ function FilmNews() {
                 <div className="chuyenmuc col-lg-4 col-md-2 col-sm-12">
                   <h3>Chuyên mục</h3>
                   <div className="noidung">
-                    <h4>Đánh giá phim</h4>
+                   <Link to={'/community'}><h4>Đánh giá phim</h4></Link>
                     <p>Góc nhìn chân thực, khách quan nhất về các bộ phim</p>
                   </div>
                   <div className="noidung">

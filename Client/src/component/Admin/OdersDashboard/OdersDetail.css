@@ -44,49 +44,78 @@
     padding-left: 5px;
 }
 
-
-/* Tạo kiểu cho bảng thông tin đơn hàng */
-
+/* Tăng cường kiểu bảng thông tin */
+/* Cấu trúc bảng chính */
 .order-table {
+    table-layout: fixed; /* Đảm bảo các cột cố định kích thước */
+    width: 100%;
     border-collapse: collapse;
-    width: 100%; /* Đảm bảo bảng chiếm hết chiều rộng */
-    margin-top: 20px; /* Tăng khoảng cách phía trên */
-    background-color: #ffffff; /* Màu nền trắng */
-    border-radius: 8px; /* Bo góc bảng */
-    overflow: hidden; /* Ẩn góc thừa của bo */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Bóng đổ nhẹ */
-}
-
-.order-table th,
-.order-table td {
-    padding: 12px; /* Tăng khoảng cách bên trong */
-    text-align: left;
-    border-bottom: 1px solid #ddd; /* Chỉ có đường viền dưới */
+    margin-top: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
 
 .order-table th {
-    background-color: #2d6a4f; /* Màu xanh đậm */
-    color: #ffffff; /* Màu chữ trắng */
-    font-weight: bold;
-    text-transform: uppercase; /* Chữ in hoa */
+    background-color: #2d6a4f;
+    color: #ffffff;
+    font-size: 16px;
+    text-transform: uppercase;
+    padding: 10px;
+    text-align: center;
 }
 
-.order-table td {
-    background-color: #f8f9fa; /* Màu nền sáng nhẹ */
-    color: #333; /* Màu chữ tối */
+/* Kích thước các cột */
+.order-table th:nth-child(1), /* Cột PHIM */
+.order-table td:nth-child(1) {
+    width: 20%; /* Giảm kích thước cột phim */
+    text-align: center;
+ 
 }
 
-.order-table tr:nth-child(even) td {
-    background-color: #e9ecef; /* Màu nền khác cho hàng chẵn */
+.order-table th:nth-child(2), /* Cột SUẤT CHIẾU */
+.order-table td:nth-child(2) {
+    width: 25%; /* Tăng cột suất chiếu */
+    text-align: center;
 }
 
+.order-table th:nth-child(3), /* Cột COMBO */
+.order-table td:nth-child(3) {
+    width: 30%; /* Cột combo lớn hơn */
+    text-align: center;
+}
+
+.order-table th:nth-child(4), /* Cột GHẾ */
+.order-table td:nth-child(4) {
+    width: 25%; /* Cột ghế vừa phải */
+    text-align: center;
+}
+
+/* Kiểu cho ảnh phim */
 .order-table img {
-    width: 100px; /* Giữ kích thước hình ảnh */
-    height: 130px;
+    width: 70px; /* Giảm kích thước ảnh */
+    height: 100px;
     object-fit: cover;
-    border-radius: 4px; /* Bo góc ảnh */
+    border-radius: 5px;
+    display: block;
+    margin: 0 auto;
 }
 
+/* Hàng dữ liệu */
+.order-table td {
+    padding: 10px;
+    font-size: 14px;
+    color: #333;
+    border-bottom: 1px solid #ddd;
+    vertical-align: middle;
+}
+
+/* Hiệu ứng hover */
+.order-table tr:hover {
+
+    transition: background-color 0.3s ease;
+}
 
 
 /* Phần cột phải - Sidebar */
@@ -147,37 +176,59 @@
 }
 
 .tongtien {
+    margin-left: 400px;
     margin-top: 20px;
-    float: right;
-    padding-top: 10px;
-    font-family: 'Arial', sans-serif;
-}
-
-.tongtien p {
-    margin: 5px 0;
-    font-size: 17px;
-    color: #333;
-}
-
-.tongtien p strong {
-    font-weight: bold;
-    color: #000;
-}
-
-.tongtien div {
-    margin-top: 5px;
-}
-
-.tongtien .tongtien-title {
+    padding: 20px;
+    max-width: 350px;
+  }
+  
+  .tongtien p {
     font-size: 16px;
+    margin: 10px 0;
+    color: #333;
+  }
+  
+  .total-amountt {
+    font-size: 18px;
     font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.tongtien .combos {
-    margin-left: 10px;
-    font-size: 14px;
-}
+    text-align:left;
+  }
+  
+.barcode-seat {
+    display: flex;
+    flex-direction: column; /* Dọc toàn bộ container */
+    gap: 10px; /* Khoảng cách giữa các ghế */
+    margin: 20px 0;
+  }
+  
+  .seat-barcode-container {
+    display: flex;
+    align-items: center; /* Canh giữa theo chiều dọc */
+    justify-content: flex-start; /* Căn trái */
+    gap: 15px; /* Khoảng cách giữa chữ và barcode */
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+  }
+  
+  .seat-label {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    min-width: 100px; /* Giữ label thẳng hàng */
+  }
+  
+  .barcode-img {
+    height: 50px; /* Chiều cao cho barcode */
+    width: 200px; /* Chiều rộng đủ để quét */
+    object-fit: contain;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+  }
+  
 
 
 /* Kiểu cho các trạng thái của vé */

@@ -326,7 +326,7 @@ const OrderDetail = () => {
             <tbody>
               <tr>
                 <td>
-                  <h5>{orderDetails.showtime.movie.movie_name}</h5>
+                  <h6>{orderDetails.showtime.movie.movie_name}</h6>
                   <img src={orderDetails.showtime.movie.poster ?? ''} alt="Movie Thumbnail" />
                 </td>
                 <td>
@@ -341,11 +341,12 @@ const OrderDetail = () => {
 
                   <p>{orderDetails.showtime.showtime_start} ~ {orderDetails.showtime.showtime_end}</p>
                 </td>
+                
                 <td>
                   {orderDetails.combos?.length > 0 ? (
                     orderDetails.combos.map((combos, index) => (
                       <div key={index}>
-                        <p><strong>{combos.combo_name}</strong></p>
+                        <p><strong>{combos.combo_name} x {combos.pivot.quantity}</strong></p>
                         <p>({formatCurrency(combos.price)} VNĐ)</p>
                       </div>
                     ))
@@ -368,33 +369,33 @@ const OrderDetail = () => {
               </tr>
             </tbody>
           </table>
-          <div className='barcode-seat'>
-            {orderDetails.seats.length > 0 ? (
-              orderDetails.seats.map((seats, index) => (
-                <div key={index}>
-                  <p></p>
-                  <p>Ghế: {seats.seat_name} ~ <img style={{width:'25%'}} src={seats.barcode} alt="" /></p>
-                </div>
-              ))
-            ) : (
-              <p>Không có ghế nào</p>
-            )}
-          </div>
-          <div className="tongtien">
-            <p><strong>Tiền Vé:</strong> {formatCurrency(orderDetails.showtime.price * orderDetails.seats.length)} VNĐ</p><br />
+          {/* <div className='barcode-seat'>
+  {orderDetails.seats.length > 0 ? (
+    orderDetails.seats.map((seats, index) => (
+      <div key={index} className="seat-barcode-container">
+        <p className="seat-label">Ghế: {seats.seat_name}</p>
+        <img className="barcode-img" src={seats.barcode} alt={`Barcode cho ghế ${seats.seat_name}`} />
+      </div>
+    ))
+  ) : (
+    <p>Không có ghế nào</p>
+  )}
+</div> */}
 
-            {orderDetails.combos?.length > 0 ? (
-              <>
-                {/* Tính tổng giá của tất cả các combo */}
-                <p><strong>Giá Combos:</strong> {formatCurrency(orderDetails.combos.reduce((total, combo) => total + combo.price, 0))} VNĐ</p><br />
-              </>
-            ) : (
-              <p>Không có combo nào</p>
-            )}
+<div className="tongtien">
+  <p><strong>Tiền Vé:</strong> {formatCurrency(orderDetails.showtime.price * orderDetails.seats.length)} VNĐ</p><br />
 
-            {/* Tổng tiền sẽ cộng tất cả tiền vé và tiền combo */}
-            <p><strong>Tổng tiền: {formatCurrency(orderDetails.amount)} VNĐ</strong></p>
-          </div>
+  {orderDetails.combos?.length > 0 ? (
+    <>
+      <p><strong>Giá Combos:</strong> {formatCurrency(orderDetails.combos.reduce((total, combo) => total + combo.price, 0))} VNĐ</p><br />
+    </>
+  ) : (
+    <p>Không có combo nào</p>
+  )}
+
+  <p className="total-amountt">Tổng tiền:<strong style={{color:"red"}}> {formatCurrency(orderDetails.amount)} VNĐ</strong></p>
+</div>
+
 
 
         </div>

@@ -110,7 +110,7 @@ const EarlyMovie: React.FC = () => {
       {selectedMovie && (
         <Modal
           title={selectedMovie.movie.movie_name || "Trailer"} // Tiêu đề modal là tên phim
-          visible={isTrailerVisible}
+          open={isTrailerVisible}
           onCancel={() => setIsTrailerVisible(false)} // Đóng modal khi nhấn ngoài modal
           footer={null}
           centered

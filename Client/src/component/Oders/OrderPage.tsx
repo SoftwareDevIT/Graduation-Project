@@ -68,7 +68,7 @@ const OrderPage: React.FC = () => {
         selectedCombos, // Pass the selected combos to the next page
       },
     });
-    console.log("bjasfjaf",showtimeId);
+    // console.log("bjasfjaf",showtimeId);
     
   };
 

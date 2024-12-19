@@ -63,6 +63,8 @@ class ShowtimeService
                 'price' => $price,
                 'status' => '1',
             ]);
+
+            $openingTime->addMinutes(15);
         }
 
         return $showtimes;
@@ -111,4 +113,5 @@ class ShowtimeService
 
         return $this->filterByRole($movie->showtimes()->getQuery())->get();
     }
+
 }

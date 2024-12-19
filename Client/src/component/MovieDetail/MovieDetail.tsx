@@ -92,7 +92,7 @@ const MovieDetail: React.FC = () => {
             message: "Thành công",
             description: "Phim đã được xóa khỏi danh sách yêu thích!",
           });
-          console.log("Movie ID to be deleted:", movie?.id);
+          // console.log("Movie ID to be deleted:", movie?.id);
         } else {
           notification.error({
             message: "Lỗi",
@@ -258,7 +258,7 @@ const MovieDetail: React.FC = () => {
       </div>
 
       {/* Modal Đánh Giá */}
-      <Modal title="Đánh giá phim" visible={ratingData.isModalVisible} onOk={handleRatingSubmit} onCancel={() => setRatingData({ ...ratingData, isModalVisible: false })}>
+      <Modal title="Đánh giá phim" open={ratingData.isModalVisible} onOk={handleRatingSubmit} onCancel={() => setRatingData({ ...ratingData, isModalVisible: false })}>
         <div className="danhgiaphim">
           <div className="imgphim">
             <img src={movie?.poster || "placeholder.jpg"} alt={movie?.movie_name} />
@@ -279,7 +279,7 @@ const MovieDetail: React.FC = () => {
     
       <Modal
   title={movie?.movie_name}  // Ẩn tiêu đề nếu không cần
-  visible={isTrailerVisible}
+  open={isTrailerVisible}
   onCancel={() => setIsTrailerVisible(false)}
   footer={null}
   centered // Modal xuất hiện giữa màn hình
