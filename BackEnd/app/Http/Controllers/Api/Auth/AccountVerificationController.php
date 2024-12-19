@@ -35,7 +35,7 @@ class AccountVerificationController extends Controller
         if ($isVerified) {
             return redirect()->to('http://localhost:5173/login')->with('success', 'Account verified successfully.');
         }
-        return $this->error('Invalid verification link.');
+        return $this->error('Liên kết xác minh không hợp lệ.');
 
     }
 }
