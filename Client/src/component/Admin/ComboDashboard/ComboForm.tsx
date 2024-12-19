@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useNavigate, useParams } from "react-router-dom";
-import { useComboContext } from "../../../Context/ComboContext"; // Import the Combo context
+
 import { Combo } from "../../../interface/Combo";
 import instance from "../../../server";
 import { notification } from 'antd'; // Import Ant Design's notification component
@@ -14,11 +14,12 @@ const comboSchema = z.object({
   descripton: z.string().min(1, "Mô tả là bắt buộc.").max(500,'Mô tả tối đa 500 ký tự'),
   price: z
         .number({ invalid_type_error: "Giá phải là số." })
-        .min(0, "Giá phải lớn hơn hoặc bằng 0.")
-        .max(10000000, "Giá không được vượt quá 10 triệu."),
+        .min(1, "Giá phải lớn hơn 0.")
+        .min(10000,'Giá tối thiểu là 10,000 VNĐ')
+        .max(10000000, "Giá không được vượt quá 10,000,000 VNĐ."),
   volume: z
     .number({ invalid_type_error: "Giá phải là số." })
-    .min(0, "Số lượng phải lớn hơn hoặc bằng 0.")
+    .min(1, "Số lượng phải lớn hơn 0.")
     .max(1000, "Số lượng không được vượt quá 1000."),
 });
 
@@ -132,3 +133,7 @@ const ComboForm = () => {
 };
 
 export default ComboForm;
+function useComboContext(): { addCombo: any; updateCombo: any; } {
+  throw new Error("Function not implemented.");
+}
+

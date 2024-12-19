@@ -43,10 +43,6 @@ const OrderDetail = () => {
           response = await instance.get(`/order/${id}`);
         }
         setOrderDetails(response.data.data);
-
-
-       
-
         setNewStatus(response.data.data.status); // Initialize status from the fetched data
       } catch (err) {
         setError('Failed to load order details');
@@ -118,40 +114,38 @@ const OrderDetail = () => {
       ? orderDetails.combos.reduce((total, combo) => total + combo.price, 0)
       : 0;
 
-    const invoiceDetails = orderDetails.seats
-      .map(
-        (seat, index) => `
-        <div style="page-break-after: always; border: 1px solid #e0e0e0; margin-bottom: 30px; padding: 20px; background-color: #f9f9f9;">
-          <h1 style="text-align: center; color: #444; font-size: 24px; font-weight: bold;">Hóa Đơn Chi Tiết</h1>
-          <div style="margin-bottom: 20px; text-align: center;">
-            <img src="https://example.com/logo.png" alt="Logo" style="width: 150px; margin-bottom: 10px;" />
-            <p><strong>CÔNG TY TNHH FLICKHIVE</strong></p>
-            <p>Địa chỉ: Trịnh Văn Bô - Bắc Từ Liêm - Hà Nội</p>
-            <p>Mã số thuế: 0315367026</p>
-          </div>
-          <hr />
-          <p><strong>Mã Đơn Hàng:</strong> ${orderDetails.booking_code}</p>
-          <p><strong>Người Dùng:</strong> ${orderDetails.user?.user_name || "Không xác định"}</p>
-          <p><strong>Tên Đầy Đủ:</strong> ${orderDetails.user?.fullname || "Không xác định"}</p>
-          <p><strong>Email:</strong> ${orderDetails.user?.email || "Không xác định"}</p>
-          <p><strong>SĐT:</strong> ${orderDetails.user?.phone || "Không xác định"}</p>
-          <hr />
-          <p><strong>Phim:</strong> ${orderDetails.showtime.movie.movie_name || "Không xác định"}</p>
-          <p><strong>Ngày:</strong> ${orderDetails.showtime?.showtime_date || "Không xác định"}</p>
-          <p><strong>Suất Chiếu:</strong> ${orderDetails.showtime?.showtime_start} ~ ${orderDetails.showtime?.showtime_end} </p>
-          <p><strong>Phòng:</strong> ${orderDetails.showtime?.room.room_name || "Không xác định"}</p>
-          <p><strong>Ghế:</strong> ${orderDetails.seats.map(seat => seat.seat_name).join(", ")}</p>
-          <hr />
-          <p><strong>Phương Thức Thanh Toán:</strong> ${orderDetails.pay_method.pay_method_name}</p>
-          <p><strong>Tổng Tiền:</strong> ${formatCurrency(orderDetails.amount)} VNĐ</p>
-          <hr />
-          <div style="text-align: center; margin-top: 20px;">
-            <strong><img src="${orderDetails.barcode}" alt="Barcode" style="width: 200px; display: block; margin: 0 auto;" /></strong>
-            <p style="font-style: italic; color: #777;">Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!</p>
-          </div>
-        </div>`
-      )
-      .join("");
+      const invoiceDetails = `
+      <div style="border: 1px solid #e0e0e0; margin-bottom: 30px; padding: 20px; background-color: #f9f9f9;">
+        <h1 style="text-align: center; color: #444; font-size: 24px; font-weight: bold;">Hóa Đơn Chi Tiết</h1>
+        <div style="margin-bottom: 20px; text-align: center;">
+          <img src="https://example.com/logo.png" alt="Logo" style="width: 150px; margin-bottom: 10px;" />
+          <p><strong>CÔNG TY TNHH FLICKHIVE</strong></p>
+          <p>Địa chỉ: Trịnh Văn Bô - Bắc Từ Liêm - Hà Nội</p>
+          <p>Mã số thuế: 0315367026</p>
+        </div>
+        <hr />
+        <p><strong>Mã Đơn Hàng:</strong> ${orderDetails.booking_code}</p>
+        <p><strong>Người Dùng:</strong> ${orderDetails.user?.user_name || "Không xác định"}</p>
+        <p><strong>Tên Đầy Đủ:</strong> ${orderDetails.user?.fullname || "Không xác định"}</p>
+        <p><strong>Email:</strong> ${orderDetails.user?.email || "Không xác định"}</p>
+        <p><strong>SĐT:</strong> ${orderDetails.user?.phone || "Không xác định"}</p>
+        <hr />
+        <p><strong>Phim:</strong> ${orderDetails.showtime.movie.movie_name || "Không xác định"}</p>
+        <p><strong>Ngày:</strong> ${orderDetails.showtime?.showtime_date || "Không xác định"}</p>
+        <p><strong>Suất Chiếu:</strong> ${orderDetails.showtime?.showtime_start} ~ ${orderDetails.showtime?.showtime_end} </p>
+        <p><strong>Phòng:</strong> ${orderDetails.showtime?.room.room_name || "Không xác định"}</p>
+        <p><strong>Ghế:</strong> ${orderDetails.seats.map(seat => seat.seat_name).join(", ")}</p>
+        <hr />
+        <p><strong>Phương Thức Thanh Toán:</strong> ${orderDetails.pay_method.pay_method_name}</p>
+        <p><strong>Tổng Tiền:</strong> ${formatCurrency(orderDetails.amount)} VNĐ</p>
+        <hr />
+        <div style="text-align: center; margin-top: 20px;">
+          <strong><img src="${orderDetails.barcode}" alt="Barcode" style="width: 200px; display: block; margin: 0 auto;" /></strong>
+          <p style="font-style: italic; color: #777;">Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!</p>
+        </div>
+      </div>
+    `;
+    
 
     // Tạo nội dung cho hóa đơn ghế
     const invoiceSeats = orderDetails.seats
@@ -347,11 +341,12 @@ const OrderDetail = () => {
 
                   <p>{orderDetails.showtime.showtime_start} ~ {orderDetails.showtime.showtime_end}</p>
                 </td>
+                
                 <td>
                   {orderDetails.combos?.length > 0 ? (
                     orderDetails.combos.map((combos, index) => (
                       <div key={index}>
-                        <p><strong>{combos.combo_name}</strong></p>
+                        <p><strong>{combos.combo_name} x {combos.pivot.quantity}</strong></p>
                         <p>({formatCurrency(combos.price)} VNĐ)</p>
                       </div>
                     ))
@@ -374,7 +369,7 @@ const OrderDetail = () => {
               </tr>
             </tbody>
           </table>
-          <div className='barcode-seat'>
+          {/* <div className='barcode-seat'>
   {orderDetails.seats.length > 0 ? (
     orderDetails.seats.map((seats, index) => (
       <div key={index} className="seat-barcode-container">
@@ -385,7 +380,7 @@ const OrderDetail = () => {
   ) : (
     <p>Không có ghế nào</p>
   )}
-</div>
+</div> */}
 
 <div className="tongtien">
   <p><strong>Tiền Vé:</strong> {formatCurrency(orderDetails.showtime.price * orderDetails.seats.length)} VNĐ</p><br />
@@ -398,7 +393,7 @@ const OrderDetail = () => {
     <p>Không có combo nào</p>
   )}
 
-  <p className="total-amountt"><strong>Tổng tiền: {formatCurrency(orderDetails.amount)} VNĐ</strong></p>
+  <p className="total-amountt">Tổng tiền:<strong style={{color:"red"}}> {formatCurrency(orderDetails.amount)} VNĐ</strong></p>
 </div>
 
 

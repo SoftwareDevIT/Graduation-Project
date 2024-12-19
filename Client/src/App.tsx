@@ -127,7 +127,7 @@ import Pointaccumulation from "./component/PersonalPage/Pointaccumulation";
 
 import CinemaSeatSelection from "./component/SeatMap/CinemaSeatSelection";
 import OrderHistoryApp from "./component/PersonalPage/MovieTicket";
-import BookingManager from "./component/TicketandSeat/BookingManager";
+
 import MovieStatistics from "./component/Admin/MovieStatistics/MovieStatistics";
 import MovieStatisticsManager from "./Page/Admin/MovieStatistics/MovieStatisticsManager";
 import CinemaInfo from "./component/Cinema/CinemaInfo";
@@ -185,7 +185,7 @@ function App() {
         <Route path="/cityform" element={<CityForm isVisible={false} onClose={function (): void {
             throw new Error("Function not implemented.");
           } }/>} />
-            <Route path="/f/:id" element={<CinemaList/>} />
+            <Route path="/cinemalist/:id" element={<CinemaList/>} />
 
         <Route path="/movie/search/:movie_name" element={<SerachMovies />} />
         <Route path="/profile" element={

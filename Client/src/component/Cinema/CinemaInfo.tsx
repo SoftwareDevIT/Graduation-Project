@@ -28,7 +28,7 @@ const ThongTinRap = () => {
 
         // Extract cinema and movies
         const cinemaData = response.data?.cinema?.[0];
-        console.log(response.data?.cinema)
+        // console.log(response.data?.cinema)
         const moviesData = response.data?.data;
 
         setCinema(cinemaData);

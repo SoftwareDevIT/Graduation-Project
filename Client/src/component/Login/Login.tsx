@@ -25,36 +25,39 @@ const Login = () => {
   const onSubmit: SubmitHandler<LoginSchema> = async (data) => {
     try {
       const response = await instance.post("/login", data);
-      console.log("data login:",response)
-      if (response.status === 200 ) {
+      
+      if (response.status === 200) {
         const { token, profile } = response.data.data;
         localStorage.setItem("token", token);
         localStorage.setItem("user_id", profile.id);
         localStorage.setItem("user_profile", JSON.stringify(profile));
-
+  
         instance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
+  
         openNotificationWithIcon("success", "Đăng nhập thành công", "Bạn đã đăng nhập thành công.");
         navigate("/");
       } else {
-        openNotificationWithIcon("error", "Lỗi", "Đăng nhập không thành công.");
+        openNotificationWithIcon("error", "Lỗi", response.data.message || "Đăng nhập không thành công.");
       }
     } catch (error: any) {
       if (error.response) {
+        const errorMessage = error.response.data.message || "Đã xảy ra lỗi. Vui lòng thử lại sau.";
+  
         if (error.response.status === 401) {
-          openNotificationWithIcon("error", "Lỗi đăng nhập", "Mật khẩu không chính xác.");
+          openNotificationWithIcon("error", "Lỗi đăng nhập", errorMessage || "Mật khẩu không chính xác.");
         } else if (error.response.status === 403) {
-          openNotificationWithIcon("error", "Lỗi đăng nhập", "Tài khoản chưa được kích hoạt, vui lòng kiểm tra email.");
+          openNotificationWithIcon("error", "Lỗi đăng nhập", errorMessage || "Tài khoản chưa được kích hoạt, vui lòng kiểm tra email.");
         } else if (error.response.status === 404) {
-          openNotificationWithIcon("error", "Lỗi đăng nhập", "Tài khoản không tồn tại.");
+          openNotificationWithIcon("error", "Lỗi đăng nhập", errorMessage || "Tài khoản không tồn tại.");
         } else {
-          openNotificationWithIcon("error", "Lỗi", "Đã xảy ra lỗi. Vui lòng thử lại sau.");
+          openNotificationWithIcon("error", "Lỗi", errorMessage);
         }
       } else {
         openNotificationWithIcon("error", "Lỗi", "Đã xảy ra lỗi. Vui lòng thử lại sau.");
       }
     }
   };
+  
 
   return (
     
