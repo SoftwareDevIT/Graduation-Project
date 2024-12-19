@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { EditOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons'; // Ant Design icons
 import { notification, Table, Pagination, Input, Button, Popconfirm, Switch } from 'antd'; // Import Ant Design components
-
+import { useComboContext } from '../../../Context/ComboContext';
 import instance from '../../../server';
 
 
@@ -16,7 +16,7 @@ const ComboDashboard: React.FC = () => {
 
 
 
-    const filteredCombos = combos.filter((combo:any) =>
+    const filteredCombos = combos.filter(combo =>
         combo.combo_name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
@@ -195,7 +195,3 @@ const ComboDashboard: React.FC = () => {
 };
 
 export default ComboDashboard;
-function useComboContext(): { state: any; deleteCombo: any; dispatch: any; } {
-    throw new Error('Function not implemented.');
-}
-

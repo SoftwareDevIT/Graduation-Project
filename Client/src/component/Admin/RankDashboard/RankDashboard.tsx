@@ -14,7 +14,6 @@ const RankDashboard = () => {
 
     const ranksPerPage = 7;
     const { Search } = Input;
-
     // Lấy dữ liệu từ API
     useEffect(() => {
         const fetchRanks = async () => {
@@ -106,14 +105,14 @@ const RankDashboard = () => {
                     <Link to={`/admin/rank/edit/${rank.id}`}>
                         <Button type="primary" icon={<EditOutlined />} />
                     </Link>
-                    <Popconfirm
+                    {/* <Popconfirm
                         title="Bạn có chắc chắn muốn xóa hạng này?"
                         onConfirm={() => handleDelete(rank.id)}
                         okText="Có"
                         cancelText="Không"
                     >
                         <Button danger icon={<DeleteOutlined />} />
-                    </Popconfirm>
+                    </Popconfirm> */}
                 </div>
             ),
         },
