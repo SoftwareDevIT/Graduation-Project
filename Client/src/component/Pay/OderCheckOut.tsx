@@ -287,6 +287,7 @@ const OrderCheckout = () => {
                                 await instance.post('confirmBooking-staff', {
                                     id: bookingInfo.booking_id,
                                 });
+                                window.location.href = `/admin/ordersdetail/${bookingInfo.booking_id}`;
                             } catch (error) {
                                 Modal.error({
                                     title: 'Lỗi xác nhận đơn hàng',
@@ -294,6 +295,7 @@ const OrderCheckout = () => {
                                 });
                             }
                         },
+
                         onCancel: () => {
                             Modal.info({
                                 title: 'Hủy xác nhận',
