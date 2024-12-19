@@ -106,7 +106,7 @@ class BookingController extends Controller
         }
 
         // Xử lý khi mã phản hồi không phải '00'
-        return redirect('http://localhost:5173/payment-success')->with('error', 'Thanh Toán Không thành công.');
+        return redirect('http://localhost:5173')->with('error', 'Thanh Toán Không thành công.');
     }
 
     // public function selectSeats(Request $request)
