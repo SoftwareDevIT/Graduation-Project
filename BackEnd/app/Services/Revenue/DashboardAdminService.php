@@ -288,7 +288,7 @@ class DashboardAdminService
     public function revenueByDateRange($booking, ?string $startDate, ?string $endDate)
     {
         if (is_null($startDate) || is_null($endDate)) {
-            $endDate = now();
+            $endDate = now()->addDay();
             $startDate = now()->subDays(15);
         }
         $startDate = Carbon::parse($startDate);
