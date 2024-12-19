@@ -489,7 +489,7 @@ const CinemaSeatSelection: React.FC = () => {
                       position: "relative",
                       display: "flex",
                       flexDirection: "column",
-                      right: "150px",
+                      right: "64px",
                     }}
                   >
                     {rows.map((row) => (
@@ -566,17 +566,19 @@ const CinemaSeatSelection: React.FC = () => {
               style={{
                 width: "30px",
                 height: "30px",
-                background: isSelected
-                  ? "#00bfff" // Ghế đang chọn
-                  : isReserved
-                  ? "#999999" // Ghế đã đặt
-                  : seatType === "VIP"
-                  ? "gold" // Ghế VIP
-                  : seatType === "Couple"
-                  ? "linear-gradient(45deg, gray 50%, rgb(56, 53, 53) 50%)" // Ghế đôi
-                  : isSeatEmpty
-                  ? "white"
-                  : "lightgray", // Ghế thông thường
+                background: isDisabled
+                ? "repeating-linear-gradient(45deg, hsla(0, 0%, 60%, .4), hsla(0, 0%, 60%, .4) 10px, hsla(0, 0%, 60%, .6) 0, hsla(0, 0%, 60%, .6) 20px)"
+                : isSelected
+                ? "#00bfff" // Ghế đang chọn
+                : isReserved
+                ? "#999999" // Ghế đã đặt
+                : seatType === "VIP"
+                ? "gold" // Ghế VIP
+                : seatType === "Couple"
+                ? "linear-gradient(45deg, gray 50%, rgb(56, 53, 53) 50%)" // Ghế đôi
+                : isSeatEmpty
+                ? "white"
+                : "lightgray", // Ghế thông thường
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
