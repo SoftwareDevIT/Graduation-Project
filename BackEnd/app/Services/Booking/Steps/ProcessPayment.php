@@ -3,10 +3,12 @@
 namespace App\Services\Booking\Steps;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class ProcessPayment
 {
+
     public function vnpay(Request $request): ?string
     {
         error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
@@ -22,15 +24,17 @@ class ProcessPayment
         $vnp_HashSecret = "UPJTP6WYL5P1DRCDK7M003GD8MNNP0SI"; // Chuỗi bí mật
 
         // Lấy dữ liệu từ request
-        $bookingId = session('booking'); // Booking ID từ bước trước
-        Log::info('Booking ID: ' . $bookingId);
-        if (!$bookingId) {
-            return null; // Trả về null nếu không có Booking ID
-        }
-
+        // $bookingId = session('booking'); // Booking ID từ bước trước
+        // Log::info('Booking ID: ' . $bookingId);
+        // if (!$bookingId) {
+        //     return null; // Trả về null nếu không có Booking ID
+        // }
         // Tạo các thông tin cần thiết cho giao dịch
-        $vnp_TxnRef = $bookingId; // Mã tham chiếu giao dịch
-        $vnp_OrderInfo = "Thanh toán VNPAY cho booking ID " . $bookingId;
+        $vnp_TxnRef = uniqid(); // Mã tham chiếu giao dịch
+        // $amount = $request->input('amount');
+        // $showtime_id = $request->input('showtime_id');
+        // $pay_method_id = $request->input('pay_method_id');
+        $vnp_OrderInfo = "Thanh toan VNPAY cho don hang " . $vnp_TxnRef;
         $vnp_OrderType = 'Moveek';
         $vnp_Amount = $request->input('amount') * 100; // Số tiền thanh toán (đơn vị VND)
         $vnp_Locale = "VN"; // Ngôn ngữ hiển thị
@@ -53,6 +57,9 @@ class ProcessPayment
             "vnp_OrderType" => $vnp_OrderType,
             "vnp_ReturnUrl" => $vnp_Returnurl,
             "vnp_TxnRef" => $vnp_TxnRef,
+            // 'showtime_id' => $showtime_id,
+            // 'amount' => $amount,
+            // 'pay_method_id' => $pay_method_id
         );
 
         // Thêm mã ngân hàng và mã hóa đơn nếu có
@@ -124,8 +131,9 @@ class ProcessPayment
         $accessKey = 'klm05TvNBzhg7h7j';
         $secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
         $orderInfo = "Thanh toán qua MoMo";
-        $amount = $request->input('amount') ;
+        $amount = $request->input('amount');
         $orderId = $bookingId;
+        $showtimeId = $request->input('showtimeId');
         $redirectUrl = "http://localhost:8000/";
         $ipnUrl = "http://localhost:8000/";
         $extraData = "";
@@ -145,6 +153,7 @@ class ProcessPayment
             'requestId' => $requestId,
             'amount' => $amount,
             'orderId' => $orderId,
+            'showtimeId' => $showtimeId,
             'orderInfo' => $orderInfo,
             'redirectUrl' => $redirectUrl,
             'ipnUrl' => $ipnUrl,
@@ -165,7 +174,7 @@ class ProcessPayment
         //     echo "Lỗi: Không nhận được payUrl từ MoMo.";
         //     exit();
         // }
-        Log::info(  $jsonResult);
+        Log::info($jsonResult);
         Log::info($jsonResult);
 
         // Kiểm tra xem phản hồi có chứa 'payUrl' hay không

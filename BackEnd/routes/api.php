@@ -198,6 +198,7 @@ Route::middleware(['auth:sanctum', 'role:manager'])->prefix('manager')->group(fu
     //checkin ghế barcode
     Route::post('checkInSeat', [CheckInTicketController::class, 'checkInSeat']);
     Route::post('checkInBooking', [CheckInTicketController::class, 'checkInBooking']);
+
 });
 
 
