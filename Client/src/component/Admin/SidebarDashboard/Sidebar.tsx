@@ -62,7 +62,7 @@ const Sidebar: React.FC = () => {
     <div className="container-wrapper">
       <div className="sidebar">
         <div className="header-logoo col-lg-1 col-md-4 col-sm-4 col-4 ">
-          <Link to={"/"}>
+          <Link to={""}>
             {" "}
             <span className="logo-first-letter1">F</span>lickHive
           </Link>

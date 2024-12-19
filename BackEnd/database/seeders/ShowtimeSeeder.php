@@ -29,7 +29,7 @@ class ShowtimeSeeder extends Seeder
         $showtimeData = [];
 
         // Tạo 10 suất chiếu ngẫu nhiên
-        for ($i = 0; $i < 1000; $i++) {
+        for ($i = 0; $i < 450; $i++) {
             $roomId = $rooms->random(); // Chọn phòng ngẫu nhiên
             $movieId = $movies->random(); // Chọn phim ngẫu nhiên
             $showtimeStart = $showtimes[array_rand($showtimes)]; // Chọn thời gian ngẫu nhiên
@@ -41,10 +41,11 @@ class ShowtimeSeeder extends Seeder
             $showtimeData[] = [
                 'room_id' => $roomId,
                 'movie_id' => $movieId,
-                'showtime_date' => $this->randomDate('2023-01-01', now()->subDay()),
+                'showtime_date' => $showtimeDate,
+                // 'showtime_date' => $this->randomDate('2023-01-01', now()->subDay()),
                 'showtime_start' => $showtimeStart,
                 'showtime_end' => $showtimeEnd,
-                'price' => rand(45000, 60000), // Giá vé ngẫu nhiên
+                'price' => rand(45, 75) * 1000,
                 'status' => '1', // Active
                 'created_at' => now(),
                 'updated_at' => now(),
