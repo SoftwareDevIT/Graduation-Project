@@ -5,7 +5,7 @@ import Footer from "../Footer/Footer";
 import Headerticket from "../Headerticket/Headerticket";
 import "./CinemaSeatSelection.css";
 import instance from "../../server";
-import { message, Spin } from "antd";
+import { message, notification, Spin } from "antd";
 import { Modal } from "antd";
 import { Movie } from "../../interface/Movie";
 import initializeEcho from "../../server/realtime";
@@ -261,7 +261,15 @@ const CinemaSeatSelection: React.FC = () => {
         );
       }
     } else {
-      // Chọn ghế
+      const selectedSeatsCount = Array.from(newSelectedSeats.values()).flat().length;
+      if (selectedSeatsCount >= 8) {
+        Modal.warning({
+          title: "Tối đa chỉ chọn được 10 ghế",
+          content: "Vui lòng chọn lại, bạn chỉ có thể chọn tối đa 8 ghế.",
+          onOk() {},
+        });
+        return; // Không cho phép chọn thêm ghế
+      }
       newSelectedSeats.set(row, [...currentIndices, col]);
 
       // Nếu ghế có liên kết, chọn cả ghế liên kết
@@ -620,7 +628,8 @@ const CinemaSeatSelection: React.FC = () => {
                   Rạp:<span> {showtimeData?.room.cinema.cinema_name}</span>
                 </p>
                 <p>
-                  Suất: <span> {showtime}</span>
+                  Suất: <span>{showtime.split(":").slice(0, 2).join(":")}</span>
+
                 </p>
                 <p>
                   Phòng chiếu: <span>{showtimeData?.room.room_name}</span>

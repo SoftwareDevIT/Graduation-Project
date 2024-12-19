@@ -56,7 +56,19 @@ const OrderCheckout = () => {
             // console.log("data",userProfile.points)
         }
     }, [userProfile]);
-
+    useEffect(() => {
+        const storedDiscount = localStorage.getItem("discount");
+        const storedFinalPrice = localStorage.getItem("finalPrice");
+    
+        if (storedDiscount) {
+          setDiscount(JSON.parse(storedDiscount));
+        }
+    
+        if (storedFinalPrice) {
+          setFinalPrice(JSON.parse(storedFinalPrice));
+        }
+      }, []);
+    
     
     const navigate = useNavigate();
     const {
@@ -79,18 +91,29 @@ const OrderCheckout = () => {
             message.warning("Vui lòng nhập mã voucher.");
             return;
         }
-     
+    
         try {
             const response = await instance.post("/apply-promotion", {
                 code: voucherCode,
-                total_price: totalPrice,
+                total_price: finalPrice || totalPrice,
             });
     
             if (response.data) {
-                const { message: successMessage,discount: voucherDiscount, final_price } = response.data;
+                const { message: successMessage, discount: voucherDiscount, final_price } = response.data;
+    
                 message.success(successMessage);
-                setDiscount((prevDiscount) => prevDiscount + voucherDiscount);
+    
+                // Cập nhật discount
+                setDiscount((prevDiscount) => {
+                    const newDiscount = prevDiscount + voucherDiscount;
+                    localStorage.setItem("discount", JSON.stringify(newDiscount)); // Lưu vào localStorage
+                    return newDiscount;
+                });
+    
+                // Cập nhật finalPrice chính xác từ API
                 setFinalPrice(final_price);
+                localStorage.setItem("finalPrice", JSON.stringify(final_price));
+    
                 setVoucherApplied(true); // Đánh dấu là voucher đã được áp dụng
             }
         } catch (error) {
@@ -100,10 +123,8 @@ const OrderCheckout = () => {
     };
     
     const handleUsePoints = async () => {
-        // Chuyển đổi pointsToUse từ string sang number
         const points = Number(pointsToUse);
     
-        // Kiểm tra nếu points không hợp lệ hoặc <= 0
         if (isNaN(points) || points <= 0) {
             message.warning("Vui lòng nhập số điểm hợp lệ.");
             return;
@@ -112,49 +133,55 @@ const OrderCheckout = () => {
             message.warning("Số điểm không thể vượt quá tổng giá trị đơn hàng.");
             return;
         }
-    
-        // Kiểm tra nếu số điểm nhập vào lớn hơn số điểm hiện có
         if (points > availablePoints) {
             message.warning("Bạn không có đủ điểm để sử dụng.");
             return;
         }
+    
         Modal.confirm({
             title: "Chỉ có thể sử dụng điểm một lần",
             content: "Bạn chỉ có thể sử dụng điểm một lần duy nhất. Vui lòng chọn số điểm tốt nhất!",
             okText: "Xác nhận",
             cancelText: "Hủy",
             onOk: async () => {
-        try {
-            const response = await instance.post("/use-points", {
-                points_to_use: points, // Sử dụng giá trị đã chuyển đổi
-                total_price: totalPrice, // Truyền tổng tiền hiện tại
-            });
+                try {
+                    const response = await instance.post("/use-points", {
+                        points_to_use: points,
+                        total_price: finalPrice || totalPrice,
+                    });
     
-            if (response.status === 200 && response.data) {
-                const { message: successMessage, discount_value: pointsDiscount, final_price } = response.data;
+                    if (response.status === 200 && response.data) {
+                        const { message: successMessage, discount_value: pointsDiscount, final_price } = response.data;
     
-                // Hiển thị thông báo thành công
-                message.success(successMessage);
+                        message.success(successMessage);
     
-                // Cập nhật tổng tiền và giảm giá
-                setDiscount((prevDiscount) => prevDiscount + pointsDiscount);
-                setFinalPrice(final_price); // Cập nhật lại tổng tiền sau khi trừ điểm
+                        // Cập nhật discount
+                        setDiscount((prevDiscount) => {
+                            const newDiscount = prevDiscount + pointsDiscount;
+                            localStorage.setItem("discount", JSON.stringify(newDiscount)); // Lưu vào localStorage
+                            return newDiscount;
+                        });
     
-                // Cập nhật lại số điểm còn lại
-                setAvailablePoints((prevPoints) => prevPoints - points);
-                setDiscountFromPoints(0);
-                // Đánh dấu là điểm đã được sử dụng
-                setIsPointsUsed(true);
-            } else {
-                message.error("Không thể sử dụng điểm. Vui lòng kiểm tra lại.");
-            }
-        } catch (error) {
-            console.error("Lỗi khi sử dụng điểm:", error);
-            message.error("Có lỗi xảy ra, vui lòng thử lại!");
-        }
-    },
-});
+                        // Cập nhật finalPrice chính xác từ API
+                        setFinalPrice(final_price);
+                        localStorage.setItem("finalPrice", JSON.stringify(final_price));
+    
+                        // Cập nhật số điểm còn lại
+                        setAvailablePoints((prevPoints) => prevPoints - points);
+    
+                        // Đánh dấu là điểm đã được sử dụng
+                        setIsPointsUsed(true);
+                    } else {
+                        message.error("Không thể sử dụng điểm. Vui lòng kiểm tra lại.");
+                    }
+                } catch (error) {
+                    console.error("Lỗi khi sử dụng điểm:", error);
+                    message.error("Có lỗi xảy ra, vui lòng thử lại!");
+                }
+            },
+        });
     };
+    
     const handleRemoveVoucher = () => {
         setVoucherCode(""); 
         setDiscount(null); 
@@ -189,6 +216,8 @@ const OrderCheckout = () => {
         return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
     };
     const handleCheckout = async () => {
+        localStorage.removeItem("discount");
+    localStorage.removeItem("finalPrice");
         const token = localStorage.getItem("token");
     
         if (!token) {
@@ -287,6 +316,7 @@ const OrderCheckout = () => {
                                 await instance.post('confirmBooking-staff', {
                                     id: bookingInfo.booking_id,
                                 });
+                                window.location.href = `/admin/ordersdetail/${bookingInfo.booking_id}`;
                             } catch (error) {
                                 Modal.error({
                                     title: 'Lỗi xác nhận đơn hàng',
@@ -294,6 +324,7 @@ const OrderCheckout = () => {
                                 });
                             }
                         },
+
                         onCancel: () => {
                             Modal.info({
                                 title: 'Hủy xác nhận',
@@ -453,7 +484,6 @@ const OrderCheckout = () => {
                     <p>Chúc bạn có trải nghiệm tốt!</p>
                 </Modal>
 <div>
-    
   <div className="order-total d-flex justify-content-between">
     <span className="total-title">Tổng</span>
     <span className="total-price">{totalPrice?.toLocaleString('vi-VN')} đ</span>
@@ -464,20 +494,14 @@ const OrderCheckout = () => {
     <span className="total-title5"> -{discount.toLocaleString('vi-VN')} đ</span>
   </div>
   )}
+  
   <div className="order-final d-flex justify-content-between">
     <span className="total-title">Tổng sau giảm:</span>
     <span className="total-titlee">
-      {(finalPrice || totalPrice)?.toLocaleString('vi-VN')} đ
+    {(finalPrice || totalPrice)?.toLocaleString('vi-VN')} đ
     </span>
   </div>
-</div>
-
-
-
-                    </div>
-
-                
-
+</div>    </div>
                     {!  isAdmin ? (
     // Admin-specific content
     <div className="payment-methods">
@@ -485,7 +509,7 @@ const OrderCheckout = () => {
         <ul>
             <li onClick={() => setPaymentMethod(1)}>
                 <img src="https://vinadesign.vn/uploads/images/2023/05/vnpay-logo-vinadesign-25-12-57-55.jpg" alt="VN Pay" className="payment-icon" />
-                VN Pay {pay_method_id === 1 && <FontAwesomeIcon icon={faCheckCircle} className="check-icon" />}
+                VN Pay {pay_method_id === 1 && <FontAwesomeIcon icon={faCheckCircle} className="check-icon-1" />}
             </li>
             <li onClick={() => setPaymentMethod(2)}>
                 <img src="https://developers.momo.vn/v3/assets/images/primary-momo-ddd662b09e94d85fac69e24431f87365.png" alt="MoMo" className="payment-icon" />
