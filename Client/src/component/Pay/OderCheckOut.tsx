@@ -296,7 +296,7 @@ const OrderCheckout = () => {
                     };
                 
                     Modal.success({
-                        title: 'Đặt vé thành công!',
+                        title: 'Chi tiết đơn hàng!',
                         content: (
                             <div>
                                 <p><strong>Thông tin đơn hàng:</strong></p>

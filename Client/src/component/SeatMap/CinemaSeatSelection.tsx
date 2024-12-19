@@ -263,8 +263,8 @@ const CinemaSeatSelection: React.FC = () => {
       const selectedSeatsCount = Array.from(newSelectedSeats.values()).flat().length;
       if (selectedSeatsCount >= 8) {
         Modal.warning({
-          title: "Tối đa chỉ chọn được 10 ghế",
-          content: "Vui lòng chọn lại, bạn chỉ có thể chọn tối đa 8 ghế.",
+           title: "Chỉ cho phép đặt tối đa 8 ghế trong 1 lần đặt vé.",
+          content: "Vui lòng chọn lại, bạn chỉ có thể chọn tối đa 8 ghế .",
           onOk() {},
         });
         return; // Không cho phép chọn thêm ghế
@@ -394,40 +394,39 @@ const CinemaSeatSelection: React.FC = () => {
       } else {
         console.error("Error: API call successful but status is not 200");
       }
-      }  catch (error: any) {
+      } catch (error: any) {
         if (error.response) {
-          // Lấy thông báo lỗi từ backend
-          const backendMessage = error.response.data?.message || "Đã xảy ra lỗi không xác định.";
+          // Lấy thông tin từ phản hồi lỗi của backend
+          const { data, status } = error.response;
+          const backendMessage = data?.message || "Đã xảy ra lỗi không xác định.";
+          const missingSeats = data?.data?.missing_seats?.join(",") || "Không xác định";
       
-          // Kiểm tra các mã lỗi cụ thể nếu cần
-          if (error.response.status === 401) {
+          // Xử lý từng mã lỗi cụ thể
+          if (status === 401) {
             message.warning("Vui lòng đăng nhập để tiếp tục.");
-            navigate("/login"); // Chuyển đến trang đăng nhập
-          } else if (error.response.status === 402) {
-            const missingSeat = error.response.data?.data?.missing_seats;
-      
-            // Nếu thông báo lỗi liên quan đến ghế
+            navigate("/login"); // Chuyển hướng tới trang đăng nhập
+          } else if (status === 402) {
+            // Kiểm tra lỗi liên quan đến ghế
             if (
               backendMessage ===
                 "Please select consecutive seats without gaps." ||
-              backendMessage === "Please select consecutive seats up to the last seat of the row."
+              backendMessage ===
+                "Please select consecutive seats up to the last seat of the row."
             ) {
               Modal.error({
                 title: "Lỗi chọn ghế",
-                content: `Vui lòng không để trống ghế ${
-                  missingSeat || "Không xác định"
-                }`,
+                content: `Vui lòng không để trống ghế: ${missingSeats}.`,
                 icon: null,
                 className: "custom-error-modal",
               });
-              return; // Dừng ở đây để không hiển thị modal mặc định
+              return; // Ngăn hiển thị modal lỗi mặc định
             }
-          } 
+          }
       
-          // Hiển thị thông báo lỗi mặc định từ backend
+          // Hiển thị modal lỗi mặc định cho các trường hợp khác
           Modal.error({
             title: "Lỗi",
-            content: backendMessage, // Sử dụng thông báo từ backend
+            content:`Vui lòng không để trống ghế: ${missingSeats}.`|| backendMessage, // Thông báo từ backend
             icon: null,
             className: "custom-error-modal",
           });
@@ -439,6 +438,7 @@ const CinemaSeatSelection: React.FC = () => {
           });
         }
       }
+      
       
   };
 

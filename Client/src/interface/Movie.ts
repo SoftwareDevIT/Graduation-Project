@@ -18,12 +18,12 @@ export interface Movie {
     rating: string | null;
     views: number | null;
     like: number | null;
-    status: number; // Số nguyên từ API trả về (1: Show, 0: Hidden)
+    status: number;
     actor: Actor[];
     cinema:Cinema[];
-    movie_category: MovieCategory[]; // Mảng các đối tượng danh mục phim chứa category_name
+    movie_category: MovieCategory[]; 
     director: Director[];
     movie_in_cinemas: Cinema[];
-    [key: string]: any; // Có thể thêm các thuộc tính khác từ API nếu cần
+    [key: string]: any; 
    
 }

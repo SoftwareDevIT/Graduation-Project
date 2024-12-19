@@ -22,37 +22,37 @@ const SkeletonLoading = () => (
 );
 
 const DanhGia: React.FC = () => {
-  const { slug } = useParams(); // Sử dụng slug từ URL
-  const { state } = useMovieContext(); // Lấy dữ liệu từ MovieContext
-  const [ratings, setRatings] = useState<any[]>([]); // Lưu danh sách đánh giá
-  const [loading, setLoading] = useState<boolean>(true); // Trạng thái loading
-  const [error, setError] = useState<string | null>(null); // Lỗi nếu có
-  const [showAllRatings, setShowAllRatings] = useState<boolean>(false); // Trạng thái để hiển thị tất cả đánh giá
+  const { slug } = useParams(); 
+  const { state } = useMovieContext(); 
+  const [ratings, setRatings] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(true); 
+  const [error, setError] = useState<string | null>(null); 
+  const [showAllRatings, setShowAllRatings] = useState<boolean>(false); 
 
-  const movie = state.movies.find((movie) => movie.slug === slug); // Tìm phim từ danh sách phim trong context
+  const movie = state.movies.find((movie) => movie.slug === slug); 
 
-  useEffect(() => {
-    if (movie?.id) {
-      setLoading(true);  // Đặt trạng thái loading = true khi gọi API
-      instance
-        .get(`/ratings/${movie?.id}`) // Gọi API lấy danh sách đánh giá của phim
-        .then((response) => {
-          if (response.data.status) {
-            setRatings(response.data.data); // Cập nhật danh sách đánh giá
-          } else {
-            setError("Không có đánh giá cho phim này."); // Thông báo khi không có đánh giá
-          }
-          setLoading(false); // Đặt trạng thái loading = false khi API đã trả về
-        })
-        .catch((error) => {
-          setError(error.message); // Lỗi khi gọi API
-          setLoading(false);
-        });
-    } else {
-      setError("ID phim không tồn tại.");
+  const fetchRatings = async (movieId: number) => {
+    try {
+      setLoading(true);
+      const response = await instance.get(`/ratings/${movieId}`);
+      if (response.data.status) {
+        setRatings(response.data.data);
+      } else {
+        setError("Không có đánh giá cho phim này.");
+      }
+    } catch (err: any) {
+      setError(err.message || "Đã xảy ra lỗi khi lấy dữ liệu.");
+    } finally {
       setLoading(false);
     }
-  }, [movie?.id]); // Chạy lại khi movie.id thay đổi
+  };
+
+  // Sử dụng useEffect để gọi hàm fetchRatings
+  useEffect(() => {
+    if (movie?.id) {
+      fetchRatings(movie.id);
+   } 
+  }, [movie?.id]); 
 
   function formatTimeAgo(date: string) {
     return formatDistanceToNow(new Date(date), { addSuffix: true, locale: vi }); // Định dạng thời gian đánh giá
