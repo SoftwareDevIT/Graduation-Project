@@ -230,7 +230,7 @@ class ShowtimeController extends Controller
     public function storeWithTimeRange(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'room_id' => 'required|integer|exists:room,id',
+            'room_id' => 'required|integer|exists:rooms,id',
             'movie_id' => 'required|integer|exists:movies,id',
             'date' => 'required|date',
             'opening_time' => 'required|date_format:H:i',
@@ -252,28 +252,29 @@ class ShowtimeController extends Controller
             }
             $data['duration'] = $movie->duration;
 
-            // Check for conflicting showtimes
-            $existingShowtimes = Showtime::where('room_id', $data['room_id'])
-                ->where('showtime_date', $data['date'])
-                ->where(function ($query) use ($data) {
-                    $query->whereBetween('showtime_start', [
-                        $data['date'] . ' ' . $data['opening_time'],
-                        $data['date'] . ' ' . $data['closing_time'],
-                    ])
-                        ->orWhereBetween('showtime_end', [
-                            $data['date'] . ' ' . $data['opening_time'],
-                            $data['date'] . ' ' . $data['closing_time'],
-                        ]);
-                })
-                ->get();
+            // Tính toán thời gian bắt đầu và kết thúc cho suất chiếu mới
+            $newShowtimeStart = Carbon::createFromFormat('Y-m-d H:i', $data['date'] . ' ' . $data['opening_time']);
+            $newShowtimeEnd = $newShowtimeStart->copy()->addMinutes($data['duration']);
 
-            if ($existingShowtimes->isNotEmpty()) {
+            // Check for conflicting showtimes
+            $conflictingShowtimes = Showtime::where('room_id', $data['room_id'])
+                ->where('showtime_date', $data['date'])
+                ->where(function ($query) use ($newShowtimeStart, $newShowtimeEnd) {
+                    $query->where(function ($q) use ($newShowtimeStart, $newShowtimeEnd) {
+                        // Check if the new showtime overlaps any existing showtime
+                        $q->whereBetween('showtime_start', [$newShowtimeStart, $newShowtimeEnd])
+                            ->orWhereBetween('showtime_end', [$newShowtimeStart, $newShowtimeEnd])
+                            ->orWhere(function ($subQuery) use ($newShowtimeStart, $newShowtimeEnd) {
+                                $subQuery->where('showtime_start', '<=', $newShowtimeStart)
+                                    ->where('showtime_end', '>=', $newShowtimeEnd);
+                            });
+                    });
+                })
+                ->exists();
+
+            if ($conflictingShowtimes) {
                 return $this->errorShowtime(
                     'Phạm vi thời gian được chọn chồng chéo với các thời gian hiển thị hiện có cho căn phòng này.',
-                    [
-                        'existing_showtimes' => $existingShowtimes,
-                    ],
-                    409
                 );
             }
 
@@ -285,6 +286,7 @@ class ShowtimeController extends Controller
             return $this->error($e->getMessage());
         }
     }
+
 
 
     public function status(int $id)

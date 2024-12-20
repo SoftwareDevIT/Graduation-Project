@@ -56,18 +56,18 @@ const OrderCheckout = () => {
             // console.log("data",userProfile.points)
         }
     }, [userProfile]);
-    useEffect(() => {
-        const storedDiscount = localStorage.getItem("discount");
-        const storedFinalPrice = localStorage.getItem("finalPrice");
+    // useEffect(() => {
+    //     const storedDiscount = localStorage.getItem("discount");
+    //     const storedFinalPrice = localStorage.getItem("finalPrice");
     
-        if (storedDiscount) {
-          setDiscount(JSON.parse(storedDiscount));
-        }
+    //     if (storedDiscount) {
+    //       setDiscount(JSON.parse(storedDiscount));
+    //     }
     
-        if (storedFinalPrice) {
-          setFinalPrice(JSON.parse(storedFinalPrice));
-        }
-      }, []);
+    //     if (storedFinalPrice) {
+    //       setFinalPrice(JSON.parse(storedFinalPrice));
+    //     }
+    //   }, []);
     
     
     const navigate = useNavigate();
@@ -103,24 +103,30 @@ const OrderCheckout = () => {
     
                 message.success(successMessage);
     
-                // Cập nhật discount
+                // Cập nhật discount và lưu vào localStorage
                 setDiscount((prevDiscount) => {
                     const newDiscount = prevDiscount + voucherDiscount;
-                    localStorage.setItem("discount", JSON.stringify(newDiscount)); // Lưu vào localStorage
+                    localStorage.setItem("discount", JSON.stringify(newDiscount));
                     return newDiscount;
                 });
     
-                // Cập nhật finalPrice chính xác từ API
+                // Cập nhật finalPrice và lưu vào localStorage
                 setFinalPrice(final_price);
-                localStorage.setItem("finalPrice", JSON.stringify(final_price));
+            
     
-                setVoucherApplied(true); // Đánh dấu là voucher đã được áp dụng
+                // Đánh dấu là voucher đã được áp dụng
+                setVoucherApplied(true);
+    
+                // Tự động xóa discount và finalPrice sau 4 phút
+               
             }
         } catch (error) {
             message.error("Mã khuyến mại không hợp lệ vui lòng kiểm tra lại");
             console.error("Error applying voucher:", error);
         }
     };
+    
+    
     const handleUsePoints = async () => {
         const points = Number(pointsToUse);
     
@@ -163,13 +169,16 @@ const OrderCheckout = () => {
     
                         // Cập nhật finalPrice chính xác từ API
                         setFinalPrice(final_price);
-                        localStorage.setItem("finalPrice", JSON.stringify(final_price));
+                       
     
                         // Cập nhật số điểm còn lại
                         setAvailablePoints((prevPoints) => prevPoints - points);
     
                         // Đánh dấu là điểm đã được sử dụng
                         setIsPointsUsed(true);
+    
+                        // Tự động xóa discount và finalPrice sau 4 phút
+                        
                     } else {
                         message.error("Không thể sử dụng điểm. Vui lòng kiểm tra lại.");
                     }
@@ -181,12 +190,8 @@ const OrderCheckout = () => {
         });
     };
     
-    const handleRemoveVoucher = () => {
-        setVoucherCode(""); 
-        setDiscount(null); 
-        setFinalPrice(totalPrice);
-        setVoucherApplied(false); 
-    };
+    
+  
     // State for payment method
     const [pay_method_id, setPaymentMethod] = useState(1);
     const [timeLeft, setTimeLeft] = useState(300);
@@ -295,7 +300,7 @@ const OrderCheckout = () => {
                     };
                 
                     Modal.success({
-                        title: 'Đặt vé thành công!',
+                        title: 'Chi tiết đơn hàng!',
                         content: (
                             <div>
                                 <p><strong>Thông tin đơn hàng:</strong></p>
@@ -337,10 +342,31 @@ const OrderCheckout = () => {
                     window.location.href = redirectUrl;  // Chuyển hướng về trang thanh toán nếu là người dùng
                 }
             }
-        } catch (error) {
-            message.error("Có lỗi xảy ra khi đặt vé.");
-            console.error("Error during booking:", error);
+        } catch (error: unknown) {
+            // Nếu lỗi là một Error thông thường, ghi lại log
+            if (error instanceof Error) {
+                console.error("Error during booking:", error.message);
+            }
+        
+            // Kiểm tra xem lỗi có phải từ axios (có response từ server)
+            if (
+                typeof error === "object" &&
+                error !== null &&
+                "response" in error &&
+                typeof (error as any).response === "object"
+            ) {
+                const backendResponse = (error as any).response;
+        
+                // Lấy thông báo từ backend (nếu có)
+                const backendMessage = backendResponse.data?.message || "Có lỗi xảy ra từ server.";
+                message.error(backendMessage);
+            } else {
+                // Xử lý lỗi không rõ nguồn gốc
+                message.error("Có lỗi xảy ra khi đặt vé.");
+            }
         }
+        
+        
     };
     return (
         <>
@@ -403,7 +429,7 @@ const OrderCheckout = () => {
                 <button className="apply-voucher-btn" onClick={handleApplyVoucher}>
                     Áp dụng
                 </button>
-                
+              
             </>
         )}
     </div>
