@@ -351,8 +351,11 @@ const displayLocations = filteredLocations;
                                     price: showtime.price,
                                   },
                                 })
+                               
                               }
+                              
                             >
+                              
                               {showtime.showtime_start.slice(0, 5)}
                               <p> {`${showtime.price / 1000}k`}</p>
                             </button>
